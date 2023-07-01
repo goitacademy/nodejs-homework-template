@@ -1,20 +1,6 @@
 const HttpError = require("../helpers/HttpError");
 
-const validateNewContact = (schema) => {
-  const func = (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      const requiredField = error.message
-        .replace(`"`, "")
-        .replace('" is required', "");
-      throw HttpError(400, `missing required ${requiredField} field`);
-    }
-    next();
-  };
-  return func;
-};
-
-const validateUpdatedContact = (schema) => {
+const validateBody = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (!Object.keys(req.body).length) {
@@ -34,4 +20,4 @@ const validateUpdatedContact = (schema) => {
   return func;
 };
 
-module.exports = { validateNewContact, validateUpdatedContact };
+module.exports = { validateBody };

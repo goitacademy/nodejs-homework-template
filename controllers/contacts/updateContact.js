@@ -1,7 +1,7 @@
-const Contact = require("../models/contact");
-const HttpError = require("../helpers/HttpError");
+const Contact = require("../../models/contact");
+const HttpError = require("../../helpers/HttpError");
 
-const updateStatusContact = async (req, res, next) => {
+const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
@@ -12,4 +12,4 @@ const updateStatusContact = async (req, res, next) => {
   res.json(result);
 };
 
-module.exports = updateStatusContact;
+module.exports = updateContact;
