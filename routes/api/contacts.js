@@ -13,4 +13,4 @@ router.delete('/:contactId', contacts.deleteById);
 
 router.put('/:contactId', contacts.updateBuId);
 
-module.exports = router
+module.exports = router;
