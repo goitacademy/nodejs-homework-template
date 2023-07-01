@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../../service/schemas/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const auth = require("../../service/auth");
 
 require("dotenv").config();
 const SECRET = process.env.SECRET;
@@ -25,6 +26,10 @@ router.post("/login", async (req, res, next) => {
   const token = jwt.sign(payload, SECRET, {
     expiresIn: "1h",
   });
+
+  user.token = token;
+
+  await user.save();
 
   return res.json({
     status: "success",
@@ -74,6 +79,34 @@ router.post("/signup", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.post("/logout", auth, async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
+
+  user.token = null;
+  await user.save();
+
+  res.status(204).json({
+    data: "No content",
+  });
+});
+
+router.get("/current", auth, async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    res.status(401).json({ message: "Not authorized" });
+    return;
+  }
+
+  res.status(200).json({
+    email: user.email,
+    subscription: user.subscription,
+  });
 });
 
 module.exports = router;
