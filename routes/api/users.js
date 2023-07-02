@@ -81,7 +81,7 @@ router.post("/signup", async (req, res, next) => {
   }
 });
 
-router.post("/logout", auth, async (req, res, next) => {
+router.get("/logout", auth, async (req, res, next) => {
   const user = await User.findById(req.user._id);
   if (!user) {
     res.status(401).json({ message: "Not authorized" });
