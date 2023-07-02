@@ -1,7 +1,6 @@
 const contactsServisce = require("../models/contacts");
 
 const { ctrlWrapper } = require("../decorators/ctrlWrapper");
-const HttpError = require("../helpers/HttpError");
 
 const getAllContacts = async (req, res, next) => {
   const result = await contactsServisce.listContacts();
@@ -41,10 +40,6 @@ const removeContact = async (req, res) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
   const result = await contactsServisce.updateContact(id, req.body);
-
-  if (req.body.constructor === Object && Object.keys(req.body).length === 0) {
-    throw HttpError(400);
-  }
 
   if (!result) {
     return res.status(404).json({
