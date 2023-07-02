@@ -2,19 +2,22 @@ const { Contact } = require("../../models");
 const { wrapper } = require("../../helpers");
 
 const getContacts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 10, favorite = null } = req.query;
+  const { page = 1, limit = 10, favorite="" } = req.query;
 
-  let filter;
+  const findOptions = {
+    owner: req.user._id,
+  };
 
-  favorite ? (filter = { owner, favorite }) : (filter = { owner });
+  if (favorite) {
+    findOptions.favorite = favorite;
+  }
 
-  const skip = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
-  const result = await Contact.find(filter, "-createdAt -updatedAt ", {
-    skip,
-    limit,
-  });
+    const result = await Contact.find(findOptions, "", {
+      skip,
+      limit,
+    });
 
   res.json(result);
 };
