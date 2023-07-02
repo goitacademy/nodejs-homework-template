@@ -5,9 +5,11 @@ const { validateBody } = require('../../decoraters/validateBody');
 const { validateBodyPatch } = require('../../decoraters/validateBodyPatch');
 const schema = require('../../schemas/contact-schemes');
 
-const { isValidId } = require('../../middlewares');
+const { isValidId, authenticate } = require('../../middlewares');
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get('/', contactController.getAll);
 
