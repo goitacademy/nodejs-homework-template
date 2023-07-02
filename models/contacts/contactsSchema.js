@@ -1,4 +1,4 @@
-const { model, Schema } = require('mongoose');
+const { Schema } = require('mongoose');
 
 const contactsSchema = new Schema({
   name: {
@@ -20,8 +20,4 @@ const contactsSchema = new Schema({
   versionKey: false
 })
 
-const contact = new model('contact', contactsSchema);
-
-module.exports = {
-  contact
-}
+module.exports = contactsSchema
