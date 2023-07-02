@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-const { nanoid } = require("nanoid");
+const crypto = require("crypto");
 
 const contactsPath = path.join(__dirname, "contacts.json"); // Встановлення шляху до файлу contacts.json з використанням модуля path
 
@@ -24,7 +24,7 @@ const addContact = async (body) => {
   const list = await listContacts(); // Отримання списку контактів
 
   const newContact = {
-    id: nanoid(),
+    id: crypto.randomUUID,
     ...body,
   };
 
