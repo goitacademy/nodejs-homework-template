@@ -9,7 +9,7 @@ const validationFavorite = (schema) => {
     if (!filledBodyFavorite) {
       next(requestError(400, "missing field favorite"));
     }
-    next(error);
+    next(requestError(400, "favorite must be a boolean"));
   };
   return func;
 };
