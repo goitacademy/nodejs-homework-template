@@ -1,4 +1,4 @@
-const validateBody = require('./contacts');
+const validateBody = require('./validatebody');
 const isValidId = require('./isValidId');
 const authenticate = require('./authenticate');
 const upload = require('./upload');
