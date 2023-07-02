@@ -11,6 +11,6 @@ router.post("/", ctrl.add);
 
 router.delete("/:id", ctrl.deleteById);
 
-router.put("/:id", ctrl.updateById);
+router.patch("/:id", ctrl.updateById);
 
 module.exports = router;
