@@ -9,22 +9,23 @@ const {
 const HttpError = require("../error/errorHandler");
 const joiConfig = require('../joiconfig')
 const JOI = require('joi');
-
+const ContactService = require('../service/ContactService');
 
 class ContactController {
+
   async create(req, res, next) {
     try {
-      const created = await addContact(req.body);
+      const created = await ContactService.addContact(req.body);
       console.log(req.body);
       res.status(201).json(created);
     } catch (error) {
       next(error);
       res.status(400)
     }
-}
-  
+  }
+
   async read(req, res, next) {//+
-    const list = await listContacts();
+    const list = await ContactService.listContacts();
     res.status(200).json(list);
   }
 
@@ -33,9 +34,10 @@ class ContactController {
 
       const body = req.body;
       const contactId = req.params.contactId;
-      const contactUpdate = await updateContact(contactId, body); 
+      const contactUpdate = await ContactService.updateContact(contactId, body); 
+      console.log(contactUpdate)
       if(!contactUpdate){
-        res.status(404).json({message:"Not found"});
+        return res.status(404).json({message:"Not found"});
       }
       res.status(200).json(contactUpdate);
     } catch (error) {
@@ -46,7 +48,7 @@ class ContactController {
   async deleted(req, res, next) {//+
     try {
       const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await ContactService.removeContact(contactId);
     if (!result) {
       return res.status(404).json({message:"Not found"});
     }
@@ -60,7 +62,7 @@ class ContactController {
   async getById(req,res,next) {//+
     try {
       const { contactId } = req.params;
-      const result = await getContactById(contactId);
+      const result = await ContactService.getContactById(contactId);
       if(!result){
         res.status(404).json({message:"Not found"});
       }
@@ -69,6 +71,24 @@ class ContactController {
       next(error);
     }
   }
+
+  async updateStatusFavoriteContact(req, res, next){
+    try {
+      console.log(req.params.contactId)
+      const contact = await ContactService.updateContact(req.params.contactId, req.body);
+      if (contact) {
+        return res
+          .status(200)
+          .json(contact);
+      }
+      return res
+        .status(404)
+        .json({message: 'Not Found' });
+    } catch (error) {
+      next(error);
+    }
+  };
+  
 }
 
 module.exports = new ContactController();

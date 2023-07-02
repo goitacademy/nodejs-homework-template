@@ -1,6 +1,8 @@
 const HttpError = require('../error/errorHandler');
 const joiConfig = require('../joiconfig');
 const { getContactById } = require('../models/contacts');
+const joiStatus = require('../joiStatus');
+
 
 const validateBody = (req,res,next) =>{
     if(!Object.keys(req.body).length){
@@ -27,4 +29,21 @@ const validateID = async (req,res,next)=>{
   next();
 }
 
-module.exports = {validateBody,validateID};
+const validateFavorite = (req,res,next) =>{
+    if(!Object.keys(req.body).length){
+        return next(HttpError(400,"missing fields"));
+    }
+    const bodyWithoutKey = [];
+    if (!Object.keys(req.body).includes("favorite")) bodyWithoutKey.push("favorite");
+
+    if(bodyWithoutKey.length){
+        return next(HttpError(400,`missing field${bodyWithoutKey.length > 1 ? "s" : ""}: ${bodyWithoutKey}`))
+    }
+    console.log("VALIDATOR",req.body,req.params.contactId)
+    const {error} = joiStatus.validate(req.body);
+    if(error) return next(HttpError(400,error.message));
+    next();
+}
+
+
+module.exports = {validateBody,validateID,validateFavorite};
