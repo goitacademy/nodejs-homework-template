@@ -30,18 +30,11 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean(),
-});
+
 
 const Contact = model('contact', contactSchema);
 
-const schemas = {
-  addSchema,
-  updateFavoriteSchema,
-};
-
 module.exports = {
   Contact,
-  schemas,
+  addSchema
 };
