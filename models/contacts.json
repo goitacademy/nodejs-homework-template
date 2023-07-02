@@ -67,17 +67,12 @@
   },
   {
     "id": "ed81bc1d-b972-4331-9d9c-4de5ea487744",
-    "name": "User-1",
-    "phone": "(295) 840-6685"
+    "name": "User-2",
+    "email": "user-2@mail.com",
+    "phone": "(292) 840-6685"
   },
   {
     "id": "aff7810f-54f7-4334-aa16-359373e8a7f8",
-    "name": "User-1",
-    "email": "user-1@mail.com",
-    "phone": "(295) 840-6685"
-  },
-  {
-    "id": "12813366-a0ae-4e20-8c45-44f54326e1d3",
     "name": "User-1",
     "email": "user-1@mail.com",
     "phone": "(295) 840-6685"

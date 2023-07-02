@@ -6,4 +6,4 @@ const contactSchema = Joi.object({
   phone: Joi.string().required().messages({ "any.required": 'Phone number must be exist!' }),
 });
 
-module.exports = contactSchema;
+module.exports = { contactSchema };
