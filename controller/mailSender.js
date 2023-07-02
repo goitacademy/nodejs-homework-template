@@ -19,7 +19,7 @@ async function sendVeryficationMail(email, verificationToken) {
     to: email,
     subject: "Hello ✔",
     text: "Hello world?",
-    html: `<b>Please confirm your mail: <a href="${link}">Naciśnij aby potwierdzić</a> </b>`,
+    html: `<b>Please confirm your email: <a href="${link}">Click to confirm</a></b>`,
   });
 }
 
