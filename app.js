@@ -3,6 +3,7 @@ const moment = require("moment");
 const fs = require("fs/promises");
 const logger = require("morgan");
 const cors = require("cors");
+const notFoundHandler=require('./middlewares/notFoundHandler')
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -23,9 +24,7 @@ app.use(async (req, res, next) => {
 
 app.use("/api/contacts", contactsRouter);
 
-app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
-});
+app.use(notFoundHandler);
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
