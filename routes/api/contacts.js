@@ -1,23 +1,15 @@
 const express = require("express");
-const Joi = require("joi");
-
 const router = express.Router();
 
 const contacts = require("../../models/contacts");
 const { HttpError } = require("../../helpers");
-
-// встановлюємо схему для body
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const { addSchema } = require("../../utils/addSchema");
 
 router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
 
-    res.json(JSON.parse(result));
+    res.json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -32,7 +24,7 @@ router.get("/:contactId", async (req, res, next) => {
     }
     res.json(result);
   } catch (err) {
-    next(err); // шукає і виконує обробник помилок в app.js
+    next(err);
   }
 });
 
