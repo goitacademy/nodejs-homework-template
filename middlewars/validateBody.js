@@ -80,6 +80,20 @@ const validateBody = (schema) =>{
   return func;
 };
 
+  const validateEmail = schema => {
+    const func = (req, res, next)=> {
+        const { error } = schema.validate(req.body);
+        if (error) {
+          next(res.status(400).json({ message: "missing fields" }));
+        }
+        next(error);
+    }
+
+    return func;
+}
+
+
+
 const validEmptyBody = () => {
   const func = (req, res, next) => {
     const bodyEmpty = Object.keys(req.body).length === 0;
@@ -112,4 +126,4 @@ const validEmptyBody = () => {
   return func;
 };
 
-module.exports = { validBody, validateBody, validEmptyBody, validateUserBody };
+module.exports = { validBody, validateBody, validEmptyBody, validateUserBody, validateEmail };

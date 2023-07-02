@@ -7,6 +7,10 @@ const {authenticate} = require('../../middlewars')
 
 router.post("/register", validate.validateUserBody(schemas.userRegisterSchema), authControllers.register)
 
+router.get("/verify/:verificationToken", authControllers.verify)
+
+router.post("/verify", validate.validateEmail(schemas.userEmailSchema), authControllers.resendVerify)
+
 router.post("/login", validate.validateUserBody(schemas.userLoginSchema), authControllers.login)
 
 router.get("/current",  authenticate, authControllers.getCurrent)
