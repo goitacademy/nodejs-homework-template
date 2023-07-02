@@ -7,6 +7,9 @@ const gravatar = require("gravatar");
 const Jimp = require("jimp");
 const path = require("path");
 const fs = require("fs");
+const uuid = require("uuid");
+const { error } = require("console");
+const { sendVeryficationMail } = require("./mailSender");
 
 const userRegister = async (req, res, next) => {
   const { email, password } = req.body;
@@ -33,8 +36,14 @@ const userRegister = async (req, res, next) => {
       s: "250",
       r: "pg",
     });
+    const verificationToken = uuid.v4();
+    newUser.verificationToken = verificationToken;
 
     await newUser.save();
+
+    await sendVeryficationMail(email, verificationToken).catch((err) =>
+      console.error(err)
+    );
 
     res.json({
       status: "Created",
@@ -66,6 +75,16 @@ const logIn = async (req, res, next) => {
       message: "Incorrect login/password",
     });
   }
+
+  if (!user.verify) {
+    return res.json({
+      status: "error",
+      code: 400,
+      data: "Bad request",
+      message: "Veryfy your email firs",
+    });
+  }
+
   const payload = {
     id: user.id,
   };
@@ -105,7 +124,6 @@ const getUserDetails = async (req, res, next) => {
 const logOutUser = async (req, res, next) => {
   try {
     req.user.token = null;
-
     await req.user.save();
     res.status(204).json();
   } catch {
@@ -164,7 +182,93 @@ const uploadAvatar = async (req, res, next) => {
 const getAvatar = (req, res, next) => {
   const filename = req.params.filename;
   const imagePath = path.join(__dirname, "../public/avatar/", filename);
+
   res.sendFile(imagePath);
+};
+// User veryfication
+const userVerification = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+
+    if (!user) {
+      return res.json({
+        Status: "Not Found",
+        code: 404,
+        ResponseBody: {
+          message: "User not found",
+        },
+      });
+    }
+
+    user.verify = true;
+    user.verificationToken = "null";
+
+    await user.save();
+
+    res.json({
+      status: "OK",
+      code: 200,
+      ResponseBody: {
+        message: "Verification successful",
+        user,
+      },
+    });
+  } catch (error) {
+    res.json({
+      status: "Bad request",
+      code: 400,
+    });
+    console.error(error);
+  }
+};
+
+const checkIfUserIsVerified = async (req, res, next) => {
+  const { email } = req.body;
+
+  const { error } = await emailValidator(email);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  if (!email) {
+    return res.json({
+      code: 400,
+      ResponseBody: {
+        message: "missing required field email",
+      },
+    });
+  }
+  const user = await User.findOne({ email });
+
+  if (user.verify) {
+    return res.json({
+      code: 400,
+      status: "Bad Request",
+      ResponseBody: {
+        message: "Verification has already been passed",
+      },
+    });
+  }
+  await sendVeryficationMail(email, user.verificationToken)
+    .then(() => {
+      return res.json({
+        code: 200,
+        status: "OK",
+        ResponseBody: {
+          message: "Verification email sent",
+        },
+      });
+    })
+    .catch(() => {
+      return res.json({
+        code: 500,
+        status: "Internal Server Error",
+        ResponseBody: {
+          message: "Sorry a server error has occurred",
+        },
+      });
+    });
 };
 
 module.exports = {
@@ -174,4 +278,6 @@ module.exports = {
   logOutUser,
   uploadAvatar,
   getAvatar,
+  userVerification,
+  checkIfUserIsVerified,
 };

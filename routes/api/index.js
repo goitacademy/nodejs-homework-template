@@ -15,6 +15,8 @@ const {
   logOutUser,
   uploadAvatar,
   getAvatar,
+  userVerification,
+  checkIfUserIsVerified,
 } = require("../../controller/userController");
 const auth = require("../../middleware/auth");
 //
@@ -56,5 +58,9 @@ router.patch("/users/avatars", auth, userUploadAvatar, uploadAvatar);
 
 // Preview of avatar
 router.get("/avatar/:filename", getAvatar);
+
+router.get("/auth/verify/:verificationToken", userVerification);
+
+router.post("/users/verify/", checkIfUserIsVerified);
 
 module.exports = router;
