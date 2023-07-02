@@ -10,7 +10,7 @@ router.post("/register", validateBody(schemas.registerSchema), register);
 
 router.post("/login", validateBody(schemas.loginSchema), login);
 
-router.post("/current", authenticate, getCurrent);
+router.get("/current", authenticate, getCurrent);
 
 router.post("/logout", authenticate, logout);
 
