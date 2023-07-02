@@ -2,7 +2,7 @@ const contactsService = require('../models/contacts-service');
 
 const { HttpError } = require('../helpers');
 
-const { ctrlWrapper } = require('../decoratots'); // try...catch wrapper!
+const { ctrlWrapper } = require('../decorators'); // try...catch wrapper!
 
 const getAllContacts = async (req, res) => { // - controler function req->res
 
