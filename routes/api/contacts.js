@@ -3,7 +3,7 @@ const express = require("express");
 const ctrl = require("../../controllers/contacts");
 
 const isValidId = require("../../middlewares/isValidId");
-const validateBody = require("../../middlewares/validateBody");
+const validateBody = require("../../middlewares/validateContactBody");
 const { schemas } = require("../../models/contact");
 const validateFavorite = require("../../middlewares/validateFavorite");
 
