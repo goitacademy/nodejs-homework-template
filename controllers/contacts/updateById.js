@@ -1,11 +1,11 @@
 const { contact } = require('../../models');
 const { HttpError } = require('../../helpers');
-const { contactsScheme } = require('../../schemes');
+const { contactSchemes } = require('../../schemes');
 const { Contact } = contact;
 
 const updateById = async (req, res, next) => {
     const { contactId } = req.params;
-    const { value, error } = contactsScheme.validate(req.body);
+    const { value, error } = contactSchemes.contactsScheme.validate(req.body);
     if(error){
       throw HttpError({status: 400, message:"missing fields"});
     }

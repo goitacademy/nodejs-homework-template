@@ -1,11 +1,11 @@
 const { contact } = require('../../models');
 const { HttpError } = require('../../helpers');
-const { favoriteScheme } = require('../../schemes');
+const { contactSchemes } = require('../../schemes');
 const { Contact } = contact;
 
 const updateStatusContact = async(req, res, next) => {
     const { contactId } = req.params;
-    const { value, error } = favoriteScheme.validate(req.body);
+    const { value, error } = contactSchemes.favoriteScheme.validate(req.body);
     if(error){
       throw HttpError({status: 400, message:"missing field favorite"});
     }
