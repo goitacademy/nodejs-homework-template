@@ -1,4 +1,3 @@
-// const nanoid = require("nanoid")
 const express = require("express");
 const User = require("../../models/users.model");
 const jwt = require("jsonwebtoken");
@@ -8,7 +7,10 @@ const gravatar = require("gravatar");
 const multer = require("multer");
 const path = require("path");
 const jimp = require("jimp");
-const { verificationToken, sendVerificationEmail } = require("./user.email");
+const {
+  sendVerificationEmail,
+  generateVerificationToken,
+} = require("./user.email");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -59,6 +61,7 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
           r: "pg",
           d: "mm",
         });
+    const verificationToken = generateVerificationToken();
     const newUser = new User({ email, avatarURL, verificationToken });
     await sendVerificationEmail(email, verificationToken);
     newUser.setPassword(password);
@@ -180,9 +183,11 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, _) => {
 
 router.get("/verify/:verificationToken", async (req, res, next) => {
   try {
+    console.log(req.params.verificationToken);
     const user = await User.findOne({
-      verificationToken,
+      verificationToken: req.params.verificationToken,
     });
+
     if (!user) {
       return res.json({
         status: "error",
