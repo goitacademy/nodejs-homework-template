@@ -7,14 +7,15 @@ const app = require('./app');
 const {DB_HOST, PORT=3000} = process.env
 
 
- mongoose.set('strictQuery',true);
+//  mongoose.set('strictQuery',true);
 
 
  mongoose.connect(DB_HOST)
 .then(() => {
-
+  app.listen(PORT)
     console.log("Database connection successful");
-    app.listen(PORT)
+
+    
 })
 .catch(err => {
   console.log(`Server not running. Error message: ${err.message}`);

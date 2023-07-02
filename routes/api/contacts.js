@@ -2,8 +2,8 @@ const express = require("express");
 // const Joi = require("joi");
 
 // const contacts = require("../../models/contacts.js");
-// const Contact = require("../../models/contact")
 const Contact = require("../../models/contact")
+// const Contact = require("../models/contact")
 
 // const { RequestError } = require("../../helpers");
 
@@ -32,7 +32,9 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await Contact.Find();
+    const result = await
+     Contact.find();
+// console.log("find");
     res.json(result);
   } catch (error) {
     next(error);
