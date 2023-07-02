@@ -8,12 +8,15 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+// global middlewares
 app.use(logger(formatsLogger));
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // if body content-type application/json, middleware create object in req.body
 
+// route
 app.use('/api/contacts', contactsRouter);
 
+// other middlewares
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
