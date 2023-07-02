@@ -74,18 +74,21 @@ const updateAvatar = async(req,res) => {
     const { id} = req.user;
     const { path: oldPath, filename} = req.file;
     const avatarName = `${id}_${filename}`;
-    const newPath = path.join(contactsDir, avatarName);
-    await Jimp.read(newPath).then(img=> {
-        return img.resize(250, Jimp.AUTO).writeAsync(newPath);
-    })
-    .catch(err=>console.log(err));
-    
-    await fs.rename(oldPath, newPath);
-   const avatarURL = path.join("avatars", avatarName)
 
-    await User.findByIdAndUpdate(id, {avatarURL})
+   try{
+    const newPath = path.join(contactsDir, avatarName);
+    const image = await Jimp.read(`./tmp/${filename}`);
+    await image.resize(250, 250);
+    await image.writeAsync(`./tmp/${filename}`);
+    await fs.rename(oldPath, newPath);
+    const avatarURL = path.join('public', 'avatars', avatarName);
+    await User.findByIdAndUpdate(req.user._id, { avatarURL })
     res.status(201).json({avatarURL});
+  } catch (error) {
+    await fs.unlink(oldPath);
+    console.log(error);
   }
+}
 
 const logOut = async(req,res)=>{
 const {_id} = req.user;
