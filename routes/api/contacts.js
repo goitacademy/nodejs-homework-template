@@ -4,7 +4,7 @@ const Joi = require("joi");
 const router = express.Router();
 
 const contacts = require("../../models/contacts");
-const HttpError = require("../../helpers/HttpError");
+const { HttpError } = require("../../helpers");
 
 // встановлюємо схему для body
 const addSchema = Joi.object({
@@ -20,7 +20,6 @@ router.get("/", async (req, res, next) => {
     res.json(JSON.parse(result));
   } catch (err) {
     res.status(500).json({ message: err.message });
-    // next(error);
   }
 });
 
@@ -29,13 +28,6 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
-      // const err = res.status(404).json({ message: "Not found" });
-
-      // const err = new Error("Not found");
-      // err.status = 404;
-      //
-      // throw err;
-
       throw HttpError(404, "Not found");
     }
     res.json(result);
@@ -55,7 +47,6 @@ router.post("/", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  // res.json({ message: "template message" });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
@@ -72,7 +63,6 @@ router.delete("/:contactId", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  // res.json({ message: "template message" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
@@ -91,8 +81,6 @@ router.put("/:contactId", async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-
-  // res.json({ message: "template message" });
 });
 
 module.exports = router;

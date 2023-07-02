@@ -17,18 +17,14 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
+
 app.use(express.json());
 
-// Коли пропишу усі функції для роутів, тоді розкоментую
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
-// Домашня сторінка
-// app.get("/", (req, res, next) => {
-//   res.send("Home page");
-// });
 
 // обробник помилок
 app.use((err, req, res, next) => {
@@ -36,12 +32,6 @@ app.use((err, req, res, next) => {
 
   res.status(status).json({ message });
 });
-
-//
-//
-//
-//
-//
 
 const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
