@@ -3,9 +3,52 @@ const User = require("../../service/schemas/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const auth = require("../../service/auth");
+const path = require("path");
+const fs = require("fs").promises;
+const multer = require("multer");
+const jimp = require("jimp");
+const { nanoid } = require("nanoid");
+
+const uploadDir = path.join(process.cwd(), "tmp");
+const storeAvatar = path.join(process.cwd(), "public/avatars");
 
 require("dotenv").config();
 const SECRET = process.env.SECRET;
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+  limits: {
+    fileSize: 1048576,
+  },
+});
+
+const upload = multer({
+  storage: storage,
+});
+
+const isAccessible = (path) => {
+  return fs
+    .access(path)
+    .then(() => true)
+    .catch(() => false);
+};
+
+const createFolderIsNotExist = async (folder) => {
+  if (!(await isAccessible(folder))) {
+    await fs.mkdir(folder);
+  }
+};
+
+router.use((req, res, next) => {
+  createFolderIsNotExist(uploadDir);
+  createFolderIsNotExist(storeAvatar);
+  next();
+});
 
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -67,6 +110,7 @@ router.post("/signup", async (req, res, next) => {
   try {
     const newUser = new User({ email });
     newUser.setPassword(password);
+    console.log(newUser.avatarURL);
     await newUser.save();
     res.json({
       status: "success",
@@ -74,12 +118,52 @@ router.post("/signup", async (req, res, next) => {
       data: {
         message: "Signup complete",
         user: `${newUser.email}, ${newUser.subscription}`,
+        avatarURL: newUser.avatarURL,
       },
     });
   } catch (error) {
     next(error);
   }
 });
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  async (req, res, next) => {
+    console.log(req.file);
+    const { path: temporaryName, originalname } = req.file;
+    const uniqueName = nanoid();
+    const fileName = path.join(storeAvatar, uniqueName.concat(originalname));
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "File not found" });
+      }
+
+      const avatar = await jimp.read(req.file.path);
+
+      await avatar
+        .autocrop()
+        .cover(
+          250,
+          250,
+          jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE
+        )
+        .writeAsync(req.file.path);
+
+      const user = await User.findById(req.user._id);
+
+      user.avatarURL = `/avatars/${fileName}`;
+      await user.save();
+
+      await fs.rename(temporaryName, fileName);
+      res.json({ avatar: user.avatarURL, status: 200 });
+    } catch (err) {
+      await fs.unlink(temporaryName);
+      return next(err);
+    }
+  }
+);
 
 router.get("/logout", auth, async (req, res, next) => {
   const user = await User.findById(req.user._id);
