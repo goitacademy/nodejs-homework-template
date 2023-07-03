@@ -1,8 +1,4 @@
-const HttpErrors = require('./HttpErrors.js'); 
-const CtrlWrapper = require('./CtrlWrapper.js');
+const HttpError = require("./HttpError");
+const ctrlWrapper = require("./ctrlWrapper");
 
-module.exports = {
-  HttpErrors,
-  CtrlWrapper,
-};
-
+module.exports = { HttpError, ctrlWrapper};
