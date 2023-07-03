@@ -18,6 +18,11 @@ const contactSchema = new Schema({
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
   }, {versionKey: false, timestramps: true});
 
   contactSchema.post("save", handleMongooseError)
@@ -34,7 +39,7 @@ const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required()
   })
   
-  const schemas = {
+  const contactSchemas = {
     addSchema,
     updateFavoriteSchema
   }
@@ -43,7 +48,7 @@ const updateFavoriteSchema = Joi.object({
 
 module.exports = {
     Contact,
-    schemas,
+    contactSchemas,
   };
 
   
