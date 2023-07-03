@@ -15,14 +15,14 @@ const getAll = async (req, res) => {
   res.json(contacts);
 };
 
-// const getById = async (req, res) => {
-//   const id = req.params.contactId;
-//   const contact = await getContactById(id);
-//   if (!contact) {
-//     throw HttpError(404, 'Contact not found');
-//   }
-//   res.json(contact);
-// };
+const getById = async (req, res) => {
+  const id = req.params.contactId;
+  const contact = await Contact.findById(id);
+  if (!contact) {
+    throw HttpError(404, 'Contact not found');
+  }
+  res.json(contact);
+};
 
 const addNew = async (req, res) => {
   const newContact = await Contact.create(req.body);
@@ -49,7 +49,7 @@ const addNew = async (req, res) => {
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
+  getById: ctrlWrapper(getById),
   addNew: ctrlWrapper(addNew),
   // deleteById: ctrlWrapper(deleteById),
   // updateById: ctrlWrapper(updateById),
