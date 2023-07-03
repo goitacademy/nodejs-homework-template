@@ -1,28 +1,28 @@
 const express = require("express");
-const Joi = require("joi");
+// const Joi = require("joi");
 
 // const contacts = require("../../models/contacts.js");
-const Contact = require("../../models/contact")
+// const Contact = require("../../models/contact")
 // const Contact = require("../models/contact")
-
-const { RequestError } = require("../../helpers");
+const ctrl = require("../../controllers/contacts")
+// const { RequestError } = require("../../helpers");
 
 const router = express.Router();
 
-const postCheckingSchema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .alphanum()
-    .required()
-    .error(new Error("missing required name field")),
-  email: Joi.string()
-    .email()
-    .required()
-    .error(new Error("missing required email field")),
-  phone: Joi.string()
-    .required()
-    .error(new Error("missing required phone field")),
-});
+// const postCheckingSchema = Joi.object({
+//   name: Joi.string()
+//     .min(3)
+//     .alphanum()
+//     .required()
+//     .error(new Error("missing required name field")),
+//   email: Joi.string()
+//     .email()
+//     .required()
+//     .error(new Error("missing required email field")),
+//   phone: Joi.string()
+//     .required()
+//     .error(new Error("missing required phone field")),
+// });
 
 // const putCheckingSchema = Joi.object({
 //   name: Joi.string().min(3).alphanum(),
@@ -30,18 +30,21 @@ const postCheckingSchema = Joi.object({
 //   phone: Joi.string(),
 // }).min(1);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await
-     Contact.find();
-// console.log("find");
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/",ctrl.getAll
+//  async (req, res, next) => {
+//   try {
+//     const result = await
+//      Contact.find();
+// // console.log("find");
+//     res.json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// }
+);
 
-// router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId",ctrl.getById
+//  async (req, res, next) => {
 //   try {
 //     const { contactId } = req.params;
 //     const result = await contacts.getContactById(contactId);
@@ -52,25 +55,29 @@ router.get("/", async (req, res, next) => {
 //   } catch (error) {
 //     next(error);
 //   }
-// });
+// }
+);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = postCheckingSchema.validate(req.body);
-    if (error) {
-      console.log(error.context);
-      throw RequestError(400, error.message);
-    }
-    const result = await 
-    // contacts.addContact(req.body);
-    Contact.create(req.body)
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", ctrl.add
+//  async (req, res, next) => {
+//   try {
+//     const { error } = postCheckingSchema.validate(req.body);
+//     if (error) {
+//       console.log(error.context);
+//       throw RequestError(400, error.message);
+//     }
+//     const result = await 
+//     // contacts.addContact(req.body);
+//     Contact.create(req.body)
+//     res.status(201).json(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// }
+);
 
-// router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId",ctrl.remove
+//  async (req, res, next) => {
 //   try {
 //     const { contactId } = req.params;
 //     const result = await contacts.removeContact(contactId);
@@ -82,9 +89,11 @@ router.post("/", async (req, res, next) => {
 //   } catch (error) {
 //     next(error);
 //   }
-// });
+// }
+);
 
-// router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId",ctrl.update
+//  async (req, res, next) => {
 //   try {
 //     const { error } = putCheckingSchema.validate(req.body);
 //     if (error) {
@@ -97,6 +106,7 @@ router.post("/", async (req, res, next) => {
 //   } catch (error) {
 //     next(error);
 //   }
-// });
+// }
+);
 
 module.exports = router;

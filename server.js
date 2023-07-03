@@ -2,9 +2,12 @@
 
 const app = require('./app');
 
+
 // const DB_HOST = require("./config");
 
 const {DB_HOST, PORT=3000} = process.env
+
+// const DB_HOST="mongodb+srv://Andy:notAllowedAccess@cluster0.5mjlhcp.mongodb.net/db-contacts?retryWrites=true&w=majority"
 
 
 //  mongoose.set('strictQuery',true);
