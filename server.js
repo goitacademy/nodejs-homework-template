@@ -5,7 +5,10 @@ const app = require("./app");
 const { DB_HOST } = process.env;
 
 mongoose
-  .connect(DB_HOST)
+  .connect(DB_HOST, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("Database connection successful");
     app.listen(3000);
