@@ -3,7 +3,6 @@ const path = require("path");
 const jimp = require("jimp");
 const { User } = require("../../models");
 const { wrapper, HttpError } = require("../../helpers");
-console.log(555);
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
