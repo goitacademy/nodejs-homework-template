@@ -7,7 +7,11 @@ const { DB_HOST } = process.env;
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(DB_HOST)
+  .connect(DB_HOST, {
+    useNewUrlParser: true,
+    useunifiedtopology: true,
+    useMongoClient: true,
+  })
   .then(() => {
     console.log("Database connection successful");
     app.listen(3000);
