@@ -8,15 +8,27 @@ const {
   postContact,
   putContact,
   deleteContact,
+  putchContact,
 } = require("../../controllers/contacts-controller");
 
-const { contactShema } = require("../../shemas");
-const { validateBody } = require("../../decorators");
+const { schemas } = require("../../models/contact");
+const { validateBody, isValid } = require("../../middlewares");
 
 router.get("/", getAllContacts);
-// router.get("/:contactId", getContactId);
-// router.post("/", validateBody(contactShema), postContact);
-// router.put("/:contactId", putContact, validateBody(contactShema));
-// router.delete("/:contactId", deleteContact);
+router.get("/:contactId", isValid, getContactId);
+router.post("/", validateBody(schemas.joiSchema, "fields"), postContact);
+router.put(
+  "/:contactId",
+  isValid,
+  validateBody(schemas.joiSchema, "fields"),
+  putContact
+);
+router.delete("/:contactId", isValid, deleteContact);
+router.patch(
+  "/:contactId/favorite",
+  isValid,
+  validateBody(schemas.updateFavoriteSchema, "fields favorite"),
+  putchContact
+);
 
 module.exports = router;
