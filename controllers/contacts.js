@@ -24,10 +24,10 @@ const getAll = async (req, res) => {
 //   res.json(contact);
 // };
 
-// const addNew = async (req, res) => {
-//   const newContact = await addContact(req.body);
-//   res.status(201).json(newContact);
-// };
+const addNew = async (req, res) => {
+  const newContact = await Contact.create(req.body);
+  res.status(201).json(newContact);
+};
 
 // const deleteById = async (req, res) => {
 //   const id = req.params.contactId;
@@ -50,7 +50,7 @@ const getAll = async (req, res) => {
 module.exports = {
   getAll: ctrlWrapper(getAll),
   // getById: ctrlWrapper(getById),
-  // addNew: ctrlWrapper(addNew),
+  addNew: ctrlWrapper(addNew),
   // deleteById: ctrlWrapper(deleteById),
   // updateById: ctrlWrapper(updateById),
 };
