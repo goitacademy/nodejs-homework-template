@@ -9,6 +9,7 @@ const {
 
 const { 
   register, 
+  login,
 } = require("./auth");
 
 module.exports = {
@@ -19,4 +20,5 @@ module.exports = {
   updateStatusContact,
   deleteById,
   register,
+  login,
 };
