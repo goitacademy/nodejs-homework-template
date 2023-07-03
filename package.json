@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "start": "cross-env NODE_ENV=production node ./app.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.1.4",

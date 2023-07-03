@@ -1,35 +1,55 @@
 const bcrypt = require("bcryptjs");
+const { generateToken } = require("../../helpers");
+// const jwt = require("jsonwebtoken");
+const User = require("../../models/user.js");
+const { HttpError } = require("../../helpers");
 
-const getUserByEmail = require("../../service/users/getUserByEmail.js");
-const generateToken = require("../../helpers/generateToken.js");
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
 
-const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
     if (!email || !password) {
-      return res.status(400).json({ error: "Validation error" });
+      throw new HttpError(400, "Validation error");
     }
 
-    const user = await getUserByEmail(email);
+    const user = await User.findOne({ email });
+
     if (!user) {
-      return res.status(401).json({ message: "Email or password is wrong" });
+      throw new HttpError(401, "Email or password is wrong");
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Email or password is wrong" });
+      throw new HttpError(401, "Email or password is wrong");
     }
 
     const token = generateToken(user._id);
 
     user.token = token;
     await user.save();
+    console.log(`User with email: ${email} has logged in.`);
+    res.status(200).json({ message: `Logged in`, user });
 
-    res.status(200).json({ token, user });
+    // const user = await User.findOne({ email });
+
+    // if (!user || !user.comparePassword(password)) {
+    //   throw new HttpError(401, "Email or password is wrong");
+    // }
+    // const payload = {
+    //   id: user._id,
+    // };
+    // const token = jwt.sign(payload, process.env.SECRET_KEY, {
+    //   expiresIn: process.env.JWT_EXPIRE,
+    // });
+    // user.token = token;
+    // await user.save();
+
+    // // const loggedUser = await User.findByIdAndUpdate(user._id, { token });
+    // console.log("Logged in".success);
+    // res.status(200).json({ message: "Logged in", user });
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    next(error);
   }
 };
 
-module.exports = {login};
+module.exports = login;

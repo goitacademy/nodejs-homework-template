@@ -1,17 +1,19 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose");
+ const { errorValidation } = require("../middleware");
 
-const contactSchema = Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
-      min: [3, "Too short name"],
+      min: [3, "name is too short"],
+      unique: true,
       required: [true, "name is required"],
     },
     email: {
       type: String,
       match: [
         /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-        "Please fill a valid email address",
+        "fill a valid email address",
       ],
       required: [true, "email is required"],
     },
@@ -25,16 +27,15 @@ const contactSchema = Schema(
       default: false,
     },
     owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    }
-    
+      type: SchemaTypes.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
+ contactSchema.post("save", errorValidation);
+
 const Contact = model("contact", contactSchema);
 
-module.exports = {
-  Contact,
-};
+module.exports = Contact;

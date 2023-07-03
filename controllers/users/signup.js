@@ -1,18 +1,18 @@
 const User = require("../../models/user.js");
+const { HttpError } = require("../../helpers");
 const bcrypt = require("bcryptjs");
-const getUserByEmail = require("../../service/users/getUserByEmail.js");
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: "Validation error" });
+      throw new HttpError(400, "Validation error");
     }
 
-    const existingUser = await getUserByEmail(email);
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: "Email in use" });
+      throw new HttpError(409, "Email in use");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,11 +24,22 @@ const signup = async (req, res) => {
     });
 
     await user.save();
+    console.log(
+      `User with email: ${user.email} was successfully singed up`.success
+    );
+    res.status(201).json({ message: "Signed up", user });
 
-    res.status(201).json({ user });
-  } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    // const existingUser = await User.findOne({ email });
+    // if (existingUser) {
+    //   throw new HttpError(409, `Email in use`);
+    // }
+    // const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    // const user = await User.create({ ...req.body, password: hashPassword });
+
+    // res.status(201).json(user);
+  } catch (user) {
+    next(user);
   }
 };
 
-module.exports = {signup};
+module.exports = signup;

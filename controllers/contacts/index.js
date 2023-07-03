@@ -1,15 +1,15 @@
-const { create } = require("./create.js");
-const { get } = require("./get.js");
-const { getById } = require("./getById.js");
-const { remove } = require("./remove.js");
-const { update } = require("./update.js");
-const { updateStatusContact } = require("./updateStatusContact.js");
+const addContact = require("./addContact.js");
+const getAll = require("./getAll.js");
+const getContactById = require("./getContactById.js");
+const removeContact = require("./removeContact.js");
+const updateContact = require("./updateContact.js");
+const updateContactStatus = require("./updateContactStatus.js");
 
 module.exports = {
-  create,
-  get,
-  getById,
-  remove,
-  update,
-  updateStatusContact,
+  addContact,
+  getAll,
+  getContactById,
+  removeContact,
+  updateContact,
+  updateContactStatus,
 };
