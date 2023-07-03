@@ -1,7 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
 
-const router = express.Router();
 const {
   listContacts,
   getContactById,
@@ -9,6 +8,8 @@ const {
   addContact,
   updateContact,
 } = require("../../models/contacts");
+
+const router = express.Router();
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).required(),
@@ -72,12 +73,13 @@ router.put("/:contactId", async (req, res, next) => {
     const { error } = contactSchema.validate(req.body);
     if (error) {
       res.json({ message: "missing fields", status: 400 });
-    }
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      res.json({ message: "Not found", status: 404 });
     } else {
-      res.status(200).json(result);
+      const result = await updateContact(contactId, req.body);
+      if (!result) {
+        res.json({ message: "Not found", status: 404 });
+      } else {
+        res.status(200).json(result);
+      }
     }
   } catch (error) {
     next(error);
