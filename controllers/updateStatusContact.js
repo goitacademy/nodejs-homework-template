@@ -2,13 +2,13 @@ const { Contact } = require('../schema');
 const { errorHandler } = require('../helpers');
 const { schemaJoi } = require('../schema');
 
-const { addSchema } = schemaJoi;
+const { updateFavoriteSchema } = schemaJoi;
 
-async function putContact(req, res, next) {
+async function updateStatusContact(req, res, next) {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = updateFavoriteSchema.validate(req.body);
     if (error) {
-      throw errorHandler(400, error.message);
+      throw errorHandler(400, "missing field favorite");
     }
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
@@ -23,4 +23,4 @@ async function putContact(req, res, next) {
   }
 }
 
-module.exports = { putContact };
+module.exports = { updateStatusContact };
