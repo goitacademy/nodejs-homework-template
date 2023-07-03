@@ -13,6 +13,6 @@ mongoose.connect(DP_HOST)
     console.log(error.message);
     process.exit(1);
   
-  });
+  })
 
 

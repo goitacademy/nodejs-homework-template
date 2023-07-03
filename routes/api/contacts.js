@@ -1,4 +1,4 @@
-const express = require('express')
+const express = require('express');
 
 const ctrl = require("../../controllers/contacts/contacts");
 
