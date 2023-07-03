@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAll, getById, addNewContact, removeContactById} = require('../../controlers/contacts')
+const { getAll, getById, addNewContact,removeContactById, updateOldContact} = require('../../controllers/contacts')
 
 const router = express.Router()
 
@@ -11,8 +11,6 @@ router.post('/', addNewContact)
 
 router.delete('/:contactId',  removeContactById)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', updateOldContact)
 
 module.exports = router

@@ -1,15 +1,8 @@
 const Joi = require("joi");
 const { HttpErrors } = require("../helpers");
-const { hlpWrapper } = require("../helpers/hlpWrapper");
 
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../models/contacts");
-const { HttpErrors } = require("../helpers");
+const { ContactModel } = require("../models/contacts");
+
 const { hlpWrapper } = require("../helpers/hlpWrapper");
 
 const schema = Joi.object({
@@ -18,17 +11,18 @@ const schema = Joi.object({
   phone: Joi.number().required(),
 });
 
-const getAll = async (req, res, next) => {
-  const contacts = await listContacts();
+const getAll = async (req, res) => {
+  const contacts = await ContactModel.find();
 
   res.status(200).json({
     contacts,
   });
 };
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await ContactModel.findById(contactId);
+
   if (!contact) {
     throw HttpErrors(404, "Not found");
   }
@@ -42,13 +36,15 @@ const addNewContact = async (req, res) => {
 
   const { error } = schema.validate({ name, email, phone });
   if (error !== undefined) {
-    
     let errorName = " ";
     error.details.map((item) => item.path.map((item) => (errorName = item)));
-    throw HttpErrors (400, `missing required ${errorName} field`)
-  
+    throw HttpErrors(400, `missing required ${errorName} field`);
   }
-  const result = await addContact(req.body);
+  const result = await ContactModel.create({
+    name,
+    email,
+    phone,
+  });
   res.status(201).json({
     result,
   });
@@ -57,7 +53,7 @@ const addNewContact = async (req, res) => {
 const removeContactById = async (req, res) => {
   const { contactId } = req.params;
 
-  const deleteContact = await removeContact(contactId);
+  const deleteContact = await ContactModel.findByIdAndDelete(contactId);
   if (!deleteContact) {
     throw HttpErrors(404, "Not found");
   }
@@ -71,7 +67,8 @@ const updateOldContact = async (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw HttpErrors(400, "missing fields");
   }
-  const result = await updateContact(contactId, req.body);
+  const result = await ContactModel.findByIdAndUpdate(contactId, req.body, {new: true})
+  
   if (!result) {
     throw HttpErrors(404, "Not found");
   }
