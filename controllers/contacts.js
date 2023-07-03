@@ -30,9 +30,10 @@ const postCheckingSchema = Joi.object({
 
 const getAll = async (req, res, next) => {
     try {
+      console.log(req);
       const result = await
        Contact.find();
-  // console.log("find");
+  
       res.json(result);
     } catch (error) {
       next(error);

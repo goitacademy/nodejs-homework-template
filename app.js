@@ -17,7 +17,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// app.listen(3001);
+app.listen(3001);
 
 // app.use("/api/contacts", contactsRouter);
 

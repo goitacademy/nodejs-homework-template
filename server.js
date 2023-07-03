@@ -25,6 +25,11 @@ const {DB_HOST, PORT=3000} = process.env
   process.exit(1);
 });
 
+
+// main().catch(err => console.log(err));
+
+// async function main() {
+//   await mongoose.connect('mongodb://127.0.0.1:27017/test');}
 // , () => {
 //   console.log("Server running. Use our API on port: 3000")
 // })
