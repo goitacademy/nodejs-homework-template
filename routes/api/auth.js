@@ -4,7 +4,7 @@ const ctrl = require("../../controllers/auth/index")
 
 const {validateBody} = require("../../middlewares");
 
-const {schemas} = require("../../models/users");
+const {schemas} = require("../../schemas/users");
 
 const router = express.Router();
 

@@ -1,14 +1,22 @@
-const {User} = require("../../models/users");
+const { User } = require("../../models/users");
 
-const { HttpError } = require("../../helpers");
+const { HttpError } = require("../../helpers/HttpError");
 
-const register = async(req, res) =>{
-    const newUser = await User.create(req.body);
+const register = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
 
-    res.status(201).json({
-        email: newUser.email,
-        // subscription: newUser.subscription,
-    })
-}
+  if(user){
+    throw HttpError(409, "Email already exist")
+  }
+  
+  const newUser = await User.create(req.body);
+
+  res.status(201);
+  res.json({
+    email: newUser.email,
+    // subscription: newUser.subscription,
+  });
+};
 
 module.exports = register;

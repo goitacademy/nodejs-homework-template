@@ -1,9 +1,10 @@
-const { ctrlWrapper } = require("../../helpers");
+const asyncHandler = require("express-async-handler");
+const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
 
 const register = require("./register");
 
 
 module.exports = {
-    register: ctrlWrapper(register),
+    register: ctrlWrapper(asyncHandler(register)),
   
 };
