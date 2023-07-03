@@ -1,18 +1,23 @@
 const express = require("express");
-
 const logger = require("morgan");
-
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
+const DB_HOST =
+  "mongodb+srv://Yakomoga:vskmqjyth111111@cluster0.escdzh4.mongodb.net/db-contacts?retryWrites=true&w=majority";
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connect success"))
+  .catch((error) => console.log(error.message));
+
 app.use(logger("combined"));
-
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
 app.use(logger(formatsLogger));
+
 app.use(cors());
 
 app.use(express.json());
