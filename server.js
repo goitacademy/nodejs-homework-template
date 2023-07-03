@@ -1,5 +1,9 @@
-const app = require('./app')
+const app = require("./app");
+require("colors");
+const connectDB = require("./config/connectDB");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+connectDB();
+
+app.listen(process.env.PORT, () => {
+  console.log(`server is running on ${process.env.PORT}`.green.bold.italic);
+});
