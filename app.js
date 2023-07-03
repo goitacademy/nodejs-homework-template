@@ -4,6 +4,7 @@ const cors = require("cors");
 const fs = require("fs").promises;
 require("dotenv").config();
 
+const authRouter = require("./routes/api/auth");
 const contactsRouter = require("./routes/api/contacts");
 const moment = require("moment");
 
@@ -21,6 +22,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((err, req, res, next) => {
