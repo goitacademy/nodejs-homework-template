@@ -23,7 +23,13 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const schemas = { addSchema };
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    'any.required': 'missing field {{#label}}',
+  }),
+});
+
+const schemas = { addSchema, updateFavoriteSchema };
 
 contactSchema.post('save', handleMongooseErr);
 
