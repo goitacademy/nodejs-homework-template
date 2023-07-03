@@ -20,9 +20,21 @@ const userSchema = new Schema({
         enum: subscriptionType,
         default: "starter"
       },
+      avatarURL:{
+        type:  String,
+        required: true,
+      },
       token: {
         type: String,
-      }
+      },
+      verify: {
+        type: Boolean,
+        default: false,
+      },
+      verificationToken: {
+        type: String,
+        required: [true, 'Verify token is required'],
+      },
 },{versionKey:false,})
 
 

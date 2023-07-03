@@ -1,5 +1,6 @@
 const Contact = require('../models/contact');
 
+
 const getAll = async (req, res, next)=>{
 
     try{
@@ -79,6 +80,7 @@ const getById = async (req, res, next) => {
     }
   }
 
+  
 module.exports = {
     getAll,
     getById,
