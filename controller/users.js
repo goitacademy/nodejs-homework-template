@@ -49,6 +49,7 @@ const register = async (req, res, next) => {
   try {
     const newUser = new User({ username, email });
     newUser.setPassword(password);
+    newUser.token = null;
 
     const payload = {
       id: newUser.id,
