@@ -1,5 +1,5 @@
 const express = require("express");
-const Joi = require("joi");
+
 const contactsModel = require("../../models/contacts");
 
 const router = express.Router();
@@ -7,15 +7,17 @@ const router = express.Router();
 const { httpError } = require("../../helpers");
 const Contact = require("../../models/contacts");
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+// const Joi = require("joi");
 
-const updateSchema = Joi.object({
-  favorite: Joi.boolean(),
-});
+// const addSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().email().required(),
+//   phone: Joi.string().required(),
+// });
+
+// const updateSchema = Joi.object({
+//   favorite: Joi.boolean(),
+// });
 
 router.get("/", async (req, res, next) => {
   try {
