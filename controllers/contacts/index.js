@@ -1,5 +1,5 @@
-const asyncHandler = require("express-async-handler");
-const { ctrlWrapper } = require("../../helpers/ctrlWrapper");
+
+const  ctrlWrapper = require("../../helpers/ctrlWrapper");
 
 const getAll = require("./getAll");
 const getById = require("./getById");
@@ -9,10 +9,10 @@ const updateStatusContact = require("./updateStatusContact");
 const deleteById = require("./deleteById");
 
 module.exports = {
-  getAll: ctrlWrapper(asyncHandler(getAll)),
-  getById: ctrlWrapper(asyncHandler(getById)),
-  add: ctrlWrapper(asyncHandler(add)),
-  updateById: ctrlWrapper(asyncHandler(updateById)),
-  updateStatusContact: ctrlWrapper(asyncHandler(updateStatusContact)),
-  deleteById: ctrlWrapper(asyncHandler(deleteById)),
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
+  updateById: ctrlWrapper(updateById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
+  deleteById: ctrlWrapper(deleteById),
 };
