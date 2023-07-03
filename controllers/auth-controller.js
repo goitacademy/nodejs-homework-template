@@ -1,6 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const fs = require('fs/promises');
+const gravatar = require('gravatar');
+const path = require('path');
+const posterDir = path.resolve('public', 'posters');
 
 const { SECRET_KEY } = process.env;
 
@@ -18,13 +22,25 @@ const signup = async (req, res, next) => {
       throw HttpError(409, 'Email in use');
     }
 
+    const avatarURL = gravatar.url(email, {
+      s: '200',
+      r: 'pg',
+      d: 'identicon',
+      protocol: 'https',
+    });
+
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({
+      ...req.body,
+      avatarURL,
+      password: hashPassword,
+    });
 
     res.status(201).json({
       user: {
         email: newUser.email,
         subscription: 'starter',
+        avatarURL,
       },
     });
 
@@ -101,9 +117,26 @@ const logout = async (req, res, next) => {
   }
 };
 
+const addAvatar = async (req, res, next) => {
+  try {
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(posterDir, filename);
+    await fs.rename(oldPath, newPath);
+    const avatar = path.join('avatars', filename);
+    const { _id: owner } = req.user;
+
+    const result = await User.create({ ...req.body, avatar, owner });
+
+    res.status(201).join(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   signIn,
   getCurrent,
   logout,
+  addAvatar,
 };
