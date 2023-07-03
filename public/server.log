@@ -138,3 +138,7 @@ GET /api/contacts/6 03-07-2023_02:45:05
 GET /api/contacts/ 03-07-2023_02:45:09
 GET /api/contacts/64a20a71dcc89c4e8cc5d878 03-07-2023_02:46:59
 GET /api/contacts/64a20a71dcc89c4e8cc5d878 03-07-2023_02:47:47
+GET /api/contacts 04-07-2023_12:34:13
+GET /favicon.ico 04-07-2023_12:34:14
+GET /api/contacts/api/contacts/64a20a71dcc89c4e8cc5d878 04-07-2023_12:34:22
+GET /api/contacts/64a20a71dcc89c4e8cc5d878 04-07-2023_12:34:33
