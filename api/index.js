@@ -1,17 +1,35 @@
 const express = require("express");
 const router = express.Router();
-const ctrlContact = require("../controller");
 
-router.get("/contacts", ctrlContact.get);
+const auth = require("../middleware/auth/auth");
+const controllerUsers = require("../controller/users");
+const controllerContac = require("../controller/contacts");
 
-router.get("/contacts/:id", ctrlContact.getById);
 
-router.post("/contacts", ctrlContact.create);
+router.post("/users/signup", controllerUsers.signup);
 
-router.put("/contacts/:id", ctrlContact.update);
+router.post("/users/login", controllerUsers.login);
 
-router.patch("/contacts/:id/isFavourite", ctrlContact.updateStatus);
+router.get("/users/current", auth, controllerUsers.getCurrentUser);
 
-router.delete("/contacts/:id", ctrlContact.remove);
+router.post("/users/logout", auth, controllerUsers.logout);
+
+router.patch("/users/", auth, controllerUsers.changeSubscription);
+
+router.get("/contacts", auth, controllerContac.getContacts);
+
+router.get("/contacts/:contactId", auth, controllerContac.getContactById);
+
+router.post("/contacts", auth, controllerContac.create);
+
+router.put("/contacts/:contactId", auth, controllerContac.update);
+
+router.patch(
+  "/contacts/:contactId/favorite",
+  auth,
+  controllerContac.updateStatus
+);
+
+router.delete("/contacts/:contactId", auth, controllerContac.remove);
 
 module.exports = router;
