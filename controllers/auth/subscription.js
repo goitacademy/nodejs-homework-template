@@ -1,6 +1,6 @@
 const { User } = require("../../models/user/user");
 
-const { HttpError } = require("../../helpers/index.js");
+const { HttpError } = require("../../helpers");
 
 const subscription = async (req, res) => {
   const { _id } = req.user;

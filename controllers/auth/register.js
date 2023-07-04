@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { nanoid } = require("nanoid");
 
 const { User } = require("../../models/user/user");
-const { HttpError, emailSender } = require("../../helpers/index.js");
+const { HttpError, emailSender } = require("../../helpers");
 
 const register = async (req, res) => {
   const { email, password } = req.body;

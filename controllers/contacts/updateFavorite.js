@@ -1,6 +1,6 @@
 const { Contact } = require("../../models/contact/contact");
 
-const { HttpError } = require("../../helpers/index.js");
+const { HttpError } = require("../../helpers");
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
