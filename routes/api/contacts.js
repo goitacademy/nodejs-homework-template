@@ -1,7 +1,6 @@
 const contactsModel = require("../../models/contacts");
+const contactsUtils = require("../../utils/contacts");
 const express = require("express");
-const nanoid = import("nanoid");
-
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -18,23 +17,23 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const contact = { name, email, phone };
-  if (
-    Object.keys(contact).every((field) => {
-      if (contact[field] !== undefined) {
-        return true;
-      }
-      res.json({ message: `missing required field - ${field}` });
-      return false;
-    })
-  ) {
-    contactsModel.addContact({ id: nanoid(), ...contact });
+  const contact = { name: req.body.name, email: req.body.email, phone: req.body.phone };
+  const missingMessage = contactsUtils.getMissingFieldsMessage(contact);
+  if (missingMessage === "") {
+    const addedContact = await contactsModel.addContact(contact);
+    res.status(201).json(addedContact);
+    return;
   }
+  res.status(400).json({ message: missingMessage });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const removed = await contactsModel.removeContact(req.params.contactId);
+  if (removed) {
+    res.json({ message: "contact deleted" });
+    return;
+  }
+  res.status(404).json({ message: "Not found" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
