@@ -9,24 +9,53 @@ router.get('/', async (req, res, next) => {
   res.json(result)
 })
 
-router.get('/:contactId', async (req, res, next) => {
-    const result = await contacts.getContactById('qdggE76Jtbfd9eWJHrssH')
-  res.json(result)
+router.get('/:id', async (req, res, next) => {
+  const contactId = req.params.id;
+  const result = await contacts.getContactById(contactId)
+  if (result) {
+    res.json(result);
+  } else {
+    res.status(404).json({ message: 'Not found' });
+  }
 })
 
 router.post('/', async (req, res, next) => {
-  const result = await contacts.addContact({ name: 'Stanislav', email: 'pr', phone: '45' })
-  res.json(result)
+  const { name, email, phone } = req.body;
+
+  if (!name || !email || !phone) {
+    res.status(400).json({ message: 'missing required name field' });
+  } else {
+    const contact = await contacts.addContact({ name, email, phone });
+    res.status(201).json(contact);
+  }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
-  const result = await contacts.removeContact("uBOr5u4WwWe8bW9QK_EMA")
-  res.json(result)
+router.delete('/:id', async (req, res, next) => {
+  const contactId = req.params.id;
+  const result = await contacts.removeContact(contactId);
+
+  if (result) {
+    res.json({ message: 'contact deleted' });
+  } else {
+    res.status(404).json({ message: 'Not found' });
+  }
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  const result = await contacts.updateContact("e6ywwRe4jcqxXfCZOj_1")
-  res.json(result)
+router.put('/:id', async (req, res, next) => {
+  const contactId = req.params.id;
+  const { name, email, phone } = req.body;
+
+  if (!name || !email || !phone) {
+    res.status(400).json({ message: 'missing fields' });
+  } else {
+    const updatedContact = await contacts.updateContact(contactId, { name, email, phone });
+    
+    if (updatedContact) {
+      res.status(200).json(updatedContact);
+    } else {
+      res.status(404).json({ message: 'Not Found' });
+    }
+  }
 })
 
 module.exports = router
