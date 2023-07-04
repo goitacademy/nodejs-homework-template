@@ -12,6 +12,7 @@ const {
   login,
   getCurrent,
   logout,
+  updateSubscription,
 } = require("./auth");
 
 module.exports = {
@@ -25,4 +26,5 @@ module.exports = {
   login,
   getCurrent,
   logout,
+  updateSubscription,
 };
