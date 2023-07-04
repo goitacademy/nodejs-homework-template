@@ -4,13 +4,14 @@ require('dotenv').config();
 const fs = require('fs/promises');
 const gravatar = require('gravatar');
 const path = require('path');
-const posterDir = path.resolve('public', 'posters');
+const Jimp = require('jimp');
 
 const { SECRET_KEY } = process.env;
 
 const User = require('../models/users');
 
 const HttpError = require('../helpers/HttpError');
+const avatarsDir = path.resolve('public', 'avatars');
 
 const signup = async (req, res, next) => {
   try {
@@ -117,20 +118,22 @@ const logout = async (req, res, next) => {
   }
 };
 
-const addAvatar = async (req, res, next) => {
-  try {
-    const { path: oldPath, filename } = req.file;
-    const newPath = path.join(posterDir, filename);
-    await fs.rename(oldPath, newPath);
-    const avatar = path.join('avatars', filename);
-    const { _id: owner } = req.user;
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsDir, filename);
+  await Jimp.read(oldPath)
+    .then((avatar) => {
+      return avatar.resize(250, 250).write(oldPath);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  await fs.rename(oldPath, newPath);
+  const avatarURL = path.join('avatars', filename);
 
-    const result = await User.create({ ...req.body, avatar, owner });
-
-    res.status(201).join(result);
-  } catch (error) {
-    next(error);
-  }
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.status(200).json({ avatarURL });
 };
 
 module.exports = {
@@ -138,5 +141,5 @@ module.exports = {
   signIn,
   getCurrent,
   logout,
-  addAvatar,
+  updateAvatar,
 };

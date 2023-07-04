@@ -14,14 +14,14 @@ const storage = multer.diskStorage({
   },
 });
 
-const limits = {
-  fileSize: 1024 * 1024,
-};
+// const limits = {
+//   fileSize: 1024 * 1024,
+// };
 
 const mineTypeWhitelist = ['image/jpeg', 'image/png'];
 
 const fileFilter = (req, file, cb) => {
-  if (mineTypeWhitelist.includes(file.mimetype)) {
+  if (!mineTypeWhitelist.includes(file.mimetype)) {
     return cb(HttpError(400, 'Invalid file format'));
   }
   cb(null, true);
@@ -29,7 +29,7 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({
   storage,
-  limits,
+  // limits,
   fileFilter,
 });
 
