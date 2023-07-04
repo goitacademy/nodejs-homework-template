@@ -5,11 +5,6 @@ const { emailSender } = require("../../Helpers");
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
 
-  if (!email) {
-    res.status(400).json({ message: "missing required field email" });
-    return;
-  }
-
   const user = await User.findOne({ email });
 
   if (!user) {
