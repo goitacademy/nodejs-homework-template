@@ -1,13 +1,30 @@
 const User = require("../../models/user.js");
 const { HttpError } = require("../../helpers");
 
-const updateSubscription = async (req, res) => {
-  const { id } = req.user;
-  const updatedUser = await User.findByIdAndUpdate(id, req.body);
-  if (!updatedUser) {
-    throw new HttpError(404, "Not found");
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { subscription } = req.body;
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      { subscription },
+      { new: true }
+    );
+    if (!user || !user.token) {
+      throw new HttpError(401, "Not authorized");
+    }
+    const userData = {
+      email: user.email,
+      subscription: user.subscription,
+    };
+    console.log(`Subscription updated successfully`.success);
+    res
+      .status(200)
+      .json({ message: `Subscription updated successfully`, userData });
+  } catch (error) {
+    next(error);
   }
-  return res.status(200).json(updatedUser);
 };
 
 module.exports = updateSubscription;

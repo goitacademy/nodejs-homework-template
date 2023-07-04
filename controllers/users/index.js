@@ -9,5 +9,5 @@ module.exports = {
   login,
   logout,
   signup,
-  updateSubscription
+  updateSubscription,
 };

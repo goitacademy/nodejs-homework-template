@@ -29,6 +29,7 @@ app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
+  console.log("Not found".error);
 });
 
 app.use((err, req, res, next) => {

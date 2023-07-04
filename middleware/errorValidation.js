@@ -7,5 +7,3 @@ const errorValidation = (error, data, next) => {
 };
 
 module.exports = errorValidation;
-
-
