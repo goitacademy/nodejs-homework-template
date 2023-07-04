@@ -10,6 +10,8 @@ const {
 const { 
   register, 
   login,
+  getCurrent,
+  logout,
 } = require("./auth");
 
 module.exports = {
@@ -21,4 +23,6 @@ module.exports = {
   deleteById,
   register,
   login,
+  getCurrent,
+  logout,
 };
