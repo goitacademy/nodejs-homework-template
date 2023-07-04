@@ -1,5 +1,9 @@
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs/promises");
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
 
 const User = require("../../service/schemas/user");
 
@@ -15,8 +19,20 @@ const UserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const addAvatar = async (req, res, next) => {
+  try {
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+  const avatarURL = gravatar.url(
+    email,
+    { size: 200, rating: "pg", default: "identicon" },
+    true
+  );
   try {
     const { error } = UserSchema.validate(req.body);
     if (error) {
@@ -37,7 +53,7 @@ const signup = async (req, res, next) => {
         });
       }
       try {
-        const newUser = new User({ email });
+        const newUser = new User({ email, avatarURL });
         newUser.setPassword(password);
         await newUser.save();
         // const { email, subscription } = newUser;
@@ -182,6 +198,7 @@ const changeSubscription = async (req, res, next) => {
 };
 
 module.exports = {
+  addAvatar,
   getCurrentUser,
   signup,
   login,
