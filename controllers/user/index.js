@@ -1,4 +1,4 @@
-const { ctrlWrapper } = require("../../helpers");
+const { ctrlWrapper } = require("../../helpers/index.js");
 
 const { updateAvatar } = require("./updateAvatar");
 

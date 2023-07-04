@@ -1,4 +1,4 @@
-const { ctrlWrapper } = require("../../helpers");
+const { ctrlWrapper } = require("../../helpers/index.js");
 
 const { register } = require("./register");
 const { login } = require("./login");
