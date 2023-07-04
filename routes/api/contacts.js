@@ -18,13 +18,13 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const contact = { name: req.body.name, email: req.body.email, phone: req.body.phone };
-  const missingMessage = contactsUtils.getMissingFieldsMessage(contact);
-  if (missingMessage === "") {
+  const validationResult = contactsUtils.validateContact(contact);
+  if (validationResult.error === undefined) {
     const addedContact = await contactsModel.addContact(contact);
     res.status(201).json(addedContact);
     return;
   }
-  res.status(400).json({ message: missingMessage });
+  res.status(400).json({ message: validationResult.error });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
@@ -38,8 +38,8 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const contact = { name: req.body.name, email: req.body.email, phone: req.body.phone };
-  const missingMessage = contactsUtils.getMissingFieldsMessage(contact);
-  if (missingMessage === "") {
+  const validationResult = contactsUtils.validateContact(contact);
+  if (validationResult.error === undefined) {
     const updatedContact = await contactsModel.updateContact(req.params.contactId, contact);
     if (updatedContact) {
       res.status(200).json(updatedContact);
@@ -48,7 +48,7 @@ router.put("/:contactId", async (req, res, next) => {
     res.status(404).json({ message: "Not found" });
     return;
   }
-  res.status(400).json({ message: missingMessage });
+  res.status(400).json({ message: validationResult.error });
 });
 
 module.exports = router;

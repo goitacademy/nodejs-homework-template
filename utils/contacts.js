@@ -1,26 +1,16 @@
-const getMissingFieldsMessage = (contact) => {
-  const obligatoryFields = ["name", "email", "phone"];
-  const missingFields = [];
-  obligatoryFields.forEach((field) => {
-    if (contact[field] === undefined) {
-      missingFields.push(field);
-    }
+const Joi = require("joi");
+
+const validateContact = (contact) => {
+  const contactSchema = Joi.object({
+    name: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email(),
+    phone: Joi.string().pattern(
+      /^(\+|0)?((((\d{2})+[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{3})|((((\+?\d{2})+[ -]?)?\d{3}[ -]?\d{2}[ -]?\d{2})))$/
+    ),
   });
-  if (missingFields.length === 0) {
-    return "";
-  }
-  let message;
-  if (missingFields.length === 1) {
-    message = `missing required field - ${missingFields[0]}`;
-  } else {
-    message = "missing required fields: ";
-    missingFields.forEach((field, idx) => {
-      message += idx === missingFields.length - 1 ? field : `${field}, `;
-    });
-  }
-  return message;
+  return contactSchema.validate(contact);
 };
 
 module.exports = {
-  getMissingFieldsMessage,
+  validateContact,
 };
