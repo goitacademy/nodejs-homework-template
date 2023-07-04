@@ -1,5 +1,5 @@
 const Contact = require("../../models/contact.js");
-const {HttpError} = require("../../helpers");
+const { HttpError } = require("../../helpers");
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
@@ -15,7 +15,7 @@ const removeContact = async (req, res, next) => {
     }
     console.log(`Contact with id: ${contactId} deleted`.success);
     res.status(200).json("Contact deleted");
-  }catch (error) {
+  } catch (error) {
     next(error);
   }
 };

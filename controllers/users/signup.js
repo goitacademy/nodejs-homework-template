@@ -28,15 +28,6 @@ const signup = async (req, res, next) => {
       `User with email: ${user.email} was successfully singed up`.success
     );
     res.status(201).json({ message: "Signed up", user });
-
-    // const existingUser = await User.findOne({ email });
-    // if (existingUser) {
-    //   throw new HttpError(409, `Email in use`);
-    // }
-    // const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-    // const user = await User.create({ ...req.body, password: hashPassword });
-
-    // res.status(201).json(user);
   } catch (user) {
     next(user);
   }

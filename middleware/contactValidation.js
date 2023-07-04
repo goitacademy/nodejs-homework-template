@@ -14,6 +14,4 @@ const favoriteJoi = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-
-
 module.exports = { contactJoi, favoriteJoi };

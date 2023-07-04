@@ -1,5 +1,5 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
- const { errorValidation } = require("../middleware");
+const { errorValidation } = require("../middleware");
 
 const contactSchema = new Schema(
   {
@@ -34,7 +34,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
- contactSchema.post("save", errorValidation);
+contactSchema.post("save", errorValidation);
 
 const Contact = model("contact", contactSchema);
 

@@ -1,4 +1,4 @@
-const {HttpError} = require("../../helpers");
+const { HttpError } = require("../../helpers");
 const Contact = require("../../models/contact.js");
 
 const getAll = async (req, res, next) => {

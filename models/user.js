@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
- const { errorValidation } = require("../middleware");
-// const bcrypt = require("bcryptjs");
+const { HttpError } = require("../helpers");
 
 const userSchema = new Schema(
   {
@@ -29,7 +28,15 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.post("save", errorValidation);
+userSchema.post("save", function (error, doc, next) {
+  if (error.name === "MongoServerError" && error.code === 11000) {
+    const errorMessage = "Email is already in use";
+    const httpError = new HttpError(409, errorMessage);
+    next(httpError);
+  } else {
+    next(error);
+  }
+});
 
 const User = model("user", userSchema);
 
