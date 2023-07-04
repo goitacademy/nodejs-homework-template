@@ -64,8 +64,17 @@ const subscriptionValidator = (data) => {
   return schema.validate(data);
 };
 
+const emailValidator = (data) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+
+  return schema.validate(data);
+};
+
 module.exports = {
   User,
   userValidator,
   subscriptionValidator,
+  emailValidator
 };

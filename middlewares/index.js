@@ -5,6 +5,7 @@ const validateUser = require("./validateUser");
 const protect = require("./protect");
 const validateSubscription = require("./validateSubscription");
 const upload = require("./upload");
+const validateEmail = require('./validateEmail')
 
 module.exports = {
   validateId,
@@ -14,4 +15,5 @@ module.exports = {
   protect,
   validateSubscription,
   upload,
+  validateEmail
 };

@@ -1,5 +1,5 @@
 const { Contact, bodyValidator, favoriteValidator } = require("./contact");
-const { User, userValidator, subscriptionValidator } = require("./user");
+const { User, userValidator, subscriptionValidator, emailValidator } = require("./user");
 
 module.exports = {
   Contact,
@@ -8,4 +8,5 @@ module.exports = {
   User,
   userValidator,
   subscriptionValidator,
+  emailValidator
 };
