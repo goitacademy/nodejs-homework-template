@@ -19,7 +19,7 @@ router.patch("/users/", auth, controllerUsers.changeSubscription);
 router.patch(
   "/users/avatars",
   auth,
-  upload.single("picture"),
+  upload.single("avatar"),
   controllerUsers.addAvatar
 );
 

@@ -21,8 +21,36 @@ const UserSubscriptionSchema = Joi.object({
 
 const addAvatar = async (req, res, next) => {
   try {
-  } catch (e) {
-    console.log(e);
+    const { path: temporaryName } = req.file;
+    console.log(path);
+    const extnameTmp = path.extname(temporaryName);
+    console.log(extnameTmp);
+    const newAvatar = Date.now().toString() + extnameTmp;
+    console.log(newAvatar);
+
+    await fs.unlink(temporaryName);
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(401).json({
+        status: "Unauthorized",
+        code: 401,
+        message: "Not authorized",
+        data: "Bad request",
+      });
+    }
+
+    user.avatarURL = `/avatars/${newAvatar}`;
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: { avatarURL: user.avatarURL },
+    });
+  } catch (err) {
+    next(err);
   }
 };
 
