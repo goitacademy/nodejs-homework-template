@@ -1,6 +1,7 @@
 const fs = require('fs/promises')
 const path = require('path')
 const { nanoid } = require("nanoid")
+const { HttpError } = require("../helpers");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -39,7 +40,7 @@ const updateContact = async (id, body) => {
 
   if (index === -1) {
     console.log("cant change element with such id");
-    return null;
+    throw HttpError(404, "Not found id");
   }
 
   contacts[index] = { id, ...body };
