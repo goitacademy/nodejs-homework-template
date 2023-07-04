@@ -1,5 +1,5 @@
 const { isValidObjectId } = require("mongoose");
-// из mongoose берем свойство isValidObgectId у mongoose
+
 const { HttpError } = require("../helpers");
 
 const isValidId = (req, res, next) => {
