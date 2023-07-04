@@ -22,11 +22,23 @@ const UserSubscriptionSchema = Joi.object({
 const addAvatar = async (req, res, next) => {
   try {
     const { path: temporaryName } = req.file;
-    console.log(path);
+    // console.log(path);
+    // console.log(temporaryName);
     const extnameTmp = path.extname(temporaryName);
-    console.log(extnameTmp);
+    // console.log(extnameTmp);
     const newAvatar = Date.now().toString() + extnameTmp;
-    console.log(newAvatar);
+    // console.log(newAvatar);
+
+    const storeImage = path.join(process.cwd(), "public", "avatars", newAvatar);
+
+    try {
+      Jimp.read(temporaryName).then((avatar) => {
+        return avatar.resize(250, 250).quality(60).write(storeImage);
+      });
+    } catch (error) {
+      await fs.unlink(temporaryName);
+      next(error);
+    }
 
     await fs.unlink(temporaryName);
 
