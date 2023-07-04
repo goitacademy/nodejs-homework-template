@@ -1,25 +1,23 @@
-const express = require('express')
+const express = require('express');
+const ctrl = require('../../controllers/contacts');
+const { validateBody } = require('../../middlewares');
+const schemas = require('../../schemas/contacts');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Отримання списку усіх контактів
+router.get('/', ctrl.getAll);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Отримання контакту по id
+router.get('/:contactId', ctrl.getById);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Додавання контакту
+router.post('/', validateBody(schemas.addSchema), ctrl.add);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Редагування контакту
+router.put('/:contactId', validateBody(schemas.addSchema), ctrl.updateById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Видалення контакту
+router.delete('/:contactId', ctrl.deleteById);
 
-module.exports = router
+module.exports = router;
