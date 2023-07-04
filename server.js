@@ -1,19 +1,29 @@
 const mongoose = require("mongoose");
 
 const app = require("./app");
+const { DB_HOST } = process.env;
 
-const DB_HOST =
-  "mongodb+srv://Yakomoga:vskmqjyth111111@cluster0.escdzh4.mongodb.net/db-contacts?retryWrites=true&w=majority";
+mongoose.set("strictQuery", true);
 
 // connect to basedata
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {});
+    app.listen(3000);
+    console.log("Database connection successful");
   })
   .catch((error) => {
     console.log(error.message);
-
     // disables running processes
     process.exit(1);
   });
+
+// mongoose
+//   .connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+//   .then(() => {
+//     console.log("Connected to MongoDB");
+//     // Решта вашого коду
+//   })
+//   .catch((error) => {
+//     console.error("Error connecting to MongoDB:", error);
+//   });
