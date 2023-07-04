@@ -1,7 +1,7 @@
-const HttpError = require("./HttpError");
-const ctrlWrapper = require("./ctrlWrapper");
-const handleMongooseError = require("./handleMongooseError");
-const emailSender = require("./emailSender");
+const HttpError = require("./HttpError.js");
+const ctrlWrapper = require("./ctrlWrapper.js");
+const handleMongooseError = require("./handleMongooseError.js");
+const emailSender = require("./emailSender.js");
 
 module.exports = {
   HttpError,
