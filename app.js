@@ -2,13 +2,7 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
-
-const DB_HOST = "mongodb+srv://Sergey:6aW8ACM88Ob9FowD@cluster0.v3b1qey.mongodb.net/db-contacts"
-mongoose.set('strictQuery', true)
-mongoose.connect(DB_HOST)
-.then(() => console.log('Connected to db-contacts'))
-.catch(error => console.log(error.message))
+require('dotenv').config()
 
 const contactsRouter = require('./routes/api/contacts')
 
