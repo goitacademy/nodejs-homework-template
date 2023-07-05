@@ -1,35 +1,5 @@
- const mongoose = require('mongoose');
+const app = require('./app')
 
-const app = require('./app');
-
-
-// const DB_HOST = require("./config");
-
-const {DB_HOST, PORT=3000} = process.env
-
-// const DB_HOST="mongodb+srv://Andy:notAllowedAccess@cluster0.5mjlhcp.mongodb.net/db-contacts?retryWrites=true&w=majority"
-
-
-//  mongoose.set('strictQuery',true);
-
-
- mongoose.connect(DB_HOST)
-.then(() => {
-  app.listen(PORT)
-    console.log("Database connection successful");
-
-    
+app.listen(3000, () => {
+  console.log("Server running. Use our API on port: 3000")
 })
-.catch(err => {
-  console.log(`Server not running. Error message: ${err.message}`);
-  process.exit(1);
-});
-
-
-// main().catch(err => console.log(err));
-
-// async function main() {
-//   await mongoose.connect('mongodb://127.0.0.1:27017/test');}
-// , () => {
-//   console.log("Server running. Use our API on port: 3000")
-// })
