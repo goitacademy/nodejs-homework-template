@@ -22,6 +22,7 @@ const getById = async (req, res) => {
 
 const addNewContact = async (req, res) => {
   const result = await addContact(req.body);
+  if (result) throw ErrorHandling(201, "contact created");
   if (!result) throw ErrorHandling(400, "missing required name field");
   res.json(result);
 };
@@ -30,13 +31,13 @@ const updateContactId = async (req, res) => {
   console.log(req.params);
   const { contactId } = req.params;
   const result = await updateContacts(contactId, req.body);
-
   if (!result) throw ErrorHandling(404, "Not Found");
   res.json(result);
 };
 const removeContactId = async (req, res) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
+  if (result) throw ErrorHandling(200, "contact deleted");
   if (!result) throw ErrorHandling(404, "Not Found");
   res.json(result);
 };
