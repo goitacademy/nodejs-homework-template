@@ -2,9 +2,9 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
-
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
+const { HttpError } = require("./helpers");
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/users", authRouter);
+app.use("/users", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
@@ -25,5 +25,14 @@ app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
 });
+
+// app.use((err, req, res, next) => {
+//   if (err instanceof HttpError) {
+//     res.status(err.status).json({ message: err.message });
+//   } else {
+//     const { status = 500, message = "Server error" } = err;
+//     res.status(status).json({ message });
+//   }
+// });
 
 module.exports = app;

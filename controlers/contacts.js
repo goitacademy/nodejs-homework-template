@@ -3,6 +3,7 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 
 const getAllContacts = async (req, res, next) => {
   const { _id: owner } = req.user;
+
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
   const data = await Contact.find({ owner }, "-createdAt -updatedAt", {
@@ -32,16 +33,6 @@ const addOneContact = async (req, res, next) => {
   res.status(201).json(data);
 };
 
-const deleteContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const data = await Contact.findByIdAndDelete(contactId);
-  if (!data) {
-    throw HttpError(404, "Not found");
-  }
-
-  res.json(data);
-};
-
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const data = await Contact.findByIdAndUpdate(contactId, req.body, {
@@ -61,6 +52,16 @@ const updateFavoriteContact = async (req, res, next) => {
   if (!data) {
     throw HttpError(404, "Not found");
   }
+  res.json(data);
+};
+
+const deleteContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const data = await Contact.findByIdAndDelete(contactId);
+  if (!data) {
+    throw HttpError(404, "Not found");
+  }
+
   res.json(data);
 };
 
