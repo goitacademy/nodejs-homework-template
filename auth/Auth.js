@@ -1,109 +1,105 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const jwtSecret =
+  "7fa6f4a152ab0683a2565acbf5316dbff0c354627a7829e34d9565016259f91cfc7496";
 const User = require("../models/User");
 
 exports.register = async (req, res, next) => {
   const { email, password } = req.body;
-  if (password.length < 6) {
-    return res.status(400).json({ message: "Password less than 6 characters" });
-  }
   try {
-    await User.create({
-      email,
-      password,
-    }).then((user) =>
-      res.status(200).json({
-        message: "User successfully created",
-        user,
-      })
-    );
-  } catch (err) {
+    bcrypt.hash(password, 10).then(async (hash) => {
+      await User.create({
+        email,
+        password: hash,
+      }).then((user) =>
+        res.status(200).json({
+          message: "User successfully created",
+          user,
+        })
+      );
+    });
+  } catch (error) {
     res.status(401).json({
       message: "User not successful created",
-      error: "Uknown error",
+      error: error.message,
     });
   }
 };
 
 exports.login = async (req, res, next) => {
+  const { email, password } = req.body;
+  // Check if username and password is provided
+  if (!email || !password) {
+    return res.status(400).json({
+      message: "Email or Password not present",
+    });
+  }
   try {
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({ email });
     if (!user) {
       res.status(401).json({
         message: "Login not successful",
         error: "User not found",
       });
     } else {
-      res.status(200).json({
-        message: "Login successful",
-        user,
+      bcrypt.compare(password, user.password).then(function (result) {
+        if (result) {
+          const maxAge = 3 * 60 * 60;
+          const token = jwt.sign(
+            { id: user._id, email, subscription: user.subscription },
+            jwtSecret,
+            {
+              expiresIn: maxAge, // 3hrs in sec
+            }
+          );
+          User.findByIdAndUpdate(user._id, { token });
+          res.json({
+            token,
+            user: {
+              email: user.email,
+              subscription: user.subscription,
+            },
+          });
+        } else {
+          res.status(400).json({ message: "Login not succesful" });
+        }
       });
     }
   } catch (error) {
     res.status(400).json({
       message: "An error occurred",
-      error: "Uknown error",
+      error: error.message,
     });
   }
 };
 
 exports.update = async (req, res, next) => {
-  const { subscription, email } = req.body;
-  // First - Verifying if role and id is presnt
-  if (subscription && email) {
-    // Second - Verifying if the value of role is admin
-    if (subscription === "pro") {
-      // Finds the user with the id
-      await User.findOne(email)
-        .then((user) => {
-          // Third - Verifies the user is not an admin
-          if (user.subscription !== "pro") {
-            user.subscription = subscription;
-            user.save((err) => {
-              //Monogodb error checker
-              if (err) {
-                res
-                  .status("400")
-                  .json({ message: "An error occurred", error: err.message });
-                process.exit(1);
-              }
-              res.status("201").json({ message: "Update successful", user });
-            });
-          } else {
-            res.status(400).json({ message: "User is already an Admin" });
-          }
-        })
-        .catch((error) => {
-          res
-            .status(400)
-            .json({ message: "An error occurred", error: error.message });
-        });
-    }
-    if (subscription === "business") {
-      // Finds the user with the id
-      await User.findOne(email)
-        .then((user) => {
-          // Third - Verifies the user is not an admin
-          if (user.subscription !== "business") {
-            user.subscription = subscription;
-            user.save((err) => {
-              //Monogodb error checker
-              if (err) {
-                res.status("400").json({
-                  message: "An error occurred",
-                  error: err.message,
-                });
-                process.exit(1);
-              }
-              res.status("201").json({ message: "Update successful", user });
-            });
-          } else {
-            res.status(400).json({ message: "User is already an Admin" });
-          }
-        })
-        .catch((error) => {
-          res
-            .status(400)
-            .json({ message: "An error occurred", error: error.message });
-        });
-    }
+  const { subscription, _id } = req.body;
+  const subscriptions = ["starter", "pro", "business"];
+
+  if (!subscriptions.includes(subscription)) {
+    res.status(400).json({ message: "There is no such subscription" });
   }
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
+  res.status(200).json({
+    message: "Update successfull",
+    updatedUser,
+  });
+};
+exports.getCurrent = async (req, res, next) => {
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
+};
+exports.logout = async (req, res, next) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.status(204).send();
 };
