@@ -1,12 +1,12 @@
-const Joi = require("joi");
+// const Joi = require("joi");
 const { ctrlsWrapper } = require("../helpers/index");
 const contacts = require("../models/contacts");
 
-const contactSchema = Joi.object({
-  name: Joi.string().min(3).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().min(10).max(15).required(),
-});
+// const contactSchema = Joi.object({
+//   name: Joi.string().min(3).required(),
+//   email: Joi.string().email().required(),
+//   phone: Joi.string().min(10).max(15).required(),
+// });
 
 const getContacts = async (req, res, next) => {
   const result = await contacts.listContacts();
@@ -24,13 +24,8 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: "missing required name field" });
-  } else {
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-  }
+  const result = await contacts.addContact(req.body);
+  res.status(201).json(result);
 };
 
 const removeContact = async (req, res, next) => {
@@ -45,16 +40,11 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    res.status(400).json({ message: "missing fields" });
+  const result = await contacts.updateContact(contactId, req.body);
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
   } else {
-    const result = await contacts.updateContact(contactId, req.body);
-    if (!result) {
-      res.status(404).json({ message: "Not found" });
-    } else {
-      res.status(200).json(result);
-    }
+    res.status(200).json(result);
   }
 };
 
