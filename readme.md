@@ -1,1 +1,1 @@
-![](https://uk.wikipedia.org/wiki/Node.js)
+![](./logo.svg)
