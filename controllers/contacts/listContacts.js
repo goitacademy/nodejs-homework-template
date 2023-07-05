@@ -6,6 +6,4 @@ const listContacts = async (_, res) => {
     res.json(result);
 }
 
-module.exports = {
-    listContacts: ctrlWrapper(listContacts),
-}
+module.exports = ctrlWrapper(listContacts)

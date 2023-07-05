@@ -10,6 +10,4 @@ const getContactById = async (req, res) => {
     res.json(result);
 }
 
-module.exports = {
-    getContactById: ctrlWrapper(getContactById),
-}
+module.exports = ctrlWrapper(getContactById)

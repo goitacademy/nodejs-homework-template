@@ -10,6 +10,4 @@ const updateFavorite = async (req, res) => {
     res.json(result);
 }
 
-module.exports = {
-    updateFavorite: ctrlWrapper(updateFavorite),
-}
+module.exports = ctrlWrapper(updateFavorite)

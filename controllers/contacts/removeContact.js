@@ -12,6 +12,4 @@ const removeContact = async (req, res) => {
     });
 }
 
-module.exports = {
-    removeContact: ctrlWrapper(removeContact),
-}
+module.exports = ctrlWrapper(removeContact)
