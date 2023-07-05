@@ -1,9 +1,9 @@
-const Contacts = require("../models/contacts");
+const Contact = require("../middleware/contacts");
 
 const getContacts = async (req, res, next) => {
   try {
     console.log(req.method);
-    const contacts = await Contacts.listContacts();
+    const contacts = await Contact.listContacts();
     res.json({ status: "success", code: 200, data: { contacts } });
   } catch (error) {
     next(error);
@@ -12,7 +12,7 @@ const getContacts = async (req, res, next) => {
 
 const getContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.getContactById(req.params.id);
+    const contact = await Contact.getContactById(req.params.id);
     console.log(contact);
     console.log(contact.id);
     if (contact) {
@@ -31,7 +31,7 @@ const getContact = async (req, res, next) => {
 
 const saveContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.addContact(req.body);
+    const contact = await Contact.addContact(req.body);
     console.log(`Contact successfully ${contact} added`);
     res.status(201).json({ status: "success", code: 201, data: { contact } });
   } catch (error) {
@@ -41,7 +41,7 @@ const saveContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.removeContact(req.params.id);
+    const contact = await Contact.removeContact(req.params.id);
     console.log(`Contact successfully ${contact} removed`);
     if (contact) {
       return res
@@ -59,7 +59,7 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     console.log(req.method);
-    const contact = await Contacts.updateContact(req.params.id, req.body);
+    const contact = await Contact.updateContact(req.params.id, req.body);
     if (contact) {
       return res
         .status(200)
@@ -75,7 +75,7 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.updateContact(req.params.id, req.body);
+    const contact = await Contact.updateContact(req.params.id, req.body);
     if (contact) {
       return res
         .status(200)
