@@ -1,4 +1,3 @@
-const Joi = require("joi");
 const { Schema, model } = require("mongoose");
 
 const contactsSchema = new Schema(
@@ -17,22 +16,15 @@ const contactsSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      // required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
-
-const updateFaforiteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
-
-const schemasJoi = { addSchema, updateFaforiteSchema };
-
 const Contact = model("contact", contactsSchema);
 
-module.exports = { Contact, schemasJoi };
+module.exports = Contact;
