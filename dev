@@ -1,0 +1,4 @@
+> template@0.0.0 start
+> cross-env NODE_ENV=production node ./server.js
+
+Database connection successful
