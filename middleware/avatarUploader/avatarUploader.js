@@ -15,4 +15,4 @@ const avatarUploader = multer({
   storage: storage,
 });
 
-module.exports = avatarUploader;
+module.exports = { avatarUploader, tempDir };
