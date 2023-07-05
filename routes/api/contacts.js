@@ -1,13 +1,17 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const router = express.Router();
 
-const contacts = require('../../models/contacts')
+const contacts = require('../../models/contacts');
 
 router.get('/', async (req, res, next) => {
-  const result = await contacts.listContacts()
-  res.json(result)
-})
+  try {
+    const result = await contacts.listContacts();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 router.get('/:id', async (req, res, next) => {
   const contactId = req.params.id;
