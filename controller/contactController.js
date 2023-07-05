@@ -68,7 +68,7 @@ class ContactController {
       }
       res.status(200).json(result);
     } catch (error) {
-      next(error);
+      return HttpError(500,error.message)
     }
   }
 

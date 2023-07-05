@@ -15,6 +15,6 @@ const ContactSchema = new Schema({
       type: Boolean,
       default: false,
     },
-})
+},{ versionKey: false })
 
 module.exports = model("Contacts",ContactSchema);
