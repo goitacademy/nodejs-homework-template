@@ -44,11 +44,10 @@ const updateContact = async (contactId, body) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = {contactId, ...body};
+  contacts[index] = {...contacts[index], ...body};
   await writeContacts(contacts);
   return contacts[index];
 }
-
 
 module.exports = {
   listContacts,
