@@ -1,5 +1,6 @@
 {
-    "name": "template",
+    "name": "nodejs-homework-rest-api",
+    "homepage": "https://TikhonenkoVV.github.io/nodejs-homework-rest-api/",
     "version": "0.0.0",
     "private": true,
     "scripts": {
