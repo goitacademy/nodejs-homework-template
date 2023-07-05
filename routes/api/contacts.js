@@ -13,9 +13,9 @@ const addSchema = Joi.object({
 router.get('/', async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
-      res.json(result);
+    res.json(result);
   } catch (error) {
-      next(error);
+    next(error);
   };
 });
 
@@ -60,19 +60,19 @@ router.put('/:id', async (req, res, next) => {
   } catch (error) {
     next(error);
   };
-})
+});
 
-// router.delete('/:id', async (req, res, next) => {
-//   const contactId = req.params.id;
-//   const result = await contacts.removeContact(contactId);
-
-//   if (result) {
-//     res.json({ message: 'contact deleted' });
-//   } else {
-//     res.status(404).json({ message: 'Not found' });
-//   }
-// })
-
-
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    };
+    res.json({ message: 'contact deleted' });
+  } catch (error) {
+    next(error);
+  };
+});
 
 module.exports = router
