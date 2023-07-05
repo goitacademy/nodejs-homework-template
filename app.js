@@ -5,6 +5,7 @@ const fs = require('fs/promises');
 const mongoose = require('mongoose');
 require('dotenv').config('./.env');
 
+
 mongoose.connect(process.env.MONGO_PASS).then(() => {
   console.log("Database connection successful");
 }).catch(() => {
@@ -21,7 +22,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
-
+app.use(express.static('public'))
 app.use('/api/contacts', contactsRouter)
 app.use('/api/users', authRouter)
 

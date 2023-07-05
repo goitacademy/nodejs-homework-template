@@ -21,7 +21,8 @@ const contactSchema = mongoose.Schema(
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'user',
-    }
+    },
+     avatarURL: String
   },
     {
       timestamps: true,

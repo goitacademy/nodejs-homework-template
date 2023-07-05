@@ -8,10 +8,11 @@ const { removeContact } = require('./contacts/removeContact');
 const {  addContact} = require('./contacts/addContact');
 const { updateStatusContact } = require('./contacts/updateStatusContact');
 const { updateContact } = require('./contacts/updateContact');
+const {changeAvatarImg} = require('./users/changeAvatarImg')
 
 
 module.exports = {
     signup, login, logout,
     getCurrent, changeUserSubscription,
-    listContacts, getContactById, removeContact, addContact, updateContact, updateStatusContact
+    listContacts, getContactById, removeContact, addContact, updateContact, updateStatusContact, changeAvatarImg
 }
