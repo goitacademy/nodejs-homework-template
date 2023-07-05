@@ -1,62 +1,18 @@
 const express = require('express');
-const {
-	listContacts,
-	getContactById,
-	removeContact,
-	addContact,
-	updateContact,
-} = require('../../models/contacts');
+const { controllerWrapper, validateBody } = require('../../helpers');
+const { getAll, getOneById, add, removeById, updateById } = require('../../controllers/contacts');
+const { addSchema, updateSchema } = require('../../schemas/contactsShema');
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-	try {
-		const result = await listContacts();
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+router.get('/', controllerWrapper(getAll));
 
-router.get('/:contactId', async (req, res, next) => {
-	try {
-		const { contactId } = req.params;
-		const result = await getContactById(contactId);
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+router.get('/:contactId', controllerWrapper(getOneById));
 
-router.post('/', async (req, res, next) => {
-	try {
-		const body = req.body;
-		const result = await addContact(body);
-		res.status(201).json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+router.post('/', validateBody(addSchema), controllerWrapper(add));
 
-router.delete('/:contactId', async (req, res, next) => {
-	try {
-		const { contactId } = req.params;
-		const result = await removeContact(contactId);
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+router.delete('/:contactId', controllerWrapper(removeById));
 
-router.put('/:contactId', async (req, res, next) => {
-	try {
-		const { contactId } = req.params;
-		const body = req.body;
-		const result = await updateContact(contactId, body);
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+router.put('/:contactId', validateBody(updateSchema), controllerWrapper(updateById));
 
 module.exports = router;
