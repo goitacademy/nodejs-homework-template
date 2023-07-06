@@ -1,14 +1,4 @@
-const { closeSync } = require("fs");
-const {
-  addContact,
-  listContacts,
-  removeContact,
-  updateContact,
-  getContactById,
-} = require("../models/contacts");
 const HttpError = require("../error/errorHandler");
-const joiConfig = require('../joiconfig')
-const JOI = require('joi');
 const ContactService = require('../service/ContactService');
 
 class ContactController {

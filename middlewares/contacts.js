@@ -37,15 +37,9 @@ const validateID = async (req,res,next)=>{
 
 const validateFavorite = (req,res,next) =>{
     if(!Object.keys(req.body).length){
-        return next(HttpError(400,"missing fields"));
+        return next(HttpError(400,"missing field favorite"));
     }
-    const bodyWithoutKey = [];
-    if (!Object.keys(req.body).includes("favorite")) bodyWithoutKey.push("favorite");
-
-    if(bodyWithoutKey.length){
-        return next(HttpError(400,`missing field${bodyWithoutKey.length > 1 ? "s" : ""}: ${bodyWithoutKey}`))
-    }
-    console.log("VALIDATOR",req.body,req.params.contactId)
+   
     const {error} = joiStatus.validate(req.body);
     if(error) return next(HttpError(400,error.message));
     next();
