@@ -1,11 +1,9 @@
-const fs = require('fs').promises;
-const uuid = require('uuid').v4;
+const Contacts = require('../models/contacts');
 
 const catchAsync = require('../utils/catchAsync');
-const { updateContactValidator, createContactValidator } = require('../utils/contactsValidator');
 
 exports.getContactsList = catchAsync(async (req, res) => {
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+  const contacts = await Contacts.find().select('-__v');
   res.status(200).json({ contacts });
 });
 
@@ -18,61 +16,81 @@ exports.getById = async (req, res) => {
 };
 
 exports.addContact = async (req, res) => {
-  const { error, value } = createContactValidator(req.body);
-
-  if (error) {
-    return res.status(400).json({
-      message: error.message,
-    });
-  }
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
-
-  const newContact = {
-    id: uuid(),
-    ...value,
-  };
-  contacts.push(newContact);
-  await fs.writeFile('./models/contacts.json', JSON.stringify(contacts));
+  const newContact = await Contacts.create({ ...req.body });
   res.status(201).json({
     contact: newContact,
   });
 };
 
 exports.removeContact = async (req, res) => {
-  const { index, contacts } = req;
+  const { contactId } = req.params;
 
-  const deletedContact = contacts.splice(index, 1);
-  await fs.writeFile('./models/contacts.json', JSON.stringify(contacts));
-  return res.status(200).json({
-    message: 'Contact deleted',
-    deletedContact: deletedContact[0],
-  });
+  const result = await Contacts.findByIdAndDelete(contactId);
+
+  if (!result)
+    return res.status(404).json({
+      message: 'There is no user with this id',
+    });
+  res.sendStatus(204);
 };
 
 exports.updateContact = async (req, res) => {
-  const { index, contacts } = req;
-  const { error, value } = updateContactValidator(req.body);
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
 
-  if (error) {
-    return res.status(400).json({
-      message: error.message,
+  const updatedContact = await Contacts.findByIdAndUpdate(
+    contactId,
+    {
+      name,
+      email,
+      phone,
+    },
+    { new: true }
+  );
+
+  if (!updatedContact)
+    return res.status(404).json({
+      message: 'There is no user with this id',
     });
-  }
 
-  if (value.name) {
-    contacts[index].name = value.name;
-  }
-  if (value.email) {
-    contacts[index].email = value.email;
-  }
-  if (value.phone) {
-    contacts[index].phone = value.phone;
-  }
-
-  const updatedContact = contacts[index];
-  await fs.writeFile('./models/contacts.json', JSON.stringify(contacts));
   return res.status(200).json({
     message: 'Contact updated',
     updatedContact: updatedContact,
+  });
+};
+
+exports.isFavoriteById = catchAsync(async (req, res) => {
+  const { contactId } = req.params;
+  const isFavorite = await Contacts.findById(contactId).select('name favorite -_id ');
+
+  if (!isFavorite)
+    return res.status(404).json({
+      message: 'There is no user with this id',
+    });
+
+  return res.status(200).json({
+    isFavorite,
+  });
+});
+
+exports.updateFavorite = async (req, res) => {
+  const { favorite } = req.body;
+  const { contactId } = req.params;
+
+  const updatedFavorite = await Contacts.findByIdAndUpdate(
+    contactId,
+    {
+      favorite: favorite,
+    },
+    { new: true }
+  );
+
+  if (!updatedFavorite)
+    return res.status(404).json({
+      message: 'There is no user with this id',
+    });
+
+  return res.status(200).json({
+    updatedFavorite,
   });
 };

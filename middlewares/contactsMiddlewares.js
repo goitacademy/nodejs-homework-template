@@ -1,22 +1,50 @@
-const fs = require('fs').promises;
+const { Types } = require('mongoose');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const Contacts = require('../models/contacts');
+const { createContactValidator, favoriteValidator } = require('../utils/contactsValidators');
 
 exports.checkContactById = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
 
-  if (contactId.length < 10) return next(new AppError(400, 'Bad request..'));
+  const isIdValid = Types.ObjectId.isValid(contactId);
 
-  const contacts = JSON.parse(await fs.readFile('./models/contacts.json'));
+  if (!isIdValid) return next(new AppError(400, 'Bad request..'));
 
-  const index = contacts.findIndex(item => item.id === contactId);
-  const contact = contacts[index];
+  const contact = await Contacts.findById(contactId).select('-__v');
 
-  if (!contact || index === -1) return next(new AppError(404, 'User does not exist..'));
+  if (!contact)
+    return res.status(404).json({
+      message: 'There is no user with this id',
+    });
 
   req.contact = contact;
-  req.index = index;
-  req.contacts = contacts;
+
+  next();
+});
+
+exports.checkContactInput = catchAsync(async (req, res, next) => {
+  const { error, value } = createContactValidator(req.body);
+
+  if (error) return next(new AppError(400, 'Invalid contact data'));
+
+  const userExists = await Contacts.exists({ email: value.email });
+
+  if (userExists) return next(new AppError(400, 'User with this email already exists'));
+
+  req.body = value;
+
+  next();
+});
+
+exports.checkFavoriteInput = catchAsync(async (req, res, next) => {
+  const { error, value } = favoriteValidator(req.body);
+  console.log();
+
+  if (error) return next(new AppError(400, error.message));
+
+  req.body = value;
+
   next();
 });

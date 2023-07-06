@@ -6,15 +6,27 @@ const {
   addContact,
   removeContact,
   updateContact,
+  isFavoriteById,
+  updateFavorite,
 } = require('../../controllers/contactsControllers.js');
 
-const { checkContactById } = require('../../middlewares/contactsMiddlewares.js');
+const {
+  checkContactById,
+  checkContactInput,
+  checkFavoriteInput,
+} = require('../../middlewares/contactsMiddlewares.js');
 
 const router = express.Router();
 
-router.route('/').get(getContactsList).post(addContact);
+router.route('/').get(getContactsList).post(checkContactInput, addContact);
 
 router.use('/:contactId', checkContactById);
-router.route('/:contactId').get(getById).delete(removeContact).put(updateContact);
+router
+  .route('/:contactId')
+  .get(getById)
+  .delete(removeContact)
+  .put(checkContactInput, updateContact);
+
+router.route('/:contactId/favorite').get(isFavoriteById).put(checkFavoriteInput, updateFavorite);
 
 module.exports = router;
