@@ -1,19 +1,35 @@
-// const fs = require('fs/promises')
+const fs = require("fs").promises;
+const uuid = require("uuid");
 
-const listContacts = async () => {}
+const contactsPath = "./models/contacts.json";
 
-const getContactById = async (contactId) => {}
+/**
+ * Повертає список контактів.
+ *
+ * @returns {Promise<Array>} Массив контактов.
+ */
+const listContacts = async () => {
+    try {
+        const data = await fs.readFile(contactsPath, "utf-8");
+        const contacts = JSON.parse(data);
+        return contacts;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+};
+const getContactById = async (contactId) => {};
 
-const removeContact = async (contactId) => {}
+const removeContact = async (contactId) => {};
 
-const addContact = async (body) => {}
+const addContact = async (body) => {};
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+    listContacts,
+    getContactById,
+    removeContact,
+    addContact,
+    updateContact,
+};
