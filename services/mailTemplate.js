@@ -16,20 +16,11 @@ const mailTemplate = (hostUrl, token) => {
             background-color: #f6f6f6;
         }
 
-
         table.container {
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
         }
-
- 
-        td.logo {
-            text-align: center;
-            padding: 20px 0;
-            width: 24px
-        }
-
 
         h1 {
             font-size: 24px;
@@ -65,9 +56,6 @@ const mailTemplate = (hostUrl, token) => {
                 font-size: 20px;
             }
 
-            td.logo {
-                padding: 10px 0;
-            }
 
             td.button {
                 padding: 10px 0;
@@ -82,7 +70,6 @@ const mailTemplate = (hostUrl, token) => {
 </head>
 <body>
     <table class="container">
-
         <tr>
             <td>
                 <h1>Please confirm your email address</h1>
