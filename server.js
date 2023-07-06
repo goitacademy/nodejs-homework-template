@@ -2,7 +2,7 @@ const app = require("./app");
 const mongoose = require("mongoose");
 const fs = require("fs").promises;
 const path = require("path");
-const { tempDir } = require("./middleware/avatarUploader");
+const { tempDir } = require("./middleware/avatarUploader/avatarUploader");
 
 require("dotenv").config();
 const uriDb = process.env.DB_HOST;
