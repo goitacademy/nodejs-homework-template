@@ -45,5 +45,6 @@ const schemas = {
   registerSchema,
   loginSchema,
 };
+// створюємо модель: викликаємо функцію модал, вказуємо назву колекції,і назву монгус схеми
 const User = model("user", userSchema);
 module.exports = { User, schemas };
