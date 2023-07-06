@@ -8,12 +8,12 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-    res.json({ message: "template message" });
+    const { contactId } = req.params;
+    // res.json({ message: `${contactId}` });
+    res.json(await contacts.getContactById(contactId));
 });
 
-router.post("/", async (req, res, next) => {
-    res.json({ message: "template message" });
-});
+router.post("/", async (req, res, next) => {});
 
 router.delete("/:contactId", async (req, res, next) => {
     res.json({ message: "template message" });
