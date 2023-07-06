@@ -11,8 +11,7 @@ const get = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
@@ -36,14 +35,12 @@ const getById = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
 const create = async (req, res, next) => {
   const { name, email, phone, favorite } = req.body;
-  console.log(req.body);
   try {
     const result = await service.createContact({
       name,
@@ -59,8 +56,7 @@ const create = async (req, res, next) => {
       data: { contact: result },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
@@ -90,8 +86,7 @@ const update = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
@@ -123,8 +118,7 @@ const updateStatus = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
@@ -149,8 +143,7 @@ const remove = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
