@@ -42,9 +42,9 @@ const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required(),
 });
 
-const schemas = {
+const schemasUser = {
   registerSchema,
   loginSchema,
 };
 
-module.exports = { schemas, User };
+module.exports = { schemasUser, User };
