@@ -1,18 +1,23 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const jwtSecret =
-  "7fa6f4a152ab0683a2565acbf5316dbff0c354627a7829e34d9565016259f91cfc7496";
+const secret = process.env.JWT_SECRET;
 const User = require("../models/User");
 
 exports.register = async (req, res, next) => {
   const { email, password } = req.body;
+  const user = await User.findOne({ email });
   try {
+    if (user) {
+      res.status(409).json({
+        message: "Email in use",
+      });
+    }
     bcrypt.hash(password, 10).then(async (hash) => {
       await User.create({
         email,
         password: hash,
       }).then((user) =>
-        res.status(200).json({
+        res.status(201).json({
           message: "User successfully created",
           user,
         })
@@ -44,24 +49,21 @@ exports.login = async (req, res, next) => {
     } else {
       bcrypt.compare(password, user.password).then(function (result) {
         if (result) {
-          const maxAge = 3 * 60 * 60;
-          const token = jwt.sign(
-            { id: user._id, email, subscription: user.subscription },
-            jwtSecret,
-            {
-              expiresIn: maxAge, // 3hrs in sec
-            }
-          );
+          const payload = {
+            id: user.id,
+            email: user.email,
+          };
+          const token = jwt.sign(payload, secret, { expiresIn: "1h" });
           User.findByIdAndUpdate(user._id, { token });
           res.json({
-            token,
-            user: {
-              email: user.email,
-              subscription: user.subscription,
+            status: "success",
+            code: 200,
+            data: {
+              token,
             },
           });
         } else {
-          res.status(400).json({ message: "Login not succesful" });
+          res.status(401).json({ message: "Email or password is wrong" });
         }
       });
     }
@@ -87,6 +89,7 @@ exports.update = async (req, res, next) => {
   );
   res.status(200).json({
     message: "Update successfull",
+    data: subscription,
     updatedUser,
   });
 };

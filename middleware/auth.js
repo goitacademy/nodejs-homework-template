@@ -1,31 +1,40 @@
-const jwt = require("jsonwebtoken");
-const jwtSecret =
-  "4715aed3c946f7b0a38e6b534a9583628d84e96d10fbc04700770d572af3dce43625dd";
-require("dotenv").config();
 const User = require("../models/User");
 
+const jwt = require("jsonwebtoken");
+const secret = process.env.JWT_SECRET;
+require("dotenv").config();
+
 const userAuth = async (req, res, next) => {
-  const { auth = "" } = req.headers;
-  const [bearer, token] = auth.split(" ");
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
-    next(
-      res.status(401).json({ message: "Not authorized, token not available" })
-    );
+    return res.status(401).json({
+      status: "error",
+      code: 401,
+      message: "Unauthorized",
+      data: "Unauthorized",
+    });
   }
   try {
-    const { id } = jwt.verify(token, jwtSecret);
+    const { id } = jwt.verify(token, secret);
     const user = await User.findById(id);
     if (!user || !user.token || user.token !== token) {
-      next(
-        res.status(401).json({ message: "Not authorized, token not available" })
-      );
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Unauthorized",
+        data: "Unauthorized",
+      });
     }
     req.user = user;
     next();
   } catch (error) {
-    next(
-      res.status(401).json({ message: "Not authorized, token not available" })
-    );
+    return res.status(401).json({
+      status: "error",
+      code: 401,
+      message: "Unauthorized",
+      data: "Unauthorized",
+    });
   }
 };
 module.exports = userAuth;
