@@ -1,11 +1,12 @@
 // const mongoose = require("mongoose");
-
+// require('dotenv').config();
 const { MongoClient } = require("mongodb");
 
 const app = require("./app");
 
-const DB_HOST =
-  "mongodb+srv://CuzImBatman:xpvNGJnyeMDGzVwg@cluster0.vosysd9.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const DB_HOST =process.env.DB_HOST;
+  
+console.log({DB_HOST});
 
 const client = new MongoClient(DB_HOST);
 
