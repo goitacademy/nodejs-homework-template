@@ -1,4 +1,3 @@
-const { string } = require("joi");
 const { Schema, model } = require("mongoose");
 
 const handleMongooseError = require("../helpers/handleMongooseError");
@@ -23,10 +22,10 @@ const userSchema = new Schema(
       String,
     },
     avatarURL: {
-      type: String,
-      required: true,
+      String,
     },
-  }, { versionKey: false, timestamps: true }
+  },
+  { versionKey: false, timestamps: true }
 );
 
 userSchema.post("save", handleMongooseError);
