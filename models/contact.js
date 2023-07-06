@@ -1,5 +1,7 @@
 const { Schema, model } = require('mongoose');
+
 const joi = require('joi');
+
 const { handleMongooseError } = require('../helpers');
 
 const contactSchema = new Schema(
@@ -16,12 +18,17 @@ const contactSchema = new Schema(
       type: String,
       require: [true, 'Set phone for contact'],
     },
+
     favorite: {
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: false }
 );
 
 contactSchema.post('save', handleMongooseError);
