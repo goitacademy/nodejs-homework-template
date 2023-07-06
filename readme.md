@@ -18,7 +18,7 @@ The Contacts API is a Node.js project that provides a set of API endpoints for u
 12. Unique Identifiers: The nanoid library generates unique IDs for contacts, ensuring uniqueness and avoiding collisions.
 13. Email Sending: The nodemailer library is utilized to send emails from the API, enabling functionalities like verification emails or notifications. Installation To set up the Contacts API locally, follow these steps:
 
-## ## Usage
+## Usage
 
 1. Clone this repository to your local machine using git clone https://github.com/haber-viacheslav/contactsApi.git.
 2. Navigate to the project directory using cd contactsApi.
