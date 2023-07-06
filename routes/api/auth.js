@@ -3,8 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const ctrl = require("../../controllers/user");
-const { authenticate } = require("../../middlewarpes");
-const { validateBody } = require("../../middlewarpes");
+const { authenticate, upload, validateBody } = require("../../middlewarpes");
 const schemas = require("../../schemas/user");
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
@@ -16,6 +15,12 @@ router.patch(
   authenticate,
   validateBody(schemas.updateSubscriptionSchema),
   ctrl.updateStatusSubscription
+);
+router.patch(
+  "/users/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrl.updateAvatar
 );
 
 module.exports = router;
