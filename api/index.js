@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-
+// s
+const {
+  avatarUploader,
+} = require("../middleware/avatarUploader/avatarUploader");
 const auth = require("../middleware/auth/auth");
 const controllerUsers = require("../controller/users");
 const controllerContac = require("../controller/contacts");
-
 
 router.post("/users/signup", controllerUsers.signup);
 
@@ -15,6 +17,13 @@ router.get("/users/current", auth, controllerUsers.getCurrentUser);
 router.post("/users/logout", auth, controllerUsers.logout);
 
 router.patch("/users/", auth, controllerUsers.changeSubscription);
+
+router.patch(
+  "/users/avatars",
+  auth,
+  avatarUploader.single("avatar"),
+  controllerUsers.addAvatar
+);
 
 router.get("/contacts", auth, controllerContac.getContacts);
 

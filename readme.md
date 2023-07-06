@@ -31,6 +31,8 @@ POST /users/logout - will logout user (delete token)
 
 PATCH /users/ - will change user subscription
 
+PATCH /users/avatars - will change avatar (key: avatar - for example in POSTMAN use Body/form-data key: avatar and upload file)
+
 GET /contacts - will get all contacts
 
 GET /contacts?favorite=false&page=2&limit=10 - will get all contacts with favorite filter set on true and pagination (favorite = false, page = 2 and limit per page = 10). Default limit is 10 per page.

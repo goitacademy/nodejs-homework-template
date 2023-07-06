@@ -1,5 +1,9 @@
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs/promises");
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
 
 const User = require("../../service/schemas/user");
 
@@ -15,8 +19,60 @@ const UserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
+const addAvatar = async (req, res, next) => {
+  try {
+    const { path: temporaryName } = req.file;
+    // console.log(path);
+    // console.log(temporaryName);
+    const extnameTmp = path.extname(temporaryName);
+    // console.log(extnameTmp);
+    const newAvatar = Date.now().toString() + extnameTmp;
+    // console.log(newAvatar);
+
+    const storeImage = path.join(process.cwd(), "public", "avatars", newAvatar);
+
+    try {
+      Jimp.read(temporaryName).then((avatar) => {
+        return avatar.resize(250, 250).quality(60).write(storeImage);
+      });
+    } catch (error) {
+      await fs.unlink(temporaryName);
+      next(error);
+    }
+
+    await fs.unlink(temporaryName);
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(401).json({
+        status: "Unauthorized",
+        code: 401,
+        message: "Not authorized",
+        data: "Bad request",
+      });
+    }
+
+    user.avatarURL = `/avatars/${newAvatar}`;
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      code: 200,
+      data: { avatarURL: user.avatarURL },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+  const avatarURL = gravatar.url(
+    email,
+    { size: 200, rating: "pg", default: "identicon" },
+    true
+  );
   try {
     const { error } = UserSchema.validate(req.body);
     if (error) {
@@ -37,7 +93,7 @@ const signup = async (req, res, next) => {
         });
       }
       try {
-        const newUser = new User({ email });
+        const newUser = new User({ email, avatarURL });
         newUser.setPassword(password);
         await newUser.save();
         // const { email, subscription } = newUser;
@@ -182,6 +238,7 @@ const changeSubscription = async (req, res, next) => {
 };
 
 module.exports = {
+  addAvatar,
   getCurrentUser,
   signup,
   login,
