@@ -17,13 +17,3 @@ mongoose
     // disables running processes
     process.exit(1);
   });
-
-// mongoose
-//   .connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => {
-//     console.log("Connected to MongoDB");
-//     // Решта вашого коду
-//   })
-//   .catch((error) => {
-//     console.error("Error connecting to MongoDB:", error);
-//   });
