@@ -9,7 +9,7 @@ dotenv.config({ path: configPath });
 
 
 const contactsRouter = require("./backend/routes/api/contacts")
-const userRouter = require("./backend/controllers/user")
+const userRouter = require("./backend/routes/api/users")
 
 const app = express();
 
