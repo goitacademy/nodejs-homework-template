@@ -7,7 +7,7 @@ const { DB_HOST } = process.env;
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect("mongodb+srv://alekstitula84:4hc51ZKTZcaVn4Wt@cluster0.tcpnf5h.mongodb.net/?retryWrites=true&w=majority")
+  .connect(DB_HOST)
   .then(() => {
     console.log("Database connection successful");
     app.listen(3000);
