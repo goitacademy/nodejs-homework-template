@@ -17,7 +17,11 @@ const updateAvatar = async (req, res) => {
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({
-    avatarURL,
+    status: 'Success',
+    code: 200,
+    data: {
+      result: { avatarURL },
+    },
   })
 };
 
