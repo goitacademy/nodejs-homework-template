@@ -1,5 +1,16 @@
-const app = require('./app')
+// ZPLUyHUegDaLFvUj
+const app = require("./app");
+const mongoose = require("mongoose");
+const DB_HOST =
+  "mongodb+srv://Yevhen-user:ZPLUyHUegDaLFvUj@cluster0.lbojy4u.mongodb.net/db_contacts?retryWrites=true&w=majority";
+mongoose
+  .connect(DB_HOST)
+  .then(() => {
+    app.listen(3000);
+    console.log("Database connection successful");
+  })
+  .catch((error) => {
+    console.log(error.message);
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+    process.exit(1);
+  });
