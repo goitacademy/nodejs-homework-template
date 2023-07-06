@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
+const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../../helpers");
 
-const contactsSchema = new mongoose.Schema(
+const contactsSchema = new Schema(
   {
     name: {
       type: String,
@@ -16,14 +17,19 @@ const contactsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     versionKey: false,
     timestamps: true,
   }
 );
+contactsSchema.post("save", handleMongooseError);
 
-const Contact = mongoose.model("Contact", contactsSchema);
+const Contact = model("Contact", contactsSchema);
 
 module.exports = Contact;
-

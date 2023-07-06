@@ -1,37 +1,37 @@
 const express = require("express");
 const validateBody = require("../../middlewars/validateBody");
-const contactsSchema = require("../../schemas/contactsSchema");
-const Contact = require("../../models/contacts/contacts");
-const router = express.Router();
-
 const {
-  updateFavourite,
-  updateContactById,
-  removeContact,
-} = require("../../controllers/contacts");
+  contactsSchema,
+  updateFavoriteSchema,
+} = require("../../schemas/contactsSchema");
+const router = express.Router();
+const authenticate = require("../../middlewars/authenticate");
+const isValidId = require("../../middlewars/isValidId");
 
-router.get("/", async (req, res, next) => {
-  const result = await Contact.find({});
-  return res.json(result);
-});
+const contactController = require("../../controllers/contacts");
 
-router.get("/:id", async (req, res, next) => {
-  const { id } = req.params;
-  const result = await Contact.findOne({ _id: id });
-  return res.json(result);
-});
+router.use(authenticate);
 
-router.post("/", validateBody(contactsSchema), async (req, res, next) => {
-  const result = await Contact.create(req.body);
-  return res.json(result);
-});
+router.get("/", contactController.listContacts);
 
-router.delete("/:id", removeContact);
+router.get("/:id", isValidId, contactController.getContactById);
 
-router.put("/:id", validateBody(contactsSchema), updateContactById);
+router.post("/", validateBody(contactsSchema), contactController.addContact);
 
-router.patch("/:id/favourite", updateFavourite);
+router.delete("/:id", isValidId, contactController.removeContact);
 
+router.put(
+  "/:id",
+  isValidId,
+  validateBody(contactsSchema),
+  contactController.updateContactById
+);
 
+router.patch(
+  "/:id/favourite",
+  validateBody(updateFavoriteSchema),
+  isValidId,
+  contactController.updateFavourite
+);
 
 module.exports = router;
