@@ -91,8 +91,3 @@ module.exports = {
   updateAvatar: ctrlWrapper(updateAvatar),
 };
 
-
-
-// const {file} = req;
-// const image = await Jimp.read(file);
-// await image.resize(250,250).writeAsync(file)
