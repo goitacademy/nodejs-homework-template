@@ -3,9 +3,9 @@ const validateBody = require("./validateBody");
 const validateFavorite = require("./validateFavorite");
 const validateUser = require("./validateUser");
 const protect = require("./protect");
-const validateSubscription = require('./validateSubscription')
-const upload = require('./upload')
-
+const validateSubscription = require("./validateSubscription");
+const upload = require("./upload");
+const validateEmail = require('./validateEmail')
 
 module.exports = {
   validateId,
@@ -14,5 +14,6 @@ module.exports = {
   validateUser,
   protect,
   validateSubscription,
-  upload
+  upload,
+  validateEmail
 };

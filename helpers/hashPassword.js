@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const createHashPassword = async (value) => {
   const result = await bcrypt.hash(value, 10);
