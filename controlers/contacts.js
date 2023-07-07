@@ -25,7 +25,7 @@ const updateById = async (req, res) => {
     new: true,
   });
   if (!result) {
-    throw new HttpError(404, "Not found");
+    throw new HttpError(404);
   }
   res.json(result);
 };
@@ -36,7 +36,7 @@ const updateFavorite = async (req, res) => {
     new: true,
   });
   if (!result) {
-    throw new HttpError(404, "Not found");
+    throw new HttpError(404);
   }
   res.json(result);
 };
