@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport(config);
 const sendVerificationEmail = async (email, verificationToken) => {
   const baseUrl =
     `${process.env.BASE_URL}:${process.env.PORT}` ||
-    `${process.env.BASE_URL}:3000`;
+    `${process.env.BASE_URL}:3001`;
 
   const emailOptions = {
     from: process.env.SENDER,

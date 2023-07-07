@@ -12,7 +12,7 @@ const connection = mongoose.connect(uriDb, {
   useUnifiedTopology: true,
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 const isAccessToPath = (path) => {
   return fs
