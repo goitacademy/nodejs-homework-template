@@ -10,6 +10,7 @@ const jimp = require("jimp");
 const nodemailer = require("nodemailer");
 const { nanoid } = require("nanoid");
 
+const passwordOutlook = process.env.passwordOutlook;
 function generateVerificationToken() {
   return nanoid();
 }
@@ -76,7 +77,7 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
       service: "outlook",
       auth: {
         user: "szpnfaceit@outlook.com",
-        password: process.env.passwordOutlook,
+        pass: "qwerty1234%",
       },
     });
 
@@ -85,19 +86,16 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
       to: newUser.email,
       subject: "Veryfication",
       text: "Mail verification link",
-      html: `<p>Click on the link and verify your account</p> <a href="http://localhost:3000/users/verify/${user.verificationToken}"`,
+      html: `<p>Click on the link and verify your account</p> <a href="http://localhost:3000/users/verify/${newUser.verificationToken}"`,
     };
 
-    await transporter.sendMail(emailOptions);
-    res.status(200).json({ message: "Verification email sent" });
-
-    res.json({
-      status: "succress",
-      code: 201,
-      data: {
-        message: "Register complete!",
-      },
+    await transporter.sendMail(emailOptions, function (err, info) {
+      if (err) {
+        console.log(err);
+        return;
+      }
     });
+    res.status(200).json({ message: "Verification email sent" });
   } catch (error) {
     next(error);
   }
@@ -207,7 +205,6 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, _) => {
 
 router.get("/verify/:verificationToken", async (req, res, next) => {
   try {
-    console.log(req.params.verificationToken);
     const user = await User.findOne({
       verificationToken: req.params.verificationToken,
     });
@@ -222,7 +219,7 @@ router.get("/verify/:verificationToken", async (req, res, next) => {
       });
     }
     user.verify = true;
-    user.verificationToken = null;
+    user.verificationToken = "null";
     await user.save();
 
     return res.status(200).json({ message: "Verification successful" });
@@ -268,13 +265,13 @@ router.post("/verify", async (req, res, next) => {
       service: "outlook",
       auth: {
         user: "szpnfaceit@outlook.com",
-        password: process.env.passwordOutlook,
+        password: passwordOutlook,
       },
     });
 
     const emailOptions = {
       form: "szpnfaceit@outlook.com",
-      to: email,
+      to: "qwerty1234%",
       subject: "Veryfication",
       text: "Mail verification link",
       html: `<p>Click on the link and verify your account</p> <a href="http://localhost:3000/users/verify/${user.verificationToken}"`,
