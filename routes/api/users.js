@@ -11,4 +11,6 @@ router.get("/logout", auth, ctrlTask.logout);
 
 router.get("/current", auth, ctrlTask.current);
 
+router.patch("/subscription", auth, ctrlTask.subscription);
+
 module.exports = router;

@@ -11,6 +11,10 @@ const userValidationSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const subscriptionValidationSchema = Joi.object().keys({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const register = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -124,9 +128,41 @@ const current = async (req, res) => {
     },
   });
 };
+
+const subscription = async (req, res) => {
+  const user = req.user;
+  const { subscription } = req.body;
+  try {
+    const { error } = subscriptionValidationSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({
+        status: "Bad Request",
+        code: 400,
+        message: error.message,
+      });
+      return;
+    }
+    const updatedUser = await service.updateUserSubscription({
+      email: user.email,
+      subscription,
+    });
+    res.status(200).json({
+      status: "OK",
+      code: 200,
+      message: "User subscription updated",
+      data: {
+        email: updatedUser.email,
+        subscription: updatedUser.subscription,
+      },
+    });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+};
 module.exports = {
   register,
   login,
   logout,
   current,
+  subscription,
 };

@@ -3,8 +3,8 @@ const User = require("./schemas/user");
 
 // CONTACTS
 
-const getAllContacts = async (owner) => {
-  return Contact.find({ owner });
+const getAllContacts = async (owner, favorite) => {
+  return Contact.find({ owner, favorite });
 };
 
 const getContactById = (id, owner) => {
@@ -53,6 +53,10 @@ const findUserById = ({ userId }) => {
   return User.findById(userId);
 };
 
+const updateUserSubscription = ({ email, subscription }) => {
+  return User.findOneAndUpdate({ email }, { subscription }, { new: true });
+};
+
 module.exports = {
   getAllContacts,
   getContactById,
@@ -64,4 +68,5 @@ module.exports = {
   updateToken,
   findUser,
   findUserById,
+  updateUserSubscription,
 };
