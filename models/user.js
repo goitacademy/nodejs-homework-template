@@ -32,14 +32,30 @@ userSchema.post("save", (error, data, next) => {
 
   const registerSchema = Joi.object({
     password: Joi.string()
+    .min(6)
     .required()
     .error(new Error("missing required password field")),
     email: Joi.string()
     .required()
     .error(new Error("missing required email field")),
     subscription:Joi.string()
-  })
+  });
+
+  const loginSchema = Joi.object({
+    password: Joi.string()
+    .min(6)
+    .required()
+    .error(new Error("missing required password field")),
+    email: Joi.string()
+    .required()
+    .error(new Error("missing required email field")),
+    subscription:Joi.string()
+  });
+
+  const authSchemas = {
+    registerSchema, loginSchema
+  }
 
   const User = model("user",userSchema);
 
-  module.exports ={User,registerSchema}
+  module.exports ={User,authSchemas}
