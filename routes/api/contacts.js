@@ -5,10 +5,12 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../../controllers/contacts.controller");
 const {
   validatePostContact,
   validatePutContact,
+  validatePatchContact,
 } = require("../../models/validateContacts");
 const { contactSchema } = require("../../models/contactsSchema");
 
@@ -23,5 +25,11 @@ router.post("/", validatePostContact(contactSchema), addContact);
 router.delete("/:contactId", removeContact);
 
 router.put("/:contactId", validatePutContact(contactSchema), updateContact);
+
+router.patch(
+  "/:contactId/favorite",
+  validatePatchContact(contactSchema),
+  updateStatusContact
+);
 
 module.exports = router;

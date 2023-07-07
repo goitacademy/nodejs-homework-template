@@ -1,101 +1,85 @@
-const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
-const path = require("path");
-const contactsPath = path.join("db", "contacts.json");
+const { Contact } = require("../models/contact");
 
-const listContacts = async (req, res, next) => {
+const listContacts = async (req, res) => {
   try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
-    res.status(200).json(contacts);
-    return contacts;
+    const contacts = await Contact.find();
+    res.json(contacts);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error retrieving contacts:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
-
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   try {
     const { id } = req.params;
-    if (id !== -1) {
-      const data = await fs.readFile(contactsPath);
-      const contacts = JSON.parse(data);
-      const contact = contacts.find((c) => c.id === id);
-      if (!contact) {
-        res.status(404).json({ message: "Not Found" });
-      }
-      res.status(200).json(contact);
-      console.log(contact);
-      return contact;
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const removeContact = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
-    const contactIndex = contacts.findIndex((el) => el.id === contactId);
-    const removedContact = contacts.find((el) => el.id === contactId);
-    if (contactIndex === -1) {
-      console.log(null);
+    const contact = await Contact.findById(id);
+    if (!contact) {
+      res.status(404).json({ message: "Not found" });
       return;
     }
-    contacts.splice(contactIndex, 1);
-    console.log(removedContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    res.status(200).json(contact);
+  } catch (error) {
+    console.error("Error retrieving contact:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+const removeContact = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const removedContact = await Contact.findByIdAndRemove(contactId);
     if (!removedContact) {
       res.status(404).json({ message: "Not found" });
-    } else {
-      removeContact(contactId);
-      res.status(200).json({ message: "Contact deleted" });
+      return;
     }
+    res.status(200).json({ message: "Contact deleted" });
   } catch (error) {
-    console.log(error);
+    console.error("Error deleting contact:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
-
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
-    const newContact = {
-      id: nanoid(),
-      ...req.body,
-    };
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    const newContact = await Contact.create(req.body);
     res.status(201).json(newContact);
-    console.log(newContact);
-    return newContact;
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error adding contact:", error);
+    res.status(500).json({ error: "Server error" });
   }
 };
-
-const updateContact = async (req, res, next) => {
-  const data = await fs.readFile(contactsPath);
-  const contacts = JSON.parse(data);
-  const { contactId } = req.params;
-  const contactIndex = contacts.findIndex((el) => el.id === contactId);
-  const contact = contacts.find((el) => el.id === contactId);
-  const updatedContact = { ...contact, ...req.body };
-  contacts[contactIndex] = updatedContact;
+const updateContact = async (req, res) => {
   try {
+    const { contactId } = req.params;
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!req.body) {
       return res.status(400).json({ message: "Missing fields" });
     }
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     res.status(200).json(updatedContact);
-    return updatedContact;
   } catch (error) {
-    console.log(error);
     return res.status(404).json({ message: "Not found" });
+  }
+};
+const updateStatusContact = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+    if (!favorite) {
+      return res.status(400).json({ message: "Missing field favorite" });
+    }
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    console.error("Error updating contact:", error);
+    throw error;
   }
 };
 
@@ -105,4 +89,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
