@@ -29,7 +29,7 @@ const add = async (req, res, next) => {
     const { error } = schemas.postCheckingSchema.validate(req.body);
 
     if (error) {
-      console.log(error, error.context);
+      // console.log(error, error.context);
       throw RequestError(400, error.message);
     }
     const result = await Contact.create(req.body);
