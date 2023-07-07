@@ -5,7 +5,6 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
-// const { nanoid } = require("nanoid");
 const { v4: uuid } = require("uuid");
 
 const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
@@ -40,6 +39,7 @@ const register = async (req, res) => {
     subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
   };
+
 
   await sendEmail(verifyEmail);
 
