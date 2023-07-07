@@ -1,19 +1,5 @@
-// const fs = require('fs/promises')
+const mongoose = require("mongoose");
+const { schema } = require("../schemas/contacts");
 
-const listContacts = async () => {}
-
-const getContactById = async (contactId) => {}
-
-const removeContact = async (contactId) => {}
-
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+const Contact = mongoose.model("contacts", schema);
+module.exports = { Contact };
