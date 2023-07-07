@@ -22,9 +22,8 @@ const getById = async (req, res) => {
 
 const addNewContact = async (req, res) => {
   const result = await addContact(req.body);
-  if (result) throw ErrorHandling(201, "contact created");
   if (!result) throw ErrorHandling(400, "missing required name field");
-  res.json(result);
+  res.status(201).json(result);
 };
 
 const updateContactId = async (req, res) => {
