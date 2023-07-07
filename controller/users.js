@@ -87,7 +87,7 @@ const login = async (req, res) => {
     const loginUser = await service.updateToken({ email, token });
     res.status(200).json({
       status: "OK",
-      code: 401,
+      code: 200,
       data: {
         token: loginUser.token,
         user: {

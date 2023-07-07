@@ -1,8 +1,9 @@
 const service = require("../service/index");
 
 const get = async (req, res, next) => {
+  const userId = req.user._id;
   try {
-    const results = await service.getAllContacts();
+    const results = await service.getAllContacts(userId);
     res.json({
       status: "success",
       code: 200,
@@ -17,8 +18,9 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
+  const userId = req.user._id;
   try {
-    const result = await service.getContactById(contactId);
+    const result = await service.getContactById(contactId, userId);
     if (result) {
       res.json({
         status: "success",
@@ -40,6 +42,7 @@ const getById = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
+  const userId = req.user._id;
   const { name, email, phone, favorite } = req.body;
   try {
     const result = await service.createContact({
@@ -47,6 +50,7 @@ const create = async (req, res, next) => {
       email,
       phone,
       favorite,
+      owner: userId,
     });
 
     res.status(201).json({
@@ -63,8 +67,9 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone, favorite } = req.body;
+  const userId = req.user._id;
   try {
-    const result = await service.updateContact(contactId, {
+    const result = await service.updateContact(contactId, userId, {
       name,
       email,
       phone,
@@ -93,6 +98,7 @@ const update = async (req, res, next) => {
 const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
+  const userId = req.user._id;
   if (favorite === undefined) {
     res.status(400).json({
       status: "error",
@@ -101,7 +107,9 @@ const updateStatus = async (req, res, next) => {
     });
   }
   try {
-    const result = await service.updateStatusContact(contactId, { favorite });
+    const result = await service.updateStatusContact(contactId, userId, {
+      favorite,
+    });
     if (result) {
       res.json({
         status: "success",
@@ -124,9 +132,9 @@ const updateStatus = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   const { contactId } = req.params;
-
+  const userId = req.user._id;
   try {
-    const result = await service.removeContact(contactId);
+    const result = await service.removeContact(contactId, userId);
     if (result) {
       res.json({
         status: "success",
