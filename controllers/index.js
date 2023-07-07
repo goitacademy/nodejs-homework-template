@@ -4,7 +4,8 @@ const getAllContacts = require("./getAllContacts");
 const getContactById = require("./getContactById");
 const updateContactById = require("./updateContactById");
 const updateFavorite = require("./updateFavorite");
-const register = require("./auth");
+const register = require("./register");
+const login = require("./login");
 
 module.exports = {
   addContact,
@@ -14,4 +15,5 @@ module.exports = {
   updateContactById,
   updateFavorite,
   register,
+  login,
 };
