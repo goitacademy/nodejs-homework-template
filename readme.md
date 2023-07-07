@@ -1,31 +1,102 @@
-## GoIT Node.js Course Template Homework
+# Node.js Phonebook
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+## Comands:
 
-Додайте ментора до колаборації
+- `npm start` &mdash; server start in production mode
+- `npm run start:dev` &mdash; start the server in development mode
+- `npm run lint` &mdash; run a code check run with eslint, must run before each PR and fix all linter errors
+- `npm lint:fix` &mdash; the same linter check, but with automatic fixes for simple errors
+ 
+# https://contacts-ttnw.onrender.com/ - API base URL
 
-Для кожної домашньої роботи створюйте свою гілку.
+## User:
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+- ##### POST /api/auth/register - Create a new user
+- ###### *Request body {"name": "Dwight Schrute", "email": "string", "password": "string"} 
+ 
+- ##### POST /api/auth/login - Login user
+- ###### *Request body {"email": "string", "password": "string"}
+ 
+- ##### POST /api/auth/logout - Log out user
+- ###### *Authorization header required (The token issued to the current user)
+ 
+- ##### GET /api/auth/current - Get information about the current user
+- ###### *Authorization header required (The token issued to the current user)
+ 
 
-Кожна нова гілка для др повинна робитися з master
+- ##### PATCH /api/auth/subscription - Change user subscription
+- ###### *Authorization header required (The token issued to the current user) & Request body { "subscription": ["starter", "pro", "business"] }
+ 
+- ##### PATCH /api/users/avatars - Change user avatar
+- ###### *Authorization header required (The token issued to the current user) & Request file { "avatar": picture } 
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+## Contact:
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+### *Authorization header required (The token issued to the current user)
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+- ##### GET /api/contacts - Get all user contacts
+ 
+- ##### GET /api/contacts/{contactId} - Get user contact by ID
+ 
+- ##### POST /api/contacts - Create a new contact
+- ###### *Request body {"name": "Pam Beesly","number": "761-23-96"}
+ 
+- ##### PUT /api/contacts/{contactId} - Update an existing contact
+- ###### *Request body {"name": "Pam Beesly","number": "761-23-96"}
+ 
+- ##### DELETE /api/contacts/{contactId} - Delete contact.
+ 
+- ##### PATCH /api/{contactId}/favorite - Add or remove a contact from favorites
+- ###### *Request body { "favorite": boolean }
 
-### Команди:
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+## Verify:
+
+- ##### GET /api/verify/{verificationCode} - Verify by email (After successful registration, user will receive an email with a link to the following URL)
+ 
+- ##### POST /api/verify - Resend the verification link to email
+- ###### *Request body { "email": "string" }
+
+## Schemas:
+
+##### User
+###### {
+###### id	string
+###### Backend-generated unique identifier.
+ 
+###### avatar picture
+###### An avatar is created automatically upon registration.
+ 
+###### name*	string
+###### Username.
+ 
+###### email*	string
+###### E-mail address.
+ 
+###### password*	string
+###### Password.
+ 
+###### subscription string 
+###### ["starter", "pro", "business"],
+###### default: "starter",
+}
+ 
+###### * - required
+###### example: OrderedMap { "name": "Adrian Cross", "email": "across@mail.com", "password": "examplepwd12345" }
+ 
+
+##### Contact
+###### {
+###### id	string
+###### Backend-generated unique identifier.
+ 
+###### name*	string
+###### Contact name.
+ 
+###### number*	string
+###### Phone number of the contact.
+###### }
+ 
+###### * - required
+###### example: OrderedMap { "name": "Jacob Mercer", "number": "761-23-96" }
+
