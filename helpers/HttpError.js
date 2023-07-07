@@ -4,7 +4,7 @@ class HttpError extends Error {
     message = messages[statusCode] || messages.default
   ) {
     super(message);
-    this.statusCode = statusCode;
+    this.status = statusCode;
   }
 }
 const messages = {
