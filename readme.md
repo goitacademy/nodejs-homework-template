@@ -5,7 +5,11 @@ First of all you need to download my files, open in your code programm, install 
 Now you must create .env with your data to mongoDb:
 DB_HOST=mongodb+srv://YOUR_LOGIN:YOUR_PASSWORD@cluster0.9yhbgdk.mongodb.net/db-contacts
 and secret to encrypt passwords:
-SECRET=YOUR_SECRET_PASSWORD
+SECRET=YOUR SECRET PASSWORD
+SENDGRID_API_KEY = YOUR SECSENDGRID API KEY
+SENDER = YOUR SENDER EMAIL
+BASE_URL = 'http://localhost'
+PORT = YOUR CHOOSEN PORT
 
 My app default is working on localhost:3000/
 
@@ -32,6 +36,10 @@ POST /users/logout - will logout user (delete token)
 PATCH /users/ - will change user subscription
 
 PATCH /users/avatars - will change avatar (key: avatar - for example in POSTMAN use Body/form-data key: avatar and upload file)
+
+GET /users/verify/:verificationToken : Verify user email by verification token
+
+POST /users/verify : Resend verification email
 
 GET /contacts - will get all contacts
 

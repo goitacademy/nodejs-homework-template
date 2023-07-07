@@ -24,6 +24,7 @@ const isAccessToPath = (path) => {
 const ifNoAccessCreateFolder = async (folder) => {
   if (!(await isAccessToPath(folder))) {
     await fs.mkdir(folder);
+    console.log(folder, " created");
   }
 };
 
@@ -35,6 +36,7 @@ connection
   .then(() => {
     console.log(`Database connection successful`);
     ifNoAccessCreateFolder(tempDir);
+    ifNoAccessCreateFolder(path.join(process.cwd(), "public"));
     ifNoAccessCreateFolder(path.join(process.cwd(), "public", "avatars"));
   })
 
