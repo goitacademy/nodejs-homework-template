@@ -63,19 +63,19 @@
 ###### {
 ###### id	string
 ###### Backend-generated unique identifier.
- 
+
 ###### avatar picture
 ###### An avatar is created automatically upon registration.
- 
+
 ###### name*	string
 ###### Username.
- 
+
 ###### email*	string
 ###### E-mail address.
- 
+
 ###### password*	string
 ###### Password.
- 
+
 ###### subscription string 
 ###### ["starter", "pro", "business"],
 ###### default: "starter",
@@ -89,13 +89,17 @@
 ###### {
 ###### id	string
 ###### Backend-generated unique identifier.
- 
+
 ###### name*	string
 ###### Contact name.
- 
+
 ###### number*	string
 ###### Phone number of the contact.
 ###### }
+ 
+###### * - required
+###### example: OrderedMap { "name": "Jacob Mercer", "number": "761-23-96" }
+
  
 ###### * - required
 ###### example: OrderedMap { "name": "Jacob Mercer", "number": "761-23-96" }
