@@ -4,7 +4,7 @@ const addContact = require('./addContact');
 const removeContact = require('./removeContact');
 const updateContact = require('./updateContact');
 const updateStatusContact = require('./updateStatusContact');
-const { ctrlWrapper } = require('../helpers');
+const { ctrlWrapper } = require('../../helpers');
 
 module.exports = {
     listContacts: ctrlWrapper(listContacts),
