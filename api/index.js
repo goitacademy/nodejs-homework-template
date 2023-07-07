@@ -25,6 +25,10 @@ router.patch(
   controllerUsers.addAvatar
 );
 
+router.get("/users/verify/:verificationToken", controllerUsers.verifyUser);
+
+router.post("/users/verify", controllerUsers.resendVerificationEmail);
+
 router.get("/contacts", auth, controllerContac.getContacts);
 
 router.get("/contacts/:contactId", auth, controllerContac.getContactById);

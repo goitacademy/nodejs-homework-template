@@ -2,10 +2,12 @@ const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
+const nanoid = require("nanoid");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
 
 const User = require("../../service/schemas/user");
+const { sendVerificationEmail } = require("../../utils/mailsender");
 
 require("dotenv").config();
 const secret = process.env.SECRET;
@@ -17,6 +19,10 @@ const UserSchema = Joi.object({
 
 const UserSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
+const validationEmail = Joi.object({
+  email: Joi.string().email().required(),
 });
 
 const addAvatar = async (req, res, next) => {
@@ -68,6 +74,7 @@ const addAvatar = async (req, res, next) => {
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
+  const verificationToken = nanoid.nanoid(8);
   const avatarURL = gravatar.url(
     email,
     { size: 200, rating: "pg", default: "identicon" },
@@ -93,10 +100,11 @@ const signup = async (req, res, next) => {
         });
       }
       try {
-        const newUser = new User({ email, avatarURL });
+        const newUser = new User({ email, avatarURL, verificationToken });
         newUser.setPassword(password);
         await newUser.save();
         // const { email, subscription } = newUser;
+        await sendVerificationEmail(email, verificationToken);
         res.status(201).json({
           status: "Contact created",
           code: 201,
@@ -135,6 +143,15 @@ const login = async (req, res, next) => {
           status: "Unauthorized",
           code: 401,
           message: "Email or password is wrong",
+          data: "Bad request",
+        });
+      }
+
+      if (user.verify === false) {
+        return res.status(401).json({
+          status: "Unauthorized",
+          code: 401,
+          message: "User not verified",
           data: "Bad request",
         });
       }
@@ -184,6 +201,15 @@ const logout = async (req, res, next) => {
   await user.save();
 
   return res.status(204).send();
+};
+
+const verifyUser = async (req, res, next) => {
+  const { verificationToken } = req.params;
+
+  try {
+  } catch (e) {
+    cosole.log(e);
+  }
 };
 
 const getCurrentUser = async (req, res, next) => {
@@ -244,4 +270,5 @@ module.exports = {
   login,
   logout,
   changeSubscription,
+  verifyUser,
 };
