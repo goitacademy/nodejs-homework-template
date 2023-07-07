@@ -12,6 +12,8 @@ const { login } = require('./users/auth');
 const { getCurrent } = require('./users/auth');
 const {logout} = require('./users/auth');
 const {updateAvatar} =require('./users/auth');
+const {verifyEmail} = require('./users/auth');
+const {resendVerifyEmail} = require('./users/auth');
 
   module.exports = {
     getAll,
@@ -25,4 +27,6 @@ const {updateAvatar} =require('./users/auth');
     getCurrent,
     logout,
     updateAvatar,
+    verifyEmail,
+    resendVerifyEmail,
   };
