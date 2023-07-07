@@ -28,23 +28,29 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const userAddSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().required(),
-  subscription: Joi.string().required(),
-  token: Joi.string().required(),
+const registerSchema = Joi.object({
+  password: Joi.string().min(4).required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  subscription: Joi.string(),
+  token: Joi.string(),
 });
 
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().messages({
-    'any.required': 'missing field {{#label}}',
-  }),
+const loginSchema = Joi.object({
+  password: Joi.string().min(4).required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  token: Joi.string(),
 });
 
-const schemas = { addSchema, updateFavoriteSchema };
+// const updateFavoriteSchema = Joi.object({
+//   favorite: Joi.boolean().required().messages({
+//     'any.required': 'missing field {{#label}}',
+//   }),
+// });
 
-contactSchema.post('save', handleMongooseErr);
+const schemas = { userSchema, registerSchema, loginSchema };
 
-const Contact = model('contact', contactSchema);
+userSchema.post('save', handleMongooseErr);
+
+const Contact = model('user', userSchema);
 
 module.exports = { Contact, schemas };
