@@ -1,13 +1,5 @@
-// const Joi = require("joi");
 const { ctrlsWrapper } = require("../helpers/index");
-// const contacts = require("../models/contacts");
 const Contact = require("../models/Contact");
-
-// const contactSchema = Joi.object({
-//   name: Joi.string().min(3).required(),
-//   email: Joi.string().email().required(),
-//   phone: Joi.string().min(10).max(15).required(),
-// });
 
 const getContacts = async (req, res, next) => {
   const result = await Contact.find({}, "-createdAt -updatedAt");
