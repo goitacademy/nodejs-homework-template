@@ -102,6 +102,7 @@ const signup = async (req, res, next) => {
       try {
         const newUser = new User({ email, avatarURL, verificationToken });
         newUser.setPassword(password);
+        // console.log(verificationToken);
         await newUser.save();
         // const { email, subscription } = newUser;
         await sendVerificationEmail(email, verificationToken);

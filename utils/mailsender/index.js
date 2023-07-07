@@ -3,8 +3,9 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const config = {
-  host: "smtp.sendgrid.net",
-  port: 25,
+  host: "smtp.forwardemail.net",
+  port: 465,
+  secure: true,
   auth: {
     user: "apikey",
     pass: process.env.SENDGRID_API_KEY,
@@ -12,11 +13,14 @@ const config = {
 };
 
 const transporter = nodemailer.createTransport(config);
-
+// console.log(transporter);
 const sendVerificationEmail = async (email, verificationToken) => {
   const baseUrl =
     `${process.env.BASE_URL}:${process.env.PORT}` ||
-    `${process.env.BASE_URL}:3001`;
+    `${process.env.BASE_URL}:3000`;
+
+  // console.log(email);
+  // console.log(process.env.SENDER);
 
   const emailOptions = {
     from: process.env.SENDER,
