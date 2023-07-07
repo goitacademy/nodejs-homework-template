@@ -1,12 +1,14 @@
 const User = require("../service/schemas/user");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs").promises;
 const storeImage = path.join(process.cwd(), "tmp");
 const storeResizedImage = path.join(process.cwd(), "public", "avatars");
 const jimp = require("jimp");
+
 
 const secret = "goit";
 
@@ -53,9 +55,16 @@ const register = async (req, res, next) => {
     });
   }
   try {
+
     const avatarURL = gravatar.url(email);
     const newUser = new User({ username, email, avatarURL });
     newUser.setPassword(password);
+
+    const newUser = new User({ username, email });
+    newUser.setPassword(password);
+    newUser.token = null;
+
+
     const payload = {
       id: newUser.id,
     };
@@ -137,6 +146,7 @@ const getCurrent = async (req, res, next) => {
   })(req, res, next);
 };
 
+
 const changeAvatar = async (req, res, next) => {
   passport.authenticate("jwt", { session: false }, async (err, user) => {
     if (err || !user) {
@@ -174,10 +184,12 @@ const changeAvatar = async (req, res, next) => {
   })(req, res, next);
 };
 
+
 module.exports = {
   login,
   register,
   logout,
   getCurrent,
   changeAvatar,
+
 };
