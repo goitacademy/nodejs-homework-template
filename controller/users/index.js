@@ -234,7 +234,52 @@ const verifyUser = async (req, res, next) => {
   }
 };
 
+const resendVerificationEmail = async (req, res, next) => {
+  const { email } = req.body;
 
+  try {
+    const { error } = validationEmail.validate(req.body);
+    if (error) {
+      res.status(400).json({
+        status: "Bad request",
+        code: 400,
+        message: error.message,
+        data: "Bad request",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Not found",
+        code: 404,
+        message: "User not found",
+        data: "Not found",
+      });
+    }
+
+    if ((user.verify = true)) {
+      return res.status(400).json({
+        status: "Bad request",
+        code: 400,
+        message: "Verification has already been passed",
+        data: "Bad request",
+      });
+    }
+
+    await sendVerificationEmail(user.email, user.verificationToken);
+
+    res.status(200).json({
+      status: "Success",
+      code: 200,
+      message: "Verification email sent",
+    });
+  } catch (error) {
+    // console.log(error);
+    next(error);
+  }
+};
 
 const getCurrentUser = async (req, res, next) => {
   try {
