@@ -12,7 +12,7 @@
 ## User:
 
 - ##### POST /api/auth/register - Create a new user
-- ###### *Request body {"name": "Dwight Schrute", "email": "string", "password": "string"} 
+- ###### *Request body {"name": "string", "email": "string", "password": "string"} 
 - ###### Responses: 201 User created. 409 User already exists. 500 Server error.
  
 - ##### POST /api/auth/login - Login user
@@ -47,11 +47,11 @@
 - ###### Responses: 200 Contact found. 401 Unauthorized. 500 Server error.
  
 - ##### POST /api/contacts - Create a new contact
-- ###### *Request body {"name": "Pam Beesly","email": "example@mail.com", "number": "761-23-96"}
+- ###### *Request body {"name": "string","email": "string", "number": "string"}
 - ###### Responses: 201 Contact created. 400 Missing field. 401 Unauthorized. 500 Server error.
  
 - ##### PUT /api/contacts/{contactId} - Update an existing contact
-- ###### *Request body {"name": "Pam Beesly","number": "761-23-96"}
+- ###### *Request body {"name": "string","number": "string"}
 - ###### Responses: 200 Contact changed. 400 Missing field. 401 Unauthorized. 500 Server error.
  
 - ##### DELETE /api/contacts/{contactId} - Delete contact.
