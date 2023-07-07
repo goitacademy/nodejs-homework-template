@@ -17,5 +17,5 @@ const contactSchema = new Schema({
   phone: String,
   favorite: Boolean,
 });
-const Contact = model('contact', contactSchema);
+const Contact = model("contact", contactSchema);
 module.exports = Contact;
