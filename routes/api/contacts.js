@@ -2,6 +2,8 @@ const express = require('express')
 
 const router = express.Router()
 
+const {HttpError} = require('../../utility/HttpError')
+
 router.get('/', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
