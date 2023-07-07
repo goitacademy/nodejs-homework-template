@@ -47,10 +47,10 @@ const loginSchema = Joi.object({
 //   }),
 // });
 
-const schemas = { userSchema, registerSchema, loginSchema };
+const schemas = { registerSchema, loginSchema };
 
 userSchema.post('save', handleMongooseErr);
 
-const Contact = model('user', userSchema);
+const User = model('user', userSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { User, schemas };
