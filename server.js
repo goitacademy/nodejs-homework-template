@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 
-// const DB_HOST = process.env.DB_HOST;
 
-const DB_HOST = "mongodb+srv://CuzImBatman:xpvNGJnyeMDGzVwg@cluster0.vosysd9.mongodb.net/db-contacts?retryWrites=true&w=majority"
+const {DB_HOST} = require("./config")
 
 const app = require("./app");
 
-// mongoose.set('stringQuery', true);
 
 mongoose.connect(DB_HOST)
 
@@ -25,6 +23,11 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
+
+
+
+
+// запит на чистому монгодб
 
 // app.listen(3000, () => {
 //   console.log("Server running. Use our API on port: 3000");
