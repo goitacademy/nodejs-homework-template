@@ -73,13 +73,12 @@ const updateStatusContact = async (req, res) => {
       { favorite },
       { new: true }
     );
-    if (!favorite) {
+    if (!req.body) {
       return res.status(400).json({ message: "Missing field favorite" });
     }
     res.status(200).json(updatedContact);
   } catch (error) {
-    console.error("Error updating contact:", error);
-    throw error;
+    return res.status(404).json({ message: "Not found" });
   }
 };
 
