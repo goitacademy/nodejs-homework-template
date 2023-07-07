@@ -16,6 +16,8 @@ const contactSchema = Schema({
     type: Boolean,
     default: false,
   },
+},{
+  versionKey: false,
 });
 
 contactSchema.post("save", (error, data, next) => {
