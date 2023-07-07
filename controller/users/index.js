@@ -205,12 +205,36 @@ const logout = async (req, res, next) => {
 
 const verifyUser = async (req, res, next) => {
   const { verificationToken } = req.params;
-
+  // console.log("Verification token: ", verificationToken);
   try {
-  } catch (e) {
-    cosole.log(e);
+    const user = await User.findOne({ verificationToken });
+    // console.log("verify user: ", user);
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Not found",
+        code: 404,
+        message: "User not found",
+        data: "Not found",
+      });
+    }
+
+    user.verificationToken = "null";
+    user.verify = true;
+    await user.save();
+
+    res.status(200).json({
+      status: "Success",
+      code: 200,
+      message: "Verification successful",
+    });
+  } catch (error) {
+    // cosole.log(error);
+    next(error);
   }
 };
+
+
 
 const getCurrentUser = async (req, res, next) => {
   try {
@@ -271,4 +295,5 @@ module.exports = {
   logout,
   changeSubscription,
   verifyUser,
+  resendVerificationEmail,
 };
