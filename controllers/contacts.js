@@ -7,7 +7,7 @@ const {
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({}, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -25,7 +25,6 @@ const addContact = async (req, res) => {
   if (error) {
     throw HttpError(400, "missing required name field");
   }
-
   const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
