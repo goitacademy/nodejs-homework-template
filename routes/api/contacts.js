@@ -1,6 +1,5 @@
-<<<<<<< Updated upstream
+
 const express = require('express')
-=======
 
 const {
   listContacts,
@@ -12,9 +11,7 @@ const {
 const express = require("express");
 const Joi = require("joi");
 const uniqid = require('uniqid'); 
->>>>>>> Stashed changes
-=======
->>>>>>> hw02-express
+
 
 const schemaPost = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
