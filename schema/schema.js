@@ -11,6 +11,10 @@ const addSchema = Joi.object({
     'string.pattern.base': 'Invalid phone number format. Expected format: (XXX) XXX-XXXX',
   }),
 });
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required()
+})
 module.exports = {
   addSchema,
+  updateFavoriteSchema,
 };
