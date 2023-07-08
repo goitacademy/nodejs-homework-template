@@ -1,70 +1,61 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { randomUUID } = require("crypto");
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const { handleMongooseError } = require("../helpers");
+const nameRegexp = /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
+const phoneRegexp =
+  /^((\+)?(3)?(8)?[- ]?)?(\(?\d{3}\)?[- ]?)?\d{3}[- ]?\d{2}[- ]?\d{2}$/;
 
-const updateContacts = async (contacts) => {
-  return await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-};
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      match: nameRegexp,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      required: [true, "Set email for contact"],
+    },
+    phone: {
+      type: String,
+      match: phoneRegexp,
+      required: [true, "Set phone for contact"],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
+contactSchema.post("save", handleMongooseError);
 
-const listContacts = async () => {
-  return JSON.parse(await fs.readFile(contactsPath));
-};
+const contactAddSchema = Joi.object({
+  name: Joi.string().min(3).max(30).pattern(nameRegexp).required().messages({
+    "any.required": "field 'name' is missing",
+    "string.pattern.base":
+      "Name may contain only letters, apostrophe, dash, and spaces. For example, Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
+  }),
+  email: Joi.string().email().required().messages({
+    "any.required": "field 'email' is missing",
+  }),
+  phone: Joi.string().pattern(phoneRegexp).required().messages({
+    "any.required": "field 'phone' is missing",
+    "string.pattern.base":
+      "Phone number must be a valid phone number for region UA, digits and can contain spaces, dashes, parentheses and can start with +",
+  }),
+  favorite: Joi.boolean().required(),
+});
 
-const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === id);
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": "Missing field favorite" }),
+});
 
-  return contact || null;
-};
+const schemas = { contactAddSchema, updateFavoriteSchema };
 
-const removeContact = async (id) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === id);
+const Contact = model("contact", contactSchema);
 
-  if (index === -1) {
-    return null;
-  }
-
-  const [result] = contacts.splice(index, 1);
-  await updateContacts(contacts);
-  return result;
-};
-
-const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: randomUUID(),
-    ...body,
-  };
-
-  contacts.push(newContact);
-  await updateContacts(contacts);
-  return newContact;
-};
-
-const updateContact = async (id, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  console.log("body]", body);
-  if (index === -1) {
-    return null;
-  }
-
-  contacts[index] = {
-    id,
-    ...body,
-  };
-  console.log("contacts[index]", contacts[index]);
-  await updateContacts(contacts);
-  return contacts[index];
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+module.exports = { Contact, schemas };
