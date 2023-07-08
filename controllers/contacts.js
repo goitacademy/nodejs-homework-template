@@ -1,38 +1,33 @@
-const validateBody = require("../middlewares/valideteBody");
+const { validateBody } = require("../middlewares");
 const schema = require("../schemas/addContSchema");
 const contrsWrapper = require("../helpers/contrsWrapper");
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const Contact = require("../models/contacts");
 const HttpError = require("../helpers/HttpError");
-
 const getAll = async (req, res) => {
-  const allContacts = await listContacts();
+  const allContacts = await Contact.find();
   res.status(200).json(allContacts);
 };
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const findedContact = await getContactById(contactId);
+  const findedContact = await Contact.findById(contactId);
   if (!findedContact) {
     throw HttpError(404, "Not found");
   }
-
   res.json(findedContact);
 };
 const addCont = async (req, res) => {
   validateBody(schema);
-  const result = await addContact(req.body);
+  const result = await Contact.create(req.body);
+  console.log(result);
   res.status(201).json(result);
 };
 const updateById = async (req, res) => {
   validateBody(schema);
 
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -40,7 +35,7 @@ const updateById = async (req, res) => {
 };
 const removeCont = async (req, res) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
