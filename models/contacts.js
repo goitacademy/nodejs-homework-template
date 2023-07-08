@@ -1,4 +1,5 @@
 // const fs = require('fs/promises')
+const { readFile, writeFile } = require("fs").promises;
 
 const listContacts = async () => {}
 

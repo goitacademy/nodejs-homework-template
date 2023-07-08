@@ -1,4 +1,18 @@
+<<<<<<< Updated upstream
 const express = require('express')
+=======
+
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
+const express = require("express");
+const Joi = require("joi");
+const uniqid = require('uniqid'); 
+>>>>>>> Stashed changes
 
 const router = express.Router()
 
