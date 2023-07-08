@@ -1,10 +1,18 @@
 const express = require("express");
+
+const contacts = require("../models/contacts.json");
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Hello World!!!");
+// app.get("/", (req, res) => {
+//   res.send("<h2>Home page</h2>>");
+// });
+
+// app.get("/contacts", (req, res) => {
+//   res.send("<h2>Contacts page</h2>");
+// });
+
+app.get("/contacts", (req, res) => {
+  res.send(contacts);
 });
 
-app.listen(3000, () => {
-  console.log("Example app listening on port 3000!");
-});
+app.listen(3000);

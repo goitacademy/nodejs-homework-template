@@ -1,14 +1,72 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
+const crypto = require("crypto");
 
-const listContacts = async () => {}
+const HttpError = require("../utils/HttpError");
 
-const getContactById = async (contactId) => {}
+const contactPath = path.join(__dirname, "..", "models", "contacts.json");
 
-const removeContact = async (contactId) => {}
+const listContacts = async () => {
+  const data = await fs.readFile(contactPath);
+  return JSON.parse(data);
+};
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const contact = contacts.find((contact) => contact.id === contactId);
 
-const updateContact = async (contactId, body) => {}
+  if (!contact) {
+    throw new HttpError(404, "This contact does not exist!");
+  }
+
+  return contact;
+};
+
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const contactIndex = contacts.findIndex(
+    (contact) => contact.id === contactId
+  );
+
+  if (contactIndex === -1) {
+    throw new HttpError(404, "This contact does not exist!");
+  }
+
+  contacts.splice(contactIndex, 1);
+  await fs.writeFile(contactPath, JSON.stringify(contacts, null, 4));
+};
+
+const addContact = async (body) => {
+  const requiredFields = ["name", "email", "phone"];
+  for (const field of requiredFields) {
+    if (!body[field]) {
+      throw new HttpError(404, `missing required ${field} field`);
+    }
+  }
+
+  const contacts = await listContacts();
+  const newContact = { id: crypto.randomUUID(), ...body };
+
+  contacts.push(newContact);
+  await fs.writeFile(contactPath, JSON.stringify(contacts, null, 4));
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const contactIndex = contacts.findIndex(
+    (contact) => contact.id === contactId
+  );
+
+  if (contactIndex === -1) {
+    throw new HttpError(404, "This contact does not exist!");
+  }
+
+  contacts[contactIndex] = { ...contacts[contactIndex], ...body };
+
+  await fs.writeFile(contactPath, JSON.stringify(contacts, null, 4));
+  return contacts[contactIndex];
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +74,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
