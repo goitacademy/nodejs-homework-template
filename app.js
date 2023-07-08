@@ -19,7 +19,7 @@ app.use("/api/users", authRouter);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
-
+app.use("/public", express.static("public"));
 app.use((err, req, res, next) => {
   let { status = 500, message = "Server error" } = err;
   if (err.message.includes("E11000 duplicate key error collection")) {

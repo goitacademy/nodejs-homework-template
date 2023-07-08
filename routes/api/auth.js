@@ -7,8 +7,10 @@ const {
   logout,
   current,
   changeSubscription,
+  changeAvatar,
 } = require("../../controllers/auth");
-const { validateRegisterBody, auth } = require("../../middlewares");
+const { validateRegisterBody, auth, upload } = require("../../middlewares");
+
 const { schemaSignup, schemaSubscription } = require("../../models/user");
 
 router.post("/signup", validateRegisterBody(schemaSignup), signup);
@@ -21,4 +23,5 @@ router.patch(
   validateRegisterBody(schemaSubscription),
   changeSubscription
 );
+router.patch("/avatars", auth, upload.single("avatars"), changeAvatar);
 module.exports = router;

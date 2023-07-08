@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 const { handleMongooseError } = require("../helpers");
+const gravatar = require("gravatar");
 const schema = mongoose.Schema(
   {
     password: {
@@ -20,6 +21,10 @@ const schema = mongoose.Schema(
     token: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      default: gravatar.profile_url(this.email),
     },
   },
   { versionKey: false, timestamps: true }

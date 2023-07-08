@@ -2,8 +2,10 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
-const { func } = require("joi");
+const Jimp = require("jimp");
+const fs = require("fs/promises");
 const { JWT_SECRET } = process.env;
+const path = require("path");
 
 async function signup(req, res, next) {
   const { email, password } = req.body;
@@ -86,10 +88,48 @@ async function changeSubscription(req, res, next) {
   });
 }
 
+const changeAvatar = async (req, res) => {
+  const { user } = req;
+
+  const { filename, path: filepath } = req.file;
+  const tmpPath = await path.resolve(__dirname, "../tmp", filename);
+  const publicPath = await path.resolve(
+    __dirname,
+    "../public/avatars",
+    filename
+  );
+  try {
+    const image = await Jimp.read(filepath);
+    await image.resize(250, 250).writeAsync(filepath);
+    await fs.rename(tmpPath, publicPath);
+  } catch (error) {
+    console.log(error.message);
+    await fs.unlink(tmpPath);
+    throw HttpError(error.status, error.message);
+  }
+
+  if (!user) {
+    throw HttpError(401, "Not authorized user");
+  }
+  const avatarPath = `/public/avatars/${filename}`;
+  const updateUser = await User.findByIdAndUpdate(
+    user._id,
+    { avatarURL: avatarPath },
+    { new: true }
+  );
+  return res.status(200).json({
+    data: {
+      user: {
+        imageUrl: updateUser.avatarURL,
+      },
+    },
+  });
+};
 module.exports = {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
   changeSubscription: ctrlWrapper(changeSubscription),
+  changeAvatar: ctrlWrapper(changeAvatar),
 };

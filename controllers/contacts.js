@@ -2,8 +2,17 @@ const { Contact } = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
-  const result = await await Contact.find();
-  res.json(result);
+  const { limit = 100, pages = 1, favorite } = req.query;
+  const skip = (pages - 1) * limit;
+  if (favorite) {
+    const result = await await Contact.find({ favorite })
+      .skip(skip)
+      .limit(limit);
+    res.json(result);
+  } else {
+    const result = await await Contact.find({}).limit(limit);
+    res.json(result);
+  }
 };
 
 const getContactById = async (req, res) => {
@@ -53,6 +62,7 @@ const updateStatusContact = async (req, res) => {
   }
   res.status(200).json(result);
 };
+
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
