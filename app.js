@@ -1,14 +1,14 @@
 //Us3XPk10iJjh6ELN
 
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
-const DB_Host = "mongodb+srv://Ishtvan:Us3XPk10iJjh6ELN@cluster0.tg7suj0.mongodb.net/contacts_finder?retryWrites=true&w=majority"
+// const DB_Host = "mongodb+srv://Ishtvan:Us3XPk10iJjh6ELN@cluster0.tg7suj0.mongodb.net/contacts_finder?retryWrites=true&w=majority"
 
-mongoose.set('strictQuery', true);
+// mongoose.set('strictQuery', true);
 
-mongoose.connect(DB_Host)
-  .then(() => console.log('Database connect success'))
-  .catch(error => console.log(error.message))
+// mongoose.connect(DB_Host)
+//   .then(() => console.log('Database connect success'))
+//   .catch(error => console.log(error.message))
 
 
 const express = require("express");
