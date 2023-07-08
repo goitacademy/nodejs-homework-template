@@ -1,29 +1,42 @@
 const express = require("express");
 const router = express.Router();
-const ctrl = require("../../controllers/contacts.js");
-const { validateBody, isValidId } = require("../../middlewares");
+const ctrl = require("../../controllers/contacts");
+const { validateBody, isValidId, authenticate } = require("../../middlewares");
 const { schemas } = require("../../models/contact");
+const expressAsync = require("express-async-handler");
 
-router.get("/", ctrl.getAll);
+router.get("/", authenticate, expressAsync(ctrl.getAll));
 
-router.get("/:contactId", isValidId, ctrl.getById);
+router.get("/:contactId", authenticate, isValidId, expressAsync(ctrl.getById));
 
-router.post("/", validateBody(schemas.addSchema), ctrl.add);
+router.post(
+  "/",
+  authenticate,
+  validateBody(schemas.addSchema),
+  expressAsync(ctrl.add)
+);
 
-router.delete("/:contactId", isValidId, ctrl.deleteById);
+router.delete(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  expressAsync(ctrl.deleteById)
+);
 
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
-  ctrl.updateFavorite
+  expressAsync(ctrl.updateFavorite)
 );
 
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBody(schemas.addSchema),
-  ctrl.updateById
+  expressAsync(ctrl.updateById)
 );
 
 module.exports = router;
