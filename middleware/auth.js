@@ -1,40 +1,42 @@
-const User = require("../models/User");
-
 const jwt = require("jsonwebtoken");
-const secret = process.env.JWT_SECRET;
 require("dotenv").config();
+
+const User = require("../models/User");
+const secret = process.env.JWT_SECRET;
 
 const userAuth = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
+
   if (bearer !== "Bearer") {
-    return res.status(401).json({
+    res.status(401).json({
       status: "error",
       code: 401,
       message: "Unauthorized",
-      data: "Unauthorized",
     });
+    return;
   }
   try {
     const { id } = jwt.verify(token, secret);
     const user = await User.findById(id);
+
     if (!user || !user.token || user.token !== token) {
-      return res.status(401).json({
+      res.status(401).json({
         status: "error",
         code: 401,
         message: "Unauthorized",
-        data: "Unauthorized",
       });
+      return;
     }
     req.user = user;
     next();
-  } catch (error) {
-    return res.status(401).json({
+  } catch {
+    res.status(401).json({
       status: "error",
       code: 401,
       message: "Unauthorized",
-      data: "Unauthorized",
     });
   }
 };
+
 module.exports = userAuth;
