@@ -1,7 +1,9 @@
 const Joi = require("joi");
 
 const setFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean()
+    .required()
+    .error(() => new Error("favorite")),
 });
 
 const contactSchema = Joi.object({
@@ -21,4 +23,15 @@ const contactSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-module.exports = { setFavoriteSchema, contactSchema };
+const userValidationSchema = Joi.object({
+  email: Joi.string()
+    .email()
+    .required()
+    .error(() => new Error("email")),
+  password: Joi.string()
+    .required()
+    .min(6)
+    .error(() => new Error("password")),
+});
+
+module.exports = { setFavoriteSchema, contactSchema, userValidationSchema };

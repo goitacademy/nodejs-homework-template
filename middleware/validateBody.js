@@ -1,7 +1,5 @@
-const { contactSchema } = require("../models/joiSchemas");
-
-const validateBody = (req, res, next) => {
-  const { error } = contactSchema.validate(req.body);
+const validateBody = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.body);
   if (error) {
     res
       .status(400)
