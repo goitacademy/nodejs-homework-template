@@ -11,6 +11,9 @@ const auth = async (req, res, next) => {
   if (bearer !== "Bearer") {
     next(HttpError(401, "Not authorized"));
   }
+  if (!token) {
+    next(HttpError(401, "No token"));
+  }
 
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
