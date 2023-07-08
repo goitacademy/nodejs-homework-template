@@ -2,6 +2,10 @@ const {User,authSchemas} =require("../models");
  
 const bcrypt = require('bcryptjs');
 
+const jwt = require("jsonwebtoken");
+
+const {SECRET_KEY} = process.env
+
 const { RequestError } = require("../helpers");
 
 
@@ -43,11 +47,11 @@ const register = async (req, res, next) => {
         const {email,password} = req.body;
         const user = await User.findOne({email});
         if (!user) {
-          throw RequestError(401, "Email or password is wrong");
+          throw RequestError(401, " Email or password is wrong");
         };
         const passwordCompare = await bcrypt.compare(password,user.password);
         if (!passwordCompare) {
-          throw RequestError(401, "Email or password is wrong");
+          throw RequestError(401, " Email or password is wrong");
         }
 
         const { error } = authSchemas.registerSchema
@@ -55,8 +59,12 @@ const register = async (req, res, next) => {
     if (error) {
       throw RequestError(400, error.message);
     }
-     const token = "hjghgjgjh"
-     res.json({token,user})
+    const payload = {
+      id:user._id,
+    }
+     const token = jwt.sign(payload,SECRET_KEY,{expiresIn:"23h"})
+     res.json({token,user:{email:user.email,
+      subscription:user.subscription}})
     } catch (error) {
       next(error);
     }
