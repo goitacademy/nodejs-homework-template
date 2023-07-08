@@ -1,3 +1,4 @@
-const ctrlsWrapper = require('./ctrlsWrapper');
+const ctrlsWrapper = require("./ctrlsWrapper");
+const mongooseError = require("./mongooseError");
 
-module.exports = { ctrlsWrapper };
+module.exports = { ctrlsWrapper, mongooseError };
