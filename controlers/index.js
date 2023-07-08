@@ -4,6 +4,11 @@ const addContact = require("./addContact");
 const updateContact = require("./updateContact");
 const removeContact = require("./removeContact");
 const updateFavorite = require("./updateFavorite");
+const register = require("./register");
+const login = require("./login");
+const getCurrentUser = require("./getCurrentUser");
+const logout = require("./logout");
+const updateUser = require("./updateUser");
 
 module.exports = {
   listContacts,
@@ -12,4 +17,9 @@ module.exports = {
   updateContact,
   removeContact,
   updateFavorite,
+  register,
+  login,
+  getCurrentUser,
+  logout,
+  updateUser,
 };
