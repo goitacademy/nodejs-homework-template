@@ -78,9 +78,24 @@
     "id": "N64u1AhJiYPfnW2--yLY8"
   },
   {
-    "name": "Roman",
+    "name": "ROMAN",
     "email": "roman@mail.ua",
     "phone": "000-555-77-77",
-    "id": "Lt2l9oI885Do1Hyb8Xvqj"
+    "id": "9HM19Mug3_skiu3qwvGh7"
+  },
+  {
+    "_id": "64a1642ff53475f5b7159db5",
+    "name": "Kennedy",
+    "email": "matis7777@gmail.com",
+    "phone": "(542) 451-7038",
+    "favorite": false,
+    "id": "ypMrh6XJcqTxZbffsf2Lh"
+  },
+  {
+    "name": "Kennedy",
+    "email": "matis7777@gmail.com",
+    "phone": "(542) 451-7038",
+    "favorite": false,
+    "id": "PjanMMKAlAVnSW2NZJJNh"
   }
 ]

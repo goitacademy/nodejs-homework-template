@@ -12,10 +12,6 @@ const listContactsService = async () => {
 
 const getContactByIdService = async (contactId) => {
   const allContacts = await listContactsService();
-
-  //   const parseAllContacts = JSON.parse(allContacts);
-  //   console.log("parseAllContacts:", parseAllContacts);
-
   const contactById = allContacts.find((contact) => contact.id === contactId);
 
   return contactById || null;
