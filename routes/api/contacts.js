@@ -9,7 +9,6 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../controllers/contactsControllers");
-// const isValidId = require("../../middlewares");
 
 router.route("/").get(getListContacts).post(createContact);
 router
