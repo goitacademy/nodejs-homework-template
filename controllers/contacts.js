@@ -1,3 +1,4 @@
+const Joi = require("joi")
 const path = require("path")
 const {
     listContacts,
@@ -8,13 +9,30 @@ const {
   } = require(path.resolve(__dirname, "../models/contacts"));
 
   const { httpError, ctrlWrapper } = require(path.resolve(__dirname, "../helpers"))
+  
+  const addSchema = Joi.object({
+    name: Joi.string()
+    .trim()
+    .required(),
+    email: Joi.string()
+    .trim()
+    .email()
+    .required(),
+    phone: Joi.string()
+    .trim()
+    .regex(/^\+\d{1}\d{8,15}$/)
+    .messages({
+      'string.pattern.base': 'Phone number must start with a plus sign (+) and have 9 to 16 digits.',
+    })
+    .required()
+  });
 
   const getAll = async (req, res) => {
       const contacts = await listContacts();
       if(!contacts) {
         throw httpError(404, "Not found")
       }
-      res.status(200).json({ contacts });
+      res.status(200).json( contacts );
   };
 
   const getById = async (req, res) => {
@@ -24,14 +42,17 @@ const {
     if(!contactById) {
       throw httpError(404, "Not found")
     }
-    res.status(200).json({ contactById });
+    res.status(200).json( contactById );
   }
 
   const add = async (req, res) => {
-    const { name, email, phone } = req.body;
-  const newContact = await addContact({ name, email, phone }); 
+    const { error } = addSchema.validate(req.body);
+    if( error) {
+      throw httpError(400, error.message)
+    }
+  const newContact = await addContact(req.body); 
 
-  res.status(201).json({ newContact });
+  res.status(201).json( newContact );
 }
 
 const deleteById = async (req, res) => {
@@ -47,6 +68,10 @@ const deleteById = async (req, res) => {
   }
 
   const updateContactById = async (req, res) => {
+    const { error } = addSchema.validate(req.body);
+    if( error) {
+      throw httpError(400, error.message)
+    }
     const contactId = req.params.contactId; 
     const { name, email, phone } = req.body; 
   
@@ -57,7 +82,7 @@ const deleteById = async (req, res) => {
       throw httpError(404, "Not found")
     }
   
-    res.json({ updatedContact });
+    res.json( updatedContact );
   }
 
   
@@ -68,3 +93,4 @@ const deleteById = async (req, res) => {
     deleteById: ctrlWrapper(deleteById),
     updateContactById: ctrlWrapper(updateContactById),
   }
+  
