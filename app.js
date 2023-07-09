@@ -5,7 +5,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 
 const contactsRouter = require("./routes/api/contacts");
-const authRouter = require("./routes/api/users")
+const authRouter = require("./routes/api/users");
 
 const app = express();
 
@@ -27,7 +27,7 @@ mongoose
 
 app.listen(3001);
 
-app.use("/users",authRouter)
+app.use("/users", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use(async (req, res) => {
