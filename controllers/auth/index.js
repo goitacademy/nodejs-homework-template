@@ -4,4 +4,6 @@ const { login } = require('./login');
 
 const { getCurrent } = require('./currentUser');
 
-module.exports = { register, login, getCurrent };
+const { logout } = require('./logout');
+
+module.exports = { register, login, getCurrent, logout };
