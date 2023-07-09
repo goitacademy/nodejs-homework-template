@@ -1,6 +1,5 @@
-const Joi = require("joi");
-
 const HttpError = require("../utils/HttpError");
+const addSchema = require("../controllers/contactSchema");
 
 const {
   listContacts,
@@ -9,12 +8,6 @@ const {
   addContact,
   updateContact,
 } = require("../models/contacts");
-
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
 
 const getAllContacts = async (req, res, next) => {
   try {
