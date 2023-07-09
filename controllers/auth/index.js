@@ -6,4 +6,6 @@ const { getCurrent } = require('./currentUser');
 
 const { logout } = require('./logout');
 
-module.exports = { register, login, getCurrent, logout };
+const { updateSubscription } = require('./updateSubscription');
+
+module.exports = { register, login, getCurrent, logout, updateSubscription };
