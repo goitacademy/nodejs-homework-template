@@ -70,8 +70,22 @@ const register = async (req, res, next) => {
     }
   };
 
+  const getCurrent = (req,res,next) => {
+try {
+  const{email,subscription} = req.user;
+res.json({
+  email,
+  subscription,
+})
+} catch (error) {
+  next(RequestError(401))
+}
+
+  }
+
 
   module.exports= {
     register,
     login,
+    getCurrent,
   }
