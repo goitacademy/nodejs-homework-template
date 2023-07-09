@@ -17,6 +17,7 @@ const upload = require("../../utils/download");
 const validateEmail = require("../../utils/validateEmail");
 const sendEmail = require("../../utils/sendEmail");
 const { BASE_URL } = process.env;
+const { v4 } = require("uuid");
 
 const router = express.Router();
 
@@ -33,12 +34,23 @@ router.post("/register", validateUser(), async (req, res, next) => {
     }
 
     const hashPassword = await createHashPassword(password);
+    const avatarURL = gravatar.url(email);
+    const verificationToken = v4();
 
     const newUser = await User.create({
       ...req.body,
       password: hashPassword,
-      avatarURL: gravatar.url(email),
+      avatarURL,
+      verificationToken,
     });
+
+    const verifyEmail = {
+      to: email,
+      subject: "Verify email",
+      html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click verify email</a>`,
+    };
+
+    await sendEmail(verifyEmail);
 
     res.status(201).json({
       user: {
@@ -61,6 +73,10 @@ router.post("/login", validateUser(), async (req, res, next) => {
 
     if (!user) {
       throw httpErr(401, "Email or password is wrong");
+    }
+
+    if (!user.verify) {
+      throw httpErr(401, "Email not verified");
     }
 
     const comparePassword = await compareResult(password, user.password);
@@ -144,49 +160,57 @@ router.patch(
   }
 );
 
-router.post("/verify", validateEmail(), async (req, res) => {
-  const { email } = req.body;
+router.post("/verify", validateEmail(), async (req, res, next) => {
+  try {
+    const { email } = req.body;
 
-  const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-  if (!user) {
-    throw httpErr(401, "Email is wrong");
+    if (!user) {
+      throw httpErr(401, "Email is wrong");
+    }
+
+    if (user.verify) {
+      throw httpErr(400, "Verification has already been passed");
+    }
+
+    const verifyEmail = {
+      to: email,
+      subject: "Verify email",
+      http: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
+    };
+
+    await sendEmail(verifyEmail);
+
+    res.json({
+      message: "Verification email sent",
+    });
+  } catch (error) {
+    next(error);
   }
-
-  if (user.verify) {
-    throw httpErr(400, "Verification has already been passed");
-  }
-
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    http: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`,
-  };
-
-  await sendEmail(verifyEmail);
-
-  res.json({
-    message: "Verification email sent",
-  });
 });
 
-router.get("/verify/:verificationToken", async (req, res) => {
-  const { verificationToken } = req.params;
+router.get("/verify/:verificationToken", async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
 
-  const user = await User.findOne({ verificationToken });
+    const user = await User.findOne({ verificationToken });
 
-  if (!user) {
-    throw httpErr(404, "User not found");
+    if (!user) {
+      throw httpErr(404, "User not found");
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+      verificationToken: null,
+      verify: true,
+    });
+
+    res.json({
+      message: "Verification successful",
+    });
+  } catch (error) {
+    next(error);
   }
-
-  await User.findByIdAndUpdate(user._id, {
-    verificationToken: null,
-    verify: true,
-  });
-
-  res.json({
-    message: "Verification successful",
-  });
 });
 
 module.exports = router;

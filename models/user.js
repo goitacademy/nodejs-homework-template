@@ -33,7 +33,7 @@ const userSchema = new Schema(
       required: [true, "Verify token is required"],
     },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false }
 );
 
 userSchema.post("save", (error, data, next) => {

@@ -31,4 +31,17 @@ const favoriteValidator = (data) => {
   return schema.validate(data);
 };
 
-module.exports = { dataValidator, favoriteValidator, userValidate };
+const emailValidator = (data) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+
+  return schema.validate(data);
+};
+
+module.exports = {
+  dataValidator,
+  favoriteValidator,
+  userValidate,
+  emailValidator,
+};
