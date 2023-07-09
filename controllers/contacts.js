@@ -60,14 +60,6 @@ const updateContactById = async (req, res) => {
   res.json(updatedContact);
 };
 
-// module.exports = {
-//   getAll,
-//   getById,
-//   add,
-//   deleteById,
-//   updateContactById,
-// }
-
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
