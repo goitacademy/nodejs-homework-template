@@ -34,4 +34,17 @@ const userValidationSchema = Joi.object({
     .error(() => new Error("password")),
 });
 
-module.exports = { setFavoriteSchema, contactSchema, userValidationSchema };
+const userSubscriptionSchema = Joi.object({
+  id: Joi.string().required(),
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .required()
+    .error(() => new Error("subscription ('starter', 'pro', 'business')")),
+});
+
+module.exports = {
+  setFavoriteSchema,
+  contactSchema,
+  userValidationSchema,
+  userSubscriptionSchema,
+};

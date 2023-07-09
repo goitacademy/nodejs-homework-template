@@ -31,6 +31,7 @@ const loginUser = async (req, res, next) => {
       res.status(401).json("Email or password is wrong");
     } else {
       const token = jwt.sign({ id: user._id }, JWT_STRING, { expiresIn: "1d" });
+      await User.findByIdAndUpdate(user._id, { token });
       res
         .status(201)
         .json({ token, user: { email, subscribtion: user.subscribtion } });
@@ -38,13 +39,36 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-const logoutUser = async (req, res, next) => {};
+const logoutUser = async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user._id, { token: "" });
+  res.status(204).json();
+};
 
-const currentUser = async (req, res, next) => {};
+const currentUser = async (req, res, next) => {
+  res
+    .status(200)
+    .json({ email: req.user.email, subscribtion: req.user.subscribtion });
+};
+
+const setSubscription = async (req, res, next) => {
+  const { subscription, id } = req.body;
+  console.log(id, subscription);
+  const result = await User.findByIdAndUpdate(
+    id,
+    { subscription },
+    { new: true, select: "email subscription" }
+  );
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    res.status(200).json(result);
+  }
+};
 
 module.exports = {
   registerUser: ctrlsWrapper(registerUser),
   loginUser: ctrlsWrapper(loginUser),
   logoutUser: ctrlsWrapper(logoutUser),
   currentUser: ctrlsWrapper(currentUser),
+  setSubscription: ctrlsWrapper(setSubscription),
 };

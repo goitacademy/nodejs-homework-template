@@ -2,7 +2,15 @@ const { ctrlsWrapper } = require("../helpers/index");
 const Contact = require("../models/Contact");
 
 const getContacts = async (req, res, next) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
+  const { page = 1, perPage = Infinity, favorite } = req.query;
+  const result = await Contact.find(
+    {
+      owner: req.user._id,
+      favorite: favorite ?? [true, false],
+    },
+    "-createdAt -updatedAt",
+    { skip: (page - 1) * perPage, limit: perPage }
+  ).populate("owner", "_id email");
   res.status(200).json(result);
 };
 
@@ -17,7 +25,7 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const result = await Contact.create(req.body);
+  const result = await Contact.create({ ...req.body, owner: req.user._id });
   res.status(201).json(result);
 };
 
