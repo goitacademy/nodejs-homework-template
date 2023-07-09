@@ -1,5 +1,6 @@
 const Joi = require("joi")
 const path = require("path");
+const ctrlWrapper = require("../helpers/ctrlWrapper");
 const { httpError} = require(path.resolve(__dirname, "../helpers"))
 const {
     listContacts,
@@ -27,34 +28,23 @@ const addSchema = Joi.object({
 });
 
   const getAll =  async (req, res, next) => {
-    try {
         const contacts = await listContacts();
         if(!contacts) {
           throw httpError(404, "Not found")
         }
         res.status(200).json( contacts );
-        
-      } catch (error) {
-        next(error)
       }
-  }
 
   const getById = async (req, res, next) => {
-    try {
     const contactId = req.params.contactId; // Получаем значение contactId из параметров запроса
     const contactById = await getContactById(contactId);
     if(!contactById) {
         throw httpError(404, "Not found")
       }
       res.status(200).json( contactById );
-    
-      } catch (error) {
-        next(error)
-      }
   }
 
   const add = async (req, res, next) => {
-    try {
         const {error} = addSchema.validate(req.body)
         if(error) {
           throw httpError(400, error.message)
@@ -64,13 +54,9 @@ const addSchema = Joi.object({
     const newContact = await addContact({ name, email, phone }); // Передаем параметр contact
     
   res.status(201).json( newContact );
-} catch (error) {
-  next(error)
-}
   }
 
 const deleteById = async (req, res, next) => {
-  try {
       const contactId = req.params.contactId; // Получаем значение contactId из параметров запроса
       const removedById = await removeContact(contactId);
   
@@ -79,14 +65,10 @@ const deleteById = async (req, res, next) => {
       }  
       res.json({
         message: "Delete success"
-      })  
-    } catch (error) {
-      next(error)
-    }
+      })
 }
 
   const updateContactById = async (req, res, next) => {
-    try {
         const {error} = addSchema.validate(req.body)
         if(error) {
           throw httpError(400, error.message)
@@ -103,25 +85,21 @@ const deleteById = async (req, res, next) => {
       }
     
       res.json( updatedContact );
-  
-    } catch (error) {
-        next(error)
-      }
   }
 
-  module.exports = {
-    getAll,
-    getById,
-    add,
-    deleteById,
-    updateContactById,
-  }
-  
   // module.exports = {
-  //   getAll: ctrlWrapper(getAll),
-  //   getById: ctrlWrapper(getById),
-  //   add: ctrlWrapper(add),
-  //   deleteById: ctrlWrapper(deleteById),
-  //   updateContactById: ctrlWrapper(updateContactById),
+  //   getAll,
+  //   getById,
+  //   add,
+  //   deleteById,
+  //   updateContactById,
   // }
+  
+  module.exports = {
+    getAll: ctrlWrapper(getAll),
+    getById: ctrlWrapper(getById),
+    add: ctrlWrapper(add),
+    deleteById: ctrlWrapper(deleteById),
+    updateContactById: ctrlWrapper(updateContactById),
+  }
   
