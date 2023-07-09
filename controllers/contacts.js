@@ -4,7 +4,8 @@ const { RequestError } = require("../helpers");
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const{_id:owner} = req.user
+    const result = await Contact.find({owner});
     res.json(result);
   } catch (error) {
     next(error);
@@ -29,10 +30,13 @@ const add = async (req, res, next) => {
     const { error } = schemas.postCheckingSchema.validate(req.body);
 
     if (error) {
-      // console.log(error, error.context);
+      
       throw RequestError(400, error.message);
     }
-    const result = await Contact.create(req.body);
+    const{_id:owner} = req.user
+    // console.log(owner);
+    const result = await Contact.create({...req.body,owner});
+   
     res.status(201).json(result);
   } catch (error) {
     next(error);
