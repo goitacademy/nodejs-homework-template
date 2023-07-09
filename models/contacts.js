@@ -37,13 +37,6 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const requiredFields = ["name", "email", "phone"];
-  for (const field of requiredFields) {
-    if (!body[field]) {
-      throw new HttpError(404, `missing required ${field} field`);
-    }
-  }
-
   const contacts = await listContacts();
   const newContact = { id: crypto.randomUUID(), ...body };
 

@@ -41,11 +41,11 @@ const deleteContact = async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await removeContact(contactId, req.body);
 
-    if (!contact) {
-      throw HttpError(404, "Not Found");
-    }
-
     res.json({ message: "Contact was removed" });
+
+    if (!contact) {
+      throw new HttpError(404, "Not Found");
+    }
   } catch (error) {
     next(error);
   }
@@ -53,6 +53,10 @@ const deleteContact = async (req, res, next) => {
 
 const addNewContact = async (req, res, next) => {
   try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw new HttpError(400, error.message);
+    }
     const contact = await addContact(req.body);
 
     res.json(contact);
@@ -65,7 +69,7 @@ const updatedContact = async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing fields");
+      throw new HttpError(400, error.message);
     }
 
     const { contactId } = req.params;
