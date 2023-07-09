@@ -1,6 +1,6 @@
 const app = require("./app");
 require("colors");
-const connectDB = require("./config/connectDB");
+const { connectDB } = require("./config");
 
 connectDB();
 
