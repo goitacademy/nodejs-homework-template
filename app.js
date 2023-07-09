@@ -7,7 +7,6 @@ const configPath = path.join(__dirname, ".", ".env");
 dotenv.config({ path: configPath });
 
 
-
 const contactsRouter = require("./backend/routes/api/contacts")
 const userRouter = require("./backend/routes/api/users")
 
