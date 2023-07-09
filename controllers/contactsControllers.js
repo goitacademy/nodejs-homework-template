@@ -25,7 +25,7 @@ async function removeContact(req, res) {
     if(!result){
         throw HttpError(404, 'Not found');
     }
-    res.json({message: 'Remove success'});
+    res.json({message: 'contact deleted'});
 }
   
 async function addContact(req, res) {
