@@ -3,7 +3,9 @@ const moment = require("moment");
 const fs = require("fs/promises");
 const logger = require("morgan");
 const cors = require("cors");
-const notFoundHandler=require('./middlewares/notFoundHandler')
+require("dotenv").config();
+
+const notFoundHandler = require("./middlewares/notFoundHandler");
 
 const contactsRouter = require("./routes/api/contacts");
 
