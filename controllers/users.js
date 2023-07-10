@@ -64,15 +64,18 @@ const login = async (req, res, next) => {
   }
 };
 
-const getCurrent = (req, res, next) => {
+const getCurrent = async (req, res, next) => {
+  console.log(req)
   try {
     const { email, subscription } = req.user;
+    console.log(email,subscription)
     res.json({
       email,
       subscription,
     });
   } catch (error) {
     next(RequestError(401));
+  
   }
 };
 

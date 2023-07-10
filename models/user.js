@@ -18,7 +18,7 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: String,
-    default: "",
+    // default: "",
   },
   {
     versionKey: false,
