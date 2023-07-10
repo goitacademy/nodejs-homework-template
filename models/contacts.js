@@ -5,62 +5,43 @@ const path = require("path");
 const contactsPath = path.join(__dirname, "db", "contacts.json");
 
 const fileWrite = async (contacts) => {
-  try {
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  } catch (error) {
-    console.log("Помилка запису до контакту :>> ", error);
-  }
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 };
 
 const listContacts = async () => {
-  try {
-    const result = await fs.readFile(contactsPath);
-    return JSON.parse(result);
-  } catch (error) {
-    console.log("Помилка доступу до контактів :>> ", error);
-  }
+  const result = await fs.readFile(contactsPath);
+  return JSON.parse(result);
 };
 
 const getContactById = async (contactId) => {
   const searchContacts = await listContacts();
-  try {
-    const contactById = searchContacts.find(
-      (contact) => contact.id === contactId
-    );
-    return contactById || null;
-  } catch (error) {
-    console.log("Помилка доступу до контакту :>> ", error);
-  }
+
+  const contactById = searchContacts.find(
+    (contact) => contact.id === contactId
+  );
+  return contactById || null;
 };
 
 const removeContact = async (contactId) => {
   const arrayContacts = await listContacts();
-  try {
-    const index = arrayContacts.findIndex(
-      (contact) => contact.id === contactId
-    );
-    if (index === -1) {
-      return null;
-    }
 
-    const deleteContact = arrayContacts.splice(index, 1);
-    fileWrite(arrayContacts);
-    return deleteContact;
-  } catch (error) {
-    console.log("Контакт не видалено:>> ", error);
+  const index = arrayContacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
+    return null;
   }
+
+  const deleteContact = arrayContacts.splice(index, 1);
+  fileWrite(arrayContacts);
+  return deleteContact;
 };
 
 const addContact = async (body) => {
   const contacts = await listContacts();
-  try {
-    const newContact = { id: nanoid(), ...body };
-    contacts.push(newContact);
-    fileWrite(contacts);
-    return newContact;
-  } catch (error) {
-    console.log("Контакт не додано:>> ", error);
-  }
+
+  const newContact = { id: nanoid(), ...body };
+  contacts.push(newContact);
+  fileWrite(contacts);
+  return newContact;
 };
 
 const updateContact = async (contactId, body) => {
