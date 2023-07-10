@@ -6,6 +6,13 @@ const {
   updateContactById,
   updateFavoriteContact,
 } = require("./contacts");
+const {
+  registerUser,
+  loginUser,
+  getCurrentUser,
+  logoutUser,
+  updateUserSubscription,
+} = require("./auth");
 
 module.exports = {
   contactsCtrl: {
@@ -15,5 +22,12 @@ module.exports = {
     removeContactById,
     updateContactById,
     updateFavoriteContact,
+  },
+  authCtrl: {
+    registerUser,
+    loginUser,
+    getCurrentUser,
+    logoutUser,
+    updateUserSubscription,
   },
 };

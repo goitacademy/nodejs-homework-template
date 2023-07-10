@@ -1,8 +1,11 @@
-const { Contact } = require("../../models");
+const {
+  contactsModel: { Contact },
+} = require("../../models");
 const { ctrlWrapper } = require("../../helpers");
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   return res.status(201).json(result);
 };
 
