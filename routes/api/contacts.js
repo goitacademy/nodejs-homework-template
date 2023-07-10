@@ -1,17 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const ctrlTask = require("../../controller/contacts.js");
+const { auth } = require("../../controller/tokenAuth.js");
 
-router.get("/", ctrlTask.get);
+router.get("/", auth, ctrlTask.get);
 
-router.get("/:contactId", ctrlTask.getById);
+router.get("/:contactId", auth, ctrlTask.getById);
 
-router.post("/", ctrlTask.create);
+router.post("/", auth, ctrlTask.create);
 
-router.put("/:contactId", ctrlTask.update);
+router.put("/:contactId", auth, ctrlTask.update);
 
-router.patch("/:contactId/favorite", ctrlTask.updateStatus);
+router.patch("/:contactId/favorite", auth, ctrlTask.updateStatus);
 
-router.delete("/:contactId", ctrlTask.remove);
+router.delete("/:contactId", auth, ctrlTask.remove);
 
 module.exports = router;

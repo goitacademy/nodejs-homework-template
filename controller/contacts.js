@@ -1,8 +1,11 @@
 const service = require("../service/index");
 
 const get = async (req, res, next) => {
+  const userId = req.user._id;
+  const { favorite = false } = req.query;
+
   try {
-    const results = await service.getAllContacts();
+    const results = await service.getAllContacts(userId, favorite);
     res.json({
       status: "success",
       code: 200,
@@ -11,15 +14,15 @@ const get = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
+  const userId = req.user._id;
   try {
-    const result = await service.getContactById(contactId);
+    const result = await service.getContactById(contactId, userId);
     if (result) {
       res.json({
         status: "success",
@@ -36,20 +39,20 @@ const getById = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
 const create = async (req, res, next) => {
+  const userId = req.user._id;
   const { name, email, phone, favorite } = req.body;
-  console.log(req.body);
   try {
     const result = await service.createContact({
       name,
       email,
       phone,
       favorite,
+      owner: userId,
     });
 
     res.status(201).json({
@@ -59,16 +62,16 @@ const create = async (req, res, next) => {
       data: { contact: result },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
 const update = async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone, favorite } = req.body;
+  const userId = req.user._id;
   try {
-    const result = await service.updateContact(contactId, {
+    const result = await service.updateContact(contactId, userId, {
       name,
       email,
       phone,
@@ -90,14 +93,14 @@ const update = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
 const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
+  const userId = req.user._id;
   if (favorite === undefined) {
     res.status(400).json({
       status: "error",
@@ -106,7 +109,9 @@ const updateStatus = async (req, res, next) => {
     });
   }
   try {
-    const result = await service.updateStatusContact(contactId, { favorite });
+    const result = await service.updateStatusContact(contactId, userId, {
+      favorite,
+    });
     if (result) {
       res.json({
         status: "success",
@@ -123,16 +128,15 @@ const updateStatus = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
 const remove = async (req, res, next) => {
   const { contactId } = req.params;
-
+  const userId = req.user._id;
   try {
-    const result = await service.removeContact(contactId);
+    const result = await service.removeContact(contactId, userId);
     if (result) {
       res.json({
         status: "success",
@@ -149,8 +153,7 @@ const remove = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
-    next(e);
+    res.status(500).json({ message: e.message });
   }
 };
 
