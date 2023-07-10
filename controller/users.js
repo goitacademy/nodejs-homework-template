@@ -7,6 +7,8 @@ const fs = require("fs").promises;
 const storeImage = path.join(process.cwd(), "tmp");
 const storeResizedImage = path.join(process.cwd(), "public", "avatars");
 const jimp = require("jimp");
+const { sendVerificationEmail } = require("../auth/config/config-nodemailer");
+const { v4: uuidv4 } = require("uuid");
 
 const secret = "goit";
 
@@ -40,12 +42,11 @@ const login = async (req, res, next) => {
     return res.json.status(400).send(e.message);
   }
 };
-
 const register = async (req, res, next) => {
   const { username, email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    res.json({
+    return res.json({
       status: "error",
       code: 409,
       data: "Conflict",
@@ -54,13 +55,20 @@ const register = async (req, res, next) => {
   }
   try {
     const avatarURL = gravatar.url(email);
+    const verificationToken = uuidv4();
+
     const newUser = new User({ username, email, avatarURL });
+    newUser.verificationToken = verificationToken;
     newUser.setPassword(password);
+
     const payload = {
       id: newUser.id,
     };
     newUser.token = jwt.sign(payload, secret, { expiresIn: "1h" });
     await newUser.save();
+
+    sendVerificationEmail(email, verificationToken);
+
     return res.json({
       status: "success",
       code: 201,
@@ -69,7 +77,7 @@ const register = async (req, res, next) => {
       },
     });
   } catch (e) {
-    res.status(400).send(e.message);
+    return res.status(400).send(e.message);
   }
 };
 
@@ -174,10 +182,37 @@ const changeAvatar = async (req, res, next) => {
   })(req, res, next);
 };
 
+const verify = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+
+    // user.verify = true;
+    // await user.save();
+    console.log(user);
+
+    return res.json({
+      status: "success",
+      code: 200,
+      data: {
+        message: "Email verified",
+      },
+    });
+  } catch (e) {
+    console.log(e.message);
+    return res.json({
+      status: "error",
+      code: 400,
+      message: "Invalid verification token",
+    });
+  }
+};
+
 module.exports = {
   login,
   register,
   logout,
   getCurrent,
   changeAvatar,
+  verify,
 };

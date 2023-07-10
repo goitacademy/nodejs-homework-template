@@ -7,6 +7,7 @@ const {
   logout,
   getCurrent,
   changeAvatar,
+  verify,
 } = require("../../controller/users.js");
 
 router.post("/login", login);
@@ -18,5 +19,7 @@ router.get("/logout", logout);
 router.get("/current", getCurrent);
 
 router.patch("/avatars", upload.single("picture"), changeAvatar);
+
+router.get("/verify:verificationToken", verify);
 
 module.exports = router;
