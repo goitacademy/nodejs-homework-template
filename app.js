@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-require('dotent').config(); // підлючаемо змінні оточення із файла .env
+require('dotenv').config(); // підлючаемо змінні оточення із файла .env
 
 const contactsRouter = require('./routes/api/contacts');
 
