@@ -7,6 +7,6 @@ exports.createContactDataValidator = (data) =>
       name: Joi.string().min(2).max(40).required(),
       email: Joi.string().email().required(),
       phone: Joi.string().min(10).max(14).required(),
-      id: Joi.string().uuid(),
+      favorite: Joi.boolean(),
     })
     .validate(data)
