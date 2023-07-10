@@ -45,19 +45,15 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  try {
-    const contacts = await listContacts();
-    const newContacts = contacts.map((contact) => {
-      if (contact.id === contactId) {
-        return { contact, ...body };
-      } else {
-        return contact;
-      }
-    });
-    fileWrite(newContacts);
-  } catch (error) {
-    console.log("Контакт не змінено:>> ", error);
-  }
+  const contacts = await listContacts();
+  const newContacts = contacts.map((contact) => {
+    if (contact.id === contactId) {
+      return { contact, ...body };
+    } else {
+      return contact;
+    }
+  });
+  fileWrite(newContacts);
 };
 
 module.exports = {
