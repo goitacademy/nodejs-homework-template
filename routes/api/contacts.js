@@ -7,7 +7,11 @@ const { schemas } = require("../../models/contact");
 
 router.get("/", contactsController.getContacts);
 
+
+
 router.get("/:contactId", isValidId, contactsController.getContact);
+
+
 
 router.post(
   "/",
