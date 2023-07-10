@@ -17,11 +17,11 @@ router.get('/current', authenticate, ctrl.getCurrent);
 // logout
 router.post('/logout', authenticate, ctrl.logout);
 // update subscription
-router.patch(
-  '/',
-  authenticate,
-  validateBody(schemas.updateSubscribtionSchema),
-  ctrl.updateSubscription
-);
+// router.patch(
+//   '/',
+//   authenticate,
+//   validateBody(schemas.updateSubscribtionSchema),
+//   ctrl.updateSubscription
+// );
 
 module.exports = router;

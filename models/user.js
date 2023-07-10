@@ -26,19 +26,7 @@ const userSchema = new Schema(
     },
     token: String,
   },
-  { versionKey: false, timestamps: true,  }
-);
-
-const updateSchema = new Schema(
-  {
-    subscription: {
-      type: String,
-      enum: ['starter', 'pro', 'business'],
-      default: 'starter',
-    },
-    token: String,
-  },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 const registerSchema = Joi.object({
@@ -54,13 +42,13 @@ const loginSchema = Joi.object({
   token: Joi.string(),
 });
 
-const updateSubscribtionSchema = Joi.object({
-  subscription: Joi.string()
-    .valid(...subscriptionsPlans)
-    .required(),
-});
+// const updateSubscribtionSchema = Joi.object({
+//   subscription: Joi.string()
+//     .valid(...subscriptionsPlans)
+//     .required(),
+// });
 
-const schemas = { registerSchema, loginSchema, updateSubscribtionSchema };
+const schemas = { registerSchema, loginSchema };
 
 userSchema.post('save', handleMongooseErr);
 
