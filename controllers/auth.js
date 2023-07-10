@@ -1,11 +1,39 @@
 const { User } = require('../models/user');
-
 const { HttpError, ctrlWrapper } = require('../helpers');
+const path = require("path");
+const fs = require("fs/promises");
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const gravatar = require("gravatar");
+const Jimp = require('jimp');
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const avatarSize = 250;
+
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarsDir, filename);
+    await Jimp.read(tempUpload)
+        .then(image => {
+            return image.resize(avatarSize, avatarSize).write(resultUpload);
+        })
+        .catch(err => {
+            console.error('Error resizing image:', err);
+            throw err;
+        });
+
+    await fs.unlink(tempUpload);
+    const avatarURL = path.join('avatars', filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+    res.json({
+        avatarURL,
+    });
+};
 
 const register = async(req, res) => {
     const { email, password } = req.body;
@@ -14,7 +42,7 @@ const register = async(req, res) => {
         throw HttpError(409, 'Email in use');
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    
+    const avatarURL = gravatar.url(email);
     const newUser = await User.create({ ...req.body, password: hashPassword });
     res.status(201).json({
         email: newUser.email,
@@ -60,4 +88,5 @@ module.exports = {
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar),
 }
