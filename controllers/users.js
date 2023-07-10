@@ -22,9 +22,6 @@ const register = async (req, res, next) => {
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({ ...req.body, password: hashPassword });
-    //   if (!newUser) {
-    //     throw RequestError(404, "Not found");
-    //   }
     res.status(201).json({
       email: newUser.email,
       subscription: newUser.subscription,
@@ -46,7 +43,7 @@ const login = async (req, res, next) => {
       throw RequestError(401, " Email or password is wrong");
     }
 
-    const { error } = authSchemas.registerSchema.validate(req.body);
+    const { error } = authSchemas.loginSchema.validate(req.body);
     if (error) {
       throw RequestError(400, error.message);
     }

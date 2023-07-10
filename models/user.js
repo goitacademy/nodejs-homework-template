@@ -41,6 +41,7 @@ const registerSchema = Joi.object({
     .required()
     .error(new Error("missing required password field")),
   email: Joi.string()
+    .email()
     .required()
     .error(new Error("missing required email field")),
   subscription: Joi.string(),
@@ -52,6 +53,7 @@ const loginSchema = Joi.object({
     .required()
     .error(new Error("missing required password field")),
   email: Joi.string()
+    .email()
     .required()
     .error(new Error("missing required email field")),
   subscription: Joi.string(),
