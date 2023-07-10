@@ -1,9 +1,19 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 const contactsRouter = require("./routes/api/contacts");
-
+const DB_HOST = "mongodb+srv://alisa:alisa1996@cluster0.sweamin.mongodb.net/contacts_reader?retryWrites=true&w=majority";
 const app = express();
+
+mongoose.set("strictQuery", true);
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connection successful"))
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
