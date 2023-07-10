@@ -79,7 +79,7 @@ const deleteContact = async (req, res, next) => {
       throw HttpError(404, "Not Found");
     }
     res.json({
-      message: "Delete success",
+      message: "Delete succes",
     });
   } catch (error) {
     next(error);
