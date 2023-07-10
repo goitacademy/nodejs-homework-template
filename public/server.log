@@ -325,3 +325,13 @@ POST /api/users/logout 10-07-2023_01:53:41
 POST /api/users/logout 10-07-2023_01:53:47
 POST /api/users/login 10-07-2023_01:53:57
 POST /api/users/logout 10-07-2023_01:54:17
+POST /api/users/register 11-07-2023_12:35:01
+POST /api/users/login 11-07-2023_12:35:13
+GET /api/contacts 11-07-2023_12:35:20
+POST /api/users/current 11-07-2023_12:35:24
+POST /api/users/logout 11-07-2023_12:35:33
+POST /api/users/login 11-07-2023_12:36:15
+GET /api/contacts 11-07-2023_12:36:23
+POST /api/users/logout 11-07-2023_12:36:26
+POST /api/users/register 11-07-2023_12:36:29
+POST /api/users/logout 11-07-2023_12:36:37
