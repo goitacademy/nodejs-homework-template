@@ -9,7 +9,9 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const id = req.pa
+  const result = contacts.getContactById(id);
+  res.json(result);
 });
 
 router.post("/", async (req, res, next) => {
