@@ -19,7 +19,7 @@ const sendVerificationEmail = (email, verificationToken) => {
     from: "zycieostrejakmaczetaelo@outlook.com",
     to: email,
     subject: "Nodemailer",
-    html: `<p>Click <a href="http://your-app-url/verify/${verificationToken}">here</a> to verify your email.</p>`,
+    html: `<p>Click <a href="http://localhost:3000/users/verify:${verificationToken}">here</a> to verify your email.</p>`,
   };
 
   transporter

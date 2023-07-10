@@ -183,28 +183,40 @@ const changeAvatar = async (req, res, next) => {
 };
 
 const verify = async (req, res, next) => {
+  const verificationToken = req.params.verificationToken.substring(1);
+
   try {
-    const { verificationToken } = req.params;
-    const user = await User.findOne({ verificationToken });
-
-    // user.verify = true;
-    // await user.save();
-    console.log(user);
-
-    return res.json({
-      status: "success",
-      code: 200,
-      data: {
-        message: "Email verified",
-      },
-    });
+    const user = await User.findOneAndUpdate(
+      { verificationToken },
+      { verify: true }
+    );
+    if (user) {
+      user.verify = true;
+      return res.status(200).send("Verification successful");
+    } else {
+      return res.status(404).send("User not found.");
+    }
   } catch (e) {
     console.log(e.message);
-    return res.json({
-      status: "error",
-      code: 400,
-      message: "Invalid verification token",
-    });
+  }
+};
+
+const resendVerification = async (req, res, next) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  try {
+    if (!email) {
+      return res.status(400).send("missing required field email");
+    }
+    if (user.verify === true) {
+      return res.status(400).send("Verification has already been passed");
+    } else {
+      const verificationToken = user.verificationToken;
+      sendVerificationEmail(email, verificationToken);
+      return res.status(200).send("Verification email sent");
+    }
+  } catch (e) {
+    console.log(e.message);
   }
 };
 
@@ -215,4 +227,5 @@ module.exports = {
   getCurrent,
   changeAvatar,
   verify,
+  resendVerification,
 };
