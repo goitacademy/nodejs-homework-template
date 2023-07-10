@@ -1,7 +1,11 @@
-const { Contact } = require("./schemaMongoose");
-const schemaJoi = require("./shemaJoi");
+const { Contact } = require('./schemaContactMongoose');
+const { User } = require('./schemaUserMongoose');
+const schemaJoiContact = require('./shemaContactJoi');
+const schemaJoiUser = require('./shemaUserJoi');
 
 module.exports = {
     Contact,
-    schemaJoi
-}
+    User,
+    schemaJoiContact,
+    schemaJoiUser,
+};

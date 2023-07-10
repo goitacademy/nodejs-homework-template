@@ -6,10 +6,10 @@ const { putContact } = require('./putContact');
 const { updateStatusContact } = require('./updateStatusContact');
 
 module.exports = {
-  getAllContacts,
-  getContactById,
-  deleteContact,
-  postContact,
-  putContact,
-  updateStatusContact
+    getAllContacts,
+    getContactById,
+    deleteContact,
+    postContact,
+    putContact,
+    updateStatusContact,
 };
