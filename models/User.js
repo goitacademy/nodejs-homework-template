@@ -1,3 +1,4 @@
+const gravatar = require("gravatar");
 const { Schema, model } = require("mongoose");
 const UserSchema = new Schema(
   {
@@ -18,6 +19,10 @@ const UserSchema = new Schema(
     token: {
       type: String,
       default: null,
+    },
+    avatarURL: {
+      type: String,
+      default: gravatar.profile_url(this.email),
     },
   },
   { versionKey: false, timestamps: true }

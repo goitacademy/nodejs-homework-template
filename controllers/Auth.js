@@ -1,7 +1,12 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
+
 const User = require("../models/User");
+
+const path = require("path");
+const Jimp = require("jimp");
+
 require("dotenv").config();
 
 exports.register = async (req, res) => {
@@ -94,4 +99,36 @@ exports.logout = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: null });
 
   res.status(204);
+};
+exports.updateAvatar = async (req, res, next) => {
+  const { user } = req;
+  const { filename, path: filepath } = req.file;
+  const tmpPath = await path.resolve(__dirname, "../tmp", filename);
+  const publicPath = await path.resolve(
+    __dirname,
+    "../public/avatars",
+    filename
+  );
+  try {
+    const img = await Jimp.read(filepath);
+    await img.resize(250, 250).writeAsync(filepath);
+    await fs.rename(tmpPath, publicPath);
+  } catch (error) {
+    console.log(error.message);
+    await fs.unlink(tmpPath);
+    throw HttpError(error.status, error.message);
+  }
+  const avatarsPath = `/public/avatars/${filename}`;
+  const updateUser = await User.findByIdAndUpdate(
+    user._id,
+    { avatarURL: avatarsPath },
+    { new: true }
+  );
+  return res.status(200).json({
+    data: {
+      user: {
+        imageUrl: updateUser.avatarURL,
+      },
+    },
+  });
 };
