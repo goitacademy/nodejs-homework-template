@@ -1,19 +1,65 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../helpers");
+const Joi = require("joi");
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      required: [true, "Set email for contact"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Set phone for contact"],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
+contactSchema.post("save", handleMongooseError);
 
-const listContacts = async () => {}
+const addschema = Joi.object({
+  name: Joi.string().alphanum().min(3).required().messages({
+    "string.base": "Name should be a string",
+    "string.min": "Name should have a minimum length of {#limit}",
+    "any.required": "Missing required name field",
+  }),
 
-const getContactById = async (contactId) => {}
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required()
+    .messages({
+      "string.email": "Invalid email format",
+      "any.required": "Missing required email field",
+    }),
 
-const removeContact = async (contactId) => {}
+  phone: Joi.string().required().messages({
+    "any.required": "Missing required phone field",
+  }),
+  favorite: Joi.boolean().messages({
+    "any.required": `missing field favorite`,
+  }),
+});
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+  }),
+});
 
-const addContact = async (body) => {}
+const Contact = model("contact", contactSchema);
 
-const updateContact = async (contactId, body) => {}
+const schemas = {
+  addschema,
+  updateFavoriteSchema,
+};
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = { Contact, schemas };
