@@ -24,6 +24,9 @@ const login = async (req, res, next) => {
       message: "Incorrect login/password",
     });
   }
+  if (user.verify === false) {
+    return res.status(400).send("verify your email");
+  }
   try {
     const payload = {
       id: user.id,
