@@ -40,6 +40,7 @@ const updateStatusContact = async (req, res) => {
   }
   res.status(200).json(result);
 };
+
 const deleteById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndRemove(id);

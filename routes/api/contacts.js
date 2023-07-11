@@ -1,6 +1,10 @@
 const express = require('express');
 
-const { validateBody, isValidId, validateFavorite } = require('../../middlewars');
+const {
+  validateBody,
+  isValidId,
+  validateFavorite,
+} = require('../../middlewars');
 const { schemas } = require('../../models/contact');
 const controlers = require('../../controllers/contacts');
 
@@ -23,7 +27,7 @@ router.patch(
   '/:id/favorite',
   isValidId,
   validateFavorite(schemas.addFavoriteShema),
-  controlers.updateFavorite
+  controlers.updateStatusContact
 );
 
 router.delete('/:id', isValidId, controlers.deleteById);
