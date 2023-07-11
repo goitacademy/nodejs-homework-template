@@ -10,7 +10,7 @@ const register = asyncHandler(async (req, res) => {
 
   if (user) throw HttpError(409, 'Email already in use');
 
-  const hashPassword = await bcrypt.hash(password, 20);
+  const hashPassword = await bcrypt.hash(password, 10);
   
 
   const newUser = await User.create({
