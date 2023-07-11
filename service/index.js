@@ -37,8 +37,8 @@ const updateStatusContact = (id, owner, { favorite }) => {
 
 // USERS
 
-const createUser = ({ email, password }) => {
-  return User.create({ email, password });
+const createUser = ({ email, password, avatarURL }) => {
+  return User.create({ email, password, avatarURL });
 };
 
 const updateToken = ({ email, token }) => {
@@ -57,6 +57,9 @@ const updateUserSubscription = ({ email, subscription }) => {
   return User.findOneAndUpdate({ email }, { subscription }, { new: true });
 };
 
+const updateUserAvatar = ({ email, avatarURL }) => {
+  return User.findOneAndUpdate({ email }, { avatarURL }, { new: true });
+};
 module.exports = {
   getAllContacts,
   getContactById,
@@ -69,4 +72,5 @@ module.exports = {
   findUser,
   findUserById,
   updateUserSubscription,
+  updateUserAvatar,
 };
