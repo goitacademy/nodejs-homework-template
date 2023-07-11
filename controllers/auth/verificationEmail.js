@@ -11,7 +11,7 @@ const verificationEmail = async (req, res) => {
         res.status(200).json({ message: 'Verification successful' });
     } catch (err) {
         console.log(err)
-        // res.sendStatus(500).json({ message: 'Ooops... Something wrong in Verify',});
+        res.status(500).json({ message: 'Ooops... Something wrong in Verify',});
     }
 
 }

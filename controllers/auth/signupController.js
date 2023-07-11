@@ -34,7 +34,7 @@ const signup = async (req, res, next) => {
         await sendgrigMail(verificationEmail);
         return res.status(201).json({ user: { email: newUser.email, subscription: newUser.subscription }  });   
     } catch (err) {
-        res.sendStatus(500).json({ message: 'Ooops... Something wrong in DB',});
+        res.status(500).json({ message: 'Ooops... Something wrong in DB',});
     }
 }
 

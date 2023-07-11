@@ -23,7 +23,7 @@ const authenticate = async (req, res, next) => {
         next();
     }
     catch (err) {
-        res.sendStatus(500).json({ message: "Ooops... AuthMidErr"});
+        res.status(500).json({ message: "Ooops... AuthMidErr"});
     }
 }
 

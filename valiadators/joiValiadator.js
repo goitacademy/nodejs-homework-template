@@ -57,4 +57,12 @@ exports.subscpiptionUserUpdateValiadation = (data) => {
         error = false;        
     }
     return { error, fieldName }
-    }
+}
+    
+exports.emailValiadation = (data) => Joi.object()
+    .options({abortEarly: false})
+    .keys({
+    email: Joi.string()
+        .email({ minDomainSegments: 2 }).required() 
+    })
+    .validate(data)
