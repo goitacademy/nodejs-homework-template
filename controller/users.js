@@ -10,6 +10,14 @@ const jimp = require("jimp");
 const { sendVerificationEmail } = require("../auth/config/config-nodemailer");
 const { v4: uuidv4 } = require("uuid");
 
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs").promises;
+const storeImage = path.join(process.cwd(), "tmp");
+const storeResizedImage = path.join(process.cwd(), "public", "avatars");
+const jimp = require("jimp");
+
+
 const secret = "goit";
 
 const login = async (req, res, next) => {
@@ -57,12 +65,22 @@ const register = async (req, res, next) => {
     });
   }
   try {
+
     const avatarURL = gravatar.url(email);
     const verificationToken = uuidv4();
 
     const newUser = new User({ username, email, avatarURL });
     newUser.verificationToken = verificationToken;
+
+
+    const avatarURL = gravatar.url(email);
+    const newUser = new User({ username, email, avatarURL });
     newUser.setPassword(password);
+
+    const newUser = new User({ username, email });
+
+    newUser.setPassword(password);
+
 
     const payload = {
       id: newUser.id,
@@ -148,6 +166,7 @@ const getCurrent = async (req, res, next) => {
   })(req, res, next);
 };
 
+
 const changeAvatar = async (req, res, next) => {
   passport.authenticate("jwt", { session: false }, async (err, user) => {
     if (err || !user) {
@@ -184,6 +203,7 @@ const changeAvatar = async (req, res, next) => {
     });
   })(req, res, next);
 };
+
 
 const verify = async (req, res, next) => {
   const verificationToken = req.params.verificationToken.substring(1);
@@ -225,12 +245,16 @@ const resendVerification = async (req, res, next) => {
   }
 };
 
+
 module.exports = {
   login,
   register,
   logout,
   getCurrent,
   changeAvatar,
+
   verify,
   resendVerification,
+
+
 };

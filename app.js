@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 const path = require("path");
 
+const path = require("path");
+
+
 const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
 
@@ -18,7 +21,14 @@ app.use(express.json());
 
 require("./auth/config/config-passport");
 
+
 app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")));
+
+
+
+app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")));
+
+
 
 app.use("/contacts", contactsRouter);
 app.use("/users", usersRouter);

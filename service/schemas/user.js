@@ -36,6 +36,11 @@ const userSchema = Schema({
     type: String,
     required: [true, "Verify token is required"],
   },
+
+  avatarURL: {
+    type: String,
+  },
+
 });
 
 userSchema.methods.setPassword = function (password) {
