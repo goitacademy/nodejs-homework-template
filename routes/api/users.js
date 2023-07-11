@@ -82,10 +82,10 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
     });
     const html = `<a href='http://localhost:3000/api/users/verify/${newUser.verificationToken}'>Confirm email</a>`;
     const emailOptions = {
-      form: "szpnfaceit@outlook.com",
+      from: "szpnfaceit@outlook.com",
       to: newUser.email,
       subject: "Varify email",
-      html,
+      html: html,
     };
 
     await transporter.sendMail(emailOptions, function (err, info) {
@@ -279,11 +279,11 @@ router.post("/verify", async (req, res, next) => {
     const html = `<p>Click on the link below to verify your account</p>
     <a href='http://localhost:3000/api/users/verify/${user.verificationToken}'>VERIFY</a>`;
     const emailOptions = {
-      form: "szpnfaceit@outlook.com",
+      from: "szpnfaceit@outlook.com",
       to: email,
       subject: "Veryfication",
       text: "Mail verification link",
-      html,
+      html: html,
     };
 
     await transporter.sendMail(emailOptions);
