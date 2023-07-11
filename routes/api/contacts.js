@@ -73,26 +73,17 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(res.body);
-    const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
-
+    const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(404, "Not found");
+      throw HttpError(404, error.message);
     }
 
+    const { contactId } = req.params;
+    const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
       throw HttpError(404, "NotFound");
     }
     res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    res.json({ message: "template message" });
   } catch (error) {
     next(error);
   }
