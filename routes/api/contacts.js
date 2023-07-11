@@ -3,7 +3,9 @@ const express = require("express");
 // const contacts = require("../../models/contacts");
 // const {HttpError} = require("../../helpers");
 
-const ctrl = require("../../controllers/contacts")
+const ctrl = require("../../controllers/contacts");
+const {validateBody}=require("../../middlewares");
+const schemas = require("../../schemas/contacts")
 
 const router = express.Router();
 
@@ -63,7 +65,7 @@ router.get("/:id",ctrl.getContactById);
 //     }
   
 // })
-router.post("/", ctrl.addContact)
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact)
 
 // router.delete('/:id', async (req, res, next) => {
 //     try {
@@ -98,5 +100,5 @@ router.delete('/:id', ctrl.deleteContactById)
 //     }
   
 // })
-router.put('/:id', ctrl.updateContactById);
+router.put('/:id',validateBody(schemas.addSchema), ctrl.updateContactById);
 module.exports = router;
