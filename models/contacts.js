@@ -50,6 +50,7 @@ const updateContact = async (contactId, data) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
+console.log("sfsdf");
 
 module.exports = {
   listContacts,
