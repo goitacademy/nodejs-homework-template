@@ -14,8 +14,7 @@
     "express": "4.17.1",
     "joi": "^17.9.2",
     "morgan": "1.10.0",
-    "uuid": "^9.0.0",
-    "yargs": "^17.7.2"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
