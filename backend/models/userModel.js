@@ -4,7 +4,11 @@ const email = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 
 const usersSchema = new Schema(
-    {
+  { 
+    name: {
+      type: String,
+      required: true,
+    },
   password: {
     type: String,
     required: [true, 'Set password for user'],
