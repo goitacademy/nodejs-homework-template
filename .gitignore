@@ -1,4 +1,6 @@
 node_modules/
+rrr/
 .env
+.env.local
 .idea
 .vscode
