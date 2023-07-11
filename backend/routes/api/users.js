@@ -7,7 +7,7 @@ const authorization = require('../../middleWares/authorization');
 const { getCurrent } = require('../../controllers/user');
 const { logout } = require('../../controllers/user');
 const  upload  = require('../../middleWares/upload');
-const avatar = require('../../controllers/user/avatar');
+const updateAvatar = require('../../controllers/user/updateAvatar');
 
 const router = express.Router()
 
@@ -15,7 +15,7 @@ router.post('/register',validateBody(schemas.registerSchema), register);
 router.post('/login',validateBody(schemas.login) ,login );
 router.get('/current', authorization, getCurrent);
 router.post('/logout', authorization, logout);
-router.post('/avatars', authorization, upload.single('avatar'), avatar)
+router.patch('/avatars', authorization,upload.single('avatar'), updateAvatar)
 
 
 
