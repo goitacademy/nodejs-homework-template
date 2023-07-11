@@ -10,7 +10,6 @@ const jimp = require("jimp");
 const nodemailer = require("nodemailer");
 const { nanoid } = require("nanoid");
 
-const passwordOutlook = process.env.passwordOutlook;
 function generateVerificationToken() {
   return nanoid();
 }
@@ -75,18 +74,18 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
     await newUser.save();
     const transporter = nodemailer.createTransport({
       service: "outlook",
+      secure: false,
       auth: {
         user: "szpnfaceit@outlook.com",
         pass: "qwerty1234%",
       },
     });
-
+    const html = `<a href='http://localhost:3000/api/users/verify/${newUser.verificationToken}'>Confirm email</a>`;
     const emailOptions = {
       form: "szpnfaceit@outlook.com",
       to: newUser.email,
-      subject: "Veryfication",
-      text: "Mail verification link",
-      html: `<p>Click on the link and verify your account</p> <a href="http://localhost:3000/users/verify/${newUser.verificationToken}"`,
+      subject: "Varify email",
+      html,
     };
 
     await transporter.sendMail(emailOptions, function (err, info) {
@@ -112,6 +111,14 @@ router.post("/login", async (req, res, _) => {
       message: "User already exists!",
     });
   }
+
+  const isVerified = user.verify;
+
+  if (!isVerified) {
+    res.status(401).json({ message: "Email is not verified" });
+    return;
+  }
+
   const payload = {
     id: user._id,
   };
@@ -263,18 +270,20 @@ router.post("/verify", async (req, res, next) => {
     }
     const transporter = nodemailer.createTransport({
       service: "outlook",
+      secure: false,
       auth: {
         user: "szpnfaceit@outlook.com",
-        password: passwordOutlook,
+        pass: "qwerty1234%",
       },
     });
-
+    const html = `<p>Click on the link below to verify your account</p>
+    <a href='http://localhost:3000/api/users/verify/${user.verificationToken}'>VERIFY</a>`;
     const emailOptions = {
       form: "szpnfaceit@outlook.com",
-      to: "qwerty1234%",
+      to: email,
       subject: "Veryfication",
       text: "Mail verification link",
-      html: `<p>Click on the link and verify your account</p> <a href="http://localhost:3000/users/verify/${user.verificationToken}"`,
+      html,
     };
 
     await transporter.sendMail(emailOptions);
