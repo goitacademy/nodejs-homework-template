@@ -23,11 +23,57 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
 
-const addContact = async (body) => {};
+  index = contacts.findIndex(item => item.id === contactId);
+  contacts.splice(index, 1);
 
-const updateContact = async (contactId, body) => {};
+  await fs.writeFile(contactsPath, JSON.stringify(contacts));
+};
+
+const addContact = async (body) => {
+  try {
+    const currentContacts = await listContacts();
+    const newContact = {
+      id: body.id,
+      name: body.name,
+      email: body.email,
+      phone: body.phone
+    }
+    const newContactsList = [...currentContacts, newContact];
+    await fs.writeFile(contactsPath, JSON.stringify(newContactsList));
+
+    return newContact;
+
+  } catch(error) {
+    console.log(error.message);
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const { name, email, phone } = body;
+    const currentContacts = await listContacts();
+    const updatedContacts = currentContacts.map(item => {
+      console.log('contactId',contactId)
+      if (item.id === contactId) {
+        item.name = name;
+        item.email = email;
+        item.phone = phone;
+        console.log('item1', item)
+        return item;
+      } else {
+        console.log('item2', item.id)
+        return item;
+      }
+    })
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
+    
+  } catch(error) {
+    console.log(error.message);
+  }
+};
 
 module.exports = {
   listContacts,
