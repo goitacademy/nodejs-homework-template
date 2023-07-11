@@ -1,8 +1,8 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
-
 const User = require("../models/User");
+const fs = require("fs/promises");
 
 const path = require("path");
 const Jimp = require("jimp");
@@ -100,7 +100,7 @@ exports.logout = async (req, res) => {
 
   res.status(204);
 };
-exports.updateAvatar = async (req, res, next) => {
+exports.updateAvatar = async (req, res) => {
   const { user } = req;
   const { filename, path: filepath } = req.file;
   const tmpPath = await path.resolve(__dirname, "../tmp", filename);
