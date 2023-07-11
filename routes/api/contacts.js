@@ -8,16 +8,16 @@ const { schemas } = require('../../models/contact');
 
 const router = express.Router();
 
-router.get('/', ctrl.getAll);
+router.get('/', ctrl.getAllContacts);
 
-router.get('/:contactId', isValidId, ctrl.getById);
+router.get('/:contactId', isValidId, ctrl.getContactById);
 
-router.post('/', validateBody(schemas.addSchema), ctrl.add);
+router.post('/', validateBody(schemas.addSchema), ctrl.addContact);
 
-router.delete('/:contactId', isValidId, ctrl.deleteById);
+router.delete('/:contactId', isValidId, ctrl.deleteContactById);
 
-router.put('/:contactId', isValidId, validateBody(schemas.addSchema), ctrl.updateById);
+router.put('/:contactId', isValidId, validateBody(schemas.addSchema), ctrl.updateContactById);
 
-router.patch('/:contactId/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite);
+router.patch('/:contactId/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavoriteContact);
 
 module.exports = router;
