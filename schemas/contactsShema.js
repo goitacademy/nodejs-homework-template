@@ -1,17 +1,16 @@
 const Joi = require('joi');
 
-const addSchema = Joi.object({
-	name: Joi.string().required(),
-	email: Joi.string().email().required(),
-	phone: Joi.string()
-		.pattern(/^\d{10}$/)
-		.required(),
+const schema = Joi.object({
+	name: Joi.string().required().messages({
+		'any.required': 'Set name for contact',
+	}),
+	email: Joi.string().email().optional(),
+	phone: Joi.string().optional(),
+	favorite: Joi.boolean().default(false),
 });
 
-const updateSchema = Joi.object({
-	name: Joi.string(),
-	email: Joi.string().email(),
-	phone: Joi.string().pattern(/^\d{10}$/),
+const updateFavoriteSchema = Joi.object({
+	favorite: Joi.boolean().required(),
 });
 
-module.exports = { addSchema, updateSchema };
+module.exports = { schema, updateFavoriteSchema };
