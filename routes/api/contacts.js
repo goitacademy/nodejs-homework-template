@@ -18,7 +18,7 @@ router.post('/', validateBody(schemas.addSchema), ctrl.add);
 router.put('/:contactId', isValidId, validateBody(schemas.addSchema), ctrl.updateById);
 
 // Редагування полю favorite
-router.patch('/:contactId/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite);
+router.patch('/:contactId/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateStatusContact);
 
 // Видалення контакту
 router.delete('/:contactId', isValidId, ctrl.deleteById);

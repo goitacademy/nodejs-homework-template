@@ -10,7 +10,7 @@ const getAll = async (req, res) => {
 // Отримання контакту по id
 const getById = async (req, res) => {
     const { contactId } = req.params;
-  const result = await Contacts.findById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw HttpError(404, "Not found"); // якщо немає контакту з таким id
     }
@@ -26,7 +26,7 @@ const add = async (req, res) => {
 // Редагування контакту
 const updateById = async (req, res) => {
     const {contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true}); // якщо не написати {new: true}, то повернеться стара версія об'єкта
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true}); // якщо не написати {new: true}, то повернеться стара версія об'єкта
     if (!result) {
       throw HttpError(404, "Not found"); // якщо немає контакту з таким id
     }
@@ -34,9 +34,9 @@ const updateById = async (req, res) => {
 }
 
 // Редагування контакту (поля favorite)
-const updateFavorite = async (req, res) => {
-    const {contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true}); // якщо не написати {new: true}, то повернеться стара версія об'єкта
+const updateStatusContact = async (req, res) => {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true}); // якщо не написати {new: true}, то повернеться стара версія об'єкта
     if (!result) {
       throw HttpError(404, "Not found"); // якщо немає контакту з таким id
     }
@@ -59,6 +59,6 @@ module.exports = {
     getById: ctrlWrapper(getById),
     add: ctrlWrapper(add),
     updateById: ctrlWrapper(updateById),
-    updateFavorite: ctrlWrapper(updateFavorite),
+    updateStatusContact: ctrlWrapper(updateStatusContact),
     deleteById: ctrlWrapper(deleteById),
 }

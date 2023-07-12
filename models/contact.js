@@ -11,12 +11,12 @@ const addSchema = Joi.object({
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({ "any.required": "missing field favorite" }),
 });
 
 const schemas = {
   addSchema,
-  updateFavoriteSchema
+  updateFavoriteSchema,
 }
 
 // Схема валідації mongoose (даних, які хочемо зберегти)
@@ -35,7 +35,9 @@ const contactSchema = new Schema( {
       type: Boolean,
       default: false,
     },
-});
+},
+  { versionKey: false }, // вимикаємо створення властивості "__v" з версією документа при додаванні данних
+);
 
 // Ця функція спрацює тільки, якщо помилка станеться під час валідації
 contactSchema.post("save", handleMongooseError);
