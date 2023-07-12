@@ -26,6 +26,14 @@ const schema = mongoose.Schema(
       type: String,
       default: gravatar.profile_url(this.email),
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -57,4 +65,18 @@ const schemaLogin = Joi.object({
 const schemaSubscription = Joi.object({
   subscription: Joi.string().required(),
 });
-module.exports = { User, schemaSignup, schemaLogin, schemaSubscription };
+const verifySchema = Joi.object({
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    })
+    .required(),
+});
+module.exports = {
+  User,
+  schemaSignup,
+  schemaLogin,
+  schemaSubscription,
+  verifySchema,
+};

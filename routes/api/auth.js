@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
@@ -8,15 +9,23 @@ const {
   current,
   changeSubscription,
   changeAvatar,
+  verifyEmail,
+  repeatedVefication,
 } = require("../../controllers/auth");
 const { validateRegisterBody, auth, upload } = require("../../middlewares");
 
-const { schemaSignup, schemaSubscription } = require("../../models/user");
+const {
+  schemaSignup,
+  schemaSubscription,
+  verifySchema,
+} = require("../../models/user");
 
 router.post("/signup", validateRegisterBody(schemaSignup), signup);
 router.post("/login", validateRegisterBody(schemaSignup), login);
+router.post("/verify", validateRegisterBody(verifySchema), repeatedVefication);
 router.get("/logout", auth, logout);
 router.get("/current", auth, current);
+router.get("/verify/:verificationToken", verifyEmail);
 router.patch(
   "/subscription",
   auth,

@@ -18,6 +18,7 @@ const schema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
     owner: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: "user",
@@ -36,4 +37,5 @@ const addSchema = Joi.object({
 const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
+
 module.exports = { addSchema, schema, updateFavoriteSchema };
