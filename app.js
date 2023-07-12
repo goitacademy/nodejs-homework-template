@@ -7,8 +7,8 @@ const DB_HOST = "mongodb+srv://Igor:rzqhz-Hx-3zZKSr@cluster0.tjaqxwm.mongodb.net
 
 mongoose.set('strictQuery', true);
 mongoose.connect(DB_HOST)
-  .then(() => console.log(connect))
-  .catch(error => console.log(error))
+  .then(() => console.log("connect"))
+  .catch(error => console.log(error.message))
 
 
 const contactsRouter = require('./routes/api/contacts')
