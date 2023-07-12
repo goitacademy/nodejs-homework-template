@@ -12,10 +12,10 @@ const app = require("./app");
 
 require("dotenv").config();
 
-const { DB_HOST } = process.env;
+const url = process.env.DB_HOST;
 
 mongoose
-  .connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     app.listen(3000, () => {
       console.log("Database connection successful");
