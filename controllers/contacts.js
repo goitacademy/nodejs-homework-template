@@ -1,13 +1,13 @@
 const contacts = require("../models/contacts");
 
-const Contact = require('../models/contacts')
+// const Contact = require('../models/contacts')
 
 const { HttpError } = require("../helpers");
 
 
 const listContacts = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const result = await contacts.listContacts();
     res.status(200).json(result); 
   } catch (error) {
     next(error);
