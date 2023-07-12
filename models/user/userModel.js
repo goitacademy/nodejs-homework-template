@@ -20,6 +20,10 @@ const updateSubscriptionSchemaJoi = Joi.object({
   subscription: Joi.valid('starter', 'pro', 'business').required()
 })
 
+const verifyEmailSchemaJoi = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2 }).pattern(EMAIL_REGEX).required(),
+})
+
 const userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -29,7 +33,7 @@ const userSchema = mongoose.Schema({
   },
   password: {
     type: String,
-    minlength: [6, 'Name should be at least 6 characters long'],
+    minlength: [6, 'Password should be at least 6 characters long'],
     required: [true, 'Set password for user'],
   },
   email: {
@@ -50,7 +54,15 @@ const userSchema = mongoose.Schema({
   avatarURL: {
     type: String,
     required: true,
-  }
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 }, { versionKey: false, timestamps: true });
 
 userSchema.post('save', handleMongooseError)
@@ -61,5 +73,6 @@ module.exports = {
   User,
   userSchemaJoi,
   userSchemaJoiLogin,
-  updateSubscriptionSchemaJoi
+  updateSubscriptionSchemaJoi,
+  verifyEmailSchemaJoi,
 }

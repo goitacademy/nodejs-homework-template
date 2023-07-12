@@ -2,7 +2,8 @@ const {
     User,
     userSchemaJoi,
     userSchemaJoiLogin,
-    updateSubscriptionSchemaJoi
+    updateSubscriptionSchemaJoi,
+    verifyEmailSchemaJoi,
 } = require('./userModel');
 
 
@@ -10,5 +11,6 @@ module.exports = {
   User,
   userSchemaJoi,
   userSchemaJoiLogin,
-  updateSubscriptionSchemaJoi
+  updateSubscriptionSchemaJoi,
+  verifyEmailSchemaJoi
 }

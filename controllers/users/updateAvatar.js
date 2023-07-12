@@ -9,9 +9,7 @@ const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
 
     const { path: tempUpload, originalname} = req.file;
-    // if (!mimetype.startsWith('image/')) {
-    //     next(HttpError(400, 'Only images can be upload'))
-    // }
+
     const filename = `${_id}_${originalname}`
     const resultUpload = path.join(avatarDir, filename);
 

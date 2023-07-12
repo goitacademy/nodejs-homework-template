@@ -8,16 +8,22 @@ const {
     ImageUploader
 } = require('../../../middlewares');
 
-console.log(ImageUploader.save)
 const {
     userSchemaJoi,
     userSchemaJoiLogin,
-    updateSubscriptionSchemaJoi
+    updateSubscriptionSchemaJoi,
+    verifyEmailSchemaJoi
 } = require('../../../models/user/userModel');
 
 router.post('/register', validateBody(userSchemaJoi), controllers.registerUser);
 
 router.post('/login', validateBody(userSchemaJoiLogin), controllers.loginUser);
+
+router.get('/verify/:verificationToken', controllers.verifyEmail);
+
+router.post('/verify',
+    validateBody(verifyEmailSchemaJoi),
+    controllers.resendVerificationCode);
 
 router.get('/current', authenticate, controllers.getCurrent);
 

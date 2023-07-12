@@ -15,6 +15,9 @@ const mutlerConfig = multer.diskStorage({
 class ImageUploader {
     static upload(name) {
         const multerFilter = (req, file, cb) => {
+            if (!file) {
+                return HttpError(404, 'Please, upload an image')
+            }
             if (file.mimetype.startsWith('image/')) {
                 cb(null, true)
             } else {
@@ -29,8 +32,6 @@ class ImageUploader {
     }
 
     static async save(req, res, next) {
-        console.log(req, 'file in save')
-
         const img = `${tempDir}\\${req.file.originalname}`;
 
         try {
