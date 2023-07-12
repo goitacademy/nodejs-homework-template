@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrls = require("../../controllers/contacts");
-const { validateBody } = require("../../middleware");
+const { validateBody, haveBody } = require("../../middleware");
 
 const router = express.Router();
 
@@ -8,10 +8,10 @@ router.get("/", ctrls.listContacts);
 
 router.get("/:contactId", ctrls.getContactById);
 
-router.post("/", validateBody, ctrls.addContact);
+router.post("/", haveBody, validateBody, ctrls.addContact);
 
 router.delete("/:contactId", ctrls.removeContact);
 
-router.put("/:contactId", validateBody, ctrls.updateContact);
+router.put("/:contactId", haveBody, validateBody, ctrls.updateContact);
 
 module.exports = router;

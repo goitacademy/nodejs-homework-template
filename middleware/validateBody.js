@@ -9,13 +9,12 @@ const addSchema = Joi.object({
 const validateBody = (req, res, next) => {
   const { error } = addSchema.validate(req.body);
   if (error) {
-    const [{ message }] = error.details;
-    return next({
-      status: 400,
-      message: `Field: ${message.replace(/"/g, "")}`,
+    const errorMessage = `missing required ${error.details[0].context.label} field`;
+    return res.status(400).json({
+      message: errorMessage,
     });
   }
-  next();
+  return next();
 };
 
 module.exports = validateBody;

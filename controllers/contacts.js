@@ -26,15 +26,6 @@ const removeContact = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   const { body } = req;
-  if (!body.name) {
-    return res.status(400).json({ message: "missing required name field" });
-  }
-  if (!body.email) {
-    return res.status(400).json({ message: "missing required email field" });
-  }
-  if (!body.phone) {
-    return res.status(400).json({ message: "missing required phone field" });
-  }
   const result = await contacts.addContact(body);
   return res.status(201).json(result);
 };
@@ -42,9 +33,6 @@ const addContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
-  if (!body) {
-    return res.status(400).json({ message: "Missing fields" });
-  }
   const result = await contacts.updateContact(contactId, body);
   if (!result) {
     return res.status(404).json({ message: "Not found" });
