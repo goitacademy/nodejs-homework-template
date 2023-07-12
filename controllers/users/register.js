@@ -3,6 +3,7 @@ const { HttpError } = require("../../helpers");
 const bcrypt = require("bcrypt");
 
 const register = async (req, res, next) => {
+  try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
@@ -16,6 +17,9 @@ const register = async (req, res, next) => {
         subscription: "starter",
       },
     });
+  } catch (error) {
+    next(error);
+  }
   };
 
 module.exports = register;
