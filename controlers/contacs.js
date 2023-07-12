@@ -10,7 +10,7 @@ const getContactsById = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.getContactById(id);
   if (!result) {
-    throw ApiError(404, "Users by id not found");
+    throw ApiError(404, "Not found");
   }
   res.status(200).json(result);
 };
@@ -23,19 +23,18 @@ const deleteContact = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.removeContact(id);
   if (!result) {
-    throw ApiError(404, "Users by id not found");
+    throw ApiError(404, "Not found");
   }
   res.status(200).json({
-    message: "Delete contact",
+    message: "contact deleted",
   });
 };
 
 const updateContactById = async (req, res, next) => {
   const { id } = req.params;
-  console.log("id :>> ", id);
   const result = await contacts.updateContact(id, req.body);
   if (!result) {
-    throw ApiError(404, "Users by id not found");
+    throw ApiError(404, "Not found");
   }
   res.status(200).json(result);
 };
