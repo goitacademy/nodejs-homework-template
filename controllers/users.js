@@ -99,12 +99,19 @@ const logout = async (req, res, next) => {
 
 const updateAvatar = async (req,res,next) => {
 try {
+  const {_id} = req.user
   const {path:tempUpload,originalName} = req.file;
-  const resultUpload = path.join(avatarDir,originalName);
-  await fs.rename(tempUpload,resultUpload)
+  const fileName = `${_id}_${originalName}`
+  const resultUpload = path.join(avatarDir,fileName);
+  await fs.rename(tempUpload,resultUpload);
+  const avatarURL = path.join("avatars",fileName);
+  await User.findByIdAndUpdate(_id,{avatarURL});
+  res.json({avatarURL});
 } catch (error) {
+ next(RequestError(401));
   
 }
+
 }
 
 module.exports = {
