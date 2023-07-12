@@ -1,5 +1,6 @@
-const { User } = require("../../models");
+const gravatar = require("gravatar");
 
+const { User } = require("../../models");
 const { HttpError, hashPasswords } = require("../../helpers");
 
 const register = async (req, res) => {
@@ -12,7 +13,13 @@ const register = async (req, res) => {
 
   const hashPassword = await hashPasswords.createHashPassword(password);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     email: newUser.email,
