@@ -7,9 +7,11 @@ const jimp = require("jimp");
 const path = require("path");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+const nodemailer = require("nodemailer");
 
 require("dotenv").config();
 const secret = process.env.SECRET;
+const emailPass = process.env.EMAIL_PASS;
 
 const userValidationSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -54,7 +56,30 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       avatarURL: avatar,
+      verify: false,
+      verificationToken: uuidv4(),
     });
+
+    const transporter = nodemailer.createTransport({
+      service: "outlook",
+      secure: false,
+      auth: {
+        user: "goitnodejs2023@outlook.com",
+        pass: emailPass,
+      },
+    });
+
+    const html = `<p>Click on the link below to verify your account</p>
+      <a href='http://localhost:3000/api/users/verify/${createUser.verificationToken}' target='_blank'>VERIFY</a>`;
+
+    const emailOptions = {
+      from: "goitnodejs2023@outlook.com",
+      to: createUser.email,
+      subject: "Verification email",
+      text: "Mail with verification link",
+      html,
+    };
+
     res.status(201).json({
       status: "Created",
       code: 201,
@@ -65,6 +90,7 @@ const register = async (req, res) => {
         },
       },
     });
+    await transporter.sendMail(emailOptions);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
@@ -91,6 +117,13 @@ const login = async (req, res) => {
       });
       return;
     }
+    if (!user.verify) {
+      res.status(401).json({
+        code: 401,
+        message: "Email is not verified",
+      });
+      return;
+    }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       res.status(401).json({
@@ -101,7 +134,7 @@ const login = async (req, res) => {
       return;
     }
     const token = jwt.sign({ userId: user._id }, secret, { expiresIn: "2h" });
-    const loginUser = await service.updateToken({ email, token });
+    const loginUser = await service.updateUser(email, { token: token });
     res.status(200).json({
       status: "OK",
       code: 200,
@@ -121,7 +154,7 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   const user = req.user;
   try {
-    await service.updateToken({ email: user.email, token: null });
+    await service.updateUser(user.email, { token: null });
     res.status(204).json({
       status: "OK",
       code: 204,
@@ -157,9 +190,8 @@ const subscription = async (req, res) => {
       });
       return;
     }
-    const updatedUser = await service.updateUserSubscription({
-      email: user.email,
-      subscription,
+    const updatedUser = await service.updateUser(user.email, {
+      subscription: subscription,
     });
     res.status(200).json({
       status: "OK",
@@ -178,11 +210,12 @@ const avatar = async (req, res) => {
   const user = req.user;
   try {
     if (!req.file) {
-      return res.status(400).json({
+      res.status(400).json({
         status: "Bad Request",
         code: 400,
         message: "File not provided",
       });
+      return;
     }
 
     const img = await jimp.read(req.file.path);
@@ -195,8 +228,7 @@ const avatar = async (req, res) => {
       )
       .writeAsync(req.file.path);
 
-    await service.updateUserAvatar({
-      email: user.email,
+    await service.updateUser(user.email, {
       avatarURL: `/avatars/${req.file.filename}`,
     });
     await img.writeAsync(path.join(avatarDir, req.file.filename));
@@ -213,6 +245,109 @@ const avatar = async (req, res) => {
     res.status(500).json({ message: e.message });
   }
 };
+
+const emailVerify = async (req, res) => {
+  try {
+    const user = await service.findUser({
+      verificationToken: req.params.verificationToken,
+    });
+    if (user.verify) {
+      res.status(400).json({
+        status: "Bad request",
+        code: 400,
+        message: "Verification has already been passed",
+      });
+      return;
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        status: "Not found",
+        code: 404,
+        message: "User not found",
+      });
+    }
+    if (user.verificationToken !== req.params.verificationToken) {
+      console.log(user.verificationToken, req.params.verificationToken);
+      return res.status(404).json({
+        status: "Not found",
+        code: 404,
+        message: "User not found",
+      });
+    }
+    await service.updateUser(user.email, {
+      verify: true,
+      verificationToken: null,
+    });
+    return res.status(200).json({
+      status: "OK",
+      code: 200,
+      message: "Verification successful",
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+const repeatVerifyEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({
+        status: "Bad request",
+        code: 400,
+        message: "Missing required field email",
+      });
+    }
+
+    const user = await service.findUser({ email: email });
+    if (!user) {
+      return res.status(404).json({
+        status: "Not found",
+        code: 404,
+        message: "User not found",
+      });
+    }
+
+    if (user.verify) {
+      return res.status(400).json({
+        status: "Bad request",
+        code: 404,
+        message: "Verification has already been passed",
+      });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "outlook",
+      secure: false,
+      auth: {
+        user: "goitnodejs2023@outlook.com",
+        pass: emailPass,
+      },
+    });
+
+    const html = `<p>Click on the link below to verify your account</p>
+      <a href='http://localhost:3000/api/users/verify/${user.verificationToken}' target='_blank'>VERIFY</a>`;
+
+    const emailOptions = {
+      from: "goitnodejs2023@outlook.com",
+      to: user.email,
+      subject: "Verification email",
+      text: "Mail with verification link",
+      html,
+    };
+
+    res.status(200).json({
+      status: "OK",
+      code: 200,
+      message: "Verification email sent",
+    });
+    await transporter.sendMail(emailOptions);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -220,4 +355,6 @@ module.exports = {
   current,
   subscription,
   avatar,
+  emailVerify,
+  repeatVerifyEmail,
 };

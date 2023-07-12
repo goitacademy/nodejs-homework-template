@@ -13,3 +13,4 @@ Update contact by id PUT /api/contacts/{id}
 Updates status favorite in contact by id PATCH /api/contacts/{id}/favorite
 Delete contact by id DELETE /api/contacts/{id}
 Upload new avatar image PATCH /api/users/avatars
+Send verification email POST /api/users/verify
