@@ -14,7 +14,7 @@ class ContactController {
     }
   }
 
-  async read(req, res, next) {//+
+  async read(req, res, next) {
     const list = await ContactService.listContacts();
     res.status(200).json(list);
   }
@@ -35,7 +35,7 @@ class ContactController {
     }
   }
 
-  async deleted(req, res, next) {//+
+  async deleted(req, res, next) {
     try {
       const { contactId } = req.params;
     const result = await ContactService.removeContact(contactId);
@@ -49,7 +49,7 @@ class ContactController {
     
   }
 
-  async getById(req,res,next) {//+
+  async getById(req,res,next) {
     try {
       const { contactId } = req.params;
       const result = await ContactService.getContactById(contactId);
