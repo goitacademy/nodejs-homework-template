@@ -1,6 +1,9 @@
 const HttpError = require('../error/errorHandler');
 const joiConfig = require('../joiconfig');
-const { getContactById } = require('../models/contacts');
+const ContactController = require('../controller/contactController')
+const joiStatus = require('../joiStatus');
+const contactController = require('../controller/contactController');
+const { isValidObjectId } = require("mongoose");
 
 const validateBody = (req,res,next) =>{
     if(!Object.keys(req.body).length){
@@ -20,11 +23,27 @@ const validateBody = (req,res,next) =>{
 }
 
 const validateID = async (req,res,next)=>{
-  const { id } = req.params;
-  const contact = await getContactById(id);
+  const { contactId } = req.params;
+  if (!isValidObjectId(contactId)) next(HttpError(400, "id no valid"));
+
+  console.log(isValidObjectId(contactId))
+
+  const contact = await contactController.getById(contactId);
   if (!contact) next(HttpError(404, "Not found"));
+  
   req.data = contact;
   next();
 }
 
-module.exports = {validateBody,validateID};
+const validateFavorite = (req,res,next) =>{
+    if(!Object.keys(req.body).length){
+        return next(HttpError(400,"missing field favorite"));
+    }
+   
+    const {error} = joiStatus.validate(req.body);
+    if(error) return next(HttpError(400,error.message));
+    next();
+}
+
+
+module.exports = {validateBody,validateID,validateFavorite};
