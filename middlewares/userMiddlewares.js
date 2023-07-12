@@ -3,7 +3,7 @@ const { Types } = require('mongoose');
 const {User} = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { createUserDataValidator, updateUserDataValidator } = require('../utils/userValidators');
+const { createUserDataValidator, updateUserDataValidator, newPassValidator } = require('../utils/userValidators');
 
 const checkUserById = catchAsync(async (req, res, next) => {
   console.log(req.params)
@@ -56,3 +56,20 @@ module.exports = {
     checkCreateUserData,
     checkUpdateUserData,
 }
+
+exports.checkMyPassword = catchAsync(async (req, res, next) => {
+  const { error, currentPassword, newPassword } = newPassValidator(req.body);
+  if (error) return next(new AppError(400, 'Invalid user data..'));
+
+  const user = await User.findById(req.user.id).select('password');
+
+  if (!(await user.checkPassword(currentPassword, user.password))) {
+    return new AppError(401, 'Current password wrong...');
+  }
+  user.password = newPassword;
+
+  await user.save();
+
+  next();
+
+})

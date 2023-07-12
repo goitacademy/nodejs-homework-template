@@ -6,8 +6,11 @@ const {
   getUserById,
   updateUserById,
   deleteUserById, 
-  getMe} = require('../../controllers/users');
-const { checkUserById, checkCreateUserData, checkUpdateUserData } = require('../../middlewares/userMiddlewares');
+  getMe,
+  updateMe,
+  updateMyPassword,
+} = require('../../controllers/users');
+const { checkUserById, checkUpdateUserData, checkMyPassword } = require('../../middlewares/userMiddlewares');
 const { protect, allowFor } = require('../../middlewares/authMiddlewares');
 const userRolesEnum = require('../../constants/userRolesEnum');
 
@@ -20,9 +23,13 @@ const router = express.Router();
 // router.delete('/:id', checkUserById, deleteUserById);
 
 // router.use(protect);
-router.get('/current', protect, getMe)
+router.get('/current', protect, getMe);
+router.patch('/update-me', protect, updateMe);
+// router.patch('/update-my-password', protect, checkMyPassword, updateMyPassword);
+
+
 router.use(allowFor(userRolesEnum.BUSINESS, userRolesEnum.PRO));
-router.post('/', createUser)
+router.post('/', createUser);
 router.get('/', getUsersList);
 
 // router.use('/:id', checkUserById);

@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const {User} = require('../models/userModel');
+const { response } = require('../app');
 
 /**
  * Create user
@@ -75,5 +76,23 @@ exports.getMe = (req, res) => {
   res.status(200).json({
     email: req.user.email,
     subscription: req.user.subscription
+  })
+}
+
+exports.updateMe = catchAsync(async (req, res) => { 
+  const { user } = req;
+  
+  Object.keys(req.body).forEach((key) => { 
+    user[key] = req.body[key];
+  })
+  const updatedUser = await user.save();
+  res.status(200).json({
+    user: updatedUser,
+  })
+})
+
+exports.updateMyPassword = (req, res) => {
+  res.status(200).json({
+    user: req.user,
   })
 }

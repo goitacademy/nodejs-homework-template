@@ -28,4 +28,15 @@ exports.signupUserDataValidator = (data) => {
       email: Joi.string().email().required(),
       password: Joi.string().regex(PASSWD_REGEX).required(),
     })
-    .validate(data)};
+    .validate(data)
+};
+    
+exports.newPassValidator = (data) => {
+  return Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      currentPassword: Joi.string().regex(PASSWD_REGEX).required(),
+      newPassword: Joi.string().regex(PASSWD_REGEX).required(),
+    })
+    .validate(data)
+};
