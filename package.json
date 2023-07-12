@@ -22,11 +22,9 @@
     "mongoose": "^7.3.0",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "uuid": "^9.0.0",
-    "uuidv4": "^6.2.13"
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",

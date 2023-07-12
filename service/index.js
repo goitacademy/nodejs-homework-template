@@ -37,28 +37,29 @@ const updateStatusContact = (id, owner, { favorite }) => {
 
 // USERS
 
-const createUser = ({
-  email,
-  password,
-  avatarURL,
-  verify,
-  verificationToken,
-}) => {
-  return User.create({ email, password, avatarURL, verify, verificationToken });
+const createUser = ({ email, password, avatarURL }) => {
+  return User.create({ email, password, avatarURL });
 };
 
-const updateUser = (email, fields) => {
-  return User.findOneAndUpdate({ email }, { $set: fields }, { new: true });
+const updateToken = ({ email, token }) => {
+  return User.findOneAndUpdate({ email }, { token }, { new: true });
 };
 
-const findUser = (userInfo) => {
-  return User.findOne(userInfo);
+const findUser = ({ email }) => {
+  return User.findOne({ email });
 };
 
 const findUserById = ({ userId }) => {
   return User.findById(userId);
 };
 
+const updateUserSubscription = ({ email, subscription }) => {
+  return User.findOneAndUpdate({ email }, { subscription }, { new: true });
+};
+
+const updateUserAvatar = ({ email, avatarURL }) => {
+  return User.findOneAndUpdate({ email }, { avatarURL }, { new: true });
+};
 module.exports = {
   getAllContacts,
   getContactById,
@@ -67,7 +68,9 @@ module.exports = {
   removeContact,
   updateStatusContact,
   createUser,
-  updateUser,
+  updateToken,
   findUser,
   findUserById,
+  updateUserSubscription,
+  updateUserAvatar,
 };

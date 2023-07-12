@@ -31,8 +31,4 @@ router.patch("/subscription", auth, ctrlTask.subscription);
 
 router.patch("/avatars", auth, upload.single("avatar"), ctrlTask.avatar);
 
-router.get("/verify/:verificationToken", ctrlTask.emailVerify);
-
-router.post("/verify", ctrlTask.repeatVerifyEmail);
-
 module.exports = router;
