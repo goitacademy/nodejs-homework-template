@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const iternalMongooseError  = require("../error/iternalMongooseError");
 
 const userSchema = new Schema(
   {
@@ -24,7 +23,6 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-userSchema.post("save", iternalMongooseError);
 const User = model("user", userSchema);
 
 module.exports = User;
