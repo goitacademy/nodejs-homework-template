@@ -100,8 +100,8 @@ const logout = async (req, res, next) => {
 const updateAvatar = async (req,res,next) => {
 try {
   const {_id} = req.user
-  const {path:tempUpload,originalName} = req.file;
-  const fileName = `${_id}_${originalName}`
+  const {path:tempUpload,originalname} = req.file;
+  const fileName = `${_id}_${originalname}`
   const resultUpload = path.join(avatarDir,fileName);
   await fs.rename(tempUpload,resultUpload);
   const avatarURL = path.join("avatars",fileName);
