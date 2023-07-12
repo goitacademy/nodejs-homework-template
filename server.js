@@ -10,8 +10,6 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 
-
-
 const url = process.env.DB_HOST;
 
 mongoose
