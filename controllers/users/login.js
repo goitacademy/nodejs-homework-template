@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const login = async (req, res, next) => {
-  try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
@@ -27,16 +26,13 @@ const login = async (req, res, next) => {
     
     await User.findByIdAndUpdate(user._id, { token });
 
-    res.status(201).json({
+    res.json({
       token,
       user: {
         email: user.email,
         subscription: user.subscription,
       },
     });
-  } catch (error) {
-    next(error);
-  }
 };
 
 module.exports = login;
