@@ -2,14 +2,10 @@ const app = require("./app");
 
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://Ruslan:m1n3KiEVI3Lb5qci@cluster0.bvujnmt.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const { DB_HOST } = require("./config");
 
 mongoose
-  .connect(DB_HOST, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  })
+  .connect(DB_HOST, { useNewUrlParser: true })
   .then(() => {
     app.listen(3000, () => {
       console.log("Database connection successful");
