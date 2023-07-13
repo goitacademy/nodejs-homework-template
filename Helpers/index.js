@@ -1,8 +1,9 @@
 const UpsErrors = require("./UpsErrors");
-const AddSchema = require("./AddSchema");
 const ctrlWraper = require('./ctrlWrapper');
+const mongooseErr = require('./mongooseErr');
+
 module.exports = {
   UpsErrors,
-  AddSchema,
-  ctrlWraper
+  ctrlWraper,
+  mongooseErr
 };
