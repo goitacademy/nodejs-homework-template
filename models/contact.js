@@ -21,6 +21,8 @@ const contactSchema = new Schema({
   },
 });
 
+contactSchema.post("save", handleMongoseError);
+
 const addSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": "Missing required name field",
@@ -41,8 +43,6 @@ const updateFavoriteSchema = Joi.object({
     "any.required": "Missing field favorite",
   }),
 });
-
-contactSchema.post("save", handleMongoseError);
 
 const Contact = model("contact", contactSchema);
 
