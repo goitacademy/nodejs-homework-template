@@ -23,7 +23,7 @@ const userSchema = new Schema(
 );
 
 // create model
-const User = model("auth", userSchema);
+const User = model("user", userSchema);
 
 // error checking
 userSchema.post("save", (error, data, next) => {

@@ -2,8 +2,15 @@ const { Contact, addSchema, addStatusSchema } = require("../models/contact");
 const { HttpError } = require("../helpers");
 
 const getListContacts = async (req, res, next) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 5 } = req.query;
+  const skip = (page - 1) * limit;
+
   try {
-    const result = await Contact.find();
+    const result = await Contact.find({ owner }, " ", { skip, limit }).populate(
+      "owner",
+      "email"
+    );
 
     res.json(result);
   } catch (err) {
@@ -25,12 +32,14 @@ const getContactById = async (req, res, next) => {
   }
 };
 const createContact = async (req, res, next) => {
+  const { _id: owner } = req.user;
+
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
       throw new HttpError(400, error.message);
     }
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({ ...req.body, owner });
 
     res.status(201).json(result);
   } catch (err) {
