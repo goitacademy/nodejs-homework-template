@@ -4,22 +4,16 @@ import { listContacts, getContactById, removeContact, addContact, updateContact 
 import { HttpError } from "../../helpers/HttpError.js";
 
 const router = express.Router();
-// validation on contact objects
-// add contact
+
+//contact validation patterns
+//add contact
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
 });
 
-//update contact
-const updateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string(),
-});
-
-//get all
+//GET - all
 router.get("/", async (req, res) => {
   try {
     const contacts = await listContacts();
@@ -29,7 +23,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//get by id
+//GET - by id
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
@@ -43,9 +37,14 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-//add
+//POST - add
 router.post("/", async (req, res, next) => {
   try {
+    const { email, name, phone } = req.body;
+    if (!email) throw HttpError(404, "missed required email field");
+    if (!name) throw HttpError(404, "missed required name field");
+    if (!phone) throw HttpError(404, "missed required phone field");
+
     const { error } = addSchema.validate(req.body);
     if (error) throw HttpError(400, error.message);
 
@@ -57,14 +56,20 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-//update by id
+//PUT - update by id
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { params, body } = req;
+
     const isBodyEmpty = Object.keys(body).length === 0 ? true : false;
 
     if (!isBodyEmpty && params.contactId) {
-      const { error } = updateSchema.validate(body);
+      const { email, name, phone } = body;
+      if (!name) throw HttpError(404, "missed required name field");
+      if (!phone) throw HttpError(404, "missed required phone field");
+      if (!email) throw HttpError(404, "missed required email field");
+      
+      const { error } = addSchema.validate(body);
       if (error) throw HttpError(400, error.message);
 
       const updatedContact = await updateContact(params.contactId, body);
@@ -79,7 +84,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-//delete by id
+//DELETE -  by id
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;

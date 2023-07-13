@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 
 const contactsPath = path.resolve("models", "contacts.json");
 
-const updateContacts = contact => fs.writeFile(contactsPath, JSON.stringify(contact, null, 2));
+const reWriteContacts = contact => fs.writeFile(contactsPath, JSON.stringify(contact, null, 2));
 
 export const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
@@ -12,7 +12,7 @@ export const listContacts = async () => {
 };
 
 export const getContactById = async contactId => {
-  const data = await listContacts();
+  const data = await listContacts();v
   const foundContact = data.find(contact => contact.id === contactId);
   return foundContact || null;
 };
@@ -26,7 +26,7 @@ export const addContact = async body => {
   };
   const data = await listContacts();
   data.push(contact);
-  await updateContacts(data)
+  await reWriteContacts(data);
   return contact;
 };
 
@@ -37,7 +37,7 @@ export const removeContact = async contactId => {
   if (index === -1) return null
 
   const [result] = contacts.splice(index, 1)
-  await updateContacts(contacts)
+  await reWriteContacts(contacts);
 
   return result
 };
@@ -50,7 +50,7 @@ export const updateContact = async (contactId, body) => {
 
   const targetContact = contacts[index];
   contacts[index] = { ...targetContact, ...body };
-  await updateContacts(contacts)
+  await reWriteContacts(contacts);
 
   return contacts[index];
 };
