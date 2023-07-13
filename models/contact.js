@@ -40,7 +40,7 @@ const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({
     "any.required": "Missing required favorite field",
   }),
-})
+});
 
 contactSchema.post("save", handleMongoseError);
 
