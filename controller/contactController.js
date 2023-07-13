@@ -4,9 +4,9 @@ const Contact = require("../models/contacts");
 class ContactController {
   async create(req, res, next) {
     try {
-      const { _id: owner } = req.user;
+      const { _id } = req.user;
       const { body } = req;
-      const created = await ContactService.addContact(body, owner);
+      const created = await ContactService.addContact(body, _id);
       res.status(201).json(created);
     } catch (error) {
       next(error);
@@ -15,7 +15,7 @@ class ContactController {
   }
 
   async read(req, res, next) {
-    const {owner} = req.query;
+    const { _id: owner } = req.user;
     const { page = 1, limit = 20, favorite } = req.query;
     const skip = (page - 1) * limit;
     const filter = favorite ? { owner, favorite } : { owner };
