@@ -9,7 +9,7 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+const getById = async (contactId) => {
   const contacts = await listContacts();
   const result = contacts.find((el) => el.id === contactId);
   return result || null;
@@ -37,20 +37,20 @@ const addContact = async (body) => {
   return newContacts;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((el) => el.id === contactId);
+  const index = contacts.findIndex((el) => el.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { id, ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
 
 module.exports = {
   listContacts,
-  getContactById,
+  getById,
   removeContact,
   addContact,
   updateContact,
