@@ -3,7 +3,6 @@ import logger from "morgan";
 import cors from "cors";
 import contactsRouter from "./routes/api/contacts.js";
 
-
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -19,9 +18,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-   const { status = 500, message = "Server Error" } = err;
-  res.status(status).json({message: message});
+  const { status = 500, message = "Server Error" } = err;
+  res.status(status).json({ message: message });
 });
 
-
-export default app
+export default app;

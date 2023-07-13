@@ -12,7 +12,7 @@ export const listContacts = async () => {
 };
 
 export const getContactById = async contactId => {
-  const data = await listContacts();v
+  const data = await listContacts();
   const foundContact = data.find(contact => contact.id === contactId);
   return foundContact || null;
 };
