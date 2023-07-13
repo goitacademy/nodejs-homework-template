@@ -1,7 +1,7 @@
-import Joi from "joi";
 import { listContacts, getContactById, removeContact, addContact, updateContact } from "../models/contacts.js";
 import { HttpError } from "../helpers/HttpError.js";
 import ctrlWrapper from "./ctrlWrapper.js";
+import Joi from "joi";
 //----------------------------------------------------------------//
 
 //validation schema
@@ -19,11 +19,10 @@ const getAll = async (req, res) => {
 
 //get contact by id
 const getById = async (req, res) => {
-
   const { contactId } = req.params;
 
-    const contact = await getContactById(contactId);
-    console.log("worked");
+  const contact = await getContactById(contactId);
+  console.log("worked");
   if (!contact) throw HttpError(404, "Not Found");
 
   res.json(contact).status(200);
@@ -78,7 +77,7 @@ const deleteContact = async (req, res) => {
   res.json({ message: "contact deleted" }).status(200);
 };
 
-//decotations of all methods 
+//decotations of all methods
 const ctrl = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
