@@ -1,22 +1,12 @@
-const Joi = require("joi");
-
 const contacts = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
 const getAll = async (req, res, next) => {
   const result = await contacts.listContacts();
-  res.status(200).json(result);
+  res.json({ status: "succes", code: 200, data: { result } });
 };
 
 const getById = async (req, res, next) => {
-  console.log(req.params);
-
   const { contactId } = req.params;
   const result = await contacts.getContactById(contactId);
 
@@ -24,17 +14,23 @@ const getById = async (req, res, next) => {
     throw HttpError(404, "Not Found");
   }
 
-  res.json(result);
+  res.json({ status: "succes", code: 200, data: { result } });
 };
 
 const add = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
+  const result = await contacts.addContact(req.body);
+  res.status(201).json({ status: "succes", code: 201, data: { result } });
+};
+
+const updateById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await contacts.updateContact(contactId, req.body);
+
+  if (!result) {
+    throw HttpError(404, "Not Found");
   }
 
-  const result = await contacts.addContact(req.body);
-  res.status(201).json(result);
+  res.json({ status: "succes", code: 200, data: { result } });
 };
 
 const deleteById = async (req, res, next) => {
@@ -46,22 +42,6 @@ const deleteById = async (req, res, next) => {
   }
 
   res.status(200).json({ message: "contact deleted" });
-};
-
-const updateById = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
-  const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
-
-  if (!result) {
-    throw HttpError(404, "Not Found");
-  }
-
-  res.status(201).json(result);
 };
 
 module.exports = {
