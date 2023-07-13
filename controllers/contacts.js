@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const contacts = require("../models/contacts");
-const { HttpError } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const contactFullSchema = Joi.object({
   name: Joi.string().required(),
@@ -8,54 +8,37 @@ const contactFullSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-const getAll = async (req, res, next) => {
-  try {
+const getAll = async (req, res) => {
     const data = await contacts.listContacts();
     res.json(data);
-  } catch (error) {
-    next(error);
-  }
 };
 
-const getById = async (req, res, next) => {
-  try {
+const getById = async (req, res) => {
     const { contactId } = req.params;
     const data = await contacts.getContactById(contactId);
     if (!data) {
       throw HttpError(404, "Not found");
     }
     res.json(data);
-  } catch (error) {
-    next(error);
-  }
 };
 
-const addOne = async (req, res, next) => {
-  try {
+const addOne = async (req, res) => {
     const { error } = contactFullSchema.validate(req.body);
     if (error) throw HttpError(400, error.message);
     const data = await contacts.addContact(req.body);
     res.status(201).json(data);
-  } catch (error) {
-    next(error);
-  }
 };
 
-const deleteById = async (req, res, next) => {
-  try {
+const deleteById = async (req, res) => {
     const { contactId } = req.params;
     const data = await contacts.removeContact(contactId);
     if (!data) {
       throw HttpError(404, "Not found");
     }
     res.json(data);
-  } catch (error) {
-    next(error);
-  }
 };
 
-const updateById = async (req, res, next) => {
-  try {
+const updateById = async (req, res) => {
     const { contactId } = req.params;
     const { error } = contactFullSchema.validate(req.body);
     if (error) throw HttpError(400, error.message);
@@ -64,15 +47,12 @@ const updateById = async (req, res, next) => {
       throw HttpError(404, "Not found");
     }
     res.json(data);
-  } catch (error) {
-    next(error);
-  }
 };
 
 module.exports = {
-  getAll,
-  getById,
-  addOne,
-  deleteById,
-  updateById,
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
+  addOne: ctrlWrapper(addOne),
+  deleteById: ctrlWrapper(deleteById),
+  updateById: ctrlWrapper(updateById),
 };
