@@ -4,38 +4,32 @@ const router = express.Router();
 
 const contactsService = require("../../models/contacts");
 
+const {HttpError} = require('../../helpers')
+
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsService.listContacts();
     res.json(contacts[2]);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
+    next(error);
   }
 });
 
 router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
+	try {
+		const { id } = req.params;
+		const contact = await contactsService.getContactById(id);
 
-    // console.log(req.params)
-    // console.log(id);
-    const contact = await contactsService.getContactById(id);
-    res.json(contact);
-
-    if (!contact)
-      return res.status(404).json({
-        message: "Not found...",
-      });
-  } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
-  }
+		if (!contact) throw HttpError(404, 'Not found with id')
+		res.json(contact);
+	}
+	catch (error) {
+		next(error);
+	}
 });
 
 router.post("/", async (req, res, next) => {
+	
   res.json({ message: "template message" });
 });
 
