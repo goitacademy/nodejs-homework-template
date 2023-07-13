@@ -39,5 +39,8 @@
   "bugs": {
     "url": "https://github.com/IgorPetrenko72/nodejs-homework-rest-api/issues"
   },
+  "engines": {
+    "node": ">=NODE_JS_VERSION"
+  },
   "homepage": "https://github.com/IgorPetrenko72/nodejs-homework-rest-api#readme"
 }
