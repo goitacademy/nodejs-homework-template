@@ -1,25 +1,26 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const {
+  getAllContacts,
+  getById,
+  deleteById,
+  createContact,
+  updateContact,
+} = require("../../controllers/contacts");
+const {
+  validationCreatePost,
+  validationUpdatePost,
+} = require("../../middleware/validationMiddleware");
 
-const contactsRouter = require('./routes/api/contacts')
+const router = express.Router();
 
-const app = express()
+router.get("/", getAllContacts);
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+router.get("/:contactId", getById);
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+router.post("/", validationCreatePost, createContact);
 
-app.use('/api/contacts', contactsRouter)
+router.delete("/:contactId", deleteById);
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+router.put("/:contactId", validationUpdatePost, updateContact);
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
-
-module.exports = app
+module.exports = router;
