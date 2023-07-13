@@ -5,7 +5,7 @@ const {
   postController,
   deleteController,
   putController,
-} = require("./controllers");
+} = require("../../controllers");
 
 const router = express.Router();
 

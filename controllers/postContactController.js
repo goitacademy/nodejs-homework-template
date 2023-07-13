@@ -1,4 +1,4 @@
-const { addContact } = require("../../../models/contacts");
+const { addContact } = require("../models/contacts");
 const { nanoid } = require("nanoid");
 
 const postController = async (req, res, next) => {
