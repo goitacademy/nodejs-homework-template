@@ -1,17 +1,17 @@
-const { HttpErrors } = require("../helpers"); // Підключення модуля HttpErrors з папки helpers
+const { HttpErrors } = require("../helpers");
 
 const validateBody = (schema) => {
   const func = (req, res, next) => {
-    const { error } = schema.validate(req.body); // Валідація тіла запиту за допомогою заданої схеми
+    const { error } = schema.validate(req.body);
 
     if (error) {
-      next(HttpErrors(400, error.message)); // Якщо виникає помилка валідації, створюється об'єкт помилки HttpErrors зі статусом 400 та повідомленням про помилку
+      next(new HttpErrors(404, "Contact not found"));
     }
 
     next();
   };
 
-  return func; // Повернення функції валідації
+  return func;
 };
 
 module.exports = validateBody;

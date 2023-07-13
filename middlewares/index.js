@@ -1,5 +1,5 @@
-const validateBody = require("./validateBody"); // Підключення модуля validateBody для валідації запиту
+const validateBody = require("./validateBody");
 
 module.exports = {
-  validateBody, // Експорт функції validateBody для використання у інших файлів
+  validateBody,
 };

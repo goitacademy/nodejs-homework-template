@@ -1,22 +1,20 @@
-const express = require("express"); // Підключення модуля Express для створення роутера
-const Joi = require("joi"); // Підключення модуля Joi для валідації даних
-const ctrl = require("../../controllers/contacts"); // Підключення модуля контролера contacts
-const { validateBody } = require("../../middlewares"); // Підключення мідлвари для валідації запиту
+const express = require("express");
+const Joi = require("joi");
+const ctrl = require("../../controllers/contacts");
+const { validateBody } = require("../../middlewares");
 
-const router = express.Router(); // Створення роутера за допомогою Express
+const router = express.Router();
 
 const addSchema = Joi.object({
-  // Визначення схеми валідації для додавання контакту
-  name: Joi.string().required(), // Вимагається рядок з ім'ям
-  email: Joi.string().required(), // Вимагається рядок з електронною поштою
-  phone: Joi.string().required(), // Вимагається рядок з номером телефону
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
 });
 
 router.route("/").get(ctrl.getAll).post();
-router.get("/", ctrl.getAll); // Роут для отримання всіх контактів
-router.get("/:contactId", ctrl.getById); // Роут для отримання контакту за його ідентифікатором
-router.post("/", validateBody(addSchema), ctrl.addContact); // Роут для додавання контакту з використанням мідлвари валідації
-router.delete("/:contactId", validateBody(addSchema), ctrl.deleteContact); // Роут для видалення контакту з використанням мідлвари валідації
-router.put("/:contactId", validateBody(addSchema), ctrl.updateContact); // Роут для оновлення контакту з використанням мідлвари валідації
-
+router.get("/", ctrl.getAll);
+router.get("/:contactId", ctrl.getById);
+router.post("/", validateBody(addSchema), ctrl.addContact);
+router.delete("/:contactId", validateBody(addSchema), ctrl.deleteContact);
+router.put("/:contactId", validateBody(addSchema), ctrl.updateContact);
 module.exports = router;

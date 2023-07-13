@@ -1,13 +1,13 @@
 const CtrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
     try {
-      await ctrl(req, res, next); // Виклик контролера з переданими параметрами запиту, відповіді та наступної middleware
+      await ctrl(req, res, next);
     } catch (error) {
-      next(error); // Передача отриманої помилки до наступної middleware
+      next(error);
     }
   };
 
-  return func; // Повернення обгортки контролера
+  return func;
 };
 
 module.exports = CtrlWrapper;
