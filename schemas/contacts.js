@@ -6,7 +6,7 @@ const addSchema = Joi.object({
     .min(3)
     .required()
     .messages({
-      "any.required": "missing fields",
+      "any.required": "missing required name field",
       "string.base": "Name must be a string",
       "string.empty": "missing required name field",
       "string.min": "Name should have a minimum length of {#limit}",
@@ -17,7 +17,7 @@ const addSchema = Joi.object({
     .email()
     .required()
     .messages({
-      "any.required": "missing fields",
+      "any.required": "missing required email field",
       "string.base": "Email must be a string",
       "string.empty": "missing required email field",
       "string.email": "Email must be a valid email address",
@@ -29,7 +29,7 @@ const addSchema = Joi.object({
     .max(16)
     .required()
     .messages({
-      "any.required": "missing fields",
+      "any.required": "missing required phone field",
       "string.base": "Phone number must be a string",
       "string.empty": "missing required phone field",
       "string.pattern.base": "Phone number is invalid",
