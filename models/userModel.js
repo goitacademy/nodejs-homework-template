@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto')
 
 const userRolesEnum = require('../constants/userRolesEnum');
 
@@ -35,7 +36,12 @@ const userSchema = new mongoose.Schema(
 )
 
 // Pre save hook. Fires on Create and Save.
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
+  if (this.isNew) {
+    const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
+    this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=robohash`;
+  }
+
   if (!this.isModified('password')) return next();
 
   // hash passwd only when passwd changed

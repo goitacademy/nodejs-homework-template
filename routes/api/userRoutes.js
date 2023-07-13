@@ -10,7 +10,7 @@ const {
   updateMe,
   updateMyPassword,
 } = require('../../controllers/users');
-const { checkUserById, checkUpdateUserData, checkMyPassword } = require('../../middlewares/userMiddlewares');
+const { checkUserById, checkUpdateUserData, checkMyPassword, uploadUserAvatar } = require('../../middlewares/userMiddlewares');
 const { protect, allowFor } = require('../../middlewares/authMiddlewares');
 const userRolesEnum = require('../../constants/userRolesEnum');
 
@@ -24,8 +24,8 @@ const router = express.Router();
 
 // router.use(protect);
 router.get('/current', protect, getMe);
-router.patch('/update-me', protect, updateMe);
-// router.patch('/update-my-password', protect, checkMyPassword, updateMyPassword);
+router.patch('/update-me', uploadUserAvatar, updateMe);
+router.patch('/update-my-password', protect, checkMyPassword, updateMyPassword);
 
 
 router.use(allowFor(userRolesEnum.BUSINESS, userRolesEnum.PRO));

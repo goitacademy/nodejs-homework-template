@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const {User} = require('../models/userModel');
 const { response } = require('../app');
+const ImageService = require('../services/imageService');
 
 /**
  * Create user
@@ -80,12 +81,19 @@ exports.getMe = (req, res) => {
 }
 
 exports.updateMe = catchAsync(async (req, res) => { 
-  const { user } = req;
-  
-  Object.keys(req.body).forEach((key) => { 
+  const { user, file } = req;
+  console.log(user)
+    const { _id } = req.user;
+
+  if (file) {
+user.avatarUrl = await ImageService.save(file, {width: 250, height: 250}, 'public', 'avatars', _id )
+  }
+
+  Object.keys(req.body).forEach((key) => {
     user[key] = req.body[key];
-  })
+  });
   const updatedUser = await user.save();
+
   res.status(200).json({
     user: updatedUser,
   })
