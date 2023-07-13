@@ -1,7 +1,9 @@
 const { User, authSchemas } = require("../models");
 
 const bcrypt = require("bcryptjs");
-const path = require("path")
+const path = require("path");
+
+const Jimp = require("jimp");
 
 const jwt = require("jsonwebtoken");
 
@@ -29,11 +31,12 @@ const register = async (req, res, next) => {
       throw RequestError(400, error.message);
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const avatarURL = gravatar.url(email)
+    const avatarURL = gravatar.url(email);
+    const resizeAvatar = await Jimp.read(avatarURL).resize(250,250).write(avatarURL); 
     const newUser = await User.create({
        ...req.body,
         password: hashPassword,
-        avatarURL });
+        resizeAvatar });
     res.status(201).json({
       email: newUser.email,
       subscription: newUser.subscription,
