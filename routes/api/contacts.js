@@ -2,24 +2,21 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const controller = require("../../controllers/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validator, isValidId } = require("../../middlewares");
+const { schemas } = require("../../models/contacts");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', controller.listContacts);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', isValidId, controller.getContactById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', validator(schemas.objectStructure), controller.addContact);
 
-module.exports = router
+router.delete('/:id', isValidId, isValidId, controller.removeContact);
+
+router.put('/:id', isValidId, validator(schemas.objectStructure), controller.updateContact);
+
+router.patch("/:id/favourite", isValidId, validator(schemas.updateFavouriteSchema), controller.updateFavourite);
+
+module.exports = router;
