@@ -9,7 +9,12 @@ const updateContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not Found");
   }
-  res.json(result);
+  res.status(200);
+  res.json({
+    code: 200,
+    message: "Update contact ",
+    data: result,
+  });
 };
 
 module.exports = updateContact;

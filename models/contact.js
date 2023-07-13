@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../middlewares");
+const { handleMongooseError } = require("../helpers");
 
 const phoneRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
 
@@ -19,6 +19,10 @@ const contactSchema = Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
@@ -41,12 +45,12 @@ const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
-const schemes = {
+const schemas = {
   addSchema,
   favoriteSchema,
 };
 
 module.exports = {
   Contact,
-  schemes,
+  schemas,
 };
