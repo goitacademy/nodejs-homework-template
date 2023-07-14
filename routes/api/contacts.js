@@ -1,5 +1,4 @@
 import express from "express";
-// import Joi from "joi";
 import {
   getContactById,
   listContacts,
@@ -10,16 +9,6 @@ import {
 import { HttpError } from "../../helpers/HttpError.js";
 import { schemaAdd, schemaUpdate } from "../../helpers/schema.js";
 
-// const schemaAdd = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// }).min(1);
-// const schemaUpdate = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// });
 export const contactsRouter = express.Router();
 
 contactsRouter.get("/", async (req, res, next) => {
@@ -36,28 +25,15 @@ contactsRouter.get("/:contactId", async (req, res, next) => {
     const id = req.params.contactId;
     const data = await getContactById(id);
     if (!data) {
-      // return res.status(404).json({ message: "Not found" });
-      // const error = new Error("Not found");
-      // error.status = 404;
-      // throw error;
       throw HttpError(404, "Not found");
     }
     res.json(data);
   } catch (error) {
-    // const { status = 500, message = "Server error" } = error;
-    // res.status(status).json({ message });
     next(error);
   }
 });
 
 contactsRouter.post("/", async (req, res, next) => {
-  // res.json({ message: "template message" });
-  // console.log(name, email, phone);
-  // if (!name || !email || !phone) {
-  //   res.json({ message: "missing required name field" });
-  //   return;
-  // }
-  // const { name, email, phone } = req.body;
   try {
     const { error } = schemaAdd.validate(req.body);
     if (error) {
@@ -71,7 +47,6 @@ contactsRouter.post("/", async (req, res, next) => {
 });
 
 contactsRouter.delete("/:contactId", async (req, res, next) => {
-  // res.json({ message: "template message" });
   const id = req.params.contactId;
   try {
     const deleting = await removeContact(id);
@@ -86,9 +61,7 @@ contactsRouter.put("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   try {
     const { error } = schemaUpdate.validate(req.body);
-    if (error) {
-      throw HttpError(404, "missing fields");
-    }
+    if (error) throw HttpError(404, "missing fields");
     const newContact = await updateContact(id, req.body);
     if (!newContact) throw HttpError(404, "Not found");
     return res.status(200).json(newContact);
