@@ -1,12 +1,10 @@
 import express from "express"
-import { listContacts } from "../../src/contacts.js"
+import { listContacts } from "../../models/contacts.js";
 
-
-const router = express.Router()
+const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-	const list = await listContacts();
-	// res.json({ message: 'template message' })
+	const list = await listContacts()
 	res.json(list)
 })
 
