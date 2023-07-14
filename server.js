@@ -8,7 +8,7 @@ const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
-  .then(app.listen(3000, console.log('Database connection successful'))
+  .then(app.listen(3004, console.log('Database connection successful'))
 
   )
   .catch((error) => {
