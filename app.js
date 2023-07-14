@@ -5,6 +5,8 @@ const Joi = require("joi");
 
 const contactsRouter = require("./routes/api/contacts");
 
+require('dotenv').config();
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
