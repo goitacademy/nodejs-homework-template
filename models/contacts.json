@@ -1,12 +1,12 @@
 [
   {
-    "contactId": "AeHIrLTr6JkxGE6SN-0Rw",
+    "id": "AeHIrLTr6JkxGE6SN-0Rw",
     "name": "Alex",
     "email": "vkutsar89@gmai.com",
     "phone": "12232"
   },
   {
-    "contactId": "qdggE76Jtbfd9eWJHrssH",
+    "id": "qdggE76Jtbfd9eWJHrssH",
     "name": "Alex",
     "email": "vkutsar89@gmail.com",
     "phone": "1223213"
@@ -18,13 +18,13 @@
     "phone": "(692) 802-2949"
   },
   {
-    "contactId": "05olLMgyVQdWRwgKfg5J6",
+    "id": "05olLMgyVQdWRwgKfg5J6",
     "name": "Alex",
     "email": "vkutsar89@gmai.com",
     "phone": "12232"
   },
   {
-    "contactId": "1DEXoP8AuCGYc1YgoQ6hw",
+    "id": "1DEXoP8AuCGYc1YgoQ6hw",
     "name": "asdasd",
     "email": "vkutsafafasr89@gmai.com",
     "phone": "12324234232"
@@ -36,27 +36,27 @@
     "phone": "(715) 598-5792"
   },
   {
-    "contactId": "C9sjBfCo4UJCWjzBnOtxl",
+    "id": "C9sjBfCo4UJCWjzBnOtxl",
     "name": "asdasd",
     "email": "vkutsafafasr89@gmai.com",
     "phone": "12324234232"
   },
   {
-    "contactId": "e6ywwRe4jcqxXfCZOj_1e",
+    "id": "e6ywwRe4jcqxXfCZOj_1e",
     "name": "Alex",
     "email": "vkutsar89@gmai.com",
     "phone": "12232"
   },
   {
     "id": "rsKkOQUi80UsgVPCcLZZW",
-    "name": "Alec Howard",
-    "email": "Donec.elementum@scelerisquescelerisquedui.net",
-    "phone": "(748) 206-2688"
+    "name": "asdasd",
+    "email": "vkutsafafasr89@gmai.com",
+    "phone": "12324234232"
   },
   {
-    "contactId": "fyFlQzbLibKOebK3CkP7o",
-    "name": "Alex",
-    "email": "vkutsar89@gmail.com",
-    "phone": "12232134"
+    "id": "fyFlQzbLibKOebK3CkP7o",
+    "name": "asd",
+    "email": "vkutsafafasr89@gmai.com",
+    "phone": "12324234232"
   }
 ]
