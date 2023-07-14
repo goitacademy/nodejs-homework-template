@@ -1,5 +1,5 @@
-const ctrlWrapper = require("../helpers");
-const generateHTTPError = require("../../helpers");
+const { ctrlWrapper } = require("../helpers");
+const { generateHTTPError } = require("../helpers");
 
 const contacts = require("../models/contacts");
 
