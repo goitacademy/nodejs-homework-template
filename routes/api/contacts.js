@@ -1,5 +1,5 @@
 import express from "express";
-import Joi from "joi";
+// import Joi from "joi";
 import {
   getContactById,
   listContacts,
@@ -8,12 +8,18 @@ import {
   updateContact,
 } from "../../models/contacts.js";
 import { HttpError } from "../../helpers/HttpError.js";
+import { schemaAdd, schemaUpdate } from "../../helpers/schema.js";
 
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+// const schemaAdd = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// }).min(1);
+// const schemaUpdate = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// });
 export const contactsRouter = express.Router();
 
 contactsRouter.get("/", async (req, res, next) => {
@@ -53,7 +59,7 @@ contactsRouter.post("/", async (req, res, next) => {
   // }
   // const { name, email, phone } = req.body;
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = schemaAdd.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -77,11 +83,12 @@ contactsRouter.delete("/:contactId", async (req, res, next) => {
 });
 
 contactsRouter.put("/:contactId", async (req, res, next) => {
+  const id = req.params.contactId;
   try {
-    const id = req.params.contactId;
-    const { name, email, phone } = req.body;
-    console.log(!name && !email && !phone);
-    if (!name && !email && !phone) throw HttpError(400, "missing fields");
+    const { error } = schemaUpdate.validate(req.body);
+    if (error) {
+      throw HttpError(404, "missing fields");
+    }
     const newContact = await updateContact(id, req.body);
     if (!newContact) throw HttpError(404, "Not found");
     return res.status(200).json(newContact);
