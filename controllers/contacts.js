@@ -1,5 +1,3 @@
-
-
 const { Contact } = require("../models/contact");
 
 const { HttpError } = require("../helpers");
@@ -12,7 +10,6 @@ const listContacts = async (req, res, next) => {
     next(error);
   }
 };
-
 
 const getById = async (req, res, next) => {
   try {
@@ -39,7 +36,9 @@ const addContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -49,14 +48,16 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-
 const updateStatusContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw HttpError(404, "Not found");
     }
+
     res.json(result);
   } catch (error) {
     next(error);
