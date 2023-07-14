@@ -56,7 +56,7 @@ contactsRouter.post("/", async (req, res, next) => {
     next(error);
   }
 });
-
+// 1
 contactsRouter.put("/:id", async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
