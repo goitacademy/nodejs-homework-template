@@ -43,4 +43,5 @@ describe("test /api/users/register route", () => {
     const user = await User.findOne({ email: registerData.email });
     expect(user.name).toBe(registerData.name);
   }, 10000);
+    
 });
