@@ -29,8 +29,6 @@ router.get("/:contactId", async (req, res, next) => {
     res.json(contact);
   } catch (error) {
     next(error);
-    // let { status = 500, message } = error;
-    // res.status(status).json({ message });
   }
 });
 
@@ -54,7 +52,7 @@ router.delete("/:contactId", async (req, res, next) => {
     if (!result) {
       throw errorHandler(404, "Not found");
     }
-    res.json(result);
+    res.json("Contact deleted");
   } catch (error) {
     next(error);
   }
