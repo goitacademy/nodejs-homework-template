@@ -1,142 +1,49 @@
 // const app = require("./app");
 const express = require("express");
 const cors = require("cors");
-// const { json } = require("express/lib/response");
-const uuid = require("uuid").v4;
-const fs = require("fs").promises;
+const dotenv = require("dotenv");
+const morgan = require("morgan");
+
+const envPath =
+  process.env.NODE_ENV === "production"
+    ? "./production.env"
+    : "./development.env";
+dotenv.config({ path: envPath });
+
+const contactsRoutes = require("./routes/api/contactsRoutes");
 
 const app = express();
+
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
 // MIDDLEWARE=====================================
 app.use(express.json());
 app.use(cors());
 
-/**custom general middleware to find contact by id */
-app.use("/contacts/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
+// ROUTES=====================================
+app.use("/contacts", contactsRoutes);
 
-    const contacts = JSON.parse(await fs.readFile("./models/contacts.json"));
-
-    const contact = contacts.find((item) => item.id === id);
-
-    if (!contact) {
-      res.status(404).json({
-        msg: "Contact does not exist..",
-      });
-    }
-
-    req.contact = contact;
-
-    next();
-  } catch (error) {
-    console.log(error);
-
-    res.sendStatus(500);
-  }
-});
-
-// CONTROLLER=====================================
-
-// @ GET /api/contacts ---AllContacts
-app.get("/contacts", async (req, res) => {
-  try {
-    const contacts = JSON.parse(await fs.readFile("./models/contacts.json"));
-
-    res.status(200).json({
-      msg: "Success",
-      contacts,
-    });
-  } catch (error) {
-    console.log(error);
-
-    res.sendStatus(500);
-  }
-});
-
-// @ GET /api/contacts/:id OneContact
-app.get("/contacts/:id", (req, res) => {
-  const { contact } = req;
-
-  res.status(200).json({
-    msg: "Success",
-    contact,
+/**
+ * Not found request handler
+ */
+app.all("*", (req, res) => {
+  res.status(404).json({
+    msg: "Oops! Resource not found..",
   });
 });
 
-// @ POST /api/contacts ----AddContact
-
-app.post("/contacts", async (req, res) => {
-  try {
-    const { name, email, phone } = req.body;
-
-    // validation
-
-    // create new Contact object
-    const newContact = {
-      id: uuid(),
-      name,
-      email,
-      phone,
-    };
-    // save contact data to DB
-    const contactDB = await fs.readFile("./models/contacts.json");
-
-    const contacts = JSON.parse(contactDB);
-    contacts.push(newContact);
-
-    await fs.writeFile("./models/contacts.json", JSON.stringify(contacts));
-
-    // send respons to the FE
-    res.status(201).json({
-      msg: "Contact created!",
-      contact: newContact,
-    });
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
+/**
+ * Global error handler.
+ */
+app.use((error, req, res, next) => {
+  res.status(500).json({
+    msg: error.message,
+  });
 });
 
-// @ DELETE /api/contacts/:id
-app.delete("/contacts/:id", async (req, res) => {
-  try {
-    const { contact } = req;
+// SERVER INIT=======================================
+const port = process.env.PORT || 3000;
 
-    // get all contacts from db
-    // delete contact by id
-    // // save contact data to DB
-    res.sendStatus(204);
-    // res.status(200).json({
-    //   msg: "Success",
-    // });
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
-});
-
-// @ PUT /api/contacts/:id
-
-app.patch("/contacts/:id", async (req, res) => {
-  try {
-    const { contact } = req;
-    const { name, phone } = req.body;
-    // update contact data
-    // get all contacts from db
-    // overwrite contact with new data
-    // // save contact data to DB
-    res.status(202).json({
-      msg: "Success",
-      // contact: updateContact,
-    });
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
-});
-
-//SERVER INIT=======================================
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
+app.listen(port, () => {
+  console.log(`Server running. Use our API on port: ${port}`);
 });
