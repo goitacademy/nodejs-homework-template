@@ -73,10 +73,24 @@ const getCurrent = async(req, res) => {
 const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: '' });
-  
+
     res.json({
-      message: 'Logout success',
+        message: 'Logout success',
     });
+};
+
+const updateSubscription = async (req, res) => {
+    const { _id } = req.user;
+  
+    const result = await User.findByIdAndUpdate(_id, req.body, {
+      new: true,
+    });
+  
+    if (!result) {
+      throw HttpError(404, `Not found`);
+    }
+  
+    res.json({ result });
   };
 
 
@@ -85,4 +99,5 @@ module.exports = {
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
+    updateSubscription: ctrlWrapper(updateSubscription),
 }
