@@ -31,13 +31,13 @@ userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
     subscription: Joi.string().valid(...validSubscriptions),
-    password: Joi.string().required(),
+    password: Joi.string().min(6).required(),
     email: Joi.string().pattern(emailRegex).required(),
 })
 
 const loginSchema = Joi.object({
     password: Joi.string().required(),
-    email: Joi.string().required(),
+    email: Joi.string().min(6).required(),
 })
 
 const schemas = {
@@ -48,6 +48,6 @@ const schemas = {
 const User = model("user", userSchema);
 
 module.exports = {
-    User,
-    schemas,
+  User,
+  schemas,
 }

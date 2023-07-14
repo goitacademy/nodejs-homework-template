@@ -1,4 +1,4 @@
-const express = require("express");
+const express = require('express');
 
 const ctrl = require("../../controllers/auth");
 
@@ -7,6 +7,6 @@ const {schemas} = require("../../models/user");
 
 const router = express.Router();
 
-router.post("./register", validateBody(schemas.registerSchema), ctrl.register);
+router.post('./register', validateBody(schemas.registerSchema), ctrl.register);
 
 module.exports = router;
