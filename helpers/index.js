@@ -1,5 +1,7 @@
-const { HttpError } = require("./HttpError");
+const HttpError = require("./HttpError");
+const controllersWrapper = require("./controllersWrapper");
 
 module.exports = {
 	HttpError,
+	controllersWrapper,
 };
