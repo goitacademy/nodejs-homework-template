@@ -3,30 +3,57 @@ const generateHTTPError = require("../../helpers");
 
 const contacts = require("../models/contacts");
 
+const Joi = require("joi");
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
 const listContacts = async (req, res, next) => {
-  res = await contacts.listContacts();
-  res.status(200).json(res.body);
+  const result = await contacts.listContacts();
+  res.status(200).json(result);
 };
 
 const getContactById = async (req, res, next) => {
-  const contactId = req.params.id;
-  const contact = await contacts.getContactById(contactId);
+  const { id } = req.params;
+  const contact = await contacts.getContactById(id);
   if (!contact) {
-    return generateHTTPError(404, "Not found");
+    throw generateHTTPError(404, "Not found");
   }
   res.status(200).json(contact);
 };
 
 const removeContact = async (req, res, next) => {
-  await contacts.removeContact();
+  const { id } = req.params;
+  const contact = await contacts.removeContact(id);
+  if (!contact) {
+    throw generateHTTPError(404, "Not found");
+  }
+  res.status(200).json({ message: "contact deleted" });
 };
 
 const addContact = async (req, res, next) => {
-  await contacts.addContact();
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: "missing required name field" });
+  }
+  const contact = await contacts.addContact(req.body);
+  res.status(201).json(contact);
 };
 
 const updateContact = async (req, res, next) => {
-  await contacts.updateContact();
+  const id = req.params;
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: "missing fields" });
+  }
+  const contact = await contacts.updateContact(id, req.body);
+  if (!contact) {
+    throw generateHTTPError(404, "Not found");
+  }
+  res.status(200).json(contact);
 };
 
 module.exports = {
