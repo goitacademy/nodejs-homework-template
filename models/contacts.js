@@ -21,7 +21,7 @@ const getById = async (id) => {
         return contactById || null
   }
 
-  const addContact = async(name, email, phone) => {
+  const addContact = async({name, email, phone}) => {
     // ...твій код. Повертає об'єкт доданого контакту. Повертає null, якщо контакт з таким id не знайдений.
         
         const data = await listContacts()
