@@ -17,6 +17,21 @@ const { SECRET_KEY } = process.env;
 
 const { RequestError } = require("../helpers");
 
+
+
+
+
+async function resize (avatar) {
+  
+  const image = await Jimp.read(avatar);
+  
+  await image.resize(250, 250);
+  
+  
+  await image.writeAsync(`resize_${Date.now()}_150x150.jpg`);
+  
+} 
+
 const register = async (req, res, next) => {
   try {
    
@@ -31,12 +46,14 @@ const register = async (req, res, next) => {
       throw RequestError(400, error.message);
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const avatarURL = gravatar.url(email);
-    const resizeAvatar = await Jimp.read(avatarURL).resize(250,250).write(avatarURL); 
+    const avatarURL =  gravatar.url(email);
+   
+     
+    // console.log(resizeAvatar);
     const newUser = await User.create({
        ...req.body,
         password: hashPassword,
-        resizeAvatar });
+        avatarURL });
     res.status(201).json({
       email: newUser.email,
       subscription: newUser.subscription,
@@ -104,8 +121,9 @@ const updateAvatar = async (req,res,next) => {
 try {
   const {_id} = req.user
   const {path:tempUpload,originalname} = req.file;
-  const fileName = `${_id}_${originalname}`
+  const fileName = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir,fileName);
+  
   await fs.rename(tempUpload,resultUpload);
   const avatarURL = path.join("avatars",fileName);
   await User.findByIdAndUpdate(_id,{avatarURL});
