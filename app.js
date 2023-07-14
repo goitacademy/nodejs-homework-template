@@ -24,17 +24,4 @@ app.use((error, req, res, next) => {
 })
 
 
-
-
-// const contacts = require("./models/contacts.json")
-
-// app.get("/", (request, response)=> {
-//   response.send("<h2>Home page</h2>")
-// });
-
-// app.get("/contacts", (req, res)=> {
-  
-//   res.json(contacts)
-// })
-
 module.exports = app
