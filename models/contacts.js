@@ -1,9 +1,8 @@
-// const fs = require('')
 import fs from 'fs/promises'
+import { nanoid } from 'nanoid'
 import path from 'path'
 
 const contactsPath = path.resolve("models", "contacts.json")
-
 
 export const listContacts = async () => {
 	const data = await fs.readFile(contactsPath)
@@ -48,18 +47,14 @@ export const updateContact = async (contactId, body) => {
 		return null
 	}
 
-	const newName = name ? name : contacts[index].name
-	const newEmail = email ? email : contacts[index].email
-	const newPhone = phone ? phone : contacts[index].phone
-
 	console.log(contacts[index]);
 	contacts[index] = {
 		id: contactId,
-		name: newName,
-		email: newEmail,
-		phone: newPhone
+		name,
+		email,
+		phone,
 	}
-	console.log(contacts[index]);
+
 	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
 	return contacts[index]
 }
