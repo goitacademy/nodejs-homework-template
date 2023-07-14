@@ -7,11 +7,11 @@ const authenticate = require('../../middlewares/authenticate');
 
 
 
-router.get('/', contactController.read)
+router.get('/',authenticate, contactController.read)
 
 router.get('/:contactId',authenticate,validateID,contactController.getById)
 
-router.post('/',validateBody(joiConfig),contactController.create )
+router.post('/',authenticate,validateBody(joiConfig),contactController.create )
 
 router.delete('/:contactId',authenticate, contactController.deleted)
 

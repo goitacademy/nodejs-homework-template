@@ -15,12 +15,13 @@ class UserController {
     res.json({ email, subscription });
   }
 
-  async login(req, res) {
+  async login(req, res, next) {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     console.log(process.env.SECRET_KEY);
     if (!user) {
-      return HttpError(401, `No user with such email`);
+      next(HttpError(401, `Email or password is wrong`));
+      return;
     }
 
     const comparePassword = await bcrypt.compare(password, user.password);
