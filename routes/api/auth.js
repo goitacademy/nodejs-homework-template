@@ -11,7 +11,7 @@ const { validateBody } = require("../../decorators");
 const { authenticate } = require("../../middlewares");
 
 router.post(
-  "/signup",
+  "/register",
   validateBody(schemas.userRegisterSchema),
   authController.signup
 );
