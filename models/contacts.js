@@ -44,7 +44,17 @@ export const addContact = async ({ name, phone, email }) => {
   return newContact;
 };
 
-export const updateContact = async (contactId, body) => {};
+export const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const contactById = contacts.find((contact) => contact.id === contactId);
+  const contactIndex = contacts.findIndex(
+    (contact) => contact.id === contactId
+  );
+  const updatedContact = { ...contactById, ...body };
+  contacts.splice(contactIndex, 1, updatedContact);
+  writeData(contacts);
+  return updatedContact || null;
+};
 
 // module.exports = {
 //   listContacts,
