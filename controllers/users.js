@@ -1,16 +1,10 @@
 const { User, authSchemas } = require("../models");
-
+const {resizeAvatar} = require("../middlewares")
 const bcrypt = require("bcryptjs");
 const path = require("path");
-
-const Jimp = require("jimp");
-
 const jwt = require("jsonwebtoken");
-
-const fs = require("fs/promises")
-
+// const fs = require("fs/promises")
 const gravatar = require("gravatar");
-
 const avatarDir = path.join(__dirname,"../","public","avatars")
 
 const { SECRET_KEY } = process.env;
@@ -21,16 +15,7 @@ const { RequestError } = require("../helpers");
 
 
 
-async function resize (avatar) {
-  
-  const image = await Jimp.read(avatar);
-  
-  await image.resize(250, 250);
-  
-  
-  await image.writeAsync(`resize_${Date.now()}_150x150.jpg`);
-  
-} 
+
 
 const register = async (req, res, next) => {
   try {
@@ -49,7 +34,7 @@ const register = async (req, res, next) => {
     const avatarURL =  gravatar.url(email);
    
      
-    // console.log(resizeAvatar);
+  
     const newUser = await User.create({
        ...req.body,
         password: hashPassword,
@@ -117,14 +102,18 @@ const logout = async (req, res, next) => {
   res.status(204).json({ message: "No Content" });
 };
 
+
+
+
 const updateAvatar = async (req,res,next) => {
 try {
+  if (!req.file) return res.status(400).json({ message: "Please upload a file" }); 
   const {_id} = req.user
   const {path:tempUpload,originalname} = req.file;
   const fileName = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir,fileName);
-  
-  await fs.rename(tempUpload,resultUpload);
+  await resizeAvatar(tempUpload,resultUpload)
+  // await fs.rename(tempUpload,resultUpload);
   const avatarURL = path.join("avatars",fileName);
   await User.findByIdAndUpdate(_id,{avatarURL});
   res.json({avatarURL});
