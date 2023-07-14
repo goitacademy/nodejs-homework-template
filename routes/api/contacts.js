@@ -1,14 +1,12 @@
-const express = require("express");
+import express from "express";
+import Joi from "joi";
 
-const router = express.Router();
+import contactsOperations from "../../models/contacts.js";
+import { HttpError } from "../../helpers/index.js";
 
-const contactsOperations = require("../../models/contacts");
+const contactsRouter = express.Router();
 
-const { HttpError } = require("../../helpers");
-
-const Joi = require("joi");
-
-const schema = Joi.object({
+const addContactSchema = Joi.object({
   // name: Joi.string().alphanum().required(),
   // email: Joi.string()
   //   .email({
@@ -17,12 +15,18 @@ const schema = Joi.object({
   //   })
   //   .required(),
   // phone: Joi.string().alphanum().required(),
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string().required().messages({
+    "any.required": "Name must be exist",
+  }),
+  email: Joi.string().email().required().messages({
+    "any.required": "Email must be exist",
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": "Phone must be exist",
+  }),
 });
 
-router.get("/", async (req, res, next) => {
+contactsRouter.get("/", async (req, res, next) => {
   try {
     const result = await contactsOperations.listContacts();
     res.json(result);
@@ -31,7 +35,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+contactsRouter.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contactsOperations.getContactById(contactId);
@@ -50,9 +54,9 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+contactsRouter.post("/", async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = addContactSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -63,7 +67,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+contactsRouter.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contactsOperations.removeContact(contactId);
@@ -77,9 +81,9 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+contactsRouter.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = schema.validate(req.body);
+    const { error } = addContactSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -95,4 +99,4 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default contactsRouter;

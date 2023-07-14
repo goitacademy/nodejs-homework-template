@@ -1,8 +1,8 @@
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
 
-const contactsRouter = require("./routes/api/contacts");
+import contactsRouter from "./routes/api/contacts.js";
 
 const app = express();
 
@@ -11,11 +11,6 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-
-// const contacts = require("./models/contacts.json");
-// app.get("/api/contacts", (req, res) => {
-//   res.json(contacts);
-// });
 
 app.use("/api/contacts", contactsRouter);
 
@@ -31,4 +26,4 @@ app.use((err, req, res, next) => {
   // open 'D:\\projects\\NODEJS\\nodejs-homework-rest-api\\models\\contacts2.json'"
 });
 
-module.exports = app;
+export default app;
