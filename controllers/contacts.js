@@ -17,33 +17,43 @@ const getContactById = async (req, res, next) => {
   res.json(result);
 };
 
-// const addContact = async (req, res) => {
-//   const result = await contacts.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const addContact = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
-// const updateContactById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contacts.updateContact(id, req.body);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json(result);
-// };
+const updateContactById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body,{new: true});
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
 
-// const deleteContactById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contacts.removeContact(id);
-//   if (!result) {
-//     throw HttpError(400, "Not found");
-//   }
-//   res.json({ message: "Delete success" });
-// };
+const updateContactFavorite = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body,{new: true});
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
+
+const deleteContactById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndDelete(id);
+  if (!result) {
+    throw HttpError(400, "Not found");
+  }
+  res.json({ message: "Delete success" });
+};
 
 module.exports = {
   getAllContact: ctrlWrapper(getAllContact),
   getContactById: ctrlWrapper(getContactById),
-  // addContact: ctrlWrapper(addContact),
-  // updateContactById: ctrlWrapper(updateContactById),
-  // deleteContactById: ctrlWrapper(deleteContactById),
+  addContact: ctrlWrapper(addContact),
+  updateContactById: ctrlWrapper(updateContactById),
+  updateContactFavorite: ctrlWrapper(updateContactFavorite),
+  deleteContactById: ctrlWrapper(deleteContactById),
 };
