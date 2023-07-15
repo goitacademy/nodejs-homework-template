@@ -3,7 +3,8 @@ const Contacts = require('../models/contacts');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getContactsList = catchAsync(async (req, res) => {
-  const contacts = await Contacts.find().select('-__v');
+  const userId = req.user.id;
+  const contacts = await Contacts.find({ owner: userId }).select('-__v');
   res.status(200).json({ contacts });
 });
 
@@ -16,7 +17,9 @@ exports.getById = async (req, res) => {
 };
 
 exports.addContact = async (req, res) => {
-  const newContact = await Contacts.create({ ...req.body });
+  const newContact = await Contacts.create({ ...req.body, owner: req.user.id });
+  console.log(req.user);
+
   res.status(201).json({
     contact: newContact,
   });
@@ -24,8 +27,12 @@ exports.addContact = async (req, res) => {
 
 exports.removeContact = async (req, res) => {
   const { contactId } = req.params;
+  const userId = req.user.id;
 
-  const result = await Contacts.findByIdAndDelete(contactId);
+  const result = await Contacts.findOneAndDelete({
+    _id: contactId,
+    owner: userId,
+  });
 
   if (!result)
     return res.status(404).json({
@@ -37,9 +44,10 @@ exports.removeContact = async (req, res) => {
 exports.updateContact = async (req, res) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
+  const userId = req.user.id;
 
-  const updatedContact = await Contacts.findByIdAndUpdate(
-    contactId,
+  const updatedContact = await Contacts.findOneAndUpdate(
+    { _id: contactId, owner: userId },
     {
       name,
       email,
@@ -61,7 +69,12 @@ exports.updateContact = async (req, res) => {
 
 exports.isFavoriteById = catchAsync(async (req, res) => {
   const { contactId } = req.params;
-  const isFavorite = await Contacts.findById(contactId).select('name favorite -_id ');
+  const userId = req.user.id;
+
+  const isFavorite = await Contacts.findOne({
+    _id: contactId,
+    owner: userId,
+  }).select('name favorite -_id ');
 
   if (!isFavorite)
     return res.status(404).json({
@@ -76,9 +89,10 @@ exports.isFavoriteById = catchAsync(async (req, res) => {
 exports.updateFavorite = async (req, res) => {
   const { favorite } = req.body;
   const { contactId } = req.params;
+  const userId = req.user.id;
 
-  const updatedFavorite = await Contacts.findByIdAndUpdate(
-    contactId,
+  const updatedFavorite = await Contacts.findOneAndUpdate(
+    { _id: contactId, owner: userId },
     {
       favorite: favorite,
     },

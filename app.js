@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 dotenv.config({ path: './.env' });
 
 const contactsRouter = require('./routes/api/contacts');
-
+const registerRouter = require('./routes/api/registerRoutes');
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
@@ -26,6 +26,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/users', registerRouter);
 app.use('/api/contacts', contactsRouter);
 
 app.all('*', (req, res) => {

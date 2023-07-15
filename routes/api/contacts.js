@@ -15,8 +15,10 @@ const {
   checkContactInput,
   checkFavoriteInput,
 } = require('../../middlewares/contactsMiddlewares.js');
+const { authMiddleware } = require('../../middlewares/authMiddleware.js');
 
 const router = express.Router();
+router.use(authMiddleware);
 
 router.route('/').get(getContactsList).post(checkContactInput, addContact);
 
