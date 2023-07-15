@@ -1,6 +1,5 @@
 import express from "express";
 import logger from "morgan";
-// morgan shows log in console
 import cors from "cors";
 import contactsRouter from "./routes/api/contacts-router.js";
 
