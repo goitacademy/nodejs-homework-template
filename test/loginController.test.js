@@ -19,8 +19,8 @@ describe('Login Controller', () => {
                 password: 'password123',
             },
         };
-
         res = {
+            status: jest.fn().mockReturnThis(),
             json: jest.fn(),
         };
     });
@@ -34,7 +34,7 @@ describe('Login Controller', () => {
         const mockedUser = {
             _id: 'user_id',
             email: 'test@example.com',
-            subscription: 'basic',
+            subscription: 'starter',
         };
 
         bcrypt.compare.mockResolvedValue(true);
@@ -44,8 +44,14 @@ describe('Login Controller', () => {
 
         await login(req, res);
 
+        expect(res.status).toHaveBeenCalledWith(200);
+
         expect(res.json).toHaveBeenCalledWith({
             token: mockedToken,
+            user: {
+                email: mockedUser.email,
+                subscription: expect.any(String),
+            },
         });
 
         expect(res.json).toHaveBeenCalledTimes(1);
