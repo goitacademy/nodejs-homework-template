@@ -24,7 +24,7 @@ const contactSchema = new Schema({
       },
 }, { 
   versionKey: false,
-  //  timestamps: true
+   timestamps: true
   })
 
 const addSchema = Joi.object({
