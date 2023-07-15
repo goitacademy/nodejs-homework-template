@@ -10,19 +10,19 @@ const register = async (req, res, next) => {
     if (user) {
       throw HttpError(409, "Email in use");
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
 
-    const newUser = await User.create({ ...req.body, password: hashedPassword, avatarURL, });
-    res.status(201).json({
-      user: {
-        email: newUser.email,
-        subscription: "starter",
-      },
+    const newUser = await User.create({
+      ...req.body,
+      password: hashedPassword,
+      avatarURL,
     });
+    res.status(201).json({ email: newUser.email, subscription: "starter" });
   } catch (error) {
     next(error);
   }
-  };
+};
 
 module.exports = register;
