@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const usersRegisterSchema = Joi.object({
+const usersSchema = Joi.object({
 	email: Joi.string()
 		.email({ tlds: { allow: false } })
 		.required()
@@ -14,4 +14,4 @@ const usersRegisterSchema = Joi.object({
 	}),
 });
 
-module.exports = { usersRegisterSchema };
+module.exports = { usersSchema };
