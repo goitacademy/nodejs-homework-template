@@ -1,0 +1,1 @@
+{"*.js":["node index.js lint","git add"]}
