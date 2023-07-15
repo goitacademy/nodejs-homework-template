@@ -25,8 +25,10 @@ const register = async (req, res, next) => {
 
     const newUser = await User.create({ ...req.body, password: hashPassword });
     res.status(201).json({
-      email: newUser.email,
-      password: newUser.password,
+      user: {
+        email: newUser.email,
+        subscription: "starter",
+      },
     });
   } catch (error) {
     next(error);
@@ -38,11 +40,11 @@ const login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-      throw new HttpError(401, "Email or password is invalid");
+      throw new HttpError(401, "Email or password is wrong");
     }
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-      throw new HttpError(401, "Email or password is invalid");
+      throw new HttpError(401, "Email or password is wrong");
     }
 
     const payload = {
@@ -50,8 +52,43 @@ const login = async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-    console.log(token);
-    res.json({ token });
+
+    await User.findByIdAndUpdate(user._id, { token });
+    // const message = };
+    // const j = JSON.stringify(message);
+    res.json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const current = async (req, res, next) => {
+  const { email, subscription } = req.user;
+  console.log(email, subscription);
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res, next) => {
+  const { _id } = req.user;
+
+  try {
+    const user = await User.findByIdAndUpdate(_id, { token: "" });
+
+    if (!user) {
+      throw new HttpError(401, "Not authorized");
+    }
+
+    res.status(204).json({ message: "Logout success" });
+    res.end();
   } catch (error) {
     next(error);
   }
@@ -60,4 +97,6 @@ const login = async (req, res, next) => {
 module.exports = {
   register,
   login,
+  current,
+  logout,
 };
