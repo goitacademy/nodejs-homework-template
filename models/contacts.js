@@ -41,7 +41,7 @@ const addContact = async (body) => {
   return contactAdded;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, data) => {
   // Повертає об'єкт оновленого контакту.
   const contacts = await listContacts();
   const index = contacts.findIndex(({ id }) => id === contactId);
@@ -49,7 +49,7 @@ const updateContact = async (contactId, body) => {
     return null;
   }
   const [contactFinded] = contacts.splice(index, 1);
-  const contactUpdated = { ...contactFinded, ...body };
+  const contactUpdated = { ...contactFinded, ...data };
   contacts.push(contactUpdated);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 

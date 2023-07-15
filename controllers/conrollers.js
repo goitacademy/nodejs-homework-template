@@ -11,12 +11,12 @@ const schema = Joi.object({
   phone: Joi.string().required(),
 });
 
-const listContacts = async (req, res, next) => {
+const getContacts = async (req, res) => {
   const result = await contacts.listContacts();
   res.json(result);
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const { id } = req.params;
   const contact = await contacts.getContactById(id);
   if (!contact) {
@@ -25,7 +25,7 @@ const getContactById = async (req, res, next) => {
   res.json(contact);
 };
 
-const removeContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { id } = req.params;
   const contact = await contacts.removeContact(id);
   if (!contact) {
@@ -34,7 +34,7 @@ const removeContact = async (req, res, next) => {
   res.json({ message: "contact deleted" });
 };
 
-const addContact = async (req, res, next) => {
+const postContact = async (req, res) => {
   const { error } = schema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: "missing required name field" });
@@ -43,8 +43,8 @@ const addContact = async (req, res, next) => {
   res.status(201).json(contact);
 };
 
-const updateContact = async (req, res, next) => {
-  const id = req.params;
+const putContact = async (req, res) => {
+  const { id } = req.params;
   const { error } = schema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: "missing fields" });
@@ -57,9 +57,9 @@ const updateContact = async (req, res, next) => {
 };
 
 module.exports = {
-  listContacts: ctrlWrapper(listContacts),
+  getContacts: ctrlWrapper(getContacts),
   getContactById: ctrlWrapper(getContactById),
-  removeContact: ctrlWrapper(removeContact),
-  addContact: ctrlWrapper(addContact),
-  updateContact: ctrlWrapper(updateContact),
+  deleteContact: ctrlWrapper(deleteContact),
+  postContact: ctrlWrapper(postContact),
+  putContact: ctrlWrapper(putContact),
 };

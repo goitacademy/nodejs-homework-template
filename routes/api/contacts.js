@@ -3,21 +3,21 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  listContacts,
+  getContacts,
   getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  deleteContact,
+  postContact,
+  putContact,
 } = require("../../controllers/conrollers");
 
-router.get("/", listContacts);
+router.get("/", getContacts);
 
 router.get("/:id", getContactById);
 
-router.post("/", addContact);
+router.post("/", postContact);
 
-router.delete("/:id", removeContact);
+router.delete("/:id", deleteContact);
 
-router.put("/:id", updateContact);
+router.put("/:id", putContact);
 
 module.exports = router;
