@@ -3,7 +3,8 @@ const { Contact } = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({});
+  console.log(result);
   res.status(200).json({ result });
 };
 
@@ -46,7 +47,7 @@ const updateStatus = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
-    console.log(req.body);
+  console.log(req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }

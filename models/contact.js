@@ -39,10 +39,10 @@ const updateStatusContact = Joi.object({
 
 const sсhemas = {
   addSchema,
-  updateStatusContact ,
+  updateStatusContact,
 };
 
-const Contact = model("contact", contactSchema);
+const Contact = model("contacts", contactSchema);
 
 module.exports = {
   Contact,
