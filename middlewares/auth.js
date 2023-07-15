@@ -16,6 +16,9 @@ const auth = async (req, res, next) => {
 	try {
 		const payload = jwt.verify(token, JWT_SECRET);
 		const user = await User.findById(payload.id);
+		if (token !== user.token) {
+			throw requestError(401, 'Not authorized');
+		}
 		req.user = user;
 	} catch (error) {
 		if (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError') {
