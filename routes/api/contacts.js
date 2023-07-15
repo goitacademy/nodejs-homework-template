@@ -10,14 +10,17 @@ const {
   putContact,
 } = require("../../controllers/conrollers");
 
+const { validateSchemaContact } = require("../../schemas");
+const { validateBody } = require("../../middlewares");
+
 router.get("/", getContacts);
 
 router.get("/:id", getContactById);
 
-router.post("/", postContact);
+router.post("/", validateBody(validateSchemaContact), postContact);
 
 router.delete("/:id", deleteContact);
 
-router.put("/:id", putContact);
+router.put("/:id", validateBody(validateSchemaContact), putContact);
 
 module.exports = router;
