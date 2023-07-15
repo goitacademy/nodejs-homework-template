@@ -22,7 +22,7 @@ const userSchema = new Schema(
     },
     token: String,
   },
-  { versionKeye: false } 
+  { versionKeye: false }
 );
 
 userSchema.post("save", handleMongooseError);
@@ -36,7 +36,7 @@ const registerSchema = Joi.object({
     "any.required": "Missing required email field",
   }),
 
-  subscription: Joi.string().required().messages({
+  subscription: Joi.string().messages({
     "any.required": "Missing required subscription field",
   }),
 });
@@ -48,6 +48,10 @@ const loginSchema = Joi.object({
 
   email: Joi.string().required().messages({
     "any.required": "Missing required email field",
+  }),
+
+  subscription: Joi.string().messages({
+    "any.required": "Missing required subscription field",
   }),
 });
 

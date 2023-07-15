@@ -6,6 +6,9 @@ const { User } = require("../models/user");
 
 const { HttpError } = require("../helpers");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const { SECRET_KEY } = process.env;
 
 // const SECRET_KEY = "y3nLgF4CisouJ2FP48Fi8ocsp4rMu5r3";
@@ -35,9 +38,11 @@ const register = async (req, res, next) => {
 };
 
 const login = async (req, res, next) => {
-
   try {
-    const { email, password } = req.body;
+    const { email, password, subscription =  "starter" } = req.body;
+    console.log(subscription)
+    console.log(email)
+ 
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -54,9 +59,12 @@ const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
+    // const newUser = await User.get(req.body);
+
     res.json({
       token,
       user: {
+        subscription,
         email,
       },
     });
