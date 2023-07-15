@@ -14,4 +14,11 @@ const usersSchema = Joi.object({
 	}),
 });
 
-module.exports = { usersSchema };
+const updateStatusSchema = Joi.object({
+	subscription: Joi.string().valid('starter', 'pro', 'business').required().messages({
+		'any.required': 'Subscription is required',
+		'any.only': 'The subscription field must have a value of "starter", "pro", or "business"',
+	}),
+});
+
+module.exports = { usersSchema, updateStatusSchema };
