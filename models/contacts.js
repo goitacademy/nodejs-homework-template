@@ -50,6 +50,7 @@ export const updateContact = async (contactId, body) => {
   const contactIndex = contacts.findIndex(
     (contact) => contact.id === contactId
   );
+  if (contactIndex === -1) return null;
   const updatedContact = { ...contactById, ...body };
   contacts.splice(contactIndex, 1, updatedContact);
   writeData(contacts);

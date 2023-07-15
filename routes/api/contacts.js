@@ -50,7 +50,8 @@ contactsRouter.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   try {
     const deleting = await removeContact(id);
-    if (!deleting) return res.status(404).json({ message: "Not found" });
+    if (!deleting) return HttpError(404, "Not found");
+    //  res.status(404).json({ message: "Not found" });
     return res.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
@@ -61,7 +62,7 @@ contactsRouter.put("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   try {
     const { error } = schemaUpdate.validate(req.body);
-    if (error) throw HttpError(404, "missing fields");
+    if (error) throw HttpError(400, "missing fields");
     const newContact = await updateContact(id, req.body);
     if (!newContact) throw HttpError(404, "Not found");
     return res.status(200).json(newContact);
