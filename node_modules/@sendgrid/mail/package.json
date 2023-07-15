@@ -1,0 +1,41 @@
+{
+  "name": "@sendgrid/mail",
+  "description": "Twilio SendGrid NodeJS mail service",
+  "version": "7.7.0",
+  "author": "Twilio SendGrid <help@twilio.com> (sendgrid.com)",
+  "contributors": [
+    "Kyle Partridge <kyle.partridge@sendgrid.com>",
+    "David Tomberlin <david.tomberlin@sendgrid.com>",
+    "Swift <swift@sendgrid.com>",
+    "Brandon West <brandon.west@sendgrid.com>",
+    "Scott Motte <scott.motte@sendgrid.com>",
+    "Robert Acosta <robert.acosta@sendgrid.com>",
+    "Elmer Thomas <ethomas@twilio.com>",
+    "Adam Reis <adam@reis.nz>"
+  ],
+  "license": "MIT",
+  "homepage": "https://sendgrid.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sendgrid/sendgrid-nodejs.git"
+  },
+  "main": "index.js",
+  "engines": {
+    "node": "6.* || 8.* || >=10.*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@sendgrid/client": "^7.7.0",
+    "@sendgrid/helpers": "^7.7.0"
+  },
+  "tags": [
+    "http",
+    "rest",
+    "api",
+    "mail",
+    "sendgrid"
+  ],
+  "gitHead": "30eebb16a51b51e6a2df1b3596044db6f5fdbe92"
+}
