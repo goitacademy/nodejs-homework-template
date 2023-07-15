@@ -6,7 +6,7 @@ import ctrlWrapper from "./ctrlWrapper.js";
 // get all contacts
 const getAll = async (req, res) => {
   const contacts = await listContacts();
-  res.json(contacts).status(200);
+  res.status(200).json(contacts);
 };
 
 //get contact by id
@@ -16,7 +16,7 @@ const getById = async (req, res) => {
   const contact = await getContactById(contactId);
   if (!contact) throw HttpError(404, "Not Found");
 
-  res.json(contact).status(200);
+  res.status(200).json(contact);
 };
 
 //add contact
@@ -43,7 +43,7 @@ const deleteContact = async (req, res) => {
   const deletedContact = await removeContact(contactId);
   if (!deletedContact) throw HttpError(404, "Not Found");
 
-  res.json({ message: "contact deleted" }).status(200);
+  res.status(200).json({ message: "contact deleted" });
 };
 
 //decotations of all methods
