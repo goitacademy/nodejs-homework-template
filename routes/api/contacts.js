@@ -1,38 +1,35 @@
 import express from "express";
+import HttpError from "../../helpers/HttpError.js";
 
 import contactsService from "../../models/contacts.js";
 
-const contactsRouter = express.Router()
+const contactsRouter = express.Router();
 
-contactsRouter.get('/', async (req, res, next) => {
+contactsRouter.get("/", async (req, res, next) => {
   try {
     const result = await contactsService.listContacts();
-  res.json(result);
+    res.json(result);
   } catch (error) {
-    res.status(500).json({message: "Server error"})
+    next(error);
   }
-})
+});
 
-contactsRouter.get('/:id', async (req, res, next) => {
+contactsRouter.get("/:id", async (req, res, next) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const result = await contactsService.getContactById(id);
-    if(!result) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
+    if (!result) {
+      throw HttpError(404);
     }
-    res.json(result)
+    res.json(result);
   } catch (error) {
-    const {status = 500, message = "Server error" } = error;
-
-    res.status(status).json({message,})
+    next(error);
   }
-})
+});
 
-// contactsRouter.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+contactsRouter.post('/', async (req, res, next) => {
+  res.json({ message: 'template message' })
+})
 
 // contactsRouter.delete('/:contactId', async (req, res, next) => {
 //   res.json({ message: 'template message' })
