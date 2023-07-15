@@ -1,11 +1,8 @@
 import Joi from "joi";
 
 export const nameSchema = Joi.string()
-  .pattern(
-    new RegExp(
-      "^\\s*[A-ZА-Я\\u0406ЇЄa-zа-яіїє]{2,}(\\s+[A-ZА-Я\\u0406ЇЄa-zа-яіїє]{2,})?\\s*$"
-    )
-  )
+  .pattern(/^[\p{L}A-Za-z\s'-]+$/u)
+  .min(2)
   .required();
 export const emailSchema = Joi.string()
   .email({
