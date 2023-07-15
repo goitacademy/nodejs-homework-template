@@ -23,7 +23,7 @@ const getById = async (req, res) => {
 const AddContact = async (req, res) => {
   const addedContact = await addContact(req.body);
 
-  res.json(addedContact).status(201);
+  res.status(201).json(addedContact);
 };
 
 //update contact id
@@ -33,7 +33,7 @@ const modifyContact = async (req, res) => {
   const updatedContact = await updateContact(params.contactId, body);
   if (!updatedContact) throw HttpError(404, "Not found");
 
-  res.json(updatedContact).status(200);
+  res.status(200).json(updatedContact);
 };
 
 //delete contact by id
