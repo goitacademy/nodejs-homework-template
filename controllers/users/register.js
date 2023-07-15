@@ -7,14 +7,16 @@ const register = async (req, res, next) => {
 	const salt = await bcrypt.genSalt();
 	const hashedPassword = await bcrypt.hash(password, salt);
 
-	const result = User.create({
+	const result = await User.create({
 		email,
 		password: hashedPassword,
 	});
 
 	res.status(201).json({
-		id: result._id,
-		email,
+		user: {
+			email,
+			subscription: result.subscription,
+		},
 	});
 };
 

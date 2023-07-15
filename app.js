@@ -21,12 +21,11 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-	console.log('err', err);
 	if (err.name === 'ValidationError') {
 		return res.stayus(400).json({ message: err.message });
 	}
 	if (err.message.includes('duplicate key error collection')) {
-		return res.status(409).json({ message: 'Already exist' });
+		return res.status(409).json({ message: 'Email in use' });
 	}
 	const { status = 500, message = 'Server error' } = err;
 	res.status(status).json({ message });
