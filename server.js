@@ -2,8 +2,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 const app = require(path.join(__dirname, 'app'));
 
-// const { DB_HOST, PORT } = process.env;
-const { DB_HOST, PORT } = require("./config.js");
+const { DB_HOST, PORT } = process.env;
+// const { DB_HOST, PORT } = require("./config.js");
 
 // mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', true);
