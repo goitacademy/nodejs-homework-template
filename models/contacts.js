@@ -54,7 +54,7 @@ const removeContact = async (id) => {
 
 }
 
-const updateContact  = async (id, name, email, phone) => {
+const updateContact  = async (id, {name, email, phone}) => {
     // ...твій код. Змінює об'єкт  контакту. Повертає null, якщо контакт з таким id не знайдений.
     const data = await listContacts()
     const index = data.findIndex(item => item.id === id);
