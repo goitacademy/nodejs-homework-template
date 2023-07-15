@@ -1,20 +1,21 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const {mongooseError} = require("../helpers")
-// const uniqueValidator = require("mongoose-unique-validator");
 
 const contactSchema = new Schema({
     name: {
         type: String,
+        unique: true,
         required: [true, 'Set name for contact'],
       },
       email: {
         type: String,
-        // unique: true,
+        unique: true,
         required: true,
       },
       phone: {
         type: String,
+        unique: true,
         required: true,
       },
       favorite: {
@@ -68,9 +69,11 @@ const addSchema = Joi.object({
 
 contactSchema.post("save", mongooseError )
 
-const Contact = model("contact", contactSchema);
+contactSchema.index({ name: 1 }, { unique: true });
+contactSchema.index({ email: 1 }, { unique: true });
+contactSchema.index({ phone: 1 }, { unique: true });
 
-// contactSchema.plugin(uniqueValidator, { message: "The {PATH} '{VALUE}' already exists." });
+const Contact = model("contact", contactSchema);
 
 const schemas = {
   addSchema,
