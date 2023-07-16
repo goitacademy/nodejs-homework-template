@@ -14,10 +14,9 @@ const getListContacts = async (req, res, next) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 20, favorite = null } = req.query;
   const skip = (page - 1) * limit;
-  console.log(`req.query::::::`, req.query);
+
   if (favorite) {
     try {
-      console.log(`favorite`);
       const result = await getContactsByFavoriteService(owner, " ", {
         skip,
         limit,
@@ -71,7 +70,7 @@ const createContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    console.log("contactId:", contactId);
+
     const { error } = addSchema.validate(req.body);
 
     if (error) {
@@ -125,23 +124,6 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-const getContactsByFavorite = async (req, res, next) => {
-  console.log(`getContactsByFavorite - UPY`);
-
-  const { _id: owner } = req.user;
-  console.log(`req.query:`, req.query);
-  // const { favorite = true } = req.query;
-  // const skip = (page - 1) * limit;
-
-  try {
-    const result = await listContactsService(owner, " ", { skip, limit });
-
-    res.json(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
-
 module.exports = {
   getListContacts,
   getContactById,
@@ -149,5 +131,4 @@ module.exports = {
   createContact,
   updateContact,
   updateStatusContact,
-  getContactsByFavorite,
 };

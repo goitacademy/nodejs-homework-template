@@ -9,7 +9,6 @@ const {
   createContact,
   updateContact,
   updateStatusContact,
-  // getContactsByFavorite,
 } = require("../../controllers/contactsControllers");
 
 router
@@ -21,8 +20,6 @@ router
   .get(authenticate, getContactById)
   .delete(authenticate, deleteContact)
   .put(authenticate, updateContact);
-
-// router.route("?favorite=true").get(authenticate, getContactsByFavorite);
 
 router.route("/:contactId/favorite").patch(updateStatusContact);
 
