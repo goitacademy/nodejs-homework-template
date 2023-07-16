@@ -3,10 +3,12 @@ const {ctrlWrapper} = require("../../helpers");
 
 const listContacts = async (req, res) => {
     const {_id: owner} = req.user;
-    const {page = 1, limit = 10} = req.query; 
+    const {page = 1, limit = 20, favorite} = req.query; 
     const skip = (page - 1) * limit;
-    const result = await Contact.find({owner}, {skip, limit}).populate("owner", "email");
+    const query = favorite !== undefined ? {owner, favorite} : {owner};
+
+    const result = await Contact.find(query, null, {skip, limit}).populate("owner", "email");
     res.json(result);
 }
 
-module.exports = ctrlWrapper(listContacts)
+module.exports = ctrlWrapper(listContacts);
