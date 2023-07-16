@@ -6,8 +6,6 @@ import {validateBody} from "../../decorators/index.js";
 
 const contactsRouter = express.Router();
 
-
-
 contactsRouter.get('/', contactControllers.getAll)
 
 contactsRouter.get('/:id', contactControllers.getById)
