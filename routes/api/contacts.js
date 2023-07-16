@@ -4,6 +4,7 @@ const {
   ctrlAddContact,
   ctrlGetContactById,
   ctrlRemoveContact,
+  ctrlUpdateContact,
 } = require('../../controllers/ctrlContacts');
 
 const router = express.Router();
@@ -16,8 +17,6 @@ router.get('/:contactId', ctrlGetContactById);
 
 router.delete('/:contactId', ctrlRemoveContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
-});
+router.put('/:contactId', ctrlUpdateContact);
 
 module.exports = router;

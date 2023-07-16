@@ -32,9 +32,19 @@ const removeContact = async (req, res) => {
   res.status(204).json();
 };
 
+const updateContact = async (req, res) => {
+  const { contactId } = req.params;
+  const body = req.body;
+
+  const result = await modelsContacts.updateContact(contactId, body);
+
+  res.status(202).json(result);
+};
+
 module.exports = {
   ctrlListContacts: ctrlWrapper(listContacts),
   ctrlAddContact: ctrlWrapper(addContact),
   ctrlGetContactById: ctrlWrapper(getContactById),
   ctrlRemoveContact: ctrlWrapper(removeContact),
+  ctrlUpdateContact: ctrlWrapper(updateContact),
 };
