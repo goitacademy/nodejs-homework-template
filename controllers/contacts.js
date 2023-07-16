@@ -1,8 +1,14 @@
-const contactsService = require('../models/contacts')
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require('../models/contacts')
 const { HttpError } = require('../helpers');
 const Joi = require('joi');
  
-const contactAddSchema = Joi.object({
+const contactSchema = Joi.object({
 	name: Joi.string().required().messages({
 		"any.required" : "missing required name field"
 	}),
@@ -14,9 +20,9 @@ const contactAddSchema = Joi.object({
 	}),
 })
 
-const getAllContacts = async (req, res, next) => {
+const getAllContactsCtrl = async (req, res, next) => {
 	try {
-		const contacts = await contactsService.listContacts();
+		const contacts = await listContacts();
 		
 		res.json(contacts);
 	} catch (error) {
@@ -24,10 +30,10 @@ const getAllContacts = async (req, res, next) => {
 	}
 };
 
-const getContactById = async (req, res, next) => {
+const getContactByIdCtrl = async (req, res, next) => {
 	try {
 		const { id } = req.params;
-		const contact = await contactsService.getContactById(id);
+		const contact = await getContactById(id);
 
 		if (!contact) throw HttpError(404, `Not found`)
 		res.json(contact);
@@ -37,12 +43,12 @@ const getContactById = async (req, res, next) => {
 	}
 }
 
-const addContact = async (req, res, next) => {
+const addContactCtrl = async (req, res, next) => {
 	try {
-		const { error } = contactAddSchema.validate(req.body)
+		const { error } = contactSchema.validate(req.body)
 		if(error) throw HttpError(400, error.message)
 
-		const result = await contactsService.addContact(req.body)
+		const result = await addContact(req.body)
 		res.status(201).json(result)
 	}
 	catch (error) {
@@ -50,17 +56,17 @@ const addContact = async (req, res, next) => {
 	}
 }
 
-const updateContact = async (req, res, next) => {
+const updateContactCtrl = async (req, res, next) => {
 	try {
 		const { name, email, phone } = req.body;
 		if(!name && !email && !phone) throw HttpError(400, "missing fields")
 		
-		const { error } = contactAddSchema.validate(req.body)
+		const { error } = contactSchema.validate(req.body)
 		if (error) throw HttpError(400, error.message)
 		
 		const { id } = req.params;
 		
-		const contact = await contactsService.updateContact(id, req.body)
+		const contact = await updateContact(id, req.body)
 
 		
 		if (!contact) throw HttpError(404, `Not found`)
@@ -71,11 +77,11 @@ const updateContact = async (req, res, next) => {
  }
 }
 
-const deleteContact = async (req, res, next) => {
+const deleteContactCtrl = async (req, res, next) => {
  try {
 	 const { id } = req.params;
 
-	 const contact = await contactsService.removeContact(id)
+	 const contact = await removeContact(id)
 	 if (!contact) throw HttpError(404, `Not found`)
 		res.json({"message": "contact deleted"});
  }
@@ -85,9 +91,9 @@ const deleteContact = async (req, res, next) => {
 }
 
 module.exports = {
-	getAllContacts,
-	getContactById,
-		addContact,
-	updateContact,
-	deleteContact,
+	getAllContactsCtrl,
+	getContactByIdCtrl,
+	addContactCtrl,
+	updateContactCtrl,
+	deleteContactCtrl,
 }
