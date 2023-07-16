@@ -14,4 +14,6 @@
 - У коді немає закоментуваних ділянок коду.
 - Проект коректно працює з актуальною LTS-версією Node.
 
-#### [hw02-express](hw02-express.md)
+## [hw02-express](hw02-express.md)
+
+## [hw03-mongodb](hw03-mongodb.md)
