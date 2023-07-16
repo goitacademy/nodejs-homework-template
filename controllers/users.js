@@ -68,17 +68,18 @@ const login = async (req, res, next) => {
   }
 };
 
-// const getCurrent = async (req, res, next) => {
-//   try {
-
-//     res.json({
-//       email,
-//       subscription,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const getCurrent = async (req, res, next) => {
+  try {
+    const { email, subscription } = req.user;
+    
+    res.json({
+      email,
+      subscription,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const logout = async (req, res, next) => {
   try {
@@ -95,6 +96,6 @@ const logout = async (req, res, next) => {
 module.exports = {
   register,
   login,
-  // getCurrent,
+  getCurrent,
   logout,
 };
