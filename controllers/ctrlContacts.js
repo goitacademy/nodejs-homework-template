@@ -20,7 +20,14 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 
+const getContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await modelsContacts.getContactById(contactId);
+  res.status(200).json(result);
+};
+
 module.exports = {
   ctrlListContacts: ctrlWrapper(listContacts),
   ctrlAddContact: ctrlWrapper(addContact),
+  ctrlGetContactById: ctrlWrapper(getContactById),
 };

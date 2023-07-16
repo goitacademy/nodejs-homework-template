@@ -23,7 +23,12 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const data = await listContacts();
+  const [contact] = data.filter((item) => item.id === contactId);
+  console.log('[contact]', contact);
+  return contact;
+};
 
 const removeContact = async (contactId) => {};
 
