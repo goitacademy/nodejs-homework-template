@@ -69,9 +69,10 @@ const login = async (req, res, next) => {
 };
 
 const getCurrent = async (req, res, next) => {
+
+  const { subscription, email } = req.user;
+
   try {
-    const { email, subscription } = req.user;
-    
     res.json({
       email,
       subscription,
@@ -83,9 +84,9 @@ const getCurrent = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    const { _conditions } = req.user;
+    const { _id } = req.user;
 
-    await User.findByIdAndUpdate(_conditions, { token: "" });
+    await User.findByIdAndUpdate(_id, { token: "" });
 
     res.status(204).json();
   } catch (error) {
