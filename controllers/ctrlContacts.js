@@ -15,16 +15,12 @@ const listContacts = async (req, res) => {
   res.status(200).json(result);
 };
 
-/**
- *
- *@ GET /api/contacts/:id
- * Не отримує body
- * Отримує параметр id
- * викликає функцію getById для роботи з json-файлом contacts.json
- * якщо такий id є, повертає об'єкт контакту в json-форматі зі статусом 200
- * якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404
- */
+const addContact = async (req, res) => {
+  const result = await modelsContacts.addContact(req.body);
+  res.status(201).json(result);
+};
 
 module.exports = {
   ctrlListContacts: ctrlWrapper(listContacts),
+  ctrlAddContact: ctrlWrapper(addContact),
 };

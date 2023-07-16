@@ -1,15 +1,13 @@
 const express = require('express');
-const { ctrlListContacts } = require('../../controllers/ctrlContacts');
+const { ctrlListContacts, ctrlAddContact } = require('../../controllers/ctrlContacts');
 
 const router = express.Router();
 
 router.get('/', ctrlListContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
-});
+router.post('/', ctrlAddContact);
 
-router.post('/', async (req, res, next) => {
+router.get('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' });
 });
 
