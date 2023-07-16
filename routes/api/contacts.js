@@ -1,18 +1,18 @@
-const express = require("express");
+import express from "express";
 
-const Joi = require("joi");
+import Joi from "joi";
 
-const router = express.Router();
-
-const {
+import {
   listContacts,
   getById,
   removeContact,
   addContact,
   updateContact,
-} = require("../../models/contacts");
+} from "../../models/contacts.js";
 
-const HttpError = require("../../helpers/HttpErrors");
+import HttpError from "../../helpers/HttpErrors.js";
+
+const router = express.Router();
 
 const schema = Joi.object({
   name: Joi.string()
@@ -93,4 +93,4 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;
