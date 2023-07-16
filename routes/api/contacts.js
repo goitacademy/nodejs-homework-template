@@ -10,7 +10,7 @@ import {
   updateContact,
 } from "../../models/contacts.js";
 
-import HttpError from "../../helpers/HttpErrors.js";
+import { HttpError } from "../../helpers/index.js";
 
 const router = express.Router();
 
@@ -76,11 +76,15 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    if (JSON.stringify(req.body) === "{}") {
+      throw HttpError(400, "missing fields");
+    }
     const { error } = schema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
+
     const result = await updateContact(contactId, req.body);
 
     if (!result) {
