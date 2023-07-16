@@ -1,42 +1,35 @@
 const Joi = require("joi");
 const path = require("path");
 const { httpError, ctrlWrapper } = require("../helpers");
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
-} = require(path.resolve(__dirname, "../models/contacts"));
+const { Contact } = require(path.resolve(__dirname, "../models/contact"));
 
 const getAll = async (req, res) => {
-  const contacts = await listContacts();
-  if (!contacts) {
+  const result = await Contact.find({});
+
+  if (!result) {
     throw httpError(404, "Not found");
   }
-  res.status(200).json(contacts);
+  res.status(200).json(result);
 };
 
 const getById = async (req, res) => {
-  const contactId = req.params.contactId; // Получаем значение contactId из параметров запроса
-  const contactById = await getContactById(contactId);
-  if (!contactById) {
+  const contactId = req.params.contactId; 
+  const result = await Contact.findById({ _id: contactId });
+  if (!result) {
     throw httpError(404, "Not found");
   }
-  res.status(200).json(contactById);
+  res.status(200).json(result);
 };
 
 const add = async (req, res) => {
-  const { name, email, phone } = req.body; // Извлекаем данные из тела запроса
-  // console.log(req.body)
-  const newContact = await addContact({ name, email, phone }); // Передаем параметр contact
-
-  res.status(201).json(newContact);
+  console.log("req.body", req.body);
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
 };
 
 const deleteById = async (req, res) => {
   const contactId = req.params.contactId; // Получаем значение contactId из параметров запроса
-  const removedById = await removeContact(contactId);
+  const removedById = await Contact.findByIdAndDelete(contactId);
 
   if (!removedById) {
     throw httpError(404, "Not found");
@@ -47,17 +40,27 @@ const deleteById = async (req, res) => {
 };
 
 const updateContactById = async (req, res) => {
-  const contactId = req.params.contactId; // Получаем значение contactId из параметров запроса
-  const { name, email, phone } = req.body; // Извлекаем данные из тела запроса
+  const contactId = req.params.contactId;
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: contactId }, req.body, { new: true });
 
-  const newContact = { name, email, phone }; // Создаем объект newContact
-
-  const updatedContact = await updateContact(contactId, newContact); // Передаем параметры contactId и newContact
   if (!updatedContact) {
     throw httpError(404, "Not found");
   }
 
   res.json(updatedContact);
+};
+
+const updateFavorite = async (req, res) => {
+  const contactId = req.params.contactId;
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId }, req.body, { new: true });
+
+  if (!result) {
+    throw httpError(404, "Not found");
+  }
+
+  res.json(result);
 };
 
 module.exports = {
@@ -66,4 +69,5 @@ module.exports = {
   add: ctrlWrapper(add),
   deleteById: ctrlWrapper(deleteById),
   updateContactById: ctrlWrapper(updateContactById),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
