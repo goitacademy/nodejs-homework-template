@@ -46,9 +46,21 @@ contactsRouter.post('/', async (req, res, next) => {
   };
 })
 
-// contactsRouter.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+contactsRouter.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsService.removeContact(id);
+
+    if (!result) {
+      throw HttpError(404);
+    }
+
+    res.json({message: "contact deleted"})
+  } catch (error) {
+    next(error)
+  }
+
+})
 
 contactsRouter.put('/:id', async (req, res, next) => {
  try {
