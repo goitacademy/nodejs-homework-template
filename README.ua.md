@@ -36,7 +36,7 @@ REST API повинен підтримувати такі раути.
 - викликає функцію `listContacts` для роботи з json-файлом `contacts.json`
 - повертає масив всіх контактів в json-форматі зі статусом `200`
 
-### @ GET /api/contacts/:id
+### @ GET /api/contacts/:contactId
 
 - Не отримує `body`
 - Отримує параметр `id`
@@ -52,7 +52,7 @@ REST API повинен підтримувати такі раути.
 - Викликає функцію `addContact(body)` для збереження контакту в файлі `contacts.json`
 - За результатом роботи функції повертає об'єкт з доданим `id` `{id, name, email, phone}` і статусом `201`
 
-### @ DELETE /api/contacts/:id
+### @ DELETE /api/contacts/:contactId
 
 - Не отримує `body`
 - Отримує параметр `id`
@@ -60,7 +60,7 @@ REST API повинен підтримувати такі раути.
 - якщо такий `id` є, повертає json формату `{"message": "contact deleted"}` і статусом `200`
 - якщо такого `id` немає, повертає json з ключем `"message": "Not found"` і статусом `404`
 
-### @ PUT /api/contacts/:id
+### @ PUT /api/contacts/:contactId
 
 - Отримує параметр `id`
 - Отримує `body` в json-форматі з оновленням будь-яких полів `name, email и phone`

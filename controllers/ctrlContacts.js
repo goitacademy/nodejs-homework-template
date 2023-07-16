@@ -4,17 +4,13 @@ const modelsContacts = require('../models/contacts');
 const { ctrlWrapper, HttpError } = require('../utils');
 
 const objectSchema = Joi.object({
-  name: Joi.string().min(3).required(),
-  email: Joi.string.email().require(),
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
   phone: Joi.string().required(),
 });
 
 /**
  * @ GET /api/contacts
- * нічого не отримує
- * викликає функцію listContacts для роботи з json-файлом contacts.json
- * повертає масив всіх контактів в json-форматі зі статусом 200
- *
  * @param {*} req
  * @param {*} res
  */
@@ -23,9 +19,15 @@ const listContacts = async (req, res) => {
   res.status(200).json(result);
 };
 
+/**
+ * @ POST /api/contacts
+ * @param {*} req
+ * @param {*} res
+ */
 const addContact = async (req, res) => {
   const { error } = objectSchema.validate(req.body);
-
+  // const missedProperty = error.details[0].context.key;
+  // console.log('------------->>>>>>>>>>>', error.details[0].context.key);
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -35,17 +37,28 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 
+/**
+ * @ GET /api/contacts/:contactId
+ * @param {*} req
+ * @param {*} res
+ */
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
 
-  if (!contactId) {
+  const result = await modelsContacts.getContactById(contactId);
+
+  if (!result) {
     throw HttpError(404, 'Not found');
   }
 
-  const result = await modelsContacts.getContactById(contactId);
   res.status(200).json(result);
 };
 
+/**
+ * @ DELETE /api/contacts/:contactId
+ * @param {*} req
+ * @param {*} res
+ */
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
 
@@ -54,9 +67,14 @@ const removeContact = async (req, res) => {
   }
 
   await modelsContacts.removeContact(contactId);
-  res.status(204).json();
+  res.json({ message: 'Contact deleted' });
 };
 
+/**
+ * @ PUT /api/contacts/:contactId
+ * @param {*} req
+ * @param {*} res
+ */
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const body = req.body;
