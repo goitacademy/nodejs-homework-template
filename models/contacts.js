@@ -47,6 +47,7 @@ export const updateContact = async (contactId, { name, phone, email }) => {
   const contactIndex = contacts.findIndex(
     (contact) => contact.id === contactId
   );
+  if (contactIndex === -1) return null;
   contacts[contactIndex] = { id: contactId, name, phone, email };
   writeData(contacts);
   return contacts[contactIndex];
