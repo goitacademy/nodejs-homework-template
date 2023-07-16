@@ -26,8 +26,7 @@ const listContacts = async (req, res) => {
  */
 const addContact = async (req, res) => {
   const { error } = objectSchema.validate(req.body);
-  // const missedProperty = error.details[0].context.key;
-  // console.log('------------->>>>>>>>>>>', error.details[0].context.key);
+
   if (error) {
     throw HttpError(400, error.message);
   }
