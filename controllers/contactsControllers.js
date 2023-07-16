@@ -7,25 +7,35 @@ const {
   removeContactService,
   addContactService,
   updateContactService,
+  getContactsByFavoriteService,
 } = require("../services/contactsServices");
 
 const getListContacts = async (req, res, next) => {
-  // const { _id: owner } = req.user;
-  // const { page = 1, limit = 5 } = req.query;
-  // const skip = (page - 1) * limit;
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite = null } = req.query;
+  const skip = (page - 1) * limit;
+  console.log(`req.query::::::`, req.query);
+  if (favorite) {
+    try {
+      console.log(`favorite`);
+      const result = await getContactsByFavoriteService(owner, " ", {
+        skip,
+        limit,
+        favorite,
+      });
 
-  try {
-    const result = await listContactsService();
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  } else
+    try {
+      const result = await listContactsService(owner, " ", { skip, limit });
 
-    // const result = await Contact.find ({ owner }, " ", { skip, limit }).populate(
-    //   "owner",
-    //   "email"
-    // );
-
-    res.json(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
+      res.json(result);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
 };
 
 const getContactById = async (req, res, next) => {
@@ -33,7 +43,7 @@ const getContactById = async (req, res, next) => {
     const { contactId } = req.params;
 
     const result = await getContactByIdService(contactId);
-    // const result = await Contact.findById(contactId);
+
     if (!result) {
       throw new HttpError(404, "Contact not found");
     }
@@ -51,7 +61,6 @@ const createContact = async (req, res, next) => {
       throw new HttpError(400, error.message);
     }
     const result = await addContactService({ ...req.body, owner });
-    // const result = await Contact.create({ ...req.body, owner });
 
     res.status(201).json(result);
   } catch (err) {
@@ -62,6 +71,7 @@ const createContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    console.log("contactId:", contactId);
     const { error } = addSchema.validate(req.body);
 
     if (error) {
@@ -69,9 +79,6 @@ const updateContact = async (req, res, next) => {
     }
 
     const result = await updateContactService(contactId, req.body);
-    // const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    //   new: true,
-    // });
 
     if (!result) {
       throw new HttpError(404, "Not found");
@@ -92,9 +99,7 @@ const updateStatusContact = async (req, res, next) => {
     }
 
     const result = await updateContactService(contactId, req.body);
-    // const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    //   new: true,
-    // });
+
     if (!result) {
       throw new HttpError(404, "Not found");
     }
@@ -109,7 +114,6 @@ const deleteContact = async (req, res, next) => {
     const { contactId } = req.params;
 
     const result = await removeContactService(contactId);
-    // const result = await Contact.findByIdAndDelete(contactId);
 
     if (!result) {
       throw new HttpError(404, "Not found");
@@ -121,6 +125,23 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
+const getContactsByFavorite = async (req, res, next) => {
+  console.log(`getContactsByFavorite - UPY`);
+
+  const { _id: owner } = req.user;
+  console.log(`req.query:`, req.query);
+  // const { favorite = true } = req.query;
+  // const skip = (page - 1) * limit;
+
+  try {
+    const result = await listContactsService(owner, " ", { skip, limit });
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getListContacts,
   getContactById,
@@ -128,4 +149,5 @@ module.exports = {
   createContact,
   updateContact,
   updateStatusContact,
+  getContactsByFavorite,
 };

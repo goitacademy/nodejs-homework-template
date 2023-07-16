@@ -1,7 +1,22 @@
 const { Contact } = require("../models/contact");
 
-const listContactsService = async () => {
-  return await Contact.find();
+const listContactsService = async (owner, keys, queryParams) => {
+  return await Contact.find({ owner }, keys, queryParams).populate(
+    "owner",
+    "email"
+  );
+};
+
+const getContactsByFavoriteService = async (
+  owner,
+  keys,
+  { skip, limit, favorite }
+) => {
+  return await Contact.find({ owner, favorite }, keys, {
+    skip,
+    limit,
+    favorite,
+  }).populate("owner", "email");
 };
 
 const getContactByIdService = async (contactId) => {
@@ -13,7 +28,9 @@ const addContactService = async (body) => {
 };
 
 const updateContactService = async (contactId, body) => {
-  return await Contact.findByIdAndUpdate(contactId, body);
+  return await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
 };
 
 const removeContactService = async (contactId) => {
@@ -28,4 +45,5 @@ module.exports = {
   removeContactService,
   addContactService,
   updateContactService,
+  getContactsByFavoriteService,
 };

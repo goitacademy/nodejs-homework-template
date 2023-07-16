@@ -6,9 +6,3 @@ class HttpError extends Error {
 }
 
 module.exports = HttpError;
-
-// const HttpError = (status, message) => {
-//   const err = new Error(message);
-//   err.status = status;
-//   return err;
-// };
