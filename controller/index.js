@@ -1,6 +1,10 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const gravatar = require("gravatar");
 require('dotenv').config();
+const path = require('path');
+const fs = require('fs/promises');
+const Jimp = require("jimp");
 
 const { SECRET_KEY } = process.env;
 
@@ -17,6 +21,8 @@ const {joiValidation, updateFavoriteSchemas} = require('../models/schemas/contac
 const { User, joiValidationRegister, joiValidationLogin } = require("../models/schemas/user");
 
 const { createAcc, loginAcc } = require("../models/users");
+
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const get = async (req, res, next) => {
   try {
@@ -144,7 +150,6 @@ const create = async (req, res, next) => {
     
     const { _id: owner } = req.user;
     const result = await addContact({ ...req.body, owner });
-    console.log(result);
     res.status(201).json(result);
 
   } catch (error) {
@@ -179,6 +184,8 @@ const register = async (req, res) => {
 
     const newUser = await createAcc(req.body);
     newUser.setPassword(password)
+    const avatar = gravatar.url(email);
+    newUser.avatarURL = avatar;
     await newUser.save()
 
     res.status(201).json({
@@ -268,6 +275,22 @@ const logout = async (req, res) => {
     email,
     subscription,
   });
+};
+
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const uniqueFilename = `${_id}-${originalname}`;
+  const resultUpload = path.join(avatarsDir, uniqueFilename);
+  await fs.rename(tempUpload, resultUpload);
+  const avatar = await Jimp.read(resultUpload);
+  await avatar.resize(250, 250).write(resultUpload);
+  const avatarURL = path.join("avatars", uniqueFilename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  
+  res.status(200).json({
+    avatarURL
+  })
 }
 
 module.exports = {
@@ -280,5 +303,6 @@ module.exports = {
   register,
   login,
   getCurrent,
-  logout
+  logout,
+  updateAvatar
 };

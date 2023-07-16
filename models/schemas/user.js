@@ -19,8 +19,9 @@ const userSchema = new Schema({
   },
   token: {
     type: String,
-    default: ""
+    default: "",
   },
+  avatarURL: String,
 });
 
 const joiValidationRegister = Joi.object({
