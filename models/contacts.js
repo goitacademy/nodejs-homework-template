@@ -71,24 +71,21 @@ const updateContact = async (contactId, body) => {
 
 const updateStatusContact = async (contactId, body) => {
   try {
-    // Проверяем, присутствует ли поле 'favorite' в теле запроса
+    
     if (!body.favorite) {
       throw new Error("Отсутствует поле 'favorite'");
     }
 
-    // Находим контакт по идентификатору и обновляем поле 'favorite'
     const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
       { favorite: body.favorite },
       { new: true }
     );
 
-    // Если контакт обновлен успешно, возвращаем обновленный объект контакта
     if (updatedContact) {
       return updatedContact;
     }
 
-    // Если контакт не найден, выбрасываем ошибку
     throw new Error("Контакт не найден");
   } catch (error) {
     console.error(error);
