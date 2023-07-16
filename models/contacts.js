@@ -55,11 +55,11 @@ const updateFavoriteSchema = Joi.object({
   }),
 });
 
-const Contact = model("contact", contactSchema);
+const Contacts = model("contact", contactSchema);
 
 const schemas = {
   addschema,
   updateFavoriteSchema,
 };
 
-module.exports = { Contact, schemas };
+module.exports = { Contacts, schemas };
