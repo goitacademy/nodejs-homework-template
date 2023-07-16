@@ -16,11 +16,21 @@ router.post(
   authController.signup
 );
 
+router.get("/verfy/:verificationToken", authController.verify);
+
+router.post(
+  "/verify",
+  validateBody(schemas.userEmailSchema),
+  authController.resendVerify
+);
+
 router.post(
   "/login",
   validateBody(schemas.userRegisterSchema),
   authController.signin
 );
+
+
 
 router.get("/current", authenticate, authController.getCurrent);
 
