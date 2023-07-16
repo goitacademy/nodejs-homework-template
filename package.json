@@ -2,7 +2,7 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
-  "engines": { 
+  "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
@@ -28,5 +28,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
+  },
+  "dependencies": {
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.8"
   }
 }

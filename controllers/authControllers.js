@@ -1,11 +1,18 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const fs = require("fs/promises");
+const path = require("path");
+
 
 const User = require("../models/user");
 
 const { HttpError } = require("../helpers");
 
 const { ctrlWrapper } = require("../decorators");
+
+const avatarsDir = path.resolve("public", "avatars");
 
 const { SECRET_KEY } = process.env;
 
@@ -16,9 +23,10 @@ const signup = async (req, res) => {
     throw HttpError(409, "Email already in use");
   }
 
+  const avatarURL = gravatar.url(email);
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
   res.status(201).json({
     user: {
@@ -70,9 +78,42 @@ const logout = async (req, res) => {
   res.status(204).json({});
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id: id } = req.user;
+  if (!req.file) {
+    throw HttpError(401, "Not authorized");
+  }
+
+
+  const { path: oldPath, filename } = req.file;
+
+  const image = await Jimp.read(oldPath);
+  await image.resize(250, 250).write(oldPath);
+
+  Jimp.read(oldPath)
+    .then((image) => {
+      return image.resize(250, 250).write(oldPath);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  
+  const newPath = path.join(avatarsDir, filename);
+
+  await fs.rename(oldPath, newPath);
+  const avatarURL = path.join("avatars", filename);
+
+  await User.findByIdAndUpdate(id, { avatarURL });
+
+    res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
