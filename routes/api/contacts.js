@@ -6,9 +6,9 @@ const router = express.Router()
 
 const contactAddSchema = Joi.object({
     name: Joi.string().required().messages({
-        "any.required": `missing required name field`,
+        "any.required": `missing required "name" field`,
     }),
-  email: Joi.string().required(),
+    email: Joi.string().required(),
     phone: Joi.string().required(),
 })
 
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
  try {
-        const { error } = contactAddSchema.validate(req.body);
+   const { error } = contactAddSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
         }
