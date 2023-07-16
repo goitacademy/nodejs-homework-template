@@ -23,12 +23,10 @@ app.use((req, res) => {
 	});
 });
 
-app.use((err, req, res, next) => {
-	res.status(500).json({
-		status: "fail",
-		code: 500,
-		message: err.message,
-		data: "Internal Server Error",
+app.use((e, req, res, next) => {
+	const { status = 500, message = "Server error!" } = e;
+	res.status(status).json({
+		message,
 	});
 });
 
