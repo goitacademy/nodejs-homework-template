@@ -6,9 +6,9 @@ import Joi from "joi";
 const contactsRouter = express.Router();
 
 const contactsAddSchema = Joi.object({
-  name: Joi.string().required().messages({'string.empty': `missing required ${name} field`}),
-  email: Joi.string().required().messages({'string.empty': `missing required ${email} field`}),
-  phone: Joi.string().required().messages({'string.empty': `missing required ${phone} field`})
+  name: Joi.string().required().messages({'any.required': 'missing required "name" field'}),
+  email: Joi.string().required().messages({'any.required': 'missing required "email" field'}),
+  phone: Joi.string().required().messages({'any.required': 'missing required "phone" field'})
 })
 
 contactsRouter.get("/", async (req, res, next) => {
@@ -25,7 +25,7 @@ contactsRouter.get("/:id", async (req, res, next) => {
     const { id } = req.params;
     const result = await contactsService.getContactById(id);
     if (!result) {
-      throw HttpError(404, error.message);
+      throw HttpError(404);
     }
     res.json(result);
   } catch (error) {
@@ -37,7 +37,7 @@ contactsRouter.post('/', async (req, res, next) => {
   try {
     const {error} = contactsAddSchema.validate(req.body);
     if(error) {
-      throw HttpError(400, message.error)
+      throw HttpError(400, error.message)
     }
     const result = await contactsService.addContact(req.body);
     res.status(201).json(result)
