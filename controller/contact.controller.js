@@ -33,6 +33,13 @@ const updateContactId = async (req, res) => {
   if (!result) throw ErrorHandling(404, "Not Found");
   res.json(result);
 };
+const updateStatusContact = async (req, res) => {
+  console.log(req.params);
+  const { contactId } = req.params;
+  const result = await updateContacts(contactId, req.body);
+  if (!result) throw ErrorHandling(404, "Not Found");
+  res.json(result);
+};
 const removeContactId = async (req, res) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
@@ -46,5 +53,6 @@ module.exports = {
   getById,
   addNewContact,
   updateContactId,
+  updateStatusContact,
   removeContactId,
 };

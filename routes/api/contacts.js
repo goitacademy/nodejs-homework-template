@@ -5,22 +5,29 @@ const {
   getById,
   addNewContact,
   updateContactId,
+  updateStatusContact,
   removeContactId,
 } = require("../../controller/contact.controller");
 const { validateContact } = require("../../middleware/validateContact");
-const schema = require("../../schema/contactSchema");
+// const schema = require("../../schema/contactSchema");
+const { schemas } = require("../../schema/contactSchema");
 const { contrWrapper } = require("../../helper/contrWrapper");
 
 router.get("/", contrWrapper(getAll));
 router.get("/:contactId", contrWrapper(getById));
 router.post(
   "/",
-  validateContact(schema.contactSchema),
+  validateContact(schemas.contactSchema),
   contrWrapper(addNewContact)
+);
+router.patch(
+  "/:contactId/favorite",
+  validateContact(schemas.updateFavoriteSchema),
+  contrWrapper(updateStatusContact)
 );
 router.put(
   "/:contactId",
-  validateContact(schema.contactSchema),
+  validateContact(schemas.contactSchema),
   contrWrapper(updateContactId)
 );
 router.delete("/:contactId", contrWrapper(removeContactId));
