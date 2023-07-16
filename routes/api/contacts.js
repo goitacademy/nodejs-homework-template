@@ -9,7 +9,7 @@ const contactAddSchema = Joi.object({
         "any.required": `missing required name field`,
     }),
   email: Joi.string().required(),
-    phone: Joi.number().required(),
+    phone: Joi.string().required(),
 })
 
 router.get('/', async (req, res, next) => {
@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
         const { id } = req.params;
-        const result = await contactsService.getById(id);
+        const result = await contactsService.getContactById(id);
         if (!result) {
             throw HttpError(404, "Not found");
         }
