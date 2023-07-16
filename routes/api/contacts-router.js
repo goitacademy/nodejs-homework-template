@@ -63,7 +63,20 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { error } = contactsAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, 'missing fields');
+    }
+    const { contactId } = req.params;
+    const result = await contactsServise.updateContact(contactId, req.body);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 export default router;
