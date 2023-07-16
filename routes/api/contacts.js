@@ -1,7 +1,9 @@
 import express from "express"
-import { addContact, getContactById, listContacts, removeContact, updateContact } from "../../models/contacts.js";
+import { addContact, getContactById, removeContact, updateContact } from "../../models/contacts.js";
 import HttpError from "../../helpers/HttpError.js";
 import Joi from "joi";
+import { listContactsController, getContactByIdController, addContactController, removeContactController } from "../../controllers/contacts.js";
+import addContactValidation from "../../validators/contacts.js";
 
 const router = express.Router();
 
@@ -11,51 +13,14 @@ const contactAddSchema = Joi.object({
 	phone: Joi.string().required()
 })
 
-router.get('/', async (req, res, next) => {
-	try {
-		const list = await listContacts()
-		res.json(list)
-	} catch (error) {
-		next(error)
-	}
-})
+router.get('/', listContactsController)
 
-router.get('/:contactId', async (req, res, next) => {
-	try {
-		const contact = await getContactById(req.params.contactId)
-		if (!contact) {
-			throw HttpError(404, "Contact not found")
-		}
-		res.json(contact)
-	} catch (error) {
-		next(error);
-	}
-})
+router.get('/:contactId', getContactByIdController)
 
-router.post('/', async (req, res, next) => {
-	try {
-		const { error } = contactAddSchema.validate(req.body);
-		if (error) {
-			throw HttpError(400, error.message)
-		}
-		const contact = await addContact(req.body);
-		res.status(201).json(contact)
-	} catch (error) {
-		next(error)
-	}
-})
+router.post('/', addContactValidation, [addContactController])
+// router.post('/', addContactController)
 
-router.delete('/:contactId', async (req, res, next) => {
-	try {
-		const contact = await removeContact(req.params.contactId);
-		if (!contact) {
-			throw HttpError(404, "Contact not found")
-		}
-		res.json({ "message": "contact deleted" })
-	} catch (error) {
-		next(error)
-	}
-})
+router.delete('/:contactId', removeContactController)
 
 router.put('/:contactId', async (req, res, next) => {
 	if (Object.keys(req.body).length === 0) {
