@@ -2,6 +2,7 @@
 import express from 'express';
 
 import contactsServise from '../../models/contacts.js';
+import { HttpError } from '../../helpers/index.js';
 
 const router = express.Router();
 
@@ -10,28 +11,20 @@ router.get('/', async (req, res) => {
     const result = await contactsServise.listContacts();
     res.json(result);
   } catch (error) {
-    res.status(500).json({
-      message: 'Server error',
-    });
+    next(error);
   }
 });
 
-router.get('/:contactId', async (req, res) => {
+router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contactsServise.getContactById(contactId);
     if (!result) {
-      const error = new Error(`Not found`);
-      error.status = 404;
-      throw error;
+      throw HttpError(404);
     }
     res.json(result);
   } catch (error) {
-    const { status = 500, message = 'Server error' } = error;
-
-    res.status(status).json({
-      message,
-    });
+    next(error);
   }
 });
 
