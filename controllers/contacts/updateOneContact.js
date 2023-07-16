@@ -7,6 +7,7 @@ const updateOneContact = async (req, res, next) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
+
   res.json(result);
 };
 
