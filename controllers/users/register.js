@@ -19,7 +19,12 @@ const register = async (req, res, next) => {
       password: hashedPassword,
       avatarURL,
     });
-    res.status(201).json({ email: newUser.email, subscription: "starter" });
+    res.status(201).json({ 
+      user: {
+        email: newUser.email,
+        subscription: "starter",
+       },
+      });
   } catch (error) {
     next(error);
   }
