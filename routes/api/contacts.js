@@ -7,6 +7,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts");
 
 const Joi = require("joi");
@@ -112,6 +113,18 @@ router.put('/:contactId', async (req, res, next) => {
   catch (err) {
     res.status(404).json({ message: err.message });
   }
-})
+});
+
+router.patch('/api/contacts/:contactId/favorite', async (req, res) => {
+  const contactId = req.params.contactId;
+  const body = req.body;
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, body);
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    res.status(404).json({ message: "Контакт не найден" });
+  }
+});
 
 module.exports = router
