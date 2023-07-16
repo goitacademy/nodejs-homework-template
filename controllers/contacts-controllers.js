@@ -1,25 +1,7 @@
-import Joi from 'joi';
-
 import contactsServise from '../models/contacts.js';
 
 import { ctrlWrapper } from '../decorators/index.js';
 import { HttpError } from '../helpers/index.js';
-
-const contactsAddSchema = Joi.object({
-  name: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required()
-    .messages({ 'any.required': `missing required name field` }),
-  email: Joi.string()
-    .required()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .messages({ 'any.required': `missing required email field` }),
-  phone: Joi.string()
-    .required()
-    .messages({ 'any.required': `missing required phone field` }),
-});
 
 const getContactsList = async (req, res) => {
   const result = await contactsServise.listContacts();
@@ -36,10 +18,6 @@ const getContactById = async (req, res) => {
 };
 
 const addNewContact = async (req, res) => {
-  const { error } = contactsAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
   const result = await contactsServise.addContact(req.body);
   res.status(201).json(result);
 };
@@ -56,10 +34,6 @@ const deleteContactById = async (req, res) => {
 };
 
 const updateContactById = async (req, res) => {
-  const { error } = contactsAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, 'missing fields');
-  }
   const { contactId } = req.params;
   const result = await contactsServise.updateContact(contactId, req.body);
   if (!result) {
