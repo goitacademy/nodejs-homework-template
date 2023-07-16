@@ -5,7 +5,7 @@ import contactsServise from '../../models/contacts.js';
 
 const router = express.Router();
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
     const result = await contactsServise.listContacts();
     res.json(result);
@@ -16,8 +16,21 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+router.get('/:contactId', async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactsServise.getContactById(contactId);
+    if (!result) {
+      return res.status(404).json({
+        message: 'Not found',
+      });
+    }
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      message: 'Server error',
+    });
+  }
 });
 
 router.post('/', async (req, res, next) => {
@@ -32,5 +45,4 @@ router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' });
 });
 
-// module.exports = router;
 export default router;
