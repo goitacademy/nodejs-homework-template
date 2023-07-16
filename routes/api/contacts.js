@@ -50,8 +50,22 @@ contactsRouter.post('/', async (req, res, next) => {
 //   res.json({ message: 'template message' })
 // })
 
-// contactsRouter.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
+contactsRouter.put('/:id', async (req, res, next) => {
+ try {
+  const {error} = contactsAddSchema.validate(req.body);
+    if(error) {
+      throw HttpError(400, error.message)
+    }
+    const { id } = req.params;
+    const result = await contactsService.updateContact(id, req.body);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+
+ } catch (error) {
+  next(error)
+ }
+})
 
 export default contactsRouter;
