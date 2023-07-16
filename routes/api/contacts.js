@@ -1,5 +1,7 @@
 const express = require("express");
 
+const Joi = require("joi");
+
 const router = express.Router();
 
 const {
@@ -7,9 +9,22 @@ const {
   getById,
   removeContact,
   addContact,
+  updateContact,
 } = require("../../models/contacts");
 
 const HttpError = require("../../helpers/HttpErrors");
+
+const schema = Joi.object({
+  name: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required name field" }),
+  email: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required email field" }),
+  phone: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required phone field" }),
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -24,7 +39,6 @@ router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await getById(contactId);
-    console.log(result);
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -36,6 +50,10 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const result = await addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -46,19 +64,33 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const remove = await removeContact(contactId);
-    res.json(remove);
+    const result = await removeContact(contactId);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
 });
 
-// router.put("/:contactId", async (req, res, next) => {
-//   try {
-//     res.json({ message: "template message" });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await updateContact(contactId, req.body);
+
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
