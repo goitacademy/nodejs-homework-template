@@ -27,11 +27,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
 
-  // if (name === "MongoServerError" && code === 11000) {
-  //   const message = "User with this email already exists";
-
-  //   res.status(409).json({ message });
-  // }
   res.status(status).json({ message });
 });
 
