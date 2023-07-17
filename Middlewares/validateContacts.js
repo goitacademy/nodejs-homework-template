@@ -21,7 +21,18 @@ const validateSchemeUpdContact = schema => {
   };
   return validate;
 };
+const validateSchemeFavorContact = (schema) => {
+  const validate = (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      next(HttpError(400, "missing field favorite"));
+    }
+    next();
+  };
+  return validate;
+};
 module.exports = {
     validateSchemeAddContact,
-    validateSchemeUpdContact
+  validateSchemeUpdContact,
+    validateSchemeFavorContact
 };

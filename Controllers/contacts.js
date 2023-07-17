@@ -1,34 +1,31 @@
-// ф-ції контроля роутів виносимо в окрему папку
+const {Contact} = require('../Service/schemas/contacts')
 
-const express = require('express');
-
-const contacts = require('../Models');
 const HttpError = require('../Helpers/HttpError');
 const ctrlWrapper = require('../Helpers/CtrlWrapper');
 
 
 const listContacts = async (req, res) => {
-      const data = await contacts.listContacts();
+  const data = await Contact.find();
     res.status(200).json(data);
  };
 
 const getContactById =   async (req, res) => {
   const { id } = req.params;
-  const data = await contacts.getContactById(id);
+  const data = await Contact.findById(id);
     if (!data) {
       throw HttpError(404, "Not found");
     }
     res.json(data);
       }
 
-const addContact =   async (req, res) => {
-       const data = await contacts.addContact(req.body);
-    res.status(201).json(data);
-  }
+const addContact = async (req, res) => {
+  const data = await Contact.create( req.body);
+   res.status(201).json(data);
+};
 
 const removeContact =   async (req, res) => {
      const { id } = req.params;
-      const data = await contacts.removeContact(id);
+      const data = await Contact.findByIdAndRemove(id);
     if (!data) {
       throw HttpError(404, "Not found");
     }
@@ -36,18 +33,32 @@ const removeContact =   async (req, res) => {
  }
 
 const updateContact = async (req, res) => {
-    const { id } = req.params;
-    const data = await contacts.updateContact(id, req.body);
+  const { id } = req.params;
+  const data = await Contact.findOneAndUpdate({ _id: id }, req.body, {
+    new: true
+  },
+    );
     if(!data){
       throw HttpError(404, "Not found");
     }
       res.status(200).json(data);
-  }
+}
+  const updateStatus = async (req, res) => {
+    const { id } = req.params;
+    const data = await Contact.findOneAndUpdate({ _id: id }, req.body, {
+      new: true,
+    });
+    if (!data) {
+      throw HttpError(404, "Not found");
+    }
+    res.status(200).json(data);
+  };
 // контроллер
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
-  getContactById: ctrlWrapper(getContactById),
+   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
-}
+  updateStatus: ctrlWrapper(updateStatus),
+};
