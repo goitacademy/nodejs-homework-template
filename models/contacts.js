@@ -2,7 +2,12 @@ const path = require('path');
 const fs = require('fs/promises');
 const { nanoid } = require('nanoid');
 
-const findContactById = require('../utils/findContactById');
+const {
+  findContactById,
+  userDataValidator,
+  userEditDataValidator,
+} = require('../utils');
+const { log } = require('console');
 
 const contactsPath = path.join('models', 'contacts.json');
 
@@ -21,6 +26,9 @@ const getContactById = async (req, res) => {
     const contactId = req.params.contactId;
     const findedContact = await findContactById(contactId);
 
+    if (!findedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
     res.status(200).json(findedContact);
   } catch (error) {
     res.sendStatus(500);
@@ -37,6 +45,7 @@ const removeContact = async (req, res) => {
     }
 
     const contacts = JSON.parse(await fs.readFile(contactsPath));
+
     const filteredContacts = contacts.filter(
       (contact) => contact.id !== contactId
     );
@@ -51,7 +60,13 @@ const removeContact = async (req, res) => {
 
 const addContact = async (req, res) => {
   try {
-    const { name, email, phone } = req.body;
+    const { error, value } = userDataValidator.validate(req.body);
+    console.log(error);
+    if (error) {
+      return res.status(400).json({ message: 'missing required name field' });
+    }
+
+    const { name, email, phone } = value;
     const newContact = {
       id: nanoid(),
       name,
@@ -74,7 +89,6 @@ const updateContact = async (req, res) => {
   try {
     const contactId = req.params.contactId;
     const contact = await findContactById(contactId);
-    const { name, email, phone } = req.body;
 
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
@@ -83,6 +97,14 @@ const updateContact = async (req, res) => {
     if (!Object.keys(req.body).length) {
       return res.status(400).json({ message: 'missing fields' });
     }
+
+    const { error, value } = userEditDataValidator.validate(req.body);
+    console.log(error);
+    if (error) {
+      return res.status(400).json({ message: 'invalid data' });
+    }
+
+    const { name, email, phone } = value;
 
     if (name) {
       contact.name = name;
