@@ -7,34 +7,27 @@ const {
   removeContactService,
   addContactService,
   updateContactService,
-  getContactsByFavoriteService,
+  // getContactsByFavoriteService,
 } = require("../services/contactsServices");
 
 const getListContacts = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20, favorite = null } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
+  const findParams = { owner, favorite };
 
-  if (favorite) {
-    try {
-      const result = await getContactsByFavoriteService(owner, " ", {
-        skip,
-        limit,
-        favorite,
-      });
+  try {
+    console.log(req.query);
+    const result = await listContactsService(findParams, " ", {
+      skip,
+      limit,
+      favorite,
+    });
 
-      res.json(result);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
-  } else
-    try {
-      const result = await listContactsService(owner, " ", { skip, limit });
-
-      res.json(result);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
-    }
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 const getContactById = async (req, res, next) => {

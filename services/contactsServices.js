@@ -1,21 +1,22 @@
 const { Contact } = require("../models/contact");
 
-const listContactsService = async (owner, keys, queryParams) => {
-  return await Contact.find({ owner }, keys, queryParams).populate(
-    "owner",
-    "email"
-  );
-};
+// const listContactsService = async (owner, keys, queryParams) => {
+//   return await Contact.find({ owner }, keys, queryParams).populate(
+//     "owner",
+//     "email"
+//   );
+// };
 
-const getContactsByFavoriteService = async (
-  owner,
+const listContactsService = async (
+  { owner, favorite },
   keys,
-  { skip, limit, favorite }
+  { skip, limit }
 ) => {
-  return await Contact.find({ owner, favorite }, keys, {
+  const findParams = favorite ? { owner, favorite } : { owner };
+
+  return await Contact.find(findParams, keys, {
     skip,
     limit,
-    favorite,
   }).populate("owner", "email");
 };
 
@@ -45,5 +46,5 @@ module.exports = {
   removeContactService,
   addContactService,
   updateContactService,
-  getContactsByFavoriteService,
+  // getContactsByFavoriteService,
 };
