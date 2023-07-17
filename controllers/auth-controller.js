@@ -18,17 +18,21 @@ const register = async (req, res) => {
     email,
     subscription,
   });
-  res
-    .status(201)
-    .json({ email: newUser.email, subscription: newUser.subscription });
+  res.status(201).json({
+    user: { email: newUser.email, subscription: newUser.subscription },
+  });
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email or password wrong");
+  }
+
   const comparePassword = await bcrypt.compare(password, user.password);
-  if (!comparePassword || !user) {
+  if (!comparePassword) {
     throw HttpError(401, "Email or password wrong");
   }
   const payload = {

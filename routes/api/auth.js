@@ -24,6 +24,6 @@ router.post(
 );
 router.post("/login", validateBody(schemas.loginSchema), login);
 router.post("/logout", authMiddleware, logout);
-router.post("/current", authMiddleware, getCurrent);
+router.get("/current", authMiddleware, getCurrent);
 
 module.exports = router;
