@@ -4,7 +4,7 @@ const dotevn = require("dotenv");
 dotevn.config();
 
 const { User } = require("../models/users");
-const { schema } = require("../utils/validation/userSchemaValidation");
+// const { schema } = require("../utils/validation/userSchemaValidation");
 
 const { HttpError } = require("../helpers");
 
@@ -19,10 +19,6 @@ const register = async (req, res, next) => {
       throw new HttpError(409, "User with this email already exists");
     }
 
-    const { error } = schema.addRegisterSchema.validate(req.body);
-    if (error) {
-      throw new HttpError(400, "Invalid request");
-    }
     const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({ ...req.body, password: hashPassword });

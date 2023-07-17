@@ -8,9 +8,10 @@ const {
   logout,
 } = require("../../controllers/userControllers");
 const { authenticate } = require("../../middlewares");
+const { userValidate } = require("../../middlewares/userValidate");
 
-router.route("/register").post(register);
-router.route("/login").post(login);
+router.route("/register").post(userValidate, register);
+router.route("/login").post(userValidate, login);
 router.route("/current").get(authenticate, current);
 router.route("/logout").post(authenticate, logout);
 
