@@ -1,25 +1,35 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const {
+  getAllContacts,
+  getContactById,
+  addContact,
+  ubdateContactById,
+  ubdateFavourite,
+  deleteContactById,
+} = require("../../controllers/contacts");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { checkID, validateBody } = require("../../middlewares");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validateSchema, ubdateFavouriteSchema } = require("../../models");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getAllContacts);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", checkID, getContactById);
 
-module.exports = router
+router.post("/", validateBody(validateSchema), addContact);
+
+router.put("/:contactId", validateBody(validateSchema), checkID, ubdateContactById);
+
+router.patch(
+  "/:contactId/favourite",
+  validateBody(ubdateFavouriteSchema),
+  checkID,
+  ubdateFavourite
+);
+
+router.delete("/:contactId", checkID, deleteContactById);
+
+module.exports = router;
