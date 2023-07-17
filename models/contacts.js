@@ -1,10 +1,11 @@
+// contacts.js
 const fs = require('fs/promises')
 const path = require('path')
 const { nanoid } = require('nanoid')
 
 // путь к contacts.json
 
-const contactsPath = path.join(__dirname, '..', 'models', 'books.json')
+const contactsPath = path.join(__dirname, '..', 'models', 'contacts.json')
 // console.log(contactsPath)
 
 const listContacts = async () => {
