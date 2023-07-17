@@ -7,6 +7,10 @@ const addSchema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
+  owner: Joi.object({
+    _id: Joi.string(),
+    email: Joi.string(),
+  }),
 });
 
 const addStatusSchema = Joi.object({
@@ -28,6 +32,10 @@ const contactSchema = new Schema({
   favorite: {
     type: Boolean,
     default: false,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
 });
 

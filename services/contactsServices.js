@@ -1,66 +1,43 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const { Contact } = require("../models/contact");
 
-const contactsPath = path.join(__dirname, "../models/contacts.json");
+// const listContactsService = async (owner, keys, queryParams) => {
+//   return await Contact.find({ owner }, keys, queryParams).populate(
+//     "owner",
+//     "email"
+//   );
+// };
 
-const listContactsService = async () => {
-  const allContacts = await fs.readFile(contactsPath, "utf-8");
+const listContactsService = async (
+  { owner, favorite },
+  keys,
+  { skip, limit }
+) => {
+  const findParams = favorite ? { owner, favorite } : { owner };
 
-  return JSON.parse(allContacts);
+  return await Contact.find(findParams, keys, {
+    skip,
+    limit,
+  }).populate("owner", "email");
 };
 
 const getContactByIdService = async (contactId) => {
-  const allContacts = await listContactsService();
-  const contactById = allContacts.find((contact) => contact.id === contactId);
-
-  return contactById || null;
-};
-
-const removeContactService = async (contactId) => {
-  const allContacts = await listContactsService();
-
-  const removedContact = allContacts.find((contact) => {
-    return contact.id === contactId;
-  });
-
-  if (!removedContact) {
-    return null;
-  }
-
-  const index = allContacts.indexOf(removedContact);
-  allContacts.splice(index, 1);
-
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-
-  return { message: "contact deleted" };
+  return (await Contact.findById(contactId)) || null;
 };
 
 const addContactService = async (body) => {
-  const newContact = { ...body, id: nanoid() };
-
-  const allContacts = await listContactsService();
-  const updateList = [...allContacts, newContact];
-
-  await fs.writeFile(contactsPath, JSON.stringify(updateList, null, 2));
-
-  return newContact;
+  return await Contact.create(body);
 };
 
 const updateContactService = async (contactId, body) => {
-  const allContacts = await listContactsService();
-
-  const contactById = allContacts.find((contact) => contact.id === contactId);
-  if (!contactById) {
-    return null;
-  }
-  const updateContact = { ...contactById, ...body };
-  const updateList = allContacts.map((contact) => {
-    return contact.id === contactId ? updateContact : contact;
+  return await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
   });
+};
 
-  await fs.writeFile(contactsPath, JSON.stringify(updateList, null, 2));
-  return updateContact;
+const removeContactService = async (contactId) => {
+  await Contact.findByIdAndDelete(contactId);
+
+  return { message: "contact deleted" };
 };
 
 module.exports = {
@@ -69,4 +46,5 @@ module.exports = {
   removeContactService,
   addContactService,
   updateContactService,
+  // getContactsByFavoriteService,
 };

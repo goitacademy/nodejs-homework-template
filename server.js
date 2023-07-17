@@ -1,20 +1,20 @@
 const mongoose = require("mongoose");
+const dotevn = require("dotenv");
+dotevn.config();
 
 const app = require("./app");
+
 const { DB_HOST } = process.env;
 
 mongoose.set("strictQuery", true);
 
 // connect to basedata
 mongoose
-  .connect(
-    DB_HOST
-    // {
-    // useNewUrlParser: true,
+  .connect(DB_HOST, {
+    useNewUrlParser: true,
     // useCreateIndex: true,
-    // useUnifiedTopology: true,
-    // }
-  )
+    useUnifiedTopology: true,
+  })
   .then(() => {
     app.listen(3000);
     console.log("Database connection successful");
