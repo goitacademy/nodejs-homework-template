@@ -4,6 +4,7 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/contacts");
 
+
 const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
 const { schemas } = require("../../models/contact");
@@ -32,6 +33,7 @@ router.patch(
   authenticate,
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
+
   ctrl.updateStatusContact
 );
 

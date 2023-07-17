@@ -1,3 +1,4 @@
+
 const errorMessageList = {
   400: "Bad Request ",
   401: "Unauthorized",
@@ -14,3 +15,4 @@ const HttpError = (status, message = errorMessageList[status]) => {
 };
 
 module.exports = HttpError;
+

@@ -5,6 +5,7 @@ const { HttpError } = require("../helpers");
 const listContacts = async (req, res, next) => {
   try {
 
+
     const { _id: owner } = req.user;
     const { page = 1, limit = 10, favorite = true } = req.query;
     const skip = (page - 1) * limit;
@@ -15,6 +16,8 @@ const listContacts = async (req, res, next) => {
       skip,
       limit,
     }).populate("owner", "email subscription");
+
+
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -36,9 +39,11 @@ const getById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
+
     const { _id: owner } = req.user;
 
     const result = await Contact.create({ ...req.body, owner });
+
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -69,6 +74,7 @@ const updateStatusContact = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
+
     res.json(result);
   } catch (error) {
     next(error);
