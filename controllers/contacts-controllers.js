@@ -37,7 +37,7 @@ const add = async (req, res) => {
   if (error) {
     throw HttpError(
       400,
-      `missing required ${error.details[0].context.key} field`
+      `Missing required ${error.details[0].context.key} field`
     );
   }
   const result = await contactsService.addContact(req.body);
