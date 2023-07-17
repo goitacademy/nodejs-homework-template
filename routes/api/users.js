@@ -10,6 +10,8 @@ const ctrl = require("../../controllers/users");
 
 router.post("/register", ctrl.register);
 
+router.get("/verify:verificationToken",ctrl.verifyEmail );
+
 router.post("/login", ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrent);
