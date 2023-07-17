@@ -7,15 +7,9 @@ import {
   updateContactById,
 } from "../../models/contacts.js";
 import HttpError from "../../models/helpters/HttpError.js";
-import Joi from "joi";
+import { contactsAddSchema } from "../../schemas/joi.js";
 
 const contactsRouter = express.Router();
-
-const contactsAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
 
 contactsRouter.get("/", async (req, res, next) => {
   try {
