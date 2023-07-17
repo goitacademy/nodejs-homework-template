@@ -1,48 +1,21 @@
 const express = require("express");
 
-const contacts = require("../../models/contacts");
-const { HttpError } = require("../../utilities");
+const ctrl = require("../../controllers/contacts");
+
+const validateBody = require("../../middlewares/validateBody");
+
+const schemas = require("../../schemas/contacts");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", ctrl.listContacts);
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
-    if (!result) {
-      HttpError(404, "Not found");
-    }
+router.get("/:id", ctrl.getById);
 
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:id", ctrl.removeContact);
 
-router.delete("/:id", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.put("/:id", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:id", validateBody(schemas.addSchema), ctrl.updateContact);
 
 module.exports = router;
