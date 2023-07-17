@@ -14,7 +14,7 @@ class Anunnak {
   }
 
   async listContacts() {
-    const result = await fs.readFile(contactsPath);
+    const result = await fs.readFile(this.path);
     return JSON.parse(result);
   }
 
@@ -62,6 +62,7 @@ class Anunnak {
   }
 }
 const contacts = new Anunnak(contactsPath);
+
 module.exports = {
   contacts,
 };

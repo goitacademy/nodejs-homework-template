@@ -1,4 +1,4 @@
-const contacts = require("../models/contacts");
+const { contacts } = require("../models");
 const { ApiError, ctrlWrap } = require("../helpers");
 
 const getContacts = async (req, res) => {
@@ -9,6 +9,7 @@ const getContacts = async (req, res) => {
 const getContactsById = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.getContactById(id);
+  console.log("result :>> ", result);
   if (!result) {
     throw ApiError(404, "Not found");
   }
