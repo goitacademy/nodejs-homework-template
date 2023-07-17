@@ -1,18 +1,26 @@
 const Joi = require('joi');
 
 const schemaAddContact = Joi.object({
-  name: Joi.string().min(2).max(30).required().messages({
-    'any.required': 'Missing required name field',
-    'string.empty': 'Name field cannot be an empty string',
-  }),
-  email: Joi.string().email().lowercase().required().messages({
-    'any.required': 'Missing required email field',
-    'string.empty': 'Email field cannot be an empty string',
-  }),
-  phone: Joi.string().required().messages({
-    'any.required': 'Missing required phone number field',
-    'string.empty': 'Phone number field cannot be an empty string',
-  }),
+  name: Joi.string()
+    .messages({
+      'any.required': 'Missing required <name> field',
+      'string.empty': 'Field <name> cannot be an empty string',
+    })
+    .required(),
+  email: Joi.string()
+    .email()
+    .lowercase()
+    .messages({
+      'any.required': 'Missing required <email> field',
+      'string.empty': 'Field <email> cannot be an empty string',
+    })
+    .required(),
+  phone: Joi.string()
+    .messages({
+      'any.required': 'Missing required <phone> field',
+      'string.empty': 'Field <phone> cannot be an empty string',
+    })
+    .required(),
 });
 
 module.exports = schemaAddContact;

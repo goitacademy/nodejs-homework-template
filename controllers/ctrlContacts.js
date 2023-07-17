@@ -1,14 +1,6 @@
-// const Joi = require('joi');
-
 const modelsContacts = require('../models/contacts');
 const { ctrlWrapper, HttpError } = require('../utils');
 const { schemaAddContact, schemaUpdateContact } = require('../schema');
-
-// const objectSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().email().required(),
-//   phone: Joi.string().required(),
-// });
 
 /**
  * @ GET /api/contacts
@@ -63,11 +55,11 @@ const getContactById = async (req, res) => {
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
 
-  if (!contactId) {
+  const result = await modelsContacts.removeContact(contactId);
+
+  if (!result) {
     throw HttpError(404, 'Not found');
   }
-
-  await modelsContacts.removeContact(contactId);
   res.json({ message: 'Contact deleted' });
 };
 

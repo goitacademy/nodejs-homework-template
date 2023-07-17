@@ -9,14 +9,12 @@ const {
 
 const router = express.Router();
 
-router.get('/', ctrlListContacts);
+router.route('/').get(ctrlListContacts).post(ctrlAddContact);
 
-router.post('/', ctrlAddContact);
-
-router.get('/:contactId', ctrlGetContactById);
-
-router.delete('/:contactId', ctrlRemoveContact);
-
-router.put('/:contactId', ctrlUpdateContact);
+router
+  .route('/:contactId')
+  .get(ctrlGetContactById)
+  .put(ctrlUpdateContact)
+  .delete(ctrlRemoveContact);
 
 module.exports = router;

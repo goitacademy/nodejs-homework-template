@@ -52,16 +52,17 @@ const getContactById = async (contactId) => {
  */
 const removeContact = async (contactId) => {
   const data = await listContacts();
+
   const index = data.findIndex((item) => item.id === contactId);
 
   if (index === -1) {
     return null;
   }
 
-  const [result] = data.splice(index, 1);
+  const deletedContact = data.splice(index, 1);
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
 
-  return result;
+  return deletedContact;
 };
 
 /**
