@@ -7,7 +7,6 @@ const {
   userDataValidator,
   userEditDataValidator,
 } = require('../utils');
-const { log } = require('console');
 
 const contactsPath = path.join('models', 'contacts.json');
 
