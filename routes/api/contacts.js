@@ -1,7 +1,7 @@
 import express from "express";
 import HttpError from "../../helpers/HttpError.js";
 import contactsService from "../../models/contacts.js";
-import contactsAddSchema from '../../helpers/validate.js';
+import contactsAddSchema from "../../helpers/validate.js";
 
 const contactsRouter = express.Router();
 
@@ -27,20 +27,20 @@ contactsRouter.get("/:id", async (req, res, next) => {
   }
 });
 
-contactsRouter.post('/', async (req, res, next) => {
+contactsRouter.post("/", async (req, res, next) => {
   try {
-    const {error} = contactsAddSchema.validate(req.body);
-    if(error) {
-      throw HttpError(400, error.message)
+    const { error } = contactsAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
     }
     const result = await contactsService.addContact(req.body);
-    res.status(201).json(result)
+    res.status(201).json(result);
   } catch (error) {
-    next(error)
-  };
-})
+    next(error);
+  }
+});
 
-contactsRouter.delete('/:id', async (req, res, next) => {
+contactsRouter.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await contactsService.removeContact(id);
@@ -49,23 +49,21 @@ contactsRouter.delete('/:id', async (req, res, next) => {
       throw HttpError(404);
     }
 
-    res.json({message: "contact deleted"})
+    res.json({ message: "contact deleted" });
   } catch (error) {
-    next(error)
+    next(error);
   }
+});
 
-})
+contactsRouter.put("/:id", async (req, res, next) => {
+  try {
+    if (Object.keys(req.body).length === 0) {
+      throw HttpError(400);
+    }
 
-contactsRouter.put('/:id', async (req, res, next) => {
- try {
-
-  if (Object.keys(req.body).length === 0) {
-    throw HttpError(400)
-  }
-
-  const {error} = contactsAddSchema.validate(req.body);
-    if(error) {
-      throw HttpError(400, error.message)
+    const { error } = contactsAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
     }
 
     const { id } = req.params;
@@ -74,10 +72,9 @@ contactsRouter.put('/:id', async (req, res, next) => {
       throw HttpError(404);
     }
     res.json(result);
-
- } catch (error) {
-  next(error)
- }
-})
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default contactsRouter;
