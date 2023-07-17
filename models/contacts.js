@@ -1,44 +1,26 @@
-const fs = require('fs/promises');
-const path = require('path');
-const { nanoid } = require('nanoid');
+const fs = require("fs/promises");
+const { nanoid } = require("nanoid");
+const path = require("path");
 
-const contactsPath = path.join(__dirname, 'contacts.json');
+const contactsPath = path.join(__dirname, "./contacts.json");
 
-// отримання списоку контактів з файлу JSON
+// Функція яка читає файл з контактами і повертає його у форматі JSON.
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
-// пошук контакта за індитифікатором
+
+// Функція яка шукає контакт за ідентифікатором у списку контактів
 
 const getContactById = async (contactId) => {
+  const contactById = String(contactId);
   const contactsList = await listContacts();
-  const contactById = contactsList.find((item) => item.id === contactId);
-  return contactById;
+  const result = contactsList.find((item) => item.id === contactById);
+  return result || null;
 };
 
-// видалення контакту зі списку контактів
-
-const removeContact = async (contactId) => {
-  const contactsList = await listContacts();
-  const indx = await contactsList.findIndex(
-    (item) => item.id === contactId.toString()
-  );
-  if (indx === -1) {
-    return null;
-  }
-  const removeItem = contactsList.splice(indx, 1);
-  const newContacts = await contactsList.filter(
-    (item) => item.id !== contactId
-  );
-  await fs.writeFile(contactsPath, JSON.stringify(newContacts));
-
-  return removeItem;
-};
-
-
-// додавання нового контакту до списку
+// Функція яка додає новий контакт з вхідними даними до списку контактів і перезаписує файл з новими даними
 
 const addContact = async (body) => {
   const id = nanoid();
@@ -52,27 +34,40 @@ const addContact = async (body) => {
   return newContact;
 };
 
-// оновлення контакта за його ідентифікатором в файлі JSON
+// Функція яка змінює контакт за ідентифікатором з вхідними даними і перезаписує файл з новими даними
 
-const changeContact = async (contactId, body) => {
-  const { name, phone, email } = body;
-  const data = await listContacts();
-  data.forEach((element) => {
-    if (element.id === contactId) {
-      element.name = name;
-      element.phone = phone;
-      element.email = email;
-    }
-  });
-
-  await fs.writeFile(contactsPath, JSON.stringify(data));
-  return await getContactById(contactId);
+const changeContact = async (contactId, data) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(item => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { contactId, ...data };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
 };
+
+
+// Функція яка видаляє контакт за ідентифікатором зі списку контактів і перезаписує файл з новими даними
+
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(item => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = contacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return result;
+}
+
+
+
 
 module.exports = {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
   changeContact,
-}
+  removeContact,
+};
