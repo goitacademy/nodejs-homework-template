@@ -10,45 +10,13 @@ const {
   updateStatusContact,
 } = require("../../models/contacts");
 
-const Joi = require("joi");
+
 const uniqid = require('uniqid'); 
+const schemaJoi = require('./schema');
 
 
-const schemaPost = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
 
-  phone: Joi.string()
-    .pattern(/^(?:\+38)?0\d{9}$/)
-    .required()
-    .messages({
-      "string.pattern.base": "Invalid phone number format",
-      "any.required": "Phone number is required",
-    }),
 
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    })
-    .required(),
-});
-
-const schemaPut = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30),
-
-  phone: Joi.string()
-    .pattern(/^(?:\+38)?0\d{9}$/)
-   
-    .messages({
-      "string.pattern.base": "Invalid phone number format",
-      "any.required": "Phone number is required",
-    }),
-
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-});
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
@@ -71,7 +39,7 @@ router.post('/', async (req, res, next) => {
   if(!name||!email|| !phone) {
     throw new Error ("missing required name field");
   }
-const result = schemaPost.validate({name, email, phone});
+const result = schemaJoi.validate({name, email, phone});
 if (result.error) {
   throw new Error(`${result.error.message}`);
 } else {
@@ -101,7 +69,7 @@ router.put('/:contactId', async (req, res, next) => {
   try {
     if(Object.keys(req.body).length ===0)
     return res.status(400).json({ message: "missing fields" });
-    const result = schemaPut.validate({...req.body});
+    const result = schemaJoi.validate({...req.body});
     if (result.error) {
       throw new Error (`${result.error.message}`);}
       else {

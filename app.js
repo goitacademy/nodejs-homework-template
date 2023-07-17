@@ -12,8 +12,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
-// eslint-disable-next-line no-undef
-// app.use(upload.none());
+
 dotenv.config()
 app.use('/api/contacts', contactsRouter)
 
