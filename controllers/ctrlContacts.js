@@ -1,13 +1,14 @@
-const Joi = require('joi');
+// const Joi = require('joi');
 
 const modelsContacts = require('../models/contacts');
 const { ctrlWrapper, HttpError } = require('../utils');
+const { schemaAddContact, schemaUpdateContact } = require('../schema');
 
-const objectSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+// const objectSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().email().required(),
+//   phone: Joi.string().required(),
+// });
 
 /**
  * @ GET /api/contacts
@@ -24,8 +25,9 @@ const listContacts = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
+
 const addContact = async (req, res) => {
-  const { error } = objectSchema.validate(req.body);
+  const { error } = schemaAddContact.validate(req.body);
 
   if (error) {
     throw HttpError(400, error.message);
@@ -78,7 +80,7 @@ const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const body = req.body;
 
-  const { error } = objectSchema.validate(req.body);
+  const { error } = schemaUpdateContact.validate(req.body);
 
   if (error) {
     throw HttpError(400, error.message);
