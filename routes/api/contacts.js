@@ -58,7 +58,7 @@ router.put("/:id", (req, res) => {
   } else {
     const contact = contacts.find((c) => c.id === id);
     if (contact) {
-      if (name) contact.name = name;
+      contact.name = name || contact.name;
       if (email) contact.email = email;
       if (phone) contact.phone = phone;
       updateContactsFile();
