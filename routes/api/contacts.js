@@ -13,11 +13,8 @@ const {
 
 const uniqid = require('uniqid'); 
 const schemaJoi = require('./schema');
-
-
-
-
 const router = express.Router()
+
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts()
