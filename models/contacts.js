@@ -55,13 +55,15 @@ const updateContact = async (contactId, body) => {
 		return null;
 	}
 
-	const [result] = allContacts.splice(idx, 1, {
-		...allContacts[idx],
+	const newUser = {
+		id: contactId,
 		...body,
-	});
+	};
+
+	allContacts[idx] = newUser;
 
 	writeFile(allContacts);
-	return result;
+	return newUser;
 };
 
 export { listContacts, getContactById, removeContact, addContact, updateContact };
