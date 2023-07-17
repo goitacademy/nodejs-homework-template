@@ -10,17 +10,17 @@ const {
   putContact,
 } = require("../../controllers/conrollers");
 
-const { validateSchemaContact } = require("../../schemas");
+const { schemaContactValidator } = require("../../schemas");
 const { validateBody } = require("../../middlewares");
 
 router.get("/", getContacts);
 
 router.get("/:id", getContactById);
 
-router.post("/", validateBody(validateSchemaContact), postContact);
+router.post("/", validateBody(schemaContactValidator), postContact);
 
 router.delete("/:id", deleteContact);
 
-router.put("/:id", validateBody(validateSchemaContact), putContact);
+router.put("/:id", validateBody(schemaContactValidator), putContact);
 
 module.exports = router;

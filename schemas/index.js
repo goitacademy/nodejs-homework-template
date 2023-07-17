@@ -1,3 +1,3 @@
-const validateSchemaContact = require("./validateSchemaContact");
+const schemaContactValidator = require("./validateSchemaContact");
 
-module.exports = { validateSchemaContact };
+module.exports = { schemaContactValidator };
