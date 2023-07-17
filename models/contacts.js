@@ -15,12 +15,49 @@ const getContactById = async (contactId) => {
   return result || null;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(({ id }) => id === contactId);
+  if (index === -1) return null;
+  const [result] = contacts.splice(index, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return result || null;
+};
 
-const addContact = async (body) => {};
+const addContact = async ({ name, email, phone }) => {
+  const contacts = await listContacts();
+  const newConatcts = {
+    id: nanoid(),
+    name,
+    email,
+    phone,
+  };
+  contacts.push(newConatcts);
 
-const updateContact = async (contactId, body) => {};
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return newConatcts;
+};
 
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(({ id }) => id === contactId);
+  if (index === -1) return null;
+  contacts[index] = {
+    ...contacts[index],
+    ...body,
+  };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
+
+// const log = async (func) =>
+//   console.log(
+//     await func("e6ywwRe4jcqxXfCZOj_1e", {
+//       name: "Alec Howardddd",
+//       email: "dfdfsdelementum@scelerisquescelerisquedui.net",
+//     })
+//   );
+// log(updateContact);
 module.exports = {
   listContacts,
   getContactById,
