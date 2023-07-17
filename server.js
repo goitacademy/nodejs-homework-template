@@ -7,7 +7,11 @@ const app = require("./app");
 
 
 mongoose
-  .connect("mongodb+srv://Vol4enak:4Wt8ss7xLegGvtzS@nodejs-db.peu48kx.mongodb.net/Contact-book")
+
+  .connect(
+    "mongodb+srv://Vol4enak:4Wt8ss7xLegGvtzS@nodejs-db.peu48kx.mongodb.net/Contact-book"
+  )
+
   .then(() => {
     app.listen(3001, () => {
       console.log("Database connection successful");
