@@ -1,6 +1,6 @@
-const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
-const Joi = require("joi");
+const { Schema, model } = require('mongoose');
+const { handleMongooseError } = require('../helpers');
+const Joi = require('joi');
 
 // Схема валідації Joi (даних, що прийшли)
 const addSchema = Joi.object({
@@ -35,8 +35,9 @@ const contactSchema = new Schema( {
       type: Boolean,
       default: false,
     },
-},
-  { versionKey: false }, // вимикаємо створення властивості "__v" з версією документа при додаванні данних
+}, { versionKey: false, timestamps: true }
+// versionKey: false - щоб не строрювалось поле "__v" з версією документа при додаванні данних
+// timestamps: true - щоб створювались поля createdAt і updatedAt (дата строрення і оновлення)
 );
 
 // Ця функція спрацює тільки, якщо помилка станеться під час валідації
