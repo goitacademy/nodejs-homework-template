@@ -50,14 +50,6 @@ const updateContact = async (contactId, body) => {
   return contacts[index];
 };
 
-// const log = async (func) =>
-//   console.log(
-//     await func("e6ywwRe4jcqxXfCZOj_1e", {
-//       name: "Alec Howardddd",
-//       email: "dfdfsdelementum@scelerisquescelerisquedui.net",
-//     })
-//   );
-// log(updateContact);
 module.exports = {
   listContacts,
   getContactById,
