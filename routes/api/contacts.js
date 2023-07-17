@@ -1,9 +1,12 @@
-const express = require('express')
+import express from "express";
+
+import contactsService from "../../models/contacts.js";
 
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const result = await contactsService.listContacts();
+  res.json(result)
 })
 
 router.get('/:contactId', async (req, res, next) => {
@@ -22,4 +25,4 @@ router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
 })
 
-module.exports = router
+export default router;
