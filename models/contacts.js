@@ -66,6 +66,7 @@ const addContact = async (req, res) => {
     }
 
     const { name, email, phone } = value;
+
     const newContact = {
       id: nanoid(),
       name,
@@ -98,7 +99,7 @@ const updateContact = async (req, res) => {
     }
 
     const { error, value } = userEditDataValidator.validate(req.body);
-    console.log(error);
+
     if (error) {
       return res.status(400).json({ message: 'invalid data' });
     }
