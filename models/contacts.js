@@ -49,7 +49,7 @@ const updateContact = async (contactId, body) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { contactId, name, email, phone };
+  contacts[index] = { id: contactId, name, email, phone };
   await updateContactStorage(contacts);
   return contacts[index]
 }
