@@ -111,8 +111,10 @@
   },
   {
     "id": "wVE5LO1oIL_MogiS1PAhJ",
-    "name": "Олександр Миронець",
-    "email": "mironec.kiev.1993@gmail.com",
-    "phone": "(073) 222-2222"
+    "name": {
+      "name": "Олександр Миронець",
+      "email": "mironec.kiev.1993@gmail.com",
+      "phone": "(073) 333-3333"
+    }
   }
 ]
