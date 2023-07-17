@@ -2,13 +2,7 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 
-// const { DB_HOST } = require("./config")
-
-
-
-mongoose
-
-  .connect(
+mongoose.connect(
     "mongodb+srv://Vol4enak:4Wt8ss7xLegGvtzS@nodejs-db.peu48kx.mongodb.net/Contact-book"
   )
 
