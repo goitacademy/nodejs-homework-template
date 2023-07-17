@@ -6,12 +6,7 @@ const {RequestError} = require("../../helpers");
 
 const router = express.Router()
 
-/* const contactSchema = Joi.object({
-  name:Joi.string().required(),
-  email:Joi.string().email({minDomainSegments: 2, tlds: {allow:['com','net']}}).required(),
-  phone:Joi.string().required(),
-}) */
-
+/* 
 router.get('/', async (_, res, next) => {
   try {
     const result = await contacts.listContacts()
@@ -76,6 +71,6 @@ router.put('/:contactId', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-})
+}) */
 
 module.exports = router
