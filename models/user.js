@@ -55,11 +55,9 @@ const loginSchema = Joi.object({
   }),
 });
 
-
 const schemas = {
   registerSchema,
   loginSchema,
-
 };
 
 const User = model("user", userSchema);
