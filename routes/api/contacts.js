@@ -2,7 +2,7 @@ import express from "express";
 
 import contactsService from "../../models/contacts.js";
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
 router.get("/", async (req, res, next) => {
   res.json({ message: "template message" });
