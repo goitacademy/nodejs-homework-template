@@ -26,8 +26,8 @@ const register = async (req, res, next) => {
 
     res.status(201).json({
       user: {
-        subscription: newUser.subscription,
         email: newUser.email,
+        password: newUser.password,
       },
     });
   } catch (error) {
@@ -43,7 +43,7 @@ const login = async (req, res, next) => {
     if (!user) {
       throw HttpError(401, "Email or password is wrong");
     }
-    const passwordCompare = bcrypt.compare(password, user.password);
+    const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
       throw HttpError(401, "Email or password is wrong");
     }
@@ -59,8 +59,8 @@ const login = async (req, res, next) => {
     res.json({
       token,
       user: {
-        subscription,
         email,
+        subscription,
       },
     });
   } catch (error) {
@@ -69,7 +69,6 @@ const login = async (req, res, next) => {
 };
 
 const getCurrent = async (req, res, next) => {
-
   const { subscription, email } = req.user;
 
   try {
@@ -81,6 +80,7 @@ const getCurrent = async (req, res, next) => {
     next(error);
   }
 };
+
 
 const logout = async (req, res, next) => {
   try {
