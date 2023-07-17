@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const sgMail = require("@sendgrid/mail")
+
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/users");
@@ -18,9 +18,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"))
 
-const {SENGIRD_API_KEY} = process.env
 
-sgMail.setApiKey(SENGIRD_API_KEY)
+
+
 
 const { DB_HOST } = process.env;
 
