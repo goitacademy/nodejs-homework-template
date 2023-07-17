@@ -81,7 +81,6 @@ const getCurrent = async (req, res, next) => {
   }
 };
 
-
 const logout = async (req, res, next) => {
   try {
     const { _id } = req.user;
