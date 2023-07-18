@@ -5,7 +5,7 @@ const Joi = require('joi')
 // импортируем обьект методов отправки запросов
 const contacts = require('../../models/contacts')
 
-const { HttpError } = require('../../helpers')
+// const { HttpError } = require('../../helpers')
 
 const router = express.Router()
 
@@ -16,6 +16,10 @@ const contactSchema = Joi.object({
   phone: Joi.string().required()
 })
 
+// 
+
+
+// получение всего списка
 router.get('/', async (req, res, next) => {
   try {
     const result = await contacts.listContacts()
@@ -24,7 +28,7 @@ router.get('/', async (req, res, next) => {
     next(error)
   }
 })
-
+// получение инф. по ид
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params
@@ -37,12 +41,24 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' })
   }
 })
+// добавление контакта
 
 router.post('/', async (req, res) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: 'missing required fields' });
+      const errorMessage = error.details[0].message.replace(/['"]/g, '');
+      let missingField = '';
+
+      if (errorMessage.includes('name')) {
+        missingField = 'name';
+      } else if (errorMessage.includes('email')) {
+        missingField = 'email';
+      } else if (errorMessage.includes('phone')) {
+        missingField = 'phone';
+      }
+
+      return res.status(400).json({ message: `missing required ${missingField} field` });
     }
 
     const newContact = await contacts.addContact(req.body);
@@ -52,6 +68,8 @@ router.post('/', async (req, res) => {
   }
 });
 
+
+// удаление контакта
 router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params
@@ -65,13 +83,29 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' })
   }
 })
-// ок
+
+// Обновление данных контакта  с выведением информ об отсутствующем элементе и всём body { message: "missing fields" }
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: 'missing fields' });
+    }
+
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: "missing fields" });
+      const errorMessage = error.details[0].message.replace(/['"]/g, '');
+      let missingField = '';
+
+      if (errorMessage.includes('name')) {
+        missingField = 'name';
+      } else if (errorMessage.includes('email')) {
+        missingField = 'email';
+      } else if (errorMessage.includes('phone')) {
+        missingField = 'phone';
+      }
+
+      return res.status(400).json({ message: `missing required ${missingField} field` });
     }
 
     const updatedContact = await contacts.updateContact(id, req.body);
