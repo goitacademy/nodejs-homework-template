@@ -78,7 +78,40 @@ const verifyEmail = async (req, res, next) => {
     next(error);
   }
   res.status(200).json({ message: 'Verification successful' });
+
 }
+
+
+const resendVerifyEmail = async (req,res,next) => {
+  try {
+    const { error } = authSchemas.emailSchema.validate(req.body);
+    if (error) {
+      throw RequestError(400, "missing required field email");
+    }
+    const { email } = req.user;
+    const user = await User.findOne({email});
+    if (!user) {
+      throw RequestError(401, "Email not found");
+    }
+    if (user.verify) {
+      throw RequestError(400, "Verification has already been passed");
+    }
+    const verifyEmail = {
+      to: email,
+      subject: "Verify email",
+      html: `<a target="_blank"
+       href="${BASE_URL}/users/verify/${user.verificationToken}"
+       >Click to verify email</a>`
+             }
+
+             await sendEmail(verifyEmail)
+
+  } catch (error) {
+    next(error)
+  }
+  res.status(200).json({ message: 'Verification email sent' });
+}
+
 
 
 const login = async (req, res, next) => {
@@ -169,4 +202,5 @@ module.exports = {
   logout,
   updateAvatar,
   verifyEmail,
+  resendVerifyEmail,
 };

@@ -74,9 +74,17 @@ const loginSchema = Joi.object({
   subscription: Joi.string(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string()
+    .email()
+    .required()
+    .error(new Error("missing required email field"))
+})
+
 const authSchemas = {
   registerSchema,
   loginSchema,
+  emailSchema,
 };
 
 const User = model("user", userSchema);
