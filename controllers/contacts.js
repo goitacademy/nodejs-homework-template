@@ -8,22 +8,9 @@ const {
 } = require("./../models/contacts");
 
 const { contactSchema } = require("./../validation/index");
-const getAllContacts = async (req, res, next) => {
-  const data = await listContacts();
-  res.status(200).json({
-    status: "success",
-    code: 200,
-    message: "ok",
-    data: data,
-  });
-};
+const getAllContacts = async (req, res) => {
+  const response = await listContacts();
 
-const getSingleContact = async (req, res, next) => {
-  const id = req.params.contactId;
-  const response = await getContactById(id);
-  if (!response) {
-    throw HttpError(404, "Not found");
-  }
   res.status(200).json({
     status: "success",
     code: 200,
@@ -32,13 +19,29 @@ const getSingleContact = async (req, res, next) => {
   });
 };
 
-const addNewContact = async (req, res, next) => {
-  if (!Object.keys(req.body).length) {
+const getSingleContact = async (req, res) => {
+  const id = req.params.contactId;
+  const response = await getContactById(id);
+  if (!response) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    message: "ok",
+    data: response,
+  });
+};
+
+const addNewContact = async (req, res) => {
+  const body = req.body;
+  if (!Object.keys(body).length) {
     throw HttpError(400, "missing fields");
   }
-  const body = req.body;
 
   const { error } = contactSchema.validate(body);
+
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -102,6 +105,8 @@ const setContact = async (req, res, next) => {
     data: response,
   });
 };
+
+
 
 module.exports = {
   getAllContacts: ctrlWrapper(getAllContacts),
