@@ -1,9 +1,9 @@
-const { getContactById } = require("../services/contactsService");
+const { getById } = require("../../services/contactsService");
 const asyncHandler = require("express-async-handler");
 
-const getContactByIdController = asyncHandler(async (req, res) => {
+const getContactById = asyncHandler(async (req, res) => {
   const { contactId } = req.params;
-  const contactById = await getContactById(contactId);
+  const contactById = await getById(contactId);
 
   !contactById
     ? res.status(404).json({ message: `Contact by ID ${contactId}: not found` })
@@ -11,5 +11,5 @@ const getContactByIdController = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  getContactByIdController,
+  getContactById,
 };

@@ -1,9 +1,9 @@
-const { updateStatus } = require("../services/contactsService");
-const { schema } = require("../schemas/joiSchema");
+const { changeStatus } = require("../../services/contactsService");
+const { joiSchema } = require("../../models/contact");
 const asyncHandler = require("express-async-handler");
 
-const updateStatusController = asyncHandler(async (req, res) => {
-  const { error } = schema.validate(req.body);
+const updateStatus = asyncHandler(async (req, res) => {
+  const { error } = joiSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: "Missing fields" });
   }
@@ -15,7 +15,7 @@ const updateStatusController = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Missing field favorite" });
   }
 
-  const updatedContact = await updateStatus(contactId, { favorite });
+  const updatedContact = await changeStatus(contactId, { favorite });
 
   !updatedContact
     ? res.status(404).json({ message: `Contact by ID ${contactId}: not found` })
@@ -23,5 +23,5 @@ const updateStatusController = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  updateStatusController,
+  updateStatus,
 };

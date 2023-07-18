@@ -15,10 +15,25 @@ const contactSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
 });
 
-const Contact = model("Contact", contactSchema);
+const Joi = require("joi");
+
+const joiSchema = Joi.object({
+  name: Joi.string().required(),
+  phone: Joi.string(),
+  email: Joi.string(),
+  favorite: Joi.boolean(),
+});
+
+const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
+  joiSchema,
 };

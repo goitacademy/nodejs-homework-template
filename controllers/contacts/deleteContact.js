@@ -1,9 +1,10 @@
-const { deleteContact } = require("../services/contactsService");
+const { removeContact } = require("../../services/contactsService");
 const asyncHandler = require("express-async-handler");
 
-const deleteContactController = asyncHandler(async (req, res) => {
+const deleteContact = asyncHandler(async (req, res) => {
   const { contactId } = req.params;
-  const deletedContact = await deleteContact(contactId);
+
+  const deletedContact = await removeContact(contactId);
 
   !deletedContact
     ? res.status(404).json({ message: `Contact by ID ${contactId}: not found` })
@@ -11,5 +12,5 @@ const deleteContactController = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  deleteContactController,
+  deleteContact,
 };
