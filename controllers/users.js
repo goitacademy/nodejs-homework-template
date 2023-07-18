@@ -81,6 +81,24 @@ const getCurrent = async (req, res, next) => {
   }
 };
 
+const updateSubscriptionUser = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+
+    const result = await User.findByIdAndUpdate(_id, req.body, {
+      new: ["starter", "pro", "business"],
+    });
+
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const logout = async (req, res, next) => {
   try {
     const { _id } = req.user;
@@ -98,4 +116,5 @@ module.exports = {
   login,
   getCurrent,
   logout,
+  updateSubscriptionUser,
 };
