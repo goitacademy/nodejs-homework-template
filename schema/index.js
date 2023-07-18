@@ -1,7 +1,6 @@
-const schemaAddContact = require('./schemaAddContact');
-const schemaUpdateContact = require('./schemaUpdateContact');
+const { schemaBody, schemaBodyObject } = require('./schemaBody');
 
 module.exports = {
-  schemaAddContact,
-  schemaUpdateContact,
+  schemaBody,
+  schemaBodyObject,
 };

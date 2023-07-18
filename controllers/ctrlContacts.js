@@ -1,6 +1,5 @@
 const modelsContacts = require('../models/contacts');
 const { ctrlWrapper, HttpError } = require('../utils');
-const { schemaAddContact, schemaUpdateContact } = require('../schema');
 
 /**
  * @ GET /api/contacts
@@ -19,12 +18,6 @@ const listContacts = async (req, res) => {
  */
 
 const addContact = async (req, res) => {
-  const { error } = schemaAddContact.validate(req.body);
-
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const result = await modelsContacts.addContact(req.body);
 
   res.status(201).json(result);
@@ -72,19 +65,13 @@ const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const body = req.body;
 
-  const { error } = schemaUpdateContact.validate(req.body);
-
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const result = await modelsContacts.updateContact(contactId, body);
 
   if (!result) {
     throw HttpError(404, 'Not found');
   }
 
-  res.status(202).json(result);
+  res.status(200).json(result);
 };
 
 module.exports = {
