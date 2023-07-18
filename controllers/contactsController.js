@@ -1,6 +1,5 @@
 import HttpError from "../helpers/HttpError.js";
 import contactsService from '../models/contacts.js';
-import contactsSchema from "../validators/contactsValidator.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -28,14 +27,6 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   try {
-    const { error } = contactsSchema.validate(req.body);
-    if (error) {
-      if (error.details[0].type === "any.required") {
-        throw HttpError(400, `missing required ${error.details[0].path[0]} field`); 
-      } else if (error.details[0].type.includes('base')) {
-        throw HttpError(400, error.message); 
-      }
-    }
     const result = await contactsService.addContact(req.body);
     res.status(201).json(result);
   }
@@ -43,7 +34,6 @@ const add = async (req, res, next) => {
     next(error);
   }
 }
-
 
 const deleteById = async (req, res, next) => {
   try {
@@ -64,16 +54,7 @@ const updateById = async (req, res, next) => {
     const keys = Object.keys(req.body);
     if (keys.length === 0) {
         throw HttpError(400, `missing fields`); 
-    } else {
-      const { error } = contactsSchema.validate(req.body);
-      if (error) {
-        if (error.details[0].type === "any.required") {
-          throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
-        } else if (error.details[0].type.includes('base')) {
-          throw HttpError(400, error.message); 
-        }
-      }
-    } 
+    }
    const { contactId } = req.params;
    const result = await contactsService.updateContact(contactId, req.body);
     if (!result) {

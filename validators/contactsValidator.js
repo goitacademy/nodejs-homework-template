@@ -1,9 +1,16 @@
-import Joi from "joi";
+import HttpError from "../helpers/HttpError.js";
+import contactsSchema from "./contactsValidateSchema.js";
 
-const contactsSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.number().required()
-}) 
+const dataValidate = (req, res, next) => {
+  const { error } = contactsSchema.validate(req.body);
+   if (error) {
+      if (error.details[0].type === "any.required") {
+        throw HttpError(400, `missing required ${error.details[0].path[0]} field`); 
+      } else if (error.details[0].type.includes('base')) {
+        throw HttpError(400, error.message); 
+      }
+  }
+  next();
+}  
 
-export default contactsSchema;
+export default dataValidate;
