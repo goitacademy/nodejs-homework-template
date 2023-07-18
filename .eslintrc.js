@@ -1,4 +1,4 @@
-module.exports = {
+const exp = {
 	env: {
 		commonjs: true,
 		es2021: true,
@@ -10,3 +10,5 @@ module.exports = {
 	},
 	rules: {},
 };
+
+export default exp;
