@@ -1,18 +1,9 @@
-const path = require('path');
-const fs = require('fs/promises');
-const { nanoid } = require('nanoid');
-
-const {
-  findContactById,
-  userDataValidator,
-  userEditDataValidator,
-} = require('../utils');
-
-const contactsPath = path.join('models', 'contacts.json');
+const { userDataValidator, userEditDataValidator } = require('../utils');
+const Contact = require('../models/contactModel');
 
 const listContacts = async (_, res) => {
   try {
-    const contacts = JSON.parse(await fs.readFile(contactsPath));
+    const contacts = await Contact.find();
 
     res.status(200).json(contacts);
   } catch (error) {
@@ -23,7 +14,7 @@ const listContacts = async (_, res) => {
 const getContactById = async (req, res) => {
   try {
     const contactId = req.params.contactId;
-    const findedContact = await findContactById(contactId, contactsPath);
+    const findedContact = await Contact.findById(contactId);
 
     if (!findedContact) {
       return res.status(404).json({ message: 'Not found' });
@@ -37,19 +28,13 @@ const getContactById = async (req, res) => {
 const removeContact = async (req, res) => {
   try {
     const contactId = req.params.contactId;
-    const contact = await findContactById(contactId, contactsPath);
+    const contact = await Contact.findById(contactId);
 
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
     }
 
-    const contacts = JSON.parse(await fs.readFile(contactsPath));
-
-    const filteredContacts = contacts.filter(
-      (contact) => contact.id !== contactId
-    );
-
-    await fs.writeFile(contactsPath, JSON.stringify(filteredContacts));
+    await Contact.findByIdAndDelete(contactId);
 
     res.status(200).json({ message: 'contact deleted' });
   } catch (error) {
@@ -60,24 +45,12 @@ const removeContact = async (req, res) => {
 const addContact = async (req, res) => {
   try {
     const { error, value } = userDataValidator.validate(req.body);
-    console.log(error);
+
     if (error) {
       return res.status(400).json({ message: 'missing required name field' });
     }
 
-    const { name, email, phone } = value;
-
-    const newContact = {
-      id: nanoid(),
-      name,
-      email,
-      phone,
-    };
-
-    const contacts = JSON.parse(await fs.readFile(contactsPath));
-    contacts.push(newContact);
-
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    const newContact = await Contact.create(value);
 
     res.status(201).json(newContact);
   } catch (error) {
@@ -88,7 +61,7 @@ const addContact = async (req, res) => {
 const updateContact = async (req, res) => {
   try {
     const contactId = req.params.contactId;
-    const contact = await findContactById(contactId, contactsPath);
+    const contact = await Contact.findById(contactId);
 
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
@@ -107,25 +80,51 @@ const updateContact = async (req, res) => {
     const { name, email, phone } = value;
 
     if (name) {
-      contact.name = name;
+      await Contact.findByIdAndUpdate(contactId, { name }, { new: true });
     }
     if (email) {
-      contact.email = email;
+      await Contact.findByIdAndUpdate(contactId, { email }, { new: true });
     }
     if (phone) {
-      contact.phone = phone;
+      await Contact.findByIdAndUpdate(contactId, { phone }, { new: true });
     }
 
-    const contacts = JSON.parse(await fs.readFile(contactsPath));
-    const filteredContacts = contacts.filter(
-      (contact) => contact.id !== contactId
+    const updatedUserData = { name, email, phone };
+
+    res.status(200).json(updatedUserData);
+  } catch (error) {
+    res.sendStatus(500);
+  }
+};
+
+const updateStatusContact = async (req, res) => {
+  try {
+    const contactId = req.params.contactId;
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    if (!Object.keys(req.body).length) {
+      return res.status(400).json({ message: 'missing field favorite' });
+    }
+
+    const { error, value } = userEditDataValidator.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ message: 'invalid data' });
+    }
+
+    const { favorite } = value;
+
+    const updatedUser = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
     );
 
-    filteredContacts.push(contact);
-
-    await fs.writeFile(contactsPath, JSON.stringify(filteredContacts));
-
-    res.status(200).json(contact);
+    res.status(200).json(updatedUser);
   } catch (error) {
     res.sendStatus(500);
   }
@@ -137,4 +136,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
