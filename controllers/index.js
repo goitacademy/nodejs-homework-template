@@ -8,5 +8,18 @@ const { register } = require("./auth/register");
 const { login } = require("./auth/login");
 const { getCurrent } = require("./auth/current");
 const { logout } = require("./auth/logout");
+const { updateAvatar } = require("./auth/updateAvatar");
 
-module.exports = { contactList, getContactById, addContact, updateContact, updateStatusContact, removeContact, register, logout, getCurrent, login };
+module.exports = {
+  contactList,
+  getContactById,
+  addContact,
+  updateContact,
+  updateStatusContact,
+  removeContact,
+  register,
+  logout,
+  getCurrent,
+  login,
+  updateAvatar,
+};
