@@ -1,11 +1,8 @@
-const path = require('path');
 const fs = require('fs/promises');
 
-const contactsPath = path.join('models', 'contacts.json');
-
-const findContactById = async (contactId) => {
+const findContactById = async (contactId, path) => {
   try {
-    const contacts = JSON.parse(await fs.readFile(contactsPath));
+    const contacts = JSON.parse(await fs.readFile(path));
     const findedContact = contacts.find((contact) => contact.id === contactId);
 
     return findedContact;
