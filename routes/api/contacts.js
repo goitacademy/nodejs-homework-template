@@ -1,10 +1,9 @@
-// contacts.js
+// contacts.js API
 const express = require('express')
 // для проверки поступающих обьектов на сервер, чтобы соответствовали требованиям
 const Joi = require('joi')
 // импортируем обьект методов отправки запросов
 const contacts = require('../../models/contacts')
-
 
 const router = express.Router()
 
