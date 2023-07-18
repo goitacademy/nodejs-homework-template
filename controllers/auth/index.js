@@ -8,6 +8,15 @@ const { logout } = require('./logout');
 
 // const { updateSubscription } = require('./updateSubscription');
 
-const {updateAvatar} = require('./updateAvatar')
+const { updateAvatar } = require('./updateAvatar');
 
-module.exports = { register, login, getCurrent, logout, updateAvatar };
+const { verifyEmail } = require('./verifyEmail');
+
+module.exports = {
+  register,
+  login,
+  getCurrent,
+  logout,
+  updateAvatar,
+  verifyEmail,
+};
