@@ -1,8 +1,9 @@
-const Joi = require("joi");
+import Joi from "joi";
 
-const contactsService = require("../models/contacts.js");
+// import { listContacts, getContactById, addContact, removeContact, updateContact } from "../models/contacts.js";
+import contactServise from "../models/contacts.js";
 
-const HttpError = require("../helpers/HttpError.js");
+import HttpError from "../helpers/HttpError.js";
 
 const contactsAddSchema = Joi.object({
   name: Joi.string().required(),
@@ -12,7 +13,7 @@ const contactsAddSchema = Joi.object({
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await contactsService.listContacts();
+    const result = await contactServise.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
@@ -22,7 +23,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
       const { contactId } = req.params;
-      const result = await contactsService.getContactById(contactId);
+      const result = await contactServise.getContactById(contactId);
       if (!result) {
         throw HttpError(404, `Contact with id ${contactId} not found`);
       }
@@ -39,7 +40,7 @@ const   createNewContact = async (req, res, next) => {
         throw HttpError(400, error.message);
       }
   
-      const result = await contactsService.addContact(req.body);
+      const result = await contactServise.addContact(req.body);
       res.status(201).json(result);
     } catch (error) {
       next(error);
@@ -49,7 +50,7 @@ const   createNewContact = async (req, res, next) => {
   const deleteById = async (req, res, next) => {
     try {
       const { contactId } = req.params;
-      const result = await contactsService.removeContact(contactId);
+      const result = await contactServise.removeContact(contactId);
       if (!result) {
         throw HttpError(404, `Contact with id ${contactId} not found`);
       }
@@ -69,7 +70,7 @@ const   createNewContact = async (req, res, next) => {
       }
   
       const { contactId } = req.params;
-      const result = await contactsService.updateContact(contactId, req.body);
+      const result = await contactServise.updateContact(contactId, req.body);
   
       if (!result) {
         throw HttpError(404, `Contact with id ${contactId} not found`);
@@ -80,7 +81,7 @@ const   createNewContact = async (req, res, next) => {
     }
   }
 
-module.exports = {
+export default {
   getAll,
   getById,
   createNewContact,
