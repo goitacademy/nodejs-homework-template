@@ -47,10 +47,11 @@ const addContact = async ({ name, email, phone }) => {
 
 const updateContact = async (id, { name, email, phone }) => {
   const contacts = await listContacts();
-  const contact = contacts.find((obj) => obj.id === id);
+  const contact = contacts.findIndex((obj) => obj.id === id);
   if (contact === -1) {
     return null;
   }
+
   contacts[contact] = { id, name, email, phone };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[contact];
