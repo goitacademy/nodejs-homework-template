@@ -15,20 +15,18 @@ export const listContacts = async () => {
 };
 
 // Повертаю об'єкт контакту з id за яким шукаю. Повертає null, якщо контакт з таким id не знайдений.
-export const getContactById = async (contactId) => {
+export const getContactById = async (id) => {
   const contactList = await listContacts();
 
-  const contactById = contactList.find((contact) => contactId === contact.id);
+  const contactById = contactList.find((contact) => id === contact.id);
   return contactById || null;
 };
 
 // Повертаю об'єкт видаленого контакту. Повертаю null, якщо контакт з таким id не знайдений.
-export const removeContact = async (contactId) => {
+export const removeContact = async (id) => {
   const contactList = await listContacts();
 
-  const contactIndex = contactList.findIndex(
-    (contact) => contactId === contact.id
-  );
+  const contactIndex = contactList.findIndex((contact) => id === contact.id);
   if (contactIndex === -1) null;
   const [resultRemoveContactById] = contactList.splice(contactIndex, 1);
   await updateContact(contactList);
@@ -50,15 +48,13 @@ export const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-export const updateContactById = async (contactId, { name, phone, email }) => {
+export const updateContactById = async (id, { name, phone, email }) => {
   const contactList = await listContacts();
-  const contactIndex = contactList.findIndex(
-    (contact) => contactId === contact.id
-  );
+  const contactIndex = contactList.findIndex((contact) => id === contact.id);
   if (contactIndex === -1) {
     return null;
   }
-  contactList[contactIndex] = { contactId, name, phone, email };
+  contactList[contactIndex] = { id, name, phone, email };
   await updateContact(contactList);
   return contactList[contactIndex];
 };

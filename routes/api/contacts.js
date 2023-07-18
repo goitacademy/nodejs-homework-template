@@ -1,23 +1,12 @@
 import express from "express";
-import Joi from "joi";
 
 import contactsServer from "../../models/contacts.js";
 
 import { HttpError } from "../../helpers/index.js";
 
-const contactsRouter = express.Router();
+import contactAddSchema from "../../service/JOI/JOI.js";
 
-const contactAddSchema = Joi.object({
-  name: Joi.string()
-    .required()
-    .messages({ "any.required": `"name" must be exist` }),
-  phone: Joi.string()
-    .required()
-    .messages({ "any.required": `"phone" must be exist` }),
-  email: Joi.string()
-    .required()
-    .messages({ "any.required": `"email" must be exist` }),
-});
+const contactsRouter = express.Router();
 
 contactsRouter.get("/", async (_, res, next) => {
   try {
@@ -68,16 +57,14 @@ contactsRouter.delete("/:contactId", async (req, res, next) => {
 
 contactsRouter.put("/:contactId", async (req, res, next) => {
   try {
+    console.log(req);
     const { body } = req;
-    const { contactId } = req.params;
+    const { contactId: id } = req.params;
     const { error } = contactAddSchema.validate(body);
     if (error) throw HttpError(400, error.message);
-    const updateContact = await contactsServer.updateContactById(
-      contactId,
-      body
-    );
+    const updateContact = await contactsServer.updateContactById(id, body);
     if (!updateContact) {
-      throw HttpError(404, `Contact with id=${contactId} is not found`);
+      throw HttpError(404, `Contact with id=${id} is not found`);
     }
     res.json(updateContact);
   } catch (error) {
