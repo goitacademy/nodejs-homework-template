@@ -5,7 +5,6 @@ const Joi = require('joi')
 // импортируем обьект методов отправки запросов
 const contacts = require('../../models/contacts')
 
-// const { HttpError } = require('../../helpers')
 
 const router = express.Router()
 
