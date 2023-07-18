@@ -1,6 +1,8 @@
 const express = require("express");
 const joi = require("joi");
 
+const { HttpError } = require("../../helpers/index");
+
 const router = express.Router();
 
 const {
@@ -49,11 +51,7 @@ router.get("/:contactId", async (req, res, next) => {
     const id = req.params.contactId;
     const response = await getContactById(id);
     if (!response) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not found",
-      });
+      throw HttpError(404, "Not found");
     }
     res.status(200).json({
       status: "success",
@@ -71,31 +69,22 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     if (!Object.keys(req.body).length) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "missing fields",
-      });
+      throw HttpError(400, "missing fields");
     }
     const body = req.body;
 
     const { error } = contactSchema.validate(body);
     if (error) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: error.message,
-      });
+      throw HttpError(400, error.message);
     }
 
     const response = await addContact(body);
 
     if (response === "contact already exists") {
-      res.status(409).json({
-        status: "error",
-        code: 409,
-        message: "Contact with such name, email or phone already exists",
-      });
+      throw HttpError(
+        409,
+        "Contact with such name, email or phone already exists"
+      );
     }
 
     res.status(201).json({
@@ -115,11 +104,7 @@ router.delete("/:contactId", async (req, res, next) => {
   try {
     const response = await removeContact(req.params.contactId);
     if (!response) {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not found",
-      });
+      throw HttpError(404, "Not found");
     }
     res.status(200).json({
       status: "success",
@@ -137,37 +122,24 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   try {
     if (!Object.keys(req.body).length) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "missing fields",
-      });
+      throw HttpError(400, "missing fields");
     }
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: error.message,
-      });
+      throw HttpError(400, error.message);
     }
 
     const response = await updateContact(req.params.contactId, req.body);
 
     if (!response) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Not found",
-      });
+      throw HttpError(404, "Not found");
     }
 
     if (response === "contact already exists") {
-      res.status(409).json({
-        status: "error",
-        code: 409,
-        message: "Contact with such name, email or phone already exists",
-      });
+      throw HttpError(
+        409,
+        "Contact with such name, email or phone already exists"
+      );
     }
 
     res.status(200).json({

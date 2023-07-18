@@ -23,28 +23,12 @@ app.use((_, res) => {
   });
 });
 
-app.use((err, req, res, next) => {
-  console.log(err.status);
-  // you can error out to stderr still, or not; your choice
-  console.error(err);
-
-  // body-parser will set this to 400 if the json is in error
-  if (err.status === 400)
-    return res.status(err.status).json({
-      status: "error",
-      code: err.status,
-      message: "Bad request",
-    });
-
-  return next(err); // if it's not a 400, let the default error handling do it.
-});
-
 app.use((err, _, res, __) => {
-  res.status(500).json({
+  const { status = 500, message = "Internal Server Error" } = err;
+  res.status(status).json({
     status: "error",
-    code: 500,
-    message: err.message,
-    data: "Internal Server Error",
+    code: status,
+    message: message,
   });
 });
 
