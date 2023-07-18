@@ -1,10 +1,9 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { nanoid } = require("nanoid");
+const { isContactUnique } = require("./../helpers/index");
 
 const contactPath = path.join(__dirname, "./contacts.json");
-
-const { isContactUnique } = require("./helpers");
 
 const listContacts = async () => {
   const data = await fs.readFile(contactPath);
