@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
-app.use((req, res) => {
+app.use((_, res) => {
 	res.status(404).json({
 		status: "error",
 		code: 404,
@@ -23,7 +23,7 @@ app.use((req, res) => {
 	});
 });
 
-app.use((e, req, res, next) => {
+app.use((e, _, res, __) => {
 	const { status = 500, message = "Server error!" } = e;
 	res.status(status).json({
 		message,

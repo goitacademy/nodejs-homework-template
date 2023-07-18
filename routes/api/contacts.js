@@ -1,22 +1,13 @@
 import express from "express";
-import Joi from "joi";
 
 import { listContacts, getContactById, addContact, removeContact, updateContact } from "../../models/contacts.js";
 
 import HTTPError from "../../helpers/HTTPError.js";
+import userAddSchema from "../../schemas/schemas.js";
 
 const router = express.Router();
 
-const userAddSchema = Joi.object({
-	name: Joi.string().min(3).max(30).required(),
-	email: Joi.string().email({ minDomainSegments: 2 }).required(),
-	phone: Joi.string()
-		.min(8)
-		.pattern(/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/)
-		.required(),
-});
-
-router.get("/", async (req, res, next) => {
+router.get("/", async (_, res, next) => {
 	try {
 		const contacts = await listContacts();
 		res.json(contacts);
