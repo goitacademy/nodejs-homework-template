@@ -8,4 +8,6 @@ const { logout } = require('./logout');
 
 // const { updateSubscription } = require('./updateSubscription');
 
-module.exports = { register, login, getCurrent, logout };
+const {updateAvatar} = require('./updateAvatar')
+
+module.exports = { register, login, getCurrent, logout, updateAvatar };
