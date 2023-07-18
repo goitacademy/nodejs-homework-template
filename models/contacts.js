@@ -23,7 +23,7 @@ const listContacts = async (_, res) => {
 const getContactById = async (req, res) => {
   try {
     const contactId = req.params.contactId;
-    const findedContact = await findContactById(contactId);
+    const findedContact = await findContactById(contactId, contactsPath);
 
     if (!findedContact) {
       return res.status(404).json({ message: 'Not found' });
@@ -37,7 +37,7 @@ const getContactById = async (req, res) => {
 const removeContact = async (req, res) => {
   try {
     const contactId = req.params.contactId;
-    const contact = await findContactById(contactId);
+    const contact = await findContactById(contactId, contactsPath);
 
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
@@ -88,7 +88,7 @@ const addContact = async (req, res) => {
 const updateContact = async (req, res) => {
   try {
     const contactId = req.params.contactId;
-    const contact = await findContactById(contactId);
+    const contact = await findContactById(contactId, contactsPath);
 
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
