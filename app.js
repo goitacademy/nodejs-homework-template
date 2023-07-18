@@ -1,7 +1,16 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// CLCOvKYzTKXeVYLN
 
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+const mongoose = require('mongoose');
+
+const DB_HOST = "mongodb+srv://Iryna:CLCOvKYzTKXeVYLN@cluster0.4aldtzj.mongodb.net/03-mongodb?retryWrites=true&w=majority";
+mongoose.set('strictQuery', true);
+
+mongoose.connect(DB_HOST)
+.then(() => console.log("Database connect success"))
+.catch(error => console.log(error.message))
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
