@@ -1,13 +1,7 @@
 const contacts = require("../models/contacts.js");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
-
-const Joi = require("joi");
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  phone: Joi.string().required(),
-  email: Joi.string().required(),
-});
+const addSchema = require("../helpers/schemaValidate.js");
 
 const getAll = async (req, res) => {
   const result = await contacts.listContacts();
