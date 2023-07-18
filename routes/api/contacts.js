@@ -7,6 +7,7 @@ const {
   addContact,
   deleteContact,
   update,
+  updateStatusContact
 } = require("../../controllers/contacts");
 
 router.get("/", getAll);
@@ -19,4 +20,7 @@ router.delete("/:contactId", deleteContact);
 
 router.put("/:contactId", update);
 
+router.patch("/:contactId/favorite", updateStatusContact);
+
 module.exports = router;
+

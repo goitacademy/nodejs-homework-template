@@ -6,6 +6,7 @@ const schema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ru"] } })
     .required(),
   phone: Joi.number().required(),
+  favorite: Joi.bool().required()
 });
 
 module.exports = {
