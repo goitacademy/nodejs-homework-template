@@ -1,11 +1,13 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../helpers");
+const { handleMongooseError, patterns } = require("../helpers");
 
-const patterns = {
-  email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-};
+
+
+// const patterns = {
+//   email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+// };
 
 const contactSchema = new Schema(
   {
