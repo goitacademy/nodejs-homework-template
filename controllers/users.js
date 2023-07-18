@@ -13,7 +13,7 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, subscription } = req.body;
     const user = await User.findOne({ email });
 
     if (user) {
@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       user: {
         email: newUser.email,
-        password: newUser.password,
+        subscription: newUser.subscription,
       },
     });
   } catch (error) {
