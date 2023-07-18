@@ -1,9 +1,10 @@
 const { Schema, model } = require("mongoose");
+const mongooseError = require("../helpers/mongooseErrors")
 
 const contactSchema = new Schema({
   name: {
     type: String,
-    required: [true, "Set name for contact"],
+    required: true
   },
   email: {
     type: String,
@@ -15,12 +16,13 @@ const contactSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+  }
 });
 
-contactSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+contactSchema.post("save", mongooseError);
 const Contact = model("contact", contactSchema);
 
 module.exports = Contact;
