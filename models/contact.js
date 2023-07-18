@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const { handleSchemaValidationErrors } = require("../helpers");
 
-
 const contactSchema = new Schema({
     name: {
         type:String,
@@ -9,17 +8,19 @@ const contactSchema = new Schema({
 },
     email:{
         type: String,
+        required: true,
     },
     phone: {
         type: String,
+        required: true,
     },
     favorite: {
         type: Boolean,
         default:false,
     },
 }, {versionKey: false, timestamps: true});
-contactSchema.post("save", handleSchemaValidationErrors);
 
+contactSchema.post("save", handleSchemaValidationErrors);
 
 
 
