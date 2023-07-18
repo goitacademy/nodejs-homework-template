@@ -1,5 +1,5 @@
 const express = require('express');
-const { validateBody } = require('../../middlewares');
+const { validateBody, authenticate } = require('../../middlewares');
 const { schemas } = require('../../models/user');
 const ctrl = require('../../controllers/auth');
 
@@ -10,5 +10,8 @@ router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 
 // Авторизація (signin)
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
+
+// Перевірка валідності токена
+router.get('/current', authenticate, ctrl.getCurrent);
 
 module.exports = router;

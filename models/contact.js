@@ -35,6 +35,12 @@ const contactSchema = new Schema( {
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId, // це означає, що тут зберігається id, яке генерує mongoDB
+      ref: "user", // назва колекції, з якої береться id
+      required: true,
+    },
+    
 }, { versionKey: false, timestamps: true }
 // versionKey: false - щоб не строрювалось поле "__v" з версією документа при додаванні данних
 // timestamps: true - щоб створювались поля createdAt і updatedAt (дата строрення і оновлення)
