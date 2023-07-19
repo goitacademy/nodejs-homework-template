@@ -1,7 +1,7 @@
 import HTTPError from "../helpers/HTTPError.js";
 
 const validateBody = schema => {
-	const func = (req, res, next) => {
+	const func = (req, _, next) => {
 		const { error } = schema.validate(req.body);
 
 		if (error) {

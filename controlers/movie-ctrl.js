@@ -2,8 +2,6 @@ import { listContacts, getContactById, addContact, removeContact, updateContact 
 
 import trycatchWrapper from "../decorators/trycatchWrapper.js";
 
-import userAddSchema from "../schemas/schemas.js";
-
 const getAllCobtactsCtrl = async (_, res, __) => {
 	const contacts = await listContacts();
 	res.json(contacts);
