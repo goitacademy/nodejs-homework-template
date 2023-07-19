@@ -9,7 +9,6 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-
     "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
@@ -19,7 +18,6 @@
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.3.4",
     "morgan": "1.10.0"
-
   },
   "devDependencies": {
     "eslint": "7.19.0",
