@@ -1,8 +1,12 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const dotenv = require('dotenv')
+ 
 
 const contactsRouter = require('./routes/api/contacts')
+
+dotenv.config()
 
 const app = express()
 
@@ -23,18 +27,5 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message })
 })
 
-
-
-
-// const contacts = require("./models/contacts.json")
-
-// app.get("/", (request, response)=> {
-//   response.send("<h2>Home page</h2>")
-// });
-
-// app.get("/contacts", (req, res)=> {
-  
-//   res.json(contacts)
-// })
 
 module.exports = app
