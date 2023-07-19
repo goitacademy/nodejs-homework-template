@@ -1,6 +1,7 @@
 const registerSchema = require("../schemas");
 // const loginSchema = require("../schemas");
 const {HttpError} = require("../helpers");
+
 const User = require("../models/user");
 
 const register = async (req, res, next) => {
@@ -10,8 +11,10 @@ const register = async (req, res, next) => {
       if(error) {
         throw HttpError(400, error.message);
       }
+
       const newUser = await User.create(req.body);
-      res.json({
+      
+      res.status(201).json({
         password: newUser.password,
         email: newUser.email,
       })

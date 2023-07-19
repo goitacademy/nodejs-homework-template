@@ -1,5 +1,5 @@
 const { getAll, getById, add, updateById, deleteById, updateStatusContact } = require("./contacts");
-const {register } = require("./auth")
+const { register } = require("./users")
 
 module.exports = {
     getAll,
