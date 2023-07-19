@@ -22,14 +22,23 @@ const login = async (req, res) => {
         throw HttpError(401, "Email or password invalid");
     }
 
+    // Формуємо payload для токена
     const payload = {
         id: user._id,
     }
 
+    // Створюємо токен
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+
+    // Додаємо токен в БД
+    await User.findByIdAndUpdate(user._id, {token});
 
     res.json({
         token,
+        "user": {
+            email: user.email,
+            subscription: user.subscription,
+        }
     });
 }
 

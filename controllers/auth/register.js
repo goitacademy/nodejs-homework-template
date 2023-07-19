@@ -16,7 +16,9 @@ const register = async (req, res) => {
     // Хешуємо пароль
     const hashPassword = await bcrypt.hash(password, 10);
 
+    // Створюємо нового користувача
     const newUser = await User.create({ ...req.body, password: hashPassword });
+
     res.status(201).json({
         email: newUser.email,
         subscription: newUser.subscription,

@@ -16,8 +16,8 @@ const authenticate = async (req, res, next) => {
         const { id } = jwt.verify(token, SECRET_KEY); // метод jwt.verify викидає помилку, тому загортаємо в try/catch
         const user = await User.findById(id);
 
-        // Якщо такого користувача нема в БД
-        if (!user) {
+        // Якщо такого користувача нема в БД або у нього немає токену або його токен не співпадає з тим, який прислали
+        if (!user || !user.token || user.token !== token) {
             next(HttpError(401));
         }
 
