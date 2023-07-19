@@ -59,7 +59,7 @@ router.delete("/:id", async (req, res, next) => {
     if (!contactID) {
       throw HttpError(404, 'Not found id');
     }
-    res.status(200).json(contactID)
+    res.status(200).json("contact deleted")
   }
   catch (error) {
        next(error)
@@ -75,7 +75,7 @@ router.put("/:id", async (req, res, next) => {
     }   
     const contactID = await contactsFunction.updateContact(id, { name, email, phone });
      if (!contactID) {
-      throw HttpError(404, 'Not found id');
+      throw HttpError(404, 'Not found');
     }
     res.status(200).json(contactID)
   }
