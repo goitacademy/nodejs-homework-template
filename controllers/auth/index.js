@@ -1,4 +1,4 @@
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require("express-async-handler");
 
 const register = require("./register");
 
@@ -12,11 +12,17 @@ const updateSubscription = require("./updateSubscription");
 
 const updateAvatar = require("./updateAvatar");
 
+const verifyEmail = require("./verifyEmail");
+
+const resendVerifyEmail = require("./resendVerifyEmail");
+
 module.exports = {
-    register: asyncHandler(register),
-    login: asyncHandler(login),
-    getCurrent: asyncHandler(getCurrent),
-    logout: asyncHandler(logout),
-    updateSubscription,
-    updateAvatar: asyncHandler(updateAvatar),
+  register: asyncHandler(register),
+  login: asyncHandler(login),
+  getCurrent: asyncHandler(getCurrent),
+  logout: asyncHandler(logout),
+  updateSubscription,
+  updateAvatar: asyncHandler(updateAvatar),
+  verifyEmail: asyncHandler(verifyEmail),
+  resendVerifyEmail: asyncHandler(resendVerifyEmail),
 };
