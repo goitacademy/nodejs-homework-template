@@ -1,7 +1,8 @@
 const Joi = require('joi');
 
-const PHONE_REGEX = '/^(d{3}) d{3}-d{4}$/';
-exports.createUserDataValidator = (data) =>
+const PHONE_REGEX = /^\(\d{3}\)\s\d{3}-\d{4}/;
+
+exports.createContactDataValidator = (data) =>
   Joi.object()
     .options({ abortEarly: false })
     .keys({

@@ -73,19 +73,6 @@ exports.removeContact = catchAsync(async (req, res) => {
  */
 // exports.updateStatus = catchAsync(async (req, res) => {
 //   const { id } = req.params;
-
-//   const updatedContact = await Contact.findByIdAndUpdate(
-//     id,
-//     { favorite: req.body.favorite },
-//     { new: true }
-//   );
-
-//   res.status(200).json({
-//     msg: 'Success',
-//     contact: updatedContact,
-//   });
-// });
-
 exports.updateStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;

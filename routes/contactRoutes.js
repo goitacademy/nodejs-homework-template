@@ -28,12 +28,6 @@ const router = Router();
  * DELETE     /contacts/<contactID>   - delete contact by id
  */
 
-// router.post('/', createContact);
-// router.get('/', getAllContacts);
-// router.get('/:id', checkContactId, getOneContact);
-// router.patch('/:id', checkContactId, updateContact);
-// router.delete('/:id', checkContactId, deleteContact);
-
 router
   .route('/')
   .post(checkCreateContactData, createContact)
