@@ -1,6 +1,6 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
-const PHONE_REGEX = "/^(d{3}) d{3}-d{4}$/";
+const PHONE_REGEX = '/^(d{3}) d{3}-d{4}$/';
 exports.createUserDataValidator = (data) =>
   Joi.object()
     .options({ abortEarly: false })

@@ -1,5 +1,5 @@
-const Contact = require("../models/contactModel");
-const { catchAsync } = require("../utils");
+const Contact = require('../models/contactModel');
+const { catchAsync } = require('../utils');
 
 /**
  * Create new contact controller.
@@ -10,7 +10,7 @@ exports.createContact = catchAsync(async (req, res) => {
   newContact.password = undefined;
 
   res.status(201).json({
-    msg: "Success",
+    msg: 'Success',
     contact: newContact,
   });
 });
@@ -22,7 +22,7 @@ exports.getAllContacts = catchAsync(async (req, res) => {
   const contacts = await Contact.find();
 
   res.status(200).json({
-    msg: "Success",
+    msg: 'Success',
     contacts,
   });
 });
@@ -34,7 +34,7 @@ exports.getOneContact = catchAsync(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
 
   res.status(200).json({
-    msg: "Success",
+    msg: 'Success',
     contact,
   });
 });
@@ -52,7 +52,7 @@ exports.updateContact = catchAsync(async (req, res) => {
   );
 
   res.status(200).json({
-    msg: "Success",
+    msg: 'Success',
     contact: updatedContact,
   });
 });
@@ -81,7 +81,7 @@ exports.updateStatus = catchAsync(async (req, res) => {
   );
 
   res.status(200).json({
-    msg: "Success",
+    msg: 'Success',
     contact: updatedContact,
   });
 });
