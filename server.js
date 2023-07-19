@@ -1,15 +1,19 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 import app from "./app.js";
-// ndD2DO6jbAW6K90S
 
-const DB_HOST =
-	"mongodb+srv://Iuliia-Tyndyk:ndD2DO6jbAW6K90S@cluster0.yx1qcvt.mongodb.net/my-contacts?retryWrites=true&w=majority";
+dotenv.config();
+const { DB_HOST, PORT } = process.env;
+
 mongoose
 	.connect(DB_HOST)
 	.then(() => {
-		app.listen(3000, () => {
+		app.listen(PORT, () => {
 			console.log("Database connection successful");
 		});
 	})
-	.catch((error) => console.log(error.message));
+	.catch((error) => {
+		console.log(error.message);
+		process.emit(1);
+	});
