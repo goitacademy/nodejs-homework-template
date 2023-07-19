@@ -3,13 +3,7 @@ const crypto = require("crypto");
 const router = express.Router();
 const contacts = require("../../models/contacts");
 const { HttpError } = require("../../utils");
-const Joi = require("joi");
-
-const reqSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+const { ReqSchema } = require("../../utils");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -35,7 +29,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = reqSchema.validate(req.body);
+    const { error } = ReqSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -61,7 +55,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const { error } = reqSchema.validate(req.body);
+    const { error } = ReqSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
