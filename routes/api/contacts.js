@@ -7,14 +7,6 @@ const {
   updateContact,
 } = require("../../models/contacts.js");
 
-const reqError = require("../../helpers/reqError.js");
-const joi = require("joi");
-const schema = joi.object({
-  name: joi.string().required(),
-  email: joi.string().required(),
-  phone: joi.string().required(),
-});
-
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
