@@ -1,5 +1,5 @@
 const { getAll, getById, add, updateById, deleteById, updateStatusContact } = require("./contacts");
-
+const {register } = require("./auth")
 
 module.exports = {
     getAll,
@@ -8,4 +8,5 @@ module.exports = {
     updateById,
     deleteById,
     updateStatusContact,
+    register,
 }

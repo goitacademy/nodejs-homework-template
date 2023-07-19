@@ -11,7 +11,20 @@ const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required(),
 })
 
+const registerSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  email: Joi.string().email().required(),
+  subscription: Joi.string(),
+})
+
+const loginSchema = Joi.object({
+  password: Joi.string().min(6).required(),
+  email: Joi.string().email().required(),
+})
+
 module.exports = {
   addSchema,
-  updateFavoriteSchema
+  updateFavoriteSchema,
+  registerSchema,
+  loginSchema,
 }
