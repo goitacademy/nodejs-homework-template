@@ -29,3 +29,39 @@
 - `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+
+
+
+Різні способи обробки помилок 
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+
+    const result = await contactsService.getContactById(contactId);
+    if (!result) {
+      throw HttpError(404);
+      // 3 спосіб
+      // throw HttpError(404, `Not found ID=${contactId}`);
+      // 2 спосіб
+      // const error = new Error(`Not found id=${contactId}`);
+      // error.status = 404;
+      // throw error;
+      // 1 спосіб
+      // return res.status(404).json({
+      //   message: `Not found id=${contactId}`,
+      // });
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+    // 2 спосіб
+    // const { status = 500, message = "Server error" } = error;
+    // res.status(status).json({
+    //   message,
+    // });
+    // 1 спосіб
+    // res.status(500).json({
+    //   message: "Server error",
+    // });
+  }
+});
