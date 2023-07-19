@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const mongoose = require('mongoose');
 
 dotenv.config({
