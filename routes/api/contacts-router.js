@@ -1,9 +1,8 @@
 import express from "express";
-
 import contactsService from "../../models/contacts.js";
 import HttpError from "../../helpers/HttpError.js";
-
 import Joi from "joi";
+
 
 const contactsRouter = express.Router();
 
@@ -91,5 +90,6 @@ contactsRouter.put("/:id", async (req, res, next) => {
     next(error);
   }
 });
+
 
 export default contactsRouter;
