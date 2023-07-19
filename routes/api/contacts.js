@@ -8,7 +8,9 @@ getById,
 add,
 updateById,
 updateStatusContact,
-removeById}= require("../../controllers/contacts");
+removeById
+} = require("../../controllers/contacts");
+
 const router = express.Router();
 
 
@@ -22,6 +24,6 @@ router.patch("/:contactId/favorite", isValidId, validationBody(schemas.updateFav
 
 router.delete('/:contactId', isValidId, ctrlWrapper(removeById));
 
-router.put('/:contactId', isValidId, validationBody(schemas.contactAddSchema), ctrlWrapper(updateById)); 
+router.put('/:contactId', isValidId, validationBody(schemas.contactAddSchema), ctrlWrapper(updateById));  
 
 module.exports = router;

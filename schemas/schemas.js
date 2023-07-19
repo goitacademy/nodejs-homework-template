@@ -1,13 +1,15 @@
-const Joi = require('joi');
-const { Schema, model} = require("mongoose");
-const Schema = mongoose.Schema;
+/* const Joi = require('joi');
+
 
   const contactAddSchema = Joi.object({
+    
     name: Joi.string().required(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
     phone: Joi.string().required(),
   })
-  
+  console.log(this.contactAddSchema);
+
+
   const updateFavoriteSchema = Joi.object({
     favorite: Joi.bool().required(),
   })
@@ -17,4 +19,4 @@ const Schema = mongoose.Schema;
     updateFavoriteSchema,
   };
 
-  module.exports = schemas;
+  module.exports = schemas; */
