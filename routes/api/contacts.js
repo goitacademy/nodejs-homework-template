@@ -1,6 +1,7 @@
 import express from "express";
 
 import validateBody from "../../decorators/validateBody.js";
+import userAddSchema from "../../schemas/schemas.js";
 
 import { getAllCobtactsCtrl, findContactByIdCtrl, addContactCtrl, putContactDataCtrl, deleteContactByIdCtrl } from "../../controlers/movie-ctrl.js";
 
@@ -10,9 +11,9 @@ router.get("/", getAllCobtactsCtrl);
 
 router.get("/:contactId", findContactByIdCtrl);
 
-router.post("/", addContactCtrl);
+router.post("/", validateBody(userAddSchema), addContactCtrl);
 
-router.put("/:contactId", putContactDataCtrl);
+router.put("/:contactId", validateBody(userAddSchema), putContactDataCtrl);
 
 router.delete("/:contactId", deleteContactByIdCtrl);
 
