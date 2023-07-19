@@ -55,7 +55,7 @@ const deleteById = async (req, res) => {
 };
 
 
-const updateById = async (req, res, next) => {
+const updateById = async (req, res) => {
         const { error } = constactsAddSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
