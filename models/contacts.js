@@ -17,22 +17,16 @@ async function getContactById(contactId) {
 }
 
 async function removeContact(contactId) {
-  try {
-    const contactToRemove = await getContactById(contactId);
-    if (!contactToRemove) {
-      return null;
-    }
-    const contacts = await listContacts();
-    const updatedContacts = contacts.filter(
-      (contact) => contact.id !== contactId
-    );
-    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
-    return contactToRemove;
-  } catch (error) {
-    console.error(`Error in contacts.js while deleting contact by ID, read the error, please: ${' '}
-      ${error}`);
+  const contactToRemove = await getContactById(contactId);
+  if (!contactToRemove) {
     return null;
   }
+  const contacts = await listContacts();
+  const updatedContacts = contacts.filter(
+    (contact) => contact.id !== contactId
+  );
+  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+  return contactToRemove;
 }
 
 async function addContact({ name, email, phone }) {
