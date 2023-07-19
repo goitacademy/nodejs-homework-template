@@ -32,7 +32,7 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = contactsAddSchema.validate(req.body);
+    const { error } = contactsSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -64,7 +64,7 @@ router.put("/:id", async (req, res, next) => {
       throw HttpError(400);
     }
 
-    const { error } = contactsAddSchema.validate(req.body);
+    const { error } = contactsSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
