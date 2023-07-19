@@ -22,7 +22,13 @@ const userSchema = new Schema({
       enum: validSubscriptions,
       default: "starter"
     },
-    token: String
+    token: {
+      type: String,
+    },
+    avatarURL:{
+      type: String,
+      required: true
+    }
   },{
   versionKey: false
 });
