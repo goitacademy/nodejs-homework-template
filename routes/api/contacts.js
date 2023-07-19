@@ -1,12 +1,8 @@
 import express from "express";
 
-import {
-	getAllCobtactsCtrl,
-	findContactByIdCtrl,
-	addContactCtrl,
-	putContactDataCtrl,
-	deleteContactByIdCtrl,
-} from "../../controlers/movie-controler.js";
+import validateBody from "../../decorators/validateBody.js";
+
+import { getAllCobtactsCtrl, findContactByIdCtrl, addContactCtrl, putContactDataCtrl, deleteContactByIdCtrl } from "../../controlers/movie-ctrl.js";
 
 const router = express.Router();
 
