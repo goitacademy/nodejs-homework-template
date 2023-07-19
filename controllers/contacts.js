@@ -1,19 +1,19 @@
-import { listContacts, getContactById, removeContact, addContact, updateContact } from "../models/contacts.js";
+
 import { HttpError } from "../helpers/HttpError.js";
 import ctrlWrapper from "./ctrlWrapper.js";
-
+import { Contact } from "../models/contact.js";
 
 // get all contacts
 const getAll = async (req, res) => {
-  const contacts = await listContacts();
-  res.status(200).json(contacts);
+  const result = await Contact.find();
+  res.status(200).json(result);
 };
 
-//get contact by id
+// //get contact by id
 const getById = async (req, res) => {
   const { contactId } = req.params;
+  const contact = await Contact.findById(contactId);
 
-  const contact = await getContactById(contactId);
   if (!contact) throw HttpError(404, "Not Found");
 
   res.status(200).json(contact);
@@ -21,16 +21,26 @@ const getById = async (req, res) => {
 
 //add contact
 const AddContact = async (req, res) => {
-  const addedContact = await addContact(req.body);
+  const addedContact = await Contact.create(req.body);
 
   res.status(201).json(addedContact);
 };
 
 //update contact id
 const modifyContact = async (req, res) => {
-  const { params, body } = req;
+  const { contactId } = req.params;
 
-  const updatedContact = await updateContact(params.contactId, body);
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body,{new: true});
+  if (!updatedContact) throw HttpError(404, "Not found");
+
+  res.status(200).json(updatedContact);
+};
+
+// update contact Status by id
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
   if (!updatedContact) throw HttpError(404, "Not found");
 
   res.status(200).json(updatedContact);
@@ -40,7 +50,7 @@ const modifyContact = async (req, res) => {
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
 
-  const deletedContact = await removeContact(contactId);
+  const deletedContact = await Contact.findByIdAndRemove(contactId);
   if (!deletedContact) throw HttpError(404, "Not Found");
 
   res.status(200).json({ message: "contact deleted" });
@@ -53,6 +63,7 @@ const ctrl = {
   AddContact: ctrlWrapper(AddContact),
   modifyContact: ctrlWrapper(modifyContact),
   deleteContact: ctrlWrapper(deleteContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
 
 //export
