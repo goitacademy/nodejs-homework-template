@@ -6,6 +6,7 @@ const contactsPath = path.join(__dirname, 'contacts.json');
 
 // Function from parse
 function parseContacts(data) {
+
   return JSON.parse(data.toString());
 }
 
@@ -28,8 +29,12 @@ const getContactById = async contactId => {
 // Remove a contact
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
+ 
 
-  const index = contacts.findIndex(item => item.id === contactId);
+  const index = contacts.findIndex(item => {
+     console.log(item.id, contactId)
+    return item.id === contactId
+  });
 
     if(index === -1){
         return null;
@@ -43,6 +48,9 @@ const removeContact = async (contactId) => {
 
 }
 
+ 
+  
+  
 // Add a new contact
 const addContact = async (body) => {
   const contacts = await listContacts();

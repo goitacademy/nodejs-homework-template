@@ -19,7 +19,7 @@ app.use('/api/contacts', contactsRouter)
 
 app.use((req, res, next) => {
 
-  res.status(404).json({ message: 'Not found Why?' })
+  res.status(404).json({ message: 'Not found' })
   next()
 })
 
