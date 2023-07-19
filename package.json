@@ -26,6 +26,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.0.1"
   }
 }
