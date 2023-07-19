@@ -36,7 +36,7 @@ app.all("*", (req, res) => {
  * Global error handler.
  */
 app.use((error, req, res, next) => {
-  res.status(500).json({
+  res.status(error.status || 500).json({
     msg: error.message,
   });
 });
