@@ -4,8 +4,6 @@ const fs = require("fs").promises;
 const { catchAsync, contactsValidators, AppError } = require("../utils");
 
 exports.addContact = catchAsync(async (req, res) => {
-  // const { name, email, phone } = req.body;
-
   const { error, value } = contactsValidators.createContactDataValidator(
     req.body
   );
@@ -45,7 +43,7 @@ exports.listContacts = catchAsync(async (req, res) => {
   });
 });
 
-exports.getContactById = catchAsync((req, res) => {
+exports.getContactById = catchAsync(async (req, res) => {
   const { contact } = req;
 
   res.status(200).json({
