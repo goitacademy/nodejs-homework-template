@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // const fs = require("fs/promises")
 const gravatar = require("gravatar");
 const avatarDir = path.join(__dirname,"../","public","avatars");
-// const nanoid = require("nanoid");
+
 const {nanoid} = require("nanoid");
 
 const { SECRET_KEY,BASE_URL } = process.env;
@@ -69,15 +69,17 @@ const verifyEmail = async (req, res, next) => {
   try {
     const{verificationToken} = req.params;
     const user = await User.findOne({verificationToken})
+   
     if (!user) {
       throw RequestError(404, 'User not found');
     }
-    await User.findByIdAndUpdate(user._id,{verify:true,verificationToken:null});
+    
+    await User.findByIdAndUpdate(user._id,{verify:true,verificationToken:""});
 
   } catch (error) {
     next(error);
   }
-  res.status(200).json({ message: 'Verification successful' });
+  return res.status(200).json({ message: 'Verification successful' });
 
 }
 
@@ -88,8 +90,9 @@ const resendVerifyEmail = async (req,res,next) => {
     if (error) {
       throw RequestError(400, "missing required field email");
     }
-    const { email } = req.user;
+    const { email } = req.body;
     const user = await User.findOne({email});
+    
     if (!user) {
       throw RequestError(401, "Email not found");
     }
@@ -123,7 +126,7 @@ const login = async (req, res, next) => {
     }
 
     if (!user.verify) {
-      throw RequestError(404, 'User not found');
+      throw RequestError(404, 'User not verified');
     }
 
     const passwordCompare = await bcrypt.compare(password, user.password);
