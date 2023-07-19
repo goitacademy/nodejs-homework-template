@@ -22,6 +22,8 @@ const signin = async (req, res) => {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 
+  await User.findByIdAndUpdate(user._id, {token});
+
   res.json({
     token,
   });
