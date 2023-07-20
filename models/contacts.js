@@ -1,59 +1,28 @@
-const fs = require("fs").promises;
-const path = require("path");
-const { nanoid } = require("nanoid");
-
-const contactsPath = path.join(__dirname, "contacts.json");
+const { Contact } = require("../models/contactModel");
 
 const listContacts = async () => {
   // Повертає масив контактів
-  const buffer = await fs.readFile(contactsPath);
-
-  return JSON.parse(buffer);
+  return await Contact.find();
 };
 
 const getContactById = async (contactId) => {
   // Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
-  const contacts = await listContacts();
-
-  return contacts.find(({ id }) => id === contactId) || null;
+  return await Contact.findById(contactId);
 };
 
 const removeContact = async (contactId) => {
   // Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-  const contacts = await listContacts();
-  const index = contacts.findIndex(({ id }) => id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [contactRemoved] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-  return contactRemoved;
+  return await Contact.findByIdAndRemove(contactId);
 };
 
-const addContact = async (body) => {
+const addContact = async (data) => {
   // Повертає об'єкт доданого контакту.
-  const contacts = await listContacts();
-  const contactAdded = { id: nanoid(), ...body };
-  contacts.push(contactAdded);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-  return contactAdded;
+  return await Contact.create(data);
 };
 
 const updateContact = async (contactId, data) => {
   // Повертає об'єкт оновленого контакту.
-  const contacts = await listContacts();
-  const index = contacts.findIndex(({ id }) => id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [contactFinded] = contacts.splice(index, 1);
-  const contactUpdated = { ...contactFinded, ...data };
-  contacts.push(contactUpdated);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-  return contactUpdated;
+  return await Contact.findByIdAndUpdate(contactId, data, { new: true });
 };
 
 module.exports = {
