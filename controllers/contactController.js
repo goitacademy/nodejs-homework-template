@@ -4,6 +4,10 @@ const contacts = require('../models/contacts')
 // для проверки поступающих обьектов на сервер, чтобы соответствовали требованиям
 const Joi = require('joi')
 
+// импорт HttpError
+
+const {HttpError} = require("../helpers/index")
+
 // создаем обязательный стандарт передаваемого обьекта
 const contactSchema = Joi.object({
   name: Joi.string().required(),
@@ -20,18 +24,19 @@ const getContacts = async (req, res, next) => {
     }
   }
 
+
   const getContact = async (req, res) => {
     try {
-      const { id } = req.params
-      const result = await contacts.getContactById(id)
+      const { id } = req.params;
+      const result = await contacts.getContactById(id);
       if (!result) {
-        return res.status(404).json({ message: 'Not found' })
+        throw HttpError(404, 'Not found');
       }
-      res.json(result)
+      res.json(result);
     } catch (error) {
-      res.status(500).json({ message: 'Server error' })
+      res.status(error.status || 500).json({ message: error.message || 'Server error' });
     }
-  }
+  };
 
   const addNewContact = async (req, res) => {
     try {
@@ -65,12 +70,12 @@ const getContacts = async (req, res, next) => {
       const { id } = req.params
       const result = await contacts.removeContact(id)
       if (!result) {
-        return res.status(404).json({ message: 'Not found' })
+        throw HttpError(404, 'Not found');
       }
   
       res.status(200).json({ message: 'Contact deleted' })
     } catch (error) {
-      res.status(500).json({ message: 'Server error' })
+      res.status(error.status || 500).json({ message: error.message || 'Server error' });
     }
   }
 
@@ -101,12 +106,12 @@ const getContacts = async (req, res, next) => {
   
       const updatedContact = await contacts.updateContact(id, req.body)
       if (!updatedContact) {
-        return res.status(404).json({ message: 'Not found' })
+        throw HttpError(404, 'Not found');
       }
   
       res.json(updatedContact)
     } catch (error) {
-      res.status(500).json({ message: 'Server error' })
+      res.status(error.status || 500).json({ message: error.message || 'Server error' });
     }
   }
 
