@@ -4,22 +4,30 @@ const {
   validateBody,
   haveBody,
   validateFavorite,
+  isValidId,
 } = require("../../middleware");
 
 const router = express.Router();
 
 router.get("/", ctrls.listContacts);
 
-router.get("/:contactId", ctrls.getContactById);
+router.get("/:contactId", isValidId, ctrls.getContactById);
 
 router.post("/", haveBody, validateBody, ctrls.addContact);
 
-router.delete("/:contactId", ctrls.removeContact);
+router.delete("/:contactId", isValidId, ctrls.removeContact);
 
-router.put("/:contactId", haveBody, validateBody, ctrls.updateContact);
+router.put(
+  "/:contactId",
+  haveBody,
+  isValidId,
+  validateBody,
+  ctrls.updateContact
+);
 
 router.patch(
   "/:contactId/favorite",
+  isValidId,
   haveBody,
   validateFavorite,
   ctrls.updateStatusContact
