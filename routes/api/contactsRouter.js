@@ -37,13 +37,24 @@ contactsRouter.post("/", async (req, res, next) => {
 // * Delete
 contactsRouter.delete("/:contactId", async (req, res, next) => {
   try {
-  } catch (error) {}
+    const result = await contactsService.removeContact(req.params.contactId);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Service error" });
+  }
 });
 
 // *Update
 contactsRouter.put("/:contactId", async (req, res, next) => {
   try {
-  } catch (error) {}
+    const result = await contactsService.updateContact(
+      req.params.contactId,
+      req.body
+    );
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Service error" });
+  }
 });
 
 export default contactsRouter;
