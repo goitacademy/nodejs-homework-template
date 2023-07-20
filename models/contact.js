@@ -30,7 +30,8 @@ const contactSchema = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false }
@@ -45,6 +46,7 @@ const contactFull = Joi.object({
   email: Joi.string().pattern(patterns.email).required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean().default(false),
+  
 });
 
 const contactFavorite = Joi.object({

@@ -1,6 +1,10 @@
+const { ctrlWrapper } = require("../../helpers");
 const { User } = require("../../models/user");
-const { HttpError, ctrlWrapper } = require("../../helpers");
 
-const logout = (req, res) => {};
+const logout = async (req, res) => {
+  const { _id: id } = req.user;
+  await User.findByIdAndUpdate(id, { token: "" });
+  res.status(204).send();
+};
 
 module.exports = ctrlWrapper(logout);

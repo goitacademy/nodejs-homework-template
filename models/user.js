@@ -51,9 +51,14 @@ const signin = Joi.object({
   password: Joi.string().min(6).max(24).required(),
 });
 
+const updateSubscribtion = Joi.object({
+  subscribtion: Joi.string().valid(...subscribtionTypes).required(),
+});
+
 const schemas = {
   signup,
   signin,
+  updateSubscribtion,
 };
 
 module.exports = {

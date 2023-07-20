@@ -5,9 +5,11 @@ const { schemas } = require("../../models/user");
 
 const router = express.Router();
 
-router.post("/register", validateBody(schemas.signup), userCtrl.signup);
-router.post("/login", validateBody(schemas.signin), userCtrl.signin);
-router.get("/current", authenticate, userCtrl.current);
-router.post("/logout", authenticate, userCtrl.logout);
+router.patch(
+  "/",
+  authenticate,
+  validateBody(schemas.updateSubscribtion),
+  userCtrl.updateSubscribtion
+);
 
 module.exports = router;

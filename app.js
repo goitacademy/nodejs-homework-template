@@ -5,6 +5,7 @@ const { HttpError } = require("./helpers");
 
 const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
+const userRouter = require('./routes/api/users');
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", userRouter);
 
 app.use((req, res) => {
   throw HttpError(404, "Not found");
