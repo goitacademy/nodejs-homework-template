@@ -27,7 +27,8 @@ router.use("/:id", checkContactById);
 router
   .route("/:id")
   .get(getContactById)
-  .patch(updateContact)
+  .put(updateContact)
   .delete(removeContact);
+router.route("/:id/favorite").patch(updateContact);
 
 module.exports = router;

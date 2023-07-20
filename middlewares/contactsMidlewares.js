@@ -41,23 +41,23 @@ exports.checkCreateContactById = catchAsync(async (req, res, next) => {
   next();
 });
 
-// exports.checkUpdateContactById = catchAsync(async (req, res, next) => {
-//   const { error, value } = contactsValidators.createContactDataValidator(
-//     req.body
-//   );
+exports.checkUpdateContactById = catchAsync(async (req, res, next) => {
+  const { error, value } = contactsValidators.createContactDataValidator(
+    req.body
+  );
 
-// if (error) {
-//   console.log(error);
+if (error) {
+  console.log(error);
 
-//   throw new AppError(400, "Invalid contact data..");
-// }
+  throw new AppError(400, "Invalid contact data..");
+}
 
-// const contactExists = await Contact.exists({ email: value.email });
+const contactExists = await Contact.exists({ email: value.email });
 
-// if (contactExists)
-//   throw new AppError(409, "Contact with this email exists..");
+if (contactExists)
+  throw new AppError(409, "Contact with this email exists..");
 
-// req.body = value;
+req.body = value;
 
-// next();
-// });
+next();
+});

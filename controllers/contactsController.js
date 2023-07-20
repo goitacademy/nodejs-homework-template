@@ -42,15 +42,24 @@ exports.getContactById = catchAsync(async (req, res) => {
  * Update contact controller
  */
 exports.updateContact = catchAsync(async (req, res) => {
+  const { favorite } = req.body;
   const { id } = req.params;
+
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
 
   const updateContact = await Contact.findByIdAndUpdate(
     id,
     {
-      name: req.body.name,
+      favorite,
     },
     { new: true }
   );
+
+  if (!updateContact) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
   res.status(200).json({
     msg: "Contact updated!",

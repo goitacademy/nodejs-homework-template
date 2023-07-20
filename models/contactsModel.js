@@ -6,7 +6,7 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -24,6 +24,10 @@ const contactSchema = new Schema(
       type: String,
       enum: Object.values(contactRolesEnum),
       default: contactRolesEnum.USER,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
     },
   },
   {
