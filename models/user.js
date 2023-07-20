@@ -30,6 +30,14 @@ const userSchema = new Schema(
             type: String,
             required: true,
         },
+        verify: {
+            type: Boolean,
+            required: true,
+        },
+        veryficationCode: {
+            type: String,
+            default: '',
+        },
     },
     { versionKey: false, timestamps: true }
 );
