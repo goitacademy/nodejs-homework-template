@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const addSchema = Joi.object({
+const addSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `missing required name field`,
   }),
@@ -12,4 +12,6 @@ export const addSchema = Joi.object({
   }),
 });
 
-// export default addSchema;
+export default {
+  addSchema,
+};
