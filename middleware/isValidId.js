@@ -1,6 +1,5 @@
 const { isValidObjectId } = require("mongoose");
 const { ErrorHandling } = require("../helper/errorReq");
-const { log } = require("console");
 
 const isValidId = (req, res, next) => {
   const { contactId } = req.params;

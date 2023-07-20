@@ -10,6 +10,7 @@ const {
 } = require("../../controller/contact.controller");
 const { validateContact } = require("../../middleware/validateContact");
 const { isValidId } = require("../../middleware/isValidId");
+const { checkRequestBody } = require("../../middleware/checkBody");
 // const schema = require("../../schema/contactSchema");
 const { schemas } = require("../../model/contact");
 const { contrWrapper } = require("../../helper/contrWrapper");
@@ -30,7 +31,7 @@ router.patch(
 router.put(
   "/:contactId",
   isValidId,
-  validateContact(schemas.addSchema),
+  checkRequestBody,
   contrWrapper(updateContactId)
 );
 router.delete("/:contactId", isValidId, contrWrapper(removeContactId));
