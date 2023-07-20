@@ -3,13 +3,13 @@ import { HttpError } from "../helpers/index.js";
 import { CtrlWrapper } from "../decorators/index.js";
 
 // * Get ALL
-const getAll = () => async (_, res) => {
+export const getAll = () => async (req, res) => {
   const result = await contactsService.listContacts();
-  res.status(200).json(result);
+  res.json(result);
 };
 
 // * Get by ID
-const getById = () => async (req, res) => {
+export const getById = () => async (req, res) => {
   const { contactId } = req.params;
   const result = await contactsService.getContactById(contactId);
   if (!result) throw HttpError(404);
@@ -18,7 +18,7 @@ const getById = () => async (req, res) => {
 };
 
 // * Post NEW
-const add = () => async (req, res) => {
+export const add = () => async (req, res) => {
   const result = await contactsService.addContact(req.body);
   if (result) throw HttpError(404, "missing required name field");
 
@@ -26,20 +26,20 @@ const add = () => async (req, res) => {
 };
 
 // * Delete
-const removeById = () => async (req, res) => {
+export const removeById = () => async (req, res) => {
   const result = await contactsService.removeContact(req.params.contactId);
   if (result) throw HttpError(404);
-  res.status(200).json({ message: "contact deleted" });
+  res.json({ message: "contact deleted" });
 };
 
 // *Update
-const updateById = () => async (req, res, next) => {
+export const updateById = () => async (req, res, next) => {
   const result = await contactsService.updateContact(
     req.params.contactId,
     req.body
   );
   if (!result) throw HttpError(404, "missing fields");
-  res.status(200).json(result);
+  res.json(result);
 };
 
 export default {

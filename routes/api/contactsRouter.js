@@ -3,9 +3,9 @@ import express from "express";
 import contactsSchemas from "../../schemas/contactsSchemas.js";
 import { validateBody } from "../../decorators/index.js";
 import { isEmptyBody } from "../../middlewars/index.js";
+import contactsService from "../../models/contacts.js";
 
 import contactsController from "../../controllers/contacts-controller.js";
-
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
