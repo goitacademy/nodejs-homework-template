@@ -5,7 +5,8 @@ const {
   postController,
   deleteController,
   putController,
-} = require("../../controllers");
+  patchController
+} = require("../../controllers/contacts");
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.get("/:contactId", getByIdController);
 router.post("/", postController);
 router.delete("/:contactId", deleteController);
 router.put("/:contactId", putController);
+router.patch("/:contactId/favorite", patchController)
 
 module.exports = router;
