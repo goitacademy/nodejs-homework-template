@@ -15,7 +15,7 @@ const listContacts = async () => {
 	}
 }
 
-/**shoding contact info by id */
+/**showing contact info by id */
 const getContactById = async contactId => {
 	try {
 		const contacts = await listContacts()
