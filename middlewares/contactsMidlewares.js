@@ -6,7 +6,7 @@ const Contact = require("../models/contactsModel");
 /**
  * Check user exists in db by id middleware.
  */
-exports.checkContactsById = catchAsync(async (req, res, next) => {
+exports.checkContactById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
   if (id.length < 10) throw new AppError(400, "Invalid ID..");
@@ -22,12 +22,19 @@ exports.checkContactsById = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.checkCreateContactsById = catchAsync(async (req, res, next) => {
+exports.checkCreateContactById = catchAsync(async (req, res, next) => {
   const { error, value } = contactsValidators.createContactDataValidator(
     req.body
   );
 
   if (error) throw new AppError(400, "Invalid contact data..");
 
-  const contactExisrs = await Contact.find({ email: value.email });
+  const contactExists = await Contact.find({ email: value.email });
+
+  if (contactExists)
+    throw new AppError(409, "Contact with this email exists..");
+
+  req.body = value;
+
+  next();
 });
