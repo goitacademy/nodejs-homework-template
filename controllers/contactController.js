@@ -2,8 +2,15 @@ const Contact = require('../models/contactModel');
 const { catchAsync } = require('../utils');
 
 /**
- * Create new contact controller.
+ * Створити новий контакт.
+ *
+ * @async
+ * @param {Object} req - Об'єкт запиту Express з даними про новий контакт в тілі запиту.
+ * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
+ * @returns {Promise<void>} - Проміс, що вирішується після створення контакту.
+ * @throws {Error} - Якщо сталася помилка при створенні контакту.
  */
+
 exports.createContact = catchAsync(async (req, res) => {
   const newContact = await Contact.create(req.body);
 
@@ -16,8 +23,16 @@ exports.createContact = catchAsync(async (req, res) => {
 });
 
 /**
- * Find all contacts controller.
+ * Контролер для отримання ВСІX контактів.
+/**
+ *
+ * @async
+ * @param {Object} req - Об'єкт запиту Express з даними про контакти в тілі запиту.
+ * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
+ * @returns {Promise<void>} - Проміс, що вирішується після отримання контактів.
+ * @throws {Error} - Якщо сталася помилка при отриманні контактів.
  */
+
 exports.getAllContacts = catchAsync(async (req, res) => {
   const contacts = await Contact.find();
 
@@ -28,8 +43,15 @@ exports.getAllContacts = catchAsync(async (req, res) => {
 });
 
 /**
- * Find contact by id controller.
+ * Знайти контакт за ідентифікатором.
+ *
+ * @async
+ * @param {Object} req - Об'єкт запиту Express з ідентифікатором контакту у параметрі запиту.
+ * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
+ * @returns {Promise<void>} - Проміс, що вирішується після знаходження контакту за ідентифікатором.
+ * @throws {Error} - Якщо сталася помилка при пошуку контакту.
  */
+
 exports.getOneContact = catchAsync(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
 
@@ -40,8 +62,16 @@ exports.getOneContact = catchAsync(async (req, res) => {
 });
 
 /**
- * Update contact controller.
+ * Оновити контакт.
+ *
+ * @async
+ * @param {Object} req - Об'єкт запиту Express з ідентиф контакту у параметрі запиту та даними для оновлення контакту.
+ * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
+ * @returns {Promise<void>} - Проміс, що вирішується після оновлення контакту.
+ *
+ * @throws {Error} - Якщо сталася помилка під час оновлення контакту.
  */
+
 exports.updateContact = catchAsync(async (req, res) => {
   const { id } = req.params;
 
@@ -58,8 +88,15 @@ exports.updateContact = catchAsync(async (req, res) => {
 });
 
 /**
- * Delete contact controller.
+ * Видалити контакт.
+ *
+ * @async
+ * @param {Object} req - Об'єкт запиту Express з ідентифікатором контакту у параметрі запиту.
+ * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
+ * @returns {Promise<void>} - Проміс, що вирішується після видалення контакту.
+ * @throws {Error} - Якщо сталася помилка при видаленні контакту.
  */
+
 exports.removeContact = catchAsync(async (req, res) => {
   const { id } = req.params;
 
@@ -69,10 +106,16 @@ exports.removeContact = catchAsync(async (req, res) => {
 });
 
 /**
- * Update contact status controller.
+ * Оновити статус контакту.
+ *
+ * @async
+ * @param {Object} req - Об'єкт запиту Express з ідентифікатором контакту у параметрі запиту та об'єктом `favorite` в тілі запиту.
+ * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
+ * @returns {Promise<void>} - Проміс, що вирішується після оновлення статусу контакту.
+ *
+ * @throws {Error} - Якщо сталася помилка під час оновлення статусу контакту.
  */
-// exports.updateStatus = catchAsync(async (req, res) => {
-//   const { id } = req.params;
+
 exports.updateStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
