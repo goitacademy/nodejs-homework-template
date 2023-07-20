@@ -1,6 +1,6 @@
 const express = require('express')
 
-const { contactJoiSchema, statusJoiSchema } = require('../../models/contacts')
+const { contactJoiSchema, statusJoiSchema } = require('../../models/contact')
 const {validation, ctrlWrapper, validationBody, validationStatusBody} = require("../../middlewares")
 
 const {
