@@ -24,7 +24,14 @@ router.delete("/:id", isValidId, deleteContact);
 router.put(
   "/:id",
   isValidId,
-  validateBody(schemas.contactValidator),
+  validateBody(schemas.contactValidator, "missing required name field"),
+  putContact
+);
+
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.contactFavoriteValidator, "missing field favorite"),
   putContact
 );
 

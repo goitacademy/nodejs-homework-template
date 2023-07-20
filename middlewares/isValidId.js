@@ -5,7 +5,7 @@ const { generateHTTPError } = require("../helpers");
 const isValidId = (req, res, next) => {
   const { id } = req.params;
   if (!isValidObjectId(id)) {
-    next(generateHTTPError(400, "Contact's id is don't valid"));
+    next(generateHTTPError(400, `Contact's id ${id} is don't valid`));
   }
   next();
 };

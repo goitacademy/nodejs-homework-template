@@ -2,22 +2,25 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 // Валідатор даних на сервері
-const schemaDBContactValidator = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const schemaDBContactValidator = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { timestamps: true, versionKey: false }
+);
 
 // Middleware обробки помилки валідації на сервері. Додаємо статус помилки, оскільки MongoDB повертає помилку без статусу
 schemaDBContactValidator.post("save", (error, data, next) => {
@@ -35,6 +38,10 @@ const contactValidator = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const schemas = { contactValidator };
+const contactFavoriteValidator = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = { contactValidator, contactFavoriteValidator };
 
 module.exports = { schemas, Contact };
