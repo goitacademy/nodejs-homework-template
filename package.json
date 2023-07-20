@@ -11,10 +11,13 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
     "joi": "^17.9.2",
+    "mongoose": "^7.3.4",
     "morgan": "1.10.0",
-    "nanoid": "^3.3.4"
+    "nanoid": "^3.3.4",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -23,7 +26,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^3.0.1"
   },
   "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
   "main": ".eslintrc.js",
@@ -36,6 +39,9 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/IgorPetrenko72/nodejs-homework-rest-api/issues"
+  },
+  "engines": {
+    "node": ">=14.20.1"
   },
   "homepage": "https://github.com/IgorPetrenko72/nodejs-homework-rest-api#readme"
 }
