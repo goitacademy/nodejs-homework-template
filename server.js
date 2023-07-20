@@ -1,13 +1,13 @@
-// const app = require("./app");
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const mongoose = require("mongoose");
 
 const envPath =
   process.env.NODE_ENV === "production"
-    ? "./production.env"
-    : "./development.env";
+    ? "./environments/production.env"
+    : "./environments/development.env";
 dotenv.config({ path: envPath });
 
 const contactsRoutes = require("./routes/api/contactsRoutes");
@@ -16,11 +16,23 @@ const app = express();
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
+// MONGODB CONECTION==============================
+
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("Database connection successful");
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
+  });
+
 // MIDDLEWARE=====================================
 app.use(express.json());
 app.use(cors());
 
-// ROUTES=====================================
+// ROUTES==========================================
 app.use("/contacts", contactsRoutes);
 
 /**

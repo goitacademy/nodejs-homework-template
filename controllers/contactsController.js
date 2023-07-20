@@ -1,28 +1,24 @@
+const Contact = require("../models/contactsModel");
+const { catchAsync, AppError } = require("../utils");
 
-const { catchAsync, contactsValidators, AppError } = require("../utils");
-
+/**
+ * Create new contact controller
+ */
 exports.addContact = catchAsync(async (req, res) => {
-  const { error, value } = contactsValidators.createContactDataValidator(
-    req.body
-  );
-  console.log(error, value);
-  if (error) throw new AppError(400, "Invalid contact data..");
+  const newContact = await Contact.create(req.body);
+  newContact.password = undefined;
 
-  const { name, email, phone } = value;
-
-  
-
-  
-
-  // send respons to the FE
   res.status(201).json({
     msg: "Contact created!",
     contact: newContact,
   });
 });
 
+/**
+ * Find all contact controller
+ */
 exports.listContacts = catchAsync(async (req, res) => {
-  
+  const contacts = await Contact.find();
 
   res.status(200).json({
     msg: "Success",
@@ -30,8 +26,11 @@ exports.listContacts = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * Find contact by id controller
+ */
 exports.getContactById = catchAsync(async (req, res) => {
-  const { contact } = req;
+  const contact = await Contact.findById(req.params.id);
 
   res.status(200).json({
     msg: "Success",
@@ -39,25 +38,33 @@ exports.getContactById = catchAsync(async (req, res) => {
   });
 });
 
+/**
+ * Update contact controller
+ */
 exports.updateContact = catchAsync(async (req, res) => {
-  const { contact } = req;
-  const { name, email, phone } = req.body;
+  const { id } = req.params;
 
+  const updateContact = await Contact.findByIdAndUpdate(
+    id,
+    {
+      name: req.body.name,
+    },
+    { new: true }
+  );
 
-
- 
   res.status(200).json({
     msg: "Contact updated!",
-    contact,
+    contact: updateContact,
   });
 });
 
+/**
+ * Delete contact controller
+ */
 exports.removeContact = catchAsync(async (req, res) => {
-  const { contact } = req;
+  const { id } = req.params;
 
-  
-  // res.sendStatus(204);
-  res.status(200).json({
-    msg: "Contact delete!",
-  });
+  await Contact.findByIdAndDelete(id);
+
+  res.sendStatus(204);
 });

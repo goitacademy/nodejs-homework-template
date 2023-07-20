@@ -1,4 +1,4 @@
-const fs = require("fs").promises;
+const { Types } = require("mongoose");
 
 const { AppError, catchAsync, contactsValidators } = require("../utils");
 const Contact = require("../models/contactsModel");
@@ -9,15 +9,13 @@ const Contact = require("../models/contactsModel");
 exports.checkContactById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
-  if (id.length < 10) throw new AppError(400, "Invalid ID..");
+  const idIsValid = Types.ObjectId.isValid(id);
 
-  const contacts = JSON.parse(await fs.readFile("./models/contacts.json"));
+  if (!idIsValid) throw new AppError(400, "Contact does not exist..");
 
-  const contact = contacts.find((item) => item.id === id);
+  const contactExists = await Contact.exists({ _id: id });
 
-  if (!contact) throw new AppError(400, "Contact does not exist..");
-
-  req.contact = contact;
+  if (!contactExists) throw new AppError(400, "Contact does not exist..");
 
   next();
 });
@@ -27,9 +25,13 @@ exports.checkCreateContactById = catchAsync(async (req, res, next) => {
     req.body
   );
 
-  if (error) throw new AppError(400, "Invalid contact data..");
+  if (error) {
+    console.log(error);
 
-  const contactExists = await Contact.find({ email: value.email });
+    throw new AppError(400, "Invalid contact data..");
+  }
+
+  const contactExists = await Contact.exists({ email: value.email });
 
   if (contactExists)
     throw new AppError(409, "Contact with this email exists..");
@@ -38,3 +40,24 @@ exports.checkCreateContactById = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+// exports.checkUpdateContactById = catchAsync(async (req, res, next) => {
+//   const { error, value } = contactsValidators.createContactDataValidator(
+//     req.body
+//   );
+
+// if (error) {
+//   console.log(error);
+
+//   throw new AppError(400, "Invalid contact data..");
+// }
+
+// const contactExists = await Contact.exists({ email: value.email });
+
+// if (contactExists)
+//   throw new AppError(409, "Contact with this email exists..");
+
+// req.body = value;
+
+// next();
+// });
