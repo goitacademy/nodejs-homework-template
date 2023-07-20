@@ -1,25 +1,31 @@
 const express = require('express')
 
+const { contactJoiSchema, statusJoiSchema } = require('../../models/contacts')
+const {validation, ctrlWrapper, validationBody, validationStatusBody} = require("../../middlewares")
+
+const {
+  getListContacts,
+  getOneContactById,
+  addOneContact,
+  removeContactById,
+  updateOneContact,
+  updateStatusContact,
+} = require("../../controllers");
+
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(getListContacts))
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", ctrlWrapper(getOneContactById))
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validationBody(contactJoiSchema), validation(contactJoiSchema), ctrlWrapper(addOneContact))
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:id", ctrlWrapper(removeContactById));
+
+router.put("/:id", validationBody(contactJoiSchema), validation(contactJoiSchema), ctrlWrapper(updateOneContact))
+
+router.patch("/:id/favorite", validationStatusBody(statusJoiSchema), ctrlWrapper(updateStatusContact))
+
 
 module.exports = router
