@@ -35,11 +35,11 @@ __this API allows you__ :
 ## Contact Example
 ```js
 {
-  "_id": "1223456id", //generating by Back End
-  "name": "Name Surname", // String Required
-  "email": "email@email.com", // String Required
-  "phone": "(000) 000-0000", // String Required
-  "favorite": false // auto added but can modify
+  "_id": "1223456id",             // String automatic generation String
+  "name": "Name Surname",         // String Required
+  "email": "email@email.com",     // String Required
+  "phone": "(000) 000-0000",      // String Required
+  "favorite": false               // Boolean auto-added but can modify 
 }
 ```
 
