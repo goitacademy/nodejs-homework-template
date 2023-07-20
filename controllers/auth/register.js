@@ -1,6 +1,7 @@
 const { User } = require("../../models/user");
 const { HttpError } = require("../../helpers");
 const bcrypt = require("bcrypt");
+const { nanoid } = require("nanoid");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -15,6 +16,7 @@ const register = async (req, res) => {
     throw HttpError(409, "Email already in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
+  const verifivationCode = nanoid();
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
