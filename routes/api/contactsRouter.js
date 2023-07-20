@@ -27,7 +27,11 @@ contactsRouter.get("/:contactId", async (req, res, next) => {
 // * Post NEW
 contactsRouter.post("/", async (req, res, next) => {
   try {
-  } catch (error) {}
+    const result = await contactsService.addContact(req.body);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Service error" });
+  }
 });
 
 // * Delete
