@@ -1,60 +1,31 @@
 import express from "express";
 
-import contactsService from "../../models/contacts.js";
+import contactsSchemas from "../../schemas/contactsSchemas.js";
+import { validateBody } from "../../decorators/index.js";
+import { isEmptyBody } from "../../middlewars/index.js";
+
+import contactsController from "../../controllers/contacts-controller.js";
 
 const contactsRouter = express.Router();
 
-// * Get ALL
-contactsRouter.get("/", async (req, res, next) => {
-  try {
-    const result = await contactsService.listContacts();
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Service error" });
-  }
-});
+contactsRouter.get("/", contactsController.getAll);
 
-// * Get by ID
-contactsRouter.get("/:contactId", async (req, res, next) => {
-  try {
-    const result = await contactsService.getContactById(req.params.contactId);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Service error" });
-  }
-});
+contactsRouter.get("/:contactId", contactsController.getById);
 
-// * Post NEW
-contactsRouter.post("/", async (req, res, next) => {
-  try {
-    const result = await contactsService.addContact(req.body);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Service error" });
-  }
-});
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  validateBody(contactsSchemas.contactsAddSchema),
+  contactsController.add
+);
 
-// * Delete
-contactsRouter.delete("/:contactId", async (req, res, next) => {
-  try {
-    const result = await contactsService.removeContact(req.params.contactId);
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Service error" });
-  }
-});
+contactsRouter.put(
+  "/:contactId",
+  isEmptyBody,
+  validateBody(contactsSchemas.contactsAddSchema),
+  contactsController.updateById
+);
 
-// *Update
-contactsRouter.put("/:contactId", async (req, res, next) => {
-  try {
-    const result = await contactsService.updateContact(
-      req.params.contactId,
-      req.body
-    );
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({ message: "Service error" });
-  }
-});
+contactsRouter.delete("/:contactId", contactsController.removeById);
 
 export default contactsRouter;
