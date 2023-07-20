@@ -3,7 +3,7 @@ import { HttpError } from "../helpers/index.js";
 import { CtrlWrapper } from "../decorators/index.js";
 
 // * Get ALL
-const getAll = () => async (req, res) => {
+const getAll = () => async (_, res) => {
   const result = await contactsService.listContacts();
   res.status(200).json(result);
 };
