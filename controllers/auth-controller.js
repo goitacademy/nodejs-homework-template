@@ -91,15 +91,17 @@ const updateAvatar = async (req, res) => {
   }
 
   const { path: tempUpload, originalname } = req.file;
-  resizeImage(tempUpload);
 
-  const extention = originalname.split(".").pop();
-  const filename = `${_id}.${extention}`;
+  const filename = `${_id}_${originalname}`;
+  // const extention = originalname.split(".").pop();
+  // const filename = `${_id}.${extention}`;
   const resultUpload = path.join(avatarsDir, filename);
 
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
-  await User.findByIdAndUpdate(_id, { avatar_url: avatarURL });
+
+  resizeImage(resultUpload);
+  await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(200).json({
     avatarURL: avatarURL,
