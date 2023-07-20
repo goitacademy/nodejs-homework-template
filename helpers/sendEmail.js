@@ -12,12 +12,13 @@ const nodemailerConfig = {
     pass: META_KEY,
   },
 };
-
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
   const email = { ...data, from: "v.v.derkach@meta.ua" };
+
   await transport.sendMail(email);
+
   return true;
 };
 

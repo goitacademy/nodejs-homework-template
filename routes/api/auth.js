@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { controllerWrapper } = require("../../helpers");
-const { validateBody, auth } = require("../../middlewares");
+const { validateBody, auth, upload } = require("../../middlewares");
 const { schemas } = require("../../models/user");
 
 const usersController = require("../../controllers/auth");
@@ -14,11 +14,11 @@ router.post(
   controllerWrapper(usersController.register)
 );
 
-router.get(
-  "/verify/:verificationCode",
-  validateBody(schemas.emailSchema),
-  controllerWrapper(usersController.verifyEmail)
-);
+// router.get(
+//   "/verify/:verificationCode",
+//   validateBody(schemas.emailSchema),
+//   controllerWrapper(usersController.verifyEmail)
+// );
 
 router.post(
   "/login",
@@ -35,6 +35,13 @@ router.patch(
   auth,
   validateBody(schemas.subscriptionSchema),
   controllerWrapper(usersController.updateSubscription)
+);
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("avatar"),
+  controllerWrapper(usersController.updateAvatar)
 );
 
 module.exports = router;
