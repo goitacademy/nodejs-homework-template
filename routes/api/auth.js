@@ -1,13 +1,10 @@
 const express = require('express');
 
-const { validateBody, authenticate } = require('../../middlewars');
+const { validateBody, authenticate, upload } = require('../../middlewars');
 const { schemas } = require('../../models/user');
 const controllers = require('../../controllers/auth');
-const logout = require('../../controllers/auth/logout');
 
 const router = express.Router();
-
-// console.log(controllers.logout)
 
 // signup
 router.post(
@@ -27,4 +24,5 @@ router.post('/users/current', authenticate, controllers.getCurrent);
 
 router.post('/users/logout', authenticate, controllers.logout);
 
+router.patch('/users/avatars', authenticate, upload.single("avatar"), controllers.updateAvatar);
 module.exports = router;
