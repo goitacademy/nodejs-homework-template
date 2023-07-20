@@ -18,7 +18,7 @@ const getContactById =   async (req, res) => {
     res.json(data);
       }
 
-const addContact = async (req, res) => {
+const addContact = async (req, res) => { 
   const data = await Contact.create( req.body);
    res.status(201).json(data);
 };
@@ -45,6 +45,7 @@ const updateContact = async (req, res) => {
 }
   const updateStatus = async (req, res) => {
     const { id } = req.params;
+      console.log(req.body);
     const data = await Contact.findOneAndUpdate({ _id: id }, req.body, {
       new: true,
     });

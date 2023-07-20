@@ -13,6 +13,7 @@ const validateSchemeAddContact = schema => {
 
 const validateSchemeUpdContact = schema => {
   const validate = (req, res, next) => {
+    console.log(req.body)
     const { error } = schema.validate(req.body);
     if (error) {
       next(HttpError(400, "missing field"));

@@ -7,10 +7,10 @@ const emailSchema = { minDomainSegments: 2, tlds: { allow: ["com", "net"] } };
 const phoneSchema = /^[\d\-()]{6,18}$/;
 
 const schemaContact = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email(emailSchema)
+  name: Joi.string()
     .required(),
+  email: Joi.string()
+    .email(emailSchema).required(),
   phone: Joi.string()
     .pattern(phoneSchema)
     .required(),
