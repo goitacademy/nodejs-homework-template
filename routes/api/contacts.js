@@ -1,6 +1,6 @@
 import express from "express";
 
-import ctrl from "../../controllers/contacts.js";
+import ctrl from "../../controllers/contacts-controller.js";
 
 import validateBody from "../../middlewares/validateBody.js";
 

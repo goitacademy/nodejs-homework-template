@@ -1,16 +1,15 @@
 import contactsService from "../models/contacts.js";
 
-import { HttpError, ctrlWrapper } from "../helpers/index.js";
+import { HttpError } from "../helpers/index.js";
+import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (_, res) => {
   const result = await contactsService.listContacts();
-
   res.json(result);
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-
   const result = await contactsService.getContactById(contactId);
   if (!result) {
     throw HttpError(404);
@@ -34,7 +33,6 @@ const updateByid = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-
   const result = await contactsService.removeContact(contactId);
   if (!result) {
     throw HttpError(404);
