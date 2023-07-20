@@ -2,6 +2,7 @@
 ### _-- Rest Api Contacts Back end --_
 
 &ensp; &ensp; [![Deployed At| ](https://i.ibb.co/zG6DGXq/render-logo-818-C47-ACCA-seeklogo-com.png)](https://nodejs-restapi-g9eb.onrender.com/api/contacts)  &ensp;   &ensp; 
+
  @ DEPLOY &ensp; &ensp;
 [![Repository](https://i.ibb.co/j3TLp8G/github-logo-vector.png)](https://github.com/NovicovMykhailo/nodejs-homework-RestApi.git) &ensp; &ensp; @ SOURCE 
 
@@ -19,7 +20,7 @@ __this API allows you__ :
 # Basic Methods
  
 
-### Base Url   [link](https://nodejs-restapi-g9eb.onrender.com/api/contacts) 'https://nodejs-restapi-g9eb.onrender.com/api/contacts'
+### Base Url   [https://nodejs-restapi-g9eb.onrender.com/api/contacts](https://nodejs-restapi-g9eb.onrender.com/api/contacts) 
 
 | Method    | LINK    | Description   | Return |
 | :---      |  :----  |          ---: |   ---:|
