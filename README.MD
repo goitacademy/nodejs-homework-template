@@ -1,11 +1,10 @@
-# $$\colorbox{green}{{\color{white}{GOIT-72\ Node\ js\ Rest \ Api}}}$$ 
-#### $$\colorbox{teal}{{\color{white}{-- Rest Api Contacts Back end --}}}$$
+# GOIT-72 Nod js Rest  Api
+### _-- Rest Api Contacts Back end --_
 
-[![Deployed At| ](https://i.ibb.co/zG6DGXq/render-logo-818-C47-ACCA-seeklogo-com.png)](https://nodejs-restapi-g9eb.onrender.com/api/contacts)  &ensp;   &ensp; $$\colorbox{lightblue}{{\color{black}{ @ DEPLOY}}}$$ 
-[![Repository](https://i.ibb.co/j3TLp8G/github-logo-vector.png)](https://github.com/NovicovMykhailo/nodejs-homework-RestApi.git) &ensp; &ensp;$$\colorbox{lightblue}{{\color{black}{ @ SOURCE }}}$$ 
+[![Deployed At| ](https://i.ibb.co/zG6DGXq/render-logo-818-C47-ACCA-seeklogo-com.png)](https://nodejs-restapi-g9eb.onrender.com/api/contacts)  &ensp;   &ensp;  @ DEPLOY
+[![Repository](https://i.ibb.co/j3TLp8G/github-logo-vector.png)](https://github.com/NovicovMykhailo/nodejs-homework-RestApi.git) &ensp; &ensp; @ SOURCE 
 
-### Contacts Api with MongoDb implementation
-
+### Contacts Api with MongoDB implementation
 
 
 __this API allows you__ :
@@ -14,7 +13,7 @@ __this API allows you__ :
 - Modify contact
 - Delete contact
 
-# Basec Methods
+# Basic Methods
  
 
 ### Base Url   [link](https://nodejs-restapi-g9eb.onrender.com/api/contacts)
