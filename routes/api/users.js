@@ -9,7 +9,7 @@ const {
 	avatars,
 } = require('../../controllers/users');
 const { usersSchema, updateStatusSchema } = require('../../schemas/usersSchema');
-const { auth, upload } = require('../../middlewares');
+const { auth, upload, updateImg } = require('../../middlewares');
 
 const router = express.Router();
 
@@ -27,6 +27,7 @@ router.patch(
 	'/avatars',
 	controllerWrapper(auth),
 	upload.single('image'),
+	controllerWrapper(updateImg),
 	controllerWrapper(avatars)
 );
 
