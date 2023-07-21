@@ -50,10 +50,10 @@ const updateFavorite = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
 
   if (!result) {
-    throw HttpError(404, "User was not found!");
+    throw HttpError(404, "Not found!");
   }
 
-  res.json(result);
+  res.status(200).json(result);
 };
 
 module.exports = {
