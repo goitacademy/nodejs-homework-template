@@ -1,5 +1,5 @@
 const { AppError, catchAsync, contactValidators } = require('../../utils');
-const Contact = require('../../models/contactModel');
+const Contact = require('../../models');
 
 exports.checkCreateContactData = catchAsync(async (req, res, next) => {
   const { error, value } = contactValidators.createContactDataValidator(
