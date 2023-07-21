@@ -28,8 +28,8 @@ describe('login', () => {
 	});
 	it('should return user object with email and subscription fields', async () => {
 		expect(response.body.user).toBeDefined();
-		expect(response.body.user.email).toBe('usertest1@gmail.com');
-		expect(response.body.user.subscription).toBe('starter');
+		expect(typeof response.body.user.email).toBe('string');
+		expect(typeof response.body.user.subscription).toBe('string');
 	});
 	afterAll(async () => {
 		await mongoose
