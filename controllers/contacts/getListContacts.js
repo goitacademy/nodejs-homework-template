@@ -6,3 +6,4 @@ const getListContacts = async (req, res, next) => {
 }
 
 module.exports = getListContacts
+

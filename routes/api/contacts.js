@@ -1,7 +1,8 @@
-const express = require('express')
+const express = require("express");
 
 const { contactJoiSchema, statusJoiSchema } = require('../../models/contact')
 const {validation, ctrlWrapper, validationBody, validationStatusBody} = require("../../middlewares")
+
 
 const {
   getListContacts,
@@ -28,4 +29,5 @@ router.put("/:id", validationBody(contactJoiSchema), validation(contactJoiSchema
 router.patch("/:id/favorite", validationStatusBody(statusJoiSchema), ctrlWrapper(updateStatusContact))
 
 
-module.exports = router
+
+module.exports = router;

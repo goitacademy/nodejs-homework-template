@@ -4,6 +4,7 @@ const { HttpError } = require("../../utils")
 const getOneContactById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findById(id);
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -11,3 +12,4 @@ const getOneContactById = async (req, res) => {
 }
 
 module.exports = getOneContactById
+
