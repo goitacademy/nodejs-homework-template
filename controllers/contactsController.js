@@ -1,10 +1,13 @@
 const Contact = require("../models/contactsModel");
-const { catchAsync, AppError } = require("../utils");
+const { catchAsync } = require("../utils");
 
 /**
  * Create new contact controller
  */
 exports.addContact = catchAsync(async (req, res) => {
+  // const newContact = new Contact(req.body);
+  // await newContact.save();
+
   const newContact = await Contact.create(req.body);
   newContact.password = undefined;
 
@@ -42,20 +45,44 @@ exports.getContactById = catchAsync(async (req, res) => {
  * Update contact controller
  */
 exports.updateContact = catchAsync(async (req, res) => {
-  const { favorite } = req.body;
   const { id } = req.params;
+
+  // const updateContact = await Contact.findByIdAndUpdate(id, req.body, {
+  //   new: true,
+  // });
+
+  // if (!updateContact) {
+  //   return res.status(404).json({ message: "Not found" });
+  // }
+
+  const contact = await Contact.findById(id);
+
+  Object.keys(req.body).forEach((key) => {
+    contact[key] = req.body[key];
+  });
+
+  const updateContact = await contact.save();
+
+  res.status(200).json({
+    msg: "Contact updated!",
+    contact: updateContact,
+  });
+});
+
+/**
+ * Update Favorite controller
+ */
+exports.updateContactFavorite = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
 
   if (favorite === undefined) {
     return res.status(400).json({ message: "missing field favorite" });
   }
 
-  const updateContact = await Contact.findByIdAndUpdate(
-    id,
-    {
-      favorite,
-    },
-    { new: true }
-  );
+  const updateContact = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
 
   if (!updateContact) {
     return res.status(404).json({ message: "Not found" });

@@ -42,22 +42,42 @@ exports.checkCreateContactById = catchAsync(async (req, res, next) => {
 });
 
 exports.checkUpdateContactById = catchAsync(async (req, res, next) => {
-  const { error, value } = contactsValidators.createContactDataValidator(
+  const { error, value } = contactsValidators.updateContactDataValidator(
     req.body
   );
 
-if (error) {
-  console.log(error);
+  if (error) {
+    console.log(error);
 
-  throw new AppError(400, "Invalid contact data..");
-}
+    throw new AppError(400, "Invalid contact data..");
+  }
 
-const contactExists = await Contact.exists({ email: value.email });
+  const contactExists = await Contact.exists({ email: value.email });
 
-if (contactExists)
-  throw new AppError(409, "Contact with this email exists..");
+  if (contactExists)
+    throw new AppError(409, "Contact with this email exists..");
 
-req.body = value;
+  req.body = value;
 
-next();
+  next();
+});
+
+exports.checkUpdateContactFavorite = catchAsync(async (req, res, next) => {
+  const { error, value } =
+    contactsValidators.updateFavoriteContactDataValidator(req.body);
+
+  if (error) {
+    console.log(error);
+
+    throw new AppError(400, "Invalid contact data..");
+  }
+
+  const contactExists = await Contact.exists({ email: value.email });
+
+  if (contactExists)
+    throw new AppError(409, "Contact with this email exists..");
+
+  req.body = value;
+
+  next();
 });
