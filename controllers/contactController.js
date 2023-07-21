@@ -115,7 +115,6 @@ exports.removeContact = catchAsync(async (req, res) => {
  *
  * @throws {Error} - Якщо сталася помилка під час оновлення статусу контакту.
  */
-
 exports.updateStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
