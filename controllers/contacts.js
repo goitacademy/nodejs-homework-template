@@ -1,10 +1,9 @@
 import HttpError from "../helpers/HttpError.js";
-import { addContact, getContactById, listContacts, removeContact, updateContact } from "../models/contacts.js";
-
+import { Contact, addContact, getContactById, listContacts, removeContact, updateContact } from "../models/contacts.js";
 import { ctrlWrapper } from '../decorators/index.js'
 
 export const listContactsController = ctrlWrapper(async (req, res, next) => {
-	const list = await listContacts()
+	const list = await Contact.find();
 	res.json(list)
 })
 
@@ -17,7 +16,7 @@ export const getContactByIdController = ctrlWrapper(async (req, res, next) => {
 })
 
 export const addContactController = ctrlWrapper(async (req, res, next) => {
-	const contact = await addContact(req.body);
+	const contact = await Contact.create(req.body);
 	res.status(201).json(contact)
 })
 
