@@ -1,12 +1,17 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-require('dotenv').config()
+require('dotenv').config();
+const gravatar = require('gravatar');
+const fs = require('fs/promises');
+const path = require('path');
+const Jimp = require('jimp');
 
 const { User } = require('../models/user');
 const { HttpError, ctrlWrapper } = require('../helpers');
 const { SECRET_KEY } = process.env;
 
-// signup
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
+
 const register = async(req, res) => {
     const { email, password, subscription } = req.body;
 
@@ -16,20 +21,22 @@ const register = async(req, res) => {
     };
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const avatarURL = gravatar.url(email);
 
     const newUser = await User.create({
         ...req.body,
         password: hashPassword,
         subscription,
+        avatarURL,
     });
 
     res.status(201).json({
+        email: newUser.email,
         subscription: newUser.subscription,
-        email: newUser.email
+        avatarURL: newUser.avatarUrl,
     })
 };
 
-// signin
 const login = async(req, res) => {
     const { email, password } = req.body;
     
@@ -59,7 +66,7 @@ const login = async(req, res) => {
     })
 };
 
-// current 
+
 const getCurrent = async(req, res) => {
     const { email, name } = req.user;
 
@@ -69,7 +76,6 @@ const getCurrent = async(req, res) => {
     })
 };
 
-// logout
 const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: '' });
@@ -93,10 +99,37 @@ const updateSubscription = async (req, res) => {
     res.json({ result });
 };
 
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+
+    Jimp.read(tempUpload)
+        .then((avatar) => {
+            return avatar
+                .resize(250, 250) // resize
+                .quality(60) // set JPEG quality
+                .write(resultUpload); // save
+        })
+        .catch((err) => {
+            throw(err);
+        });
+
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarsDir, filename);
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = path.join('avatars', filename);
+    
+    await User.findByIdAndUpdate(_id, {avatarURL});
+
+    res.json({avatarURL});
+};
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateSubscription: ctrlWrapper(updateSubscription),
-}
+    updateAvatar: ctrlWrapper(updateAvatar),
+};
