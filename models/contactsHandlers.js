@@ -1,4 +1,4 @@
-const { Contact } = require("../models/contactModel");
+const { Contact } = require("./contactModel");
 
 const listContacts = async () => {
   // Повертає масив контактів

@@ -8,7 +8,7 @@ const {
   deleteContact,
   postContact,
   putContact,
-} = require("../../controllers/conrollers");
+} = require("../../controllers");
 
 const { schemas } = require("../../models/contactModel");
 const { isValidId, validateBody } = require("../../middlewares");

@@ -1,7 +1,7 @@
 const { ctrlWrapper } = require("../helpers");
 const { generateHTTPError } = require("../helpers");
 
-const handlersDB = require("../models/contacts");
+const handlersDB = require("../models/contactsHandlers");
 
 const getContacts = async (req, res) => {
   const result = await handlersDB.listContacts();
