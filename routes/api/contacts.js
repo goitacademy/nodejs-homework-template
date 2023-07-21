@@ -8,19 +8,31 @@ const {
   deleteContact,
   postContact,
   putContact,
-} = require("../../controllers/conrollers");
+} = require("../../controllers");
 
-const { schemaContactValidator } = require("../../schemas");
-const { validateBody } = require("../../middlewares");
+const { schemas } = require("../../models/contactModel");
+const { isValidId, validateBody } = require("../../middlewares");
 
 router.get("/", getContacts);
 
-router.get("/:id", getContactById);
+router.get("/:id", isValidId, getContactById);
 
-router.post("/", validateBody(schemaContactValidator), postContact);
+router.post("/", validateBody(schemas.contactValidator), postContact);
 
-router.delete("/:id", deleteContact);
+router.delete("/:id", isValidId, deleteContact);
 
-router.put("/:id", validateBody(schemaContactValidator), putContact);
+router.put(
+  "/:id",
+  isValidId,
+  validateBody(schemas.contactValidator, "missing required name field"),
+  putContact
+);
+
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.contactFavoriteValidator, "missing field favorite"),
+  putContact
+);
 
 module.exports = router;
