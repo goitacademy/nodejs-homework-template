@@ -8,10 +8,10 @@ const contactsRouter = require("./routes/api/contacts");
 const authRouter = require("./routes/api/auth");
 const userRouter = require('./routes/api/users');
 
-
 const STATIC_PATH = path.join(__dirname, "public");
 
 const app = express();
+
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
