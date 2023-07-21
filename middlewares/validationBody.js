@@ -16,4 +16,6 @@ const validationBody = (schema) => {
   };
 };
 
-module.exports = validationBody;
+
+module.exports = validationBody
+

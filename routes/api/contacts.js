@@ -1,26 +1,33 @@
 const express = require("express");
 
-const {validation, ctrlWrapper, validationBody} = require("../../middlewares");
-const {contactSchema} = require("../../schemas");
+const { contactJoiSchema, statusJoiSchema } = require('../../models/contact')
+const {validation, ctrlWrapper, validationBody, validationStatusBody} = require("../../middlewares")
+
+
 const {
   getListContacts,
   getOneContactById,
   addOneContact,
   removeContactById,
   updateOneContact,
+  updateStatusContact,
 } = require("../../controllers");
 
+const router = express.Router()
 
-const router = express.Router();
 
-router.get("/", ctrlWrapper(getListContacts));
+router.get("/", ctrlWrapper(getListContacts))
 
-router.get("/:id", ctrlWrapper(getOneContactById));
+router.get("/:id", ctrlWrapper(getOneContactById))
 
-router.post("/", validationBody(contactSchema), validation(contactSchema), ctrlWrapper(addOneContact));
+router.post("/", validationBody(contactJoiSchema), validation(contactJoiSchema), ctrlWrapper(addOneContact))
 
 router.delete("/:id", ctrlWrapper(removeContactById));
 
-router.put("/:id", validationBody(contactSchema), validation(contactSchema),  ctrlWrapper(updateOneContact));
+router.put("/:id", validationBody(contactJoiSchema), validation(contactJoiSchema), ctrlWrapper(updateOneContact))
+
+router.patch("/:id/favorite", validationStatusBody(statusJoiSchema), ctrlWrapper(updateStatusContact))
+
+
 
 module.exports = router;
