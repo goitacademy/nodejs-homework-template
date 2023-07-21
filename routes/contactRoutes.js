@@ -7,7 +7,7 @@ const {
   updateContact,
   removeContact,
   updateStatus,
-} = require('../controllers/contactController');
+} = require('../controllers/contactsr');
 
 const {
   checkContactId,
