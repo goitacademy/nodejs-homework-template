@@ -1,7 +1,5 @@
-const { Types } = require("mongoose");
-
 const { AppError, catchAsync, contactsValidators } = require("../utils");
-const Contact = require("../models/contactsModel");
+const contactService = require("../services/contactServices");
 
 /**
  * Check user exists in db by id middleware.
@@ -9,13 +7,7 @@ const Contact = require("../models/contactsModel");
 exports.checkContactById = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
-  const idIsValid = Types.ObjectId.isValid(id);
-
-  if (!idIsValid) throw new AppError(400, "Contact does not exist..");
-
-  const contactExists = await Contact.exists({ _id: id });
-
-  if (!contactExists) throw new AppError(400, "Contact does not exist..");
+  await contactService.contactExistsById(id);
 
   next();
 });
@@ -31,10 +23,7 @@ exports.checkCreateContactById = catchAsync(async (req, res, next) => {
     throw new AppError(400, "Invalid contact data..");
   }
 
-  const contactExists = await Contact.exists({ email: value.email });
-
-  if (contactExists)
-    throw new AppError(409, "Contact with this email exists..");
+  await contactService.contactExists({ email: value.email });
 
   req.body = value;
 
@@ -46,16 +35,16 @@ exports.checkUpdateContactById = catchAsync(async (req, res, next) => {
     req.body
   );
 
+  await contactService.contactExists({
+    email: value.email,
+    _id: { $ne: req.params.id },
+  });
+
   if (error) {
     console.log(error);
 
     throw new AppError(400, "Invalid contact data..");
   }
-
-  const contactExists = await Contact.exists({ email: value.email });
-
-  if (contactExists)
-    throw new AppError(409, "Contact with this email exists..");
 
   req.body = value;
 
@@ -63,19 +52,20 @@ exports.checkUpdateContactById = catchAsync(async (req, res, next) => {
 });
 
 exports.checkUpdateContactFavorite = catchAsync(async (req, res, next) => {
-  const { error, value } =
-    contactsValidators.updateFavoriteContactDataValidator(req.body);
+  const { error, value } = contactsValidators.updateContactDataValidator(
+    req.body
+  );
+
+  await contactService.contactExists({
+    email: value.email,
+    _id: { $ne: req.params.id },
+  });
 
   if (error) {
     console.log(error);
 
     throw new AppError(400, "Invalid contact data..");
   }
-
-  const contactExists = await Contact.exists({ email: value.email });
-
-  if (contactExists)
-    throw new AppError(409, "Contact with this email exists..");
 
   req.body = value;
 

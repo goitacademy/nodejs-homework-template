@@ -1,5 +1,6 @@
 const Contact = require("../models/contactsModel");
 const { catchAsync } = require("../utils");
+const contactService = require("../services/contactServices");
 
 /**
  * Create new contact controller
@@ -45,23 +46,12 @@ exports.getContactById = catchAsync(async (req, res) => {
  * Update contact controller
  */
 exports.updateContact = catchAsync(async (req, res) => {
-  const { id } = req.params;
+  // const { id } = req.params;
 
-  // const updateContact = await Contact.findByIdAndUpdate(id, req.body, {
-  //   new: true,
-  // });
-
-  // if (!updateContact) {
-  //   return res.status(404).json({ message: "Not found" });
-  // }
-
-  const contact = await Contact.findById(id);
-
-  Object.keys(req.body).forEach((key) => {
-    contact[key] = req.body[key];
-  });
-
-  const updateContact = await contact.save();
+  const updateContact = await contactService.updateContacts(
+    req.params.id,
+    req.body
+  );
 
   res.status(200).json({
     msg: "Contact updated!",

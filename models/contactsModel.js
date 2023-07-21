@@ -53,15 +53,6 @@ contactSchema.pre("save", async function (next) {
 contactSchema.method.checkPassword = (candidate, hash) =>
   bcrypt.compare(candidate, hash);
 
-// const salt = await bcrypt.genSalt(10);
-// console.log("salt=>>", salt);
-
-// const hashedPassword = await bcrypt.hash(req.body.password, salt);
-// console.log("hash=>>", hashedPassword);
-
-// const isPasswordMatch = await bcrypt.compare("Pass*1234", hashedPassword);
-// console.log("Match=>>", isPasswordMatch);
-
 const Contact = model("Contact", contactSchema);
 
 module.exports = Contact;
