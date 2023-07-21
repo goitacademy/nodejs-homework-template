@@ -8,7 +8,8 @@ const { getContactList,
   getOneContact,
   addNewContact,
   deleteContact,
-  updateContactById } = require('../../controllers/contacts');
+  updateContactById,
+  updateStatusContact } = require('../../controllers/contacts');
 
 router.get('/', getContactList);
 
@@ -16,8 +17,10 @@ router.get('/:contactId', isValidId, getOneContact);
 
 router.post('/', addNewContact);
 
-// router.delete('/:contactId', isValidId, deleteContact);
+router.delete('/:contactId', isValidId, deleteContact);
 
-// router.put('/:contactId', isValidId, updateContactById);
+router.put('/:contactId', isValidId, updateContactById);
+
+router.patch('/:contactId/favorite', isValidId, updateStatusContact)
 
 module.exports = router;

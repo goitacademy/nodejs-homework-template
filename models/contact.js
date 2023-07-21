@@ -27,6 +27,10 @@ const validateSchema = Joi.object({
   favorite: Joi.boolean(),
 })
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+})
+
 const Contact = model("contact", contactSchema);
 
-module.exports = {Contact, validateSchema};
+module.exports = {Contact, validateSchema, updateFavoriteSchema};
