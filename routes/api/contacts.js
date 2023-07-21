@@ -12,7 +12,7 @@ router.get("/", ctrl.getAllContacts);
 
 router.get("/:contactId", isValidId, ctrl.getContactById);
 
-router.post("/", isValidId, validateBody(schemas.addSchema), ctrl.addContact);
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 
 router.put(
   "/:contactId",
