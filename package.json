@@ -1,28 +1,41 @@
 {
-    "name": "rest-api",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "start": "cross-env NODE_ENV=production node ./server.js",
-        "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
-        "lint": "eslint **/*.js",
-        "lint:fix": "eslint --fix **/*.js"
-    },
-    "dependencies": {
-        "body-parser": "^1.20.2",
-        "cors": "2.8.5",
-        "cross-env": "7.0.3",
-        "express": "4.17.1",
-        "morgan": "1.10.0",
-        "uuid": "^9.0.0"
-    },
-    "devDependencies": {
-        "eslint": "7.19.0",
-        "eslint-config-prettier": "^8.3.0",
-        "eslint-config-standard": "16.0.3",
-        "eslint-plugin-import": "2.25.3",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "5.2.0",
-        "nodemon": "2.0.15"
+  "name": "03",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "set NODE_ENV=development && set APP_ENV=dev && nodemon index.js",
+    "prod": "set NODE_ENV=production && node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.34.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^4.3.8",
+    "lint-staged": "^13.1.2",
+    "nodemon": "^2.0.22"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "mongoose": "^7.4.0",
+    "morgan": "^1.10.0"
+  }
 }
