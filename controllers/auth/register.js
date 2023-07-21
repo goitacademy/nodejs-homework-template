@@ -4,7 +4,7 @@ const { nanoid } = require('nanoid');
 
 const { User } = require('../../models/user');
 
-const { HttpError, sendEmail } = require('../../helpers');
+const { HttpError, sendMail } = require('../../helpers');
 
 const { BASE_URL } = process.env;
 
@@ -18,21 +18,21 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
-    const veryficationCode = nanoid();
+    const verificationCode = nanoid();
 
     const newUser = await User.create({
         ...req.body,
         password: hashPassword,
         avatarURL,
-        veryficationCode,
+        verificationCode,
     });
     const verifyEmail = {
         to: email,
         subject: 'verify email',
-        html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationCode}">Click verify email</a>`,
+        html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationCode}">Click verify email</a>`,
     };
 
-    await sendEmail(verifyEmail);
+    await sendMail(verifyEmail);
 
     res.status(201).json({
         email: newUser.email,
