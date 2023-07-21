@@ -8,6 +8,8 @@ const {
   getCurrent,
   userSubscription,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers/auth-controller");
 const { validateBody, authMiddleware } = require("../../middlewares");
 const { schemas } = require("../../models/user");
@@ -28,5 +30,7 @@ router.post("/login", validateBody(schemas.loginSchema), login);
 router.post("/logout", authMiddleware, logout);
 router.get("/current", authMiddleware, getCurrent);
 router.patch("/avatars", authMiddleware, upload.single("avatar"), updateAvatar);
+router.post("/verify", validateBody(schemas.verifySchema), resendVerifyEmail);
+router.get("/verify/:verificationToken", verifyEmail);
 
 module.exports = router;

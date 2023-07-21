@@ -3,10 +3,12 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
+const shortid = require("shortid");
 
 const { User } = require("../models/user");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 const { resizeImage } = require("../middlewares");
+
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -16,15 +18,26 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(409, "Email in use");
   }
-
   const avatarURL = gravatar.url(email);
+  const verifyToken = shortid();
+
   const handlePassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     password: handlePassword,
     email,
     subscription,
     avatar_url: avatarURL,
+    verificationToken: verifyToken,
   });
+
+  const mail = {
+    from: "maksmrk@ukr.net",
+    to: email,
+    subject: "Verify your email",
+    html: `<a href="http://localhost:3000/users/verify/${verifyToken}">Press here</a>`,
+  };
+
+  await sendEmail(mail);
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
@@ -93,8 +106,6 @@ const updateAvatar = async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
 
   const filename = `${_id}_${originalname}`;
-  // const extention = originalname.split(".").pop();
-  // const filename = `${_id}.${extention}`;
   const resultUpload = path.join(avatarsDir, filename);
 
   await fs.rename(tempUpload, resultUpload);
@@ -108,6 +119,47 @@ const updateAvatar = async (req, res) => {
   });
 };
 
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+
+  if (!user) {
+    HttpError(404, { message: "User not found" });
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+  res.json(200, { message: "Verification successful" });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(400, { message: "missing required field email" });
+  }
+  console.log(user.verify);
+
+  if (user.verify) {
+    throw HttpError(400, `massage: Verification has already been passed`);
+  }
+
+  const mail = {
+    from: "maksmrk@ukr.net",
+    to: email,
+    subject: "Verify your email",
+    html: `<a href="http://localhost:3000/users/verify/${user.verificationToken}">Press here</a>`,
+  };
+
+  if (!user.verify) {
+    await sendEmail(mail);
+  }
+
+  res.json(200, { message: "Verification email sent" });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
@@ -115,4 +167,6 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   userSubscription: ctrlWrapper(userSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
+  verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };
