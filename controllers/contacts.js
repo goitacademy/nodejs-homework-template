@@ -1,6 +1,6 @@
 const { Contact } = require("../models/contact");
 
-const { AppError, ctrlWrapper } = require("../utils");
+const { HttpError, ctrlWrapper } = require("../utils");
 
 const allContacts = async (req, res, next) => {
   const contactList = await Contact.find();
@@ -14,7 +14,7 @@ const idContact = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await Contact.findById(contactId);
   if (!contact) {
-    throw AppError(404, "Not found contact");
+    throw HttpError(404, "Not found contact");
   }
   res.status(200).json({
     msg: "Success! Contact find",
@@ -35,7 +35,7 @@ const deleteContact = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndRemove(contactId, req.body);
   if (!result) {
-    throw AppError(404, "Not found contact");
+    throw HttpError(404, "Not found contact");
   }
   res.status(200).json({
     msg: "Success! Contact delete",
@@ -50,7 +50,7 @@ const refreshContact = async (req, res, next) => {
   });
 
   if (!updateContact) {
-    throw AppError(404, "Not found contact");
+    throw HttpError(404, "Not found contact");
   }
   res.status(201).json({
     msg: "Contact update success!",
@@ -58,16 +58,16 @@ const refreshContact = async (req, res, next) => {
   });
 };
 
-const updateFavorite = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
 
   if (!result) {
-    throw AppError(404, "Not found contact");
+    throw HttpError(400, "missing field favorite");
   }
-  res.status(201).json({
+  res.status(200).json({
     msg: "Contact update!",
     contact: result,
   });
@@ -79,5 +79,5 @@ module.exports = {
   createContact: ctrlWrapper(createContact),
   deleteContact: ctrlWrapper(deleteContact),
   refreshContact: ctrlWrapper(refreshContact),
-  updateFavorite: ctrlWrapper(updateFavorite),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
