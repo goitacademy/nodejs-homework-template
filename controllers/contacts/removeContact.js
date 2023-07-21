@@ -10,10 +10,12 @@ const { catchAsync } = require('../../utils');
  * @returns {Promise<void>} - Проміс, що вирішується після видалення контакту.
  * @throws {Error} - Якщо сталася помилка при видаленні контакту.
  */
-exports.removeContact = catchAsync(async (req, res) => {
+const removeContact = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   await Contact.findByIdAndDelete(id);
 
   res.sendStatus(204);
 });
+
+module.exports = removeContact;

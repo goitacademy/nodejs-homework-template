@@ -1,4 +1,4 @@
-const Contact = require('../../models/contactModel');
+const Contact = require('../../models');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -11,7 +11,7 @@ const { catchAsync } = require('../../utils');
  *
  * @throws {Error} - Якщо сталася помилка під час оновлення контакту.
  */
-exports.updateContact = catchAsync(async (req, res) => {
+const updateContact = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   const updatedContact = await Contact.findByIdAndUpdate(
@@ -25,3 +25,5 @@ exports.updateContact = catchAsync(async (req, res) => {
     contact: updatedContact,
   });
 });
+
+module.exports = updateContact;

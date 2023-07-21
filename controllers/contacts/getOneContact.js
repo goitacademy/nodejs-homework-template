@@ -1,5 +1,6 @@
-const Contact = require('../../models/contactModel');
+const Contact = require('../../models');
 const { catchAsync } = require('../../utils');
+
 /**
  * Знайти контакт за ідентифікатором.
  *
@@ -9,7 +10,7 @@ const { catchAsync } = require('../../utils');
  * @returns {Promise<void>} - Проміс, що вирішується після знаходження контакту за ідентифікатором.
  * @throws {Error} - Якщо сталася помилка при пошуку контакту.
  */
-exports.getOneContact = catchAsync(async (req, res) => {
+const getOneContact = catchAsync(async (req, res) => {
   const contact = await Contact.findById(req.params.id);
 
   res.status(200).json({
@@ -17,3 +18,5 @@ exports.getOneContact = catchAsync(async (req, res) => {
     contact,
   });
 });
+
+module.exports = getOneContact;

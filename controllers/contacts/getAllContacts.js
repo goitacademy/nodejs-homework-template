@@ -1,4 +1,4 @@
-const Contact = require('../../models/contactModel');
+const Contact = require('../../models');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -11,7 +11,7 @@ const { catchAsync } = require('../../utils');
  * @returns {Promise<void>} - Проміс, що вирішується після отримання контактів.
  * @throws {Error} - Якщо сталася помилка при отриманні контактів.
  */
-exports.getAllContacts = catchAsync(async (req, res) => {
+const getAllContacts = catchAsync(async (req, res) => {
   const contacts = await Contact.find();
 
   res.status(200).json({
@@ -19,3 +19,5 @@ exports.getAllContacts = catchAsync(async (req, res) => {
     contacts,
   });
 });
+
+module.exports = getAllContacts;

@@ -1,4 +1,4 @@
-const Contact = require('../../models/contactModel');
+const Contact = require('../../models');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -11,7 +11,7 @@ const { catchAsync } = require('../../utils');
  *
  * @throws {Error} - Якщо сталася помилка під час оновлення статусу контакту.
  */
-exports.updateStatus = catchAsync(async (req, res) => {
+const updateStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
 
@@ -37,3 +37,5 @@ exports.updateStatus = catchAsync(async (req, res) => {
   // Якщо контакт з таким ідентифікатором не знайдено, повертаємо статус 404 з повідомленням 'Not found'
   return res.status(404).json({ message: 'Not found' });
 });
+
+module.exports = updateStatus;

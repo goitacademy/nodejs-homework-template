@@ -13,7 +13,7 @@ const {
   checkContactId,
   checkCreateContactData,
   checkBoolean,
-} = require('../middlewares/contactMiddlewares');
+} = require('../middlewares/contacts');
 
 const router = Router();
 
