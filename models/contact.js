@@ -1,5 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const joiPhoneNumber = require("joi-phone-number");
+const myCustomJoi = Joi.extend(joiPhoneNumber);
+
 const {mongooseError} = require("../helpers")
 
 const contactSchema = new Schema({
@@ -21,6 +24,11 @@ const contactSchema = new Schema({
       favorite: {
         type: Boolean,
         default: false,
+      },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
       },
 }, { 
   versionKey: false,
@@ -49,21 +57,28 @@ const addSchema = Joi.object({
       "string.empty": "missing required email field",
       "string.email": "Email must be a valid email address",
     }),
-  phone: Joi.string()
-    .trim()
-    // .regex(/^\+?[()\-\d]+$/)
-    .min(9)
-    .max(16)
-    .required()
-    .messages({
-      "any.required": "missing required phone field",
-      "string.base": "Phone number must be a string",
-      "string.empty": "missing required phone field",
-      "string.pattern.base": "Phone number is invalid",
-      "string.min": "Phone number should have a minimum length of {#limit}",
-      "string.max": "Phone number should have a maximum length of {#limit}",
-    }),
-    favorite: Joi.boolean(),
+  // phone: Joi.string()
+  //   .trim()
+  //   .regex(/^\+?[()\-\d]+$/)
+  //   .min(9)
+  //   .max(16)
+  //   .required()
+  //   .messages({
+  //     "any.required": "missing required phone field",
+  //     "string.base": "Phone number must be a string",
+  //     "string.empty": "missing required phone field",
+  //     "string.pattern.base": "Phone number is invalid",
+  //     "string.min": "Phone number should have a minimum length of {#limit}",
+  //     "string.max": "Phone number should have a maximum length of {#limit}",
+  //   }),
+  phone: myCustomJoi.string().phoneNumber().required().messages({
+    "any.required": "missing required phone field",
+    "string.base": "Phone number must be a string",
+    "string.empty": "missing required phone field",
+    "string.pattern.base": "Phone number is invalid",
+    "phoneNumber.invalid": "Phone number is invalid",
+  }),
+  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({

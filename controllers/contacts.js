@@ -4,7 +4,14 @@ const { httpError, ctrlWrapper } = require("../helpers");
 const { Contact } = require(path.resolve(__dirname, "../models/contact"));
 
 const getAll = async (req, res) => {
-  const result = await Contact.find({});
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "_id email");
 
   if (!result) {
     throw httpError(404, "Not found");
@@ -13,7 +20,7 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
-  const contactId = req.params.contactId; 
+  const contactId = req.params.contactId;
   const result = await Contact.findById({ _id: contactId });
   if (!result) {
     throw httpError(404, "Not found");
@@ -22,8 +29,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  console.log("req.body", req.body);
-  const result = await Contact.create(req.body);
+  // const {_id: owner} = req.user;
+  const result = await Contact.create({ ...req.body, owner: req.user._id });
   res.status(201).json(result);
 };
 
@@ -42,7 +49,10 @@ const deleteById = async (req, res) => {
 const updateContactById = async (req, res) => {
   const contactId = req.params.contactId;
   const updatedContact = await Contact.findOneAndUpdate(
-    { _id: contactId }, req.body, { new: true });
+    { _id: contactId },
+    req.body,
+    { new: true }
+  );
 
   if (!updatedContact) {
     throw httpError(404, "Not found");
@@ -53,8 +63,9 @@ const updateContactById = async (req, res) => {
 
 const updateFavorite = async (req, res) => {
   const contactId = req.params.contactId;
-  const result = await Contact.findOneAndUpdate(
-    { _id: contactId }, req.body, { new: true });
+  const result = await Contact.findOneAndUpdate({ _id: contactId }, req.body, {
+    new: true,
+  });
 
   if (!result) {
     throw httpError(404, "Not found");
