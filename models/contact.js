@@ -1,11 +1,13 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../helpers");
+const { handleMongooseError, patterns } = require("../helpers");
 
-const patterns = {
-  email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-};
+
+
+// const patterns = {
+//   email: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+// };
 
 const contactSchema = new Schema(
   {
@@ -26,6 +28,11 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false }
 );
@@ -39,6 +46,7 @@ const contactFull = Joi.object({
   email: Joi.string().pattern(patterns.email).required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean().default(false),
+  
 });
 
 const contactFavorite = Joi.object({
