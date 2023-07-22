@@ -2,7 +2,7 @@
 
 const { Types } = require('mongoose');
 const { AppError, catchAsync } = require('../../utils');
-const { Contact } = require('../../models');
+const services = require('../../services/contacts');
 
 exports.checkContactId = catchAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -11,7 +11,7 @@ exports.checkContactId = catchAsync(async (req, res, next) => {
 
   if (!idIsValid) throw new AppError(404, 'Contact does not exist..');
 
-  const contactExists = await Contact.exists({ _id: id });
+  const contactExists = await services.checkContactExists({ _id: id });
 
   if (!contactExists) throw new AppError(404, 'contact does not exist..');
 

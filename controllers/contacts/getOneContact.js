@@ -1,6 +1,6 @@
 // ./controllers/contacts/getOneContact.js
 
-const { Contact } = require('../../models');
+const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -13,7 +13,7 @@ const { catchAsync } = require('../../utils');
  * @throws {Error} - Якщо сталася помилка при пошуку контакту.
  */
 const getOneContact = catchAsync(async (req, res) => {
-  const contact = await Contact.findById(req.params.id);
+  const contact = await services.getOneContact(req.params.id);
 
   res.status(200).json({
     msg: 'Success',

@@ -1,6 +1,6 @@
 // ./controllers/contacts/removeContact.js
 
-const { Contact } = require('../../models');
+const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -16,11 +16,9 @@ const { catchAsync } = require('../../utils');
 const updateContact = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  const updatedContact = await Contact.findByIdAndUpdate(
-    id,
-    { name: req.body.name },
-    { new: true }
-  );
+  const updatedContact = await services.updateContact(id, {
+    name: req.body.name,
+  });
 
   res.status(200).json({
     msg: 'Success',

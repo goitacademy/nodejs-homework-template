@@ -1,6 +1,6 @@
 // ./controllers/contacts/createContact.js
 
-const { Contact } = require('../../models');
+const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -13,9 +13,8 @@ const { catchAsync } = require('../../utils');
  * @throws {Error} - Якщо сталася помилка при створенні контакту.
  */
 const createContact = catchAsync(async (req, res) => {
-  const newContact = await Contact.create(req.body);
-
-  newContact.password = undefined;
+  console.log(req.body);
+  const newContact = await services.createContact(req.body);
 
   res.status(201).json({
     msg: 'Success',

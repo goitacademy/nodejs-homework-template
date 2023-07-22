@@ -1,6 +1,6 @@
 // ./controllers/contacts/getAllContacts.js
 
-const { Contact } = require('../../models');
+const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -14,7 +14,7 @@ const { catchAsync } = require('../../utils');
  * @throws {Error} - Якщо сталася помилка при отриманні контактів.
  */
 const getAllContacts = catchAsync(async (req, res) => {
-  const contacts = await Contact.find();
+  const contacts = await services.getAllContacts();
 
   res.status(200).json({
     msg: 'Success',

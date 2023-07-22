@@ -1,6 +1,6 @@
 // ./controllers/contacts/updateStatus.js
 
-const { Contact } = require('../../models');
+const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
@@ -23,11 +23,7 @@ const updateStatus = catchAsync(async (req, res) => {
   }
 
   // Знаходимо контакт за його ідентифікатором і оновлюємо поле 'favorite'
-  const updatedContact = await Contact.findByIdAndUpdate(
-    id,
-    { favorite },
-    { new: true }
-  );
+  const updatedContact = await services.updateStatus(id, { favorite });
 
   // Якщо контакт існує і оновлено успішно, повертаємо його
   if (updatedContact) {
