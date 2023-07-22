@@ -2,7 +2,9 @@ const { ApiError } = require("../helpers");
 
 const validateBody = (schema) => {
   const func = (req, res, next) => {
-    console.log("req.body :>> ", req.body);
+    if (req.body === {}) {
+      next(ApiError(400, "missing required field"));
+    }
     const { error } = schema.validate(req.body);
     if (error) {
       next(ApiError(400, error.message));
