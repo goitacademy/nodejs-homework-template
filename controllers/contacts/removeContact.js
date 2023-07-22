@@ -11,5 +11,4 @@ const removeContact = async (req, res) => {
   res.json({"message": "contact deleted"});
 };
 
-
 module.exports = ControllerWrapper(removeContact);
