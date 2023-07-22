@@ -13,19 +13,14 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendMail = async () => {
+const sendMail = async data => {
     try {
-        const email = {
-            to: 'helennikitchenko@meta.ua',
-            from: 'helnikitka@gmail.com',
-            subject: 'Test email',
-            html: '<p><strong>Test email</strong> from localhost:3000</p>',
-        };
+        const email = { ...data, from: 'helnikitka@gmail.com' };
 
-        await transporter.sendMail(email);
-        console.log('Email sent successfully');
+        const info = await transporter.sendMail(email);
+        console.log('Email sent successfully:', info.response);
     } catch (error) {
-        console.log(error.message);
+        console.error('Error sending email:', error.message);
     }
 };
 module.exports = sendMail;
