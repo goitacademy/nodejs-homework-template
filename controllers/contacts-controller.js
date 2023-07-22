@@ -1,35 +1,15 @@
-import Joi from "joi";
-
-import contactsService from "../models/contacts.js";
+import Contact from "../models/contact.js";
 
 import { HttpError } from "../helpers/index.js";
 
-const contactsAddSchema = Joi.object({
-  name: Joi.string().min(3).max(30).required().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      allowFullyQualified: true,
-    })
-    .required()
-    .messages({
-      "any.required": `missing required email field`,
-    }),
-  phone: Joi.string()
-    .pattern(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-\s\./0-9]*$/, "phone number")
-    .min(2)
-    .max(20)
-    .required()
-    .messages({
-      "any.required": `missing required phone field`,
-    }),
-});
+import {
+  contactsAddSchema,
+  contactUpdateFavoriteSchema,
+} from "../schemas/contacts-schemas.js";
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await contactsService.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -39,13 +19,12 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsService.getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw HttpError(404, `Contact with id=${contactId} not found`);
     }
     res.json(result);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -56,7 +35,7 @@ const addNew = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contactsService.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -66,7 +45,8 @@ const addNew = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsService.removeContact(contactId);
+
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       throw HttpError(404, `Contact with id=${contactId} not found`);
     }
@@ -83,7 +63,10 @@ const updateById = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
-    const result = await contactsService.updateContact(contactId, req.body);
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw HttpError(404, `Contact with id=${contactId} not found`);
     }
@@ -93,4 +76,31 @@ const updateById = async (req, res, next) => {
   }
 };
 
-export default { getAll, getById, addNew, deleteById, updateById };
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { error } = contactUpdateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      throw HttpError(404, `Contact with id=${contactId} not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default {
+  getAll,
+  getById,
+  addNew,
+  deleteById,
+  updateById,
+  updateStatusContact,
+};
