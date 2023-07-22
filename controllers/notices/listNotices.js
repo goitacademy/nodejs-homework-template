@@ -8,7 +8,7 @@ const listNotices = async (req, res) => {
         const { page = 1, limit = 20, favorite = false } = req.query;
         const skip = (page - 1) * limit;
         let panginationString = { owner }
-        !favorite ? panginationString = {owner} : panginationString = { owner , favorite };
+        // !favorite ? panginationString = {owner} : panginationString = { owner , favorite };
         const noticesList = await Notice.find( panginationString , "-createdAT -updatedAT", {skip, limit});  
         return res.status(200).json(noticesList);   
     } catch (err) {
