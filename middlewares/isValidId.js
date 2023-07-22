@@ -1,11 +1,12 @@
+const { isValidObjectId } = require("mongoose");
+const { HttpError } = require("../helpers");
+
 const isValidId = (req, res, next) => {
-    const { name, email, phone, } = req.body;
-  
-    if (!name && !email && !phone) {
-      res.status(400).json({ message: "missing fields" });
-    } else {
-      next();
-    }
-  };
-  
-  module.exports = isValidId;
+  const { id } = req.params;
+  if (!isValidObjectId(id)) {
+    next(HttpError(400, `${id} is not valid`));
+  }
+  next();
+};
+
+module.exports = isValidId;
