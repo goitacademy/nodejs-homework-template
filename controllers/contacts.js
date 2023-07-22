@@ -1,21 +1,23 @@
-import {
-  listContacts,
-  getById,
-  removeContact,
-  addContact,
-  updateContact,
-} from "../models/contacts.js";
+// import {
+//   listContacts,
+//   getById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// } from "../models/contacts.js";
+
+import Book from "../models/contact.js";
 
 import { HttpError, ctrlWrapper } from "../helpers/index.js";
 
 const getAll = async (req, res, next) => {
-  const allContacts = await listContacts();
+  const allContacts = await Book.find();
   res.json(allContacts);
 };
 
 const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await getById(contactId);
+  const result = await Book.findById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -23,13 +25,13 @@ const getContactById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const result = await addContact(req.body);
+  const result = await Book.create(req.body);
   res.status(201).json(result);
 };
 
 const deleteById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
+  const result = await Book.findByIdAndDelete(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -37,13 +39,35 @@ const deleteById = async (req, res, next) => {
 };
 
 const updateById = async (req, res, next) => {
-  if (JSON.stringify(req.body) === "{}") {
+  const emptyBody = !Object.keys(req.body).length;
+  if (emptyBody) {
     throw HttpError(400, "missing fields");
   }
 
   const { contactId } = req.params;
 
-  const result = await updateContact(contactId, req.body);
+  const result = await Book.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.status(200).json(result);
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const emptyBody = !Object.keys(req.body).length;
+  if (emptyBody) {
+    throw HttpError(400, "missing field favorite");
+  }
+
+  const { contactId } = req.params;
+
+  const result = await Book.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -58,4 +82,5 @@ export default {
   add: ctrlWrapper(add),
   deleteById: ctrlWrapper(deleteById),
   updateById: ctrlWrapper(updateById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
