@@ -18,9 +18,9 @@ const contactSchema = new Schema({
   },
 });
 
-// contactSchema.pre("findOneAndUpdate", validateAtUpdate);
+contactSchema.pre("findOneAndUpdate", validateAtUpdate);
 contactSchema.post("save", handleSaveError);
-// contactSchema.post("findOneAndUpdate", handleSaveError);
+contactSchema.post("findOneAndUpdate", handleSaveError);
 
 const Contact = model("contact", contactSchema);
 

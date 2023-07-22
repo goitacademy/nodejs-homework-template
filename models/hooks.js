@@ -3,7 +3,7 @@ export const handleSaveError = (error, data, next) => {
   next();
 };
 
-export const validateAtUpdate = (next) => {
+export const validateAtUpdate = function (next) {
   this.getOptions.runValidatros = true;
   next();
 };
