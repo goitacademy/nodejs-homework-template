@@ -10,6 +10,9 @@ const { ctrlWrapper } = require("../utils/ctrlWrapper");
 // };
 const getAll = async (req, res) => {
   const result = await Contact.find();
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
   res.json(result);
 };
 
