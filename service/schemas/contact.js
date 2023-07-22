@@ -8,7 +8,7 @@ const schemaFullContact = Joi.object({
     .required(),
   name: Joi.string().min(3).max(25).required().pattern(/^[\s\S]*$/),
   email: Joi.string().required()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua", "ca"] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua", "ca", "uk"] } })
     .required(),
     favorite: Joi.boolean()
 });
