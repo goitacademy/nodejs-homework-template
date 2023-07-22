@@ -1,15 +1,21 @@
+const { HttpError } = require("../../helpers");
 const { User } = require("../../models/user");
 
 const verifyEmail = async (req, res) => {
-  const { verificationCode } = req.query;
-  console.log(verificationCode);
-  const user = User.findByOne({ verificationCode });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
   if (!user) {
-    console.log("not знайшов");
+    throw HttpError(404, "Email not found");
   }
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.status(200);
   res.json({
-    message: "Verification email success",
+    code: 200,
+    message: "Verification successful",
   });
 };
-
 module.exports = verifyEmail;

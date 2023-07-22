@@ -14,11 +14,17 @@ router.post(
   controllerWrapper(usersController.register)
 );
 
-// router.get(
-//   "/verify/:verificationCode",
-//   validateBody(schemas.emailSchema),
-//   controllerWrapper(usersController.verifyEmail)
-// );
+router.get(
+  "/verify/:verificationToken",
+
+  controllerWrapper(usersController.verifyEmail)
+);
+
+router.post(
+  "/verify",
+  validateBody(schemas.emailSchema),
+  controllerWrapper(usersController.resendVerifyEmail)
+);
 
 router.post(
   "/login",
