@@ -31,7 +31,7 @@ contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
-const schema = Joi.object({
+const addSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": "missing required email field",
     "string.base": "field email must be a string",
@@ -47,11 +47,15 @@ const schema = Joi.object({
       "any.required": "missing required email field",
       "string.base": "field email must be a string",
     }),
-  favorite: Joi.boolean(),
+});
+
+const patchSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const schemas = {
-  schema,
+  addSchema,
+  patchSchema,
 };
 
 module.exports = {
