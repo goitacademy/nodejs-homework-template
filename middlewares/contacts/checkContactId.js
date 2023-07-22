@@ -1,7 +1,7 @@
+// ./midlewares/contacts/checkContactId.js
+
 const { Types } = require('mongoose');
-
 const { AppError, catchAsync } = require('../../utils');
-
 const { Contact } = require('../../models');
 
 exports.checkContactId = catchAsync(async (req, res, next) => {

@@ -1,3 +1,5 @@
+// ./models/contactModel.js
+
 const { model, Schema } = require('mongoose');
 
 const contactSchema = new Schema({

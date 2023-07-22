@@ -1,9 +1,9 @@
+// ./index.js
+
 const express = require('express');
 const cors = require('cors');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const dotenv = require('dotenv');
 const morgan = require('morgan');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const mongoose = require('mongoose');
 
 dotenv.config({
@@ -43,10 +43,6 @@ app.use((req, res, next) => {
 
   next();
 });
-
-// /cars
-// req.body { type: 'petrol' }
-// req.query baseURL/cars?type=petrol
 
 // ROUTES ===============================================
 app.use('/api/contacts', contactRoutes);

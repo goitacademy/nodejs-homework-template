@@ -1,3 +1,5 @@
+// ./controllers/contacts/removeContact.js
+
 const { Contact } = require('../../models');
 const { catchAsync } = require('../../utils');
 
