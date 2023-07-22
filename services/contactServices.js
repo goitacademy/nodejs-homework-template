@@ -47,7 +47,7 @@ exports.addContact = async (contactData) => {
  * Get contacts services.
  * @returns {Promise<User[]>}
  */
-exports.listContacts = () => Contact.find();
+exports.getAllContacts = () => Contact.find();
 
 /**
  * Get contact by id service.
