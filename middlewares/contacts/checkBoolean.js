@@ -2,6 +2,7 @@
 
 const { catchAsync } = require('../../utils');
 
+/* eslint-disable */
 exports.checkBoolean = catchAsync(async (req, res, next) => {
   const { favorite } = req.body;
 
