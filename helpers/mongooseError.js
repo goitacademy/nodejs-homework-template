@@ -1,10 +1,3 @@
-// const mongooseError = (error, data, next) => {
-//     console.log('error.name', error.name)
-//     error.status = 400
-//     next(error)
-// }
-// module.exports = mongooseError;
-
 
 const mongooseError = (error, data, next) => {
     console.log('error.name', error.name);

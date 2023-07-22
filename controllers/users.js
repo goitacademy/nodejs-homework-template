@@ -1,4 +1,4 @@
-const { User } = require("../models/user");
+const  User  = require("../models/user");
 const { httpError, ctrlWrapper } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -38,15 +38,18 @@ const login = async (req, res) => {
     await User.findByIdAndUpdate(user._id, {token});
     res.json({
         token,
-
+        user: {
+          email,
+          subscription: user.subscription
+        }
     })
 }
 
 const getCurrent = async (req, res) => {
-  const {email, name} = req.user;
+  const {email, subscription} = req.user;
   res.json({
     email,
-    name,
+    subscription,
   })
 }
 

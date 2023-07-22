@@ -1,11 +1,10 @@
-const Joi = require("joi");
 const path = require("path");
 const { httpError, ctrlWrapper } = require("../helpers");
 const { Contact } = require(path.resolve(__dirname, "../models/contact"));
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
 
   const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
@@ -29,13 +28,13 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  // const {_id: owner} = req.user;
-  const result = await Contact.create({ ...req.body, owner: req.user._id });
+  const {_id: owner} = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const deleteById = async (req, res) => {
-  const contactId = req.params.contactId; // Получаем значение contactId из параметров запроса
+  const contactId = req.params.contactId;
   const removedById = await Contact.findByIdAndDelete(contactId);
 
   if (!removedById) {
