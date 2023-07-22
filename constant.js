@@ -1,7 +1,8 @@
-const path = require('node:path');
+const PORT = 3000
+const MONGO_URL = 'mongodb+srv://admin:jcy1HCQ3hgVJn2q8@nodejshw.mnna64b.mongodb.net/db-contacts'
 
-const CONTACTS_PATH = path.join(__dirname, 'models', 'contacts.json')
 
 module.exports = {
-    CONTACTS_PATH
+    PORT,
+    MONGO_URL
 }

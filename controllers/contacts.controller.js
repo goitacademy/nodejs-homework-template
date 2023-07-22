@@ -1,14 +1,14 @@
-const contactsModels = require("../models/contacts");
+const { getAllContacts, getContactsById, createContacts, removeContacts, updateContacts, updateStatusContact } = require("../service/contacts.service");
 
 const getContacts = async (_, res) => {
-    const listContacts = await contactsModels.listContacts();
+    const listContacts = await getAllContacts();
 
     return res.json(listContacts)
 }
 
 const getContactById = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await contactsModels.getById(contactId);
+    const contact = await getContactsById(contactId);
 
     if (!contact) return res.status(404).json({ message: "Not found" })
 
@@ -17,7 +17,7 @@ const getContactById = async (req, res) => {
 
 const deleteContactById = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await contactsModels.removeContact(contactId);
+    const contact = await removeContacts(contactId);
 
     if (!contact) return res.status(404).json({ message: "Not found" })
 
@@ -25,20 +25,27 @@ const deleteContactById = async (req, res) => {
 }
 
 const createContact = async (req, res) => {
-    const contact = await contactsModels.addContact(req.body);
+    const contact = await createContacts(req.body);
 
     return res.status(201).json(contact)
 }
 
 const putContact = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await contactsModels.updateContact(contactId, req.body);
+    const contact = await updateContacts(contactId, req.body);
 
     if (!contact) return res.status(404).json({ message: "Not found" })
 
     return res.json(contact)
 }
 
+const patchContact = async (req, res) => {
+    const { contactId } = req.params;
+    const contact = await updateStatusContact(contactId, req.body);
 
+    if (!contact) return res.status(404).json({ message: "Not found", params: req.params })
 
-module.exports = { getContacts, getContactById, createContact, deleteContactById, putContact }
+    return res.json(contact)
+}
+
+module.exports = { getContacts, getContactById, createContact, deleteContactById, putContact, patchContact }
