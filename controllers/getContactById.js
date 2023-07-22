@@ -11,5 +11,4 @@ const getContactById = async (req, res) => {
   res.json(result);
 };
 
-
 module.exports = ControllerWrapper(getContactById);
