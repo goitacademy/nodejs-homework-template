@@ -1,5 +1,9 @@
 // ./services/contacts/index.js
 
+/**
+ * Виконання операцій над базою даних
+ */
+
 const createContact = require('./createContact');
 const getAllContacts = require('./getAllContacts');
 const getOneContact = require('./getOneContact');

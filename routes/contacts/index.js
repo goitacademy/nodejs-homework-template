@@ -1,5 +1,5 @@
 // ./routes/contacts/index.js
 
-const routes = require('./contactRoutes');
+const contactRoutes = require('./contactRoutes');
 
-module.exports = routes;
+module.exports = contactRoutes;

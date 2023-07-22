@@ -2,20 +2,9 @@
 
 const { Router } = require('express');
 
-const {
-  createContact,
-  getAllContacts,
-  getOneContact,
-  updateContact,
-  removeContact,
-  updateStatus,
-} = require('../../controllers/contacts');
+const controllers = require('../../controllers/contacts');
 
-const {
-  checkContactId,
-  checkCreateContactData,
-  checkBoolean,
-} = require('../../middlewares/contacts');
+const middleware = require('../../middlewares/contacts');
 
 const router = Router();
 
@@ -32,17 +21,17 @@ const router = Router();
 
 router
   .route('/')
-  .post(checkCreateContactData, createContact)
-  .get(getAllContacts);
+  .post(middleware.checkCreateContactData, controllers.createContact)
+  .get(controllers.getAllContacts);
 
-router.use('/:id', checkContactId);
+router.use('/:id', middleware.checkContactId);
 router
   .route('/:id')
-  .get(getOneContact)
-  .patch(updateContact)
-  .delete(removeContact);
+  .get(controllers.getOneContact)
+  .patch(controllers.updateContact)
+  .delete(controllers.removeContact);
 
-router.use('/:id/favorite', checkContactId, checkBoolean);
-router.route('/:id/favorite').patch(updateStatus);
+router.use('/:id/favorite', middleware.checkContactId, middleware.checkBoolean);
+router.route('/:id/favorite').patch(controllers.updateStatus);
 
 module.exports = router;

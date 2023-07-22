@@ -3,6 +3,9 @@
 const { AppError, catchAsync, contactValidators } = require('../../utils');
 const services = require('../../services/contacts');
 
+/**
+ * Перевірка та обробка даних для створення нового контакту.
+ */
 exports.checkCreateContactData = catchAsync(async (req, res, next) => {
   const { error, value } = contactValidators.createContactDataValidator(
     req.body

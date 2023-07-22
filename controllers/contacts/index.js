@@ -1,5 +1,9 @@
 // ./controllers/contacts/index.js
 
+/**
+ * Контролери
+ */
+
 const createContact = require('./createContact');
 const getAllContacts = require('./getAllContacts');
 const getOneContact = require('./getOneContact');
