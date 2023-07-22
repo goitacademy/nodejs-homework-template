@@ -1,6 +1,6 @@
 // ./services/contacts/removeContact.js
 
-const { Contact } = require('../../models');
+const Contact = require('../../models/contacts');
 
 /**
  * Оновити контакт.

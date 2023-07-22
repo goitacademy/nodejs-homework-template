@@ -1,6 +1,6 @@
 // ./services/contacts/updateStatus.js
 
-const { Contact } = require('../../models');
+const Contact = require('../../models/contacts');
 
 /**
  * Оновити статус контакту.

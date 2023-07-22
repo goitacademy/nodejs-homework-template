@@ -13,7 +13,7 @@ dotenv.config({
       : './environments/development.env',
 });
 
-const contactRoutes = require('./routes/contactRoutes');
+const contactRoutes = require('./routes/contacts');
 
 const app = express();
 

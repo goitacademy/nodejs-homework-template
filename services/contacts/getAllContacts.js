@@ -1,6 +1,6 @@
 // ./services/contacts/getAllContacts.js
 
-const { Contact } = require('../../models');
+const Contact = require('../../models/contacts');
 
 /*
  * Сервіс для отримання ВСІX контактів.

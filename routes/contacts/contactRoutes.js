@@ -1,3 +1,5 @@
+// ./routes/contacts/contactRoutes.js
+
 const { Router } = require('express');
 
 const {
@@ -7,13 +9,13 @@ const {
   updateContact,
   removeContact,
   updateStatus,
-} = require('../controllers/contacts');
+} = require('../../controllers/contacts');
 
 const {
   checkContactId,
   checkCreateContactData,
   checkBoolean,
-} = require('../middlewares/contacts');
+} = require('../../middlewares/contacts');
 
 const router = Router();
 
