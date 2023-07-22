@@ -3,7 +3,11 @@
 const Contact = require('../../models/contacts');
 
 /**
- * Створити новий контакт.
+ * Створює новий контакт.
+ *
+ * @param {Object} fields - Об'єкт з даними нового контакту, який буде створений.
+ * @returns {Promise<Object>} - Проміс, що вирішується об'єктом нового контакту,
+ * якщо створення успішне, або з помилкою, якщо сталася яка-небудь помилка.
  */
 const createContact = (fields) => Contact.create(fields);
 

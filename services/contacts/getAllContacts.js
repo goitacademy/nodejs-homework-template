@@ -2,10 +2,12 @@
 
 const Contact = require('../../models/contacts');
 
-/*
- * Сервіс для отримання ВСІX контактів.
+/**
+ * Отримує всі контакти з бази даних.
+ *
+ * @returns {Promise<Array>} - Проміс, що вирішується масивом контактів,
+ * які були знайдені в базі даних. Повертається порожній масив, якщо контакти відсутні.
  */
-
 const getAllContacts = () => Contact.find();
 
 module.exports = getAllContacts;
