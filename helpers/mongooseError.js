@@ -1,6 +1,6 @@
 
 const mongooseError = (error, data, next) => {
-    console.log('error.name', error.name);
+    // console.log('error.name', error.name);
     if (error.name === 'ValidationError') {
       const errors = {};
       for (let field in error.errors) {

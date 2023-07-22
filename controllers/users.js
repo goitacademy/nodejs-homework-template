@@ -53,12 +53,23 @@ const getCurrent = async (req, res) => {
   })
 }
 
-const logout =async (req, res) => {
+const logout = async (req, res) => {
   const {_id} = req.user;
-  console.log('_id', _id)
   await User.findByIdAndUpdate(_id, {token: null});
 
   res.status(204).json();
+}
+
+const renewalSubscription = async (req, res) => {
+  const {id} = req.user;
+  const { subscription} = req.body;
+  console.log('subscription', subscription)
+  const result = await User.findByIdAndUpdate(id, {subscription}, {new: true, select: "-_id email subscription"});
+
+  if(!result) {
+    throw httpError(404, "Not Found")
+  }
+  res.status(200).json(result);
 }
 
 module.exports = {
@@ -66,4 +77,5 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  renewalSubscription: ctrlWrapper(renewalSubscription),
 };

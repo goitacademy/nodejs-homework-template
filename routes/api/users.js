@@ -1,6 +1,6 @@
 const express = require("express")
 const { validateBody, authenticate } = require('../../middlewares')
-const { signUserSchema } = require('../../models/joiSchemas')
+const { signUserSchema, updateSubscriptionSchema } = require('../../models/joiSchemas')
 const ctrl = require('../../controllers/users')
 const router = express.Router()
 
@@ -8,13 +8,12 @@ const router = express.Router()
 router.post("/register", validateBody(signUserSchema), ctrl.register)
 // sign in
 router.post("/login", validateBody(signUserSchema), ctrl.login)
-
-router.post("/logout",
- authenticate,
-  ctrl.logout);
-
+// log out
+router.post("/logout", authenticate, ctrl.logout);
+// current user
 router.get("/current", authenticate, ctrl.getCurrent);
-
+// Subscription renewal
+router.patch("/", authenticate, validateBody(updateSubscriptionSchema), ctrl.renewalSubscription)
 
 
 

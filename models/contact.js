@@ -41,4 +41,4 @@ contactSchema.index({ phone: 1 }, { unique: true });
 
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact;
+module.exports = {Contact};
