@@ -9,6 +9,7 @@ const isBodyEmpty = (req, res, next) => {
       next(HttpError(400, "missing fields"));
     }
   }
+  next()
 };
 
 module.exports = isBodyEmpty;
