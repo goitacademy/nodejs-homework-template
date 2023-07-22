@@ -9,6 +9,7 @@ const {
   removeContact,
   updateStatusContact,
 } = require('../../controllers/contacts');
+
 const { checkUserById } = require('../../middleware/contacts');
 
 router.get('/', listContacts);
