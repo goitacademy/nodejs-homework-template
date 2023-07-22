@@ -35,16 +35,16 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const contacts = await listContacts();
-  const newBook = {
+  const newContact = {
     id: uuid(),
     ...body,
   };
-  contacts.push(newBook);
+  contacts.push(newContact);
   await fs.writeFile(
     contactsPath,
     JSON.stringify(contacts, null, 2)
   );
-  return newBook;
+  return newContact;
 };
 
 const updateContact = async (contactId, body) => {
@@ -63,11 +63,10 @@ const updateContact = async (contactId, body) => {
   return contacts[index];
 };
 
-
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-}
+};
