@@ -12,6 +12,6 @@ router.patch(
   userCtrl.updateSubscribtion
 );
 
-router.patch("/users/avatars", authenticate, upload, userCtrl.updateAvatar);
+router.patch("/avatars", authenticate, upload.single("avatar"), userCtrl.updateAvatar);
 
 module.exports = router;
