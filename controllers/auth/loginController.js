@@ -7,13 +7,13 @@ const {  loginValiadation } = require('../../valiadators/joiValiadator');
 const login = async (req, res) => {
     
     try {
-        const { error, value } = loginValiadation(req.body);
-        if (error) {
-            const fieldName = error.details[0].path[0];
-            return res.status(400).json({
-                message: `missing required ${fieldName} field`
-            })
-        }
+        // const { error, value } = loginValiadation(req.body);
+        // if (error) {
+        //     const fieldName = error.details[0].path[0];
+        //     return res.status(400).json({
+        //         message: `missing required ${fieldName} field`
+        //     })
+        // }
         const { email, password } = req.body;
         const userI = await User.findOne({ email });
         if (!userI) {
@@ -35,7 +35,7 @@ const login = async (req, res) => {
         await User.findByIdAndUpdate(userI._id, { token });
         return res.status(200).json({ token: token, user: { email: userI.email, subscription: userI.subscription } });
     } catch (err) {
-        return res.sendStatus(500).json({ message: 'Ooops... Something wrong in DB'});
+        return res.status(500).json({ message: 'Ooops... Something wrong in DB'});
     }
 }
 

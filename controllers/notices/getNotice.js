@@ -1,5 +1,5 @@
 const fs = require('fs/promises');
-const Notice = require('../../models/notices/notises');
+const Notice = require('../../models/notices/notices');
 
 const getNoticeById = async (req, res) => {
 

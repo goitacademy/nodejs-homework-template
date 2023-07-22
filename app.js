@@ -15,6 +15,7 @@ mongoose.connect(process.env.MONGO_PASS).then(() => {
 
 const noticesRouter = require('./routes/api/notices')
 const authRouter = require('./routes/api/authRoutes')
+const petsRouter = require('./routes/api/pets')
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -25,6 +26,8 @@ app.use(express.json())
 app.use(express.static('public'))
 app.use('/api/notices', noticesRouter)
 app.use('/api/users', authRouter)
+app.use('/api/pets', petsRouter)
+
 
 
 app.get('/', (req, res) => {

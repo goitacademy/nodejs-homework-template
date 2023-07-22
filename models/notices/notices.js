@@ -49,6 +49,6 @@ const noticeSchema = mongoose.Schema(
   }
 );
 
-const Notice = mongoose.model('Notice', contactSchema);
+const Notice = mongoose.model('Notice', noticeSchema);
 
 module.exports = Notice;

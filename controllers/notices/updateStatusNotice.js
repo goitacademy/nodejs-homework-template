@@ -1,6 +1,6 @@
 const fs = require('fs/promises');
 const { contactsValiadationFavorite } = require('../../valiadators/joiValiadator');
-const Contact = require('../../models/notices/notises');
+const Notice = require('../../models/notices/notices');
 
 const updateStatusContact = async (req, res) => {
   try {
@@ -11,7 +11,7 @@ const updateStatusContact = async (req, res) => {
         message: `missing required ${fieldName} field`
       })
     }
-    const item = await Contact.findOneAndUpdate({favorite: req.body.favorite });
+    const item = await Notice.findOneAndUpdate({favorite: req.body.favorite });
     if (!item) {
       return res.status(404).json({ "message": "Not found" })
     }

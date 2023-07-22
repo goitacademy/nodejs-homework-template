@@ -2,13 +2,14 @@ const fs = require('fs/promises');
 const Notice = require('../../models/notices/notices');
 
 
-const listNotices = async (req, res) => {
-  const { _id: owner } = req.user;
+const filterNotices = async (req, res) => {
+    const { sex, category } = req.query;
+    console.log(sex, category)
     try {
         const { page = 1, limit = 20, favorite = false } = req.query;
         const skip = (page - 1) * limit;
-        let panginationString = { owner }
-        !favorite ? panginationString = {owner} : panginationString = { owner , favorite };
+        let panginationString = {sex}
+        category ? panginationString = {category, sex} : panginationString = { sex };
         const noticesList = await Notice.find( panginationString , "-createdAT -updatedAT", {skip, limit});  
         return res.status(200).json(noticesList);   
     } catch (err) {
@@ -18,5 +19,5 @@ const listNotices = async (req, res) => {
 }
 
 module.exports = {
-    listNotices
+    filterNotices
 }

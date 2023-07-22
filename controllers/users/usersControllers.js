@@ -10,10 +10,9 @@ const getCurrent = async (req, res) => {
                 message: "Email or password is wrong"
             });
         }
-        User.findByIdAndUpdate(userI._id, { subscription });
-        return res.status(200).json({ user: { email: email, subscription: subscription } })
+        return res.status(200).json({ userI })
     } catch (err) {
-        res.sendStatus(500).json({ message: 'Ooops... Something wrong in DB' });
+        res.status(500).json({ message: 'Ooops... Something wrong in DB' });
     }
 }
 
@@ -32,7 +31,7 @@ const changeUserData = async (req, res) => {
         return res.status(201).json(renewUser);
     } catch (err) {
         console.log(err)
-        res.sendStatus(500).json({ message: 'Ooops... Something wrong in DB' });
+        res.status(500).json({ message: 'Ooops... Something wrong in DB' });
     }
 }
 

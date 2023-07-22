@@ -1,17 +1,19 @@
 const express = require('express')
 const router = express.Router()
-const {listContacts, getContactById, removeContact, addContact, updateContact, updateStatusContact} = require('../../controllers/index')
+const {filterNotices, listNotices, getNoticeById, removeNotice, addNotice, updateStatusContact, getAllNotices} = require('../../controllers/index')
 const authenticate = require('../../middlewares/authMiddleware');
 
-router.get('/', authenticate, listContacts)
+router.get('/', getAllNotices)
 
-router.get('/:id', authenticate, getContactById)
+router.get('/search', filterNotices)
 
-router.post('/', authenticate, addContact)
+router.get('/:id', getNoticeById)
 
-router.delete('/:id', authenticate, removeContact)
+router.post('/', authenticate, addNotice)
 
-router.put('/:id', authenticate, updateContact)
+router.delete('/:id', authenticate, removeNotice)
+
+router.get('/owner', authenticate, listNotices)
 
 router.put('/:id/favorite', authenticate, updateStatusContact)
 
