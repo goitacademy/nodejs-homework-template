@@ -21,8 +21,12 @@ const addFavorites = async (req, res) => {
 const removeFavorites = async (req, res) => {
     const { id } = req.params;
     try {
-        const newUser = await User.findById(req.user._id);  
-        return res.status(200).json(newUser);   
+        const favNotice = await Notice.findById(id);
+        if (!favNotice) {
+            return res.status(404).json({message: 'Not found'});
+        }
+        const newUser = await User.findByIdAndUpdate(req.user._id, { $pull: { favorites: favNotice } });
+        return res.status(200).json(newUser.favorites); 
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: 'Ooops... ListContacts'})

@@ -6,7 +6,7 @@ const filterNotices = async (req, res) => {
     const { sex, category } = req.query;
     console.log(sex, category)
     try {
-        const { page = 1, limit = 20, favorite = false } = req.query;
+        const { page = 1, limit = 20 } = req.query;
         const skip = (page - 1) * limit;
         let panginationString = {sex}
         category ? panginationString = {category, sex} : panginationString = { sex };
