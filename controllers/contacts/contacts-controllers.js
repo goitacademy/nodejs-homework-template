@@ -1,6 +1,16 @@
 // const { HttpError } = require('../../helpers');
 const Contact = require("../../models/contact")
 
+const getAll = async (req, res, next) => {
+  try {
+    const contacts = await Contact.find();
+
+    res.json(contacts);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const add = async (req, res, next) => {
 	try {
 		const result = await Contact.create(req.body)
@@ -24,15 +34,7 @@ const add = async (req, res, next) => {
 // 	}
 // };
 
-const getAll = async (req, res, next) => {
-	try {
-		const contacts = await Contact.find();
 
-		res.json(contacts);
-	} catch (error) {
-		next(error);
-	}
-};
 
 // const getById = async (req, res, next) => {
 // 	try {
