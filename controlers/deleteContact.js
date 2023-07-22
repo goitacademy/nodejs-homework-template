@@ -9,4 +9,4 @@ const deleteContact = async (req, res) => {
     message: "contact deleted",
   });
 };
-module.exports = { deleteContact: ctrlWrap(deleteContact) };
+module.exports = ctrlWrap(deleteContact);

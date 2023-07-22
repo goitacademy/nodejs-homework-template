@@ -1,15 +1,18 @@
-const { getContacts } = require("./getContacts");
-const { getContactsById } = require("./getContactsById");
-const { addContact } = require("./addContact");
-const { deleteContact } = require("./deleteContact");
-const { updateContactById } = require("./updateContactById");
-const { updateStatusById } = require("./updateStatusById");
+const fs = require("fs");
+const path = require("path");
+const currentDirectory = __dirname;
 
-module.exports = {
-  getContacts,
-  getContactsById,
-  addContact,
-  deleteContact,
-  updateContactById,
-  updateStatusById,
-};
+function getFunctionFileNames() {
+  const files = fs.readdirSync(currentDirectory);
+  return files.filter(
+    (file) => path.extname(file) === ".js" && file !== "index.js"
+  );
+}
+
+const functions = getFunctionFileNames().reduce((acc, fileName) => {
+  const functionName = path.parse(fileName).name;
+  acc[functionName] = require(`./${fileName}`);
+  return acc;
+}, {});
+
+module.exports = { functions };

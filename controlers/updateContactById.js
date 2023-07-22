@@ -8,4 +8,4 @@ const updateContactById = async (req, res, next) => {
   FindByIdError(result);
   res.status(200).json(result);
 };
-module.exports = { updateContactById: ctrlWrap(updateContactById) };
+module.exports = ctrlWrap(updateContactById);

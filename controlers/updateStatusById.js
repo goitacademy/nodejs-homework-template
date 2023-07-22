@@ -8,4 +8,4 @@ const updateStatusById = async (req, res, next) => {
   FindByIdError(result);
   res.status(200).json(result);
 };
-module.exports = { updateStatusById: ctrlWrap(updateStatusById) };
+module.exports = ctrlWrap(updateStatusById);
