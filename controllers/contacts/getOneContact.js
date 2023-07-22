@@ -4,13 +4,7 @@ const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
- * Знайти контакт за ідентифікатором.
- *
- * @async
- * @param {Object} req - Об'єкт запиту Express з ідентифікатором контакту у параметрі запиту.
- * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
- * @returns {Promise<void>} - Проміс, що вирішується після знаходження контакту за ідентифікатором.
- * @throws {Error} - Якщо сталася помилка при пошуку контакту.
+ * Контролер знаходження контакту за ідентифікатором.
  */
 const getOneContact = catchAsync(async (req, res) => {
   const contact = await services.getOneContact(req.params.id);

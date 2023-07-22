@@ -4,14 +4,7 @@ const services = require('../../services/contacts');
 const { catchAsync } = require('../../utils');
 
 /**
- * Оновити статус контакту.
- *
- * @async
- * @param {Object} req - Об'єкт запиту Express з ідентифікатором контакту у параметрі запиту та об'єктом `favorite` в тілі запиту.
- * @param {Object} res - Об'єкт відповіді Express для відправки відповіді.
- * @returns {Promise<void>} - Проміс, що вирішується після оновлення статусу контакту.
- *
- * @throws {Error} - Якщо сталася помилка під час оновлення статусу контакту.
+ * Контролер оновлення статусу контакту.
  */
 const updateStatus = catchAsync(async (req, res) => {
   const { id } = req.params;
