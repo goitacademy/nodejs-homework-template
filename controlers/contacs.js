@@ -1,31 +1,26 @@
-const { contacts } = require("../models");
-const { ApiError, ctrlWrap } = require("../helpers");
-
+const { Contact } = require("../models");
+const { ctrlWrap, FindByIdError } = require("../helpers");
 const getContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
+
   res.status(200).json(result);
 };
 
 const getContactsById = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.getContactById(id);
-  console.log("result :>> ", result);
-  if (!result) {
-    throw ApiError(404, "Not found");
-  }
+  const result = await Contact.findById(id);
+  FindByIdError(result);
   res.status(200).json(result);
 };
 
 const addContact = async (req, res) => {
-  const result = await contacts.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.removeContact(id);
-  if (!result) {
-    throw ApiError(404, "Not found");
-  }
+  const result = await Contact.findByIdAndRemove(id);
+  FindByIdError(result);
   res.status(200).json({
     message: "contact deleted",
   });
@@ -33,10 +28,18 @@ const deleteContact = async (req, res) => {
 
 const updateContactById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await contacts.updateContact(id, req.body);
-  if (!result) {
-    throw ApiError(404, "Not found");
-  }
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  FindByIdError(result);
+  res.status(200).json(result);
+};
+const updateStatusById = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  FindByIdError(result);
   res.status(200).json(result);
 };
 module.exports = {
@@ -45,4 +48,5 @@ module.exports = {
   addContact: ctrlWrap(addContact),
   deleteContact: ctrlWrap(deleteContact),
   updateContactById: ctrlWrap(updateContactById),
+  updateStatusById: ctrlWrap(updateStatusById),
 };
