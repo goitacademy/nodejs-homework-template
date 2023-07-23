@@ -1,6 +1,6 @@
 const handleSaveError = (error, data, next) => {
 	error.status = 400;
-	next(error);
+	next();
 };
 
 module.exports = handleSaveError;
