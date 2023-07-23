@@ -3,12 +3,13 @@ import express from 'express';
 import contactsController from '../../controllers/contacts-controllers.js';
 import contactsSchema from '../../schemas/contacts-schemas.js';
 import { validateBody } from '../../decorators/index.js';
+import { isValidId } from '../../middlewars/index.js';
 
 const router = express.Router();
 
 router.get('/', contactsController.getContactsList);
 
-router.get('/:contactId', contactsController.getContactById);
+router.get('/:contactId', isValidId, contactsController.getContactById);
 
 router.post(
   '/',
@@ -16,10 +17,11 @@ router.post(
   contactsController.addNewContact
 );
 
-router.delete('/:contactId', contactsController.deleteContactById);
+// router.delete('/:contactId', isValidId, contactsController.deleteContactById);
 
 router.put(
   '/:contactId',
+  isValidId,
   validateBody(contactsSchema.contactsAddSchema),
   contactsController.updateContactById
 );
