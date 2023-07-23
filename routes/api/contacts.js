@@ -1,16 +1,24 @@
 import express from "express";
 import contactsController from "../../controllers/mivies-controllers.js";
 
+import isValidId from "../../middleware/isValidId.js";
+
 const router = express.Router();
 
 router.get("/", contactsController.getAll);
 
-router.get("/:contactId", contactsController.getById);
+router.get("/:contactId", isValidId, contactsController.getById);
 
 router.post("/", contactsController.add);
 
-router.delete("/:contactId", contactsController.delleteById);
+router.delete("/:contactId", isValidId, contactsController.delleteById);
 
-router.put("/:contactId", contactsController.updateById);
+router.put("/:contactId", isValidId, contactsController.updateById);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  contactsController.updateFavorite
+);
 
 export default router;
