@@ -1,15 +1,20 @@
 const { User } = require("../../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "u6OQjxQL9P";
-const { HttpError, ctrlWrapper } = require("../../helpers");
 
+const { HttpError, ctrlWrapper } = require("../../helpers");
+require("dotenv").config();
+
+const { SECRET_KEY } = process.env;
 const login = async (req, res) => {
   const { email, password } = req.body;
-  // console.log(req.body);
+
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password invalid");
+  }
+  if (!user.verify) {
+    throw HttpError(401, "Email not verified");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {

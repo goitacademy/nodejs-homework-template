@@ -4,9 +4,10 @@ const cors = require("cors");
 const authRouter = require("./routes/api/auth");
 const mongoose = require("mongoose");
 const contactsRouter = require("./routes/api/contacts");
-const DB_HOST = "mongodb+srv://alisa:alisa1996@cluster0.sweamin.mongodb.net/contacts_reader?retryWrites=true&w=majority";
 const app = express();
+require("dotenv").config();
 
+const { DB_HOST } = process.env;
 mongoose.set("strictQuery", true);
 mongoose
   .connect(DB_HOST)

@@ -9,6 +9,8 @@ const { login } = require("./auth/login");
 const { getCurrent } = require("./auth/current");
 const { logout } = require("./auth/logout");
 const { updateAvatar } = require("./auth/updateAvatar");
+const { verifyEmail } = require("./auth/verifyEmail");
+const { resendVerifyEmail } = require("./auth/resendVerifyEmail");
 
 module.exports = {
   contactList,
@@ -18,6 +20,8 @@ module.exports = {
   updateStatusContact,
   removeContact,
   register,
+  verifyEmail,
+  resendVerifyEmail,
   logout,
   getCurrent,
   login,
