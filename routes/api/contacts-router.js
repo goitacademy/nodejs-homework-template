@@ -10,22 +10,22 @@ const router = express.Router();
 
 router.get('/', contactsController.getAll);
 
-router.get('/:contactId', contactsController.getById);
+// router.get('/:contactId', contactsController.getById);
 
-router.post(
-  '/',
-  isEmptyBody,
-  validateBody(contactsSchemas.contactsAddSchema),
-  contactsController.add
-);
+// router.post(
+//   '/',
+//   isEmptyBody,
+//   validateBody(contactsSchemas.contactsAddSchema),
+//   contactsController.add
+// );
 
-router.delete('/:contactId', contactsController.deleteById);
+// router.delete('/:contactId', contactsController.deleteById);
 
-router.put(
-  '/:contactId',
-  isEmptyBody,
-  validateBody(contactsSchemas.contactsAddSchema),
-  contactsController.updateById
-);
+// router.put(
+//   '/:contactId',
+//   isEmptyBody,
+//   validateBody(contactsSchemas.contactsAddSchema),
+//   contactsController.updateById
+// );
 
 export default router;
