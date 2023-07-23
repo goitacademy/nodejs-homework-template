@@ -39,11 +39,6 @@ const deleteById = async (req, res, next) => {
 };
 
 const updateById = async (req, res, next) => {
-  const emptyBody = !Object.keys(req.body).length;
-  if (emptyBody) {
-    throw HttpError(400, "missing fields");
-  }
-
   const { contactId } = req.params;
 
   const result = await Book.findByIdAndUpdate(contactId, req.body, {
@@ -58,10 +53,6 @@ const updateById = async (req, res, next) => {
 };
 
 const updateStatusContact = async (req, res, next) => {
-  const emptyBody = !Object.keys(req.body).length;
-  if (emptyBody) {
-    throw HttpError(400, "missing field favorite");
-  }
 
   const { contactId } = req.params;
 

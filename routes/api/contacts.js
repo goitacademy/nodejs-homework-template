@@ -2,9 +2,7 @@ import express from "express";
 import ctrl from "../../controllers/contacts.js";
 
 import schemas from "../../schemas/contacts.js";
-import validateBody from "../../middlewares/validateBody.js";
-
-import isValidId from "../../middlewares/isValidId.js";
+import { isEmpty, isValidId, validateBody } from "../../middlewares/index.js";
 
 const router = express.Router();
 
@@ -18,6 +16,7 @@ router.delete("/:contactId", isValidId, ctrl.deleteById);
 
 router.put(
   "/:contactId",
+  isEmpty,
   isValidId,
   validateBody(schemas.schema),
   ctrl.updateById
@@ -25,6 +24,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  isEmpty,
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateStatusContact
