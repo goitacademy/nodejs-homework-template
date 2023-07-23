@@ -5,37 +5,16 @@ import {
   listContacts,
   removeContact,
   updateContactById,
-} from "../../models/contacts.js";
-import HttpError from "../../models/helpters/HttpError.js";
+} from "../../controllers/contacts.js";
+import HttpError from "../../helpters/HttpError.js";
 import { contactsAddSchema } from "../../schemas/joi.js";
+import isValidId from "../../middlewares/isValidId.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", async (req, res, next) => {
-  try {
-    const allContacts = await listContacts();
+contactsRouter.get("/", listContacts);
 
-    res.json(allContacts);
-  } catch (error) {
-    next(error);
-  }
-});
-
-contactsRouter.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-
-    const foundContact = await getContactById(contactId);
-
-    if (!foundContact) {
-      throw HttpError(404);
-    }
-
-    res.json(foundContact);
-  } catch (error) {
-    next(error);
-  }
-});
+contactsRouter.get("/:contactId", isValidId, getContactById);
 
 contactsRouter.post("/", async (req, res, next) => {
   try {
