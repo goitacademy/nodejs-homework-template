@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
-const emailRegexp = /^\S+@\S+\.\S+$/;
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const phoneRegexp = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
 
 const contactSchema = new Schema({
@@ -20,6 +20,15 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
+     owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+    subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter"
+  },
 },
     { versionKey: false, timestamps: true }
 );
