@@ -9,11 +9,14 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.3.1",
     "express": "4.17.1",
     "joi": "^17.9.2",
+    "joi-phone-number": "^5.1.1",
+    "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.3.4",
     "mongoose-unique-validator": "^4.0.0",
     "morgan": "1.10.0",
@@ -28,5 +31,13 @@
     "eslint-plugin-promise": "5.2.0",
     "mongodb": "^5.7.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "resolutions": {
+    "node": "14.20.1"
+  },
+  "cSpell.enabled": true,
+  "cSpell.ignorePaths": [
+    "yarn.lock",
+    "package-lock.json"
+  ]
 }
