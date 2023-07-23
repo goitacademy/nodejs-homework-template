@@ -1,15 +1,21 @@
 
 const Contact = require('./contact')
 
-const listContacts = async () => {
+
+
+
+const listContacts = async (req) => {
   try {
-    const contacts = await Contact.find();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find({ owner }, { skip, limit });
     return contacts;
   } catch (err) {
     console.log(err);
     throw err;
   }
-}
+};
 
 const getContactById = async (contactId) => {
   try {
@@ -24,16 +30,17 @@ const getContactById = async (contactId) => {
   }
 }
 
-const addContact = async (body) => {
+const addContact = async (req, body) => {
   try {
-    const newContact = new Contact(body);
+    const { _id: owner } = req.user;
+    const newContact = new Contact({ ...body, owner }); 
     const savedContact = await newContact.save();
     return savedContact;
   } catch (err) {
     console.error(err);
     throw err;
   }
-}
+};
 
 const removeContact = async (contactId) => {
   try {

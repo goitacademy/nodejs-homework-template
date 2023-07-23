@@ -1,6 +1,6 @@
 
 const express = require('express')
-
+const {authenticate} = require('../../middleware/authenticate')
 const {
   listContacts,
   getContactById,
@@ -16,12 +16,19 @@ const schemaJoi = require('./schema');
 const router = express.Router()
 
 
-router.get('/', async (req, res, next) => {
-  const contacts = await listContacts()
-  res.status(200).json(contacts)
+
+router.get('/', authenticate, async (res, req) => {
+  try {
+    const contacts = await listContacts(req);
+    res.status(200).json(contacts);
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+    
+  }
+  
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId',authenticate, async (req, res, next) => {
   try{
   const contact = await getContactById(req.params.contactId)
   res.status(200).json(contact)}
@@ -30,7 +37,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
  try{
   const {name, email, phone} = req.body;
   if(!name||!email|| !phone) {
@@ -51,7 +58,7 @@ const id = uniqid.time();
  }
 })
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", authenticate, async (req, res, next) => {
   
   try {
     const newArr = await removeContact(req.params.contactId);
@@ -62,7 +69,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', authenticate, async (req, res, next) => {
   try {
     if(Object.keys(req.body).length ===0)
     return res.status(400).json({ message: "missing fields" });
@@ -80,7 +87,7 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/api/contacts/:contactId/favorite', async (req, res) => {
+router.patch('/api/contacts/:contactId/favorite', authenticate, async (req, res) => {
   const contactId = req.params.contactId;
   const body = req.body;
 
