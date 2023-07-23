@@ -6,7 +6,7 @@ const contactSchema = Schema(
   {
     name: {
       type: String,
-      required: [true, 'Set name for contact'],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -18,17 +18,22 @@ const contactSchema = Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-const Contact = model('Contact', contactSchema);
+const Contact = model('contact', contactSchema);
 
 const contactSchemaJoi = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().required(),
   phone: Joi.string().required(),
-  favorite: Joi.boolean(),
+  favorite: Joi.bool(),
 });
 
 const favoriteSchemaJoi = Joi.object({
