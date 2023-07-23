@@ -2,8 +2,8 @@ const Joi = require("joi");
 const { Schema, model } = require("mongoose");
 const {handleMongooseError}= require("../helpers")
 
-const dataEmail = /^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/   // Nick@mail.com
-const dataPhone = /\(\d{3}\)\s?\d{3}-\d{4}$/;  // (222) 333-4444
+const emailRegexp = /^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/   // Nick@mail.com
+const phoneRegexp = /\(\d{3}\)\s?\d{3}-\d{4}$/;  // (222) 333-4444
 
 
 const contactSchema = new Schema({
@@ -13,18 +13,23 @@ const contactSchema = new Schema({
   },
   email: {
     type: String,
-    match: dataEmail,
+    match: emailRegexp,
     required: true
   },
   phone: {
     type: String,
-    match: dataPhone,
+    match: phoneRegexp,
     required: true
   },
   favorite: {
     type: Boolean,
     default: false,
   },
+  owner: {
+  type: Schema.Types.ObjectId,
+  ref: "user",
+  required: true,
+  }
 }, {versionKey: false, timestamps: true});
 
 const addSchema = Joi.object({

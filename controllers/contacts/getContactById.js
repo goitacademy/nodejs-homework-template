@@ -10,7 +10,5 @@ const getContactById = async (req, res, next) => {
   res.json(result);
 };
 
-// module.exports = { getContactById: ctrlWrapper(getContactById) };
-
 
 module.exports = getContactById
