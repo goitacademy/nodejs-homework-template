@@ -3,23 +3,23 @@ const Joi = require('joi');
 const subscriptionList = ['starter', 'pro', 'business'];
 
 const registerSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().min(8).required(),
+    email: Joi.string().required(),
+    password: Joi.string().min(8).required(),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().required(),
-  password: Joi.string().min(8).required(),
+    email: Joi.string().required(),
+    password: Joi.string().min(8).required(),
 });
 
 const updateSubscriptionSchema = Joi.object({
-  subscription: Joi.string()
-    .valid(...subscriptionList)
-    .required(),
+    subscription: Joi.string()
+        .valid(...subscriptionList)
+        .required(),
 });
 
 module.exports = {
-  registerSchema,
-  loginSchema,
-  updateSubscriptionSchema,
+    registerSchema,
+    loginSchema,
+    updateSubscriptionSchema,
 };

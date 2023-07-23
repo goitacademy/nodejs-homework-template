@@ -3,12 +3,12 @@ const express = require('express');
 const { isValidId, authenticate } = require('../../middlewares');
 
 const {
-  getAllContacts,
-  getContactById,
-  deleteContact,
-  postContact,
-  putContact,
-  updateStatusContact,
+    getAllContacts,
+    getContactById,
+    deleteContact,
+    postContact,
+    putContact,
+    updateStatusContact,
 } = require('../../controllers/contacts/index');
 
 const router = express.Router();
