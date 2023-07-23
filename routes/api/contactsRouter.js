@@ -1,5 +1,5 @@
 import express from "express";
-import contactsService from '../../controllers/contacts-controllers.js';
+import Contact from '../../models/contact.js';
 import httpError from "../../helpers/httpError.js";
 import Joi from "joi";
 
@@ -12,7 +12,7 @@ const contactsAddSchema = Joi.object({
 
 contactsRouter.get('/', async (req, res, next) => {
    try {
-      const result = await contactsService.listContacts();
+      const result = await Contact.find();
       res.json({ result });
    } catch (error) {
       next(error);
