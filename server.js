@@ -15,6 +15,6 @@ mongoose
     })
   )
   .catch((error) => {
-    console.log(error.message);
+    console.log('Database connection failed:', error.message);
     process.exit(1);
   });
