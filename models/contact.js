@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../middleware");
+const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
 const phoneRegExp =
@@ -23,6 +23,11 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
