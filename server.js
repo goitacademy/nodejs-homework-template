@@ -1,6 +1,9 @@
 const app = require('./app')
 const mongoose = require('mongoose')
-const { MONGO_URL, PORT } = require('./constant')
+require('dotenv').config()
+
+const MONGO_URL = process.env.MONGO_URL
+const PORT = process.env.PORT
 
 const connection = mongoose.connect(MONGO_URL)
 
