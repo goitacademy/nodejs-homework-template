@@ -1,11 +1,3 @@
-// import {
-//   listContacts,
-//   getById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// } from "../models/contacts.js";
-
 import Book from "../models/contact.js";
 
 import { HttpError, ctrlWrapper } from "../helpers/index.js";
@@ -53,7 +45,6 @@ const updateById = async (req, res, next) => {
 };
 
 const updateStatusContact = async (req, res, next) => {
-
   const { contactId } = req.params;
 
   const result = await Book.findByIdAndUpdate(contactId, req.body, {
