@@ -11,7 +11,7 @@ const getAll = async (req, res, next) => {
 	}
 };
 
-const add = async (req, res) => {
+const add = async (req, res, next) => {
 	try {
 		const result = await Contact.create(req.body)
 		res.status(201).json(result)
@@ -63,6 +63,21 @@ const updById = async (req, res, next) => {
 // 	}
 // };
 
+const updStatusContact = async (req, res, next) => {
+	try {
+		const { favorite } = req.body;
+		// if (!favorite) throw HttpError(400, "missing fields")
+
+		const { id } = req.params;
+		const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true, })
+
+		if (!contact) throw HttpError(404, `Not found`)
+		res.json(contact);
+	}
+	catch (error) {
+		next(error);
+	}
+};
 
 module.exports = {
 	getAll,
@@ -70,4 +85,5 @@ module.exports = {
 	getById,
 	// deleteById,
 	updById,
+	updStatusContact,
 };

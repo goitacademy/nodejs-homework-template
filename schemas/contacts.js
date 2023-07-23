@@ -13,5 +13,11 @@ const contactsSchema = Joi.object({
 	favorite: Joi.boolean(),
 });
 
+const updStatusSchema = Joi.object({
+	favorite: Joi.boolean().required(),
+});
 
-module.exports = contactsSchema;
+module.exports = {
+	contactsSchema,
+	updStatusSchema,
+};
