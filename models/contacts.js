@@ -37,7 +37,7 @@ const addContact = async (body) => {
   };
 
   allContacts.unshift(newContact);
-  await updateContactsStorage(allContacts);
+  updateContactsStorage(allContacts);
   return newContact;
 };
 
@@ -50,7 +50,7 @@ const updateContact = async (contactId, body) => {
   if (contactIndex === -1) return null;
 
   allContacts[contactIndex] = {
-    contactId,
+    id: contactId,
     ...body,
   };
 

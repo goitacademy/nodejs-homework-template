@@ -1,8 +1,8 @@
 import { HttpError } from "../helpers/index.js";
 
-const validateBody = () => {
+const validateBody = (schema) => {
   return (req, res, next) => {
-    const { error } = contactsAddSchema.validate(req.body);
+    const { error } = schema.validate(req.body);
     if (error) next(HttpError(400, error.message));
     next();
   };

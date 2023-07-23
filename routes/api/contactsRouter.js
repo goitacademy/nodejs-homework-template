@@ -1,11 +1,11 @@
 import express from "express";
 
-import contactsSchemas from "../../schemas/contactsSchemas.js";
 import { validateBody } from "../../decorators/index.js";
 import { isEmptyBody } from "../../middlewars/index.js";
-import contactsService from "../../models/contacts.js";
 
 import contactsController from "../../controllers/contacts-controller.js";
+import contactsAddSchema from "../../schemas/contacts-schemas.js";
+
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
@@ -15,14 +15,14 @@ contactsRouter.get("/:contactId", contactsController.getById);
 contactsRouter.post(
   "/",
   isEmptyBody,
-  validateBody(contactsSchemas.contactsAddSchema),
+  validateBody(contactsAddSchema),
   contactsController.add
 );
 
 contactsRouter.put(
   "/:contactId",
   isEmptyBody,
-  validateBody(contactsSchemas.contactsAddSchema),
+  validateBody(contactsAddSchema),
   contactsController.updateById
 );
 
