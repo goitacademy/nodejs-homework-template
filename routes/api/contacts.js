@@ -9,9 +9,10 @@ const validateMiddleWare = validation(contactsSchema)
 
 contactsRouter.get("/", ctrl.getAll);
 
+contactsRouter.post("/", validateMiddleWare, ctrl.add);
+
 // contactsRouter.get("/:id", ctrl.getById);
 
-contactsRouter.post("/", validateMiddleWare, ctrl.add);
 
 // contactsRouter.put("/:id", validateMiddleWare, ctrl.updById);
 

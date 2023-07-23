@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const handleSaveError = require("../models/hooks")
 
 const contactSchema = new Schema({
 	name: {
@@ -15,8 +16,11 @@ const contactSchema = new Schema({
 		type: Boolean,
 		default: false,
 	},
-})
+});
+
+contactSchema.post("save", handleSaveError);
 
 const Contact = model("contact", contactSchema);
+
 
 module.exports = Contact;
