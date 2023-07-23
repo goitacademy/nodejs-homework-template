@@ -17,7 +17,7 @@ contactsRouter.get("/:id", isValidId, ctrl.getById);
 
 contactsRouter.put("/:id", isValidId, validateMiddleWare, ctrl.updById);
 
-// contactsRouter.delete("/:id", ctrl.deleteById);
+contactsRouter.delete("/:id", ctrl.deleteById);
 
 contactsRouter.patch("/:id/favorite", isValidId, validateStatus, ctrl.updStatusContact);
 

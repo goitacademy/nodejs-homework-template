@@ -50,24 +50,21 @@ const updById = async (req, res, next) => {
 	}
 };
 
-// const deleteById = async (req, res, next) => {
-// 	try {
-// 		const { id } = req.params;
+const deleteById = async (req, res, next) => {
+	try {
+		const { id } = req.params;
 
-// 		const contact = await contactsService.removeContact(id)
-// 		if (!contact) throw HttpError(404, `Not found`)
-// 		res.json({ "message": "contact deleted" });
-// 	}
-// 	catch (error) {
-// 		next(error)
-// 	}
-// };
+		const contact = await Contact.findByIdAndDelete(id)
+		if (!contact) throw HttpError(404, `Not found`)
+		res.json({ "message": "contact deleted" });
+	}
+	catch (error) {
+		next(error)
+	}
+};
 
 const updStatusContact = async (req, res, next) => {
 	try {
-		const { favorite } = req.body;
-		// if (!favorite) throw HttpError(400, "missing fields")
-
 		const { id } = req.params;
 		const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true, })
 
@@ -83,7 +80,7 @@ module.exports = {
 	getAll,
 	add,
 	getById,
-	// deleteById,
+	deleteById,
 	updById,
 	updStatusContact,
 };
