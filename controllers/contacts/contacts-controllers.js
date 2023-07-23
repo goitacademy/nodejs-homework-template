@@ -34,6 +34,22 @@ const getById = async (req, res, next) => {
 	}
 };
 
+const updById = async (req, res, next) => {
+	try {
+		const { name, email, phone } = req.body;
+		if (!name && !email && !phone) throw HttpError(400, "missing fields")
+
+		const { id } = req.params;
+		const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true, })
+
+		if (!contact) throw HttpError(404, `Not found`)
+		res.json(contact);
+	}
+	catch (error) {
+		next(error);
+	}
+};
+
 // const deleteById = async (req, res, next) => {
 // 	try {
 // 		const { id } = req.params;
@@ -47,26 +63,11 @@ const getById = async (req, res, next) => {
 // 	}
 // };
 
-// const updById = async (req, res, next) => {
-// 	try {
-// 		const { name, email, phone } = req.body;
-// 		if (!name && !email && !phone) throw HttpError(400, "missing fields")
-
-// 		const { id } = req.params;
-// 		const contact = await contactsService.updateContact(id, req.body)
-
-// 		if (!contact) throw HttpError(404, `Not found`)
-// 		res.json(contact);
-// 	}
-// 	catch (error) {
-// 		next(error);
-// 	}
-// };
 
 module.exports = {
 	getAll,
 	add,
 	getById,
 	// deleteById,
-	// updById,
+	updById,
 };

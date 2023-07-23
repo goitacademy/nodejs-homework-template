@@ -20,6 +20,12 @@ const contactSchema = new Schema({
 	},
 }, { versionKey: false, timestamps: true, });
 
+contactSchema.pre("findOneAndUpdate", function (next) {
+	this.getOptions.runValidators = true;
+
+	next();
+});
+
 contactSchema.post("save", handleSaveError);
 
 const Contact = model("contact", contactSchema);

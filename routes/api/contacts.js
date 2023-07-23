@@ -14,7 +14,7 @@ contactsRouter.post("/", validateMiddleWare, ctrl.add);
 
 contactsRouter.get("/:id", isValidId, ctrl.getById);
 
-// contactsRouter.put("/:id", validateMiddleWare, ctrl.updById);
+contactsRouter.put("/:id", validateMiddleWare, ctrl.updById);
 
 // contactsRouter.delete("/:id", ctrl.deleteById);
 
