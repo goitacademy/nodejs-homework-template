@@ -1,7 +1,7 @@
 const express = require("express");
 
 const isBodyEmpty = require("../../utils/isBodyEmpty");
-const isValidFavoriteId = require("../../utils/isValidFavoriteId");
+const isValidId = require("../../utils/isValidId");
 const router = express.Router();
 const ctrl = require("../../controlers/contacts");
 const { validateBody } = require("../../middlewares");
@@ -24,7 +24,7 @@ router.delete("/:contactId", ctrl.deleteById);
 
 router.patch(
   "/:contactId/favorite",
-  isValidFavoriteId,
+  isValidId,
   isBodyEmpty,
   validateBody(schemas.patchSchema),
   ctrl.updateStatusContact
