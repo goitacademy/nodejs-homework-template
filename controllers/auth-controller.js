@@ -51,6 +51,10 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password wrong");
   }
 
+  if (!user.verify) {
+    throw HttpError(401, "Account not verified");
+  }
+
   const comparePassword = await bcrypt.compare(password, user.password);
   if (!comparePassword) {
     throw HttpError(401, "Email or password wrong");
@@ -124,12 +128,12 @@ const verifyEmail = async (req, res) => {
   const user = await User.findOne({ verificationToken });
 
   if (!user) {
-    HttpError(404, { message: "User not found" });
+    throw HttpError(404, "User not found");
   }
 
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationToken: "",
+    verificationToken: null,
   });
   res.json(200, { message: "Verification successful" });
 };
@@ -140,11 +144,6 @@ const resendVerifyEmail = async (req, res) => {
   if (!user) {
     throw HttpError(400, { message: "missing required field email" });
   }
-  console.log(user.verify);
-
-  if (user.verify) {
-    throw HttpError(400, `massage: Verification has already been passed`);
-  }
 
   const mail = {
     from: "maksmrk@ukr.net",
@@ -153,7 +152,9 @@ const resendVerifyEmail = async (req, res) => {
     html: `<a href="http://localhost:3000/users/verify/${user.verificationToken}">Press here</a>`,
   };
 
-  if (!user.verify) {
+  if (user.verify) {
+    throw HttpError(400, `Verification has already been passed`);
+  } else {
     await sendEmail(mail);
   }
 
