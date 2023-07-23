@@ -1,3 +1,4 @@
+const { ContactModel } = require('../models');
 const modelsContacts = require('../models/contacts');
 const { ctrlWrapper, HttpError } = require('../utils');
 
@@ -7,7 +8,10 @@ const { ctrlWrapper, HttpError } = require('../utils');
  * @param {*} res
  */
 const listContacts = async (req, res) => {
-  const result = await modelsContacts.listContacts();
+  // const result = await modelsContacts.listContacts();
+
+  const result = await ContactModel.find().select('-__v');
+
   res.status(200).json(result);
 };
 
@@ -18,7 +22,9 @@ const listContacts = async (req, res) => {
  */
 
 const addContact = async (req, res) => {
-  const result = await modelsContacts.addContact(req.body);
+  // const result = await modelsContacts.addContact(req.body);
+
+  const result = await ContactModel.create(req.body);
 
   res.status(201).json(result);
 };
