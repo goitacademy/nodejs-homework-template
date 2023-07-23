@@ -22,18 +22,29 @@ const addNewContact = async (req, res) => {
   res.status(201).json(result);
 };
 
-// const deleteContactById = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await contactsServise.removeContact(contactId);
-//   if (!result) {
-//     throw HttpError(404);
-//   }
-//   res.json({
-//     message: 'contact deleted',
-//   });
-// };
+const deleteContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json({
+    message: 'contact deleted',
+  });
+};
 
 const updateContactById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json(result);
+};
+
+const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
@@ -48,6 +59,7 @@ export default {
   getContactsList: ctrlWrapper(getContactsList),
   getContactById: ctrlWrapper(getContactById),
   addNewContact: ctrlWrapper(addNewContact),
-  // deleteContactById: ctrlWrapper(deleteContactById),
+  deleteContactById: ctrlWrapper(deleteContactById),
   updateContactById: ctrlWrapper(updateContactById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
