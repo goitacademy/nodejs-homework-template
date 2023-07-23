@@ -1,14 +1,14 @@
-// const { HttpError } = require('../../helpers');
+const { HttpError } = require('../../helpers');
 const Contact = require("../../models/contact")
 
 const getAll = async (req, res, next) => {
-  try {
-    const contacts = await Contact.find();
+	try {
+		const contacts = await Contact.find();
 
-    res.json(contacts);
-  } catch (error) {
-    next(error);
-  }
+		res.json(contacts);
+	} catch (error) {
+		next(error);
+	}
 };
 
 const add = async (req, res) => {
@@ -21,18 +21,18 @@ const add = async (req, res) => {
 	}
 };
 
-// const getById = async (req, res, next) => {
-// 	try {
-// 		const { id } = req.params;
-// 		const contact = await contactsService.getContactById(id);
+const getById = async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		const contact = await Contact.findById(id);
 
-// 		if (!contact) throw HttpError(404, `Not found`)
-// 		res.json(contact);
-// 	}
-// 	catch (error) {
-// 		next(error);
-// 	}
-// };
+		if (!contact) throw HttpError(404, `Not found`)
+		res.json(contact);
+	}
+	catch (error) {
+		next(error);
+	}
+};
 
 // const deleteById = async (req, res, next) => {
 // 	try {
@@ -66,7 +66,7 @@ const add = async (req, res) => {
 module.exports = {
 	getAll,
 	add,
+	getById,
 	// deleteById,
-	// getById,
 	// updById,
 };
