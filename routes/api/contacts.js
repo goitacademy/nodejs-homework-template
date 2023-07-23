@@ -1,5 +1,7 @@
 import express from "express";
 
+import { isValidId } from "../../middlewares/index.js";
+
 import contactsControllers from "../../controllers/contacts-controllers.js";
 
 import { validateBody } from "../../decorators/index.js";
@@ -10,7 +12,7 @@ const router = express.Router();
 
 router.get("/", contactsControllers.getAll);
 
-router.get("/:contactId", contactsControllers.getById);
+router.get("/:contactId", isValidId, contactsControllers.getById);
 
 router.post(
   "/",
@@ -21,9 +23,13 @@ router.post(
 router.put(
   "/:contactId",
   validateBody(contactsSchemas.contactAddSchema),
-  contactsControllers.deleteById
+  contactsControllers.updateById
 );
-
-router.delete("/:contactId", contactsControllers.getById);
+router.patch(
+  "/:contactId/favorite",
+  validateBody(contactsSchemas.contactUpdateFavoriteSchema),
+  contactsControllers.updateFavorite
+);
+router.delete("/:contactId", isValidId, contactsControllers.deleteById);
 
 export default router;
