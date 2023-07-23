@@ -8,19 +8,19 @@ const getAll = async (req, res, next) => {
   res.json(result);
 };
 
-// const getById = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const result = await contactsService.getContactById(contactId);
-//   if (!result) {
-//     throw HttpError(404);
-//   }
-//   res.json(result);
-// };
+const getById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findById(contactId);
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json(result);
+};
 
-// const add = async (req, res, next) => {
-//   const result = await contactsService.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const add = async (req, res, next) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
 // const updateById = async (req, res, next) => {
 //   const { contactId } = req.params;
@@ -43,8 +43,8 @@ const getAll = async (req, res, next) => {
 
 export default {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
-  // add: ctrlWrapper(add),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
   // updateById: ctrlWrapper(updateById),
   // deleteById: ctrlWrapper(deleteById),
 };

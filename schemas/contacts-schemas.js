@@ -24,6 +24,7 @@ const contactsAddSchema = Joi.object({
       'string.empty': "Phone number can't be empty!",
       'string.base': 'Phone number must be a string!',
     }),
+  favorite: Joi.boolean(),
 });
 
 export default {
