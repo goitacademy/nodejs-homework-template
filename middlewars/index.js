@@ -1,0 +1,1 @@
+export {default as isValidateId} from "./isValidId.js"

@@ -1,7 +1,7 @@
 import Joi from "joi";
-
+import Contact from "../models/contact.js";
 // import { listContacts, getContactById, addContact, removeContact, updateContact } from "../models/contacts.js";
-import contactServise from "../models/contacts.js";
+// import contactServise from "../models/contacts.js";
 
 import HttpError from "../helpers/HttpError.js";
 
@@ -13,7 +13,7 @@ const contactsAddSchema = Joi.object({
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await contactServise.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -21,65 +21,85 @@ const getAll = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const result = await contactServise.getContactById(contactId);
-      if (!result) {
-        throw HttpError(404, `Contact with id ${contactId} not found`);
-      }
-      res.json(result);
-    } catch (error) {
-      next(error);
+  try {
+    const { id } = req.params;
+    const result = await Contact.findById(id);
+    if (!result) {
+      throw HttpError(404, `Contact with id ${id} not found`);
     }
-  };
-
-const   createNewContact = async (req, res, next) => {
-    try {
-      const { error } = contactsAddSchema.validate(req.body);
-      if (error) {
-        throw HttpError(400, error.message);
-      }
-  
-      const result = await contactServise.addContact(req.body);
-      res.status(201).json(result);
-    } catch (error) {
-      next(error);
-    }
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
+};
 
-  const deleteById = async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const result = await contactServise.removeContact(contactId);
-      if (!result) {
-        throw HttpError(404, `Contact with id ${contactId} not found`);
-      }
-  
-      res.json({ message: "Delete Success" });
-    } catch (error) {
-      next(error);
+const createNewContact = async (req, res, next) => {
+  try {
+    const { error } = contactsAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
     }
-  }
 
-  const updateContactById = async (req, res, next) => {
-    try {
-      const { error } = contactsAddSchema.validate(req.body);
-  
-      if (error) {
-        throw HttpError(400, error.message);
-      }
-  
-      const { contactId } = req.params;
-      const result = await contactServise.updateContact(contactId, req.body);
-  
-      if (!result) {
-        throw HttpError(404, `Contact with id ${contactId} not found`);
-      }
-      res.json(result);
-    } catch (error) {
-      next(error);
-    }
+    const result = await Contact.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
   }
+};
+
+const deleteById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Contact.findByIdAndDelete(id);
+    if (!result) {
+      throw HttpError(404, `Contact with id ${id} not found`);
+    }
+
+    res.json({ message: "Delete Success" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateContactById = async (req, res, next) => {
+  try {
+    const { error } = contactsAddSchema.validate(req.body);
+
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!result) {
+      throw HttpError(404, `Contact with id ${id} not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateFavorite = async (req, res, next) => {
+  try {
+    // const { error } = contactsAddSchema.validate(req.body);
+
+    // if (error) {
+    //   throw HttpError(400, error.message);
+    // }
+
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!result) {
+      throw HttpError(404, `Contact with id ${id} not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export default {
   getAll,
@@ -87,4 +107,5 @@ export default {
   createNewContact,
   deleteById,
   updateContactById,
+  updateFavorite,
 };
