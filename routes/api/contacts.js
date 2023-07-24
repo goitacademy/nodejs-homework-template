@@ -2,24 +2,23 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers/controllers")
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {validateBody, isValid} = require("../../midllewares");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {schemas} = require("../../models/contact")
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ctrl.getAll)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', isValid,  ctrl.getById)
+
+router.post('/', validateBody(schemas.addSchema), ctrl.add)
+
+router.put('/:contactId', isValid, validateBody(schemas.addSchema), ctrl.update)
+
+router.patch('/:contactId/favorite', isValid, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
+
+router.delete('/:contactId', isValid, ctrl.remove )
+
 
 module.exports = router
