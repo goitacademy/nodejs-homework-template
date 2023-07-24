@@ -32,18 +32,18 @@ const listContacts = async () => {
 //   return result;
 // }
 
-// const addContact = async ({name, email, phone}) => {
-//   const contacts = await listContacts();
-//   const newContact = {
-//     id: nanoid(),
-//     name,
-//     email,
-//     phone,
-//   };
-//   contacts.push(newContact);
-//   await updateContacts(contacts);
-//   return newContact;
-// };
+const addContact = async ({name, email, phone}) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: nanoid(),
+    name,
+    email,
+    phone,
+  };
+  contacts.push(newContact);
+  await updateContacts(contacts);
+  return newContact;
+};
 
 // const updateContact = async (id, body) => {
 //   const contacts = await listContacts();

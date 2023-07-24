@@ -29,18 +29,18 @@ contactsRouter.get("/", async (req, res, next) => {
 //   }
 // });
 
-// contactsRouter.post("/", async (req, res, next) => {
-//   try {
-//     const { error } = contactsAddSchema.validate(req.body);
-//     if (error) {
-//       throw HttpError(400, error.message);
-//     }
-//     const result = await contactsService.addContact(req.body);
-//     res.status(201).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+contactsRouter.post("/", async (req, res, next) => {
+  try {
+    const { error } = contactsAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await Contact.create(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 // contactsRouter.delete("/:id", async (req, res, next) => {
 //   try {
