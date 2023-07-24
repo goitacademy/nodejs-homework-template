@@ -36,8 +36,13 @@ const authSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
 userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
 
-module.exports = { User, authSchema };
+module.exports = { User, authSchema, loginSchema };
