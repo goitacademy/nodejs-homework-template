@@ -86,6 +86,17 @@ const updateContact = async (req, res) => {
   res.status(200).json(result);
 };
 
+// const updateStatusContact = async (req, res) => {
+//   const { contactId } = req.params;
+//   const body = req.body;
+
+//   const result = await ContactModel.findByIdAndUpdate({ _id: contactId }, body, { new: true });
+//   if (!result) {
+//     throw HttpError(404, 'Not found');
+//   }
+//   res.json(result);
+// };
+
 module.exports = {
   ctrlListContacts: ctrlWrapper(listContacts),
   ctrlAddContact: ctrlWrapper(addContact),
