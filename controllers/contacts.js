@@ -81,3 +81,4 @@ module.exports = {
   refreshContact: ctrlWrapper(refreshContact),
   updateStatusContact: ctrlWrapper(updateStatusContact),
 };
+
