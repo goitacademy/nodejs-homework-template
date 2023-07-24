@@ -1,15 +1,15 @@
-import Joi from "joi";
-import Contact from "../models/contact.js";
+// import Joi from "joi";
+import {Contact} from "../models/index.js";
 // import { listContacts, getContactById, addContact, removeContact, updateContact } from "../models/contacts.js";
 // import contactServise from "../models/contacts.js";
+import { contactsAddSchema } from "../schemas/index.js";
+import {HttpError} from "../helpers/index.js";
 
-import HttpError from "../helpers/HttpError.js";
-
-const contactsAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
+// const contactsAddSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// });
 
 const getAll = async (req, res, next) => {
   try {

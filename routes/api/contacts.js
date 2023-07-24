@@ -4,7 +4,7 @@ import { isValidateId } from "../../middlewars/index.js";
 
 const contactsRouter = Router();
 
-import contactControl from '../../controllers/contacts-controllers.js';
+import {contactControl} from '../../controllers/index.js';
 
 contactsRouter.get("/", contactControl.getAll);
 
