@@ -16,6 +16,13 @@ const contactsAddSchema = Joi.object({
     .messages({ 'any.required': `missing required phone field` }),
 });
 
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ 'any.required': `missing field favorite` }),
+});
+
 export default {
   contactsAddSchema,
+  contactUpdateFavoriteSchema,
 };
