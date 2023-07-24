@@ -74,10 +74,10 @@ const updateById = async (req, res, next) => {
   }
 };
 
-const updateByIdFavorite = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      throw HttpError(400);
+      throw HttpError(400, "missing field favorite" );
     }
 
     const { error } = contactSchema.contactUpdateFavoriteSchema.validate(
@@ -88,7 +88,7 @@ const updateByIdFavorite = async (req, res, next) => {
     }
 
     const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    const result = await Contact.findByIdAndUpdate(id, req.body.favorite, { new: true });
     if (!result) {
       throw HttpError(404);
     }
@@ -104,5 +104,5 @@ export default {
   add,
   deleteById,
   updateById,
-  updateByIdFavorite,
+  updateStatusContact,
 };
