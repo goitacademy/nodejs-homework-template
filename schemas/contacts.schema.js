@@ -20,7 +20,19 @@ const contactSchema = Joi.object({
         .messages({
             'string.pattern.base': 'Phone number must have 10 digits.',
             'any.required': "missing required phone field"
-        })
+        }),
+    favorite: Joi
+        .boolean()
 })
 
-module.exports = { contactSchema }
+const contactByFieldSchema = (fieldName) => {
+    const result = contactSchema
+        .fork(Object.keys(contactSchema.describe().keys), (schema) => schema.optional())
+        .fork(fieldName, (schema) => schema.required().messages({
+            'any.required': `missing required ${fieldName} field`
+        }))
+
+    return result
+}
+
+module.exports = { contactSchema, contactByFieldSchema }
