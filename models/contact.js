@@ -29,7 +29,7 @@ contactSchema.pre("findOneAndUpdate", handleUpdateValidator);
 
 contactSchema.post("save", handleSaveError);
 
-contactSchema.post("findOneAndUpdate", handleUpdateStatusError);
+contactSchema.post("findOneAndUpdate", handleSaveError);
 
 const Contact = model("contact", contactSchema);
 
