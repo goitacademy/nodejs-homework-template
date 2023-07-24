@@ -1,25 +1,29 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const contacts = require("../../models/contacts");
+const { errorHandler } = require("../../helpers");
+const { contactSchema } = require("../../schemas/contacts");
+const { validateBody } = require("../../middlewares");
+const schema = require("../../schemas/contacts");
+const booksController = require("../../controllers/contacts");
+const controllerWrapper = require("../../helpers/controllerWrapper");
 
-const router = express.Router()
+router.get("/", controllerWrapper(booksController.listAll));
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", controllerWrapper(booksController.getById));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  "/",
+  validateBody(schema.contactSchema),
+  controllerWrapper(booksController.add)
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", controllerWrapper(booksController.removeById));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  validateBody(schema.contactSchema),
+  controllerWrapper(booksController.updateById)
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
