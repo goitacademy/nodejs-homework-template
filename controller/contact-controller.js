@@ -1,23 +1,17 @@
-import express from "express";
-import HttpError from "../../helpers/HttpError.js";
-// import contactsService from "../../models/contacts.js";
-import {contactsAddSchema, contactUpdateFavoriteSchema} from "../../helpers/validate.js";
-import isValidId from "../../middlewars/isValidId.js";
+import HttpError from "../helpers/HttpError";
+import moviesSchemas from "../helpers/validate";
+import Contact from "../models/contact"
 
-import Contact from '../../models/contact.js';
-
-const contactsRouter = express.Router();
-
-contactsRouter.get("/", async (req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
-    const result = await Contact.find({}, "name email phone")
+    const result = await Contact.find({}, "name email phone");
     res.json(result);
   } catch (error) {
     next(error);
   }
-});
+};
 
-contactsRouter.get("/:id", isValidId, async (req, res, next) => {
+const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await Contact.findById(id);
@@ -28,11 +22,11 @@ contactsRouter.get("/:id", isValidId, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-contactsRouter.post("/", async (req, res, next) => {
+const add = async (req, res, next) => {
   try {
-    const { error } = contactsAddSchema.validate(req.body);
+    const { error } = moviesSchemas.contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -41,9 +35,9 @@ contactsRouter.post("/", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-contactsRouter.delete("/:id", async (req, res, next) => {
+const deleteById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await Contact.findByIdAndDelete(id);
@@ -56,21 +50,21 @@ contactsRouter.delete("/:id", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-contactsRouter.put("/:id", isValidId, async (req, res, next) => {
+const updateById = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
       throw HttpError(400);
     }
 
-    const { error } = contactsAddSchema.validate(req.body);
+    const { error } = moviesSchemas.contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
 
     const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true}, );
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     if (!result) {
       throw HttpError(404);
     }
@@ -78,21 +72,23 @@ contactsRouter.put("/:id", isValidId, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-ontactsRouter.patch("/:id/favorite", isValidId, async (req, res, next) => {
+const updateByIdFavorite = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
       throw HttpError(400);
     }
 
-    const { error } = contactUpdateFavoriteSchema.validate(req.body);
+    const { error } = moviesSchemas.contactUpdateFavoriteSchema.validate(
+      req.body
+    );
     if (error) {
       throw HttpError(400, error.message);
     }
 
     const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true}, );
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     if (!result) {
       throw HttpError(404);
     }
@@ -100,6 +96,13 @@ ontactsRouter.patch("/:id/favorite", isValidId, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
+};
 
-export default contactsRouter;
+export default {
+  getAll,
+  getById,
+  add,
+  deleteById,
+  updateById,
+  updateByIdFavorite,
+};
