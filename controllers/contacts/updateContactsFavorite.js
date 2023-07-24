@@ -1,4 +1,4 @@
-const { Contact } = require("../../models");
+const { Contact } = require("../../models/contacts");
 const { HttpError, ctrlWrapper } = require("../../helpers");
 
 const updateFavorite = async (req, res) => {
