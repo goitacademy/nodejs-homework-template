@@ -1,6 +1,6 @@
-import HttpError from "../helpers/HttpError";
-import contactSchema from "../helpers/validate";
-import Contact from "../models/contact"
+import HttpError from "../helpers/HttpError.js";
+import contactSchema from "../helpers/validate.js";
+import Contact from "../models/contact.js";
 
 const getAll = async (req, res, next) => {
   try {
