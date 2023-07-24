@@ -8,6 +8,11 @@ const contactsAddSchema = Joi.object({
   phone: Joi.string().min(7).required().messages({
     'any.required': '"Phone" is a required field',
   }),
+  favorite: Joi.boolean(),
 });
 
-export default { contactsAddSchema };
+const contactsToggleFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+export default { contactsAddSchema, contactsToggleFavoriteSchema };

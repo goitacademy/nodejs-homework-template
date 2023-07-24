@@ -1,42 +1,49 @@
-import contactsService from '../models/contacts.js';
+import Contact from '../models/contact.js';
 import { controllerWrapper } from '../decorators/index.js';
 
 const notFoundMsg = 'Could not find contact with the requested id';
 
 // ####################################################
 
-const getAll = async (req, res, next) => {
-  const result = await contactsService.getAllContacts();
+const getAll = async (req, res) => {
+  const result = await Contact.find();
   res.json(result);
 };
 
-const getById = async ({ params: { id } }, res, next) => {
-  const result = await contactsService.getContactById(id);
+const getById = async ({ params: { id } }, res) => {
+  const result = await Contact.findById(id);
   if (!result) throw HttpError(404, notFoundMsg);
 
   res.json(result);
 };
 
-const add = async (req, res, next) => {
-  //   const { error } = contactAddSchema.validate(req.body);
-  //   if (error) throw HttpError(400, error.message);
-
-  const result = await contactsService.addContact(req.body);
+const add = async (req, res) => {
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
-const updateById = async ({ body, params: { id } }, res, next) => {
-  //   const { error } = contactAddSchema.validate(body);
-  //   if (error) throw HttpError(400, error.message);
-
-  const result = await contactsService.updateContactById(id, body);
+const deleteById = async ({ params: { id } }, res) => {
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) throw HttpError(404, notFoundMsg);
 
   res.json(result);
 };
 
-const deleteById = async (req, res, next) => {
-  const result = await contactsService.removeContact(req.params.id);
+const updateById = async ({ params: { id } }, res) => {
+  const result = await Contact.findByIdAndUpdate(id, body, {
+    new: true,
+    // runValidators: true,
+  });
+  if (!result) throw HttpError(404, notFoundMsg);
+
+  res.json(result);
+};
+
+const updateStatusContact = async ({ body, params: { id } }, res) => {
+  const result = await Contact.findByIdAndUpdate(id, body, {
+    new: true,
+    // runValidators: true,
+  });
   if (!result) throw HttpError(404, notFoundMsg);
 
   res.json(result);
@@ -48,4 +55,5 @@ export default {
   add: controllerWrapper(add),
   updateById: controllerWrapper(updateById),
   deleteById: controllerWrapper(deleteById),
+  updateStatusContact: controllerWrapper(updateStatusContact),
 };
