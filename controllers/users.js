@@ -1,10 +1,16 @@
 const User = require("../models/user");
-const { httpError, ctrlWrapper } = require("../helpers");
+const { httpError, ctrlWrapper, formattedDate } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const fs = require("fs/promises");
+const path = require("path");
+
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
+
+
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -17,17 +23,16 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
   res
     .status(201)
-    .json({ user: { email, subscription: newUser.subscription, avatarURL } });
+    .json({ user: { email, subscription: newUser.subscription} });
 };
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-
   if (!user) {
     throw httpError(401, "Email or password is wrong");
   }
@@ -80,10 +85,40 @@ const renewalSubscription = async (req, res) => {
   res.status(200).json(result);
 };
 
+
+const avatarDir = path.join(__dirname, "..", "public", "avatars")
+
+
+const updateAvatar = async (req, res) => {
+// console.log('req.user', req.user)
+// console.log('req.file in updateAvatar', req.file)
+  const { email, _id } = req.user;
+  const { path: tempPath, originalname } = req.file;
+
+  const userName = email.substring(0, email.indexOf('@'));
+  const originalExtension = path.extname(originalname);
+   
+  const fileName = `${userName}_${formattedDate}${originalExtension}`;
+
+  const resultPath = path.join(avatarDir, fileName);
+
+  
+  Jimp.read(tempPath)
+    .then((img) => img.resize(250, 250).write(resultPath))
+    .catch((err) => console.log(err.message));
+  await fs.rename(tempPath, resultPath);
+  const avatarURL = path.join("avatars", fileName);
+  console.log('avatarURL', avatarURL)
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.status(200).json({ avatarURL });
+}
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   renewalSubscription: ctrlWrapper(renewalSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
