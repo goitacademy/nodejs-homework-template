@@ -11,13 +11,7 @@ router.get("/", ctrl.getAll);
 
 router.get("/:contactId", isValidId, ctrl.getById);
 
-router.post(
-  "/",
-  isValidId,
-  isBodyEmpty,
-  validateBody(schemas.schema),
-  ctrl.add
-);
+router.post("/", isBodyEmpty, validateBody(schemas.addSchema), ctrl.add);
 
 router.put(
   "/:contactId",
