@@ -2,7 +2,7 @@ import { listContacts, getContactById, addContact, removeContact, updateContact 
 
 import trycatchWrapper from "../decorators/trycatchWrapper.js";
 
-const getAllCobtactsCtrl = async (_, res, __) => {
+const getAllContactsCtrl = async (_, res, __) => {
 	const contacts = await listContacts();
 	res.json(contacts);
 };
@@ -46,9 +46,9 @@ const deleteContactByIdCtrl = async (req, res, __) => {
 };
 
 export default {
-	getAllCobtactsCtrl: trycatchWrapper(getAllCobtactsCtrl),
+	getAllContactsCtrl: trycatchWrapper(getAllContactsCtrl),
 	findContactByIdCtrl: trycatchWrapper(findContactByIdCtrl),
-	addContactCtrl: trycatchWrapper(addContactCtrl),
 	putContactDataCtrl: trycatchWrapper(putContactDataCtrl),
 	deleteContactByIdCtrl: trycatchWrapper(deleteContactByIdCtrl),
+	addContactCtrl: trycatchWrapper(addContactCtrl),
 };

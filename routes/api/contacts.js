@@ -3,18 +3,18 @@ import express from "express";
 import validateBody from "../../decorators/validateBody.js";
 import userAddSchema from "../../schemas/schemas.js";
 
-import { getAllCobtactsCtrl, findContactByIdCtrl, addContactCtrl, putContactDataCtrl, deleteContactByIdCtrl } from "../../controlers/movie-ctrl.js";
+import ctrl from "../../controlers/movie-ctrl.js";
 
 const router = express.Router();
 
-router.get("/", getAllCobtactsCtrl);
+router.get("/", ctrl.getAllContactsCtrl);
 
-router.get("/:contactId", findContactByIdCtrl);
+router.get("/:contactId", ctrl.findContactByIdCtrl);
 
-router.post("/", validateBody(userAddSchema), addContactCtrl);
+router.post("/", validateBody(userAddSchema), ctrl.addContactCtrl);
 
-router.put("/:contactId", validateBody(userAddSchema), putContactDataCtrl);
+router.put("/:contactId", validateBody(userAddSchema), ctrl.putContactDataCtrl);
 
-router.delete("/:contactId", deleteContactByIdCtrl);
+router.delete("/:contactId", ctrl.deleteContactByIdCtrl);
 
 export default router;
