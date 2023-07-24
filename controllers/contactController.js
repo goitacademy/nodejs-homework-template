@@ -31,24 +31,19 @@ const getContacts = async (req, res, next) => {
     }
   }
 
+ 
   const getContact = async (req, res, next) => {
     try {
       const { id } = req.params;
-      // const result = await Contact.findOne({_id: id}); - найти обьект где есть _id = id
       const result = await Contact.findById(id);
       if (!result) {
-        throw HttpError(404, 'Not found');
+        throw new HttpError(404, 'Contact not found');
       }
       res.json(result);
-    } 
-    // catch (error) {
-    //   next(error);
-    // }
-    catch (error) {
-      res.status(error.status || 500).json({ message: error.message || 'Server error' });
+    } catch (error) {
+      next(error); // Передаем ошибку в следующий обработчик ошибок для дальнейшей обработки
     }
   };
-
 
   const addNewContact = async (req, res) => {
     try {

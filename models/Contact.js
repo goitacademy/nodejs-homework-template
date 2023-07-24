@@ -1,7 +1,7 @@
 // contact.js
 const { model, Schema } = require('mongoose')
 
-// const {handleMongooseError} = require('../helpers/index')
+const {handleMongooseError} = require('../helpers/index')
 
 const contactSchema = new Schema(
   {
@@ -27,7 +27,7 @@ const contactSchema = new Schema(
 )
 
 
-// contactSchema.post('save', handleMongooseError)
+contactSchema.post('save', handleMongooseError)
 
 // const schemas = {updateFavoriteSchema}
 
