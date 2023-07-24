@@ -2,6 +2,8 @@ const express = require('express');
 
 const ctrl = require('../../controllers/auth');
 
+const email = require('../../services/email');
+
 const { validateBody, authenticate, upload } = require('../../middlewares');
 
 const { schemas } = require('../../models/user');
@@ -10,9 +12,9 @@ const router = express.Router();
 
 router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 
-router.get('/verify/:verificationToken', ctrl.verifyEmail);
+router.get('/verify/:verificationToken', email.verifyEmail);
 
-router.post('/verify', validateBody(schemas.emailSchema), ctrl.resendVerifyEmail);
+router.post('/verify', validateBody(schemas.emailSchema), email.resendVerifyEmail);
 
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
 
