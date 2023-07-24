@@ -1,0 +1,14 @@
+// чтобы при ошибке поиска по ИД если не похоже на ид выдавал ошибку правильную
+const { isValidObjectId } = require('mongoose')
+
+const {HttpError} = require('../helpers/HttpError')
+
+const isValidId = (req, res, next) => {
+    const {id} = req.params
+    if(!isValidObjectId(id)){
+        next(HttpError(400, `${id} is not valid id`))
+    }
+    next()
+}
+
+module.exports = isValidId

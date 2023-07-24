@@ -13,13 +13,13 @@ router.get('/', contactController.getContacts)
 // получение инф. по ид
 router.get('/:id', contactController.getContact)
 
-// добавление контакта
+// // добавление контакта
 router.post('/', contactController.addNewContact)
 
-// удаление контакта
+// // удаление контакта
 router.delete('/:id', contactController.deleteContact)
 
-// Обновление данных контакта  с выведением информ об отсутствующем элементе и всём body { message: "missing fields" }
+// // Обновление данных контакта  с выведением информ об отсутствующем элементе и всём body { message: "missing fields" }
 router.put('/:id', contactController.addChangeContact)
 
 module.exports = router
