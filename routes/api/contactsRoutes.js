@@ -8,10 +8,6 @@ const { isValidId } = require('../../middlewares/index')
 
 const router = express.Router()
 
-
-
-
-
 // получение всего списка
 router.get('/', contactController.getContacts)
 
@@ -22,12 +18,12 @@ router.get('/:id', isValidId, contactController.getContact)
 router.post('/', contactController.addNewContact)
 
 // // удаление контакта
-router.delete('/:id',  isValidId,  contactController.deleteContact)
+router.delete('/:id', isValidId, contactController.deleteContact)
 
 // // Обновление данных контакта  с выведением информ об отсутствующем элементе и всём body { message: "missing fields" }
-router.put('/:id',  isValidId,  contactController.addChangeContact)
+router.put('/:id', isValidId, contactController.addChangeContact)
 
 // переключатель favorite маршрут
-router.patch('/:id/favorite',  isValidId,  contactController.addChangeFavorite)
+router.patch('/:id/favorite', isValidId, contactController.addChangeFavorite)
 
 module.exports = router
