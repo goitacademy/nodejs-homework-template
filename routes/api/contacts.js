@@ -2,6 +2,7 @@ import express from "express";
 import HttpError from "../../helpers/HttpError.js";
 // import contactsService from "../../models/contacts.js";
 import contactsAddSchema from "../../helpers/validate.js";
+import isValidId from "../../middlewars/isValidId.js";
 
 import Contact from '../../models/contact.js';
 
@@ -9,25 +10,25 @@ const contactsRouter = express.Router();
 
 contactsRouter.get("/", async (req, res, next) => {
   try {
-    const result = await Contact.find()
+    const result = await Contact.find({}, "name email phone")
     res.json(result);
   } catch (error) {
     next(error);
   }
 });
 
-// contactsRouter.get("/:id", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const result = await contactsService.getContactById(id);
-//     if (!result) {
-//       throw HttpError(404);
-//     }
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+contactsRouter.get("/:id", isValidId,  async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Contact.findById(id);
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 contactsRouter.post("/", async (req, res, next) => {
   try {
