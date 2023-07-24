@@ -21,7 +21,7 @@ const getById = async (req, res) => {
   const result = await Contact.findById(contactId);
   console.log(result);
   if (!result) {
-    throw HttpError(404, "Not Found");
+    throw HttpError(404, "Not found");
     //   const error = new Error("Not found");
     //   error.status = 404;
     //   throw error;
@@ -38,7 +38,7 @@ const deleteById = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
-    throw HttpError(404, "Not Found");
+    throw HttpError(404, "Not found");
   }
   res.json({ message: "Delete success" });
   // res.status(204).send()
@@ -48,7 +48,7 @@ const updateById = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body);
   if (!result) {
-    throw HttpError(404, "Not Found");
+    throw HttpError(404, "Not found");
   }
   res.json(result);
 };
