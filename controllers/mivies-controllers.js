@@ -56,12 +56,9 @@ const delleteById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   const { contactId } = req.params;
-  //  console.log(contactId);
-  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+
   const { length } = Object.keys(req.body);
-  console.log(length);
+
   if (length === 0) {
     throw HttpError(400, "missing field");
   }
@@ -69,25 +66,39 @@ const updateById = async (req, res, next) => {
   if (error) {
     throw HttpError(400, error.message);
   }
+
+  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (result === null) {
+    throw HttpError(404, "Not found");
+  }
+
   res.json(result);
 };
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
 
-  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
-
   const { length } = Object.keys(req.body);
-  // console.log(length);
+
   if (length === 0) {
     throw HttpError(400, "missing field favorite");
   }
   const { error } = movieUpdateFavoriteSchema.validate(req.body);
   if (error) {
+    throw HttpError(404, error.message);
+  }
+
+  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (result === null) {
     throw HttpError(404, "Not found");
   }
+
   res.json(result);
 };
 
