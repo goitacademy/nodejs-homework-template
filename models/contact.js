@@ -10,12 +10,16 @@ const contactShema = new Schema(
     },
     email: {
       type: String,
+      match: [
+        schemas.emailRegexp,
+        "Invalid email format. Please fill a valid email ",
+      ],
       required: [true, "Set email for contact"],
     },
     phone: {
       type: String,
       match: [
-        schemas.dataRegexp,
+        schemas.phoneRegexp,
         "Invalid phone number format. Please fill a valid phone number (000) 000-0000.",
       ],
       required: [true, "Set phone for contact"],
@@ -23,6 +27,11 @@ const contactShema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }

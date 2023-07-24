@@ -1,5 +1,5 @@
-const { Contact } = require("../models");
-const { FindByIdError, ctrlWrap } = require("../helpers");
+const { Contact } = require("../../models");
+const { FindByIdError, ctrlWrap } = require("../../helpers");
 
 const getContactsById = async (req, res) => {
   const { id } = req.params;

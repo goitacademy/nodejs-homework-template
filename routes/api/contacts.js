@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { validateBody, isValidId, dontBody } = require("../../middlewares");
+const { api } = require("../../controlers");
 const { schemas } = require("../../schemas");
-const { functions } = require("../../controlers");
 const {
   getContacts,
   getContactsById,
@@ -10,7 +10,7 @@ const {
   deleteContact,
   updateContactById,
   updateStatusById,
-} = functions;
+} = api;
 router.get("/", getContacts);
 
 router.get("/:id", isValidId, getContactsById);

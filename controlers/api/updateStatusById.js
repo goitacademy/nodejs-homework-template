@@ -1,5 +1,5 @@
-const { Contact } = require("../models");
-const { FindByIdError, ctrlWrap } = require("../helpers");
+const { Contact } = require("../../models");
+const { FindByIdError, ctrlWrap } = require("../../helpers");
 const updateStatusById = async (req, res, next) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body, {

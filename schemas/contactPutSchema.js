@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const dataRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
+const { phoneRegexp, emailRegexp } = require("./regexp");
 const contactPutSchema = Joi.object({
   name: Joi.string()
     .trim()
@@ -8,11 +8,11 @@ const contactPutSchema = Joi.object({
     .messages({ "any.required": "missing required name field" }),
   email: Joi.string()
     .trim()
-    .email()
+    .pattern(emailRegexp)
     .messages({ "any.required": "missing required email field" }),
   phone: Joi.string()
     .trim()
-    .pattern(dataRegexp)
+    .pattern(phoneRegexp)
     .messages({
       messages:
         "Invalid phone number format. Please fill a valid phone number (000) 000-0000.",
