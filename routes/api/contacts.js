@@ -1,7 +1,7 @@
 import express from "express";
 import HttpError from "../../helpers/HttpError.js";
 // import contactsService from "../../models/contacts.js";
-import contactsAddSchema from "../../helpers/validate.js";
+import {contactsAddSchema, contactUpdateFavoriteSchema} from "../../helpers/validate.js";
 import isValidId from "../../middlewars/isValidId.js";
 
 import Contact from '../../models/contact.js';
@@ -17,7 +17,7 @@ contactsRouter.get("/", async (req, res, next) => {
   }
 });
 
-contactsRouter.get("/:id", isValidId,  async (req, res, next) => {
+contactsRouter.get("/:id", isValidId, async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await Contact.findById(id);
@@ -43,41 +43,63 @@ contactsRouter.post("/", async (req, res, next) => {
   }
 });
 
-// contactsRouter.delete("/:id", async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const result = await contactsService.removeContact(id);
+contactsRouter.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Contact.findByIdAndDelete(id);
 
-//     if (!result) {
-//       throw HttpError(404);
-//     }
+    if (!result) {
+      throw HttpError(404);
+    }
 
-//     res.json({ message: "contact deleted" });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    res.json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
 
-// contactsRouter.put("/:id", async (req, res, next) => {
-//   try {
-//     if (Object.keys(req.body).length === 0) {
-//       throw HttpError(400);
-//     }
+contactsRouter.put("/:id", isValidId, async (req, res, next) => {
+  try {
+    if (Object.keys(req.body).length === 0) {
+      throw HttpError(400);
+    }
 
-//     const { error } = contactsAddSchema.validate(req.body);
-//     if (error) {
-//       throw HttpError(400, error.message);
-//     }
+    const { error } = contactsAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
 
-//     const { id } = req.params;
-//     const result = await contactsService.updateContact(id, req.body);
-//     if (!result) {
-//       throw HttpError(404);
-//     }
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true}, );
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+ontactsRouter.patch("/:id/favorite", isValidId, async (req, res, next) => {
+  try {
+    if (Object.keys(req.body).length === 0) {
+      throw HttpError(400);
+    }
+
+    const { error } = contactUpdateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true}, );
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default contactsRouter;
