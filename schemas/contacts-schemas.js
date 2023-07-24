@@ -24,8 +24,18 @@ const contactsAddSchema = Joi.object({
       'string.empty': "Phone number can't be empty!",
       'string.base': 'Phone number must be a string!',
     }),
+  favorite: Joi.boolean().messages({
+    'boolean.base': 'Favorite must be true or false!',
+  }),
+});
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    'boolean.base': 'Favorite must be true or false!',
+  }),
 });
 
 export default {
   contactsAddSchema,
+  contactUpdateFavoriteSchema,
 };
