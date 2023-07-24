@@ -1,19 +1,21 @@
-const mongoose = require("mongoose");
 const app = require("./app");
-
+const {connectMongo}= require("./db/connections");
 const { DB_HOST, PORT = 5500 } = process.env;
 
-console.log(PORT);
 
-mongoose
-    .connect(DB_HOST)
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log("Server running. Use our API on port", PORT);
-        });
-        console.log("DataBase connection successful");
-    })
-    .catch((error) => {
-        console.log(error.message);
-        process.exit(1);
-    });
+const main = async() => {
+    try{
+        await connectMongo(DB_HOST);
+        console.log("Database connection successful");
+             app.listen(PORT, (err) => {
+              if(err) console.log("Error at aserver launch:", err);
+             console.log(`Server running. Use our API on port", ${PORT}`); 
+             });
+         } catch (error) {
+            console.log(`Failed to launch applicatin with error ${err.message}`);
+             process.exit(1);
+         }
+     };
+
+
+main();

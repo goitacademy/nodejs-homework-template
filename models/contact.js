@@ -1,48 +1,31 @@
-const { Schema, model } = require("mongoose");
+const {Contacts} = require("../db/contactsModel");
+/* const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleSchemaValidationErrors } = require("../helpers");
+ */
+const listContacts = async () => await Contacts.find();
 
-const contactSchema = new Schema(
-    {
-        name: {
-            type: String,
-            required: [true, "Set name for contact"],
-        },
-        email: {
-            type: String,
-            required: true,
-        },
-        phone: {
-            type: String,
-            required: true,
-        },
-        favorite: {
-            type: Boolean,
-            default: false,
-        },
-    },
-    { versionKey: false, timestamps: true }
-);
+const getContactById = async (contactId) => 
+await Contacts.findOne({_id: contactId});
 
-contactSchema.post("save", handleSchemaValidationErrors);
+const removeContact = async (contactId)=>
+await Contacts.findByIdAndRemove(contactId);
 
-const contactAddSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-        .required(),
-    phone: Joi.string().required(),
-});
+const addContact = async(name, email, phone, favorite) =>
+await Contacts.create({name, emeil, phone, favorite});
 
-const updateFavoriteSchema = Joi.object({
-    favorite: Joi.bool().required(),
-});
+const updateContact = async (contactId, body) => 
+await Contacts.findByIdAndUpdate ({_id: contactId}, body, {new:true});
 
-const schemas = {
-    contactAddSchema,
-    updateFavoriteSchema,
-};
+const updateStatusContact = async (contactId, body)=> 
+await Contacts.findByIdAndUpdate({_id: contactId}, body, {new:true});
 
-const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { 
+listContacts, 
+getContactById,
+removeContact,
+addContact,
+updateContact,
+updateStatusContact,
+ };

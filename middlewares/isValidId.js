@@ -1,4 +1,4 @@
-const {isValidObjectId} = require("mongoose");
+ /* const {isValidObjectId} = require("mongoose");
 
 const {RequestError} = require("../helpers");
 
@@ -10,6 +10,14 @@ const isValidId = (req, _, next) => {
         next(error);
     }
     next();
-}
+} */
 
-module.exports = isValidId;
+module.exports.isValidId = (middleware)=>{
+    return async ( req, res)=> {
+        try{
+            await middleware(req, res);
+        }catch (err){
+            return res.status(404).json({status: "Not found, catch"});
+        }
+    };
+};
