@@ -1,5 +1,5 @@
 import HttpError from "../helpers/HttpError";
-import moviesSchemas from "../helpers/validate";
+import contactSchema from "../helpers/validate";
 import Contact from "../models/contact"
 
 const getAll = async (req, res, next) => {
@@ -26,7 +26,7 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   try {
-    const { error } = moviesSchemas.contactsAddSchema.validate(req.body);
+    const { error } = contactSchema.contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -58,7 +58,7 @@ const updateById = async (req, res, next) => {
       throw HttpError(400);
     }
 
-    const { error } = moviesSchemas.contactsAddSchema.validate(req.body);
+    const { error } = contactSchema.contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -80,7 +80,7 @@ const updateByIdFavorite = async (req, res, next) => {
       throw HttpError(400);
     }
 
-    const { error } = moviesSchemas.contactUpdateFavoriteSchema.validate(
+    const { error } = contactSchema.contactUpdateFavoriteSchema.validate(
       req.body
     );
     if (error) {

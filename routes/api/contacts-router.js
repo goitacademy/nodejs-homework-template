@@ -1,5 +1,6 @@
 import express from "express";
-import contactsController from "../../controller/contact-controller";
+
+import contactsController from "../../controller/contactController";
 
 // import isValidId from "../../middlewars/isValidId.js";
 
