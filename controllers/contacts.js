@@ -1,13 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
-import { nanoid } from "nanoid";
 import Contact from "../models/contact.js";
 import HttpError from "../helpters/HttpError.js";
-
-const contacsPath = path.resolve("controllers", "contacts.json");
-
-const updateContacts = (contacts) =>
-  fs.writeFile(contacsPath, JSON.stringify(contacts, null, 2));
+import { contactsAddSchema, contactsFavoriteSchema } from "../schemas/joi.js";
 
 export const listContacts = async (req, res, next) => {
   try {
@@ -35,53 +28,77 @@ export const getContactById = async (req, res, next) => {
   }
 };
 
-export const addContact = async ({ name, email, phone }) => {
-  const contacts = await listContacts();
+export const addContact = async (req, res, next) => {
+  try {
+    const { error } = contactsAddSchema.validate(req.body);
 
-  const newContact = {
-    id: nanoid(),
-    name,
-    email,
-    phone,
-  };
+    if (error) {
+      throw HttpError(400);
+    }
 
-  contacts.push(newContact);
+    const newContact = await Contact.create(req.body);
 
-  await updateContacts(contacts);
-
-  return newContact;
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const removeContact = async (contactId) => {
-  const contacts = await listContacts();
+export const removeContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
 
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+    await Contact.findByIdAndDelete(contactId);
 
-  if (index === -1) {
-    return null;
+    res.json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
   }
-
-  const [contactToRemove] = contacts.splice(index, 1);
-
-  await updateContacts(contacts);
-
-  return contactToRemove;
 };
 
-export const updateContactById = async (contactId, { name, email, phone }) => {
-  const contacts = await listContacts();
+export const updateContactById = async (req, res, next) => {
+  try {
+    const { error } = contactsAddSchema.validate(req.body);
 
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+    if (error) {
+      throw HttpError(400, "missing required name field");
+    }
+    const { contactId } = req.params;
 
-  if (index === -1) {
-    return null;
+    const contactToUpdate = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true }
+    );
+
+    res.json(contactToUpdate);
+  } catch (error) {
+    next(error);
   }
+};
 
-  contacts[index] = { contactId, name, email, phone };
+export const updateStatusContact = async (req, res, next) => {
+  try {
+    const { error } = contactsFavoriteSchema.validate(req.body);
 
-  await updateContacts(contacts);
+    if (error) {
+      throw HttpError(400, "missing field favorite");
+    }
 
-  return contacts[index];
+    const { contactId } = req.params;
+
+    const contactStatus = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+
+    if (!contactStatus) {
+      throw HttpError(404);
+    }
+
+    res.json(contactStatus);
+  } catch (error) {
+    next(error.message);
+  }
 };
 
 export default {
@@ -90,4 +107,5 @@ export default {
   removeContact,
   addContact,
   updateContactById,
+  updateStatusContact,
 };

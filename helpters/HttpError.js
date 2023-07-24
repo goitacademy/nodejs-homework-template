@@ -1,6 +1,6 @@
 const messageList = {
   404: "Not found",
-  400: "missing required name field",
+  400: "missing required field",
 };
 
 const HttpError = (status, message = messageList[status]) => {
