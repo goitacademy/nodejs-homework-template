@@ -1,10 +1,21 @@
-import contacts from "../../models/contacts.json";
+const contacts = require("../../models/contacts.json");
 const express = require("express");
+const Joi = require("joi");
 const { HttpEror } = require("../../helpers/index.js");
 
 const contactsService = require("../../models/contacts.js");
 
 const contactsRouter = express.Router();
+
+const contactAddSchema = Joi.object({
+  name: Joi.string().required().message({
+    "any.required": `add "name" please`,
+  }),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required().message({
+    "any.required": `add "phone" please`,
+  }),
+});
 
 contactsRouter.get("/", async (req, res, next) => {
   try {
@@ -29,15 +40,49 @@ contactsRouter.get("/:contactId", async (req, res, next) => {
 });
 
 contactsRouter.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpEror(400, error.message);
+    }
+    const result = await contactsService.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 contactsRouter.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactsService.removeContact(contactId);
+    if (!result) {
+      throw HttpEror(404, `Contact with id=${contactId} not found`);
+    }
+    res.json({
+      message: "Delete successful",
+    });
+  } catch (error) {
+    next(error);
+  }
   res.json({ message: "template message" });
 });
 
 contactsRouter.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpEror(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contactsService.updateContact(contactId, req.body);
+    if (!result) {
+      throw HttpEror(404, `Contact with id=${contactId} not found`);
+    }
+    req.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = contactsRouter;
