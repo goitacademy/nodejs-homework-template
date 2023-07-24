@@ -21,7 +21,7 @@ const getById = async (req, res) => {
   const result = await Contact.findById(contactId);
   console.log(result);
   if (!result) {
-    throw HttpError(404, "NotFound");
+    throw HttpError(404, "Not Found");
     //   const error = new Error("Not found");
     //   error.status = 404;
     //   throw error;
