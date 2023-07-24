@@ -3,9 +3,14 @@ const {updateFavoriteSchema} = require("../schemas");
 const {HttpError} = require("../helpers");
 const Contact = require("../models/contact");
 
+
+
 const getAll = async (req, res, next) => {
     try {
-      const result = await Contact.find();
+      const {_id: owner} = req.user;
+      const {page = 1, limit = 10} = req.query;
+      const skip = (page - 1) * limit;
+      const result = await Contact.find({owner}, "-v", {skip, limit}).populate("owner");
       res.json(result)
     }
     catch(error) {
@@ -34,7 +39,9 @@ const add = async (req, res, next) => {
       if(error) {
         throw HttpError(400, "missing required name field");
       }
-      const result = await Contact.create(req.body);
+
+      const {_id: owner} = req.user;
+      const result = await Contact.create({...req.body, owner});
       res.status(201).json(result)
     }
     catch(error) {

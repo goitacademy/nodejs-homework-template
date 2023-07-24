@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+// const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const addSchema = Joi.object({
     name: Joi.string().required(),
@@ -15,15 +15,20 @@ const updateFavoriteSchema = Joi.object({
 
 const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
-  // email: Joi.string().email().required(),
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string().email().required(),
+
+  // паттерн не працює - потрібно розібратися
+  // email: Joi.string().pattern(emailRegexp).required(),
   // email: Joi.string().required(),
   subscription: Joi.string(),
 })
 
 const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string().email().required(),
+
+  // паттерн не працює - потрібно розібратися
+  // email: Joi.string().pattern(emailRegexp).required(),
 })
 
 module.exports = {
