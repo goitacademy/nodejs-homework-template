@@ -22,4 +22,7 @@ router.delete('/:id', contactController.deleteContact)
 // // Обновление данных контакта  с выведением информ об отсутствующем элементе и всём body { message: "missing fields" }
 router.put('/:id', contactController.addChangeContact)
 
+// переключатель favorite маршрут
+router.patch('/:id/favorite', contactController.addChangeFavorite)
+
 module.exports = router

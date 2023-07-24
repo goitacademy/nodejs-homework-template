@@ -17,9 +17,9 @@ const contactSchema = Joi.object({
   favorite: Joi.boolean()
 })
 
-// const updateFavoriteSchema =  Joi.object({
-//   favorite: Joi.boolean().required(),
-// })
+const updateFavoriteSchema =  Joi.object({
+  favorite: Joi.boolean().required(),
+})
 
 const getContacts = async (req, res, next) => {
     try {
@@ -131,13 +131,52 @@ const getContacts = async (req, res, next) => {
     }
   }
 
+  const addChangeFavorite = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({ message: 'missing fields' });
+      }
+  
+      const { error } = updateFavoriteSchema.validate(req.body);
+      if (error) {
+        const errorMessage = error.details[0].message.replace(/['"]/g, '');
+        let missingField = '';
+  
+        if (errorMessage.includes('name')) {
+          missingField = 'name';
+        } else if (errorMessage.includes('email')) {
+          missingField = 'email';
+        } else if (errorMessage.includes('phone')) {
+          missingField = 'phone';
+        }
+  
+        return res
+          .status(400)
+          .json({ message: `missing required ${missingField} field` });
+      }
+  // id, req.body, {  new: true,} если хочу получать изменённый обьект
+      const updatedFavorite = await Contact.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      if (!updatedFavorite) {
+        throw HttpError(404, 'Not found');
+      }
+  
+      res.json(updatedFavorite);
+    } catch (error) {
+      next(error);
+    }
+  };
+  
+
   module.exports = {
     getContacts,
     getContact,
     addNewContact,
     deleteContact,
     addChangeContact,
-    
+    addChangeFavorite
 
   }
   
