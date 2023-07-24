@@ -31,7 +31,7 @@ const schema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
-  owner: Joi.ObjectId(),
+  owner: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({
