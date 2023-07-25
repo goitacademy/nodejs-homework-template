@@ -4,7 +4,7 @@
 Форк створить репозиторій на вашому http://github.com
 
 ## Пояснювальний Запис по Роботі з Домашніми Завданнями на блоці Node.js
-[Watch the video](https://www.loom.com/share/007c97d271604e02ae61adbb5b69edd3)
+[Дивитись запис](https://www.loom.com/share/007c97d271604e02ae61adbb5b69edd3)
 
 ### Команди:
 
