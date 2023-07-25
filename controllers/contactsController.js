@@ -52,10 +52,6 @@ const deleteById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   try {
-    const keys = Object.keys(req.body);
-    if (keys.length === 0) {
-        throw HttpError(400, `missing fields`); 
-    }
    const { contactId } = req.params;
    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new:true});
     if (!result) {
@@ -70,10 +66,6 @@ const updateById = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const keys = Object.keys(req.body);
-    if (keys.length === 0) {
-        throw HttpError(400, `missing field favorite`); 
-    }
    const { contactId } = req.params;
    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new:true});
     if (!result) {

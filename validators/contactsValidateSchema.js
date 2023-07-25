@@ -7,10 +7,5 @@ const contactsSchema = Joi.object({
   favorite: Joi.boolean()
 }) 
 
-const contactsUpdateFavoriteSchema = Joi.object({
-   favorite: Joi.boolean().required(),
-})
-
-export default {
-  contactsSchema,
-  contactsUpdateFavoriteSchema};
+export default contactsSchema;
+ 
