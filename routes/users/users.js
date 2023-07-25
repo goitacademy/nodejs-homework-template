@@ -26,4 +26,12 @@ router.patch(
   middleW.validateBody(schemas.updateSubscription),
   userCtrl.updateSubscription
 );
+
+router.patch(
+  "/avatars",
+  middleW.autorization,
+  middleW.uploadAvatar.single("avatar"),
+  userCtrl.updateAvatar
+);
+
 module.exports = router;
