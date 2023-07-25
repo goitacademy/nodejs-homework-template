@@ -1,25 +1,61 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// ========NPM MODULES======== //
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
-const contactsRouter = require('./routes/api/contacts')
+// ========USER MODULES======== //
+const contactsRouter = require("./routes/contactsRoutes");
 
-const app = express()
+// ========EXPRESS APPLICATION======== //
+const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+// ========ENVIROMENT======== //
+const envPath =
+  process.env.NODE_ENV === "production"
+    ? "./enviroments/production.env"
+    : "./enviroments/development.env";
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+dotenv.config({ path: envPath });
 
-app.use('/api/contacts', contactsRouter)
+// ========MONGO DB CONNECTOIN======== //
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then((con) => {
+    console.log("Database connection successful");
+  })
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+// ========MIDDLEWARES======== //
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
 
+// ========ROUTES======== //
+app.use("/api/contacts", contactsRouter);
+
+// ========NOT FOUND ERROR======== //
+// app.use((req, res) => {
+//   res.status(404).json({ message: "Not found" });
+// });
+
+/**
+ * Not found request handler.
+ */
+app.all("*", (req, res) => {
+  res.status(404).json({
+    message: "Oops! Resource not found..",
+  });
+});
+
+// ========SERVER ERROR======== //
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  res.status(err.status || 500).json({ message: err.message });
+});
 
-module.exports = app
+module.exports = app;
