@@ -1,23 +1,8 @@
-// для проверки поступающих обьектов на сервер, чтобы соответствовали требованиям
-const Joi = require('joi')
-
 // импорт HttpError
-
 const { HttpError } = require('../helpers/index')
 const { Contact } = require('../models/Contact')
 
-// создаем обязательный стандарт передаваемого обьекта
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean()
-})
-
-// создаем обязательный стандарт передаваемого Favorite
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required()
-})
+const { contactSchema, updateFavoriteSchema } = require('../schemas/index')
 
 const getContacts = async (req, res, next) => {
   try {
