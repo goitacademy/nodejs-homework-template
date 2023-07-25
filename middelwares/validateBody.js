@@ -1,10 +1,16 @@
-const { HtthError } = require("../helpers");
+const {
+  HtthError,
+} = require("../helpers");
 
 const validateBody = (schema) => {
   const func = (req, res, next) => {
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate(
+      req.body
+    );
     if (error) {
-      next(HtthError(400, error.message));
+      next(
+        HtthError(400, error.message)
+      );
     }
     next();
   };
