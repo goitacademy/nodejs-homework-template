@@ -1,4 +1,6 @@
 const { Schema, model } = require("mongoose");
+const { handleMongooseError } = require("../utilities");
+const Joi = require("joi");
 
 const contactSchema = new Schema(
   {
@@ -8,7 +10,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      match: /[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}/,
+      // match: /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}/,
     },
     phone: {
       type: String,
@@ -22,6 +24,17 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+contactSchema.post("save", handleMongooseError);
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
+
+const schemas = { addSchema };
+
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact;
+module.exports = { Contact, schemas };
