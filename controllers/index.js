@@ -1,0 +1,1 @@
+export { default as contactsController } from './contacts.js';

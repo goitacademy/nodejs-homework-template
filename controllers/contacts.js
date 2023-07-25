@@ -1,5 +1,5 @@
 import Contact from "../models/contact.js";
-import HttpError from "../helpters/HttpError.js";
+import { HttpError } from '../helpters/index.js';
 import { contactsAddSchema, contactsFavoriteSchema } from "../schemas/joi.js";
 
 export const listContacts = async (req, res, next) => {
