@@ -1,25 +1,31 @@
-const express = require('express')
+const express = require('express');
+
+const { contacts: ctrl } = require('../../controllers');
+
+const { validation, ctrlWrapper } = require('../../middlewares');
+
+const {contactSchemaJoi, favoriteSchemaJoi} = require('../../models');
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrlWrapper(ctrl.getAll));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validation(contactSchemaJoi), ctrlWrapper(ctrl.add));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", ctrlWrapper(ctrl.deleteById));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  validation(contactSchemaJoi),
+  ctrlWrapper(ctrl.updateById)
+);
 
-module.exports = router
+router.patch(
+  "/:contactId/favorite",
+  validation(favoriteSchemaJoi),
+  ctrlWrapper(ctrl.updateFavorite)
+);
+
+module.exports = router;
