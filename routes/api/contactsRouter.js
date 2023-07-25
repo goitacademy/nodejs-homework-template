@@ -1,8 +1,8 @@
 import express from 'express';
-import controller from '../../controllers/contactsController.js';
+import { controller } from '../../controllers/contacts/index.js';
 
 import { validateBody } from '../../decorators/index.js';
-import schemas from '../../schemas/contactsSchemas.js';
+import { schemas } from '../../schemas/index.js';
 import { isBodyEmpty, isValidId } from '../../middleware/index.js';
 
 // ####################################################

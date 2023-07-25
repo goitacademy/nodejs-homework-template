@@ -1,5 +1,5 @@
-import Contact from '../models/contact.js';
-import { controllerWrapper } from '../decorators/index.js';
+import Contact from '../../models/contact.js';
+import { controllerWrapper } from '../../decorators/index.js';
 
 const notFoundMsg = 'Could not find contact with the requested id';
 
