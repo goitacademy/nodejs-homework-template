@@ -3,7 +3,6 @@ const {handleMongooseError} = require("../helpers");
 
 const Joi = require("joi")
 
-// const addShema = require("../shemas/shemasContacts")
 const contactSchema = new Schema({
     name: {
         type: String,

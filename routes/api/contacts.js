@@ -2,23 +2,23 @@ const express = require('express')
 
 const router = express.Router()
 
-const ctrl = require("../../controllers/controllers")
+const ctrl = require("../../controllers/ctrlContacts")
 
-const {validateBody, isValid} = require("../../midllewares");
+const {validateBody, isValid, authenticate} = require("../../midllewares");
 
 const {schemas} = require("../../models/contact")
 
-router.get('/', ctrl.getAll)
+router.get('/', authenticate, ctrl.getAll)
 
-router.get('/:contactId', isValid,  ctrl.getById)
+router.get('/:contactId', authenticate, isValid,  ctrl.getById)
 
-router.post('/', validateBody(schemas.addSchema), ctrl.add)
+router.post('/', authenticate, validateBody(schemas.addSchema), ctrl.add)
 
-router.put('/:contactId', isValid, validateBody(schemas.addSchema), ctrl.update)
+router.put('/:contactId', authenticate, isValid, validateBody(schemas.addSchema), ctrl.update)
 
-router.patch('/:contactId/favorite', isValid, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
+router.patch('/:contactId/favorite', authenticate, isValid, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
 
-router.delete('/:contactId', isValid, ctrl.remove )
+router.delete('/:contactId', authenticate, isValid, ctrl.remove )
 
 
-module.exports = router
+module.exports = router;
