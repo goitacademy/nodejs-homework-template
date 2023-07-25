@@ -5,9 +5,7 @@ const dotenv = require('dotenv');
 
 dotenv.config({
   path:
-    process.env.NODE_ENV === 'production'
-      ? './environments/production.env'
-      : './environments/development.env',
+    process.env.NODE_ENV === 'production' ? './environments/production.env' : './environments/.env',
 });
 
 const contactsRouter = require('./routes/api/contacts');
