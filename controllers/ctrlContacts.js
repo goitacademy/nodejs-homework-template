@@ -54,6 +54,7 @@ const removeContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, 'Not found');
   }
+
   res.json({ message: 'Contact deleted' });
 };
 
@@ -66,7 +67,7 @@ const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const body = req.body;
 
-  const result = await ContactModel.findByIdAndUpdate({ _id: contactId }, body);
+  const result = await ContactModel.findByIdAndUpdate({ _id: contactId }, body, { new: true });
 
   if (!result) {
     throw HttpError(404, 'Not found');
