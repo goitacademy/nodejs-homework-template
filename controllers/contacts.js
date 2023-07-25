@@ -4,11 +4,17 @@ const { generateHTTPError } = require("../helpers");
 const { contactsHandlers } = require("../helpers");
 
 const getContacts = async (req, res) => {
+  // Поля фільрації даних для запиту
   const { _id: owner } = req.user;
+  const { favorite } = req.query;
+  const fieldsForFilter = favorite ? { owner, favorite } : { owner };
+
   // Пагінація
   const { page, limit } = req.query;
   const skip = (page - 1) * limit;
-  const result = await contactsHandlers.listCoontacts(owner, { skip, limit });
+  const options = skip ? { skip, limit } : {};
+
+  const result = await contactsHandlers.listContacts(fieldsForFilter, options);
   res.json(result);
 };
 

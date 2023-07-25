@@ -2,11 +2,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const { SECRET_KEY } = process.env;
-
 const { ctrlWrapper } = require("../helpers");
 const { generateHTTPError } = require("../helpers");
 const User = require("../models/user");
+
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   // Перевірка, чи існує користувач із вказаною електронною адресою
@@ -65,9 +65,27 @@ const currentUser = async (req, res) => {
   res.json({ email: req.user.email, subscription: req.user.subscription });
 };
 
+const updateUserSubscription = async (req, res) => {
+  if (!req.user) {
+    throw generateHTTPError(401, "Not authorized");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    { subscription: req.body.subscription },
+    {
+      new: true,
+    }
+  );
+  if (!user) {
+    throw generateHTTPError(404, "Not found user");
+  }
+  res.json({ email: req.user.email, subscription: req.user.subscription });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   logIn: ctrlWrapper(logIn),
   logOut: ctrlWrapper(logOut),
   currentUser: ctrlWrapper(currentUser),
+  updateUserSubscription: ctrlWrapper(updateUserSubscription),
 };

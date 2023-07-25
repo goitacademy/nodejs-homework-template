@@ -28,8 +28,7 @@ const schemaDBUserValidator = new Schema(
       ],
       default: STATUS_SUBSCRIPTION.STARTER,
     },
-    token: String,
-    default: "",
+    token: { type: String, default: "" },
   },
   { timestamps: true, versionKey: false }
 );
@@ -50,10 +49,10 @@ const userValidator = Joi.object({
   email: Joi.string().email().required(),
 });
 
-// const contactFavoriteValidator = Joi.object({
-//   favorite: Joi.boolean().required(),
-// });
+const userSubscriptionValidator = Joi.object({
+  subscription: Joi.valid(...Object.values(STATUS_SUBSCRIPTION)).required(),
+});
 
-const schemas = { userValidator };
+const schemas = { userValidator, userSubscriptionValidator };
 
 module.exports = { schemas, User };
