@@ -1,4 +1,4 @@
-import contactsService from "../models/contacts.js";
+import Contacts from "../models/contacts.js";
 import Joi from "joi";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
@@ -13,16 +13,22 @@ const contactsAddSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": "missing required phone field",
   }),
+  favorite: Joi.boolean(),
+});
+
+const movieUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const getAll = async (req, res) => {
-  const result = await contactsService.listContacts();
+  const result = await Contacts.find();
   res.json(result);
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsService.getContactById(contactId);
+
+  const result = await Contacts.findById({ _id: contactId });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -35,13 +41,13 @@ const add = async (req, res, next) => {
   if (error) {
     throw HttpError(400, error.message);
   }
-  const result = await contactsService.addContact(req.body);
+  const result = await Contacts.create(req.body);
   res.status(201).json(result);
 };
 
 const delleteById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contactsService.removeContact(contactId);
+  const result = await Contacts.findByIdAndRemove(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -51,16 +57,48 @@ const delleteById = async (req, res, next) => {
 const updateById = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const result = await contactsService.updateContact(contactId, req.body);
   const { length } = Object.keys(req.body);
-  console.log(length);
+
   if (length === 0) {
-    throw HttpError(400, "missing fields");
+    throw HttpError(400, "missing field");
   }
   const { error } = contactsAddSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
+
+  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (result === null) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.json(result);
+};
+
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+
+  const { length } = Object.keys(req.body);
+
+  if (length === 0) {
+    throw HttpError(400, "missing field favorite");
+  }
+  const { error } = movieUpdateFavoriteSchema.validate(req.body);
+  if (error) {
+    throw HttpError(404, error.message);
+  }
+
+  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (result === null) {
+    throw HttpError(404, "Not found");
+  }
+
   res.json(result);
 };
 
@@ -70,4 +108,5 @@ export default {
   add: ctrlWrapper(add),
   delleteById: ctrlWrapper(delleteById),
   updateById: ctrlWrapper(updateById),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
