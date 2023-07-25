@@ -1,1 +1,2 @@
-export { default as HttpError } from "./HttpError";
+export {default as HttpError} from "./HttpError.js";
+export {default as contactDecorator} from "./contactDecorator.js"

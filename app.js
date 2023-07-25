@@ -1,17 +1,10 @@
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
-const contactsService = require("./models/contacts.json");
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
 
-const contactsRouter = require("./routes/api/contacts-router.js");
+import contactsRouter from "./routes/api/contacts-router.js";
 
 const app = express();
-
-app.listen(3001, () => console.log("Server runnig on 3001 PORT"));
-
-app.get("/", (req, res) => {
-  res.send("<h1> Home page</h1>");
-});
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -30,4 +23,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-module.exports = app;
+export default app;
