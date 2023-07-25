@@ -10,19 +10,25 @@ const {
   putContact,
 } = require("../../controllers");
 
-const { schemas } = require("../../models/contactModel");
-const { isValidId, validateBody } = require("../../middlewares");
+const { schemas } = require("../../models/contact");
+const { authenticate, isValidId, validateBody } = require("../../middlewares");
 
-router.get("/", getContacts);
+router.get("/", authenticate, getContacts);
 
-router.get("/:id", isValidId, getContactById);
+router.get("/:id", authenticate, isValidId, getContactById);
 
-router.post("/", validateBody(schemas.contactValidator), postContact);
+router.post(
+  "/",
+  authenticate,
+  validateBody(schemas.contactValidator),
+  postContact
+);
 
-router.delete("/:id", isValidId, deleteContact);
+router.delete("/:id", authenticate, isValidId, deleteContact);
 
 router.put(
   "/:id",
+  authenticate,
   isValidId,
   validateBody(schemas.contactValidator, "missing required name field"),
   putContact
@@ -30,6 +36,7 @@ router.put(
 
 router.patch(
   "/:id/favorite",
+  authenticate,
   isValidId,
   validateBody(schemas.contactFavoriteValidator, "missing field favorite"),
   putContact
