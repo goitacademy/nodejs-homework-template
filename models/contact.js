@@ -18,6 +18,10 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
       },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+      }
 }, {versionsKey: false, timestamps: true});
 
 const addSchema = Joi.object({
