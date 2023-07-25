@@ -1,11 +1,8 @@
 const { isValidObjectId } = require("mongoose");
-const { ApiError } = require("../helpers");
+const service = require("../service");
 const isValidId = (req, res, next) => {
   const { id } = req.params;
-
-  if (!isValidObjectId(id)) {
-    next(ApiError(404, `${id} is not valid id`));
-  }
+  service.CheckByError(!isValidObjectId(id), 404, `${id} is not valid id`);
   next();
 };
 module.exports = isValidId;

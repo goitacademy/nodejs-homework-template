@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
+const service = require("../service");
 const { schemas } = require("../schemas");
 
 const contactShema = new Schema(
@@ -37,7 +37,7 @@ const contactShema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-contactShema.post("save", handleMongooseError);
+contactShema.post("save", service.handleMongooseError);
 
 const Contact = model("contact", contactShema);
 

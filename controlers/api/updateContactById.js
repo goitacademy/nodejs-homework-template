@@ -1,11 +1,11 @@
 const { Contact } = require("../../models");
-const { FindByIdError, ctrlWrap } = require("../../helpers");
+const service = require("../../service");
 const updateContactById = async (req, res, next) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body, {
     new: true,
   });
-  FindByIdError(result);
+  service.CheckByError(!result, 404);
   res.status(200).json(result);
 };
-module.exports = ctrlWrap(updateContactById);
+module.exports = service.ctrlWrap(updateContactById);

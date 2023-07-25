@@ -1,12 +1,29 @@
 const express = require("express");
-const { validateBody } = require("../../middlewares");
+const middleW = require("../../middlewares");
 const { schemas } = require("../../schemas");
-const { register, login } = require("../../controlers/users");
+const { userCtrl } = require("../../controlers");
 
 const router = express.Router();
 
-router.post("/register", validateBody(schemas.registerSchema), register);
+router.post(
+  "/register",
+  middleW.validateBody(schemas.registerSchema),
+  userCtrl.register
+);
 
-router.post("/login", validateBody(schemas.loginSchema), login);
+router.post(
+  "/login",
+  middleW.validateBody(schemas.loginSchema),
+  userCtrl.logIn
+);
 
+router.get("/current", middleW.autorization, userCtrl.getCurrent);
+
+router.post("/logout", middleW.autorization, userCtrl.logOut);
+router.patch(
+  "/",
+  middleW.autorization,
+  middleW.validateBody(schemas.updateSubscription),
+  userCtrl.updateSubscription
+);
 module.exports = router;

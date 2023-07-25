@@ -1,3 +1,3 @@
-const api = require("./api");
-const { register, login } = require("./users");
-module.exports = { api, register, login };
+const apiCtrl = require("./api");
+const userCtrl = require("./users");
+module.exports = { apiCtrl, userCtrl };

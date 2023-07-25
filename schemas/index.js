@@ -3,6 +3,7 @@ const { favoriteSchema } = require("./favoriteSchema");
 const { contactPutSchema } = require("./contactPutSchema");
 const { registerSchema } = require("./registerSchema");
 const { loginSchema } = require("./loginSchema");
+const { updateSubscription } = require("./updateSubscription");
 const { phoneRegexp, emailRegexp } = require("./regexp");
 
 const schemas = {
@@ -11,6 +12,7 @@ const schemas = {
   contactPutSchema,
   registerSchema,
   loginSchema,
+  updateSubscription,
   phoneRegexp,
   emailRegexp,
 };

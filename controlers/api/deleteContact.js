@@ -1,12 +1,12 @@
 const { Contact } = require("../../models");
-const { FindByIdError, ctrlWrap } = require("../../helpers");
+const service = require("../../service");
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndRemove(id);
-  FindByIdError(result);
+  service.CheckByError(!result, 404);
   res.status(200).json({
     message: "contact deleted",
   });
 };
-module.exports = ctrlWrap(deleteContact);
+module.exports = service.ctrlWrap(deleteContact);

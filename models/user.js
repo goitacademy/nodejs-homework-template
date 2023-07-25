@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
+const service = require("../service");
 const { schemas } = require("../schemas");
 const userShema = new Schema(
   {
@@ -23,7 +23,7 @@ const userShema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userShema.post("save", handleMongooseError);
+userShema.post("save", service.handleMongooseError);
 
 const User = model("user", userShema);
 

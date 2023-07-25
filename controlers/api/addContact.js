@@ -1,7 +1,9 @@
 const { Contact } = require("../../models");
-const { ctrlWrap } = require("../../helpers");
+const service = require("../../service");
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  console.log(req.user);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
-module.exports = ctrlWrap(addContact);
+module.exports = service.ctrlWrap(addContact);

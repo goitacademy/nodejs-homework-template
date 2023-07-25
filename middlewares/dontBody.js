@@ -1,13 +1,13 @@
-const { ApiError } = require("../helpers");
+const service = require("../service");
 
 const dontBody = (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     switch (req.method) {
       case "PATCH":
-        throw ApiError(400, "missing field favorite ");
+        throw service.CreateError(400, "missing field favorite ");
 
       default:
-        throw ApiError(400, "missing fields");
+        throw service.CreateError(400, "missing fields");
     }
   }
 
