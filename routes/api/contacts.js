@@ -6,6 +6,8 @@ import contactsService from "../../models/contacts.js";
 
 import contactsSchema from "../../helpers/Validate.js";
 
+// import Contact from "../../models/contact.js";
+
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
