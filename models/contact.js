@@ -1,8 +1,5 @@
 const {Contacts} = require("../db/contactsModel");
-/* const { Schema, model } = require("mongoose");
-const Joi = require("joi");
-const { handleSchemaValidationErrors } = require("../helpers");
- */
+
 const listContacts = async () => await Contacts.find();
 
 const getContactById = async (contactId) => 
@@ -12,7 +9,7 @@ const removeContact = async (contactId)=>
 await Contacts.findByIdAndRemove(contactId);
 
 const addContact = async(name, email, phone, favorite) =>
-await Contacts.create({name, emeil, phone, favorite});
+await Contacts.create({name, email, phone, favorite});
 
 const updateContact = async (contactId, body) => 
 await Contacts.findByIdAndUpdate ({_id: contactId}, body, {new:true});

@@ -1,7 +1,7 @@
 const validationBody = require("./validationBody");
-const isValidId = require("./isValidId");
+const catchErrors = require("/middlewares/catchErrors");
 
 module.exports = {
     validationBody,
-    isValidId,
+    catchErrors
 } 
