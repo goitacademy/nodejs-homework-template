@@ -7,7 +7,8 @@ const STATUS_CODES = {
 };
 
 const generateHTTPError = (status, message) => {
-  const error = new Error((message = STATUS_CODES[status]));
+  if (!message) message = STATUS_CODES[status];
+  const error = new Error(message);
   error.status = status;
   return error;
 };

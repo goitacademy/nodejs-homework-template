@@ -2,11 +2,11 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const { generateHTTPError } = require("../helpers");
-const User = require("../models/user");
+const { User } = require("../models/user");
 
 const { SECRET_KEY } = process.env;
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
@@ -14,8 +14,8 @@ const authenticate = (req, res, next) => {
   }
   // Перевірка на валідність токена та існування користувача токена
   try {
-    const { id } = jwt.validate(token, SECRET_KEY);
-    const user = User.findById(id);
+    const { id } = jwt.verify(token, SECRET_KEY);
+    const user = await User.findById(id);
     if (!user || !user.token || user.token !== token) {
       next(generateHTTPError(401, "Not authorized"));
     }

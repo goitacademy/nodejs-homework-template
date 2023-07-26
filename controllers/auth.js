@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const { ctrlWrapper } = require("../helpers");
 const { generateHTTPError } = require("../helpers");
-const User = require("../models/user");
+const { User } = require("../models/user");
 
 const { SECRET_KEY } = process.env;
 
@@ -18,10 +18,13 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const data = { ...req.body, password: hashPassword };
-  const result = await User.create(data);
-  res
-    .status(201)
-    .json({ email: result.email, subscription: result.subscription });
+  const newUser = await User.create(data);
+
+  const { subscription } = newUser;
+
+  res.status(201).json({
+    user: { email, subscription },
+  });
 };
 
 const logIn = async (req, res) => {
@@ -33,7 +36,7 @@ const logIn = async (req, res) => {
   }
 
   // Перевірка пароля користувача
-  const isCorrectPassword = bcrypt.compare(password, user.password);
+  const isCorrectPassword = await bcrypt.compare(password, user.password);
   if (!isCorrectPassword) {
     throw generateHTTPError(401, "Email or password is wrong");
   }
@@ -42,11 +45,12 @@ const logIn = async (req, res) => {
   const payload = { id: user._id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  await User.findbyIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { token });
 
+  const { subscription } = user;
   res.json({
     token,
-    user: { email: user.email, subscription: user.subscription },
+    user: { email, subscription },
   });
 };
 
@@ -54,15 +58,16 @@ const logOut = async (req, res) => {
   if (!req.user) {
     throw generateHTTPError(401, "Not authorized");
   }
-  await User.findbyIdAndUpdate(req.user._id, { token: "" });
-  res.status(204);
+  await User.findByIdAndUpdate(req.user._id, { token: "" });
+  res.status(204).json({});
 };
 
 const currentUser = async (req, res) => {
   if (!req.user) {
     throw generateHTTPError(401, "Not authorized");
   }
-  res.json({ email: req.user.email, subscription: req.user.subscription });
+  const { email, subscription } = req.user;
+  res.json({ email, subscription });
 };
 
 const updateUserSubscription = async (req, res) => {
@@ -79,7 +84,8 @@ const updateUserSubscription = async (req, res) => {
   if (!user) {
     throw generateHTTPError(404, "Not found user");
   }
-  res.json({ email: req.user.email, subscription: req.user.subscription });
+  const { email, subscription } = user;
+  res.json({ user: { email, subscription } });
 };
 
 module.exports = {

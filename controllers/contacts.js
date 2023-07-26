@@ -12,7 +12,7 @@ const getContacts = async (req, res) => {
   // Пагінація
   const { page, limit } = req.query;
   const skip = (page - 1) * limit;
-  const options = skip ? { skip, limit } : {};
+  const options = page ? { skip, limit } : {};
 
   const result = await contactsHandlers.listContacts(fieldsForFilter, options);
   res.json(result);

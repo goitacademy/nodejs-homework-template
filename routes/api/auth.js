@@ -17,22 +17,12 @@ router.post("/register", validateBody(schemas.userValidator), register);
 
 router.post("/login", validateBody(schemas.userValidator), logIn);
 
-router.post(
-  "/logout",
-  authenticate,
-  validateBody(schemas.userValidator),
-  logOut
-);
+router.post("/logout", authenticate, logOut);
 
-router.get(
-  "/current",
-  authenticate,
-  validateBody(schemas.userValidator),
-  currentUser
-);
+router.get("/current", authenticate, currentUser);
 
 router.patch(
-  "/",
+  "/subscription",
   authenticate,
   validateBody(schemas.userSubscriptionValidator),
   updateUserSubscription
