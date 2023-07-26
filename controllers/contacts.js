@@ -1,16 +1,26 @@
 const { ctrlWrapper } = require("../helpers");
 const { generateHTTPError } = require("../helpers");
 
-const handlersDB = require("../models/contactsHandlers");
+const { contactsHandlers } = require("../helpers");
 
 const getContacts = async (req, res) => {
-  const result = await handlersDB.listContacts();
+  // Поля фільрації даних для запиту
+  const { _id: owner } = req.user;
+  const { favorite } = req.query;
+  const fieldsForFilter = favorite ? { owner, favorite } : { owner };
+
+  // Пагінація
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
+  const options = page ? { skip, limit } : {};
+
+  const result = await contactsHandlers.listContacts(fieldsForFilter, options);
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const contact = await handlersDB.getContactById(id);
+  const contact = await contactsHandlers.getContactById(id);
   if (!contact) {
     throw generateHTTPError(404, "Not found");
   }
@@ -19,7 +29,7 @@ const getContactById = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const contact = await handlersDB.removeContact(id);
+  const contact = await contactsHandlers.removeContact(id);
   if (!contact) {
     throw generateHTTPError(404, "Not found");
   }
@@ -27,14 +37,15 @@ const deleteContact = async (req, res) => {
 };
 
 const postContact = async (req, res) => {
-  const contact = await handlersDB.addContact(req.body);
+  const { _id: owner } = req.user;
+  const contact = await contactsHandlers.addContact({ ...req.body, owner });
   res.status(201).json(contact);
 };
 
 const putContact = async (req, res) => {
   const { id } = req.params;
 
-  const contact = await handlersDB.updateContact(id, req.body);
+  const contact = await contactsHandlers.updateContact(id, req.body);
   if (!contact) {
     throw generateHTTPError(404, "Not found");
   }

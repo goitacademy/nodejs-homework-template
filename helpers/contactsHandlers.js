@@ -1,8 +1,8 @@
-const { Contact } = require("./contactModel");
+const { Contact } = require("../models/contact");
 
-const listContacts = async () => {
+const listContacts = async (fieldsForQuery, options) => {
   // Повертає масив контактів
-  return await Contact.find();
+  return await Contact.find({ ...fieldsForQuery }, "", { ...options });
 };
 
 const getContactById = async (contactId) => {
