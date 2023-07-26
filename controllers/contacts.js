@@ -1,14 +1,16 @@
 const { Contact } = require("../models/contact.js");
 
-const { HttpError } = require("../utils");
-const { ctrlWrapper } = require("../utils/ctrlWrapper");
+const { HttpError } = require("../utils/index.js");
+const { ctrlWrapper } = require("../utils/ctrlWrapper.js");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find(owner);
   if (!result) {
     throw HttpError(404, "Not found");
   }
   res.json(result);
+  console.log(`owner: ${owner}`);
 };
 
 const getById = async (req, res) => {
@@ -22,8 +24,10 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
+  console.log(`owner: ${owner}`);
 };
 
 const deleteById = async (req, res) => {
