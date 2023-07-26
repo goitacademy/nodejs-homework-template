@@ -5,3 +5,4 @@ node_modules/
 
 enviroments/development.env
 enviroments/production.env
+enviroments/.env
