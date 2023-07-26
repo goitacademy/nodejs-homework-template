@@ -17,19 +17,19 @@ router.post(
   userCtrl.logIn
 );
 
-router.get("/current", middleW.autorization, userCtrl.getCurrent);
+router.get("/current", middleW.authenticate, userCtrl.getCurrent);
 
-router.post("/logout", middleW.autorization, userCtrl.logOut);
+router.post("/logout", middleW.authenticate, userCtrl.logOut);
 router.patch(
   "/",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.validateBody(schemas.updateSubscription),
   userCtrl.updateSubscription
 );
 
 router.patch(
   "/avatars",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.uploadAvatar.single("avatar"),
   userCtrl.updateAvatar
 );

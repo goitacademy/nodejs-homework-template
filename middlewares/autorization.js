@@ -3,8 +3,11 @@ const { User } = require("../models");
 const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = process.env;
 
-const authorization = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
+  if (!authorization) {
+    next(service.CreateError(401, "Not authorization"));
+  }
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
     next(service.CreateError(401, "Not authorization"));
@@ -22,4 +25,4 @@ const authorization = async (req, res, next) => {
     next(service.CreateError(401, "Not authorization"));
   }
 };
-module.exports = authorization;
+module.exports = authenticate;

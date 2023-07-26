@@ -5,7 +5,6 @@ const gravatar = require("gravatar");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
-  console.log("email,password :>> ", email, password);
   const user = await User.findOne({ email });
 
   service.CheckByError(user, 409, "Email in use");

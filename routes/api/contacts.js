@@ -4,18 +4,18 @@ const middleW = require("../../middlewares");
 const { apiCtrl } = require("../../controlers");
 const { schemas } = require("../../schemas");
 
-router.get("/", middleW.autorization, apiCtrl.getContacts);
+router.get("/", middleW.authenticate, apiCtrl.getContacts);
 
 router.get(
   "/:id",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.isValidId,
   apiCtrl.getContactsById
 );
 
 router.post(
   "/",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.dontBody,
   middleW.validateBody(schemas.contactSchema),
   apiCtrl.addContact
@@ -23,14 +23,14 @@ router.post(
 
 router.delete(
   "/:id",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.isValidId,
   apiCtrl.deleteContact
 );
 
 router.put(
   "/:id",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.isValidId,
   middleW.dontBody,
   middleW.validateBody(schemas.contactPutSchema),
@@ -39,7 +39,7 @@ router.put(
 
 router.patch(
   "/:id/favorite",
-  middleW.autorization,
+  middleW.authenticate,
   middleW.isValidId,
   middleW.validateBody(schemas.favoriteSchema),
   apiCtrl.updateStatusById
