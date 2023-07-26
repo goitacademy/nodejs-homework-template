@@ -4,7 +4,9 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const allContacts = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const contactList = await Contact.find({ owner }, "-createdAt -updatedAt");
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const contactList = await Contact.find({ owner },"-createdAt -updatedAt", {skip, limit}).populate("owner", "_id email subscription");
   res.status(200).json({
     msg: "You Contact List!",
     contact: contactList,
@@ -24,7 +26,7 @@ const idContact = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-   const { _id: owner } = req.user;
+  const { _id: owner } = req.user;
   const newContact = await Contact.create({ ...req.body, owner });
 
   res.status(201).json({
