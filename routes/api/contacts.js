@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const ctrl = require('../../controllers');
-const { validateBody, validateData, ctrlWrapper} = require('../../helpers')
+const ctrl = require('../../controllers/index');
+const { validateBody, validateData, ctrlWrapper} = require('../../helpers/index');
 
 router.get('/', ctrlWrapper(ctrl.getAll));
 
