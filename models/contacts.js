@@ -4,6 +4,8 @@ import path from "path";
 
 import { nanoid } from "nanoid";
 
+
+
 const contactsPath = path.resolve("models", "contacts.json");
 console.log(contactsPath);
 
