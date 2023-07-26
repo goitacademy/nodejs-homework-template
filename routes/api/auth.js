@@ -6,12 +6,14 @@ const {
 } = require("../../models");
 const { authCtrl } = require("../../controllers");
 const authenticate = require("../../middlewares/authenticate");
+const upload = require("../../middlewares/upload");
 
 authRouter.post(
   "/register",
   validateBody(userJoiSchemas.registrationSchema),
   authCtrl.registerUser
 );
+
 authRouter.post(
   "/login",
   validateBody(userJoiSchemas.loginSchema),
@@ -27,6 +29,13 @@ authRouter.patch(
   authenticate,
   validateBody(userJoiSchemas.subscriptionSchema),
   authCtrl.updateUserSubscription
+);
+
+authRouter.patch(
+  "/user/avatar",
+  authenticate,
+  upload.single("avatar"),
+  authCtrl.updateAvatar
 );
 
 module.exports = authRouter;
