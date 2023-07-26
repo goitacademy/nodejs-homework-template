@@ -1,4 +1,6 @@
-import contactsService from '../models/contacts';
+import contactsService from '../models/contacts.js';
+import {ctrlWrapper} from '../decorators/index.js';
+import HttpError from '../helpers/index.js';
 
 const getAll = async (req, res) => {
   const result = await contactsService.listContacts();
@@ -40,11 +42,9 @@ const deleteById = async (req, res) => {
 };
 
 export default {
-  getAll,
-  getById,
-  add,
-  updateById,
-  deleteById,
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
+  updateById: ctrlWrapper(updateById),
+  deleteById: ctrlWrapper(deleteById),
 };
-
-
