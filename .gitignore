@@ -3,6 +3,5 @@ node_modules/
 .idea
 .vscode
 
-/enviroments
-/enviroments/development.env
-/enviroments/production.env
+enviroments/development.env
+enviroments/production.env
