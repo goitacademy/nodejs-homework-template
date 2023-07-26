@@ -56,6 +56,7 @@ async function addContact(name, email, phone) {
     return newContact;
   } catch (err) {
     console.error('Error adding a contact', err);
+    return null; 
   }
 }
 
