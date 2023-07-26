@@ -1,11 +1,12 @@
 const { Contact } = require("../models/contact");
 
-const { HttpError, ctrlWrapper } = require("../utils");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const allContacts = async (req, res, next) => {
-  const contactList = await Contact.find();
+  const { _id: owner } = req.user;
+  const contactList = await Contact.find({ owner }, "-createdAt -updatedAt");
   res.status(200).json({
-    msg: "Load Contact List!",
+    msg: "You Contact List!",
     contact: contactList,
   });
 };
@@ -23,7 +24,8 @@ const idContact = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-  const newContact = await Contact.create(req.body);
+   const { _id: owner } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner });
 
   res.status(201).json({
     msg: "Contact created!",
@@ -81,4 +83,3 @@ module.exports = {
   refreshContact: ctrlWrapper(refreshContact),
   updateStatusContact: ctrlWrapper(updateStatusContact),
 };
-
