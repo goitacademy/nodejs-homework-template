@@ -38,7 +38,7 @@ const updateSchema = Joi.object({
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().message("missing field favorite"),
+  favorite: Joi.boolean().required(),
 });
 
 const schemas = {
