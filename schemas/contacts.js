@@ -18,6 +18,7 @@ const addSchemaPost = Joi.object({
   email: Joi.string()
     .email({ minDomainSegments: 2 })
     .required(),
+  favorite: Joi.boolean(),
 });
 
 const addSchemaPut = Joi.object({
@@ -29,6 +30,7 @@ const addSchemaPut = Joi.object({
     .min(5)
     .pattern(new RegExp(validPhone)),
   email: Joi.string().email({ minDomainSegments: 2 }),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {
