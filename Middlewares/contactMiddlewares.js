@@ -1,24 +1,53 @@
-const fs = require('fs').promises;
+const { AppError, catchAsync, contactValidators } = require('../utils');
 
-const { AppError, catchAsync } = require('../utils');
+const contactService = require('../services/contactServices');
 
 exports.checkContactId = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
-  if (id.length < 10) {
-    // return res.status(400).json({
-    //   msg: 'Invalid ID..',
-    // });
-    throw new AppError(400, 'Invalid ID..');
+  await contactService.contactExistsById(id);
+
+  next();
+});
+
+exports.checkCreateContactData = catchAsync(async (req, res, next) => {
+  const { error, value } = contactValidators.createContactDataValidator(req.body);
+
+  if (error) {
+    console.log(error);
+
+    throw new AppError(400, 'Invalid contact data');
   }
 
-  const contacts = JSON.parse(await fs.readFile('models.json'));
+  await contactService.contactExists({ phone: value.phone });
 
-  const contact = contacts.find((item) => item.id === id);
+  req.body = value;
 
-  if (!contact) throw new AppError(404, 'Contact does not exist..');
+  next();
+});
 
-  req.contact = contact;
+// const contacts = JSON.parse(await fs.readFile('models.json'));
+
+// const contact = contacts.find((item) => item.id === id);
+
+// if (!contact) throw new AppError(404, 'Contact does not exist..');
+
+// req.contact = contact;
+
+// next();
+// });
+
+
+
+exports.checkUpdateContactData = catchAsync(async (re, res, next) => {
+  const { error, value } = contactValidators.checkUpdateContactData(req.body);
+  if (error) {
+    console.log(error);
+
+    throw new AppError(400, 'Invalid Contact Data')
+  }
+
+  req.body = value;
 
   next();
 });

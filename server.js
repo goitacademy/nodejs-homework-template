@@ -2,15 +2,25 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 dotenv.config({
-  path: process.env.NODE_ENV === 'production' ? '/environments/production.env.example' : '/environments/development.env.example',
+  path: process.env.NODE_ENV === 'production' ? './environments/production.env.example' : './environments/development.env.example',
 });
 
 const contactRoutes = require('./routes/api/contactsRoutes');
 const app = express();
 
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+
+//MONGODB CONNECTION
+mongoose.connect(process.env.MONGO_URL).then((con) => {
+  console.log('Mongo DB successfully connected!');
+}).catch((error) => {
+  console.log(error);
+
+  process.exit(1);
+});
 
 
 //MIDLEWARES
@@ -26,7 +36,7 @@ app.use((req, res, next) => {
 
 //Routes
 
-app.use('/contacts, contactRoures');
+app.use('/contacts', contactRoutes);
 
 app.get('/ping', (req, res) => {
   res.status(200).json({
@@ -35,7 +45,7 @@ app.get('/ping', (req, res) => {
 });
 
 //Not found request handler
-pp.all('*', (req, res) => {
+app.all('*', (req, res) => {
   res.status(404).json({
     message: 'Oops! Resours not found...',
   });

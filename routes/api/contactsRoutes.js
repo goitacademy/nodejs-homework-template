@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
-const { createContact, getAllContacts, getOneContact, updateContact, deleteContact } = require('/controllers/contactController');
-const { checkContactId } = require('/Middlewares/contactMiddlewares');
+const { createContact, getAllContacts, getOneContact, updateContact, deleteContact } = require('../../controlers/contactController');
+const { checkContactId, checkCreateContactData, checkUpdateContactData } = require('../../Middlewares/contactMiddlewares');
 
 const router = Router();
 
@@ -24,14 +24,15 @@ const router = Router();
 
 router
   .route('/')
-  .post(createContact)
+  .post(checkCreateContactData, createContact)
   .get(getAllContacts);
 
 router.use('/:id', checkContactId);
+
 router
   .route('/:id')
   .get(getOneContact)
-  .patch(updateContact)
+  .patch(checkUpdateContactData, updateContact)
   .delete(deleteContact);
 
 module.exports = router;
