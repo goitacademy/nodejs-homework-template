@@ -59,7 +59,7 @@ const logOut = async (req, res) => {
     throw generateHTTPError(401, "Not authorized");
   }
   await User.findByIdAndUpdate(req.user._id, { token: "" });
-  res.status(204).json({});
+  res.sendStatus(204);
 };
 
 const currentUser = async (req, res) => {
