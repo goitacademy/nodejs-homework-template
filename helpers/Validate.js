@@ -13,4 +13,8 @@ const contactsSchema = Joi.object({
   }),
 });
 
-export default contactsSchema
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+export default { contactsSchema, contactUpdateFavoriteSchema };
