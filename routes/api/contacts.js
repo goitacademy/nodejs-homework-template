@@ -7,9 +7,10 @@ const {
   ctrlRemoveContact,
   ctrlUpdateContact,
 } = require('../../controllers/ctrlContacts');
-const validateBody = require('../../middlewares/validateBody');
 
-const { schemaBodyObject, schemaBody } = require('../../schema');
+const { validateBody, isValidId } = require('../../middlewares');
+
+const { schemaBodyObject, schemaBody, schemaStatusContact } = require('../../schema');
 
 const router = express.Router();
 
@@ -20,8 +21,12 @@ router
 
 router
   .route('/:contactId')
-  .get(ctrlGetContactById)
-  .put(validateBody(schemaBodyObject), validateBody(schemaBody), ctrlUpdateContact)
-  .delete(ctrlRemoveContact);
+  .get(isValidId, ctrlGetContactById)
+  .put(isValidId, validateBody(schemaBodyObject), validateBody(schemaBody), ctrlUpdateContact)
+  .delete(isValidId, ctrlRemoveContact);
+
+router
+  .route('/:contactId/favorite')
+  .patch(isValidId, validateBody(schemaStatusContact), ctrlUpdateContact);
 
 module.exports = router;

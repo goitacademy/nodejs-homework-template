@@ -23,9 +23,15 @@ const schemaBody = Joi.object({
     'any.required': 'Missing required <phone> field',
     'string.empty': 'Field <phone> cannot be an empty string',
   }),
+  favorite: Joi.boolean(),
+});
+
+const schemaStatusContact = Joi.object({
+  favorite: Joi.boolean().required().error(new Error('Missing field favorite')),
 });
 
 module.exports = {
   schemaBody,
   schemaBodyObject,
+  schemaStatusContact,
 };

@@ -1,6 +1,12 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const dotenv = require('dotenv');
+
+dotenv.config({
+  path:
+    process.env.NODE_ENV === 'production' ? './environments/production.env' : './environments/.env',
+});
 
 const contactsRouter = require('./routes/api/contacts');
 
@@ -14,9 +20,9 @@ app.use(express.json());
 
 app.use('/api/contacts', contactsRouter);
 
-// app.use((req, res) => {
-//   res.status(404).json({ message: 'Not found' });
-// });
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not found' });
+});
 
 app.use((err, req, res, next) => {
   const { status = 500, message = 'Server error' } = err;
