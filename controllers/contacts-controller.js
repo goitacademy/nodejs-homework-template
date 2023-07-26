@@ -4,7 +4,16 @@ import Contact from '../models/contact.js';
 
 
 const getAll = async (req, res) => {
-    const result = await Contact.find({}, "-createdAt -updatedAt");
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 20, favorite } = req.query;
+    const skip = (page - 1) * limit;
+
+    const result = await Contact.find(
+        { owner, favorite: favorite ?? [true, false] },
+        "-createdAt -updatedAt",
+        { skip, limit })
+        .populate("owner", "email subscription");
+
     res.json(result);
 };
 
@@ -18,7 +27,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-    const result = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
 };
 

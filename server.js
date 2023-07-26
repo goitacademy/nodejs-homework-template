@@ -1,8 +1,6 @@
 import app from './app.js';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import "dotenv/config";
 
 const {DB_HOST, PORT} = process.env;
 
@@ -16,6 +14,3 @@ mongoose.connect(DB_HOST)
     console.log(error.message);
     process.exit(1);
   })
-
-
-// 0o8AzpmoPbrc4RrK
