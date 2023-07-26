@@ -1,13 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-// const { nanoid } = require("nanoid");
-const nanoid = import("nanoid").then((module) => {
-  const nanoid = module.default;
-  return nanoid
-  // Тепер ви можете використовувати nanoid у вашому коді
-});;
-
+const { nanoid } = require("nanoid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
@@ -15,25 +9,25 @@ async function listContacts() {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 }
-async function getContactById(contactId) {
+async function getContactById(id) {
   const contacts = await listContacts();
-  const result = contacts.find((item) => item.id === contactId);
+  const result = contacts.find((item) => item.id === id);
   return result || null;
 }
-async function updateContact(contactId, data) {
+async function updateContact(id, data) {
   const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
-  const [contact] = { contactId, ...data };
+  contacts[index] = { id, ...data };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contact[index];
+  return contacts[index];
 }
 
-async function removeContact(contactId) {
+async function removeContact(id) {
   const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
