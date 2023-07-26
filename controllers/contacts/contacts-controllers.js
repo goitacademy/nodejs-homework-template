@@ -36,9 +36,6 @@ const getById = async (req, res, next) => {
 
 const updById = async (req, res, next) => {
 	try {
-		const { name, email, phone } = req.body;
-		if (!name && !email && !phone) throw HttpError(400, "missing fields")
-
 		const { id } = req.params;
 		const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true, })
 
