@@ -7,6 +7,7 @@ const { generateHTTPError } = require("../helpers");
 const { User } = require("../models/user");
 
 const { SECRET_KEY } = process.env;
+const { TOKEN_EXPIRES_IN } = process.env;
 
 const register = async (req, res) => {
   // Перевірка, чи існує користувач із вказаною електронною адресою
@@ -44,7 +45,7 @@ const logIn = async (req, res) => {
   // Логінізація (видача токена)
   const payload = { id: user._id };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKEN_EXPIRES_IN });
   await User.findByIdAndUpdate(user._id, { token });
 
   const { subscription } = user;
