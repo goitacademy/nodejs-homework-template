@@ -7,9 +7,11 @@ import User from "../models/user.js";
 const signup = async (req, res) => {
   const newUser = await User.create(req.body);
 
-  req.status(201).join({
-    name: newUser.name,
-    email: newUser.email,
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
