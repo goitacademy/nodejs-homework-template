@@ -1,5 +1,15 @@
-const app = require('./app')
+const app = require("./app");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const dotenv = require("dotenv");
+dotenv.config({
+  path:
+    process.env.NODE_ENV === "production"
+      ? "./environments/production.env"
+      : "./environments/development.env",
+});
+
+const port = process.env.PORT;
+
+app.listen(port, () => {
+  console.log(`Server running. Use our API on port: ${port}`);
+});
