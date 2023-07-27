@@ -4,7 +4,7 @@ import { CtrlWrapper } from "../decorators/index.js";
 
 // * Get ALL
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({}, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -38,9 +38,7 @@ const updateById = async (req, res, next) => {
   const result = await Contact.findByIdAndUpdate(
     req.params.contactId,
     req.body,
-    {
-      new: true,
-    }
+    { new: true }
   );
   if (!result) throw HttpError(404, "Not found");
   res.json(result);
@@ -51,9 +49,7 @@ const updateFavorite = async (req, res, next) => {
   const result = await Contact.findByIdAndUpdate(
     req.params.contactId,
     req.body,
-    {
-      new: true,
-    }
+    { new: true }
   );
   if (!result) throw HttpError(404, "Not found");
   res.json(result);

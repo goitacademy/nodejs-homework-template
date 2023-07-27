@@ -1,6 +1,6 @@
 import Joi from "joi";
 import { Schema, model } from "mongoose";
-import handleSaveError from "./hooks.js";
+import hooks from "./hooks.js";
 
 const phoneRegexp = /^\d{3}-\d{3}-\d{4}$/;
 
@@ -27,7 +27,9 @@ const contactSchema = new Schema(
   }
 );
 
-contactSchema.post("save", handleSaveError);
+contactSchema.post("save", hooks.handleSaveError);
+contactSchema.post("findOneAndUpdate", hooks.handleSaveError);
+contactSchema.pre("findOneAndUpdate", hooks.validateAtUpdate);
 
 const contactsAddSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -48,18 +50,18 @@ const contactsAddSchema = Joi.object({
     "string.empty": `email cannot be an empty field`,
     "any.required": `missing required email field`,
   }),
-  favourite: Joi.boolean().messages({
-    "string.base": `favourite should be a type of 'text'`,
-    "string.empty": `favourite cannot be an empty field`,
-    "any.required": `missing required favourite field`,
+  favorite: Joi.boolean().messages({
+    "string.base": `favorite should be a type of 'text'`,
+    "string.empty": `favorite cannot be an empty field`,
+    "any.required": `missing required favorite field`,
   }),
 });
 
-const updateFavouriteSchema = Joi.object({
-  favourite: Joi.boolean().required().messages({
-    "string.base": `favourite should be a type of 'text'`,
-    "string.empty": `favourite cannot be an empty field`,
-    "any.required": `missing required favourite field`,
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "string.base": `favorite should be a type of 'text'`,
+    "string.empty": `favorite cannot be an empty field`,
+    "any.required": `missing required favorite field`,
   }),
 });
 
@@ -67,5 +69,5 @@ export const Contact = model("contact", contactSchema);
 
 export default {
   contactsAddSchema,
-  updateFavouriteSchema,
+  updateFavoriteSchema,
 };
