@@ -2,7 +2,7 @@ const express = require('express');
 
 const isValidId = require('../../middlewares/isValidId');
 
-const {validateData} = require('../../middlewares/validateData');
+const validateData = require('../../middlewares/validateData');
 
 const {schemas} = require('../../models/contact');
 
