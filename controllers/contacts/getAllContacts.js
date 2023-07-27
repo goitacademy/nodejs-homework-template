@@ -7,7 +7,15 @@ const { catchAsync } = require('../../utils');
  * Контролер для отримання ВСІX контактів.
  */
 const getAllContacts = catchAsync(async (req, res) => {
-  const contacts = await services.getAllContacts();
+  const userId = req.user._id;
+
+  const contacts =
+    req.query.favorite !== undefined
+      ? await services.getFavoriteContacts({
+          favorite: req.query.favorite,
+          owner: userId,
+        })
+      : await services.getAllContacts(userId);
 
   res.status(200).json({
     msg: 'Success',

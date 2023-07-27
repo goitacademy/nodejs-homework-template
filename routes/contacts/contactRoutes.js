@@ -6,6 +6,8 @@ const controllers = require('../../controllers/contacts');
 
 const middleware = require('../../middlewares/contacts');
 
+const { protect } = require('../../middlewares/auth');
+
 const router = Router();
 
 /**
@@ -18,7 +20,7 @@ const router = Router();
  * PUT/PATCH  /contacts/<contactID>   - update contact by id
  * DELETE     /contacts/<contactID>   - delete contact by id
  */
-
+router.use(protect);
 router
   .route('/')
   .post(middleware.checkCreateContactData, controllers.createContact)
@@ -30,6 +32,7 @@ router
   .get(controllers.getOneContact)
   .patch(controllers.updateContact)
   .delete(controllers.removeContact);
+// router.route('?favorite=true').get(controllers.getFavoriteContacts);
 
 router.use('/:id/favorite', middleware.checkContactId, middleware.checkBoolean);
 router.route('/:id/favorite').patch(controllers.updateStatus);

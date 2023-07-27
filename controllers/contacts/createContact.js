@@ -13,7 +13,16 @@ const { catchAsync } = require('../../utils');
  * @throws {Error} - Якщо сталася помилка при створенні контакту.
  */
 const createContact = catchAsync(async (req, res) => {
-  const newContact = await services.createContact(req.body);
+  const { name, email, phone } = req.body;
+
+  const newContactData = {
+    name,
+    email,
+    phone,
+    owner: req.user,
+  };
+
+  const newContact = await services.createContact(newContactData);
 
   res.status(201).json({
     msg: 'Success',

@@ -8,6 +8,6 @@ const Contact = require('../../models/contacts');
  * @returns {Promise<Array>} - Проміс, що вирішується масивом контактів,
  * які були знайдені в базі даних. Повертається порожній масив, якщо контакти відсутні.
  */
-const getAllContacts = () => Contact.find();
+const getAllContacts = (ownerId) => Contact.find({ owner: ownerId });
 
 module.exports = getAllContacts;

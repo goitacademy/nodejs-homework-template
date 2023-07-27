@@ -15,8 +15,10 @@ exports.checkCreateContactData = catchAsync(async (req, res, next) => {
     throw new AppError(400, 'Invalid contact data..');
   }
 
+  const userId = req.user._id;
   const contactExists = await services.checkContactExists({
     email: value.email,
+    owner: userId,
   });
 
   if (contactExists) {

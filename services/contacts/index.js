@@ -11,6 +11,7 @@ const updateContact = require('./updateContact');
 const removeContact = require('./removeContact');
 const updateStatus = require('./updateStatus');
 const checkContactExists = require('./checkContactExists');
+const getFavoriteContacts = require('./getFavoriteContacts');
 
 module.exports = {
   createContact,
@@ -20,4 +21,5 @@ module.exports = {
   updateContact,
   updateStatus,
   checkContactExists,
+  getFavoriteContacts,
 };

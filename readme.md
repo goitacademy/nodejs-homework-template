@@ -2,7 +2,7 @@
 
 Структура проекту
 
-```shell
+```text
 ├── controllers/
 │   └── contacts/
 │       ├── createContact.js
