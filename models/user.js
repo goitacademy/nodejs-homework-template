@@ -5,38 +5,48 @@ const { handleMongooseError, patterns } = require("../helpers");
 
 const subscribtionTypes = ["starter", "pro", "business"];
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    require: [true, "Define user name"],
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      require: [true, "Define user name"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      match: patterns.email,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Set password for user"],
+      min: 6,
+      max: 24,
+    },
+    subscribtion: {
+      type: String,
+      enum: subscribtionTypes,
+      default: "starter",
+    },
+    token: {
+      type: String,
+      default: "",
+    },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, 'Verification token is required'],
+    }
   },
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    match: patterns.email,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Set password for user"],
-    min: 6,
-    max: 24,
-  },
-  subscribtion: {
-    type: String,
-    enum: subscribtionTypes,
-    default: "starter",
-  },
-  token: {
-    type: String,
-    default: "",
-  },
-  avatarURL: {
-    type: String,
-    required: true,
-    
-  }
-}, {versionKey: false, timestamps: true});
+  { versionKey: false, timestamps: true }
+);
 
 userSchema.post("save", handleMongooseError);
 
@@ -60,10 +70,15 @@ const updateSubscribtion = Joi.object({
   subscribtion: Joi.string().valid(...subscribtionTypes).required(),
 });
 
+const resendVerification = Joi.object({
+  email: Joi.string().pattern(patterns.email).required()
+})
+
 const schemas = {
   signup,
   signin,
   updateSubscribtion,
+  resendVerification,
 };
 
 module.exports = {

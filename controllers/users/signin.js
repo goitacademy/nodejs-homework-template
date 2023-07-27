@@ -9,6 +9,8 @@ const signin = async (req, res) => {
 
   if (!user) throw HttpError(401, "No such user/password combination");
 
+  if (!user.verify) throw HttpError(401, "Email not verified");
+
   const isPasswordValid = await bcrypt.compare(plainPassword, user.password);
 
   if (!isPasswordValid)

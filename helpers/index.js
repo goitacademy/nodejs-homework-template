@@ -4,6 +4,7 @@ const handleMongooseError = require('./handleMongooseError');
 const paginationParams = require('./paginationParams');
 const patterns = require('./patterns');
 const normalizeAvatar = require("./normalizeAvatar");
+const sendEmail = require("./sendEmail");
 
 module.exports = {
   HttpError,
@@ -12,4 +13,5 @@ module.exports = {
   paginationParams,
   patterns,
   normalizeAvatar,
+  sendEmail,
 };
