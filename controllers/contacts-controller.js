@@ -45,7 +45,7 @@ const updateById = async (req, res, next) => {
 };
 
 // *Update Favorite
-const updateFavorite = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   const result = await Contact.findByIdAndUpdate(
     req.params.contactId,
     req.body,
@@ -60,6 +60,6 @@ export default {
   getById: CtrlWrapper(getById),
   add: CtrlWrapper(add),
   updateById: CtrlWrapper(updateById),
-  updateFavorite: CtrlWrapper(updateFavorite),
+  updateStatusContact: CtrlWrapper(updateStatusContact),
   removeById: CtrlWrapper(removeById),
 };
