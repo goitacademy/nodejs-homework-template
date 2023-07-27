@@ -5,7 +5,11 @@ const { ctrlWrapper } = require("../utils/ctrlWrapper.js");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }).populate(
+  const { page = 5, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  console.log(`req.query: ${JSON.stringify(req.query)}`);
+
+  const result = await Contact.find({ owner }, "", { skip, limit }).populate(
     "owner",
     "name email phone"
   );

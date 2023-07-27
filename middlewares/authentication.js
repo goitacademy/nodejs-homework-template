@@ -27,7 +27,11 @@ const authentication = async (req, res, next) => {
     console.log(`user: ${user}`);
     console.log(`id: ${id}`);
 
-    if (!user) {
+    console.log(`user.token: ${user.token}`);
+    console.log(`token: ${token}`);
+
+    // Проверяем есть ли пользователь в базе, проверяем есть и верный ли токен у пользователя
+    if (!user || !user.token || user.token !== token) {
       next(HttpError(401));
     }
     req.user = user;
