@@ -5,7 +5,10 @@ const { ctrlWrapper } = require("../utils/ctrlWrapper.js");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find(owner);
+  const result = await Contact.find({ owner }).populate(
+    "owner",
+    "name email phone"
+  );
   if (!result) {
     throw HttpError(404, "Not found");
   }
