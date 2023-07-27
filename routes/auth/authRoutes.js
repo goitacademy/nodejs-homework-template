@@ -17,7 +17,7 @@ router.post('/signup', checkSignupUserData, signup);
 router.post('/login', login);
 
 // logout - logout current user
-router.get('/logout', logout);
+router.post('/logout', logout);
 
 // current - get current user
 router.get('/current', getCurrentUser);
