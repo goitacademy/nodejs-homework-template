@@ -1,6 +1,6 @@
-const Contact = require("../models/contact.js");
+const Contact = require("../../models/contact");
 
-const { HttpError } = require("../helpers/index.js");
+const { HttpError } = require("../../helpers/index");
 
 const deleteById = async (req, res, next) => {
   const { id } = req.params;
@@ -13,3 +13,5 @@ const deleteById = async (req, res, next) => {
     message: "Delete success",
   });
 };
+
+module.exports = deleteById;

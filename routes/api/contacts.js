@@ -7,7 +7,7 @@ const {
   updateById,
   deleteById,
   updateFavorite,
-} = require("../../controllers/contact-controller.js");
+} = require("../../controllers/contacts/index.js");
 const { validateBody } = require("../../decorators/index.js");
 const { isEmptyBody, isValidId } = require("../../middlewares/index");
 const {
