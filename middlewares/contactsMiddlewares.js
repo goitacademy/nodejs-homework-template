@@ -44,9 +44,11 @@ exports.checkCreateContactData = cathAsync(async (req, res, next) => {
 
 // Check before update contact in the database
 exports.checkUpdateContactData = cathAsync(async (req, res, next) => {
-  const { name, email, phone } = req.body;
-
-  if (!name && !email && !phone) throw new AppError(400, "missing fields");
+  // const { name, email, phone } = req.body;
+  // if (!name && !email && !phone) throw new AppError(400, "missing fields");
+  if (!req.body.name) throw new AppError(400, "missing required name field");
+  if (!req.body.email) throw new AppError(400, "missing required email field");
+  if (!req.body.phone) throw new AppError(400, "missing required phone field");
 
   const { error, value } = updateContactDataValidator(req.body);
 
