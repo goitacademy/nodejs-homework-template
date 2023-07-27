@@ -5,7 +5,7 @@ const joiUserValidator = (data) => {
     .keys({
         name: Joi.string().min(3), 
         email: Joi.string(), 
-        phone: Joi.number(),
+        phone: Joi.string(),
     }).validate(data);
 }
 
