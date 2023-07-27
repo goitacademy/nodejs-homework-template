@@ -18,7 +18,6 @@ const getContactById = async (contactId) => {
     console.table(contactById);
     return contactById;
     } else {
-    console.log('sorry, there is no user with that id \n');
     return null;
   };
   // return contactById || null;
@@ -29,7 +28,6 @@ const removeContact = async (contactId) => {
   const data = await read;
   const newData = data.filter(item => item.id !== contactId);
   await fs.writeFile('contacts.json', JSON.stringify(newData));
-  console.log('Contact successfully deleted \n');
   return data.find(data.id === contactId)
 }
 
@@ -45,7 +43,6 @@ const addContact = async ({ name, email, phone }) => {
 
   data.push(body);
   await fs.writeFile(contactsPath, JSON.stringify(data))
-  console.log('Woot! Your contact has been added.');
   return body;
 }
 
@@ -55,7 +52,7 @@ const updateContact = async (contactId, body) => {
     if (item.id === contactId) {
       return item
     }
-    
+    return newContact;
   })
   const updatedContact = { ...newContact, ...body };
   await fs.writeFile(contactsPath, JSON.stringify([...data, updatedContact]))
