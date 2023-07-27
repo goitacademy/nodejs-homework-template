@@ -11,7 +11,7 @@ mongoose
     app.listen(5050);
   })
   .then(() => {
-    console.log("Database connection successful");
+    console.log("Database connection successful <3");
   })
   .catch((error) => {
     console.log(error.message);

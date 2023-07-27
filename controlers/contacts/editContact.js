@@ -3,9 +3,13 @@ const { Contact } = require("../../models/contact");
 
 const editContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: req.user._id },
+    req.body,
+    {
+      new: true,
+    }
+  );
   if (!result) {
     throw HttpError(404, "Not found");
   }
