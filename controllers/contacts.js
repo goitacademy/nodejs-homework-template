@@ -1,12 +1,25 @@
 const {Contact} = require('../models/contact');
-const {HttpError} = require('../helpers');
-const {ctrlWrapper} = require('../helpers');
-const {schemas} = require('../models/contact');
+const {HttpError, ctrlWrapper} = require('../helpers');
 
 const getAll = async (req, res) => {
-    const result = await Contact.find({}, "-createdAt -updatedAt");
-    res.status(200).json(result);
-}
+  const { favorite } = req.query; 
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filter = { owner };
+
+  if (favorite !== undefined) {
+    filter.favorite = favorite;
+  }
+
+  const result = await Contact.find(filter, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate('owner', 'email');
+
+  res.status(200).json(result);
+};
 
 const getById = async (req, res) => {
     const {contactId} = req.params;
@@ -18,11 +31,8 @@ const getById = async (req, res) => {
 }
 
 const add = async (req, res) => {
-    const {error} = schemas.addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, "missing required name field")
-    }
-    const result = await Contact.create(req.body);
+    const {_id: owner} = req.user;
+    const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
 }
 
@@ -36,10 +46,6 @@ const remove = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const {error} = schemas.addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, "missing fields")
-    }
     const {contactId} = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     res.status(200).json(result);
@@ -48,10 +54,6 @@ const update = async (req, res) => {
 const updateStatusContact = async (req, res) => {
   if(!req.body) { 
     throw HttpError(400, "missing field favorite")
-  }
-  const {error} = schemas.updateFavoriteSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, "Not found")
   }
   const {contactId} = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
