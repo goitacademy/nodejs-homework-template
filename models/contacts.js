@@ -7,7 +7,6 @@ const read = fs.readFile(contactsPath).then(data => JSON.parse(data));
 
 const listContacts = async () => {
   const data = await read;
-  console.table(data)
   return data;
 }
 
@@ -15,7 +14,6 @@ const getContactById = async (contactId) => {
   const data = await read;
   const contactById = data.find(item => item.id === contactId);
   if (contactById) {
-    console.table(contactById);
     return contactById;
     } else {
     return null;
