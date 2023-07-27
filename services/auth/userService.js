@@ -1,6 +1,6 @@
 const { Types } = require('mongoose');
 const { AppError } = require('../../utils');
-const { signToken } = require('./jwtService');
+const { signToken, checkToken } = require('./jwtService');
 const userRolesEnum = require('../../constants/userRolesEnum');
 const User = require('../../models/auth');
 
@@ -118,4 +118,19 @@ exports.loginUser = async ({ email, password }) => {
   const token = signToken(user.id);
 
   return { user, token };
+};
+
+/**
+ * Get current user via sign token.
+ * @param {Object} token
+ * @returns {Object}
+ */
+exports.getCurrentUser = async (token) => {
+  const userId = checkToken(token);
+
+  const user = await User.findByIdAndDelete(userId);
+
+  if (!user) throw new AppError(401, 'Not authorized..');
+
+  return { user };
 };

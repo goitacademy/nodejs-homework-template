@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { signup, login } = require('../../controllers/auth');
+const { signup, login, getCurrentUser } = require('../../controllers/auth');
 const { checkSignupUserData } = require('../../middlewares/auth');
 
 const router = Router();
@@ -10,5 +10,9 @@ router.post('/signup', checkSignupUserData, signup);
 
 // login - login user - authentification
 router.post('/login', login);
+
+module.exports = router;
+// current - get current user
+router.get('/current', getCurrentUser);
 
 module.exports = router;
