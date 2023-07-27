@@ -1,39 +1,41 @@
-const fs = require('fs/promises')
+const fs = require('fs/promises');
+const { v4 } = require("uuid");
 const path = require('path');
 
 
 const contactsPath = path.join(__dirname, 'contacts.json')
-const read = fs.readFile(contactsPath).then(data => JSON.parse(data));
 
 const listContacts = async () => {
-  const data = await read;
-  return data;
-}
+  const data = await fs.readFile(contactsPath);
+  const contacts = JSON.parse(data);
+  return contacts;
+};
+
 
 const getContactById = async (contactId) => {
-  const data = await read;
-  const contactById = data.find(item => item.id === contactId);
-  if (contactById) {
-    return contactById;
-    } else {
+  const data = await listContacts();
+  const contactById = data.find(({id}) => id === contactId.toString());
+  if (!contactById) {
     return null;
+    } else {
+    return contactById;
   };
-  // return contactById || null;
-  
 }
 
 const removeContact = async (contactId) => {
-  const data = await read;
-  const newData = data.filter(item => item.id !== contactId);
+  const data = await listContacts();
+  const newData = data.filter((item) => item.id !== contactId);
   await fs.writeFile('contacts.json', JSON.stringify(newData));
-  return data.find(data.id === contactId)
+  
+  const removedContact = data.find((item)=> item.id === contactId)
+  return removedContact || null
 }
 
 const addContact = async ({ name, email, phone }) => {
-  const data = await read;
+  const data = await listContacts();
 
   const body = {
-    // id,
+    id: v4(),
     name,
     email,
     phone
@@ -45,15 +47,16 @@ const addContact = async ({ name, email, phone }) => {
 }
 
 const updateContact = async (contactId, body) => {
-  const data = await read;
-  const newContact = data.map(item => {
-    if (item.id === contactId) {
-      return item
-    }
-    return newContact;
-  })
-  const updatedContact = { ...newContact, ...body };
-  await fs.writeFile(contactsPath, JSON.stringify([...data, updatedContact]))
+  const data = await listContacts();
+  const index = data.findIndex((item) => item.id === contactId);
+
+  if (index === -1) {
+    return null;
+  }
+
+  const updatedContact = { ...data[index], ...body };
+  data[index] = updatedContact;
+  await fs.writeFile(contactsPath, JSON.stringify(data))
   return updatedContact;
 }
 
