@@ -15,12 +15,13 @@ async function getContactById(id) {
   return result || null;
 }
 async function updateContact(id, data) {
+  const currentContact = await getContactById(id);
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, ...data };
+  contacts[index] = { id, ...currentContact, ...data };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 }

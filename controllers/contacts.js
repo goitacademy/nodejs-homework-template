@@ -6,6 +6,11 @@ const AddSchema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
+const UpdateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
 
 const getAll = async (req, res) => {
   const result = await contacts.listContacts();
@@ -29,7 +34,10 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 const updateContact = async (req, res) => {
-  const { error } = AddSchema.validate(req.body);
+  if (Object.keys(req.body).length < 1) {
+    throw HttpError(400, "missing fields");
+  }
+  const { error } = UpdateSchema.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
