@@ -57,4 +57,24 @@ module.exports = {
     }
     next();
   },
+  postAutothValidation: (req, res, next) => {
+    const schemaValid = Joi.object({
+      email: ({
+        minDomainSegments:2,
+        tlds: {allow:["com", "net"]},
+      })
+      .optional(),
+      password: Joi.string().required(),
+      subscription: Joi.string().optional(),
+    });
+
+    const validationResult = schemaValid.validate(req.body);
+    if (validationResult.error) {
+      return res.status(400).json({
+        contentType: "application/json",
+        ResponseBody: validationResult.error.details,
+      });
+    }
+    next();
+  },
 };
