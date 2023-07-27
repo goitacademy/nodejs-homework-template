@@ -1,8 +1,9 @@
 import { Schema, model } from "mongoose";
 
 const movieSchema = new Schema({
-  title: String,
-  director: String,
+  name: String,
+  email: String,
+  phone: String,
 });
 
 const Contact = model("contact", movieSchema);
