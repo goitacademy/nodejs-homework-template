@@ -33,11 +33,11 @@ const login = async (req, res) => {
     // Додаємо токен в БД
     await User.findByIdAndUpdate(user._id, {token});
 
-    res.json({
+    res.status(200).json({
         token,
         "user": {
-            email: user.email,
-            subscription: user.subscription,
+            "email": user.email,
+            "subscription": user.subscription,
         }
     });
 }
