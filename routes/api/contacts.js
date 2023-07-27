@@ -1,83 +1,44 @@
 const express = require("express");
 
 const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts.js");
-const { HttpError } = require("../../helpers");
-const { contactSchema } = require("../../schema/contacts.js");
+  getAll,
+  getById,
+  add,
+  updateById,
+  deleteById,
+  updateFavorite,
+} = require("../../controllers/contacts/index.js");
+const { validateBody } = require("../../decorators/index.js");
+const { isEmptyBody, isValidId } = require("../../middlewares/index");
+const {
+  contactSchema,
+  contactUpdateFavoriteSchema,
+} = require("../../schema/contacts.js");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
-    res.json(contacts);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", getAll);
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await getContactById(id);
-    if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:id", isValidId, getById);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", isEmptyBody, validateBody(contactSchema), add);
 
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await removeContact(id);
-    if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
-    }
+router.delete("/:id", isValidId, deleteById);
 
-    res.json({
-      message: "Delete success",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  isEmptyBody,
+  validateBody(contactUpdateFavoriteSchema),
+  updateFavorite
+);
 
-router.put("/:id", async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { id } = req.params;
-    const result = await updateContact(id, req.body);
-    if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put(
+  "/:id",
+  isValidId,
+  isEmptyBody,
+  validateBody(contactSchema),
+  updateById
+);
 
 module.exports = router;
