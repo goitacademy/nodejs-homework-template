@@ -68,10 +68,34 @@ await User.findByIdAndUpdate(_id, { token: null });
 };
 
 
+const updateUser = async (req, res, next) => {
+   const { _id } = req.user;
+  const { subscription } = req.body;
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    {
+      new: true,
+    }
+  );
+
+
+  if (!updateUser) {
+    throw HttpError(404, "Not found user");
+  }
+  res.status(201).json({
+    msg: "User data update success!",
+    subscription: updateUser.subscription,
+  });
+};
+
+
+
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateUser: ctrlWrapper(updateUser),
 };

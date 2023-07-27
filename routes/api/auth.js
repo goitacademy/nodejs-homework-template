@@ -14,5 +14,7 @@ router.post("/login",validateBody(schemas.loginSchema), ctrl.login);
 router.get("/current", authenticate, ctrl.getCurrent);
 //Logout
 router.post("/logout", authenticate, ctrl.logout);
+//Logout
+router.patch("/", authenticate, ctrl.updateUser);
 
 module.exports = router;

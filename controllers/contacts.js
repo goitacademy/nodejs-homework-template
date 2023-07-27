@@ -6,7 +6,10 @@ const allContacts = async (req, res, next) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
-  const contactList = await Contact.find({ owner },"-createdAt -updatedAt", {skip, limit}).populate("owner", "_id email subscription");
+  const contactList = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "_id email subscription");
   res.status(200).json({
     msg: "You Contact List!",
     contact: contactList,
@@ -85,3 +88,4 @@ module.exports = {
   refreshContact: ctrlWrapper(refreshContact),
   updateStatusContact: ctrlWrapper(updateStatusContact),
 };
+ 
