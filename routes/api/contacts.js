@@ -1,6 +1,6 @@
 import express from "express";
 
-import { isValidId } from "../../middlewares/index.js";
+import { isValidId, authenticate } from "../../middlewares/index.js";
 
 import contactsControllers from "../../controllers/contacts-controllers.js";
 
@@ -9,6 +9,8 @@ import { validateBody } from "../../decorators/index.js";
 import contactsSchemas from "../../Schemas/contacts-schemas.js";
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", contactsControllers.getAll);
 
