@@ -1,7 +1,7 @@
 // ./contrllers/auth/authController.js
 
 const { catchAsync } = require('../../utils');
-const userService = require('../../services/auth/userService');
+const userService = require('../../services/auth');
 
 const signup = catchAsync(async (req, res) => {
   const { user, token } = await userService.signupUser(req.body);
