@@ -3,6 +3,7 @@ const ctrlWrapper = require('./ctrlWrapper');
 const handleMongooseError = require('./handleMongooseError');
 const paginationParams = require('./paginationParams');
 const patterns = require('./patterns');
+const normalizeAvatar = require("./normalizeAvatar");
 
 module.exports = {
   HttpError,
@@ -10,4 +11,5 @@ module.exports = {
   handleMongooseError,
   paginationParams,
   patterns,
+  normalizeAvatar,
 };
