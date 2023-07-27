@@ -1,11 +1,7 @@
 import express from "express";
 
 import { validateBody } from "../../decorators/index.js";
-import {
-  isEmptyBody,
-  isEmptyBodyFav,
-  isValidId,
-} from "../../middlewars/index.js";
+import { isEmptyBody, isValidId } from "../../middlewars/index.js";
 
 import contactsController from "../../controllers/contacts-controller.js";
 import schemas from "../../models/contacts.js";
@@ -35,7 +31,7 @@ contactsRouter.delete("/:contactId", isValidId, contactsController.removeById);
 contactsRouter.patch(
   "/:contactId/favorite",
   isValidId,
-  isEmptyBodyFav,
+  isEmptyBody,
   validateBody(schemas.updateFavoriteSchema),
   contactsController.updateStatusContact
 );
