@@ -39,6 +39,10 @@ const loginSchema = Joi.object({
 
 userSchema.post("save", handleMongooseError);
 
+userSchema.statics.updateSubscription = async function (userId, newSubscription) {
+  return this.findByIdAndUpdate(userId, { subscription: newSubscription }, { new: true });
+};
+
 const User = model("user", userSchema);
 
 module.exports = { User, authSchema, loginSchema };
