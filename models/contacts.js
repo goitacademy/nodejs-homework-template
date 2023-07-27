@@ -1,14 +1,66 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises')
+const path = require('path');
 
-const listContacts = async () => {}
 
-const getContactById = async (contactId) => {}
+const contactsPath = path.join(__dirname, 'contacts.json')
+const read = fs.readFile(contactsPath).then(data => JSON.parse(data));
 
-const removeContact = async (contactId) => {}
+const listContacts = async () => {
+  const data = await read;
+  console.table(data)
+  return data;
+}
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {
+  const data = await read;
+  const contactById = data.find(item => item.id === contactId);
+  if (contactById) {
+    console.table(contactById);
+    return contactById;
+    } else {
+    console.log('sorry, there is no user with that id \n');
+    return null;
+  };
+  // return contactById || null;
+  
+}
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async (contactId) => {
+  const data = await read;
+  const newData = data.filter(item => item.id !== contactId);
+  await fs.writeFile('contacts.json', JSON.stringify(newData));
+  console.log('Contact successfully deleted \n');
+  return data.find(data.id === contactId)
+}
+
+const addContact = async ({ name, email, phone }) => {
+  const data = await read;
+
+  const body = {
+    // id,
+    name,
+    email,
+    phone
+  };
+
+  data.push(body);
+  await fs.writeFile(contactsPath, JSON.stringify(data))
+  console.log('Woot! Your contact has been added.');
+  return body;
+}
+
+const updateContact = async (contactId, body) => {
+  const data = await read;
+  const newContact = data.map(item => {
+    if (item.id === contactId) {
+      return item
+    }
+    
+  })
+  const updatedContact = { ...newContact, ...body };
+  await fs.writeFile(contactsPath, JSON.stringify([...data, updatedContact]))
+  return updatedContact;
+}
 
 module.exports = {
   listContacts,
