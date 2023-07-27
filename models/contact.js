@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+
 const Joi = require("joi");
 
 const { handleMongooseError } = require("../middlewares");
@@ -7,7 +8,7 @@ const contactSchema = new Schema(
   {
     name: {
       type: String,
-      // required: [true, "Set name for contact"],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -33,7 +34,9 @@ const addSchema = Joi.object({
 });
 
 const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({
+    "any.required": "missing field favorite",
+  }),
 });
 
 const schemas = {
@@ -41,7 +44,7 @@ const schemas = {
   updateFavoriteSchema,
 };
 
-const Contact = model("сontact", contactSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = {
   Contact,
