@@ -1,7 +1,7 @@
+const validateData = require("../middlewares/validateData");
 const {
   Contact,
-  validateSchema,
-  updateFavoriteSchema,
+  schemas,
 } = require("../models/contact");
 
 const HttpError = require("../utils/HttpError");
@@ -35,7 +35,7 @@ const findOneContact = async (contactId) => {
  * @returns {Object}
  */
 const addContact = async (body) => {
-  const { error } = validateSchema.validate(body);
+  const { error } = validateData(schemas.addContactSchema).validate(body);
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -66,7 +66,7 @@ const deleteContactById = async (contactId) => {
  * @returns {Object}
  */
 const updateContact = async (contactId, body) => {
-  const { error } = validateSchema.validate(body);
+  const { error } = validateData(schemas.addContactSchema).validate(body);
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -89,7 +89,7 @@ const updateContact = async (contactId, body) => {
  * @returns {Object}
  */
 const updateContactStatus = async (contactId, body) => {
-  const { error } = updateFavoriteSchema.validate(body);
+  const { error } = validateData(schemas.updateFavoriteSchema).validate(body);
   if (error) {
     throw HttpError(400, error.message);
   }

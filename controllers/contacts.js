@@ -9,8 +9,8 @@ const {
 
 const ctrlWrapper = require("../utils/ctrlWrapper");
 
-const getContactList = async (req, res) => {
-  const contactList = await findContacts();
+const getContactList = (req, res) => {
+  const contactList = findContacts();
   res.json(contactList);
 };
 
