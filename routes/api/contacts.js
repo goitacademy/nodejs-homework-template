@@ -1,6 +1,5 @@
-const express = require('express')
+const express = require("express")
 
-// const contacts = require("../../models/contacts")
 
 
 const ctrl = require("../../controllers/contacts")
