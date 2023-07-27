@@ -128,7 +128,22 @@ exports.loginUser = async ({ email, password }) => {
 exports.getCurrentUser = async (token) => {
   const userId = checkToken(token);
 
-  const user = await User.findByIdAndDelete(userId);
+  const user = await User.findById(userId);
+
+  if (!user) throw new AppError(401, 'Not authorized..');
+
+  return { user };
+};
+
+/**
+ * Logout.
+ * @param {Object} token
+ * @returns {Object}
+ */
+exports.logout = async (token) => {
+  const userId = checkToken(token);
+
+  const user = await User.findById(userId);
 
   if (!user) throw new AppError(401, 'Not authorized..');
 

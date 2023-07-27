@@ -21,6 +21,16 @@ const login = catchAsync(async (req, res) => {
   });
 });
 
+const logout = catchAsync(async (req, res, next) => {
+  // Отримуємо токен з заголовка Authorization (Bearer токен)
+  const token = req.headers.authorization?.split(' ')[1];
+
+  await userService.getCurrentUser(token);
+
+  // Повертаємо успішну відповідь
+  res.sendStatus(204);
+});
+
 const getCurrentUser = catchAsync(async (req, res, next) => {
   // Отримуємо токен з заголовка Authorization (Bearer токен)
   const token = req.headers.authorization?.split(' ')[1];
@@ -37,5 +47,6 @@ const getCurrentUser = catchAsync(async (req, res, next) => {
 module.exports = {
   signup,
   login,
+  logout,
   getCurrentUser,
 };
