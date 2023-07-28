@@ -5,10 +5,12 @@ const {
   getCurrent,
   logout,
   subscriptionUpdate,
+  updateAvatar,
 } = require("../../controllers/auth");
 const validateBody = require("../../midlewares/validateBody");
 const authentificate = require("../../midlewares/authentificate");
-const { schemas } = require("../../models/user");
+const upload = require("../../midlewares/upload");
+const { schemas } = require("../../models/joiSchemasForUser");
 
 const router = express.Router();
 
@@ -21,5 +23,11 @@ router.patch(
   authentificate,
   validateBody(schemas.subscriptionUpdateSchema),
   subscriptionUpdate
+);
+router.patch(
+  "/users/avatars",
+  authentificate,
+  upload.single("avatar"),
+  updateAvatar
 );
 module.exports = router;
