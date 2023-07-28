@@ -23,8 +23,10 @@ const register = async (req, res, next) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    name: newUser.name,
-    email: newUser.email,
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -54,16 +56,20 @@ const login = async (req, res, next) => {
 
   res.json({
     token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
 
 // Проверяем авторизовани ли пользователь и выводим его имя и почту
 const getCurrent = async (req, res) => {
-  const { name, email } = req.user;
+  const { email, subscription } = req.user;
 
   res.json({
-    name,
     email,
+    subscription,
   });
 };
 
@@ -73,9 +79,7 @@ const logout = async (req, res) => {
   // Удаляем токен пользователя с базы
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({
-    message: "Loguot success!",
-  });
+  res.status(204).json();
 };
 
 module.exports = {
