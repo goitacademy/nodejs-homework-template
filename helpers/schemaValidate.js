@@ -5,5 +5,10 @@ const addSchema = Joi.object({
   email: Joi.string()
     .regex(/^[0-9]{10}$/)
     .required(),
+  favorite: Joi.boolean(),
 });
-module.exports = addSchema;
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+const schema = { addSchema, updateFavoriteSchema };
+module.exports = { schema };
