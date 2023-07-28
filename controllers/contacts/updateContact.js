@@ -1,6 +1,6 @@
-const { Contact } = require("../../models/contact");
+const { Contact } = require('../../models/contact');
 
-const { HttpError } = require("../../helpers");
+const { HttpError } = require('../../helpers');
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
@@ -9,7 +9,7 @@ const updateContact = async (req, res) => {
   });
 
   if (!result) {
-    throw HttpError(404, "User was not found!");
+    throw HttpError(404, 'User was not found!');
   }
 
   res.json(result);

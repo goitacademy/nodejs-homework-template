@@ -1,7 +1,7 @@
 const { isValidObjectId } = require('mongoose');
 const { HttpError } = require('../helpers');
 
-const idValidator = (req, res, next) => {
+const contactIdValidator = (req, res, next) => {
     const { contactId } = req.params;
 
     if (!isValidObjectId(contactId)) {
@@ -10,4 +10,4 @@ const idValidator = (req, res, next) => {
     next();
 }
 
-module.exports = idValidator;
+module.exports = contactIdValidator;

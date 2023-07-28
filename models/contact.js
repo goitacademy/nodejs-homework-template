@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
-const Joi = require("joi");
+const Joi = require('joi');
 
-const { HandleMongooseError } = require("../helpers");
+const { HandleMongooseError } = require('../helpers');
 
 const nameRegexp = /^[-a-zA-Zа-яА-ЯёЁ\s]+$/u;
 const emailRegexp =
@@ -24,11 +24,16 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+    }
 },
     { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", HandleMongooseError);
+contactSchema.post('save', HandleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().min(3).max(25).pattern(nameRegexp).required(),

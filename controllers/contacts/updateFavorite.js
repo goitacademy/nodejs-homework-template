@@ -1,6 +1,6 @@
-const { Contact } = require("../../models/contact");
+const { Contact } = require('../../models/contact');
 
-const { HttpError } = require("../../helpers");
+const { HttpError } = require('../../helpers');
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
@@ -9,7 +9,7 @@ const updateFavorite = async (req, res) => {
   });
 
   if (!result) {
-    throw HttpError(404, "Not found!");
+    throw HttpError(404);
   }
 
   res.status(200).json(result);
