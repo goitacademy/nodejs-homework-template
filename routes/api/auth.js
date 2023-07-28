@@ -1,5 +1,5 @@
 const express = require('express');
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate} = require('../../middlewares');
 const { schemas } = require('../../models/user');
 const ctrl = require('../../controllers/auth');
 

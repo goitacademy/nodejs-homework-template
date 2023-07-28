@@ -23,7 +23,11 @@ const userSchema = new Schema({
     enum: subscriptionList,
     default: subscriptionList[0],
   },
-  token: String
+  token: String,
+  avatarURL: {
+    type: String,
+    required: true,
+  },
 }, { versionKey: false, timestamps: true }
     // versionKey: false - щоб не строрювалось поле "__v" з версією документа при додаванні данних
     // timestamps: true - щоб створювались поля createdAt і updatedAt (дата строрення і оновлення)
