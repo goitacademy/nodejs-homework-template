@@ -42,10 +42,10 @@ const registerSchema = Joi.object({
     .min(10)
     .required()
     .messages({
-      'string.base': `"name" must be a string`,
-      'string.empty': `"name" cannot be an empty field`,
-      'string.min': `"name" should have a minimum length of {#limit}`,
-      'any.required': `missing required "name" field`
+      'string.base': `"email" must be a string`,
+      'string.empty': `"email" cannot be an empty field`,
+      'string.min': `"email" should have a minimum length of {#limit}`,
+      'any.required': `missing required "email" field`
     }),
     password: Joi.string()
     .trim()
@@ -68,10 +68,10 @@ const loginSchema = Joi.object({
     .max(20)
     .required()
     .messages({
-      'string.base': `"name" must be a string`,
-      'string.empty': `"name" cannot be an empty field`,
-      'string.min': `"name" should have a minimum length of {#limit}`,
-      'any.required': `missing required "name" field`
+      'string.base': `"email" must be a string`,
+      'string.empty': `"email" cannot be an empty field`,
+      'string.min': `"email" should have a minimum length of {#limit}`,
+      'any.required': `missing required "email" field`
     }),
     password: Joi.string()
     .trim()
