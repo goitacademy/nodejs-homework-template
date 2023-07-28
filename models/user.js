@@ -1,4 +1,4 @@
-const { Schema, model, Model } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const { handleSaveError, handleUpdValidate } = require("../models/hooks");
 const emailRegexp = require("../constants/user-constants");
 
@@ -21,3 +21,14 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+userSchema.pre("findOneAndUpdate", handleUpdValidate);
+
+userSchema.post("findOneAndUpdate", handleSaveError);
+
+userSchema.post("save", handleSaveError);
+
+const User = model("user", userSchema);
+
+
+module.exports = User;
