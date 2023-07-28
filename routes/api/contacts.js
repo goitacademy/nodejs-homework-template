@@ -9,23 +9,24 @@ const {
   updateStatusContact,
 } = require("../../controllers/contacts");
 
-const { schemas } = require("../../models/book");
+const { schemas } = require("../../models/contact");
 
 const { validateBody, validateBodyFavorite } = require("../../decorators");
-const { isValidId } = require("../../middlewares");
+const { isValidId, authenticate} = require("../../middlewares");
 
 const router = express.Router();
 
-router.get("/", contactsList.getAllContacts);
+router.get("/", authenticate, contactsList.getAllContacts);
 
-router.get("/:contactId", isValidId, getContactById.getContactById);
+router.get("/:contactId", authenticate, isValidId, getContactById.getContactById);
 
-router.post("/", validateBody(schemas.contactSchemaJoi), addContact.addContact);
+router.post("/", authenticate, validateBody(schemas.contactSchemaJoi), addContact.addContact);
 
-router.delete("/:contactId", isValidId, deleteContact.deleteContact);
+router.delete("/:contactId", authenticate, isValidId, deleteContact.deleteContact);
 
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBody(schemas.contactSchemaJoi),
   updateContact.updateContact
