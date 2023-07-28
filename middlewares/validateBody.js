@@ -1,6 +1,6 @@
 const { HttpError } = require("../helpers");
 
-const validateBodyContacts = (schema) => {
+const validateBody = (schema) => {
   const func = async (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -11,4 +11,4 @@ const validateBodyContacts = (schema) => {
   };
   return func;
 };
-module.exports = validateBodyContacts;
+module.exports = validateBody;
