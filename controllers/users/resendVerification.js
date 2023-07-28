@@ -11,7 +11,10 @@ const resendVerification = async (req, res) => {
     throw HttpError(400, "Verification has already been passed");
   }
 
-  await sendEmail(user.email, user.verificationToken);
+  await sendEmail({
+    email: user.email,
+    token: user.verificationToken,
+  });
 
   res.json({
     message: "Verification email sent",

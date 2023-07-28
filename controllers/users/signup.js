@@ -1,6 +1,6 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
-const {nanoid} = require("nanoid");
+const { nanoid } = require("nanoid");
 
 const { User } = require("../../models/user");
 const { HttpError, ctrlWrapper, sendEmail } = require("../../helpers");
@@ -22,7 +22,10 @@ const signup = async (req, res) => {
     verificationToken: nanoid(),
   });
 
-  await sendEmail(newUser.email, newUser.verificationToken);
+  await sendEmail({
+    email: newUser.email,
+    token: newUser.verificationToken,
+  });
 
   res.status(201).json({
     name: newUser.name,
