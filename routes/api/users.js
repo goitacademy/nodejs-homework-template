@@ -14,7 +14,7 @@ router.post("/logout", authenticate, ctrl.logout);
 router.get("/current", authenticate, ctrl.getCurrent);
 // Subscription renewal
 router.patch("/", authenticate, validateBody(updateSubscriptionSchema), ctrl.renewalSubscription)
-
+// update avatar
 router.patch(
     "/avatars",
     authenticate,
