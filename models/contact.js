@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const { handleSaveError, validateAtUpdate } = require("../models/hooks");
 const { phoneNumberRegex } = require("../constants/contacts-constans");
+
 const contactSchema = new Schema(
   {
     name: {
@@ -19,6 +20,11 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
