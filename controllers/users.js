@@ -111,10 +111,6 @@ const updateAvatar = async (req, res) => {
       await User.findByIdAndUpdate(_id, { avatarURL });
       res.status(200).json({ avatarURL });
     })
-    .catch((err) => {
-      console.log(err.message);
-      res.status(500).json({ error: "Image processing error for avatar." });
-    });
 }
 
 module.exports = {
