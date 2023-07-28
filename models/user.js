@@ -2,6 +2,8 @@ const { Schema, model } = require("mongoose");
 
 const Joi = require("joi");
 
+const handleMongooseError = require('../utils/handleMongooseError');
+
 const userSchema = Schema(
   {
     password: {
@@ -29,6 +31,8 @@ const userSchema = Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
+userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
