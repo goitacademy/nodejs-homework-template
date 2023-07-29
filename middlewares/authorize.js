@@ -1,10 +1,12 @@
-const {Users} = require("../db/contactsModel");
+const {Users} = require("../db/usersModel");
 const jwt = require("jsonwebtoken");
 const {Unauthorized} = require("http-errors");
+const {JWT_SECRET} = process.env;
 
 const authorize = async ( req, res, next) => {
     try{
         const {authorization} = req.headers;
+        
         if (!authorization) {
             throw new Unauthorized(" Now authorized");
         }

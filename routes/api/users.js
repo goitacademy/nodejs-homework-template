@@ -6,6 +6,9 @@ const {
     catchErrors,
 } = require("../../middlewares/catchErrors");
 const {postAuthValidation} = require("../../middlewares/validationBody");
+
+
+
 const router = express.Router();
 
 const {
@@ -61,5 +64,6 @@ router.get(
         res.status(200).send(user);
     })
 );
+
 module.exports = router;
 
