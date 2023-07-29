@@ -14,6 +14,14 @@ authRouter.post(
   authCtrl.registerUser
 );
 
+authRouter.get("/verify/:verificationToken", authCtrl.verifyEmail);
+
+authRouter.post(
+  "/verify",
+  validateBody(userJoiSchemas.verificationSchema),
+  authCtrl.resendVerifyEmail
+);
+
 authRouter.post(
   "/login",
   validateBody(userJoiSchemas.loginSchema),

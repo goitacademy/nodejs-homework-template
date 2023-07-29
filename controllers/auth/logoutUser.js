@@ -1,4 +1,3 @@
-const { ctrlWrapper } = require("../../helpers");
 const {
   userModel: { User },
 } = require("../../models");
@@ -10,4 +9,4 @@ const logoutUser = async (req, res) => {
   res.json({ message: "Logout success" });
 };
 
-module.exports = { logoutUser: ctrlWrapper(logoutUser) };
+module.exports = logoutUser;

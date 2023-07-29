@@ -1,7 +1,7 @@
 const {
   contactsModel: { Contact },
 } = require("../../models");
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { HttpError } = require("../../helpers");
 
 const updateFavoriteContact = async (req, res) => {
   const isReqBody = Object.keys(req.body).length !== 0;
@@ -18,4 +18,4 @@ const updateFavoriteContact = async (req, res) => {
   return res.json(result);
 };
 
-module.exports = { updateFavoriteContact: ctrlWrapper(updateFavoriteContact) };
+module.exports = updateFavoriteContact;

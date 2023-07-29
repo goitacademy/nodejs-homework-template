@@ -4,7 +4,7 @@ require("dotenv").config();
 const {
   userModel: { User },
 } = require("../../models");
-const { ctrlWrapper, HttpError } = require("../../helpers");
+const { HttpError } = require("../../helpers");
 const { SECRET_KEY } = process.env;
 
 const loginUser = async (req, res) => {
@@ -12,6 +12,10 @@ const loginUser = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is invalid");
+  }
+
+  if (!user.verify) {
+    throw HttpError(401, "Email is not verified");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -26,4 +30,4 @@ const loginUser = async (req, res) => {
   res.json({ token });
 };
 
-module.exports = { loginUser: ctrlWrapper(loginUser) };
+module.exports = loginUser;

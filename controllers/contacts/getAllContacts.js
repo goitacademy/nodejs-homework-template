@@ -1,7 +1,6 @@
 const {
   contactsModel: { Contact },
 } = require("../../models");
-const { ctrlWrapper } = require("../../helpers");
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -26,4 +25,4 @@ const getAllContacts = async (req, res) => {
   res.json({ result, page, limit });
 };
 
-module.exports = { getAllContacts: ctrlWrapper(getAllContacts) };
+module.exports = getAllContacts;

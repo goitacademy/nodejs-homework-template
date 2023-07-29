@@ -1,7 +1,7 @@
 const {
   contactsModel: { Contact },
 } = require("../../models");
-const { HttpError, ctrlWrapper } = require("../../helpers");
+const { HttpError } = require("../../helpers");
 
 const updateContactById = async (req, res) => {
   const isReqBody = Object.keys(req.body).length !== 0;
@@ -18,4 +18,4 @@ const updateContactById = async (req, res) => {
   return res.json(result);
 };
 
-module.exports = { updateContactById: ctrlWrapper(updateContactById) };
+module.exports = updateContactById;

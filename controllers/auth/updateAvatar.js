@@ -3,7 +3,7 @@ const fs = require("fs/promises");
 const {
   userModel: { User },
 } = require("../../models");
-const { ctrlWrapper, jimpAvatar } = require("../../helpers");
+const { jimpAvatar } = require("../../helpers");
 
 const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
 
@@ -24,4 +24,4 @@ const updateAvatar = async (req, res) => {
   res.json({ avatarURL });
 };
 
-module.exports = { updateAvatar: ctrlWrapper(updateAvatar) };
+module.exports = updateAvatar;
