@@ -1,6 +1,6 @@
-import Contact from "../models/contact.js";
+import { Contact } from '../models/index.js';
 import { HttpError } from '../helpters/index.js';
-import { contactsAddSchema, contactsFavoriteSchema } from "../schemas/joi.js";
+import { contactsAddSchema, contactsFavoriteSchema } from "../schemas/contactsSchema.js";
 
 export const listContacts = async (req, res, next) => {
   try {
