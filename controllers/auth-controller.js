@@ -32,12 +32,12 @@ const login = async(req, res)=> {
     const {email, password} = req.body;
     const user = await User.findOne({email});
     if(!user) {
-        throw HttpError(401, "email or password invalid");
+        throw HttpError(401, "email or password is wrong");
     }
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if(!passwordCompare) {
-        throw HttpError(401, "email or password invalid");
+        throw HttpError(401, "email or password is wrong");
     }
 
     const payload = {
@@ -69,9 +69,7 @@ const logout = async(req, res) => {
     const {_id} = req.user;
     await User.findByIdAndUpdate(_id, {token: ""});
     
-    res.status(204).json({
-        message: "Logout successful"
-    })
+    res.status(204);
 }
 
 export default {

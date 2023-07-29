@@ -1,6 +1,6 @@
 import express from "express";
 
-import authController from "../../controllers/auth-controller.js";
+import {authController} from '../../controllers/index.js';
 
 import usersSchemas from "../../schemas/users-schemas.js";
 
