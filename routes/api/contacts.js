@@ -4,6 +4,7 @@ const { contactJoiSchema, statusJoiSchema } = require('../../models/contact')
 const {validation, ctrlWrapper, validationBody, validationStatusBody, isValid, authenticate} = require("../../middlewares")
 
 
+
 const {
   getListContacts,
   getOneContactById,
@@ -27,6 +28,7 @@ router.delete("/:id", authenticate, isValid, ctrlWrapper(removeContactById));
 router.put("/:id", authenticate, isValid, validationBody(contactJoiSchema), validation(contactJoiSchema), ctrlWrapper(updateOneContact))
 
 router.patch("/:id/favorite", authenticate, isValid, validationStatusBody(statusJoiSchema), ctrlWrapper(updateStatusContact))
+
 
 
 

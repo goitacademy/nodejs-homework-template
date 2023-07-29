@@ -16,7 +16,7 @@ const contactSchema = Schema ({
     },
     favorite: {
       type: Boolean,
-      enum: favoriteList,
+     enum: favoriteList,
       default: false,
   },
     owner: {
@@ -50,3 +50,6 @@ module.exports = {
     contactJoiSchema,
     statusJoiSchema,
 }
+
+
+

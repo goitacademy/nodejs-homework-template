@@ -24,3 +24,4 @@ module.exports = {
   logout,
   updateSubscriptionUser,
 };
+
