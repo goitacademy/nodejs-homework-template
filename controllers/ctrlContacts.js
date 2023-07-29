@@ -7,7 +7,8 @@ const { ctrlWrapper, HttpError } = require('../utils');
  * @param {*} res
  */
 const listContacts = async (req, res) => {
-  const result = await ContactModel.find();
+  const { _id: owner } = req.user;
+  const result = await ContactModel.find({ owner }, '-createdAt -updatedAt -owner');
 
   res.status(200).json(result);
 };
@@ -19,7 +20,10 @@ const listContacts = async (req, res) => {
  */
 
 const addContact = async (req, res) => {
-  const result = await ContactModel.create(req.body);
+  // const result = await ContactModel.create(req.body);
+
+  const { _id: owner } = req.user;
+  const result = await ContactModel.create({ ...req.body, owner });
 
   res.status(201).json(result);
 };
