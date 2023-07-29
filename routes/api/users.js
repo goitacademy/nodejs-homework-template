@@ -7,8 +7,10 @@ const {
 	current,
 	updateSubscription,
 	avatars,
+	verify,
+	resetVerify,
 } = require('../../controllers/users');
-const { usersSchema, updateStatusSchema } = require('../../schemas/usersSchema');
+const { usersSchema, updateStatusSchema, resetVerifySchema } = require('../../schemas/usersSchema');
 const { auth, upload, updateImg } = require('../../middlewares');
 
 const router = express.Router();
@@ -30,5 +32,7 @@ router.patch(
 	controllerWrapper(updateImg),
 	controllerWrapper(avatars)
 );
+router.get('/verify/:verificationToken', controllerWrapper(verify));
+router.post('/verify', validateBody(resetVerifySchema), controllerWrapper(resetVerify));
 
 module.exports = router;

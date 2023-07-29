@@ -22,4 +22,14 @@ const updateStatusSchema = Joi.object({
 	}),
 });
 
-module.exports = { usersSchema, updateStatusSchema };
+const resetVerifySchema = Joi.object({
+	email: Joi.string()
+		.email({ tlds: { allow: false } })
+		.required()
+		.messages({
+			'string.email': 'Please enter a valid email address',
+			'any.required': 'Email is required',
+		}),
+});
+
+module.exports = { usersSchema, updateStatusSchema, resetVerifySchema };
