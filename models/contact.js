@@ -9,6 +9,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      default: "",
     },
     phone: {
       type: String,
@@ -16,6 +17,10 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false, timestamps: true }
@@ -25,7 +30,7 @@ const Contact = model("contact", contactSchema);
 
 const addShema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().optional().allow(""),
   phone: Joi.string().required(),
 });
 
