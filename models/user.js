@@ -28,6 +28,7 @@ const schemaDBUserValidator = new Schema(
       ],
       default: STATUS_SUBSCRIPTION.STARTER,
     },
+    avatarURL: String,
     token: { type: String, default: "" },
   },
   { timestamps: true, versionKey: false }
