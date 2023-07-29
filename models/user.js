@@ -31,7 +31,7 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
-
+// в
 userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
