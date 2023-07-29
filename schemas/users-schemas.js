@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const emailRegexp = require("../constants/user-constants")
 
-const userSignUpSchema = Joi.object({
+const userSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).messages({
     "any.required": "missing required email field",
   }),
@@ -11,6 +11,7 @@ const userSignUpSchema = Joi.object({
   }),
 });
 
+
 module.exports = {
-	userSignUpSchema,
+	userSchema,
 };
