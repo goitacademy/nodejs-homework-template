@@ -1,25 +1,72 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsFunc = require("../../models/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  const list = await contactsFunc.listContacts();
+  console.log("Contacts:");
+  console.table(list);
+  res.status(200).json(list);
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const contact = await contactsFunc.getContactById(req.params.contactId);
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  res.status(200).json(contact);
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  const { name, email, phone } = req.body;
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  if (!name || !email || !phone) {
+    return res.status(400).json({
+      message: "missing required name - field",
+    });
+  }
 
-module.exports = router
+  const newContact = contactsFunc.addContact(req.body);
+
+  res.status(201).json(newContact);
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+
+  const contacts = await contactsFunc.listContacts();
+  const newContacts = await contactsFunc.removeContact(String(contactId));
+
+  if (newContacts.length === contacts.length) {
+    return res.status(404).json({
+      message: "Not found",
+    });
+  }
+
+  res.status(200).json({
+    message: `contact deleted`,
+  });
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+  if (!name && !email && !phone) {
+    return res.status(400).json({ message: "missing fields" });
+  }
+  const updateContact = await contactsFunc.updateContact(contactId, req.body);
+
+  if (updateContact.message === "validationError") {
+    return res
+      .status(404)
+      .json({ message: "validation failed, " + updateContact.err.message });
+  }
+  if (!updateContact) {
+    return res.status(404).json({ message: "not found" });
+  }
+  return res.status(200).json({ message: "contact updated" });
+});
+
+module.exports = router;
