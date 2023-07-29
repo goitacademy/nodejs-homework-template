@@ -18,8 +18,14 @@ const contactsSchema = new Schema(  {
     favorite: {
       type: Boolean,
       default: false,
-    },
-})
+  },
+    
+},
+  {
+  // timestamps: true,
+versionKey: false
+}
+)
   
 contactsSchema.post("save", handleMongooseError);
 
