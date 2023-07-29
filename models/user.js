@@ -4,19 +4,21 @@ const emailRegexp = require("../constants/user-constants");
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: [true, "Set name"],
-    },
     email: {
       type: String,
 			required: [true, "Set email"],
-			match: emailRegexp,
+			unique: true,
+      match: emailRegexp,
     },
     password: {
       type: String,
-			required: [true, "Set password"],
-			minlength: 6,
+      required: [true, "Set password"],
+      minlength: 6,
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
     },
   },
   { versionKey: false, timestamps: true }
