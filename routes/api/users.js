@@ -1,8 +1,15 @@
 const express = require('express');
 const { controllerWrapper, validateBody } = require('../../helpers');
-const { register, login, logout, current, updateSubscription } = require('../../controllers/users');
+const {
+	register,
+	login,
+	logout,
+	current,
+	updateSubscription,
+	avatars,
+} = require('../../controllers/users');
 const { usersSchema, updateStatusSchema } = require('../../schemas/usersSchema');
-const { auth } = require('../../middlewares');
+const { auth, upload, updateImg } = require('../../middlewares');
 
 const router = express.Router();
 
@@ -15,6 +22,13 @@ router.patch(
 	controllerWrapper(auth),
 	validateBody(updateStatusSchema),
 	controllerWrapper(updateSubscription)
+);
+router.patch(
+	'/avatars',
+	controllerWrapper(auth),
+	upload.single('image'),
+	controllerWrapper(updateImg),
+	controllerWrapper(avatars)
 );
 
 module.exports = router;

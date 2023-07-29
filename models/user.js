@@ -18,7 +18,7 @@ const schema = new Schema({
 		enum: ['starter', 'pro', 'business'],
 		default: 'starter',
 	},
-
+	avatarURL: String,
 	token: String,
 });
 
