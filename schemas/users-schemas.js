@@ -11,7 +11,7 @@ const userRegisterSchema = Joi.object({
     .messages({ 'any.required': `missing required password field` }),
 });
 
-const userSigninSchema = Joi.object({
+const userLoginSchema = Joi.object({
   email: Joi.string()
     .required()
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
@@ -24,5 +24,5 @@ const userSigninSchema = Joi.object({
 
 export default {
   userRegisterSchema,
-  userSigninSchema,
+  userLoginSchema,
 };
