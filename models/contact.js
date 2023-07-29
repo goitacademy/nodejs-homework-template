@@ -1,6 +1,8 @@
 const {Schema, model} = require("mongoose")
 const Joi = require("joi")
 
+const favoriteList = [true, false];
+
 const contactSchema = Schema ({
     name: {
       type:String,
@@ -14,9 +16,13 @@ const contactSchema = Schema ({
     },
     favorite: {
       type: Boolean,
-      enum: [true, false],
+     enum: favoriteList,
       default: false,
-    },
+  },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
 }, { versionKey: false, timestamps: true })
 
 
@@ -33,7 +39,7 @@ const contactJoiSchema = Joi.object({
 })
 
 const statusJoiSchema = Joi.object({
-    favorite: Joi.boolean().required(),
+    favorite: Joi.boolean().valid(...favoriteList).required(),
   })
 
 

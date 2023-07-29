@@ -2,12 +2,12 @@ const validationStatusBody = (schema) => {
   return (req, res, next) => {
     const { error, value } = schema.validate(req.body)
 
-    if (value.favorite === null || error) {
+    if (error) {
       error.status = 400;
       error.message = `${error.message.replace(
         /"/g,
         ""
-      )}, please, set true or false`;
+      )}`;
       next(error)
     }
 
@@ -20,5 +20,6 @@ const validationStatusBody = (schema) => {
     next()
   }
 }
+
 
 module.exports = validationStatusBody
