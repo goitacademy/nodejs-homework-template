@@ -9,28 +9,24 @@ const authenticate = async (req, res, next) => {
   const { authorization = '' } = req.headers;
   const [bearer, token] = authorization.split(' ');
 
-  console.log('bearer--------->', bearer);
-
   if (bearer !== 'Bearer') {
-    next(HttpError(401, 'Not authorized --->bearer'));
+    next(HttpError(401, 'Not authorized'));
   }
 
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
-    console.log('id--------->>>>>>>>', id);
 
     const user = await UserModel.findById(id);
-    console.log('user------->>>>>>', user);
 
-    if (!user) {
-      next(HttpError(401, 'Not authorized -->>user'));
+    if (!user || !user.token || user.token !== token) {
+      next(HttpError(401, 'Not authorized'));
     }
 
     req.user = user._id;
 
     next();
   } catch (error) {
-    next(HttpError(401, 'Not authorized --->>error'));
+    next(HttpError(401, 'Not authorized'));
   }
 };
 
