@@ -24,10 +24,10 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: { String },
-    // avataURL: {
-    //   type: String,
-    //   required: [true, "Set avatar for user"],
-    // },
+    avatarURL: {
+      type: String,
+      // required: [true, "Set avatar for user"],
+    },
   },
   { versionKey: false, timeseries: true }
 );

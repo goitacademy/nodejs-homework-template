@@ -3,13 +3,14 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const gravatar = require("gravatar");
+const path = require("path");
+const { ctrlWrapper } = require("../utils/ctrlWrapper");
+const { HttpError } = require("../utils");
+const fs = require("fs/promises");
 
 const { SECRET_KEY } = process.env;
 
-const { HttpError } = require("../utils");
-const { ctrlWrapper } = require("../utils/ctrlWrapper");
-
-// console.log(process.env);
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -24,11 +25,11 @@ const register = async (req, res, next) => {
   const avatarURL = gravatar.url(email);
 
   console.log(avatarURL);
-  
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarURL,
+    avatarURL: avatarURL,
   });
 
   console.log(newUser);
@@ -37,6 +38,7 @@ const register = async (req, res, next) => {
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      // avatarURL: newUser.avatarURL,
     },
   });
 };
@@ -93,9 +95,34 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateUserAvatar = async (req, res) => {
+  const { _id } = req.user;
+  // Берем временный путь
+  const { path: tempUpload, originalname } = req.file;
+  // Добовляем Id к имени файла 
+  const fileName = `${_id}${originalname}`;
+  // Создаем новый путь, где должны быть данные
+  const resultUpload = path.join(avatarsDir, fileName);
+  // Перемещаем данные
+  await fs.rename(tempUpload, resultUpload);
+  // Записываем новый путь в БЗ
+  const avatarURL = path.join("avatars", fileName);
+  
+  // console.log(`req.file: ${JSON.stringify(req.file)}`);
+  // console.log(`tempUpload: ${tempUpload}`);
+  // console.log(`originalname: ${originalname}`);
+  // console.log(`resultUpload: ${resultUpload}`);
+  // await User.findById(_id, { avatarURL });
+
+  res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateUserAvatar: ctrlWrapper(updateUserAvatar),
 };
