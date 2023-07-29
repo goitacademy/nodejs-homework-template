@@ -1,15 +1,16 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../helpers");
+const { handleMongooseError } = require("../../helpers");
 
 const Joi = require("joi");
 
-const genreList = [true, "Andriy", "Mikha", "Orest, Ostap"];
+// const genreList = [true, "Andriy, Mikha, Orest, Ostap, Ivan, Sofia, Eva, Anita"];
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: genreList,
+      required: true,
+      // для валідації name required: genreList,
     },
     email: {
       type: String,
@@ -21,6 +22,11 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -29,10 +35,9 @@ contactSchema.post("save", handleMongooseError);
 
 // Data validation ==========================================
 
+// для валідації name .valid(...genreList)
 const createContactSchema = Joi.object({
-  name: Joi.string()
-    .valid(...genreList)
-    .required(),
+  name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string()
     .pattern(
