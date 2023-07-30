@@ -22,7 +22,7 @@ const authenticate = async (req, res, next) => {
       next(HttpError(401, 'Not authorized'));
     }
 
-    req.user = user._id;
+    req.user = user;
 
     next();
   } catch (error) {
