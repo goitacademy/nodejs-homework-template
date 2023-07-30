@@ -2,11 +2,13 @@ const express = require("express");
 const contactsRouter = express.Router();
 
 const ctrl = require("../../controllers/contacts/contacts-controllers");
-const { validation, isValidId, isAmptyBody } = require("../../middlewares");
+const { validation, isValidId, isAmptyBody, authenticate } = require("../../middlewares");
 const { contactsSchema, updStatusSchema } = require("../../schemas");
 
 const validateMiddleWare = validation(contactsSchema);
 const validateStatus = validation(updStatusSchema);
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", ctrl.getAll);
 
