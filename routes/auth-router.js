@@ -3,6 +3,7 @@ import express from 'express';
 import authController from '../controllers/auth-controller.js';
 import { validateBody } from '../decorators/index.js';
 import usersSchemas from '../schemas/users-schemas.js';
+import { authenticate } from '../middlewares/index.js';
 
 const authRouter = express.Router();
 
@@ -17,5 +18,7 @@ authRouter.post(
   validateBody(usersSchemas.userLoginSchema),
   authController.login
 );
+
+authRouter.get('/current', authenticate, authController.getCurrent);
 
 export default authRouter;
