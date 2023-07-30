@@ -24,11 +24,11 @@ const authenticate = async (req, res, next) => {
 
     if (!user) throw HttpError(401, "Not authorized");
 
+    req.user = user;
     next();
   } catch (error) {
     throw HttpError(401, "Not authorized");
   }
 };
-
 
 module.exports = ctrlWrapper(authenticate);
