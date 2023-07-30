@@ -3,8 +3,7 @@ import contactsService from "../../models/contacts.js";
 import { contactAddSchema } from "../../schemas/index.js";
 import { HttpError, contactDecorator } from "../../helpers/index.js";
 
-const router = express.Router();
-
+export const router = express.Router();
 
 export const getAllContacts = async (req, res) => {
     const result = await contactsService.listContacts();
@@ -57,14 +56,13 @@ export const updateContact = async (req, res) => {
 
   router.get("/:contactId", getContactById);
   
-  router.post("/", contactAddSchema, addNewContact);
+  router.post("/", addNewContact);
   
   router.delete("/:contactId", deleteContact);
   
   router.put(
     "/:contactId",
-    contactAddSchema,
-    updateContact
+      updateContact
   );
 
 export default {
