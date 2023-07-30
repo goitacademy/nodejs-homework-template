@@ -3,34 +3,40 @@ import express from 'express';
 import contactsController from '../../controllers/contacts-controller.js';
 import contactsSchema from '../../schemas/contacts-schemas.js';
 import { validateBody } from '../../decorators/index.js';
-import { isValidId } from '../../middlewars/index.js';
+import { isValidId, authenticate } from '../../middlewars/index.js';
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get('/', contactsController.getContactsList);
+contactsRouter.use(authenticate);
 
-router.get('/:contactId', isValidId, contactsController.getContactById);
+contactsRouter.get('/', contactsController.getContactsList);
 
-router.post(
+contactsRouter.get('/:contactId', isValidId, contactsController.getContactById);
+
+contactsRouter.post(
   '/',
   validateBody(contactsSchema.contactsAddSchema),
   contactsController.addNewContact
 );
 
-router.delete('/:contactId', isValidId, contactsController.deleteContactById);
+contactsRouter.delete(
+  '/:contactId',
+  isValidId,
+  contactsController.deleteContactById
+);
 
-router.put(
+contactsRouter.put(
   '/:contactId',
   isValidId,
   validateBody(contactsSchema.contactsAddSchema),
   contactsController.updateContactById
 );
 
-router.patch(
+contactsRouter.patch(
   '/:contactId/favorite',
   isValidId,
   validateBody(contactsSchema.contactUpdateFavoriteSchema),
   contactsController.updateStatusContact
 );
 
-export default router;
+export default contactsRouter;
