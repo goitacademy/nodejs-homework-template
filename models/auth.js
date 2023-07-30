@@ -1,12 +1,14 @@
 const User  = require('./user');
+const fs = require("fs/promises");
 const bcrypt = require('bcrypt')
 const registerSchema = require("../routes/api/registerSchema");
 const loginSchema = require("../routes/api/loginSchema");
-const jwt = require('jsonwebtoken')
-const {SECRET_KEY} = process.env
-
-
-
+const jwt = require('jsonwebtoken');
+const {SECRET_KEY} = process.env;
+const gravatar = require("gravatar");
+const path = require("path");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const Jimp  =require("jimp");
 const register = async (userData) => {
   const { name, email, password } = userData;
 
@@ -22,7 +24,9 @@ const register = async (userData) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ name, email, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({ name, email, password: hashPassword ,avatarURL });
+ 
 
   return {
     email: newUser.email,
@@ -88,10 +92,36 @@ res.json(
   {email,
   name,}
 )
-}
+};
+
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+
+  try {
+    const avatar = await Jimp.read(tempUpload);
+    await avatar.cover(250, 250).writeAsync(tempUpload);
+
+    const uniqueFilename = `${Date.now()}-${originalname}`;
+    const resultUpload = path.join(avatarsDir, uniqueFilename);
+
+    await fs.rename(tempUpload, resultUpload);
+
+    const avatarURL = `/avatars/${uniqueFilename}`;
+
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    
+    res.status(200).json({ avatarURL });
+  } catch (err) {
+    console.error(err);
+   
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
   module.exports = { register,
-login, logout, current};
+login, logout, current, updateAvatar};
 
 
 

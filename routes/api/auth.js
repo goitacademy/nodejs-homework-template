@@ -1,10 +1,10 @@
 const express = require('express')
 
-const {register, login, logout, current} =  require('../../models/auth')
+const {register, login, logout, current, updateAvatar} =  require('../../models/auth')
 const router = express.Router()
 
-const {authenticate} = require('../../middleware/authenticate')
-
+const {authenticate, } = require('../../middleware/authenticate')
+const {upload, } = require('../../middleware/upload')
 
 router.post('/users/register', async (req, res, next) => {
   try {
@@ -27,10 +27,9 @@ router.post('/users/register', async (req, res, next) => {
 
    router.post('/users/logout', logout);
 
+   router.post('/users/current', authenticate, current);
 
-   
-
-   router.post('/users/current', authenticate, current)
+   router.patch('/users/avatars', authenticate, upload.single("avatar"), updateAvatar )
     
 
 module.exports = router
