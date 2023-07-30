@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  res.json({ message: 'Home work in process' })
 })
 
 router.get('/:contactId', async (req, res, next) => {
