@@ -8,7 +8,8 @@ const { SECRET_KEY } = process.env;
 
 // signin
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password} = req.body;
+  console.log(res.body);
 
   const user = await User.findOne({email});
   if (!user) {
@@ -24,10 +25,11 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
-  await User.findByIdAndUpdate(user._id, {token})
+  await User.findByIdAndUpdate(user._id, {token});
   
   res.json({
     token: token,
+    subscription: user.subscription
   });
   // const decodeToken = jwt.decode(token);
   // console.log(decodeToken);
