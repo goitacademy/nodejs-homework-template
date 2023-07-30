@@ -1,14 +1,29 @@
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 const { JWT_SECRET } = process.env;
 
-const HttpError = require("../helpers")
-const ctrlWrapper = require("../decorators")
+const { HttpError } = require("../helpers");
+const ctrlWrapper = require("../decorators");
 
-const authenticate = async (req, res) => {
-	const { autorization } = req.headers;
-	const [bearer, token] = autorization.split(" ");
+const User = require("../models/user");
 
-	if(bearer !== "Bearer") throw HttpError(401)
+const authenticate = async (req, res, next) => {
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
+
+  if (bearer !== "Bearer") throw HttpError(401, "Unauthorized");
+
+  try {
+    const { id } = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(id);
+
+    if (!user) throw HttpError(401, "Unauthorized");
+
+    next();
+  } catch (error) {
+    throw HttpError(401, "Unauthorized");
+  }
 };
 
 module.exports = ctrlWrapper(authenticate);

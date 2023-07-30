@@ -20,10 +20,6 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: {
-      type: String,
-      default: null,
-    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -35,6 +31,5 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 userSchema.post("save", handleSaveError);
 
 const User = model("user", userSchema);
-
 
 module.exports = User;
