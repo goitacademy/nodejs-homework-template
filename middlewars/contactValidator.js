@@ -1,7 +1,7 @@
 import HttpError from "../helpers/HttpError.js";
-import contactsSchema from "./contactsValidateSchema.js";
+import contactsSchema from "../schemas/contactsSchema.js";
 
-const dataValidate = (req, res, next) => {
+const contactValidator = (req, res, next) => {
   const { error } = contactsSchema.validate(req.body);
    if (error) {
       if (error.details[0].type === "any.required") {
@@ -13,4 +13,4 @@ const dataValidate = (req, res, next) => {
   next();
 }  
 
-export default dataValidate;
+export default contactValidator;

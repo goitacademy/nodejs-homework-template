@@ -1,10 +1,12 @@
 import HttpError from "../helpers/HttpError.js";
-// import contactsService from '../models/contacts.js';
 import Contact from "../models/contacts.js";
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit; 
+    const result = await Contact.find({ owner }, {}, { skip, limit });
     res.json(result);
   }
   catch (error) {
@@ -27,8 +29,10 @@ const getById = async (req, res, next) => {
 }
 
 const add = async (req, res, next) => {
+  const { _id: owner } = req.user;
+  
   try {
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
   }
   catch (error) {
@@ -39,7 +43,9 @@ const add = async (req, res, next) => {
 const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    console.log(contactId)
     const result = await Contact.findByIdAndRemove(contactId);
+    console.log(result)
     if (!result) {
       throw HttpError(404, "Not found");
     }
