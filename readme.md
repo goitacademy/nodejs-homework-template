@@ -1,3 +1,5 @@
-## це вірний пул рекв. до 2 дз
+## node-js rest api
 
-https://github.com/Anasurim/nodejs-rest-api/pull/1
+- express
+- mongo db
+- mongoose
