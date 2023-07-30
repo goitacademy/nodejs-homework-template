@@ -5,8 +5,17 @@ const { Contact } = require('../models/Contact')
 const { contactSchema, updateFavoriteSchema } = require('../schemas/index')
 
 const getContacts = async (req, res, next) => {
+  const { _id: owner } = req.user
+  //  пишем значение по умолчанию
+  const { page = 1, limit = 10 } = req.query
+  // получаем значение сколько пропустить skip
+  const skip = (page - 1) * limit
   try {
-    const result = await Contact.find()
+    // получаем только контакты добавленные пользователем await Contact.find({owner})
+    const result = await Contact.find({ owner }, '-createdAt -updatedAt', {
+      skip,
+      limit
+    }).populate('owner')
     res.json(result)
   } catch (error) {
     next(error)
@@ -27,6 +36,8 @@ const getContact = async (req, res, next) => {
 }
 
 const addNewContact = async (req, res) => {
+  // для записи каждого созданого контакта закрепляем owner
+  const { _id: owner } = req.user
   try {
     const { error } = contactSchema.validate(req.body)
     if (error) {
@@ -45,7 +56,9 @@ const addNewContact = async (req, res) => {
         .status(400)
         .json({ message: `missing required ${missingField} field` })
     }
-    const newContact = await Contact.create(req.body)
+
+    // распыляем обьект и добавляем новое значение owner
+    const newContact = await Contact.create({ ...req.body, owner })
 
     res.status(201).json(newContact)
   } catch (error) {
