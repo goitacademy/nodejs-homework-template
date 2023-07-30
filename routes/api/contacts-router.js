@@ -1,26 +1,41 @@
 import express from "express";
 
-import controllers from "../../controllers/contacts-controllers.js";
+import { ctrlWrapper } from "../../decorators/index.js";
 
-import { isValidId, isEmptyBody } from "../../middlewars/index.js";
+import {
+  getAll,
+  getById,
+  add,
+  updateById,
+  deleteById,
+  updateFavorite,
+} from "../../controllers/contacts-controllers/index.js";
+
+import {
+  isValidId,
+  isEmptyBody,
+  authenticate,
+} from "../../middlewars/index.js";
 
 const router = express.Router();
 
-router.get("/", controllers.getAll);
+router.use(authenticate);
 
-router.get("/:contactId", isValidId, controllers.getById);
+router.get("/", ctrlWrapper(getAll));
 
-router.post("/", isEmptyBody, controllers.add);
+router.get("/:contactId", isValidId, ctrlWrapper(getById));
 
-router.put("/:contactId", isValidId, isEmptyBody, controllers.updateById);
+router.post("/", isEmptyBody, ctrlWrapper(add));
+
+router.put("/:contactId", isValidId, isEmptyBody, ctrlWrapper(updateById));
 
 router.patch(
   "/:contactId/favorite",
   isValidId,
   isEmptyBody,
-  controllers.updateFavorite
+  ctrlWrapper(updateFavorite)
 );
 
-router.delete("/:contactId", isValidId, controllers.deleteById);
+router.delete("/:contactId", isValidId, ctrlWrapper(deleteById));
 
 export default router;
