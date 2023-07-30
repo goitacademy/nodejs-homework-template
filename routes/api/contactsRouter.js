@@ -1,13 +1,19 @@
 import express from 'express';
-import { controller } from '../../controllers/contacts/index.js';
+import { contactsController as controller } from '../../controllers/index.js';
 
 import { validateBody } from '../../decorators/index.js';
-import { schemas } from '../../schemas/index.js';
-import { isBodyEmpty, isValidId } from '../../middleware/index.js';
+import { contactsSchemas as schemas } from '../../schemas/index.js';
+import {
+  authenticate,
+  isBodyEmpty,
+  isValidId,
+} from '../../middleware/index.js';
 
 // ####################################################
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate); // for all
 
 contactsRouter.get('/', controller.getAll);
 
