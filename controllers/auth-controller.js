@@ -40,6 +40,7 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token,
@@ -47,13 +48,35 @@ const login = async (req, res) => {
   });
 };
 
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: '' });
+
+  res.status(204).json({});
+};
+
 const getCurrent = (req, res) => {
   const { email, subscription } = req.user;
   res.json({ email, subscription });
 };
 
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  console.log(_id);
+  console.log(req.body);
+  const result = await User.findByIdAndUpdate(_id, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404);
+  }
+  res.json(result);
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };

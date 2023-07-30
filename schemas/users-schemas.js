@@ -22,7 +22,12 @@ const userLoginSchema = Joi.object({
     .messages({ 'any.required': `missing required password field` }),
 });
 
+const userSubscriptionSchema = Joi.object({
+  subscription: Joi.string().required(),
+});
+
 export default {
   userRegisterSchema,
   userLoginSchema,
+  userSubscriptionSchema,
 };
