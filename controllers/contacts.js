@@ -1,10 +1,10 @@
-const contacts = require("../models/contacts");
+const Contact = require("../models/contact");
 
 const { HttpError } = require("../helpers");
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -14,7 +14,7 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const result = await Contact.findById(id);
     if (!result) {
       throw HttpError(404, "Not Found");
     }
@@ -26,7 +26,7 @@ const getById = async (req, res, next) => {
 
 const post = async (req, res, next) => {
   try {
-    const result = await contacts.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -36,7 +36,7 @@ const post = async (req, res, next) => {
 const remove = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const result = await Contact.findByIdAndRemove(id);
     if (!result) {
       throw HttpError(404, "Not Found");
     }
@@ -49,7 +49,20 @@ const remove = async (req, res, next) => {
 const put = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.updateContact(id, req.body);
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    if (!result) {
+      throw HttpError(404, "Not Found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateFavorite = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     if (!result) {
       throw HttpError(404, "Not Found");
     }
@@ -65,4 +78,5 @@ module.exports = {
   post,
   remove,
   put,
+  updateFavorite,
 };
