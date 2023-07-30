@@ -1,6 +1,6 @@
 export const handleSaveError = (error, _, next) => {
-  const { status } = error;
-  status = 400;
+  const { status, name, code } = error;
+  status = code === 11000 && name === "MongoServerError" ? 409 : 400;
   next();
 };
 
