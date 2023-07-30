@@ -4,12 +4,17 @@ import { HttpError } from '../helpers/index.js';
 
 const getContactsList = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 5 } = req.query;
+  console.log(req.query);
+  const { page = 1, limit = 20, favorite = 'false' } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, '-createdAt -updatedAt', {
-    skip,
-    limit,
-  }).populate('owner');
+  const result = await Contact.find(
+    { owner, favorite },
+    '-createdAt -updatedAt',
+    {
+      skip,
+      limit,
+    }
+  ).populate('owner');
   res.json(result);
 };
 
