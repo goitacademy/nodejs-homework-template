@@ -2,15 +2,13 @@ import { Router } from 'express'
 
 import {validateBody} from '../../decorators/index.js';
 
-import {authenticate,isEmptyBody, isValidId} from '../../middlewares/index.js';
+import {isEmptyBody, isValidId} from '../../middlewares/index.js';
 
 import contactsSchema from '../../schemas/contacts-schemas.js';
 
 import {contactsController} from '../../controllers/index.js';
 
 const router = Router();
-
-router.use(authenticate);
 
 router.get('/', contactsController.getAll);
 
