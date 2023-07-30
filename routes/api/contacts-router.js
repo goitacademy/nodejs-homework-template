@@ -6,26 +6,29 @@ import {
   isEmptyBody,
   isEmptyFavorite,
   isValidId,
+  authenticate,
 } from '../../middlewares/index.js';
 
 import contactsSchemas from '../../schemas/contacts-schemas.js';
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get('/', contactsController.getAll);
+contactsRouter.use(authenticate);
 
-router.get('/:contactId', isValidId, contactsController.getById);
+contactsRouter.get('/', contactsController.getAll);
 
-router.post(
+contactsRouter.get('/:contactId', isValidId, contactsController.getById);
+
+contactsRouter.post(
   '/',
   isEmptyBody,
   validateBody(contactsSchemas.contactsAddSchema),
   contactsController.add
 );
 
-router.delete('/:contactId', isValidId, contactsController.deleteById);
+contactsRouter.delete('/:contactId', isValidId, contactsController.deleteById);
 
-router.put(
+contactsRouter.put(
   '/:contactId',
   isValidId,
   isEmptyBody,
@@ -33,7 +36,7 @@ router.put(
   contactsController.updateById
 );
 
-router.patch(
+contactsRouter.patch(
   '/:contactId/favorite',
   isValidId,
   isEmptyFavorite,
@@ -41,4 +44,4 @@ router.patch(
   contactsController.updateStatusContact
 );
 
-export default router;
+export default contactsRouter;
