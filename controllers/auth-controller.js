@@ -1,9 +1,12 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 import User from '../models/user.js';
 
 import { ctrlWrapper } from '../decorators/index.js';
 import { HttpError } from '../helpers/index.js';
+
+const { JWT_SECRET } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -37,7 +40,11 @@ const login = async (req, res) => {
     throw HttpError(401, errorMessage);
   }
 
-  const token = 'fdfsdfdgdgdgdvdvdvfdbdfbfdbdf';
+  const payload = {
+    id: searchedUser._id,
+  };
+
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '23h' });
 
   res.json({
     token: token,
