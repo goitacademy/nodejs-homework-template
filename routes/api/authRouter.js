@@ -2,6 +2,7 @@ import express from 'express';
 import { validateBody } from '../../decorators/index.js';
 import { usersSchemas as schemas } from '../../schemas/index.js';
 import { authController as controller } from '../../controllers/index.js';
+import { authenticate } from '../../middleware/index.js';
 
 // ####################################################
 
@@ -18,5 +19,9 @@ authRouter.post(
   validateBody(schemas.signinSchema),
   controller.signin
 );
+
+authRouter.get('/current', authenticate, controller.getCurrent);
+
+authRouter.post('/signout', authenticate, controller.signout);
 
 export default authRouter;

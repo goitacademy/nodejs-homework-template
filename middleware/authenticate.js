@@ -19,7 +19,7 @@ const authenticate = async (req, res, next) => {
     const { id } = payload;
 
     const user = await User.findById(id);
-    if (!user) throw HttpError(401);
+    if (!user || !user.token) throw HttpError(401);
 
     req.user = user;
 

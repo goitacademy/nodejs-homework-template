@@ -12,6 +12,7 @@ const authErrorMsg = 'Invalid email or password';
 
 // ####################################################
 
+// Create an account
 const signup = async (req, res) => {
   const { email, password } = req.body;
 
@@ -28,6 +29,7 @@ const signup = async (req, res) => {
   });
 };
 
+// Log in
 const signin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -41,16 +43,31 @@ const signin = async (req, res) => {
   const payload = { id: user._id };
   const secret = process.env.JWT_SECRET;
   const token = jwt.sign(payload, secret, { expiresIn: '23h' });
+  await User.findByIdAndUpdate(user.id, { token });
 
   res.json({ token });
 };
 
-// const signout = async (req, res) => {};
+// Log out
+const signout = async (req, res) => {
+  const { _id: id } = req.user;
+  await User.findByIdAndUpdate(id, { token: '' });
+
+  res.json({ message: 'Signed out successfully' });
+};
+
+// Check if user is logged in
+const getCurrent = (req, res) => {
+  const { name, email } = req.user;
+
+  res.json({ name, email });
+};
 
 // ####################################################
 
 export default {
   signup: controllerWrapper(signup),
   signin: controllerWrapper(signin),
-  // signout: controllerWrapper(signout),
+  signout: controllerWrapper(signout),
+  getCurrent: controllerWrapper(getCurrent),
 };
