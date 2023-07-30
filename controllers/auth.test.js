@@ -14,6 +14,7 @@ const desiredRes = {
   user: {
     email: expect.any(String),
     subscription: expect.any(String),
+    avatarURL: expect.any(String),
   },
 };
 
@@ -23,6 +24,6 @@ describe("test logIn function", () => {
       (req = { body: { email: "iryna@gmail.com", password: "1234" } }),
       (res = {})
     );
-    expect(result).toMatchSnapshot(desiredRes);
+    expect(result).toMatchObject(desiredRes);
   }, 1000000);
 });
