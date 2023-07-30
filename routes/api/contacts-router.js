@@ -1,74 +1,19 @@
 import express from "express";
-import contactsService from "../../models/contacts.js";
-import { contactAddSchema } from "../../schemas/index.js";
-import { HttpError, contactDecorator } from "../../helpers/index.js";
+import contactsControllers from "../../controllers/contactsControllers.js";
 
-export const router = express.Router();
+const router = express.Router();
 
-export const getAllContacts = async (req, res) => {
-    const result = await contactsService.listContacts();
-    res.json(result);
-  };
+router.get("/", contactsControllers.getAllContacts);
 
-export const getContactById = async (req, res) => {
-    const { contactId } = req.params;
-    const result = await contactsService.getContactById(contactId);
-    if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found`);
-    }
-    res.json(result);
-  };
+router.get("/:contactId", contactsControllers.getContactById);
 
-export const addNewContact = async (req, res) => {
-  const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await contactsService.addContact(req.body);
-    res.status(201).json(result);
-  };
-
-export const deleteContact = async (req, res) => {
-    const { contactId } = req.params;
-    const result = await contactsService.removeContact(contactId);
-    if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found`);
-    }
-    res.json({
-      message: "Delete successful",
-    });
-  };
-
-export const updateContact = async (req, res) => {
-   const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const { contactId } = req.params;
-    const result = await contactsService.updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found`);
-    }
-    req.json(result);
-  };
-
-  router.get("/", getAllContacts);
-
-  router.get("/:contactId", getContactById);
+router.post("/", contactsControllers.addNewContact);
   
-  router.post("/", addNewContact);
+router.delete("/:contactId", contactsControllers.deleteContact);
   
-  router.delete("/:contactId", deleteContact);
-  
-  router.put(
+router.put(
     "/:contactId",
-      updateContact
+    contactsControllers.updateContact
   );
 
-export default {
-  getAllContacts: contactDecorator(getAllContacts),
-  getContactById: contactDecorator(getContactById),
-  addNewContact: contactDecorator(addNewContact),
-  deleteContact: contactDecorator(deleteContact),
-  updateContact: contactDecorator(updateContact),
-};
+export default router;
