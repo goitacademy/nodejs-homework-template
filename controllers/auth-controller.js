@@ -62,8 +62,6 @@ const getCurrent = (req, res) => {
 
 const updateSubscription = async (req, res) => {
   const { _id } = req.user;
-  console.log(_id);
-  console.log(req.body);
   const result = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   });
