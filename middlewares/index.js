@@ -7,5 +7,5 @@ module.exports = {
 	validation,
 	isValidId,
 	isAmptyBody,
-	authenticate
+	authenticate,
 };
