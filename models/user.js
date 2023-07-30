@@ -46,6 +46,9 @@ const userSubscriptionValidator = Joi.object({
   subscription: Joi.valid(...Object.values(STATUS_SUBSCRIPTION)).required(),
 });
 
-const schemas = { userValidator, userSubscriptionValidator };
+const schemas = {
+  userValidator,
+  userSubscriptionValidator,
+};
 
 module.exports = { schemas, User };

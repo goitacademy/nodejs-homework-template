@@ -104,11 +104,16 @@ const updateUserAvatar = async (req, res) => {
   const { _id } = req.user._id;
   const { path: tmpUploadDir, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
-  const staticUploadDir = path.join(__dirname, "../", filename);
-
-  await fs.rename(tmpUploadDir, staticUploadDir, () =>
-    resizeFile(staticUploadDir)
+  const staticUploadDir = path.join(
+    __dirname,
+    "../",
+    "public",
+    "avatars",
+    filename
   );
+  await resizeFile(tmpUploadDir);
+
+  await fs.rename(tmpUploadDir, staticUploadDir);
 
   const avatarURL = path.join("avatars", filename);
 
