@@ -13,12 +13,14 @@ router.get("/", ctrlWrapper(ctrl.getAll));
 
 router.get("/:contactId", ctrlWrapper(ctrl.getById));
 
-router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.add));
+router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.updateById));
 
-// router.delete("/:contactId", );
+router.delete("/:contactId", ctrlWrapper(ctrl.removeById));
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put(
+  "/:contactId",
+  validateBody(schemas.addSchema),
+  ctrlWrapper(ctrl.updateById)
+);
 
 module.exports = router;
