@@ -22,6 +22,7 @@ const register = async (req, res, next) => {
   }
   // Хешируем пароль
   const hashPassword = await bcrypt.hash(password, 10);
+  
   const avatarURL = gravatar.url(email);
 
   console.log(avatarURL);
@@ -99,7 +100,7 @@ const updateUserAvatar = async (req, res) => {
   const { _id } = req.user;
   // Берем временный путь
   const { path: tempUpload, originalname } = req.file;
-  // Добовляем Id к имени файла 
+  // Добовляем Id к имени файла
   const fileName = `${_id}${originalname}`;
   // Создаем новый путь, где должны быть данные
   const resultUpload = path.join(avatarsDir, fileName);
@@ -107,7 +108,7 @@ const updateUserAvatar = async (req, res) => {
   await fs.rename(tempUpload, resultUpload);
   // Записываем новый путь в БЗ
   const avatarURL = path.join("avatars", fileName);
-  
+
   // console.log(`req.file: ${JSON.stringify(req.file)}`);
   // console.log(`tempUpload: ${tempUpload}`);
   // console.log(`originalname: ${originalname}`);
