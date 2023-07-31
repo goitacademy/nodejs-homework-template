@@ -2,10 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const  { handleSaveError, handleUpdateValidate } = require("./hooks");
 
-// const { requiredList } = require('../constants/contact-constants');
-
-// import { genreList, releaseDateRegexp } from "../constants/movie-constants.js";
-
 const contactSchema = new Schema({
     name: {
         type: String,
@@ -21,6 +17,11 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
       },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        // required: true,
+      }
 }, {versionKey: false, timestamps: true}
 );
 
