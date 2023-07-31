@@ -1,37 +1,19 @@
 const express = require('express')
 
-const contacts = require('../../models/contacts')
+
+const ctrl = require('../../controllers/books')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  const allContacts = await contacts.listContacts();
-  res.json(allContacts);
-})
 
-router.get('/:contactId', async (req, res, next) => {
-  const {contactId} = req.params;
+router.get('/', ctrl.getAll)
 
-  const contactByID = await contacts.getContactById(contactId);
-  res.json(contactByID)
- 
-})
+router.get('/:contactId', ctrl.getById )
 
-router.post('/', async (req, res, next) => {
-  const newContact = await contacts.addContact(req.body);
-  res.json(newContact)
-})
+router.post('/', ctrl.add)
 
-router.delete('/:contactId', async (req, res, next) => {
-  const {contactId} = req.params;
-  const removeContactById = await contacts.removeContact(contactId)
-  res.json(removeContactById)
-})
+router.put('/:contactId', ctrl.update)
 
-router.put('/:contactId', async (req, res, next) => {
-  const {contactId} = req.params;
-  const updateCont = await contacts.updateContact(contactId, req.body);
-  res.json(updateCont)
-})
+router.delete('/:contactId',ctrl.remove)
 
 module.exports = router

@@ -23,7 +23,6 @@ const removeContact = async (contactId) => {
 
   const [result] = allContacts.splice(index,1);
   await fs.writeFile(filePath, JSON.stringify(allContacts, null, 2))
-  console.log(result);
   return result;
 }
 
