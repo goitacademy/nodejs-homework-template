@@ -6,29 +6,32 @@ const {
 
 const {schemas} = require('../../models/user');
 
-const {register, login, logout, current} = require('../../services/userServices')
-
+const {registerNewUser,
+    logInUser,
+    logOutUser,
+    currentUser,
+    } = require('../../controllers/users')
 const router = express.Router();
 
 /**
  * REGISTRATION NEW USER
  */
-router.post('/register', validateData(schemas.registerSchema), register);
+router.post('/register', validateData(schemas.registerSchema), registerNewUser);
 
 /**
  * LOG IN USER
  */
-router.post('/login', validateData(schemas.loginSchema), login);
+router.post('/login', validateData(schemas.loginSchema), logInUser);
 
 /**
  * LOG OUT USER
  */
-router.post('/logout', authenticate, logout);
+router.post('/logout', authenticate, logOutUser);
 
 /**
  * GET DATA ABOUT CURRENT USER
  */
-router.get('/current', authenticate, current);
+router.get('/current', authenticate, currentUser);
 
 
 module.exports = router;

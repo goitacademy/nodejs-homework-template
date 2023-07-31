@@ -1,6 +1,7 @@
 const {getContactList} = require('./getContactList');
 
 const {getOneContact} = require('./getOneContact');
+const {ctrlWrapper} = require("../../utils");
 
 const {addNewContact} = require('./addNewContact');
 
@@ -10,7 +11,7 @@ const {updateContactById} = require('./updateContactById');
 
 const {updateStatusContact} = require ('./updateStatusContact');
 
-const {ctrlWrapper} = require("../../utils");
+
 
 module.exports = {
   getContactList: ctrlWrapper(getContactList),

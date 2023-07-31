@@ -23,9 +23,6 @@ app.use((_, res) => {
 
 app.use((err, _, res, next) => {
   const { status = 500, message = 'Server internal error' } = err;
-    res.status(status).json({
-      message,
-    });
   res.status(status).json({ message,})
 });
 

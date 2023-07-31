@@ -10,24 +10,22 @@ require('dotenv').config();
 const {SECRET_KEY} = process.env;
 
 
-const register = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
+const register = async (data) => {
+  const { email, password } = data.body;
+  const user = await User.findOne({email});
 
   if (user) {
     throw HttpError(409, "Email in use");
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashedPassword });
+  const newUser = await User.create({ ...data.body, password: hashedPassword });
 
-  res.status(201).json({ 
-    email: newUser.email,
-    password: newUser.password });
+  return newUser;
 };
 
-const login = async(req, res) => {
-    const {email, password} = req.body;
+const login = async(data) => {
+  const { email, password } = data.body;
     const user = await User.findOne({ email });
 
     const comparedPassword = await bcrypt.compare(password, user.password);
@@ -42,25 +40,18 @@ const login = async(req, res) => {
     
     const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "12h"});
     await User.findByIdAndUpdate(user._id, {token});
-      res.json({token})
+    return token;
 };
 
-const logout = async(req, res) => {
-    const {_id} = req.user;
-    await User.findByIdAndUpdate(_id, {token: null});
+const logout = async(data) => {
+    const {_id} = data.user;
+    const result = await User.findByIdAndUpdate(_id, {token: null});
 
-    res.status(204).json();
-}
-
-const current = async(req, res) => {
-    const {email, subscription} = req.user;
-
-    res.json({email, subscription});
+    return result;
 }
 
 module.exports = {
   register,
   login,
   logout,
-  current,
 };
