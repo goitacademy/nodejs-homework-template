@@ -39,7 +39,7 @@ exports.checkCreateContactData = catchAsync(async (req, res, next) => {
 
 
 
-exports.checkUpdateContactData = catchAsync(async (re, res, next) => {
+exports.checkUpdateContactData = catchAsync(async (req, res, next) => {
   const { error, value } = contactValidators.checkUpdateContactData(req.body);
   if (error) {
     console.log(error);

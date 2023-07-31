@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { createContact, getAllContacts, getOneContact, updateContact, deleteContact } = require('../../controlers/contactController');
+const { createContact, getAllContacts, getOneContact, updateContact, deleteContact } = require('../../controlers/contacts/index');
 const { checkContactId, checkCreateContactData, checkUpdateContactData } = require('../../Middlewares/contactMiddlewares');
 
 const router = Router();
