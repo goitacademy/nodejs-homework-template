@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-// import HttpError from "../helpers/HttpError.js";
 import User from "../models/user.js";
 
 dotenv.config();
@@ -12,9 +11,8 @@ const register = async (req, res) => {
     const user = await User.findOne({ email });
   
     if (user) {
-            // throw HttpError(409, "Email in use")
-            res.status(409).json({ message: 'Email in use' });
-            return;
+        res.status(409).json({ message: 'Email in use' });
+        return;
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({...req.body, password:hashPassword});
@@ -34,13 +32,11 @@ const login = async(req, res) => {
     if (!user) { 
         res.status(401).json({ message: 'Email or password wrong' });
         return;
-        // throw HttpError(401, "Email or password wrong")
     }
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
          res.status(401).json({ message: 'Email or password wrong' });
         return;
-        //   throw HttpError(401, "Email or password wrong")
     }
     const payload = {
         id: user._id,
@@ -57,35 +53,30 @@ const login = async(req, res) => {
     })
 }
 
-const current = (req, res, next) => {
+const current = (req, res) => {
     const { email, subscription } = req.user;
     res.json({
         email,
         subscription})
 }
 
-const logout = async (req, res, next) => {
+const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
     res.status(204).json({message: "No content"})
 }
 
-// const updateSubscription = async (req, res) => {
-//     const {id } = req.params;
-//     // console.log(id)
-
-//     const { subscription } = req.body;
-//     console.log(subscription)
-//    const updatingSubscription =  await User.findByIdAndUpdate(id, { subscription: subscription }, {new:true})
-    
-//     res.json(updatingSubscription);
-
-// }
+const updateSubscription = async (req, res) => {
+    const {id } = req.params;
+    const { subscription } = req.body;
+    const updatingSubscription = await User.findByIdAndUpdate(id, { subscription: subscription }, { new: true });
+    res.json(updatingSubscription);
+}
 
 export default {
     register,
     login,
     current,
     logout,
-    // updateSubscription,
+    updateSubscription,
 }

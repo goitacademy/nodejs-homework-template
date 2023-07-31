@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import User from "../models/user.js";
-import HttpError from "./../helpers/HttpError.js";
+import HttpError from "../helpers/HttpError.js";
 
 
 dotenv.config();
@@ -12,14 +12,14 @@ const authenticate = async (req, res, next) => {
     console.log(authorization)
     const [bearer, token] = authorization.split(" ");
     if (bearer !== "Bearer") {
-        console.log("first")
+       
         // throw HttpError(401, `Not authorized`);
         res.status(401).json({ message: `Not authorized` });
         return;
     }
     try {
         const { id } = jwt.verify(token, SECRET_KEY);
-        console.log("second")
+        
         // const { id } = payload;
         const user = await User.findById(id);
        
