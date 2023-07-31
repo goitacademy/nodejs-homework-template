@@ -21,7 +21,24 @@ const movieUpdateFavoriteSchema = Joi.object({
 });
 
 const getAll = async (req, res) => {
-  const result = await Contacts.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  // const condition = { owner };
+  // if (favorite) {
+  //   condition.favorite = favorite
+  // } else {
+  //   condition
+  // }
+
+  const condition = favorite ? { owner, favorite } : { owner };
+
+  const result = await Contacts.find(condition, "-cratedAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "email subscription");
+
   res.json(result);
 };
 
@@ -37,11 +54,12 @@ const getById = async (req, res) => {
 
 const add = async (req, res, next) => {
   const { error } = contactsAddSchema.validate(req.body);
+  const { _id: owner } = req.user;
   // console.log(error.message);
   if (error) {
     throw HttpError(400, error.message);
   }
-  const result = await Contacts.create(req.body);
+  const result = await Contacts.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

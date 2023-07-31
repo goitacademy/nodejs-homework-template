@@ -1,9 +1,11 @@
 import express from "express";
 import contactsController from "../../controllers/mivies-controllers.js";
-
+import authenticate from "../../middleware/authenticate.js";
 import isValidId from "../../middleware/isValidId.js";
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", contactsController.getAll);
 
