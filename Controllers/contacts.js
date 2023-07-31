@@ -58,15 +58,7 @@ const updateStatus = async (req, res) => {
   res.status(200).json(data);
 };
 
-// const getContactFavorite = async (req, res) => {
-//   const { favorite } = req.query;
-//   console.log(favorite)
-//   const data = await Contact.find({ favorite});
-//   if (!data) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json(data);
-// };
+
 
 // контроллер
 module.exports = {
@@ -76,5 +68,4 @@ module.exports = {
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
   updateStatus: ctrlWrapper(updateStatus),
-  // getContactFavorite: ctrlWrapper(getContactFavorite),
 };

@@ -4,11 +4,16 @@ const {
   validateSchemeUpdContact,
   validateSchemeFavorContact,
 } = require("../Middlewares/validateContacts");
-const validateToken = require('../Middlewares/validateToken')
+const validateUser = require('../Middlewares/validateUser');
+const validateToken = require('../Middlewares/validateToken');
+const upload = require('../Middlewares/upload');
+
 module.exports = {
   isValidId,
   validateSchemeAddContact,
   validateSchemeUpdContact,
   validateSchemeFavorContact,
- validateToken
+  validateUser,
+  validateToken,
+ upload,
 };

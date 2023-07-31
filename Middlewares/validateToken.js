@@ -17,15 +17,7 @@ const validateToken = async (req, res, next) => {
     if (!user || !user.token || user.token !== token) {
       next(HttpError(401, "Not authorized"));
     }
-    //    if (!user) {
-    //      next(HttpError(401, "No user"));
-    //   }
-    //    if (!user.token) {
-    //      next(HttpError(401, "Not tokenUser"));
-    //   }
-    //    if ( user.token !== token) {
-    //      next(HttpError(401, "Not token"));
-    //    }
+
     req.user = user;
     next();
   } catch {
