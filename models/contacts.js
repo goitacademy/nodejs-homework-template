@@ -1,67 +1,73 @@
-import fs from "fs/promises";
-import path from "path";
-import { nanoid } from "nanoid";
+import Joi from "joi";
+import { Schema, model } from "mongoose";
+import hooks from "./hooks.js";
 
-const contactPath = path.join("models", "contacts.json");
+const phoneRegexp = /^\d{3}-\d{3}-\d{4}$/;
 
-const updateContactsStorage = (contacts) => {
-  fs.writeFile(contactPath, JSON.stringify(contacts), null, 2);
-};
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
 
-const listContacts = async () => {
-  const contacts = await fs.readFile(contactPath);
-  return JSON.parse(contacts);
-};
+contactSchema.post("save", hooks.handleSaveError);
+contactSchema.post("findOneAndUpdate", hooks.handleSaveError);
+contactSchema.pre("findOneAndUpdate", hooks.validateAtUpdate);
 
-const getContactById = async (contactId) => {
-  const allContacts = await listContacts();
-  return allContacts.find(({ id }) => id === String(contactId)) || null;
-};
+const contactsAddSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "string.base": `name should be a type of 'text'`,
+    "string.empty": `name cannot be an empty field`,
+    "any.required": `missing required name field`,
+  }),
+  phone: Joi.string()
+    .required()
+    .messages({
+      "string.base": `phone should be a type of 'text'`,
+      "string.empty": `phone cannot be an empty field`,
+      "any.required": `missing required phone field`,
+    })
+    .pattern(phoneRegexp),
+  email: Joi.string().required().messages({
+    "string.base": `email should be a type of 'text'`,
+    "string.empty": `email cannot be an empty field`,
+    "any.required": `missing required email field`,
+  }),
+  favorite: Joi.boolean().messages({
+    "string.base": `favorite should be a type of 'text'`,
+    "string.empty": `favorite cannot be an empty field`,
+    "any.required": `missing required favorite field`,
+  }),
+});
 
-const removeContact = async (contactId) => {
-  const allContacts = await listContacts();
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "string.base": `favorite should be a type of 'text'`,
+    "string.empty": `favorite cannot be an empty field`,
+    "any.required": `missing required favorite field`,
+  }),
+});
 
-  const index = allContacts.findIndex(({ id }) => id === String(contactId));
-  if (index === -1) return null;
-
-  const [result] = allContacts.splice(index, 1);
-  await updateContactsStorage(allContacts);
-  return result;
-};
-
-const addContact = async (body) => {
-  const allContacts = await listContacts();
-  const newContact = {
-    id: nanoid(),
-    ...body,
-  };
-
-  allContacts.unshift(newContact);
-  updateContactsStorage(allContacts);
-  return newContact;
-};
-
-const updateContact = async (contactId, body) => {
-  const allContacts = await listContacts();
-
-  const contactIndex = allContacts.findIndex(
-    ({ id }) => id === String(contactId)
-  );
-  if (contactIndex === -1) return null;
-
-  allContacts[contactIndex] = {
-    id: contactId,
-    ...body,
-  };
-
-  await updateContactsStorage(allContacts);
-  return allContacts[contactIndex];
-};
+export const Contact = model("contact", contactSchema);
 
 export default {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  contactsAddSchema,
+  updateFavoriteSchema,
 };
