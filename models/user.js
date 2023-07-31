@@ -28,6 +28,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  verify: { // чи підтвердив користувач свій e-mail
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: { // токін для підтвердження e-mail
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 }, { versionKey: false, timestamps: true }
     // versionKey: false - щоб не строрювалось поле "__v" з версією документа при додаванні данних
     // timestamps: true - щоб створювались поля createdAt і updatedAt (дата строрення і оновлення)
@@ -42,16 +50,22 @@ const registerSchema = Joi.object({
     subscription: Joi.valid(...subscriptionList),
 });
 
+// Схема валідації Joi для повторної відправки листа для підтвердження e-mail
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({ "any.required": "Missing required field email" }),
+});
+
 // Схема валідації Joi для авторизації (даних, що прийшли)
 const loginSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
 });
 
-// Об'єднуємо схеми Joi8
+// Об'єднуємо схеми Joi
 const schemas = {
   registerSchema,
   loginSchema,
+  emailSchema,
 }
 
 // Створюємо модель
