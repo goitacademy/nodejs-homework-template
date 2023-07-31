@@ -1,5 +1,5 @@
 const fs = require('fs/promises');
-const { v4 } = require("uuid");
+const { randomUUID } = require('crypto');
 const path = require('path');
 
 
@@ -35,7 +35,7 @@ const addContact = async ({ name, email, phone }) => {
   const data = await listContacts();
 
   const body = {
-    id: v4(),
+    id: randomUUID(),
     name,
     email,
     phone

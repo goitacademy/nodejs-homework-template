@@ -1,16 +1,40 @@
 const express = require('express')
-
 const router = express.Router();
-const path = require('path');
 
-
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require('../../models/contacts.js');
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'get request' })
+  try {
+    const contacts = await listContacts();
+    res.json(contacts);
+    res.status(200);
+
+  } catch (error) {
+    res.status(404);
+    next(error)
+  }; 
 })
 
+
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contactId = req.params.contactId
+    const singleContact = await getContactById(contactId);
+    if (!singleContact) {
+      res.status(404).json({ message: 'Not found' })
+    }
+    res.json(singleContact);
+    res.status(200);
+  } catch (error) {
+    next(error);
+  };
+    
 })
 
 router.post('/', async (req, res, next) => {
