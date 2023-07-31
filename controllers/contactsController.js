@@ -2,12 +2,27 @@ import HttpError from "../helpers/HttpError.js";
 import Contact from "../models/contacts.js";
 
 const getAll = async (req, res, next) => {
-  try {
+  try { 
+    const [key] = Object.keys(req.query);
+    const [value] = Object.values(req.query);
     const { _id: owner } = req.user;
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 20 } = req.query;
     const skip = (page - 1) * limit; 
     const result = await Contact.find({ owner }, {}, { skip, limit });
-    res.json(result);
+   
+    if (req.query && key==="favorite") {
+      if (value === "true") {     
+        const resultFiltered = result.filter((contact) => contact.favorite === true);
+        res.json(resultFiltered);
+        return;
+      }
+      if (value === "false") {
+        const resultFiltered = result.filter((contact) => contact.favorite === false);
+        res.json(resultFiltered);
+        return;
+      }
+    }
+  res.json(result);
   }
   catch (error) {
     next(error)
@@ -90,5 +105,5 @@ export default  {
     add,
     deleteById,
     updateById,
-    updateStatusContact
+    updateStatusContact,
 }

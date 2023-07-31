@@ -7,7 +7,6 @@ import isEmptyBodyFavorite from "../../middlewars/isEmptyBodyFavorite.js";
 import favoriteValidate from "../../middlewars/favoriteValidate.js";
 import authenticate from "../../middlewars/authenticate.js";
 
-
 const routerContacts = express.Router();
 
 routerContacts.use(authenticate);

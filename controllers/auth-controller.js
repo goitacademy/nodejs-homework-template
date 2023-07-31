@@ -70,9 +70,22 @@ const logout = async (req, res, next) => {
     res.status(204).json({message: "No content"})
 }
 
+// const updateSubscription = async (req, res) => {
+//     const {id } = req.params;
+//     // console.log(id)
+
+//     const { subscription } = req.body;
+//     console.log(subscription)
+//    const updatingSubscription =  await User.findByIdAndUpdate(id, { subscription: subscription }, {new:true})
+    
+//     res.json(updatingSubscription);
+
+// }
+
 export default {
     register,
     login,
     current,
-    logout
+    logout,
+    // updateSubscription,
 }

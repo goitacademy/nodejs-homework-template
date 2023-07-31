@@ -12,6 +12,8 @@ authRouter.post('/users/login', isEmptyBody, userValidator.userLoginValidator, a
 
 authRouter.get('/users/current', authenticate, authController.current);
 
-authRouter.post('/users/logout', authenticate,authController.logout )
+authRouter.post('/users/logout', authenticate, authController.logout);
+
+// authRouter.patch('/users/:id', authController.updateSubscription);
 
 export default authRouter;
