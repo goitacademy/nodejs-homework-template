@@ -1,25 +1,26 @@
-const express = require('express')
+import express from "express";
+import contactsController from "../../controllers/mivies-controllers.js";
+import authenticate from "../../middleware/authenticate.js";
+import isValidId from "../../middleware/isValidId.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use(authenticate);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", contactsController.getAll);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", isValidId, contactsController.getById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", contactsController.add);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", isValidId, contactsController.delleteById);
 
-module.exports = router
+router.put("/:contactId", isValidId, contactsController.updateById);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  contactsController.updateFavorite
+);
+
+export default router;
