@@ -7,12 +7,20 @@ const { contactSchema, updateFavoriteSchema } = require('../schemas/index')
 const getContacts = async (req, res, next) => {
   const { _id: owner } = req.user
   //  пишем значение по умолчанию
-  const { page = 1, limit = 10 } = req.query
+  const { page = 1, limit = 20, favorite } = req.query
   // получаем значение сколько пропустить skip
   const skip = (page - 1) * limit
   try {
+ // Формируем объект с условиями для поиска True & False 
+ const query = { owner };
+ if (favorite === 'true') {
+  query.favorite = true;
+} else if (favorite === 'false') {
+  query.favorite = false;
+}
+
     // получаем только контакты добавленные пользователем await Contact.find({owner})
-    const result = await Contact.find({ owner }, '-createdAt -updatedAt', {
+    const result = await Contact.find( query , '-createdAt -updatedAt', {
       skip,
       limit
     }).populate('owner')
