@@ -1,11 +1,17 @@
 const { Contact } = require("../models/contact");
 
-const { HttpError, ctrlWrapper } = require("../utils");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const allContacts = async (req, res, next) => {
-  const contactList = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const contactList = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "_id email subscription");
   res.status(200).json({
-    msg: "Load Contact List!",
+    msg: "You Contact List!",
     contact: contactList,
   });
 };
@@ -23,7 +29,8 @@ const idContact = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-  const newContact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner });
 
   res.status(201).json({
     msg: "Contact created!",
@@ -81,4 +88,4 @@ module.exports = {
   refreshContact: ctrlWrapper(refreshContact),
   updateStatusContact: ctrlWrapper(updateStatusContact),
 };
-
+ 
