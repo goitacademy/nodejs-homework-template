@@ -34,4 +34,20 @@ const userLoginSchema = Joi.object({
   }),
 });
 
-export default { userRegisterSchema, userLoginSchema };
+const userUpdateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid('starter', 'pro', 'business')
+    .required()
+    .messages({
+      'any.required': 'missing required subscription field!',
+      'string.empty': "Subscription can't be empty!",
+      'any.only':
+        'Invalid subscription value! Must be one of: starter, pro, business',
+    }),
+});
+
+export default {
+  userRegisterSchema,
+  userLoginSchema,
+  userUpdateSubscriptionSchema,
+};

@@ -72,9 +72,23 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateUserSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const result = await User.findByIdAndUpdate(_id, req.body, {
+    new: true,
+  });
+
+  if (!result) {
+    throw HttpError(404);
+  }
+
+  res.json(result);
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateUserSubscription: ctrlWrapper(updateUserSubscription),
 };
