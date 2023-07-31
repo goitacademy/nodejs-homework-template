@@ -1,8 +1,9 @@
 const { ctrlWrapper, HttpError } = require('../helpers');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
-
-const registerCtrl = async (req, res, next) => {
+const jwt = require('jsonwebtoken');
+const { SECRET_KEY } = process.env;
+const registerCtrl = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -15,7 +16,28 @@ const registerCtrl = async (req, res, next) => {
     name: newUser.name,
   });
 };
+const loginCtrl = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, 'Email or password is not valid');
+  }
+  const comparePassword = await bcrypt.compare(password, user.password);
+  if (!comparePassword) {
+    throw HttpError(401, 'Email or password is not valid');
+  }
+
+  const payload = {
+    id: user._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+
+  res.status(200).json({
+    token,
+  });
+};
 
 module.exports = {
   registerCtrl: ctrlWrapper(registerCtrl),
+  loginCtrl: ctrlWrapper(loginCtrl),
 };
