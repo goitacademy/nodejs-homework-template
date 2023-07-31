@@ -28,3 +28,23 @@ exports.updateContactFavoriteValidator = (data) =>
       favorite: Joi.boolean(),
     })
     .validate(data);
+
+// ===========
+
+exports.registerUserDataValidator = (data) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      email: Joi.string().email().required(),
+      password: Joi.string().min(3).required(),
+    })
+    .validate(data);
+
+exports.loginUserDataValidator = (data) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    })
+    .validate(data);
