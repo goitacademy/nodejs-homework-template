@@ -67,9 +67,9 @@ const logout = async (req, res) => {
 }
 
 const updateSubscription = async (req, res) => {
-    const {id } = req.params;
+    const { _id } = req.user;
     const { subscription } = req.body;
-    const updatingSubscription = await User.findByIdAndUpdate(id, { subscription: subscription }, { new: true });
+    const updatingSubscription = await User.findByIdAndUpdate(_id, { subscription: subscription }, { new: true });
     res.json(updatingSubscription);
 }
 

@@ -9,7 +9,6 @@ const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
     const { authorization = ""} = req.headers;
-    console.log(authorization)
     const [bearer, token] = authorization.split(" ");
     if (bearer !== "Bearer") {
        
@@ -24,7 +23,6 @@ const authenticate = async (req, res, next) => {
         const user = await User.findById(id);
        
         if (!user || !user.token) {
-             console.log("third")
             // throw HttpError(401, `Not authorized`);
             res.status(401).json({ message: `Not authorized` });
             return;
