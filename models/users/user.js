@@ -23,6 +23,10 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: { type: String, default: "" },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -39,8 +43,15 @@ const loginSchema = Joi.object({
 
 userSchema.post("save", handleMongooseError);
 
-userSchema.statics.updateSubscription = async function (userId, newSubscription) {
-  return this.findByIdAndUpdate(userId, { subscription: newSubscription }, { new: true });
+userSchema.statics.updateSubscription = async function (
+  userId,
+  newSubscription
+) {
+  return this.findByIdAndUpdate(
+    userId,
+    { subscription: newSubscription },
+    { new: true }
+  );
 };
 
 const User = model("user", userSchema);
