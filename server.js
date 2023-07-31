@@ -1,5 +1,5 @@
 
-// импортируем mongoose
+// импортируем mongoose.
 const mongoose = require("mongoose")
 // если .env в основной папке то пишем require('dotenv').config()
 require('dotenv').config({ path: './environments/.env' });

@@ -1,27 +1,29 @@
-// для проверки поступающих обьектов на сервер, чтобы соответствовали требованиям
-const Joi = require('joi')
-
 // импорт HttpError
-
 const { HttpError } = require('../helpers/index')
 const { Contact } = require('../models/Contact')
 
-// создаем обязательный стандарт передаваемого обьекта
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean()
-})
-
-// создаем обязательный стандарт передаваемого Favorite
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required()
-})
+const { contactSchema, updateFavoriteSchema } = require('../schemas/index')
 
 const getContacts = async (req, res, next) => {
+  const { _id: owner } = req.user
+  //  пишем значение по умолчанию
+  const { page = 1, limit = 20, favorite } = req.query
+  // получаем значение сколько пропустить skip
+  const skip = (page - 1) * limit
   try {
-    const result = await Contact.find()
+ // Формируем объект с условиями для поиска True & False 
+ const query = { owner };
+ if (favorite === 'true') {
+  query.favorite = true;
+} else if (favorite === 'false') {
+  query.favorite = false;
+}
+
+    // получаем только контакты добавленные пользователем await Contact.find({owner})
+    const result = await Contact.find( query , '-createdAt -updatedAt', {
+      skip,
+      limit
+    }).populate('owner')
     res.json(result)
   } catch (error) {
     next(error)
@@ -42,6 +44,8 @@ const getContact = async (req, res, next) => {
 }
 
 const addNewContact = async (req, res) => {
+  // для записи каждого созданого контакта закрепляем owner
+  const { _id: owner } = req.user
   try {
     const { error } = contactSchema.validate(req.body)
     if (error) {
@@ -60,7 +64,9 @@ const addNewContact = async (req, res) => {
         .status(400)
         .json({ message: `missing required ${missingField} field` })
     }
-    const newContact = await Contact.create(req.body)
+
+    // распыляем обьект и добавляем новое значение owner
+    const newContact = await Contact.create({ ...req.body, owner })
 
     res.status(201).json(newContact)
   } catch (error) {
