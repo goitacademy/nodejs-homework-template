@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 
 const {User} = require("../models/user");
 
-const HttpError = require("../utils/HttpError");
-const ctrlWrapper = require("../utils/ctrlWrapper");
+const {HttpError} = require("../utils");
+
 require('dotenv').config();
 
 const {SECRET_KEY} = process.env;
@@ -41,13 +41,26 @@ const login = async(req, res) => {
     };
     
     const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "12h"});
-
-      res.json({
-        token
-      })
+    await User.findByIdAndUpdate(user._id, {token});
+      res.json({token})
 };
 
+const logout = async(req, res) => {
+    const {_id} = req.user;
+    await User.findByIdAndUpdate(_id, {token: null});
+
+    res.status(204).json();
+}
+
+const current = async(req, res) => {
+    const {email, subscription} = req.user;
+
+    res.json({email, subscription});
+}
+
 module.exports = {
-  register: ctrlWrapper(register),
-  login: ctrlWrapper(login),
+  register,
+  login,
+  logout,
+  current,
 };

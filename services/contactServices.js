@@ -4,15 +4,14 @@ const {
   schemas,
 } = require("../models/contact");
 
-const HttpError = require("../utils/HttpError");
+const {HttpError} = require("../utils");
 
 /** ===============
  * GET ALL CONTACTS ===============
  * @returns {Array<object>}
  */
-const findContacts = async () => {
-  const result = await Contact.find();
-  return result;
+const findContacts = async(owner) => {
+   return await Contact.find(owner);
 };
 
 /** ===============
@@ -35,7 +34,7 @@ const findOneContact = async (contactId) => {
  * @returns {Object}
  */
 const addContact = async (body) => {
-  const { error } = validateData(schemas.addContactSchema).validate(body);
+  const { error } = validateData(schemas.addContactSchema);
   if (error) {
     throw HttpError(400, error.message);
   }

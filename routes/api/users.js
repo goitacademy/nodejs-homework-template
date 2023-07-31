@@ -1,12 +1,12 @@
 const express = require('express');
 
-const validateData = require('../../middlewares/validateData');
-
-const authenticate = require('../../middlewares/authenticate');
+const {
+    authenticate,
+    validateData } = require('../../middlewares')
 
 const {schemas} = require('../../models/user');
 
-const {register, login} = require('../../services/userServices')
+const {register, login, logout, current} = require('../../services/userServices')
 
 const router = express.Router();
 
@@ -18,17 +18,17 @@ router.post('/register', validateData(schemas.registerSchema), register);
 /**
  * LOG IN USER
  */
-router.post('/login', authenticate, validateData(schemas.loginSchema), login);
+router.post('/login', validateData(schemas.loginSchema), login);
 
 /**
  * LOG OUT USER
  */
-router.post('/logout');
+router.post('/logout', authenticate, logout);
 
 /**
  * GET DATA ABOUT CURRENT USER
  */
-router.get('/current');
+router.get('/current', authenticate, current);
 
 
 module.exports = router;
