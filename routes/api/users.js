@@ -4,10 +4,9 @@ const {
   catchRegErrors,
   catchLogErrors,
   catchErrors,
-} = require("../../middlewares/catch-errors");
-const { postAuthValidation } = require("../../middlewares/validationSchema");
-const router = express.Router();
-
+} = require("../../middlewares/catchErrors");
+const { postAuthValidation } = require("../../middlewares/validationBody");
+const router = express.Router();  
 const {
   signupUser,
   loginUser,
