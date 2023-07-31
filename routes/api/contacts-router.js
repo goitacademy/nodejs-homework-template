@@ -1,9 +1,9 @@
 import express from "express";
 
 import contactsController from "../../controllers/contacts-controller.js";
-import contactSchemas from "../../schemas/schemas.js";
+import contactSchemas from "../../schemas/contacts-schemas.js";
 import { validateBody } from "../../decorator/index.js";
-import isValidId from "../../middlewars/isValidId.js";
+import {isValidId} from "../../middlewars/index.js";
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
@@ -16,7 +16,7 @@ contactsRouter.post(
   contactsController.add
 );
 
-contactsRouter.put(
+contactsRouter.patch(
   "/:id",
   isValidId,
   validateBody(contactSchemas.addContactSchema),
