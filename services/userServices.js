@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const {User} = require("../models/user");
 
-const {HttpError} = require("../utils");
+const HttpError = require("../utils/HttpError");
 
 require('dotenv').config();
 

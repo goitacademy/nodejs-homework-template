@@ -1,3 +1,5 @@
+const ctrlWrapper = require("../../utils/ctrlWrapper");
+
 const {
     addContact
   } = require("../../services/contactServices");
@@ -12,4 +14,4 @@ const addNewContact = async (req, res) => {
     });
 };
 
-module.exports = addNewContact;
+module.exports = {addNewContact: ctrlWrapper(addNewContact)};

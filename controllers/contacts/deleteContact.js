@@ -1,3 +1,5 @@
+const ctrlWrapper = require("../../utils/ctrlWrapper");
+
 const {
     deleteContactById
   } = require("../../services/contactServices");
@@ -11,4 +13,4 @@ const deleteContact = async (req, res) => {
     });
 };
 
-module.exports = deleteContact;
+module.exports = {deleteContact: ctrlWrapper(deleteContact)};

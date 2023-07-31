@@ -1,3 +1,5 @@
+const ctrlWrapper = require("../../utils/ctrlWrapper");
+
 const {
     findOneContact
   } = require("../../services/contactServices");
@@ -8,4 +10,4 @@ const getOneContact = async (req, res) => {
     res.json(foundContact);
   };
 
-module.exports = getOneContact;
+module.exports = {getOneContact: ctrlWrapper(getOneContact)};

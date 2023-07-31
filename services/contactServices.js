@@ -4,7 +4,7 @@ const {
   schemas,
 } = require("../models/contact");
 
-const {HttpError} = require("../utils");
+const HttpError = require("../utils/HttpError");
 
 /** ===============
  * GET ALL CONTACTS ===============

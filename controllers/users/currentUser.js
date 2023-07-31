@@ -1,4 +1,6 @@
-const currentUser = async(req, res) => {
+const ctrlWrapper = require("../../utils/ctrlWrapper");
+
+const currentUser = async (req, res) => {
     const {email, subscription} = req.user;
     
     res.json({email, subscription});
@@ -6,4 +8,4 @@ const currentUser = async(req, res) => {
 };
 
 
-module.exports = currentUser;
+module.exports = { currentUser: ctrlWrapper(currentUser) };

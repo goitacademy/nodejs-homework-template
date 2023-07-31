@@ -1,5 +1,7 @@
 const {register} = require('../../services/userServices')
 
+const ctrlWrapper = require("../../utils/ctrlWrapper");
+
 const registerNewUser = async(req, res) => {
 
     const newUser = await register(req)
@@ -11,4 +13,4 @@ const registerNewUser = async(req, res) => {
 
 
 
-module.exports = registerNewUser;
+module.exports = { registerNewUser: ctrlWrapper(registerNewUser), };

@@ -1,4 +1,6 @@
-const {logout} = require('../../services/userServices')
+const { logout } = require('../../services/userServices')
+
+const ctrlWrapper = require("../../utils/ctrlWrapper");
 
 const logOutUser = async(req,res) => {
 
@@ -6,4 +8,4 @@ const logOutUser = async(req,res) => {
     res.status(204).json();
 };
 
-module.exports = logOutUser;
+module.exports = { logOutUser: ctrlWrapper(logOutUser) };

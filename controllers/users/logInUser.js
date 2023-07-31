@@ -1,4 +1,6 @@
-const {login} = require('../../services/userServices')
+const { login } = require('../../services/userServices')
+
+const ctrlWrapper = require("../../utils/ctrlWrapper");
 
 const logInUser = async(req,res) => {
 
@@ -8,4 +10,4 @@ const logInUser = async(req,res) => {
 };
 
 
-module.exports = logInUser;
+module.exports = { logInUser: ctrlWrapper(logInUser) };
