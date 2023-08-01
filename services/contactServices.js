@@ -10,8 +10,8 @@ const HttpError = require("../utils/HttpError");
  * GET ALL CONTACTS ===============
  * @returns {Array<object>}
  */
-const findContacts = async(owner) => {
-   return await Contact.find(owner);
+const findContacts = async(...options) => {
+   return await Contact.find(...options);
 };
 
 /** ===============

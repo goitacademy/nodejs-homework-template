@@ -6,7 +6,10 @@ const {
 
 const getContactList = async (req, res) => {
     const {_id: owner} = req.user;
-    const contactList = await findContacts({owner});
+    const {page = 1, limit = 20} = req.query;
+    const skip = (page - 1) * limit;
+    
+    const contactList = await findContacts({owner}, "-createdAt -updatedAt", {skip, limit});
     res.json(contactList);
 };
 
