@@ -45,7 +45,7 @@ async function updateContact(contactId, { name, email, phone }) {
   if (ind === -1) {
     return null;
   }
-  contacts[ind] = { contactId, name, email, phone };
+  contacts[ind] = { id: contactId, name, email, phone };
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return contacts[ind];
 }
