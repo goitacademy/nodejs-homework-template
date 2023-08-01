@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import app from "./app.js";
 
-dotenv.config();
+import "dotenv/config";
+// import dotenv from "dotenv"; заміна 1 рядком /\
+// dotenv.config();
 
 const { DB_HOST, PORT } = process.env;
 // console.log(process.env);
@@ -17,4 +18,7 @@ mongoose
       console.log(`Database connection successful, port: ${PORT}`);
     });
   })
-  .catch((error) => console.log(error.message));
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });

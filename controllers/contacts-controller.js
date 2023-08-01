@@ -27,7 +27,7 @@ const updateByid = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
-    // runValidators: true, 1спосіб валідація при зміні 2сп. в моделях
+    // runValidators: true, 1спосіб валідація при оновленні, зміні 2сп. в моделях
   });
   if (!result) {
     throw HttpError(404);

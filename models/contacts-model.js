@@ -22,7 +22,7 @@ const contactSchema = new Schema(
 );
 contactSchema.pre("findOneAndUpdate", handleUpdateValidate);
 contactSchema.post("findOneAndUpdate", handleSaveError);
-// при методі PUT 2спосіб валідація при зміні
+// при методі PUT 2спосіб валідація при оновленні зміні, 1сп в контролерах
 contactSchema.post("save", handleSaveError);
 // / при методі POST щоб відловлювати помилку валідації
 
