@@ -1,59 +1,31 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
-const { handleMongooseError } = require("../helpers");
+const { Schema, model } = require('mongoose');
+const { handleMongooseError } = require('../helpers');
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-const subList = ["starter", "pro", "business"];
-const userSchema = new Schema(
-  {
-    password: {
-      type: String,
-      required: [true, "Set password for user"],
-    },
-    email: {
-      type: String,
-      required: [true, "Email is required"],
-      match: emailRegexp,
-      uniqe: true,
-    },
-    subscription: {
-      type: String,
-      enum: subList,
-      default: "starter",
-    },
-    token: String,
+
+const userSchema = new Schema ({
+  password: {
+    type: String,
+        required: [true, 'Set password for user'],
+    minlength: 7
   },
-  { versionKey: false, timestamps: true }
-);
+  email: {
+    type: String,
+      required: [true, 'Email is required'],
+    match: emailRegexp,
+    unique: true,
+  },
+  subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter"
+  },
+  token: String,
+  avatarURL: String,
+}, {versionKey: false})
 
-userSchema.post("save", handleMongooseError);
+userSchema.post('save', handleMongooseError)
 
-const registerSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().pattern(emailRegexp).required(),
-  subscription: Joi.string().valid(...subList),
-});
+const User = model('user', userSchema)
 
-const loginSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().pattern(emailRegexp).required(),
-});
-
-const updatedSub = Joi.object({
-  subscription: Joi.string()
-    .valid(...subList)
-    .required(),
-});
-
-const schemas = {
-  registerSchema,
-  loginSchema,
-  updatedSub,
-};
-
-const User = model("user", userSchema);
-
-module.exports = {
-  User,
-  schemas,
-};
+module.exports = User
