@@ -1,15 +1,3 @@
-// import { Shema, modal } from "mongoose";
-
-// const contactShema = new Shema({
-//     name: String,
-//     phone: String,
-//     email: String,
-// });
-
-// const Contact = model("contact", contactShema);
-
-// export default Contact;
-
 import { Schema, model } from "mongoose";
 import { handleSaveError, validateAtUpdate} from "./hooks.js";
 
