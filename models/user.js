@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const  { handleSaveError, handleUpdateValidate } = require("./hooks");
 
-const emailRegexp = require("../constants/user-constants");
+const emailRegexp = require("../constants/index");
 
 const userSchema = new Schema({
     password: {

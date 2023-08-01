@@ -1,11 +1,11 @@
 const { Schema, model } = require("mongoose");
-
+const requiredList = require("../constants/index")
 const  { handleSaveError, handleUpdateValidate } = require("./hooks");
 
 const contactSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Set name for contact'],
+        required: requiredList,
       },
       email: {
         type: String,

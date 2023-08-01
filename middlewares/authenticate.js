@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
-const HttpError = require("../helpers/HttpError");
+const HttpError = require("../helpers/index");
 const { ctrlWrapper } = require("../decorators/index");
 
 const dotenv = require("dotenv");
