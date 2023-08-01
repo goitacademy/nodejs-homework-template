@@ -1,8 +1,11 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs").promises;
 
-const { ctrlWrapper } = require("../helpers");
+const { ctrlWrapper, resizeFile } = require("../helpers");
 const { generateHTTPError } = require("../helpers");
 const { User } = require("../models/user");
 
@@ -18,13 +21,17 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const data = { ...req.body, password: hashPassword };
+  const data = {
+    ...req.body,
+    password: hashPassword,
+    avatarURL: gravatar.url(email),
+  };
   const newUser = await User.create(data);
 
-  const { subscription } = newUser;
+  const { subscription, avatarURL } = newUser;
 
   res.status(201).json({
-    user: { email, subscription },
+    user: { email, subscription, avatarURL },
   });
 };
 
@@ -37,7 +44,7 @@ const logIn = async (req, res) => {
   }
 
   // Перевірка пароля користувача
-  const isCorrectPassword = await bcrypt.compare(password, user.password);
+  const isCorrectPassword = bcrypt.compare(password, user.password);
   if (!isCorrectPassword) {
     throw generateHTTPError(401, "Email or password is wrong");
   }
@@ -48,10 +55,10 @@ const logIn = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: TOKEN_EXPIRES_IN });
   await User.findByIdAndUpdate(user._id, { token });
 
-  const { subscription } = user;
+  const { subscription, avatarURL } = user;
   res.json({
     token,
-    user: { email, subscription },
+    user: { email, subscription, avatarURL },
   });
 };
 
@@ -67,8 +74,8 @@ const currentUser = async (req, res) => {
   if (!req.user) {
     throw generateHTTPError(401, "Not authorized");
   }
-  const { email, subscription } = req.user;
-  res.json({ email, subscription });
+  const { email, subscription, avatarURL } = req.user;
+  res.json({ email, subscription, avatarURL });
 };
 
 const updateUserSubscription = async (req, res) => {
@@ -89,10 +96,46 @@ const updateUserSubscription = async (req, res) => {
   res.json({ user: { email, subscription } });
 };
 
+const updateUserAvatar = async (req, res) => {
+  if (!req.user) {
+    throw generateHTTPError(401, "Not authorized");
+  }
+
+  const { _id } = req.user._id;
+  const { path: tmpUploadDir, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const staticUploadDir = path.join(
+    __dirname,
+    "../",
+    "public",
+    "avatars",
+    filename
+  );
+  await resizeFile(tmpUploadDir);
+
+  await fs.rename(tmpUploadDir, staticUploadDir);
+
+  const avatarURL = path.join("avatars", filename);
+
+  const user = await User.findByIdAndUpdate(
+    _id,
+    { avatarURL },
+    {
+      new: true,
+    }
+  );
+  if (!user) {
+    throw generateHTTPError(404, "Not found user");
+  }
+
+  res.json({ user: { avatarURL } });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   logIn: ctrlWrapper(logIn),
   logOut: ctrlWrapper(logOut),
   currentUser: ctrlWrapper(currentUser),
   updateUserSubscription: ctrlWrapper(updateUserSubscription),
+  updateUserAvatar: ctrlWrapper(updateUserAvatar),
 };

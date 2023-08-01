@@ -28,6 +28,7 @@ const schemaDBUserValidator = new Schema(
       ],
       default: STATUS_SUBSCRIPTION.STARTER,
     },
+    avatarURL: String,
     token: { type: String, default: "" },
   },
   { timestamps: true, versionKey: false }
@@ -45,6 +46,9 @@ const userSubscriptionValidator = Joi.object({
   subscription: Joi.valid(...Object.values(STATUS_SUBSCRIPTION)).required(),
 });
 
-const schemas = { userValidator, userSubscriptionValidator };
+const schemas = {
+  userValidator,
+  userSubscriptionValidator,
+};
 
 module.exports = { schemas, User };
