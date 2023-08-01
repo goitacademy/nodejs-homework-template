@@ -1,6 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 
-import contactSchema from "../helpers/validate.js";
+import contactSchema from "../helpers/Validate.js"
 
 import Contact from "../models/contact.js";
 
