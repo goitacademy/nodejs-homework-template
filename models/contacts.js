@@ -28,9 +28,11 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const allContacts = await listContacts();
+
   const newContact = {
-    ...body,
     id: nanoid(),
+    ...body,
+    
   }
   allContacts.push(newContact);
   await fs.writeFile(filePath, JSON.stringify(allContacts, null, 2))
@@ -40,10 +42,9 @@ const addContact = async (body) => {
 
 const updateContact = async (id, body) => {
   const allContacts = await listContacts();
-  const contactById = await getContactById(id);
   const index = allContacts.findIndex(contact => contact.id === id);
   if (index === -1) return null;
-  allContacts[index] = {...contactById, ...body}
+  allContacts[index] = {...allContacts[index], ...body}
   await fs.writeFile(filePath, JSON.stringify(allContacts, null, 2))
   return allContacts[index];
 }

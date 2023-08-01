@@ -10,6 +10,12 @@ const addSchema = Joi.object({
     phone: Joi.string().required(),
  })
 
+ const addSchemaPut = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+})
+
 
 
  const getAll =  async (req, res, next) => {
@@ -50,6 +56,10 @@ const addSchema = Joi.object({
 
   const update =  async (req, res, next) => {
     try {
+      const {error} = addSchemaPut.validate(req.body);
+      if (error) {
+        throw HttpError(400, error.message);
+      }
       const {contactId} = req.params;
       const result = await contacts.updateContact(contactId, req.body);
       if (!result) {
