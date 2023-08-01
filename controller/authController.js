@@ -4,7 +4,7 @@ import HttpError from '../helpers/HttpError.js';
 
 import userSchemas from '../helpers/user-shemas.js';
 
-import bcrypt from "bcryptjs";
+import bcryptjs from "bcryptjs";
 
 import jwt from "jsonwebtoken";
 
@@ -24,7 +24,7 @@ const signup = async (req, res, next) => {
     return next(HttpError(409, "Email in use"));
   }
 
-  const hashPassword = await bcrypt.hash(password, 10);
+  const hashPassword = await bcryptjs.hash(password, 10);
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
@@ -48,7 +48,7 @@ const signin = async (req, res, next) => {
     return next(HttpError(401, "Email or password invalid"));
   }
 
-  const passwordCompare = await bcrypt.compare(password, user.password);
+  const passwordCompare = await bcryptjs.compare(password, user.password);
   
   if (!passwordCompare) {
     return next(HttpError(401, "Email or password invalid"));
