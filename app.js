@@ -6,6 +6,8 @@ import cors from "cors";
 
 import router from "./routes/api/contactsRouter.js";
 
+import authRouter from "./routes/api/auth-router.js";
+
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -14,6 +16,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/api/contacst', authRouter)
 app.use('/api/contacts', router)
 
 app.use((req, res) => {
