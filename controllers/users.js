@@ -1,4 +1,7 @@
+<<<<<<< Updated upstream
 const User = require("../models/user");
+=======
+>>>>>>> Stashed changes
 const { HttpError, resizeImage } = require("../helpers");
 const schemas = require("../schemas");
 const bcrypt = require("bcrypt");
@@ -7,12 +10,20 @@ const { updateUserSchema } = require("../schemas");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+<<<<<<< Updated upstream
 require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
 
 const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
+=======
+const { User } = require("../models/user");
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
+
+const { SECRET_KEY } = process.env;
+
+>>>>>>> Stashed changes
 const register = async (req, res, next) => {
   try {
     const { error } = schemas.userSchema.validate(req.body);

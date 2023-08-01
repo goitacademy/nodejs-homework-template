@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const app = require("./app");
 
-const DB_HOST = process.env.DB_HOST || "mongodb://localhost:27017/contacts";
+const DB_HOST = process.env.DB_HOST || "mongodb://localhost:27017";
 
 console.log(DB_HOST);
 mongoose
