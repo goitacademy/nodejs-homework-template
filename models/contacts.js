@@ -64,4 +64,3 @@ export default {
   addContact,
   updateContact,
 }
-
