@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const cathAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const User = require("../models/usersModel");
@@ -37,6 +38,31 @@ exports.checkLoginUserData = cathAsync(async (req, res, next) => {
   }
 
   req.body = value;
+
+  next();
+});
+
+// RPOTECT ROUTES MIDDLEWARE
+
+exports.protect = cathAsync(async (req, res, next) => {
+  const token =
+    req.headers.authorization?.startsWith("Bearer") &&
+    req.headers.authorization.split(" ")[1];
+
+  if (!token) throw new AppError(401, "Not authorized");
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // console.log(decoded);
+  } catch (err) {
+    console.log(err.message);
+    throw new AppError(401, "Not authorized");
+  }
+  const currentUser = await User.findById(decoded.id);
+
+  if (!currentUser) throw new AppError(401, "Not authorized");
+
+  req.user = currentUser;
 
   next();
 });

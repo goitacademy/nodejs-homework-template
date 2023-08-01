@@ -35,3 +35,19 @@ exports.loginUser = cathAsync(async (req, res) => {
     user: { email: user.email, subscription: user.subscription },
   });
 });
+
+// LOGOUT USER
+exports.logoutUser = cathAsync(async (req, res) => {
+  // ТУТ ТРЕБА ВИДАЛИТИ ТОКЕН
+
+  res.sendStatus(204);
+});
+
+// GET CURRENT USER
+exports.currentUser = cathAsync(async (req, res) => {
+  //   console.log(req.user);
+  const { email, subscription } = req.user;
+  const currUs = { email, subscription };
+
+  res.status(200).json(currUs);
+});
