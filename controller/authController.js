@@ -2,7 +2,7 @@ import User from '../models/user.js';
 
 import HttpError from '../helpers/HttpError.js';
 
-import userSchemas from '../helpers/user-shemas.js';
+import userShemas from '../helpers/user-shemas.js';
 
 import bcryptjs from "bcryptjs";
 
@@ -13,7 +13,7 @@ import "dotenv/config";
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res, next) => {
-  const { error } = userSchemas.userSignupShema.validate(req.body);
+  const { error } = userShemas.userSignupShema.validate(req.body);
   if (error) {
     return next(HttpError(400, error.message));
   }
@@ -37,7 +37,7 @@ const signup = async (req, res, next) => {
 };
 
 const signin = async (req, res, next) => {
-  const { error } = userSchemas.userSigninShema.validate(req.body);
+  const { error } = userShemas.userSigninShema.validate(req.body);
   if (error) {
     return next(HttpError(400, error.message));
     
