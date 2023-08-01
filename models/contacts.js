@@ -39,7 +39,7 @@ async function addContact({ name, email, phone }) {
   return newContact;
 }
 
-const updateContact = async (contactId, body) => {};
+async function updateContact(contactId, body) {}
 
 module.exports = {
   listContacts,
