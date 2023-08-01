@@ -4,20 +4,21 @@ const contacts = require("../../models/contacts");
 
 const router = express.Router();
 
-const {HttpError} = require('../../helpers/HtppError')
+const {HttpError} = require('../../helpers')
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const allContacts = await contacts.listContacts();
     res.json(allContacts);
   } catch (err) {
-    res.status(500).json({
-      message: "Server error",
-    });
+    next(err);
+    // res.status(500).json({
+    //   message: "Server error",
+    // });
   }
 });
 
-router.get("/:contactId", async (req, res) => {
+router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await contacts.getContactById(contactId);
@@ -32,10 +33,11 @@ router.get("/:contactId", async (req, res) => {
     }
     res.json(contact);
   } catch (err) {
-    const { status = 500, message = "Server error"} = err;
-    res.status(status).json({
-      message,
-    });
+    next(err);
+    // const { status = 500, message = "Server error"} = err;
+    // res.status(status).json({
+    //   message,
+    // });
   }
 });
 
