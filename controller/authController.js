@@ -87,5 +87,9 @@ const logout = async (req, res) => {
   });
 };
 
-export default { signup, signin, getCurrent, logout };
-
+export default {
+    signup,
+    signin,
+    getCurrent,
+    logout
+};
