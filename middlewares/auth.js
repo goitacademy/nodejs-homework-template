@@ -4,10 +4,11 @@ const { User } = require('../models/user');
 
 const {SECRET_KEY} = process.env;
 
+// функция для проверки авторизации (по токену) 
+// пользователя при запросах
 const auth = async (req, res, next) => {
     const { authorization = '' } = req.headers;
     const [bearer, token] = authorization.split(" ");
-    console.log(bearer, token);
     if (bearer !== "Bearer") {
         console.log("No Bearer");
         next(HttpError(401))
@@ -15,11 +16,10 @@ const auth = async (req, res, next) => {
     try {
         const { id } = jwt.verify(token, SECRET_KEY);
         const user = await User.findById(id);
-        console.log(user);
         if (!user) {
-        console.log("No User");
            next(HttpError(401)) 
         }
+        req.user = user;
         next();
     } catch {
         console.log("token is invalid");
@@ -27,7 +27,5 @@ const auth = async (req, res, next) => {
     }
 
 };
-
-
 
 module.exports = auth;

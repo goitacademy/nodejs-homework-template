@@ -1,13 +1,21 @@
 const { HttpError, ctrlWrapper } = require('../helpers');
 const { Contact } = require('../models/contact');
 
-const listContacts = async (_, res) => {
-  const contacts = await Contact.find({}, '-createdAt -updatedAt');
+const listContacts = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const contacts = await Contact.find({ owner }, '-createdAt -updatedAt', { skip, limit }).populate(
+    'owner',
+    'name',
+  );
+
   res.json(contacts);
 };
 
 const getContactById = async (req, res) => {
-  const response = await Contact.findById(req.params.contactId, '-createdAt -updatedAt');
+  const { _id: owner } = req.user;
+  const response = await Contact.findById({ owner }, req.params.contactId, '-createdAt -updatedAt');
   if (!response) {
     throw HttpError(404, 'Not Found');
   }
@@ -15,8 +23,17 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newContact = await Contact.create(req.body);
-
+  const { email, phone } = req.body;
+  const contactEmail = await Contact.findOne({ email });
+  const contactPhone = await Contact.findOne({ phone });
+  if (contactEmail) {
+    throw HttpError(409, `Contact with email ${email} already exists`);
+  }
+  if (contactPhone) {
+    throw HttpError(409, `Contact with phone ${phone} already exist`);
+  }
+  const { _id: owner } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner });
   if (!newContact) {
     throw HttpError(404, 'Unable to add contact');
   }
