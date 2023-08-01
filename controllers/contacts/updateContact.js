@@ -4,7 +4,7 @@ const { RequestError } = require("../../helpers");
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.updateContact(id, req.body, { new: true });
+  const result = await contacts.updateContact(id, req.body);
   if (!result) {
     throw RequestError(404, "Not found");
   }
