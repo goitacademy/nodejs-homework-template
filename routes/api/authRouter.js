@@ -9,19 +9,15 @@ import { authenticate } from '../../middleware/index.js';
 const authRouter = express.Router();
 
 authRouter.post(
-  '/signup',
-  validateBody(schemas.signupSchema),
-  controller.signup
+  '/register',
+  validateBody(schemas.registerSchema),
+  controller.register
 );
 
-authRouter.post(
-  '/signin',
-  validateBody(schemas.signinSchema),
-  controller.signin
-);
+authRouter.post('/login', validateBody(schemas.loginSchema), controller.login);
 
 authRouter.get('/current', authenticate, controller.getCurrent);
 
-authRouter.post('/signout', authenticate, controller.signout);
+authRouter.post('/logot', authenticate, controller.logot);
 
 export default authRouter;

@@ -1,8 +1,10 @@
-import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import { controllerWrapper } from '../decorators/index.js';
+import jwt from 'jsonwebtoken';
+
 import { HttpError } from '../helpers/index.js';
 import User from '../models/user.js';
+
+import { controllerWrapper } from '../decorators/index.js';
 
 // ####################################################
 
@@ -15,7 +17,7 @@ const authenticate = async (req, res, next) => {
   if (bearer !== 'Bearer') throw HttpError(401);
 
   try {
-    const payload = jwt.verify(token, secret); // if true, returns payload
+    const payload = jwt.verify(token, secret);
     const { id } = payload;
 
     const user = await User.findById(id);

@@ -13,7 +13,7 @@ const authErrorMsg = 'Invalid email or password';
 // ####################################################
 
 // Create an account
-const signup = async (req, res) => {
+const register = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -30,7 +30,7 @@ const signup = async (req, res) => {
 };
 
 // Log in
-const signin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -49,7 +49,7 @@ const signin = async (req, res) => {
 };
 
 // Log out
-const signout = async (req, res) => {
+const logot = async (req, res) => {
   const { _id: id } = req.user;
   await User.findByIdAndUpdate(id, { token: '' });
 
@@ -66,8 +66,8 @@ const getCurrent = (req, res) => {
 // ####################################################
 
 export default {
-  signup: controllerWrapper(signup),
-  signin: controllerWrapper(signin),
-  signout: controllerWrapper(signout),
+  register: controllerWrapper(register),
+  login: controllerWrapper(login),
+  logot: controllerWrapper(logot),
   getCurrent: controllerWrapper(getCurrent),
 };
