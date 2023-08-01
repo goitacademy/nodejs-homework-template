@@ -3,18 +3,20 @@ const { Contact } = require('../models/contact');
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, favorite = false } = req.query;
+  console.log(favorite);
   const skip = (page - 1) * limit;
-  const contacts = await Contact.find({ owner }, '-createdAt -updatedAt', { skip, limit }).populate(
-    'owner',
-    'name',
-  );
+  const contacts = await Contact.find({ owner, favorite: favorite }, '-createdAt -updatedAt', {
+    skip,
+    limit,
+  }).populate('owner', 'name');
 
   res.json(contacts);
 };
 
 const getContactById = async (req, res) => {
   const { _id: owner } = req.user;
+
   const response = await Contact.findById({ owner }, req.params.contactId, '-createdAt -updatedAt');
   if (!response) {
     throw HttpError(404, 'Not Found');
@@ -58,14 +60,14 @@ const updateContact = async (req, res) => {
   res.status(200).json(updatedContact);
 };
 
-const updateStatusContact = async (req, res) => {
-  const updatedStatusContact = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
+const updateFavorite = async (req, res) => {
+  const updateFavorite = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
     new: true,
   });
-  if (!updatedStatusContact) {
+  if (!updateFavorite) {
     throw HttpError(404, 'Not Found');
   }
-  res.status(200).json(updatedStatusContact);
+  res.status(200).json(updateFavorite);
 };
 
 module.exports = {
@@ -74,5 +76,5 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
-  updateFavorite: ctrlWrapper(updateStatusContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
