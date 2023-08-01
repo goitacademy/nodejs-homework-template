@@ -30,6 +30,14 @@ const schemaDBUserValidator = new Schema(
     },
     avatarURL: String,
     token: { type: String, default: "" },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { timestamps: true, versionKey: false }
 );
@@ -46,9 +54,14 @@ const userSubscriptionValidator = Joi.object({
   subscription: Joi.valid(...Object.values(STATUS_SUBSCRIPTION)).required(),
 });
 
+const userEmailValidator = Joi.object({
+  email: Joi.string().email(),
+});
+
 const schemas = {
   userValidator,
   userSubscriptionValidator,
+  userEmailValidator,
 };
 
 module.exports = { schemas, User };
