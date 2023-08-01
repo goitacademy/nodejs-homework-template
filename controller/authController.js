@@ -13,7 +13,7 @@ import "dotenv/config";
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res, next) => {
-  const { error } = userSchemas.userSignupSchema.validate(req.body);
+  const { error } = userSchemas.userSignupShema.validate(req.body);
   if (error) {
     return next(HttpError(400, error.message));
   }
@@ -37,7 +37,7 @@ const signup = async (req, res, next) => {
 };
 
 const signin = async (req, res, next) => {
-  const { error } = userSchemas.userSigninSchema.validate(req.body);
+  const { error } = userSchemas.userSigninShema.validate(req.body);
   if (error) {
     return next(HttpError(400, error.message));
     
