@@ -64,10 +64,5 @@
         "name": "greg",
         "email": "greg@greg.com",
         "phone": "123-4567"
-    },
-    {
-        "id": "94c085c3-9e81-4810-9efb-76b190b02411",
-        "name": "peg",
-        "email": "peeg@peeg.com"
     }
 ]

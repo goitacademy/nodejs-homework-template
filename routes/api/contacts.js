@@ -45,13 +45,23 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     next(error)
     res.status(404).json({ message: 'Could not validate input' })
-  }
-  
-
+  };
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contactId = req.params.contactId;
+    const deleteContact = await removeContact(contactId);
+    if (!deleteContact) {
+      res.status(404).json({ message: 'Not found' })
+    }
+    res.json({ message: "contact deleted" });
+    res.status(200);
+  } catch (error) {
+    next(error);
+    res.status(404).json({ message: 'Could delete contact' })
+    
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
