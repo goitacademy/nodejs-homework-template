@@ -5,10 +5,6 @@ import { handleSaveError, validateAtUpdate } from "./hooks.js";
 import { emailRegexp } from "../constans/user-constans.js";
 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-    },
     password: {
         type: String,
         required: [true, "Set password for user"],
