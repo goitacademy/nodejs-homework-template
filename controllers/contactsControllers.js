@@ -1,9 +1,11 @@
 const Contacts = require("../models/contactsModel");
 const cathAsync = require("../utils/catchAsync");
 
-// GET ALL CONTACTS
+// GET ALL CONTACTS !!! DONE
 exports.listContacts = cathAsync(async (req, res) => {
-  const contacts = await Contacts.find().select("-__v");
+  const contacts = await Contacts.find({ owner: req.user.id }).select(
+    "-__v -owner"
+  );
   res.status(200).json(contacts);
 });
 
@@ -11,6 +13,12 @@ exports.listContacts = cathAsync(async (req, res) => {
 exports.getContactById = cathAsync(async (req, res) => {
   const { contactId } = req.params;
   const contact = await Contacts.findById(contactId);
+
+  // if (contact.owner !== req.user.id)
+  // res.status(404).json({ msg: "not your contact" });
+  // console.log("contact", contact);
+
+  contact.owner = undefined;
   res.status(200).json(contact);
 });
 
@@ -21,10 +29,12 @@ exports.removeContact = cathAsync(async (req, res) => {
   res.status(200).json({ message: "contact deleted" });
 });
 
-// ADD NEW CONTACT BY BODY JSON
+// ADD NEW CONTACT BY BODY JSON !!! DONE
 exports.addContact = cathAsync(async (req, res) => {
-  const newContact = await Contacts.create(req.body);
+  const cont = { ...req.body, owner: req.user.id };
+  const newContact = await Contacts.create(cont);
   newContact.__v = undefined;
+  newContact.owner = undefined;
   res.status(201).json(newContact);
 });
 
