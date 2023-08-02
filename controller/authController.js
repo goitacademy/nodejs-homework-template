@@ -45,13 +45,13 @@ const signin = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    return next(HttpError(401, "Email or password invalid"));
+    return next(HttpError(401, "Email or password is wrong"));
   }
 
   const passwordCompare = await bcryptjs.compare(password, user.password);
   
   if (!passwordCompare) {
-    return next(HttpError(401, "Email or password invalid"));
+    return next(HttpError(401, "Email or password is wrong"));
   }
 
   const payload = {
