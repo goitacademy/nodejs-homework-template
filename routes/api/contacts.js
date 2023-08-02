@@ -8,12 +8,12 @@ const router = express.Router()
 
 router.get('/', ctrl.getAll)
 
-router.get('/:contactId', ctrl.getById )
+// router.get('/:contactId', ctrl.getById )
 
-router.post('/', ctrl.add)
+// router.post('/', ctrl.add)
 
-router.put('/:contactId', ctrl.update)
+// router.put('/:contactId', ctrl.update)
 
-router.delete('/:contactId',ctrl.remove)
+// router.delete('/:contactId',ctrl.remove)
 
 module.exports = router
