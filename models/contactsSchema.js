@@ -5,4 +5,8 @@ const contactSchema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
-module.exports = { contactSchema };
+const contactPatchSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = { contactSchema, contactPatchSchema };

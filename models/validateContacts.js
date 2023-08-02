@@ -32,4 +32,25 @@ const validatePutContact = (schema) => {
   return middleware;
 };
 
-module.exports = { validatePostContact, validatePutContact };
+const validatePatchContact = (schema) => {
+  const middleware = (req, res, next) => {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).json({ message: "missing field favorite" });
+      return;
+    } else {
+      const { error } = schema.validate(req.body);
+      if (error) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
+    }
+    next();
+  };
+  return middleware;
+};
+
+module.exports = {
+  validatePostContact,
+  validatePutContact,
+  validatePatchContact,
+};
