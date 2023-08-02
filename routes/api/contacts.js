@@ -4,6 +4,7 @@ import ctrl from "../../controllers/contacts-controller.js";
 
 import { validateBody } from "../../decorators/index.js";
 import {
+  authenticate,
   isBodyEmpty,
   isBodyFavoriteEmpty,
   isValidId,
@@ -11,27 +12,29 @@ import {
 
 import contactsSchemas from "../../schemas/contacts-schemas.js";
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get("/", ctrl.getAll);
+contactsRouter.use(authenticate);
 
-router.get("/:contactId", isValidId, ctrl.getById);
+contactsRouter.get("/", ctrl.getAll);
 
-router.post(
+contactsRouter.get("/:contactId", isValidId, ctrl.getById);
+
+contactsRouter.post(
   "/",
   isBodyEmpty,
   validateBody(contactsSchemas.addSchema),
   ctrl.add
 );
 
-router.put(
+contactsRouter.put(
   "/:contactId",
   isBodyEmpty,
   isValidId,
   validateBody(contactsSchemas.addSchema),
   ctrl.updateByid
 );
-router.patch(
+contactsRouter.patch(
   "/:contactId/favorite",
   isBodyFavoriteEmpty,
   isValidId,
@@ -39,6 +42,6 @@ router.patch(
   ctrl.updateStatusContact
 );
 
-router.delete("/:contactId", isValidId, ctrl.deleteById);
+contactsRouter.delete("/:contactId", isValidId, ctrl.deleteById);
 
-export default router;
+export default contactsRouter;

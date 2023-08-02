@@ -1,5 +1,6 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
 import "dotenv/config";
 
 import User from "../models/user-model.js";
@@ -43,9 +44,14 @@ const login = async (req, res) => {
   };
   // generation token + jwt
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+  // await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
-    token,
+    token: token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
 
