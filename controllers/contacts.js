@@ -27,19 +27,19 @@ const addSchema = Joi.object({
         }
  }
 
-//  const getById = async (req, res, next) => {
-//     try {
-//       const {contactId} = req.params;
-//       const contactByID = await contacts.getContactById(contactId);
-//       if (!contactByID) {
-//         throw HttpError(404, 'Not Found');
-//       }
-//       res.json(contactByID)
-//     } catch (error) {
-//       next(error);
+ const getById = async (req, res, next) => {
+    try {
+      const {contactId} = req.params;
+      const contactByID = await Contact.findById(contactId);
+      if (!contactByID) {
+        throw HttpError(404, 'Not Found');
+      }
+      res.json(contactByID)
+    } catch (error) {
+      next(error);
      
-//     } 
-//   }
+    } 
+  }
 
   const add = async (req, res, next) => {
     try {
@@ -87,7 +87,7 @@ const addSchema = Joi.object({
 
  module.exports= {
     getAll,
-    // getById,
+    getById,
     add,
     // update,
     // remove,
