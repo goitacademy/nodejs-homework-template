@@ -12,8 +12,7 @@ const userSigninSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
-
 export default {
-    userSignupSchema,
-    userSigninSchema,
-}
+  userSignupSchema,
+  userSigninSchema,
+};
