@@ -1,25 +1,35 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+import express from "express";
 
-const contactsRouter = require('./routes/api/contacts')
+import logger from "morgan";
 
-const app = express()
+import cors from "cors";
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+import router from "./routes/api/contactsRouter.js";
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+import authRouter from "./routes/api/authRouter.js";
 
-app.use('/api/contacts', contactsRouter)
+const app = express();
+
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+
+app.use(logger(formatsLogger));
+
+app.use(cors());
+
+app.use(express.json());
+
+app.use('/api/contacts', router);
+
+app.use('/users', authRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
-})
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message, })
+});
 
-module.exports = app
+export default app;
+  
