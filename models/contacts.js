@@ -1,17 +1,28 @@
-
 const Contact = require("./schemas/contact");
 
 const listContacts = async () => {
-  return Contact.find();
+  try {
+    return Contact.find();
+  } catch (err) {
+    return err;
+  }
 };
 
 const getContactById = async (contactId) => {
-    const res= Contact.findOne({ _id: contactId });
-  return res.then(res => res).catch(err=> false);
+  try {
+    const res = Contact.findOne({ _id: contactId });
+    return res.then((res) => res).catch((err) => false);
+  } catch (err) {
+    return err;
+  }
 };
 
 const removeContact = async (contactId) => {
-  return Contact.findByIdAndDelete({_id: contactId})
+  try {
+    return Contact.findByIdAndDelete({ _id: contactId });
+  } catch (err) {
+    return err;
+  }
 };
 
 const addContact = async (body) => {
@@ -21,18 +32,16 @@ const addContact = async (body) => {
       name,
       email,
       phone,
-   })
+    });
   } catch (err) {
     console.log("validation failed: ");
     return console.table(err.details);
-  } 
+  }
 };
 
 const updateContact = async (contactId, body) => {
-
   try {
-    return  Contact.findByIdAndUpdate({_id:contactId}, body)
-   
+    return Contact.findByIdAndUpdate({ _id: contactId }, body);
   } catch (err) {
     console.log("validation failed: ");
     console.table(err.details);
@@ -41,14 +50,13 @@ const updateContact = async (contactId, body) => {
 };
 
 const updateStatusContact = async (contactId, body) => {
-
   try {
-    await Contact.findByIdAndUpdate({ _id: contactId }, body)
-    return  Contact.findById({_id: contactId})
+    await Contact.findByIdAndUpdate({ _id: contactId }, body);
+    return Contact.findById({ _id: contactId });
   } catch (err) {
     return { message: "validationError", err };
   }
-}
+};
 
 module.exports = {
   listContacts,
