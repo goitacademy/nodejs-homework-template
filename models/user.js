@@ -22,12 +22,15 @@ const userSchema = new Schema(
       enum: Object.values(userRolesEnum),
       default: userRolesEnum.STARTER,
     },
-    
-      token: {
-        type: String,
-        default: null,
-      },
-    
+
+    token: {
+      type: String,
+      default: null,
+    },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
