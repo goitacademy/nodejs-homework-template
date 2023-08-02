@@ -38,7 +38,8 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(404, { message: "missing required name field" });
+      console.log("yes");
+      throw HttpError(404, "missing required name field");
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -53,7 +54,7 @@ router.delete("/:contactId", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json({ message: "contact deleted" });
+    res.status(200).json({ "message": "contact deleted" });
   } catch (error) {
     next(error);
   }
@@ -63,8 +64,7 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      console.log(error);
-      throw HttpError(404, error.message);
+      throw HttpError(404, "missing fields");
     }
     const result = await contacts.updateContact(req.params.contactId, req.body);
     if (!result) {
