@@ -12,8 +12,7 @@ const {
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
-    res.json(contacts);
-    res.status(200);
+    res.status(200).json(contacts);
 
   } catch (error) {
     res.status(404);
@@ -55,8 +54,8 @@ router.delete('/:contactId', async (req, res, next) => {
     if (!deleteContact) {
       res.status(404).json({ message: "Not found" })
     }
-    res.json({ message: "contact deleted" });
-    res.status(200);
+    res.status(200).json({ message: "contact deleted" });
+    
   } catch (error) {
     next(error);
     res.status(404).json({ message: "Could delete contact" })
@@ -76,8 +75,7 @@ router.put('/:contactId', async (req, res, next) => {
     if (!updatedContact) {
       res.status(404).json({ message: "Not found" })
     }
-    res.json({ message: "contact updated" });
-    res.status(200);
+    res.status(200).json({ message: "contact updated" });
   } catch (error) {
     next(error);
     res.status(404).json({message: "could not update contact"})
