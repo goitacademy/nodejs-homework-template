@@ -16,3 +16,11 @@ export const contactAddSchema = Joi.object({
 export const emptyBodySchema = Joi.object()
   .min(1)
   .messages({ "object.min": "missing fields" });
+
+export const emptyFavoriteBodySchema = Joi.object()
+  .min(1)
+  .messages({ "object.min": "missing field favorite" });
+
+export const updateStatusContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
