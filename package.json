@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "cross-env NODE_ENV=development node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
@@ -15,19 +16,27 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.3.1",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.10",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.0",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nanoid": "^4.0.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "jest": "^29.6.2",
+    "nodemon": "2.0.15",
+    "superagent": "^8.0.9",
+    "supertest": "^6.3.3"
   }
 }
