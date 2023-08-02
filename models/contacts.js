@@ -6,8 +6,7 @@ const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
   try {
-	  const data = await fs.readFile(contactsPath);
-
+    const data = await fs.readFile(contactsPath);
     return JSON.parse(data);
   } catch (error) {
     console.log(error);
@@ -45,7 +44,7 @@ const addContact = async (body) => {
     const newContact = {
       ...body,
       id: nanoid(),
-	 };
+    };
     contacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return newContact;
@@ -57,11 +56,13 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   try {
     const contacts = await listContacts();
+    const contact = await getContactById(contactId);
+
     const index = contacts.findIndex((contact) => contact.id === contactId);
     if (index === -1) {
       return null;
     }
-    contacts[index] = { contactId, ...body };
+    contacts[index] = { ...contact, ...body };
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return contacts[index];
   } catch (error) {
