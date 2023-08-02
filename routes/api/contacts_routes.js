@@ -38,7 +38,7 @@ contactsRouter.post('/', async (req, res, next) => {
   try {
     const { error, value } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({message: error.details[0].message})
+      throw new Error(error.details[0].message)
     }
     const newContact = await contactsService.addContact(req.body);
     res.status(201).json(newContact);
@@ -65,10 +65,9 @@ contactsRouter.delete('/:contactId', async (req, res, next) => {
 contactsRouter.put('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const { contactId } = req.params;
     const { error, value } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      throw new Error(error.details[0].message);
     }
     const updateContact = await contactsService.updateContact(contactId, req.body);
     res.json(updateContact);
