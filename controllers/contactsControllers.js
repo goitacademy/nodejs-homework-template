@@ -49,6 +49,7 @@ exports.updateContact = cathAsync(async (req, res) => {
 
   const updatedContact = await contact.save();
   updatedContact.__v = undefined;
+  updatedContact.owner = undefined;
   res.status(200).json(updatedContact);
 });
 
@@ -61,5 +62,6 @@ exports.updateFavoriteStatus = cathAsync(async (req, res) => {
   const updatedContact = await contact.save();
 
   updatedContact.__v = undefined;
+  updatedContact.owner = undefined;
   res.status(200).json(updatedContact);
 });
