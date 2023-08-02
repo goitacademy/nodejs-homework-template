@@ -2,46 +2,18 @@ const express = require("express");
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
+const { isEmptyBody } = require("../../helpers");
 
-const { ResponseError } = require("../../helpers");
+const ctrl = require("../../controllers/controllers");
 
-router.get("/", async (req, res,) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    res.status(500).json({
-      message: "Server error",
-    });
-  }
+router.get("/", ctrl.getAll);
 
-});
+router.get("/:contactId", ctrl.getById);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
-    if (!result) {
-      throw ResponseError(404, "Not found");
-    }
-    res.json(result);
+router.post("/", isEmptyBody, ctrl.post);
 
-  } catch (error) {
-   next(error)
-  }
-});
+router.delete("/:contactId", ctrl.remove);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:id", isEmptyBody, ctrl.put);
 
 module.exports = router;
