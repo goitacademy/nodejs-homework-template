@@ -1,7 +1,7 @@
 const fs = require('fs/promises');
 const { randomUUID } = require('crypto');
 const path = require('path');
-
+const { schema } = require('../../schemas/contacts');
 
 const contactsPath = path.join(__dirname, 'contacts.json')
 
