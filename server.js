@@ -11,11 +11,7 @@ const portForConnection = PORT || 3000;
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(portForConnection, () => {
-      console.log(
-        `Database connection successful. Use our API in local connection on port: ${portForConnection}`
-      );
-    });
+    console.log("Mongo DB successfully connected ...");
   })
   .catch((error) => {
     console.log(
@@ -23,3 +19,7 @@ mongoose
     );
     process.exit(1);
   });
+
+module.exports = app.listen(portForConnection, () => {
+  console.log(`Use our API in local connection on port: ${portForConnection}`);
+});
