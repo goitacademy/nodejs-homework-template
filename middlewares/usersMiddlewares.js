@@ -60,7 +60,8 @@ exports.protect = cathAsync(async (req, res, next) => {
   }
   const currentUser = await User.findById(decoded.id);
 
-  if (!currentUser) throw new AppError(401, "Not authorized");
+  if (!currentUser || !currentUser.token || currentUser.token !== token)
+    throw new AppError(401, "Not authorized");
 
   req.user = currentUser;
 
