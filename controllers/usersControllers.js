@@ -38,8 +38,6 @@ exports.loginUser = cathAsync(async (req, res) => {
 
 // LOGOUT USER
 exports.logoutUser = cathAsync(async (req, res) => {
-  // ТУТ ТРЕБА ВИДАЛИТИ ТОКЕН
-
   res.sendStatus(204);
 });
 
