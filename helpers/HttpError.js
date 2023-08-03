@@ -1,6 +1,6 @@
 const messageList = {
   400: "Missing fields",
-  401: "Unauthrized",
+  401: "Unauthorized",
   403: "Forbidden",
   404: "Not found",
   409: "Conflict",

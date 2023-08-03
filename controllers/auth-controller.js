@@ -23,8 +23,10 @@ const signup = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    email: newUser.email,
-    subscription: newUser.subscription,
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -36,7 +38,7 @@ const login = async (req, res) => {
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Password or email is wrong");
+    throw HttpError(401, "Email or password is wrong");
   }
 
   const payload = {
@@ -44,7 +46,7 @@ const login = async (req, res) => {
   };
   // generation token + jwt
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
-  // await User.findByIdAndUpdate(user._id, { token });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token: token,
@@ -55,7 +57,24 @@ const login = async (req, res) => {
   });
 };
 
+const getCurrent = (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  // throw HttpError(409, "Email in use");
+  res.status(204).json();
+};
+
 export default {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };
