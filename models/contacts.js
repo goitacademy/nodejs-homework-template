@@ -1,58 +1,35 @@
-import fs from "fs/promises";
-import path from "path";
-import { nanoid } from "nanoid";
+import { Schema, model } from "mongoose";
 
-const contactsPath = path.resolve("models", "contacts.json");
+import { handleSaveError, handleUpdateValidate } from "./hooks.js";
 
-export async function listContacts() {
-  try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    return JSON.parse(data);
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
+const contactShema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      required: [true, "Set email for contact"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Set phone for contact"],
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-async function getContactById(contactId) {
-  try {
-    const contacts = await listContacts();
-    const resultById = contacts.find((contact) => contact.id === contactId);
-    return resultById || null;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
+contactShema.pre("findOneAndUpdate", handleUpdateValidate);
 
-export async function removeContact(contactId) {
-  try {
-    const contacts = await listContacts();
-    const contactToRemove = contacts.find(
-      (contact) => contact.id === contactId
-    );
-    if (!contactToRemove) return null;
-    const updatedContacts = contacts.filter(({ id }) => id !== contactId);
-    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
-    return contactToRemove;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
+contactShema.post("save", handleSaveError);
 
-export async function addContact(name, email, phone) {
-  try {
-    const contacts = await listContacts();
-    const newContact = { id: nanoid(), name, email, phone };
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return newContact;
-  } catch (error) {
-    throw new Error(error.message);
-  }
-}
+contactShema.post("findOneAndUpdate", handleSaveError);
 
-export default {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-};
+const Contact = model("contact", contactShema);
+
+export default Contact;
