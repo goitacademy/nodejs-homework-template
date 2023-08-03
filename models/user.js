@@ -1,12 +1,10 @@
 // user.js схема для auth user
-const { model, Schema } = require('mongoose');
-const Joi = require('joi');
-const { handleMongooseError } = require('../helpers/index');
-
-
+const { model, Schema } = require('mongoose')
+const Joi = require('joi')
+const { handleMongooseError } = require('../helpers/index')
 
 // Любое регулярное выражение для проверки email
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 // Создали схему для отправки данных пользователя
 const userSchema = new Schema(
@@ -15,50 +13,55 @@ const userSchema = new Schema(
       type: String,
       // Проверка email и уникальность добавить
       match: emailRegexp,
-    //   mongoDB -> indexes -> email unique создать
+      //   mongoDB -> indexes -> email unique создать
       unique: true,
-      required: [true, 'Email is required'],
+      required: [true, 'Email is required']
     },
     password: {
       type: String,
       // Минимальная длина 6 символов
       minlength: 6,
-      required: true,
+      required: true
     },
     subscription: {
       type: String,
       enum: ['starter', 'pro', 'business'],
-      default: 'starter',
+      default: 'starter'
     },
     // для logOut token строка, не обязательный параметр
     token: {
-        type: String, 
-        default: ""
+      type: String,
+      default: ''
+    },
+    // добавляем в схему аватар
+    avatarURL: {
+      type: String,
+      required: true
     }
   },
   // Для добавления времени Event
   { versionKey: false, timestamps: true }
-);
+)
 
 // Если не соответствует схеме - выкидываем ошибку
-userSchema.post('save', handleMongooseError);
+userSchema.post('save', handleMongooseError)
 
 const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
-});
+  password: Joi.string().min(6).required()
+})
 
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
-});
+  password: Joi.string().min(6).required()
+})
 
 const schemas = {
   registerSchema,
-  loginSchema,
-};
+  loginSchema
+}
 
 // Создаём модель. Указываем название коллекции в единственном числе и схему добавляем userSchema
-const User = model('user', userSchema);
+const User = model('user', userSchema)
 
-module.exports = { schemas, User };
+module.exports = { schemas, User }

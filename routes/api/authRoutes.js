@@ -2,7 +2,7 @@
 const express = require('express')
 const authController = require('../../controllers/authController')
 
-const { authenticate } = require('../../middlewares/index')
+const { authenticate, upload } = require('../../middlewares/index');
 
 const router = express.Router()
 
@@ -25,5 +25,10 @@ router.get('/current', authenticate, authController.getCurrent)
 router.post('/logout', authenticate, (req, res) => {
   authController.logout(req, res)
 })
+
+// upload.single('avatar') для перенесения в папку public
+router.patch('/avatars', authenticate, upload.single('avatar'), (req, res) => {
+  authController.updateAvatar(req, res);
+});
 
 module.exports = router

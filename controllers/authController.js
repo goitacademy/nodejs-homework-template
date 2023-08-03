@@ -3,8 +3,19 @@ const { schemas, User } = require('../models/user')
 const jwt = require('jsonwebtoken')
 // пакет для хеширования пароля
 const bcrypt = require('bcrypt')
+// для временной аватарки пакет при 1 регистрации
+const gravatar = require('gravatar')
+// используем fs для перемещения
+const fs = require('fs/promises')
+const path = require('path');
+// для работы с изображениями jimp & fs-extra
+const jimp = require('jimp');
+// const fsExtra = require('fs-extra');
 
 const { SECRET_KEY } = process.env
+
+// путь для аватар переноса(сохранения)
+const avatarDir = path.join(__dirname, '../', 'public', 'avatars')
 
 const register = async (req, res) => {
   try {
@@ -37,8 +48,12 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10)
 
+    // передаем email человека и мы получаем аватар временную(первоначальную) каждому при регистрации
+    const avatarURL = gravatar.url(email)
+  
+
     // Создаем нового пользователя в базе данных
-    const newUser = await User.create({ ...req.body, password: hashPassword })
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL })
 
     // Отправляем успешный ответ с данными о новом пользователе и статусом 201
     res.status(201).json({
@@ -118,9 +133,45 @@ const logout = async (req, res) => {
   //   res.json({message: "Logout success"})
 }
 
+const updateAvatar = async (req, res) => {
+  const {_id} = req.user
+  // импортируем путь и название
+  const { path: tempUpload, originalname } = req.file
+
+  // Путь для временного хранения загруженного файла в папке 'temp'
+  const tempPath = path.join(__dirname, '../', 'temp', originalname);
+
+  // Читаем изображение с использованием jimp
+  const image = await jimp.read(tempUpload);
+
+  // Изменяем размер изображения до 250x250
+  await image.resize(250, 250);
+
+  // Добавляем уникальность имени с помощью добавления идентификатора пользователя + название файла
+  const filename = `${_id}_${originalname}`;
+
+  // Итоговый путь сохранения файла с уникальным именем в папке 'public/avatars'
+  const resultUpload = path.join(avatarDir, filename);
+
+  // Сохраняем измененное изображение в папку 'public/avatars'
+  await image.writeAsync(resultUpload);
+
+  // Удаляем временный файл из папки 'temp'
+  await fs.unlink(tempPath);
+
+  // Записываем новый путь в базу. Получаем идентификатор и отправляем новый путь к avatarURL
+  const avatarURL = path.join('avatars', filename)
+  await User.findByIdAndUpdate(_id, {avatarURL})
+
+  // Отправляем URL аватара в ответе
+  res.json({avatarURL})
+}
+
+
 module.exports = {
   register,
   login,
   getCurrent,
-  logout
+  logout,
+  updateAvatar
 }
