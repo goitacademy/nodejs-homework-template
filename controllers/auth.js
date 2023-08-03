@@ -64,7 +64,8 @@ const verifyToken = async (req, res) => {
 const resendEmail = async (req, res) => {
   const { email } = req.body;
 
-  const user = User.findOne({ email });
+  const user = await User.findOne({ email });
+
   // Перевірка на існування користувача в базі
   if (!user) {
     throw generateHTTPError(404, "User not found");

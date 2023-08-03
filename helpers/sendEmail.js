@@ -23,6 +23,8 @@ const sendEmail = async ({ email, verificationToken }) => {
     html: `<a href="${baseURL}/users/verify/${verificationToken}" target="_blank">Please, confirm your registration by press this reference</a>`,
   };
 
+  console.log(emailOptions);
+
   await transporter.sendMail(emailOptions);
 };
 
