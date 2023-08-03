@@ -13,17 +13,14 @@ const listContacts = async (req, res) => {
 
   res.json(contacts);
 };
-
 const getContactById = async (req, res) => {
   const { _id: owner } = req.user;
-
   const response = await Contact.findById({ owner }, req.params.contactId, '-createdAt -updatedAt');
   if (!response) {
     throw HttpError(404, 'Not Found');
   }
   res.status(200).json(response);
 };
-
 const addContact = async (req, res) => {
   const { email, phone } = req.body;
   const contactEmail = await Contact.findOne({ email });
@@ -49,7 +46,6 @@ const removeContact = async (req, res) => {
   }
   res.status(200).json({ message: 'contact deleted' });
 };
-
 const updateContact = async (req, res) => {
   const updatedContact = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
     new: true,
@@ -59,7 +55,6 @@ const updateContact = async (req, res) => {
   }
   res.status(200).json(updatedContact);
 };
-
 const updateFavorite = async (req, res) => {
   const updateFavorite = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {
     new: true,

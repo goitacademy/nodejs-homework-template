@@ -19,12 +19,7 @@ const registerCtrl = async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const avatarUrl = gravatar.url(email);
   const newUser = await User.create({ ...req.body, password: hashedPassword, avatarUrl });
-  res.status(201).json({
-    user: {
-      email: newUser.email,
-      subscription: newUser.subscription,
-    },
-  });
+  res.status(201).json({ user: { email: newUser.email, subscription: newUser.subscription } });
 };
 const loginCtrl = async (req, res) => {
   const { email, password } = req.body;
@@ -36,33 +31,19 @@ const loginCtrl = async (req, res) => {
   if (!comparePassword) {
     throw HttpError(401, 'Email or password is not valid');
   }
-
-  const payload = {
-    id: user._id,
-  };
+  const payload = { id: user._id };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '12h' });
   await User.findByIdAndUpdate(user._id, { token });
-  res.status(200).json({
-    token,
-    user: {
-      email: user.email,
-      subscription: user.subscription,
-    },
-  });
+  res.status(200).json({ token, user: { email: user.email, subscription: user.subscription } });
 };
 const logoutCtrl = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
-  res.status(204).json({
-    message: 'Logout success',
-  });
+  res.status(204).json({ message: 'Logout success' });
 };
 const getCurrentCtrl = (req, res) => {
   const { email, subscription } = req.user;
-  res.json({
-    email,
-    subscription,
-  });
+  res.json({ email, subscription });
 };
 const updateSubscriptionCtrl = async (req, res) => {
   const { _id, subscription } = req.user;
@@ -73,9 +54,7 @@ const updateSubscriptionCtrl = async (req, res) => {
   const updatedSubscription = await User.findByIdAndUpdate(
     _id,
     { $set: { subscription: newSubscription } },
-    {
-      new: true,
-    },
+    { new: true },
   );
   if (!updatedSubscription) {
     throw HttpError(409, 'Not Found');
@@ -96,6 +75,7 @@ const updateAvatarCtrl = async (req, res) => {
   console.log(avatarUrl);
   res.json({ avatarUrl });
 };
+
 module.exports = {
   registerCtrl: ctrlWrapper(registerCtrl),
   loginCtrl: ctrlWrapper(loginCtrl),
