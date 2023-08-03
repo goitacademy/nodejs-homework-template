@@ -1,14 +1,9 @@
-const fs = require('fs/promises');
-const { v4 } = require("uuid");
-const path = require("path");
-const contactsPath = path.resolve(__dirname, "./contacts.json");
+const Contact = require('../service/schemas/contacts');
 
 const listContacts = async (req, res) => {
  try {
-   const data = await fs.readFile(contactsPath, "utf-8");
-   const contacts = JSON.parse(data);
-
-   res.json(contacts);
+   const contacts = await Contact.find();
+    res.json(contacts); 
  } catch (error) {
    console.error(error.message);
    res.status(404).json({ error: "Error!" });
@@ -17,11 +12,8 @@ const listContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const contacts = JSON.parse(data);
-
     const { contactId } = req.params;
-    const foundContact = contacts.find((contact) => contact.id === contactId);
+    const foundContact =  await Contact.findOne({ _id: contactId});
 
     if (foundContact) {
       res.send(foundContact);
@@ -36,67 +28,79 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  try {
-    const data = await fs.readFile(contactsPath, "utf-8");
-    const contacts = JSON.parse(data);
-
-    const contact = req.body;
-
-    if (contact.name && contact.email && contact.phone) {
-      contacts.push({ ...contact, id: v4() });
-      await fs.writeFile(contactsPath, JSON.stringify(contacts));
-      res.status(201).send(`Contact with the name ${contact.name} added to the  database!`);
-    }
-    else {
-       res.status(404).json({ message: "missing required name field" });
-    }
-  }
-  catch (error) {
-    console.error(error.message)
-  }
+ try {
+   const contact = req.body;
+   await Contact.create({ ...contact });
+   res.status(201).json(`contact with name:${contact.name} add to data base!`);
+ } catch (error) {
+   console.error(error.message);
+   res.status(500).json({ message: "Failed to add contact to the database." });
+ }
 }
-const removeContact = async (req, res) => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const contacts = JSON.parse(data);
 
+const removeContact = async (req, res) => {
+  const contacts = await Contact.find();
   const { contactId } = req.params;
 
   if (contacts.some((contact) => contact.id === contactId)) {
-    const newContactList = contacts.filter((contact) => contact.id !== contactId);
-    fs.writeFile(contactsPath, JSON.stringify(newContactList));
+    await Contact.findByIdAndRemove({ _id: contactId });
     res.status(200).send({message: "contact deleted"});
   }
   else {
     res.status(404).send({ message: "Not found" });
   }
-  
- 
 };
 
 const updateContact = async (req, res) => {
-   const data = await fs.readFile(contactsPath, "utf-8");
-   const contacts = JSON.parse(data);
-  const { contactId } = req.params;
-  const contact = req.body;
-
+   const { contactId } = req.params;
+   const contact = req.body;
+  
   if (contact.name && contact.phone && contact.email) {
-    const dataToUpDate = { ...contact, id: contactId };
-
-    const indexToUpDate = contacts.findIndex((user) => user.id === contactId);
-
-    contacts[indexToUpDate] = dataToUpDate;
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    res.send(contact)
-  }
-  else {
-    res.status(400).send({ message: "missing fields" });
+    try {
+      const updatedContact = await Contact.findByIdAndUpdate(
+        contactId,
+        { $set: contact }, 
+        { new: true }
+      );
+      res.send(updatedContact);
+    } catch (error) {
+      res.status(404).json({ message: "Contact not found" });
+    }
+  } else {
+    res.status(400).json({ message: "Missing fields" });
   }
 };
 
+const updateStatusContact = async (req, res) => {
+   const { contactId } = req.params;
+   const { favorite = true} = req.body;
+   const contact = req.body;
+
+  if (favorite === undefined) {
+    res.status(400).json({ message: "missing field favorite" });
+    return;
+  }
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { $set: contact, favorite },
+      { new: true }
+    );
+    if (updatedContact) {
+      res.status(200).json(updatedContact);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 module.exports = {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 }
