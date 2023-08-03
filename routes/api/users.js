@@ -11,6 +11,7 @@ const {registerNewUser,
     logOutUser,
     currentUser,
     } = require('../../controllers/users')
+    
 const router = express.Router();
 
 /**

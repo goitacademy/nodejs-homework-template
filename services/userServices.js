@@ -1,10 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 
-const multer = require('multer')
-
-const path = require('path')
-
 const {User} = require("../models/user");
 
 const HttpError = require("../utils/HttpError");
@@ -13,11 +9,6 @@ require('dotenv').config();
 
 const {SECRET_KEY} = process.env;
 
-const tempDir = path.join(__dirname, "public", "avatars");
-
-const multerConfig = multer.diskStorage({
-  destination: tempDir,
-});
 
 const register = async (data) => {
   const { email, password } = data.body;
