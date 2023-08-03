@@ -1,10 +1,22 @@
-import { Contact } from '../models/index.js';
-import { HttpError } from '../helpters/index.js';
-import { contactsAddSchema, contactsFavoriteSchema } from "../schemas/contactsSchema.js";
+import { Contact } from "../models/index.js";
+import { HttpError } from "../helpters/index.js";
+import {
+  contactsAddSchema,
+  contactsFavoriteSchema,
+} from "../schemas/contactsSchema.js";
 
 export const listContacts = async (req, res, next) => {
   try {
-    const allContacts = await Contact.find();
+    const { _id: owner } = req.user;
+
+    const { page = 1, limit = 20, ...query } = req.query;
+    const skip = (page - 1) * limit;
+
+    const allContacts = await Contact.find(
+      { owner, ...query },
+      "-createdAt -updatedAt",
+      { skip, limit }
+    );
 
     res.json(allContacts);
   } catch (error) {
@@ -36,7 +48,9 @@ export const addContact = async (req, res, next) => {
       throw HttpError(400);
     }
 
-    const newContact = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+
+    const newContact = await Contact.create({ ...req.body, owner });
 
     res.status(201).json(newContact);
   } catch (error) {
