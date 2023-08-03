@@ -95,19 +95,20 @@ export const removeContact = async id => {
 
 /**
  *
- * @param {object} data
+ * @param {object} body - добавляемые данные
+ * @returns {object} данные успешно добавленного контакта
  */
 export const addContact = async body => {
   const list = await getAllContacts();
 
-  // валидация данных
+  // валидация
   try {
     await utils.contactDataScheme.validateAsync(body);
   } catch ({ message }) {
     throw CustomError('ERR_INVALID_DATA', message);
   }
 
-  // форматированные данные нового контакта
+  // форматируем данные контакта
   const { name, email, phone } = body;
   const data = {
     id: utils.getId(),

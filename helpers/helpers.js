@@ -21,7 +21,3 @@ export const formatPhone = v =>
     .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
 
 export const formatName = v => String(v).replace(/\s*/, ' ').trim();
-
-// const { error } = contactDataScheme.validate({ name: 1, phone: 2 });
-// const [{ message }] = error.details;
-// console.log({ message });
