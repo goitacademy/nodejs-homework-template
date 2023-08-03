@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
 
 const { User } = require("../../models");
-
 const { HttpError } = require("../../helpers");
+const gravatar = require("gravatar");
 
 const register = async (req, res) => {
   // checking if user with such email is already registered
@@ -16,10 +16,16 @@ const register = async (req, res) => {
 
   // hashing password
   const hashPassword = await bcrypt.hash(password, 10);
+  // creating of temporary user avatar
+  const avatarURL = gravatar.url(email);
 
   // adding a new user if he's registering with unique email
   // with hashed password
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
