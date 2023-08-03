@@ -1,0 +1,15 @@
+import { Contact } from "../../models/";
+import { HttpError } from "../../utilities";
+
+const getById = async (req, res) => {
+  const { id } = req.params;
+
+  const result = await Contact.findById(id);
+  if (!result) {
+    HttpError(404, "Not found");
+  }
+
+  res.json(result);
+};
+
+module.exports = getById;

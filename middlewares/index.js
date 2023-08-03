@@ -1,4 +1,5 @@
-const { isValidId } = require("./isValidId");
+const isValidId = require("./isValidId");
 const validateBody = require("./validateBody");
+const ctrlWrapper = require("./ctrlWrapper");
 
-module.exports = { validateBody, isValidId };
+module.exports = { validateBody, isValidId, ctrlWrapper };
