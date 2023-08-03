@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
 
 const { SECRET_KEY } = process.env;
 
@@ -15,8 +16,10 @@ const register = async (req, res) => {
     throw HttpError(409, 'Email in use');
   }
 
-  const hachedPassword = await bcrypt.hash(password, 10);
-  const newUser = await UserModel.create({ ...req.body, password: hachedPassword });
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
+
+  const newUser = await UserModel.create({ ...req.body, password: hashedPassword, avatarURL });
 
   res.status(201).json({
     user: {
