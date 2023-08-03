@@ -29,7 +29,7 @@ exports.loginUser = cathAsync(async (req, res) => {
   const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
-
+  await User.findByIdAndUpdate(user._id, { token });
   res.status(200).json({
     token,
     user: { email: user.email, subscription: user.subscription },
@@ -38,6 +38,8 @@ exports.loginUser = cathAsync(async (req, res) => {
 
 // LOGOUT USER
 exports.logoutUser = cathAsync(async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
   res.sendStatus(204);
 });
 
