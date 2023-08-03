@@ -1,5 +1,4 @@
-const Joi = require("joi");
-const { schema } = require("../../models/schema.js");
+const { schema, statusSchema } = require("../../models/schema.js");
 
 const {
   listContacts,
@@ -7,6 +6,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts.js");
 const express = require("express");
 
@@ -18,11 +18,16 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
-  if (contact) {
-    res.json(contact);
+  try {
+    const contact = await getContactById(req.params.contactId);
+    if (contact) {
+      res.json(contact);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (e) {
+    console.error(e);
   }
-  res.status(404).json({ message: "Not found" });
 });
 
 router.post("/", async (req, res, next) => {
@@ -43,7 +48,7 @@ router.post("/", async (req, res, next) => {
     res.status(400).json({ message: msg });
   } else {
     const newContact = await addContact(contact);
-    res.json(newContact);
+    res.status(201).json(newContact);
   }
 });
 
@@ -77,6 +82,23 @@ router.put("/:contactId", async (req, res, next) => {
     res.status(400).json({ message: msg });
   } else {
     const contactUpdated = await updateContact(req.params.contactId, contact);
+    if (contactUpdated) {
+      res.json(contactUpdated);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  }
+});
+
+router.put("/:contactId/favorite", async (req, res, next) => {
+  const validation = statusSchema.validate(req.body);
+  if (validation.error) {
+    res.status(400).json({ message: validation.error.message });
+  } else {
+    const contactUpdated = await updateStatusContact(
+      req.params.contactId,
+      req.body
+    );
     if (contactUpdated) {
       res.json(contactUpdated);
     } else {
