@@ -1,3 +1,4 @@
+
 const {Schema, model} = require('mongoose');
 
 
@@ -20,6 +21,7 @@ const contactSchema = new Schema (
     
     }, {versionKey: false, timestamps: true}
 ) 
+
 
 
 contactSchema.post('save', (error, data, next) => {

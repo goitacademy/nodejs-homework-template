@@ -14,8 +14,10 @@ router.get('/:contactId', isValidId, ctrl.getById)
 
 router.post('/', ctrl.add)
 
-// router.put('/:contactId', ctrl.update)
+router.put('/:contactId', isValidId, ctrl.update)
 
-// router.delete('/:contactId',ctrl.remove)
+router.patch('/:contactId/favorite', isValidId, ctrl.updateStatusContact)
+
+router.delete('/:contactId',ctrl.remove)
 
 module.exports = router
