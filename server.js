@@ -1,8 +1,9 @@
 const app = require('./app');
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
-const uriDb ="mongodb+srv://zheniaklimenchuk:1234@cluster0.p5cti98.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const PORT = 3000;
+const uriDb = process.env.DB_HOST;
 
 const connection = mongoose.connect(uriDb, {
   useNewUrlParser: true,
