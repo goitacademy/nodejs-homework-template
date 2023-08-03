@@ -9,6 +9,8 @@ const {
   currentUser,
   updateUserSubscription,
   updateUserAvatar,
+  verifyToken,
+  resendEmail,
 } = require("../../controllers");
 
 const { schemas } = require("../../models/user");
@@ -39,5 +41,9 @@ router.patch(
   uploadAvatar.single("avatar"),
   updateUserAvatar
 );
+
+router.get("/verify/:verificationToken", verifyToken);
+
+router.post("/verify/", validateBody(schemas.userEmailValidator), resendEmail);
 
 module.exports = router;
