@@ -1,14 +1,23 @@
-const { Contact } = require("../../models/contacts");
-
-const { RequestError } = require("../../helpers");
+const updateStatusContact = require("./updateStatusContact");
 
 const updateFavorite = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
-    throw RequestError(404, "Not found");
+  const { body } = req;
+  try {
+    const updatedContact = await updateStatusContact(id, body);
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    if (error.message === "missing field favorite") {
+      res.status(400).json({ message: "missing field favorite" });
+    } else {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   }
-  res.status(201).json(result);
 };
 
 module.exports = updateFavorite;
