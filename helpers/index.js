@@ -3,6 +3,8 @@ const {
   contactSchema,
   addContactsSchema,
   patchContactsFavoriteSchema,
+  userSchema,
+  registerSchema,
 } = require("./schemas");
 
 module.exports = {
@@ -10,4 +12,6 @@ module.exports = {
   contactSchema,
   addContactsSchema,
   patchContactsFavoriteSchema,
+  userSchema,
+  registerSchema,
 };
