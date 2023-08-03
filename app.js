@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 
 // ========USER MODULES======== //
 const contactsRouter = require("./routes/contactsRoutes");
+const usersRouter = require("./routes/usersRoutes");
 
 // ========EXPRESS APPLICATION======== //
 const app = express();
@@ -37,6 +38,7 @@ app.use(cors());
 app.use(express.json());
 
 // ========ROUTES======== //
+app.use("/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
 // ========NOT FOUND ERROR======== //

@@ -17,6 +17,9 @@ const {
   updateContact,
   updateFavoriteStatus,
 } = require("../controllers/contactsControllers");
+const { protect } = require("../middlewares/usersMiddlewares");
+
+router.use(protect);
 
 router.get("/", listContacts);
 router.post("/", checkCreateContactData, addContact);
