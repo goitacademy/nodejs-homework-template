@@ -43,7 +43,7 @@ const flushContacts = async data =>
   await fs.writeFile(CONTACTS_PATH, JSON.stringify(data, null, 2));
 
 /**
- *
+ * Добавляет контакт в конец файла
  * @param {object} data
  */
 const appendContact = async data => {
@@ -138,6 +138,7 @@ export const addContact = async body => {
  *
  * @param {string} id
  * @param {object} body
+ * @returns {object} данные успешно обновленного контакта
  */
 export const updateContact = async (id, body) => {
   let validatedBody;
