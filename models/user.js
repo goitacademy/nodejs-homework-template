@@ -19,6 +19,14 @@ const userSchema = Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
     avatarURL: String,
     token: String,
   },
@@ -29,6 +37,12 @@ userSchema.post("save", handleMongooseError);
 const registerValidator = (data) => {
   const registerSchema = Joi.object({
     password: Joi.string().min(6).required(),
+    email: Joi.string().email().required(),
+  });
+  return registerSchema.validate(data);
+};
+const verifyValidator = (data) => {
+  const registerSchema = Joi.object({
     email: Joi.string().email().required(),
   });
   return registerSchema.validate(data);
@@ -48,4 +62,5 @@ module.exports = {
   User,
   registerValidator,
   loginValidator,
+  verifyValidator,
 };
