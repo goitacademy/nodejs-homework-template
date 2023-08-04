@@ -14,16 +14,19 @@ const avatarPath = path.resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
-	const user = await User.findOne({ email });
-	
-	if (user) throw HttpError(409, "Email in use");
+  const user = await User.findOne({ email });
+
+  if (user) throw HttpError(409, "Email in use");
 
   const { path: oldPath, filename } = req.file;
-	const newPath = path.join(avatarPath, filename);
-	
-	await fs.rename(oldPath, newPath);
-	
-	const avatar = path.join("public", "avatars", filename)
+  const newPath = path.join(avatarPath, filename);
+  // console.log(oldPath);
+	// console.log(newPath);
+	// console.log(path)
+
+  await fs.rename(oldPath, newPath);
+
+  const avatar = path.join("public", "avatars", filename);
 
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
@@ -35,11 +38,10 @@ const signup = async (req, res) => {
   res.status(201).json({
     user: {
       email: newUser.email,
-			subscription: newUser.subscription,
+      subscription: newUser.subscription,
     },
   });
 };
-
 
 const login = async (req, res) => {
   const { email, password } = req.body;
