@@ -1,6 +1,7 @@
 {
-  "name": "template",
-  "version": "0.0.0",
+  "name": "goit-node-hw-02",
+  "version": "1.0.0",
+  "description": "Node JS GoIT homework 2; use framework express",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
@@ -11,7 +12,7 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
+    "express": "^4.18.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
@@ -21,6 +22,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^3.0.1"
   }
 }
