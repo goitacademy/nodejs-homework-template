@@ -39,7 +39,7 @@ export const addedContactScheme = Joi.object(schemeObject).options({
 
 // минимум одно обязательное
 export const updatedContactScheme = Joi.object(schemeObject)
-  .or('name', 'phone', 'email')
+  .or(...Object.keys(schemeObject))
   .messages({ 'object.missing': 'At least one field is required' });
 
 //////////////////
