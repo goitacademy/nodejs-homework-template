@@ -1,15 +1,9 @@
-const fs = require('fs/promises');
+// const fs = require("fs/promises");
 
-const ctrlWrapper = require('../../utils/ctrlWrapper');
+const ctrlWrapper = require("../../utils/ctrlWrapper");
 
+const uploadUserAvatar = async (req, res) => {
+  // res.json({avatarURL});
+};
 
-const uploadUserAvatar = async(req, res) => {
-
-    await fs.rename(tempDirUpload, finalUpload);
-    res.json({avatarURL});
-
-
-}
-
-
-module.exports = {uploadUserAvatar: ctrlWrapper(uploadUserAvatar)};
+module.exports = { uploadUserAvatar: ctrlWrapper(uploadUserAvatar) };
