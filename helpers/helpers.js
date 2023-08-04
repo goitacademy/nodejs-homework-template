@@ -40,10 +40,10 @@ export const addedContactScheme = Joi.object(schemeObject).options({
 // минимум одно обязательное
 export const updatedContactScheme = Joi.object(schemeObject)
   .or('name', 'phone', 'email')
-  .messages({ 'object.missing': 'at least one field is required' });
+  .messages({ 'object.missing': 'At least one field is required' });
 
 //////////////////
-// format
+// formatting
 //////////////////
 
 export const formatPhone = v =>

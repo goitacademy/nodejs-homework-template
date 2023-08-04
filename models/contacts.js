@@ -43,6 +43,7 @@ const flushContacts = async data =>
   await fs.writeFile(CONTACTS_PATH, JSON.stringify(data, null, 2));
 
 /**
+ *
  * Добавляет контакт в конец файла
  * @param {object} data
  */
@@ -53,6 +54,7 @@ const appendContact = async data => {
 };
 
 /**
+ *
  * Проверяет, есть ли контакт с такими данными в БД
  * @param {object} {email, phone}
  * @returns {boolean}
