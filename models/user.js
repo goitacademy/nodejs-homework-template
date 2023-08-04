@@ -32,23 +32,20 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
-    avatarURL:{
-      type: String,
-      default: null
-    } 
+    avatarURL: String,
   },
   { versionKey: false, timestamps: true }
 );
 
-userSchema.pre('save', function() {
+// userSchema.pre('save', function() {
 
-if(this.isNew){
+// if(this.isNew){
 
-    const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
+//     const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
     
-    this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
-}
-});
+//     this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
+// }
+// });
 
 userSchema.post("save", handleMongooseError);
 

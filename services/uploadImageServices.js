@@ -2,19 +2,23 @@
 
 // const path = require('path');
 
+// const fs = require('fs/promises');
 
-// const tempDir = path.join(process.cwd(), "public", "avatars");
+// const tempDir = path.join(process.cwd(), "tmp");
+
+// const avatarsDir = path.join(process.cwd(), "public", "avatars");
+
 
 // const multerConfig = multer.diskStorage({
 //   destination: tempDir,
 //   filename: (req, file, cb) => {
-//     cb(null, "test-image.jpg")
+//     cb(null, file.originalname)
 //   }
 // });
 
-// const upload = multer({
+// const uploadUserAvatar = multer({
 //   storage: multerConfig
 // });
 
 
-// module.exports = upload;
+// module.exports = uploadUserAvatar;

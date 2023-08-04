@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const contactsRouter = require('./routes/api/contacts');
 const usersRouter = require('./routes/api/users')
-// const uploadImageRouter = require('./routes/api/uploadImage');
+
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(express.static("public"));
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);
-// app.use('/avatars', uploadImageRouter)
+
 
 app.use((_, res) => {
   res.status(404).json({ message: 'Not found' });
