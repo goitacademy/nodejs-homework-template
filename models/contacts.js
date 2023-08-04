@@ -45,12 +45,15 @@ const removeContact = async (contactId) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, name, phone, email) => {
   try {
     const contacts = await listContacts();
-    const contactToUpdate = contacts.filter(contact => contact.id === contactId);
-    const updatedContact = { ...contactToUpdate };
-    console.log(updatedContact);
+    const contactIsExist = contacts.filter(contact => contact.id === id);
+    const oldContacts = contacts.filter(contact => contact.id !== id);
+    const updatedContact = { id, name, phone, email };
+    const updatedContacts = [...oldContacts, updatedContact];
+    await fs.writeFile(dataPath, JSON.stringify(updatedContacts));
+    return contactIsExist;
   } catch (error) {
     console.log(error.message);
   }
