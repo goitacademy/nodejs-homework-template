@@ -2,12 +2,11 @@ import fs from 'fs/promises';
 import path from 'path';
 import * as utils from '../helpers/helpers.js';
 
+const ERR_ALREADY_EXISTS =
+  'A contact with the same email or phone already exists';
+
 const CONTACTS_PATH = path.resolve('models', 'contacts.json');
 const DEF_CHARSET = 'utf-8';
-
-//
-// helpers
-//
 
 /**
  *
@@ -36,11 +35,22 @@ const getAllContacts = async (charset = DEF_CHARSET) => {
 };
 
 /**
+ *
  * Перезаписывает файл новыми данными
  * @param {array} data
  */
 const flushContacts = async data =>
   await fs.writeFile(CONTACTS_PATH, JSON.stringify(data, null, 2));
+
+/**
+ *
+ * @param {object} data
+ */
+const appendContact = async data => {
+  const list = (await getAllContacts()) ?? [];
+  await flushContacts([...list, data]);
+  return data;
+};
 
 /**
  * Проверяет, есть ли контакт с такими данными в БД
@@ -52,9 +62,9 @@ const isContactExists = async ({ email, phone } = {}) => {
   return list.some(itm => itm.email === email || itm.phone === phone);
 };
 
-//
-// public API
-//
+//////////////////
+// Public API
+//////////////////
 
 /**
  *
@@ -99,11 +109,9 @@ export const removeContact = async id => {
  * @returns {object} данные успешно добавленного контакта
  */
 export const addContact = async body => {
-  const list = await getAllContacts();
-
-  // валидация
+  // проверяем валидность данных
   try {
-    await utils.contactDataScheme.validateAsync(body);
+    await utils.addedContactScheme.validateAsync(body);
   } catch ({ message }) {
     throw CustomError('ERR_INVALID_DATA', message);
   }
@@ -114,18 +122,52 @@ export const addContact = async body => {
     id: utils.getId(),
     name: utils.formatName(name),
     phone: utils.formatPhone(phone),
-    email: email.trim(),
+    email: email?.trim(),
   };
 
   // проверяем наличие контакта в БД
   if (await isContactExists(data)) {
-    throw CustomError('ERR_ALREADY_EXISTS', 'Contact already exists');
+    throw CustomError('ERR_ALREADY_EXISTS', ERR_ALREADY_EXISTS);
   }
 
   // добавляем контакт в БД
-  flushContacts([...list, data]);
-
-  return data;
+  return appendContact(data);
 };
 
-export const updateContact = async (id, body) => {};
+/**
+ *
+ * @param {string} id
+ * @param {object} body
+ */
+export const updateContact = async (id, body) => {
+  let validatedBody;
+
+  // проверяем валидность данных
+  try {
+    validatedBody = await utils.updatedContactScheme.validateAsync(body);
+  } catch ({ message }) {
+    throw CustomError('ERR_INVALID_DATA', message);
+  }
+
+  const list = await getAllContacts();
+
+  // проверяем есть ли контакт с заданным id
+  const updatedIndex = list?.findIndex(itm => itm.id === id) ?? -1;
+  if (updatedIndex < 0) return null;
+
+  // обновляем только те поля, для которых заданы валидные значения
+  const { name, email, phone } = validatedBody;
+  const curData = list[updatedIndex];
+  const newData = {
+    id,
+    name: name ? utils.formatName(name) : curData.name,
+    phone: phone ? utils.formatPhone(phone) : curData.phone,
+    email: email?.trim() ?? curData.email,
+  };
+
+  // обновляем БД
+  list[updatedIndex] = newData;
+  await flushContacts(list);
+
+  return newData;
+};

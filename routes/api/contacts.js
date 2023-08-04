@@ -67,6 +67,15 @@ router.post('/', async ({ body }, res) => {
   PUT id
   изменение контакта с заданным id
 */
-router.put('/:id', async (req, res, next) => {
-  res.json({ message: 'template message' });
+router.put('/:id', async ({ body, params }, res) => {
+  const { id } = params;
+  try {
+    // обновляем данные контакта
+    const updated = await api.updateContact(id, body);
+    res
+      .status(updated ? STATUS.ok : STATUS.notFound)
+      .json(updated ?? CODE.notFound);
+  } catch ({ message }) {
+    res.status(STATUS.badRequest).json({ message });
+  }
 });
