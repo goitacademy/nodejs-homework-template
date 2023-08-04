@@ -4,7 +4,7 @@ import { validateBody } from "../../decorators/index.js";
 
 import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 
-import contactsController from "../../controllers/contacts-controller.js";
+import contactsController from "../../controllers/contacts/contacts.js";
 
 import contastsSchemas from "../../schemas/contacts-schemas.js";
 
