@@ -6,15 +6,6 @@ const updateStatusContact = require("./updateStatusContact");
 const removeContact = require("./removeContact");
 const { ctrlWrapper } = require("../../middlewares");
 
-// module.exports = {
-//   listContacts,
-//   getById,
-//   addContact,
-//   updateContact,
-//   updateStatusContact,
-//   removeContact,
-// };
-
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getById: ctrlWrapper(getById),

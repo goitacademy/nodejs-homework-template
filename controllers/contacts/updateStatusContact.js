@@ -1,5 +1,5 @@
-import { Contact } from "../../models/";
-import { HttpError } from "../../utilities";
+const { HttpError } = require("../../utilities");
+const { Contact } = require("../../models");
 
 const updateStatusContact = async (req, res) => {
   const { id } = req.params;
