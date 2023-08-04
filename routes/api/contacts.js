@@ -9,13 +9,19 @@ const {
   updateFavorite,
 } = require("../../controllers/contacts/index.js");
 const { validateBody } = require("../../decorators/index.js");
-const { isEmptyBody, isValidId } = require("../../middlewares/index");
+const {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+} = require("../../middlewares/index");
 const {
   contactSchema,
   contactUpdateFavoriteSchema,
 } = require("../../schema/contacts.js");
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", getAll);
 
