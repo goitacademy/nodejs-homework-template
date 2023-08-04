@@ -9,18 +9,21 @@ const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 dotenv.config();
 const { JWT_SECRET } = process.env;
+
 const avatarPath = path.resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  const { path: oldPath, filename } = req.file;
+	const user = await User.findOne({ email });
+	
+	if (user) throw HttpError(409, "Email in use");
 
-  const newPath = path.join(avatarPath, filename);
+  const { path: oldPath, filename } = req.file;
+	const newPath = path.join(avatarPath, filename);
+	
 	await fs.rename(oldPath, newPath);
 	
 	const avatar = path.join("public", "avatars", filename)
-  if (user) throw HttpError(409, "Email in use");
 
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
