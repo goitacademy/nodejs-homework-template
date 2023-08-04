@@ -4,11 +4,8 @@ const { ctrlWraper } = require("../helpers");
 const path = require("path");
 const fs = require("fs/promises");
 const { jimpResizer } = require("../helpers");
-<<<<<<< HEAD
-=======
 const { sendEmail } = require("../helpers");
 const { nanoid } = require("nanoid");
->>>>>>> hw06-email
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -144,11 +141,8 @@ const getCurrent = async (req, res) => {
   });
 };
 
-<<<<<<< HEAD
-=======
 // Update avatar
 
->>>>>>> hw06-email
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
