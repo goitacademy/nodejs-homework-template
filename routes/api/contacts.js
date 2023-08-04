@@ -1,25 +1,25 @@
-const express = require('express')
+import * as api from '../../models/contacts.js';
+import * as contactsController from '../../controllers/contactsController.js';
+import express from 'express';
 
-const router = express.Router()
+export const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// GET
+// получение списка всех контактов
+router.get('/', contactsController.listContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// GET id
+// получение контакта с заднным id
+router.get('/:id', contactsController.getContactById);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// DELETE id
+// удаление контакта с заданным id
+router.delete('/:id', contactsController.removeContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// POST
+// добавление нового контакта
+router.post('/', contactsController.addContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+// PUT id
+// изменение контакта с заданным id
+router.put('/:id', contactsController.updateContact);
