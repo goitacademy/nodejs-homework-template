@@ -5,17 +5,17 @@ const ctrl = require('../../controllers/controllers');
 
 
 const schemas = require("../../schemas/validateSchema");
-const validateFunc = require("../../middlewares/validateFunc");
+const {validateFunc, handleBodyChange} = require("../../middlewares");
 
 router.get('/', ctrl.getAllContacts);
 
-router.get('/:contactId', ctrl.getById);
+router.get('/:id', ctrl.getById);
 
 router.post('/', validateFunc(schemas.addSchema), ctrl.addContact);
 
-router.put("/:contactId", validateFunc(schemas.addSchema), ctrl.updContactById);
+router.put( "/:id", handleBodyChange, validateFunc(schemas.addSchema), ctrl.updContactById );
 
-router.delete('/:contactId',ctrl.deleteContactById);
+router.delete('/:id',ctrl.deleteContactById);
 
 
 module.exports = router;
