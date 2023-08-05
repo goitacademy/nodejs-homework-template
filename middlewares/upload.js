@@ -4,7 +4,14 @@ const path = require("path");
 const destination = path.resolve("temp");
 
 const storage = multer.diskStorage({
-  destination,
+	destination,
+	filename: (req, file, cb) => {
+		const { originalname } = file;
+		const uniquePrefix = `${Date.now()}'-'${Math.round(Math.random() * 1E9)}`;
+		const filename = `${uniquePrefix}_${originalname}`;
+
+		cb(null, filename);
+	}
 });
 
 const limits = {
