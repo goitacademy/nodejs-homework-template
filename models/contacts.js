@@ -18,22 +18,20 @@ const listContacts = async () => {
   }
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   try {
     const contacts = await findFile();
-    const findContact = contacts.find((contact) => contact.id === contactId);
+    const findContact = contacts.find((contact) => contact.id === id);
     return findContact || null;
   } catch (e) {
     console.log(e.message);
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   try {
     const contacts = await findFile();
-    const findIndexContact = contacts.findIndex(
-      (contact) => contact.id === contactId
-    );
+    const findIndexContact = contacts.findIndex((contact) => contact.id === id);
     if (findIndexContact === -1) {
       return null;
     }
@@ -48,14 +46,12 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   try {
     const contacts = await findFile();
     const newContact = {
       id: nanoid(),
-      name,
-      email,
-      phone,
+      ...body,
     };
     contacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
@@ -65,12 +61,21 @@ const addContact = async (name, email, phone) => {
   }
 };
 
-// const updateContact = async (contactId, body) => {};
+const updateContact = async (id, body) => {
+  const contacts = await findFile();
+  const index = contacts.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id, ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  // updateContact,
+  updateContact,
 };
