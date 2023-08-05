@@ -1,10 +1,12 @@
-const express = require('express')
+const express = require('express')//create web server
 const logger = require('morgan')
 const cors = require('cors')
 
+const contactRouter = require('./routes/api/contacts')
+
 const contactsRouter = require('./routes/api/contacts')
 
-const app = express()
+const app = express() //app web server
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
