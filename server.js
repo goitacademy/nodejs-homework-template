@@ -1,5 +1,24 @@
+
+// импортируем mongoose.
+const mongoose = require("mongoose")
+// если .env в основной папке то пишем require('dotenv').config()
+require('dotenv').config({ path: './environments/.env' });
 const app = require('./app')
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.set('strictQuery', true)
+
+// запуск сервера после успешно подсоединения к dataBase
+mongoose.connect(DB_HOST).then(() => {
+  console.log("Database connection successful");
+  app.listen(PORT)
+ 
 })
+.catch(error => {
+  console.log("Database connection error:", error.message);
+  // останавливает запущенный процесс в случае ошибки
+  process.exit(1)
+} )
+
+
