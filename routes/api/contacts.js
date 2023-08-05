@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
-const { getContact, getContactId, postContact, deleteContact, putContacts } = require('../../controllers/userControler')
+const { getContact, getContactId, postContact, deleteContact, putContacts } = require('../../controllers/contactControler')
 const { contactsValidator, checkContactId } = require('../../middlewares/contactMiddleware')
+const { protect } = require('../../middlewares/userMiddlewares')
 
 
-
+router.use(protect)
 
 router.route('/').post(contactsValidator, postContact).get(getContact)
 

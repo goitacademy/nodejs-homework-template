@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const { joiUserValidator } = require("../utils/joiValidator")
 const  AppError  = require('../utils/appError')
-const Contact = require('../models/contactModal')
+const Contact = require('../models/contactModel')
 const {catchAsync} = require('../utils/catchAsync')
 
 
@@ -33,3 +33,4 @@ exports.checkContactId = catchAsync(async (req, res, next) => {
 
     next()
 })
+

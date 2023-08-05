@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 
 
 const contactsRouter = require('./routes/api/contacts')
+const userRouter = require('./routes/api/userRouter')
 
 const app = express()
 
@@ -29,6 +30,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
+app.use('/users', userRouter)
 
 app.get('/ping', (req, res) => {
   // res.status(201).send('<h1>HELLO FROM EXPRESS!!!</h1>');
