@@ -136,7 +136,7 @@ const logout = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const {_id} = req.user
 
- // Проверяем наличие файла в запросе, если нет - ошибку выводим
+ // Проверяем наличие файла в запросе, если нет - ошибку выводим/
  if (!req.file) {
   return res.status(400).json({ message: 'Avatar file is missing' });
 }
