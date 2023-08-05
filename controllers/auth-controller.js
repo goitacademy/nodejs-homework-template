@@ -88,11 +88,9 @@ const updateAvatar = async (req, res) => {
 
   const filename = `${_id}_${originalname}`;
 
-  async function main() {
+  async function newAvatar() {
     const image = await jimp.read(`${oldPath}`);
-
     image.resize(250, 250, jimp.RESIZE_BEZIER);
-
     await image.writeAsync(`${oldPath}`);
 
     const newPath = path.join(avatarPath, filename);
@@ -105,7 +103,7 @@ const updateAvatar = async (req, res) => {
     });
   }
 
-  main();
+  newAvatar();
 };
 
 export default {
