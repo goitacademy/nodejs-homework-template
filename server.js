@@ -1,11 +1,32 @@
-const app = require('./app')
+const mongoose = require("mongoose");
+const app = require("./app");
+require("dotenv").config();
 
-const PORT = process.env.PORT || 3000;
-const uriDb = process.env.MONGO_URL;
+const { PORT, DB_HOST } = process.env;
 
-mongoose.set('strictQuery', true)
+mongoose.set("strictQuery", false);
+mongoose.set("useFindAndModify", false);
 
-const connection = mongoose.connect(uriDb, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-})
+const start = async () => {
+  try {
+    await mongoose.connect(
+      DB_HOST,
+      {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+      },
+      () => {
+        console.log("Database connection successful");
+        app.listen(PORT || 3000, () => {
+          console.log(`Server running. Use our API on port: ${PORT}`);
+        });
+      }
+    );
+  } catch (err) {
+    console.log(err.message);
+    process.exit(1);
+  }
+};
+
+start();
