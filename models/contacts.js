@@ -1,6 +1,7 @@
 const fs = require('fs').promises;
+const path = require('path');
 
-const contactsPath = require('./contacts.json');
+const contactsPath = path.join(__dirname, './contacts.json');
 
 const listContacts = async () => {
   try {
@@ -19,7 +20,7 @@ const getContactById = async (contactId) => {
     if (contactById !== undefined) {
       return contactById;
     } else {
-      return `Contact with the provided ID was not found.`.bgYellow
+      return `Contact with the provided ID was not found.`
     }
   } catch (err) {
     console.log(err.message);
@@ -34,9 +35,9 @@ const removeContact = async (contactId) => {
       const { name } = contactToRemove;
       const newContacts = contacts.filter(({ id }) => id !== contactId);
       fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
-      return `${name} has been removed.`.bgYellow
+      return `${name} has been removed.`
     } else {
-      return `Contact with the provided ID was not found.`.bgYellow
+      return `Contact with the provided ID was not found.`
     }
   } catch (err) {
     console.log(err.message)
@@ -51,9 +52,9 @@ const addContact = async (body) => {
     if (name, email, phone) {
       contacts.push(newContact);
       fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-      return `${name} has been added.`.bgYellow
+      return `${name} has been added.`
     } else {
-      return `Not enough data.`.bgYellow
+      return `Not enough data.`
     }
   } catch (err) {
     console.log(err.message);
