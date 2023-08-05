@@ -3,7 +3,6 @@ const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
 
 const logout = async (req, res) => {
-  console.log("hi");
   const { email } = req.body;
   const user = await User.findOne({ email });
 
