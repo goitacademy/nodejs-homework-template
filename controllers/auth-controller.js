@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import path from 'path';
 import gravatar from 'gravatar';
+import jimp from 'jimp';
 
 import User from '../models/user.js';
 import { ctrlWrapper } from '../decorators/index.js';
@@ -22,16 +23,9 @@ const register = async (req, res) => {
 
   const avatarURL = gravatar.url(email);
 
-  const { path: oldPath, filename } = req.file;
-  const newPath = path.join(avatarPath, filename);
-  await fs.rename(oldPath, newPath);
-
-  const avatar = path.join('avatars', filename);
-
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatar,
     avatarURL,
   });
   res.status(201).json({
@@ -88,10 +82,37 @@ const updateSubscription = async (req, res) => {
   res.json(result);
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: oldPath, originalname } = req.file;
+
+  const filename = `${_id}_${originalname}`;
+
+  async function main() {
+    const image = await jimp.read(`${oldPath}`);
+
+    image.resize(250, 250, jimp.RESIZE_BEZIER);
+
+    await image.writeAsync(`${oldPath}`);
+
+    const newPath = path.join(avatarPath, filename);
+    await fs.rename(oldPath, newPath);
+    const avatarURL = path.join('avatars', filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+      avatarURL,
+    });
+  }
+
+  main();
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

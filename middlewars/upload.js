@@ -1,17 +1,14 @@
 import multer from 'multer';
 import path from 'path';
 
-const destination = path.resolve('temp');
+const destination = path.resolve('tmp');
 
 const storage = multer.diskStorage({
   destination,
   filename: function (req, file, cb) {
-    const uniquePrefix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const filename = `${uniquePrefix}_${file.originalname}`;
-    cb(null, filename);
+    cb(null, file.originalname);
   },
 });
-// ${_id}_
 
 const limits = {
   fileSize: 1024 * 1024 * 5,
