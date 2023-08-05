@@ -20,9 +20,6 @@ const signup = async (req, res) => {
 
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarPath, filename);
-  // console.log(oldPath);
-	// console.log(newPath);
-	// console.log(path)
 
   await fs.rename(oldPath, newPath);
 
