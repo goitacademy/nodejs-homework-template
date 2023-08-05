@@ -1,11 +1,15 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import fs from 'fs/promises';
+import path from 'path';
 
 import User from '../models/user.js';
 import { ctrlWrapper } from '../decorators/index.js';
 import { HttpError } from '../helpers/index.js';
 
 const { JWT_SECRET } = process.env;
+
+const avatarPath = path.resolve('public', 'avatars');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -15,8 +19,18 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
-  console.log(newUser);
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarPath, filename);
+  await fs.rename(oldPath, newPath);
+
+  const avatarURL = path.join('avatars', filename);
+  console.log(avatarURL);
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
   res.status(201).json({
     user: { email: newUser.email, subscription: newUser.subscription },
   });
