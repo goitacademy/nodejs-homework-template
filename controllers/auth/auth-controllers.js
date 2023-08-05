@@ -26,7 +26,7 @@ const signup = async (req, res) => {
 
   await fs.rename(oldPath, newPath);
 
-  const avatar = path.join("public", "avatars", filename);
+  const avatar = path.join("avatars", filename);
 
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
