@@ -7,8 +7,15 @@ import {
   updateContact,
 } from '../../models/contacts.js';
 import { Router } from 'express';
+import Joi from 'joi';
 
 const router = Router();
+
+const reqBodySchema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  phone: Joi.string().min(6).max(20).required(),
+});
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
@@ -24,14 +31,11 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body;
+  const { value, error } = reqBodySchema.validate(req.body);
+  const { name, email, phone } = value;
 
-  if (!(name && email && phone)) {
-    !name
-      ? res.status(400).json({ message: `missing required name - field` })
-      : !email
-      ? res.status(400).json({ message: `missing required email - field` })
-      : res.status(400).json({ message: `missing required phone - field` });
+  if (!!error) {
+    res.status(400).json({ message: error.message });
     return;
   }
 
@@ -50,17 +54,15 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 router.put('/:id', async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const { id } = req.params;
+  const { value, error } = reqBodySchema.validate(req.body);
+  const { name, email, phone } = value;
 
-  if (!(name && email && phone)) {
-    !name
-      ? res.status(400).json({ message: `missing required name - field` })
-      : !email
-      ? res.status(400).json({ message: `missing required email - field` })
-      : res.status(400).json({ message: `missing required phone - field` });
+  if (!!error) {
+    res.status(400).json({ message: error.message });
     return;
   }
+
+  const { id } = req.params;
 
   const updatedContact = await updateContact(id, name, email, phone);
   !updatedContact

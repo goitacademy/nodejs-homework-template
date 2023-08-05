@@ -43,9 +43,9 @@ const addContact = async (id, name, email, phone) => {
 
 const removeContact = async contactId => {
   const contacts = await getParsedContactsList();
-  const searchedContact = contacts.filter(c => c.id === contactId);
+  const searchedContact = contacts.find(c => c.id === contactId);
 
-  if (!searchedContact.length) {
+  if (!searchedContact) {
     return null;
   }
 
@@ -56,9 +56,9 @@ const removeContact = async contactId => {
 
 const updateContact = async (id, name, email, phone) => {
   const contacts = await getParsedContactsList();
-  const searchedContact = contacts.filter(c => c.id === id);
+  const searchedContact = contacts.find(c => c.id === id);
 
-  if (!searchedContact.length) {
+  if (!searchedContact) {
     return null;
   }
   const updatedContact = {
@@ -67,9 +67,9 @@ const updateContact = async (id, name, email, phone) => {
     email,
     phone,
   };
-  const filteredContacts = contacts.filter(c => c.id !== id);
-  const newContactsList = [...filteredContacts, updatedContact];
-  await fs.writeFile(contactsPath, JSON.stringify(newContactsList));
+  const filteredContactsList = contacts.filter(c => c.id !== id);
+  const updatedContactsList = [...filteredContactsList, updatedContact];
+  await fs.writeFile(contactsPath, JSON.stringify(updatedContactsList));
   return updatedContact;
 };
 
