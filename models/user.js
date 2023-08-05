@@ -22,7 +22,11 @@ const userSchema = new Schema ({
             type: Schema.Types.ObjectId,
             ref: 'user',
         },
-        token: String
+        token: String,
+        avatarUrl: {
+            type: String,
+            required: true,
+        }
 
 }, {versionKey: false, timestamps: true})
 
