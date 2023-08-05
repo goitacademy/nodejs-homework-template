@@ -1,134 +1,67 @@
-const Contact = require('../models/contactModal')
-const { listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact } = require('../models/contacts')
-  
-const catchAsync = require("../utils/catchAsync")
-const {joiUserValidator} = require('../utils/joiValidator')
+const User = require('../models/userModel')
+
+const {catchAsync} = require('../utils/catchAsync')
+const AppError = require('../utils/appError')
+const { userValidator } = require('../utils/joiValidator')
+const { bcryptPassword, checkBcryptPass } = require('../services/bcryptPassword')
+const { createToken } = require('../services/jwtToken')
+const { protect } = require('../middlewares/userMiddlewares')
+
+exports.userSingUp = catchAsync(async (req, res) => {
+
+    const {error, value} = await userValidator(req.body)
+    if(error) throw new AppError(400, 'invalid data');
 
 
+    const emailIsDb = await User.exists({email: value.email})
+    if(emailIsDb) throw new AppError(409, 'Email in use');
+ 
+    const hashPass = await bcryptPassword(value.password)
+   
+        const newUser = await User.create({...value, password: hashPass})
+        newUser.password = undefined
 
-exports.getContact = async (req, res) => {
-        try {
-      
-          const dataContacts = await Contact.find().select('-__v');
-      
-          res.status(200).json({
-            msg: "success",
-            dataContacts
-          })
-          
-        } catch (error) {
-          console.log(error)
-        }
-       
-    }
+        const token = createToken(newUser.id)
 
-exports.getContactId = async (req, res) => {
-    try {
-      const { contactId } = req.params;
-      
-      const findContact = await Contact.findById(contactId)
-    
-      if(findContact) {
-        return res.status(200).json({
-          msg: 'good',
-          findContact
+        res.status(201).json({
+            user: newUser,
+            token
         })
-      } else {
-        return res.status(404).json({
-          message: "Not found"
+})
+
+exports.userLogin = catchAsync( async (req, res) => {
+
+    const {error, value} = await userValidator(req.body)
+    if(error) throw new AppError(400, 'invalid data');
+
+
+        const loginUser = await User.findOne({ email: value.email }).select('+password');
+        if(!loginUser) throw new AppError(400, 'invalid data')
+
+        const truePassword = await checkBcryptPass(value.password, loginUser.password)
+        if(!truePassword) throw new AppError(400, 'ivalid data')
+        
+        loginUser.password = undefined
+
+        const token = await createToken(loginUser.id)
+        console.log(token)
+
+        res.status(200).json({
+            user: loginUser,
+            token
         })
-      }
-    } catch (error) {
-      console.log(error.messenge)
-    }
-  
-    }
+})
 
-exports.postContact = async (req, res) => {
+exports.logOut = catchAsync( async (req, res) => {
+    res.sendStatus(204)
+})
 
-  try {
-    const {name, email, phone} = req.body
+exports.currentUser = catchAsync(async(req, res) => {
+    const {email, subscription} = req.user
+    res.status(200).json({
+        email,
+        subscription
+    })
+})
 
-    if (!name || !email || !phone) {
-      return res.status(400).json({
-        message: "missing required name field"
-      })
-    }
-  
-    console.log(req.body)
-    
-    const createNewContact = await Contact.create(req.body);
-    
-    if (!createNewContact) {
-      return res.status(400).json({
-        message: "missing required try agen"
-      })
-    }
-  
-    res.status(201).json(
-      createNewContact
-    )
-  
-  } catch (error) {
-    console.log(error.messenge)
-  }
-  
-    
-    }
-
-exports.deleteContact = async (req, res) => {
-    try {
-      const { contactId } = req.params;
-  
-      const remove =  await Contact.findByIdAndDelete(contactId)
-    
-      if(remove) {
-        return res.status(200).json({
-          message: "contact deleted"
-        })
-      } else {
-        return res.status(404).json({
-          message: "Not found"
-        })
-      }
-    
-    } catch (error) {
-      console.log(error.messenge)
-    }
-  
-    }
-
-exports.putContacts = async (req, res, next) => {
-
-    const  { error, value }  = await joiUserValidator(req.body)
-  
-  
-    if (error) {
-      return res.status(400).json({
-        message: "missing required name field"
-      })
-    }
-  
-    const {contactId} = req.params;
-    const body = value
-  
-    if (!body) {
-      return res.status(400).json({
-        "message": "missing fields"
-      })
-    }
-  
-    const updCont = await Contact.findByIdAndUpdate(contactId, body, {new: true})
-  
-    if (!updCont) {
-      return res.status(404).json({
-        message: "Not found"
-      })
-    }
-  
-    res.status(200).json(updCont)
-     }
+exports.getUserById = (id) => User.findById(id)

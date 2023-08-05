@@ -9,6 +9,15 @@ const joiUserValidator = (data) => {
     }).validate(data);
 }
 
+const userValidator = (data) => {
+    return Joi.object().options({abortEarly: false})
+    .keys({
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+    }).validate(data);
+}
+
 module.exports = {
-    joiUserValidator
+    joiUserValidator,
+    userValidator,
 }
