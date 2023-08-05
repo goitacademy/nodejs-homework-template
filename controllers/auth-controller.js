@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import path from 'path';
+import gravatar from 'gravatar';
 
 import User from '../models/user.js';
 import { ctrlWrapper } from '../decorators/index.js';
@@ -19,16 +20,18 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
 
+  const avatarURL = gravatar.url(email);
+
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarPath, filename);
   await fs.rename(oldPath, newPath);
 
-  const avatarURL = path.join('avatars', filename);
-  console.log(avatarURL);
+  const avatar = path.join('avatars', filename);
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
+    avatar,
     avatarURL,
   });
   res.status(201).json({
