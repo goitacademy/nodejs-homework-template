@@ -1,8 +1,6 @@
-// із ройтес арі переносимо сюди запити
-// переносимо сюди функції запиту
-// імпортуємо в однині Contact
+
 const { Contact } = require("../models/contacts");
-// сюди імпортуємо функцію HttpError i ctrlWrapper
+
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
@@ -26,9 +24,7 @@ const getById = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-    //  оновлення по айді через метод findByIdAndUpdate
-    // перший айді другий обєкт оновлення
-    // для того щоб він повернув оновлену версію тоді третій аргумент {new: true}
+    
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
@@ -62,7 +58,7 @@ const updateFavorite = async (req, res) => {
 };
 
 module.exports = {
-    // під час експорту загортаємо в контролер
+    
   listContacts: ctrlWrapper(listContacts),
   addContact: ctrlWrapper(addContact),
   getById: ctrlWrapper(getById),
