@@ -24,8 +24,8 @@ const register = async (req, res) => {
   const newUser = await User.create(credentials);
 
   res.status(201).json({
-    name: newUser.name,
     email: newUser.email,
+    subscription: newUser.subscription,
   });
 };
 
@@ -57,9 +57,26 @@ const logout = async (req, res) => {
 
 // Check if user is logged in
 const getCurrent = (req, res) => {
-  const { name, email } = req.user;
+  const { email, subscription } = req.user;
 
-  res.json({ name, email });
+  res.json({ email, subscription });
+};
+
+// Update subscription type
+const updateSubscription = async (req, res) => {
+  console.log('req: ', req);
+  const { subscription } = req.body;
+  const { _id: id } = req.user;
+
+  await User.findByIdAndUpdate(id, { subscription });
+
+  let firstCharacter = subscription.charAt(0);
+  firstCharacter = firstCharacter.toUpperCase();
+  let capitalizedString = firstCharacter + subscription.slice(1);
+
+  res.json({
+    message: `Subscription has been updated to '${capitalizedString}'`,
+  });
 };
 
 // ####################################################
@@ -69,4 +86,5 @@ export default {
   login: controllerWrapper(login),
   logout: controllerWrapper(logout),
   getCurrent: controllerWrapper(getCurrent),
+  updateSubscription: controllerWrapper(updateSubscription),
 };
