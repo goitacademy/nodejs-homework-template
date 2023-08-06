@@ -1,0 +1,132 @@
+[{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe8"
+    },
+    "name": "Abbot Franks",
+    "email": "scelerisque@magnis.org",
+    "phone": "(186) 568-3720",
+    "favorite": true
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe6"
+    },
+    "name": "Ded",
+    "email": "dsseest@utquamvel.net",
+    "phone": "+38(093) 123-456-789",
+    "favorite": true,
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1671147132705"
+      }
+    }
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe3"
+    },
+    "name": "Allen Raymond",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(992) 914-3792",
+    "favorite": true,
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1671325185184"
+      }
+    }
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe7"
+    },
+    "name": "Cyrus Jackson",
+    "email": "nibh@semsempererat.com",
+    "phone": "(501) 472-5218",
+    "favorite": true
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe4"
+    },
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685",
+    "favorite": true
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe5"
+    },
+    "name": "Kennedy Lane",
+    "email": "mattis.Cras@nonenimMauris.net",
+    "phone": "(542) 451-7038",
+    "favorite": false
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbe9"
+    },
+    "name": "Reuben Henry",
+    "email": "pharetra.ut@dictum.co.uk",
+    "phone": "(715) 598-5792",
+    "favorite": true
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbea"
+    },
+    "name": "Simon Morton",
+    "email": "dui.Fusce.diam@Donec.com",
+    "phone": "(233) 738-2360",
+    "favorite": true
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbec"
+    },
+    "name": "Alec Howard",
+    "email": "Donec.elementum@scelerisquescelerisquedui.net",
+    "phone": "(748) 206-2688",
+    "favorite": true
+  },{
+    "_id": {
+      "$oid": "6393def55e1f48171bfecbeb"
+    },
+    "name": "Thomas Lucas",
+    "email": "qwerty@com.net",
+    "phone": "(704) 398-7993",
+    "favorite": false,
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1671661164579"
+      }
+    }
+  },{
+    "_id": {
+      "$oid": "639a4d8082918d15c8f338cc"
+    },
+    "favorite": false,
+    "name": "Vitaliy Boiko",
+    "email": "is@n.net",
+    "phone": "(54212545378)",
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1671056768935"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1671325053988"
+      }
+    }
+  },{
+    "_id": {
+      "$oid": "639e4965e5fd0304989402b3"
+    },
+    "favorite": true,
+    "name": "Chaim Lewis",
+    "email": "duy.in@egetlacus.ca",
+    "phone": "(294) 840-6686",
+    "createdAt": {
+      "$date": {
+        "$numberLong": "1671317861582"
+      }
+    },
+    "updatedAt": {
+      "$date": {
+        "$numberLong": "1671317861582"
+      }
+    }
+  }]
