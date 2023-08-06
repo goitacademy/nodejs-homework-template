@@ -6,7 +6,7 @@ const updateStatusContactSchema = Joi.object()
       .required()
       .error((errors) => {
         if (errors[0].code === "any.required") {
-          errors[0].message = "Missing field favorite";
+          errors[0].message = "Missing favorites field";
         }
         return errors;
       }),

@@ -7,7 +7,7 @@ const contactSchema = Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
-      minlength: [2, "Very short name"],
+      minlength: [2, "Name is too short"],
       maxlength: 40,
       trim: true,
     },
