@@ -11,38 +11,32 @@ const router = express.Router()
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
-  res.status(200).json({ message: contacts })
+  res.status(200).json({ message: contacts });
 });
 
 router.get('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const response = await getContactById(contactId);
-  const responseType = typeof response;
-  if (responseType === 'object') {
-    res.status(200).json({ message: response })
-  } else {
-    res.status(404).json({ message: 'Not found' })
-  }
+  response ? res.status(200).json({ message: response }) : res.status(404).json({ message: 'Not found' });
 });
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  res.status(200).json({ message: 'template message' })
+  const body = req.body;
+  const response = await addContact(body);
+  response ? res.status(201).json({ message: response }) : res.status(400).json({ "message": "missing required name - field" });
 });
 
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   response = await removeContact(contactId);
-  if (response !== undefined) {
-    res.status(200).json({ message: response })
-  } else {
-    res.status(404).json({ message: 'Not found' })
-  }
+  response ? res.status(200).json({ message: response }) : res.status(404).json({ message: 'Not found' });
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  const { id } = req.params;
-  res.status(200).json({ message: 'template message' })
+  const { contactId } = req.params;
+  const body = req.body;
+  const response = await updateContact(contactId, body);
+  res.status(200).json({ message: response })
 });
 
 module.exports = router

@@ -41,22 +41,34 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   try {
+    const { name, email, phone } = body;
     const contacts = await listContacts();
     const id = Date.now().toString();
     const newContact = { id, name, email, phone };
     if (name, email, phone) {
       contacts.push(newContact);
       fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-      return `${name} has been added.`
+      return newContact
     } else {
-      return `Not enough data.`
+      return
     }
   } catch (err) {
     console.log(err.message);
   }
 };
 
-const updateContact = async (contactId, body) => { };
+const updateContact = async (contactId, body) => { 
+  try {
+    const { name, email, phone } = body;
+    const contacts = await listContacts();
+    const contactToUpdate = contacts.find(({ id }) => id === contactId);
+    console.log(contactToUpdate);
+    return "asd"
+  }
+  catch (err) {
+    console.log(err.message);
+  }
+};
 
 module.exports = {
   listContacts,
