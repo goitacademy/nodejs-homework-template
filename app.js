@@ -2,7 +2,7 @@ const express = require('express')//create web server
 const logger = require('morgan')
 const cors = require('cors')
 
-const contactRouter = require('./routes/api/contacts')
+    
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -20,7 +20,7 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
-app.use((err, req, res, next) => {
+app.use((err, req, res, next) => { //midleware
   res.status(500).json({ message: err.message })
 })
 
