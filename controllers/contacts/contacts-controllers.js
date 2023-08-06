@@ -42,7 +42,7 @@ const deleteById = async (req, res, next) => {
 	res.json({ message: "contact deleted" });
 };
 
-const updStatusContact = async (req, res, next) => {
+const updStatusContact = async (req, res) => {
 	const { id } = req.params;
 	const contact = await Contact.findByIdAndUpdate(id, req.body, { new: true });
 

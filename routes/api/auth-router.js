@@ -10,11 +10,11 @@ const ctrl = require("../../controllers/auth/auth-controllers");
 const { authenticate } = require("../../middlewares");
 
 authRouter.post(
-  "/register",
-  upload.single("avatar"),
-  isAmptyBody,
-  validateMiddleWare,
-  ctrl.signup
+	"/register",
+	upload.single("avatar"),
+	isAmptyBody,
+	validateMiddleWare,
+	ctrl.signup
 );
 
 authRouter.post("/login", isAmptyBody, validateMiddleWare, ctrl.login);
@@ -22,5 +22,8 @@ authRouter.post("/login", isAmptyBody, validateMiddleWare, ctrl.login);
 authRouter.get("/current", authenticate, ctrl.getCurrent);
 
 authRouter.post("/logout", authenticate, ctrl.logout);
+
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updAvatar);
+
 
 module.exports = authRouter;
