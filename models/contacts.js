@@ -11,38 +11,30 @@ const listContacts = async () => {
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const contactById = contacts.find(({ id }) => id === contactId)
-    if (contactById !== undefined) {
-      return contactById;
-    } else {
-      return `Contact with the provided ID was not found.`
-    }
+    const contactById = contacts.find(({ id }) => id === contactId);
+    return contactById;
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
 const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
     const contactToRemove = contacts.find(({ id }) => id === contactId)
-    if (contactToRemove !== undefined) {
-      const { name } = contactToRemove;
-      const newContacts = contacts.filter(({ id }) => id !== contactId);
-      fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
-      return `${name} has been removed.`
-    } else {
-      return `Contact with the provided ID was not found.`
-    }
+    const { name } = contactToRemove;
+    const newContacts = contacts.filter(({ id }) => id !== contactId);
+    fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
+    return `${name} has been removed.`
   } catch (err) {
     console.log(err.message)
   }
-}
+};
 
 const addContact = async (body) => {
   try {
@@ -59,9 +51,9 @@ const addContact = async (body) => {
   } catch (err) {
     console.log(err.message);
   }
-}
+};
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (contactId, body) => { };
 
 module.exports = {
   listContacts,

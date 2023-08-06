@@ -11,28 +11,34 @@ const router = express.Router()
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
-  res.json({ message: contacts })
+  res.status(200).json({ message: contacts })
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const { id } = req.params;
-  res.json({ message: req.params })
+  const { contactId } = req.params;
+  const response = await getContactById(contactId);
+  const responseType = typeof response;
+  if (responseType === 'object') {
+    res.status(200).json({ message: response })
+  } else {
+    res.status(404).json({ message: 'Not found' })
+  };
 })
 
 router.post('/', async (req, res, next) => {
   const { name, email, phone } = req.body;
-  res.json({ message: 'template message' })
+  res.status(200).json({ message: 'template message' })
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   const { id } = req.params;
   removeContact(id);
-  res.json({ message: 'contact removed' })
+  res.status(200).json({ message: 'contact deleted' })
 })
 
 router.put('/:contactId', async (req, res, next) => {
   const { id } = req.params;
-  res.json({ message: 'template message' })
+  res.status(200).json({ message: 'template message' })
 })
 
 module.exports = router
