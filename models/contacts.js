@@ -49,21 +49,28 @@ const addContact = async (body) => {
       contacts.push(newContact);
       fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
       return newContact
-    } else {
-      return
     }
+    return
   } catch (err) {
     console.log(err.message);
   }
 };
 
-const updateContact = async (contactId, body) => { 
+const updateContact = async (contactId, body) => {
   try {
-    const { name, email, phone } = body;
     const contacts = await listContacts();
-    const contactToUpdate = contacts.find(({ id }) => id === contactId);
-    console.log(contactToUpdate);
-    return "asd"
+    // const contactToUpdate = await getContactById(contactId);
+    const indexToUpdate = contacts.findIndex((contact) => contact.id === contactId);
+    console.log(contacts[indexToUpdate]);
+    if (indexToUpdate === -1) {
+      return "nope"
+    } else {
+      // const updatedContact = { ...contactToUpdate, ...body }
+//       const updatedContacts = {...contacts, updatedContact}
+      contacts[indexToUpdate] = { ...contacts[indexToUpdate], ...body };
+      fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return contacts[indexToUpdate];
+    }
   }
   catch (err) {
     console.log(err.message);
