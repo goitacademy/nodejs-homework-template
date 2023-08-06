@@ -2,7 +2,7 @@ const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 const path = require("path");
 
-const contactsPath = path.resolve(__dirname, "models", "contacts.json");
+const contactsPath = path.resolve(__dirname, "contacts.json");
 
 // TODO: задокументувати кожну функцію
 
