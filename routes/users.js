@@ -7,11 +7,11 @@ const {
 } = require("../controllers/auth.contoller");
 const authMiddleware = require("../middleware/auth");
 const router = express.Router();
-const { validateRegister } = require("../models/validateContacts");
+const { validateRegister, validateLogin } = require("../models/validateContacts");
 const { schemas } = require("../models/user");
 
 router.post("/register", validateRegister(schemas.registerSchema), register);
-router.post("/login", login);
+router.post("/login", validateLogin(schemas.loginSchema), login); 
 router.post("/logout", authMiddleware, logout);
 router.get("/current", authMiddleware, current);
 

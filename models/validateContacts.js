@@ -68,10 +68,25 @@ const validatePatchContact = (schema) => {
   };
   return middleware;
 };
+const validateLogin = (schema) => {
+  const middleware = async (req, res, next) => {
+    const { error } = schema.validate(req.body);
+    if (error) {
+      const missingField = error.details[0].context.label;
+      res
+        .status(400)
+        .json({ message: `Missing required '${missingField}' field` });
+      return;
+    }
+    next();
+  };
+  return middleware;
+};
 
 module.exports = {
   validatePostContact,
   validatePutContact,
   validatePatchContact,
   validateRegister,
+  validateLogin, 
 };

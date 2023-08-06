@@ -43,9 +43,7 @@ const logout = async (req, res) => {
 };
 
 const current = async (req, res) => {
-  const { email } = req.body;
-  const user = await User.findOne({ email });
-  const { subscription } = user;
+  const { email, subscription } = req.user;
   return res.status(200).json({ email, subscription });
 };
 
