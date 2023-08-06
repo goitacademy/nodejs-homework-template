@@ -13,7 +13,7 @@ const listContacts = async () => {
 const getContactById = async contactId => {
 	const contacts = await listContacts()
 	const foundContact = contacts.find(item => item.id === contactId)
-	return foundContact ? foundContact : null
+	return foundContact || null
 }
 
 const removeContact = async contactId => {
@@ -46,7 +46,7 @@ const updateContact = async (contactId, contact) => {
 	if (index === -1) {
 		return null
 	} else {
-		let foundContact = {
+		const foundContact = {
 			id: contactId,
 			...contact,
 		}
