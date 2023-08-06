@@ -1,1 +1,3 @@
-export { default as schemas } from './contactsSchemas.js';
+export { default as contactsSchemas } from './contactsSchemas.js';
+
+export { default as usersSchemas } from './usersSchemas.js';

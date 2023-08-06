@@ -1,12 +1,21 @@
-import Contact from '../../models/contact.js';
-import { controllerWrapper } from '../../decorators/index.js';
-
-const notFoundMsg = 'Could not find contact with the requested id';
+import Contact from '../models/contact.js';
+import { controllerWrapper } from '../decorators/index.js';
+import { HttpError } from '../helpers/index.js';
 
 // ####################################################
 
+const notFoundMsg = 'Could not find contact with the requested id';
+
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, ...q } = req.query;
+  const skip = (page - 1) * limit;
+
+  const result = await Contact.find({ owner, ...q }, '-createdAt -updatedAt', {
+    skip,
+    limit,
+  }).populate('owner', 'name, email');
+
   res.json(result);
 };
 
@@ -18,7 +27,8 @@ const getById = async ({ params: { id } }, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -48,6 +58,8 @@ const updateStatusContact = async ({ body, params: { id } }, res) => {
 
   res.json(result);
 };
+
+// ####################################################
 
 export default {
   getAll: controllerWrapper(getAll),
