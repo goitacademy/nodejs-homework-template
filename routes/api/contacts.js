@@ -1,6 +1,8 @@
 const express = require('express')
 
 const router = express.Router()
+const secondary = require('../../secondaryFunctions/contact')
+
 
 router.get('/', async (req, res, next) => {
   res.json({ message: 'template message' })
