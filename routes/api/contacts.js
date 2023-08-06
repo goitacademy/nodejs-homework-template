@@ -82,7 +82,15 @@ router.put('/:contactId', async (req, res, next) => {
     isContact.name = name;
     isContact.email = email;
     isContact.phone = phone;
-      // JSON.parse(JSON.stringify(validation.value)
+  
+    // if (!isContact) {
+    //   res.status(400).json({
+    //     message: "missing fields",
+    //     code: 400,
+    //   });
+    //   return;
+    // }
+
     if (isContact) {
       res.json({
         status: "success",
