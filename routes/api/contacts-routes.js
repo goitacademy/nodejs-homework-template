@@ -13,7 +13,7 @@ const isValiId = require("../../middlewares/isValidId");
   Routes ----------------------------------------------------------------------
 */
 
-// router.use(authentificate);
+router.use(authentificate);
 
 router.get("/", contactControllers.getAllContacts);
 
@@ -25,6 +25,11 @@ router.delete("/:contactId", isValiId, contactControllers.deleteContact);
 
 router.put("/:contactId", isValiId, validateBody(schemas.editContactSchema), contactControllers.changeContact);
 
-router.patch("/:contactId/favorite", isValiId, validateBody(schemas.editFavoriteSchema), contactControllers.changeFavorite);
+router.patch(
+    "/:contactId/favorite",
+    isValiId,
+    validateBody(schemas.editFavoriteSchema),
+    contactControllers.changeFavorite
+);
 
 module.exports = router;
