@@ -91,4 +91,35 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
   return res.status(200).json(updateStatus);
 });
 
+router.post("/users/signup", async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "Registration validation error" });
+  }
+  const newUser = await contactsFunc.signup(email, password);
+  if (newUser.message === "Email in use") {
+    return res.status(409).json({ message: "Email in use" });
+  }
+
+  return res.status(201).json(newUser);
+});
+
+router.post("/users/login", async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: "please enter email and password" });
+  }
+
+  const signup = await contactsFunc.login(email, password);
+  console.log("signup: ", signup);
+  if (signup.message === "401") {
+    return res.status(401).json({ message: "Email or password is wrong" });
+  }
+  if (signup.message === "400") {
+    return res.status(400).json({ message: "Registration validation error" });
+  }
+
+  return res.status(200).json(signup);
+});
+
 module.exports = router;
