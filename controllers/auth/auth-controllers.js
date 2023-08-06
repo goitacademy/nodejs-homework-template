@@ -11,6 +11,7 @@ dotenv.config();
 const { JWT_SECRET } = process.env;
 
 const gravatar = require("gravatar");
+const Jimp = require("jimp");
 
 const avatarPath = path.resolve("public", "avatars");
 
@@ -81,13 +82,29 @@ const logout = async (req, res) => {
 const updAvatar = async (req, res) => {
 	const { _id } = req.user;
 	const { path: oldPath, filename } = req.file;
-	console.log(filename)
 	const newPath = path.join(avatarPath, filename);
 
 	await fs.rename(oldPath, newPath);
 
-	const avatar = path.join("avatars", filename);
-	await User.findByIdAndUpdate(_id, { avatarURL: avatar}, { new: true });
+	const avatar = path.join("public", "avatars", filename);
+	await User.findByIdAndUpdate(_id, { avatarURL: avatar }, { new: true });
+
+	// Jimp.read(`${avatar}`)
+	// 	.then((image) => {
+	// 		image.resize(100, 100)
+	// 	})
+	// 	.catch((error) => {
+	// 		console.log(error)
+	// 	});
+	
+	Jimp.read(`${avatar}`)
+		.then((img) => {
+			return img
+				.resize(250, 250)	
+		})
+		.catch((err) => {
+			console.error(err);
+		});
 
 	res.json({
 		avatarURL: avatar,
