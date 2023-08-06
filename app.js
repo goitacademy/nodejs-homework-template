@@ -1,10 +1,13 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-
+const path = require('path');
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
