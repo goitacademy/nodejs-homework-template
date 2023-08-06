@@ -46,6 +46,7 @@ mongoose.connect(process.env.MONGO_URL).then((con) => {
 //MIDLEWARES
 app.use(express.json());
 app.use(cors());
+app.use(express.static("public"));
 
 //custom general middleware to sign time string to re object
 app.use((req, res, next) => {
@@ -219,3 +220,93 @@ const port = process.env.PORT || 3000;
 app.listen(3000, () => {
   console.log(`Server  is up and running on port ${port}`);
 });
+
+// const express = require('express');
+// const dotenv = require('dotenv');
+// const morgan = require('morgan');
+// const cors = require('cors');
+// const mongoose = require('mongoose');
+// const fs = require('fs');
+
+// dotenv.config({
+//   path: process.env.NODE_ENV === 'production' ? './environments/production.env.example' : './environments/development.env.example',
+// });
+
+// const contactRoutes = require('./routes/api/contactsRoutes');
+// const app = express();
+
+// if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+
+// // MONGODB CONNECTION
+// mongoose.connect(process.env.MONGO_URL, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// }).then(() => {
+//   console.log('Mongo DB successfully connected!');
+// }).catch((error) => {
+//   console.error('Error connecting to MongoDB:', error);
+//   process.exit(1);
+// });
+
+// // MIDDLEWARES
+// app.use(express.json());
+// app.use(cors());
+// app.use(express.static("public"));
+
+// // Custom general middleware to sign time string to req object
+// app.use((req, res, next) => {
+//   req.time = new Date().toLocaleString('uk-UA');
+//   next();
+// });
+
+// // Middleware to find contact by id
+// app.use('/contacts/:id', async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const contacts = JSON.parse(await fs.promises.readFile('contacts.json'));
+//     const contact = contacts.find((item) => item.id === id);
+
+//     if (!contact) {
+//       return res.status(404).json({
+//         message: 'Contact does not exist..',
+//       });
+//     }
+
+//     req.contact = contact;
+
+//     next();
+//   } catch (error) {
+//     console.log(error);
+//     res.sendStatus(500);
+//   }
+// });
+
+// // ROUTES
+// app.use('/contacts', contactRoutes);
+
+// app.get('/ping', (req, res) => {
+//   res.status(200).json({
+//     message: 'pong!',
+//   });
+// });
+
+// // Not found request handler
+// app.all('*', (req, res) => {
+//   res.status(404).json({
+//     message: 'Oops! Resource not found...',
+//   });
+// });
+
+// // Global error handler. Four arguments are required!
+// app.use((err, req, res, next) => {
+//   res.status(err.status || 500).json({
+//     message: err.message,
+//   });
+// });
+
+// // SERVER INIT
+// const port = process.env.PORT || 3000;
+
+// app.listen(port, () => {
+//   console.log(`Server is up and running on port ${port}`);
+// });

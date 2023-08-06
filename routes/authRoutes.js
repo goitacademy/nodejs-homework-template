@@ -4,6 +4,7 @@ const validation = require('../Middlewares/validationMiddlewares');
 const { schema } = require('../models/user.models');
 const { users: ctrl } = require('../controlers');
 const authenticate = require('../Middlewares/authMiddlewares');
+const upload = require('../Middlewares/multerMiddlewares');
 
 const router = express.Router();
 
@@ -20,10 +21,10 @@ router.post("/logout", authenticate, ctrl.logout);
 router.get("/current", authenticate, ctrl.getCurrent);
 
 router.patch(
-  "/",
+  "/avatars",
   authenticate,
-  validation.updateSubscriptionValid(schema.updateSubscriptionSchema),
-  ctrl.updateSubscription
+  upload.single('avatar'),
+  ctrl.updateAvatar
 );
 
 module.exports = router;
