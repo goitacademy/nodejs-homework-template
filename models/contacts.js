@@ -32,7 +32,7 @@ const removeContact = async (id) => {
 };
 
 const addContact = async (data) => {
-  // Повертає об'єкт доданого контакту.
+  // Повертає об'єкт доданого контакту..
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
