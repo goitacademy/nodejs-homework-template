@@ -36,8 +36,7 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) throw HttpError(401, authErrorMsg);
 
-  // As of bcryptjs 2.4.0, 'compare' returns a promise if callback is omitted:
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password); // As of bcryptjs 2.4.0, 'compare' returns a promise if callback (passed as the third argument) is omitted
   if (!isPasswordValid) throw HttpError(401, authErrorMsg);
 
   const payload = { id: user._id };
@@ -49,7 +48,7 @@ const login = async (req, res) => {
 };
 
 // Log out
-const logot = async (req, res) => {
+const logout = async (req, res) => {
   const { _id: id } = req.user;
   await User.findByIdAndUpdate(id, { token: '' });
 
@@ -68,6 +67,6 @@ const getCurrent = (req, res) => {
 export default {
   register: controllerWrapper(register),
   login: controllerWrapper(login),
-  logot: controllerWrapper(logot),
+  logout: controllerWrapper(logout),
   getCurrent: controllerWrapper(getCurrent),
 };
