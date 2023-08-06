@@ -77,8 +77,11 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    // const { name, email, phone } = req.body;
+    const { name, email, phone } = req.body;
     const isContact = await updateContact(contactId);
+    isContact.name = name;
+    isContact.email = email;
+    isContact.phone = phone;
       // JSON.parse(JSON.stringify(validation.value)
     if (isContact) {
       res.json({
