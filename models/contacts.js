@@ -36,7 +36,7 @@ const addContact = async (body) => {
 
 const removeContact = async (contactId) => {
   let isContact = false;
-  const contacts = fs
+  const contacts = await fs
     .readFile(contactsPath)
     .then((data) => JSON.parse(data))
     .then((contacts) =>
