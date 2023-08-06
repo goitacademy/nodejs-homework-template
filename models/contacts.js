@@ -27,10 +27,13 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
     const contactToRemove = contacts.find(({ id }) => id === contactId)
-    const { name } = contactToRemove;
-    const newContacts = contacts.filter(({ id }) => id !== contactId);
-    fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
-    return `${name} has been removed.`
+    if (contactToRemove !== undefined) {
+      const { name } = contactToRemove;
+      const newContacts = contacts.filter(({ id }) => id !== contactId);
+      fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
+      return `${name} deleted`
+    }
+    return
   } catch (err) {
     console.log(err.message)
   }
