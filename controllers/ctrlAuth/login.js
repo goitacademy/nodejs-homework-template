@@ -12,13 +12,13 @@ const login = async (req, res) => {
   const user = await authService.getUser({ email });
 
   if (!user) {
-    throw setApiErrorStatus(401, "Email invalid");
+    throw setApiErrorStatus(401, "Invalid email");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
-    throw setApiErrorStatus(401, "Password invalid");
+    throw setApiErrorStatus(401, "Invalid password");
   }
 
   const payload = { id: user._id };

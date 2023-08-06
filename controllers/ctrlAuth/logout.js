@@ -5,7 +5,7 @@ const logout = async (req, res) => {
 
   await authService.updateUser(_id, { token: "" });
 
-  res.status(204).json({ message: "Logout success" });
+  res.status(204).json({ message: "Logout successful" });
 };
 
 module.exports = logout;

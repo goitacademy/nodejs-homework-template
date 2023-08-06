@@ -9,7 +9,7 @@ const updateByIdStatusContact = async (req, res) => {
   } = req;
 
   if (favorite === undefined) {
-    return setApiErrorStatus(400, "Missing field favorite");
+    return setApiErrorStatus(400, "Missing favorites field");
   }
 
   const result = await contactsService.updateContact(contactId, owner, {

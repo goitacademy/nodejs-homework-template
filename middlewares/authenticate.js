@@ -8,12 +8,12 @@ const { SECRET_KEY } = process.env;
 const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   if (!authorization) {
-    next(setApiErrorStatus(401, "Not have data for authorization"));
+    next(setApiErrorStatus(401, "No data for authorization"));
   }
 
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {
-    next(setApiErrorStatus(401, "Not the correct bearer type"));
+    next(setApiErrorStatus(401, "No correct bearer type"));
   }
 
   try {

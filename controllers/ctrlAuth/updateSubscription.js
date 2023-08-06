@@ -6,7 +6,7 @@ const updateSubscription = async (req, res) => {
   const { _id } = req.user;
 
   if (subscription === undefined) {
-    return setApiErrorStatus(400, "Missing field subscription");
+    return setApiErrorStatus(400, "Missing subscription field");
   }
 
   const user = await authService.updateUser(_id, { subscription });

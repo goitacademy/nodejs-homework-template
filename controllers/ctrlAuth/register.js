@@ -9,7 +9,7 @@ const register = async (req, res) => {
   const user = await authService.getUser({ email });
 
   if (user) {
-    throw setApiErrorStatus(409, "Email in use");
+    throw setApiErrorStatus(409, "Email is already used");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
