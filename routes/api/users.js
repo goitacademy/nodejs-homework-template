@@ -19,6 +19,14 @@ router.get("/current", authenticate, ctrlAuth.getCurrent);
 
 router.get("/logout", authenticate, ctrlAuth.logout);
 
+router.get("/verify/:verifycationCode", ctrlAuth.verify);
+
+router.post(
+  "/verify",
+  validateBody(userJoiSchemas.userEmailSchema),
+  ctrlAuth.resendVerify
+);
+
 router.patch(
   "/",
   validateBody(userJoiSchemas.updateStatusSchema),
