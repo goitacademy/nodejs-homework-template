@@ -1,3 +1,7 @@
 const { Contact, validateSchema, ubdateFavouriteSchema } = require("./contact");
 
-module.exports = { Contact, validateSchema, ubdateFavouriteSchema };
+module.exports = {
+  Contact,
+  validateSchema,
+  ubdateFavouriteSchema,
+};

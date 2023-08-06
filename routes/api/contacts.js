@@ -9,27 +9,28 @@ const {
   deleteContactById,
 } = require("../../controllers/contacts");
 
-const { checkID, validateBody } = require("../../middlewares");
+const { checkID, validateBody, authenticate } = require("../../middlewares");
 
-const { validateSchema, ubdateFavouriteSchema } = require("../../models");
+const { validateSchema, ubdateFavouriteSchema } = require("../../models/contact");
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get("/", getAllContacts);
+contactsRouter.get("/", authenticate, getAllContacts);
 
-router.get("/:contactId", checkID, getContactById);
+contactsRouter.get("/:contactId", authenticate, checkID, getContactById);
 
-router.post("/", validateBody(validateSchema), addContact);
+contactsRouter.post("/", authenticate, validateBody(validateSchema), addContact);
 
-router.put("/:contactId", validateBody(validateSchema), checkID, ubdateContactById);
+contactsRouter.put("/:contactId", validateBody(validateSchema), checkID, ubdateContactById);
 
-router.patch(
+contactsRouter.patch(
   "/:contactId/favourite",
+  authenticate,
   validateBody(ubdateFavouriteSchema),
   checkID,
   ubdateFavourite
 );
 
-router.delete("/:contactId", checkID, deleteContactById);
+contactsRouter.delete("/:contactId", authenticate, checkID, deleteContactById);
 
-module.exports = router;
+module.exports = contactsRouter;

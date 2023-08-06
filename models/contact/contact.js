@@ -1,14 +1,15 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handlerMongooseError } = require("../helpers");
+const { handlerMongooseError } = require("../../helpers");
 
 const contactSchema = new Schema(
   {
     name: { type: String, require: true },
-    email: { type: String, unique: true, required: true },
-    phone: { type: String, unique: true, require: true },
+    email: { type: String, required: true },
+    phone: { type: String, require: true },
     favorite: { type: Boolean, default: false },
+    owner: { type: Schema.Types.ObjectId, ref: "user", required: true },
   },
   { versionKey: false, timestamps: true }
 );
