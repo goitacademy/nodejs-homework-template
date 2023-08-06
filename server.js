@@ -1,5 +1,6 @@
-const app = require('./app')
+const app = require("./app");
 
+// запускаємо сервер. Першим агументом зазначємо порт на якому буде запущений сервер, другим аргуметом передаємо колбек-функцію яка повертає повідомлення що сервер запущений.
 app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+  console.log("Server running. Use our API on port: 3000");
+});
