@@ -1,10 +1,16 @@
-import HttpError from "../helpers/HttpError.js";
 import Contact from "../models/contact.js";
 
+import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page, limit } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner }, { skip, limit }).populate(
+    "owner",
+    "name email"
+  );
   res.json(result);
 };
 const getById = async (req, res) => {
@@ -17,7 +23,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

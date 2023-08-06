@@ -6,8 +6,10 @@ import validateBody from "../../decorators/validateBody.js";
 
 import isValidId from "../../middlewars/isValidId.js";
 import isEmptyBody from "../../middlewars/isEmptyBody.js";
+import authenticate from "../../middlewars/authenticate.js";
 
 export const contactsRouter = express.Router();
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll);
 
