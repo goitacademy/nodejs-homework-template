@@ -29,16 +29,12 @@ describe('test-login route', () => {
       .send(loginData);
 
     expect(statusCode).toBe(200);
-    // console.log(statusCode);
 
     const user = await User.findOne({ email: loginData.email });
-    // console.log(user.token);
     expect(body.token).toBe(user.token);
 
-    console.log(body);
-
     expect({
-      user: { email: body.user.email, subscription: body.user.subscription },
+      user: { email: loginData.email, subscription: body.user.subscription },
     }).toEqual({
       user: { email: user.email, subscription: user.subscription },
     });
