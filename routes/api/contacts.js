@@ -2,7 +2,8 @@ const express = require('express')
 
 const router = express.Router();
 
-const { listContacts, getContactById, addContact, updateContact } = require('../../models/contacts');
+const { listContacts, getContactById, addContact, updateContact, removeContact } = require('../../models/contacts');
+// const contacts = listContacts();
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
@@ -54,7 +55,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    const contact = await removeContact(contactId);
     if (contact) {
       res.json({
         status: 'success',
