@@ -6,13 +6,14 @@ const {
   getCurrent,
   signout,
   updateSubscription,
+  updateAvatar,
 } = require("../../controllers/auth/index.js");
 
 const usersSchemas = require("../../schema/users-schema.js");
 
 const { validateBody } = require("../../decorators/index.js");
 
-const { authenticate } = require("../../middlewares/index.js");
+const { authenticate, upload } = require("../../middlewares/index.js");
 
 const authRouter = express.Router();
 
@@ -29,6 +30,13 @@ authRouter.patch(
   authenticate,
   validateBody(usersSchemas.updateSubscriptionSchema),
   updateSubscription
+);
+
+authRouter.patch(
+  "/users/avatars",
+  authenticate,
+  upload.single("avatar"),
+  updateAvatar
 );
 
 module.exports = authRouter;
