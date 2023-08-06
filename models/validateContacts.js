@@ -88,5 +88,5 @@ module.exports = {
   validatePutContact,
   validatePatchContact,
   validateRegister,
-  validateLogin, 
+  validateLogin,
 };
