@@ -1,4 +1,4 @@
-const contactsOperations = require("../../models/contacts");
+const { Contact } = require("../../models");
 const { contactSchema } = require("../../schemas");
 
 const updateById = async (req, res, next) => {
@@ -13,9 +13,10 @@ const updateById = async (req, res, next) => {
       return;
     }
     const { contactId } = req.params;
-    const updatedContact = await contactsOperations.updateContact(
+    const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
-      req.body
+      req.body,
+      { new: true }
     );
     if (!updatedContact) {
       res.status(404).json({
