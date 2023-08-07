@@ -3,7 +3,7 @@ const express = require("express");
 const {
   authenticate,
   validateData,
-  uploadUserAvatar,
+  uploadAvatar,
 } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
@@ -13,6 +13,7 @@ const {
   logInUser,
   logOutUser,
   currentUser,
+  uploadUserAvatar,
 } = require("../../controllers/users");
 
 // const uploadUserAvatar = require("../../middlewares/uploadUserAvatar");
@@ -49,18 +50,8 @@ router.get("/current", authenticate, currentUser);
 router.patch(
   "/avatars",
   authenticate,
-  uploadUserAvatar.single("avatar")
-  //   async (req, res) => {
-  //     const { avatarURL, _id } = req.user;
-
-  //     const { path: tempDirUpload } = req.file;
-
-  //     const finalUpload = path.join(avatarsDir, `${_id}.jpg`);
-
-  //     await fs.rename(tempDirUpload, finalUpload);
-  //     // await fs.rename(`../tmp/${_id}.jpg`, `../public/avatars/${_id}.jpg`)
-  //     res.json({ avatarURL });
-  //   }
+  uploadAvatar.single("avatar"),
+  uploadUserAvatar
 );
 
 module.exports = router;

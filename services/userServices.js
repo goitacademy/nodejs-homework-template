@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
 const gravatar = require("gravatar");
+const Jimp = require("jimp");
 
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
@@ -11,7 +12,7 @@ const { User } = require("../models/user");
 
 const HttpError = require("../utils/HttpError");
 
-const avatarsDir = path.join(process.cwd(), "../", "public", "avatars");
+const avatarsDir = path.join(process.cwd(), "./", "public", "avatars");
 
 const register = async (data) => {
   const { email, password } = data.body;
@@ -59,16 +60,21 @@ const logout = async (data) => {
   return result;
 };
 
-const updateUserAvatar = async (data) => {
+const updateUserAvatar = async (data, _) => {
   const { _id } = data.user;
-
   const { path: tempDirUpload } = data.file;
 
-  const finalDirUpload = path.join(avatarsDir, `${_id}.jpg`);
+  const imageName = `${_id}__avatar.jpg`;
+
+  const finalDirUpload = path.join(avatarsDir, imageName);
+  const avatarURL = path.join(avatarsDir, imageName);
+
+  const userAvatar = await Jimp.read(tempDirUpload);
+  await userAvatar.resize(250, 250).writeAsync(tempDirUpload);
 
   await fs.rename(tempDirUpload, finalDirUpload);
 
-  // ПЕРЕМЕСТИТЬ СНАЧАЛА В ПАПКУ ТЕМП, ЗАТЕМ JIMP, А ПОСЛЕ УЖЕ В НОВУЮ. ИЗМЕНИТЬ СНАЧАЛА НУЖНО ПУТЬ avatarsDir на tmp , ЗАТЕМ ЧЕРЕЗ ASYNC JIMP УЖЕ В НОВУЮ
+  await User.findByIdAndUpdate(_id, { avatarURL });
 };
 
 module.exports = {

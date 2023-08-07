@@ -1,14 +1,14 @@
-const validateData = require('./validateData');
+const validateData = require("./validateData");
 
-const authenticate = require('./authenticate');
+const authenticate = require("./authenticate");
 
-const isValidId = require('./isValidId');
+const isValidId = require("./isValidId");
 
-const uploadUserAvatar = require('./uploadUserAvatar');
-
+const uploadAvatar = require("./uploadAvatar");
 
 module.exports = {
-    validateData,
-    authenticate,
-    isValidId,
-    uploadUserAvatar}
+  validateData,
+  authenticate,
+  isValidId,
+  uploadAvatar,
+};
