@@ -3,8 +3,8 @@ const express = require("express");
 const {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 } = require("../../models/contacts.js");
 
