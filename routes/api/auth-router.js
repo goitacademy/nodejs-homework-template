@@ -1,14 +1,12 @@
 import express from "express";
 import authController from "../../controllers/auth-controller.js";
-import { validateBody } from "../../decorator/index.js";
+import { validateBody,  } from "../../decorator/index.js";
 import usersSchemas from "../../schemas/users-schemas.js";
-import { authenticate } from "../../middlewars/index.js";
+import { authenticate,  upload } from "../../middlewars/index.js";
 
 const authRouter = express.Router();
 
-authRouter.post(
-  "/registered",
-  validateBody(usersSchemas.userSignupSchema),
+authRouter.post("/registered", validateBody(usersSchemas.userSignupSchema),
   authController.registered
 );
 
@@ -19,6 +17,9 @@ authRouter.post(
 );
 
 authRouter.get("/current", authenticate, authController.current);
+
+authRouter.patch("/avatars", upload.single('avatarURL'),
+authenticate, authController.updateAvatar)
 
 authRouter.post("/logout", authenticate, authController.logout);
 

@@ -7,6 +7,7 @@ import {
   authenticate,
   isValidId,
   isEmptyBody,
+  upload
 } from "../../middlewars/index.js";
 
 const contactsRouter = express.Router();
@@ -18,7 +19,7 @@ contactsRouter.get("/", contactsController.getAll);
 contactsRouter.get("/:id", isValidId, contactsController.getById);
 
 contactsRouter.post(
-  "/",
+  "/", upload.single('avatarURL'),
   isEmptyBody,
   validateBody(contactSchemas.addContactSchema),
   contactsController.add
