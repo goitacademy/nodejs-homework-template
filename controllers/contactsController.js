@@ -1,6 +1,6 @@
 import Contact from '../models/contact.js';
 import { controllerWrapper } from '../decorators/index.js';
-import { HttpError } from '../helpers/index.js';
+import { HttpError, cloudinary } from '../helpers/index.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -30,21 +30,28 @@ const getById = async ({ params: { id } }, res) => {
 };
 
 const add = async (req, res) => {
+  const { _id: owner } = req.user;
+
   const { email } = req.body;
   const doesExist = await Contact.findOne({ email });
   if (doesExist) throw HttpError(409, alreadyExistsMsg);
 
   const { path: oldPath, filename } = req.file;
-  const avatarPath = path.resolve('public', 'avatars');
-  // C:\Users\dev0652\Documents\GitHub\node-rest-api\public\avatars
-  const newPath = path.join(avatarPath, filename);
 
-  await fs.rename(oldPath, newPath);
-  const avatar = path.join('avatars', filename);
-  // 'public' is omitted because a middleware in app.js already tells Express to look for static files in the 'public' folder
+  // For files stored in the cloud:
 
-  const { _id: owner } = req.user;
+  const fileData = await cloudinary.uploader.upload(oldPath, {
+    folder: 'avatars',
+  });
+  const { url: avatar } = fileData;
 
+  // For locally stored files:
+  // const avatarPath = path.resolve('public', 'avatars');
+  // const newPath = path.join(avatarPath, filename);
+  // await fs.rename(oldPath, newPath);
+  // const avatar = path.join('avatars', filename); // 'public' is omitted because a middleware in app.js already tells Express to look for static files in the 'public' folder
+
+  await fs.unlink(oldPath); // deletes temp file
   const result = await Contact.create({ ...req.body, avatar, owner });
   res.status(201).json(result);
 };
