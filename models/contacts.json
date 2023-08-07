@@ -59,11 +59,10 @@
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
   },
-
   {
-    "name": "John Doe",
-    "email": "john@example.com",
-    "phone": "123-456-7890",
+    "name": "Nowe imię",
+    "email": "nowy@example.com",
+    "phone": "555-123-4567",
     "id": "1691404788650"
   }
 ]
