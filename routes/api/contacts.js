@@ -1,13 +1,14 @@
-const express = require('express')
+const express = require('express');
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('../../models/contacts')
+} = require('../../models/contacts');
+const {schemaAdd, schemaUpdate} = require('../../validation/validation');
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
@@ -21,9 +22,15 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const body = req.body;
-  const response = await addContact(body);
-  response ? res.status(201).json({ message: response }) : res.status(400).json({ "message": "missing required name - field" });
+  try {
+    const body = await schemaAdd.validateAsync(req.body);
+    const response = await addContact(body);
+    res.status(201).json({ message: response });
+  }
+  catch (err) {
+    res.status(400).json({ message: err.details[0].message })
+    console.log(err);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
@@ -33,10 +40,17 @@ router.delete('/:contactId', async (req, res, next) => {
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const updatedData = req.body;
-  const response = await updateContact(contactId, updatedData);
-  response ? res.status(200).send(response) : res.status(404).json({ message: 'Not found' });
+  try {
+    const { contactId } = req.params;
+    const updatedData = await schemaUpdate.validateAsync(req.body);
+    console.log(updatedData);
+    const response = await updateContact(contactId, updatedData);
+    res.status(200).send(response)
+  }
+  catch (err) {
+    res.status(400).json({ message: err.details[0].message });
+    console.log(err);
+  }
 });
 
 module.exports = router
