@@ -1,8 +1,10 @@
 // 39lNFivy9TLyWhle
-
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://darynakarmazin:39lNFivy9TLyWhle@cluster0.ii8or3n.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const dotenv = require("dotenv");
+dotenv.config();
+
+const { DB_HOST } = process.env;
+
 mongoose
   .connect(DB_HOST)
   .then(() => console.log("Database connection successful"))
