@@ -39,11 +39,9 @@ router.get('/', async (req, res, next) => {
       contacts,
     },
   });
-  next();
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  try {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
     if (contact) {
@@ -58,13 +56,9 @@ router.get('/:contactId', async (req, res, next) => {
       status: "Not found",
       code: 404,
     })
-  } catch (error) {
-    next(error);
-  }
 });
 
 router.post('/', async (req, res, next) => {
-  try {
     const { name, email, phone } = await req.body;
     const validation = schemaRequired.validate({ name, email, phone });
     if (validation.error) {
@@ -81,13 +75,9 @@ router.post('/', async (req, res, next) => {
       code: 201,
       data: { contact },
     });
-  } catch (error) {
-    next(error);
-  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  try {
     const { contactId } = req.params;
     const contact = await removeContact(contactId);
     if (contact) {
@@ -101,13 +91,9 @@ router.delete('/:contactId', async (req, res, next) => {
         code: 404,
       });
     }
-  } catch (error) {
-    next(error);
-  }
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  try {
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
     const validation = schema.validate({ name, email, phone });
@@ -136,9 +122,6 @@ router.put('/:contactId', async (req, res, next) => {
       message: "Not found",
       code: 404,
     });
-  } catch (error) {
-    next(error);
-  }
 })
 
 module.exports = router
