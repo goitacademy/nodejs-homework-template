@@ -23,7 +23,7 @@ const schemaUpdate = Joi.object({
         .trim(),
     phone: Joi.string()
         .trim()
-});
+}).min(1);
 
 module.exports = {
     schemaAdd,
