@@ -1,5 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import path from "path";
+import fs from "fs/promises";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 import "dotenv/config";
 
 import User from "../models/user.js";
@@ -17,8 +21,13 @@ const singUp = async (req, res) => {
     throw HttpError(409, "Email already exists");
   }
 
+  const url = gravatar.url(email, { s: "250", r: "x", d: "retro" });
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL: url,
+  });
 
   res.status(201).json({
     user: {
@@ -42,7 +51,7 @@ const singIn = async (req, res) => {
   const token = jwt.sign(payload, JWt_SECRET, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
-    token: user.token,
+    token,
     user: {
       email: user.email,
       subscription: user.subscription,
@@ -76,10 +85,45 @@ const updateSubscriptionStatus = async (req, res) => {
   res.json(updateSubscription);
 };
 
+const avatarPath = path.resolve("public", "avatars");
+
+const updateAvatarStatus = async (req, res) => {
+  const { path: oldPath, filename } = req.file;
+  const outputPath = path.resolve("temp", filename);
+  try {
+    const image = await Jimp.read(outputPath);
+    await image.resize(250, 250);
+    await image.writeAsync(outputPath);
+    req.file.path = outputPath;
+  } catch (error) {
+    throw HttpError(400, `${error.message}`);
+  }
+  console.log(req.file);
+  console.log(avatarPath);
+  const newPath = path.join(avatarPath, filename);
+  await fs.rename(oldPath, newPath);
+  const url = path.join("avatars", filename);
+
+  const { _id } = req.user;
+
+  const updateAvatar = await User.findByIdAndUpdate(
+    _id,
+    { avatarURL: url },
+    {
+      new: true,
+    }
+  );
+  if (!updateAvatar) {
+    throw HttpError(404, `User with id=${_id} is not found`);
+  }
+  res.json(updateAvatar);
+};
+
 export default {
   singUp: ctrlWrapper(singUp),
   singIn: ctrlWrapper(singIn),
   getCurrent: ctrlWrapper(getCurrent),
   singOut: ctrlWrapper(singOut),
   updateSubscriptionStatus: ctrlWrapper(updateSubscriptionStatus),
+  updateAvatarStatus: ctrlWrapper(updateAvatarStatus),
 };
