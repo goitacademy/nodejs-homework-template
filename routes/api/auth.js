@@ -10,9 +10,13 @@ const {
   logout,
   ubdateSubscriptaion,
   ubdateAvatar,
+  verifyEmail,
+  resendVerifuEmail,
 } = require("../../controllers/user");
 
 router.post("/register", validateBody(Schemas.registerSchema), register);
+router.get("/verify/:verificationCode", verifyEmail);
+router.post("/verify", validateBody(Schemas.refreshEmailSchema), resendVerifuEmail);
 router.post("/login", validateBody(Schemas.loginSchema), login);
 router.get("/current", authenticate, getCurrent);
 router.post("/logout", authenticate, logout);

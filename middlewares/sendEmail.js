@@ -2,7 +2,6 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const { META_PASSWORD } = process.env;
-console.log(META_PASSWORD);
 
 const nodemailerConfig = {
   host: "smtp.meta.ua",
@@ -16,13 +15,12 @@ const nodemailerConfig = {
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
-const sendEmail = async (data) => {
-  const email = { ...data, from: "artemliaschenko@meta.ua" };
+const sendEmai = async (data) => {
+  const email = { from: "artemliaschenko@meta.ua", ...data };
   await transport.sendMail(email);
-  return true;
 };
 
-module.exports = sendEmail;
+module.exports = sendEmai;
 
 // const email = {
 //   to: "playfootball826@gmail.com",

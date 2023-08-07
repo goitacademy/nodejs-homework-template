@@ -5,6 +5,8 @@ const getCurrent = require("./getCurrent");
 const logout = require("./logout");
 const ubdateSubscriptaion = require("./ubdateSubscription");
 const ubdateAvatar = require("./ubdateAvatar");
+const verifyEmail = require("./verifyEmail");
+const resendVerifuEmail = require("./resendVerifuEmail");
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -13,4 +15,6 @@ module.exports = {
   logout: ctrlWrapper(logout),
   ubdateSubscriptaion: ctrlWrapper(ubdateSubscriptaion),
   ubdateAvatar: ctrlWrapper(ubdateAvatar),
+  verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifuEmail: ctrlWrapper(resendVerifuEmail),
 };

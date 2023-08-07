@@ -4,7 +4,7 @@ require("dotenv").config();
 const { nanoid } = require("nanoid");
 const { User } = require("../../models/user");
 const { HttpError } = require("../../helpers");
-const { sendEmail } = require("../../middlewares");
+const { sendEmai } = require("../../middlewares");
 const { BASE_URL } = process.env;
 
 const register = async (req, res) => {
@@ -32,7 +32,7 @@ const register = async (req, res) => {
     html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationCode}">Click verify Email</a>`,
   };
 
-  await sendEmail(verifyEmail);
+  await sendEmai(verifyEmail);
 
   res.status(201).json({
     name: newUser.name,

@@ -58,6 +58,10 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const refreshEmailSchema = Joi.object({
+  email: Joi.string().required(),
+});
+
 const ubdateSubscriptaion = Joi.object({
   subscription: Joi.string()
     .valid(...subscriptionList)
@@ -68,6 +72,7 @@ const Schemas = {
   registerSchema,
   loginSchema,
   ubdateSubscriptaion,
+  refreshEmailSchema,
 };
 
 const User = model("user", userSchema);
