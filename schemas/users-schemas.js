@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const userSignupSchema = Joi.object({
+export const userSignupSchema = Joi.object({
   email: Joi.string().required().messages({
     "any.required": `"email" missing field`,
   }),
@@ -10,7 +10,7 @@ const userSignupSchema = Joi.object({
   subscription: Joi.string(),
 });
 
-const userSigninSchema = Joi.object({
+export const userSigninSchema = Joi.object({
   email: Joi.string().required().messages({
     "any.required": `"email" missing field`,
   }),
@@ -19,7 +19,6 @@ const userSigninSchema = Joi.object({
   }),
 });
 
-export default {
-  userSignupSchema,
-  userSigninSchema,
-};
+export const updateUserAvatar = Joi.object({
+  avatarURL: Joi.boolean(),
+});
