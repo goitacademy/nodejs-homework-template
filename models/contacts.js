@@ -10,14 +10,16 @@ const listContacts = async () => {  try {
     console.log(err.message);
   }}
 
-const getContactById = async (contactId) => { try {
+const getContactById = async (contactId) => {
+  try {
     const contacts = JSON.parse(fs.readFileSync(contactsPath));
     const searchContact = contacts.find((elem) => elem.id === contactId);
     console.log(searchContact);
     return searchContact;
   } catch (err) {
     console.log(err.message);
-  }}
+  }
+};
 
 const removeContact = async (contactId) => { try {
     const contacts = await JSON.parse(fs.readFileSync(contactsPath));
@@ -60,7 +62,8 @@ const addContact = async (body) => { const name = body.name;
     return 2;
   }}
 
-const updateContact = async (contactId, body) => {  const name = body.name;
+const updateContact = async (contactId, body) => {
+  const name = body.name;
   const email = body.email;
   const phone = body.phone;
   const contacts = await JSON.parse(fs.readFileSync(contactsPath));
@@ -87,7 +90,8 @@ const updateContact = async (contactId, body) => {  const name = body.name;
       return null;
     }
   });
-  return message;}
+  return message
+};
 
 module.exports = {
   listContacts,
@@ -95,4 +99,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
