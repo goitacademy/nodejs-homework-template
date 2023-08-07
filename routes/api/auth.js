@@ -1,6 +1,6 @@
 const express = require('express')
 
-const {register, login, logout, current, updateAvatar} =  require('../../models/auth')
+const {register, login, logout, current, updateAvatar, verifyEmail, resendVerificationEmail} =  require('../../models/auth')
 const router = express.Router()
 
 const {authenticate, } = require('../../middleware/authenticate')
@@ -21,7 +21,9 @@ router.post('/users/register', async (req, res, next) => {
     res.status(400).json({ message: err.message });
   }
 });
+   router.get('/users/verify/:verificationToken', verifyEmail)
 
+   router.post('/users.verify', resendVerificationEmail)
 
    router.post('/users/login', login);
 
