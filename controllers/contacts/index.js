@@ -1,7 +1,7 @@
-const addContacts = require('./addContact');
-const updateContacts = require('./updateContact');
+const addContact = require('./addContact');
+const updateContact = require('./updateContact');
 
 module.export = {
-    addContacts,
-    updateContacts
+    addContact,
+    updateContact
 };

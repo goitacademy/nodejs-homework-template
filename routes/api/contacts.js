@@ -2,13 +2,13 @@ const express = require('express')
 const router = express.Router();
 const { contacts: ctrl } = require("../../controllers");
 const { ctrlWrapper, validation } = require("../../middlewares");
-
+const { contactSchema } = require('../../schemas/contacts');
 const {
   listContacts,
   getContactById,
   removeContact,
 } = require('../../models/contacts.js');
-const { contactSchema } = require('../../schemas/contacts.js');
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -18,9 +18,8 @@ router.get('/', async (req, res, next) => {
   } catch (error) {
     res.status(404);
     next(error)
-  }; 
-})
-
+  };
+});
 
 router.get('/:contactId', async (req, res, next) => {
   try {
@@ -35,7 +34,8 @@ router.get('/:contactId', async (req, res, next) => {
     next(error);
   };
     
-})
+});
+
 router.post("/", validation(contactSchema), ctrlWrapper(ctrl.addContact));
 // router.post('/', async (req, res, next) => {
 //   try {
@@ -62,7 +62,7 @@ router.delete('/:contactId', async (req, res, next) => {
     res.status(404).json({ message: "Could delete contact" })
     
   }
-})
+});
 
 router.put("/", validation(contactSchema), ctrlWrapper(ctrl.updateContact));
 // router.put('/:contactId', async (req, res, next) => {
