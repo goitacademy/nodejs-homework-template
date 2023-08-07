@@ -1,12 +1,12 @@
 import express from 'express';
 import { contactsController as controller } from '../../controllers/index.js';
-
 import { validateBody } from '../../decorators/index.js';
 import { contactsSchemas as schemas } from '../../schemas/index.js';
 import {
   authenticate,
   isBodyEmpty,
   isValidId,
+  upload,
 } from '../../middleware/index.js';
 
 // ####################################################
@@ -21,6 +21,7 @@ contactsRouter.get('/:id', isValidId, controller.getById);
 
 contactsRouter.post(
   '/',
+  upload.single('avatar'),
   isBodyEmpty,
   validateBody(schemas.contactsAddSchema),
   controller.add

@@ -5,7 +5,6 @@ const isBodyEmpty = (req, res, next) => {
     ? 'Missing field "Favorite"'
     : 'Request is empty';
 
-  console.log(req);
   const { length } = Object.keys(req.body);
   if (!length) next(HttpError(400, errorMessage));
   next();

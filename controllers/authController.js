@@ -64,7 +64,6 @@ const getCurrent = (req, res) => {
 
 // Update subscription type
 const updateSubscription = async (req, res) => {
-  console.log('req: ', req);
   const { subscription } = req.body;
   const { _id: id } = req.user;
 
