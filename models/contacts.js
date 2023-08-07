@@ -1,19 +1,81 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, "contacts.json");
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const fileContent = await fs.readFile(contactsPath, { encoding: "utf8" });
+    const contacts = JSON.parse(fileContent);
 
-const removeContact = async (contactId) => {}
+    return contacts;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const contact = contacts.find(({ id }) => id === contactId);
 
-const updateContact = async (contactId, body) => {}
+    return contact;
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+const addContact = async (contact) => {
+  try {
+    const contacts = await listContacts();
+    contacts.push(contact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const i = contacts.findIndex(({ id }) => id === contactId);
+
+    if (i > -1) {
+      contacts.splice(i, 1);
+      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return true;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const contact = contacts.find(({ id }) => id === contactId);
+
+    if (contact) {
+      contact.name = body.name;
+      contact.email = body.email;
+      contact.phone = body.phone;
+
+      await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+      return contact;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+};
 
 module.exports = {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
-}
+};
