@@ -19,7 +19,7 @@ const validNumber = Joi
     .trim()
     .required();
 
-const schema = Joi.object({
+const contactSchema = Joi.object({
     name: validName,
     
     email: validEmail,
@@ -27,4 +27,4 @@ const schema = Joi.object({
     phone: validNumber,
 });
 
-module.exports = { schema };
+module.exports = { contactSchema };

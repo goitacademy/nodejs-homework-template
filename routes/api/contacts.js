@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router();
+const { contacts: ctrl } = require("../../controllers");
+const { ctrlWrapper, validation } = require("../../middlewares");
 
 const {
   listContacts,
   getContactById,
   removeContact,
-  addContact,
-  updateContact,
 } = require('../../models/contacts.js');
+const { contactSchema } = require('../../schemas/contacts.js');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -35,17 +36,17 @@ router.get('/:contactId', async (req, res, next) => {
   };
     
 })
-
-router.post('/', async (req, res, next) => {
-  try {
-    const body = req.body
-    const newContact = await addContact(body);
-    res.status(201).json(newContact)
-  } catch (error) {
-    next(error)
-    res.status(404).json({ message: "Could not validate input" })
-  };
-})
+router.post("/", validation(contactSchema), ctrlWrapper(ctrl.addContact));
+// router.post('/', async (req, res, next) => {
+//   try {
+//     const body = req.body
+//     const newContact = await addContact(body);
+//     res.status(201).json(newContact)
+//   } catch (error) {
+//     next(error)
+//     res.status(404).json({ message: "Could not validate input" })
+//   };
+// })
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
@@ -63,24 +64,25 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const contactId = req.params.contactId;
-    const body = req.body;
+router.put("/", validation(contactSchema), ctrlWrapper(ctrl.updateContact));
+// router.put('/:contactId', async (req, res, next) => {
+//   try {
+//     const contactId = req.params.contactId;
+//     const body = req.body;
     
-    if (body === null) {
-      res.status(404).json({ message: "Could not validate input" })
-    }
-    const updatedContact = await updateContact(contactId, body);
-    if (!updatedContact) {
-      res.status(404).json({ message: "Not found" })
-    }
-    res.status(200).json({ message: "contact updated" });
-  } catch (error) {
-    next(error);
-    res.status(404).json({message: "could not update contact"})
-  }
+//     if (body === null) {
+//       res.status(404).json({ message: "Could not validate input" })
+//     }
+//     const updatedContact = await updateContact(contactId, body);
+//     if (!updatedContact) {
+//       res.status(404).json({ message: "Not found" })
+//     }
+//     res.status(200).json({ message: "contact updated" });
+//   } catch (error) {
+//     next(error);
+//     res.status(404).json({message: "could not update contact"})
+//   }
  
-})
+// })
 
 module.exports = router
