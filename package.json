@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "rest-api-hw02-06",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,6 +12,7 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "joi": "^17.9.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
@@ -22,5 +23,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)\r Форк створить репозиторій на вашому http://github.com",
+  "main": ".eslintrc.js",
+  "keywords": [],
+  "author": "Serhii Kotkov",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Serhii-K5/nodejs-homework-rect-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Serhii-K5/nodejs-homework-rect-api/issues"
+  },
+  "homepage": "https://github.com/Serhii-K5/nodejs-homework-rect-api#readme"
 }
