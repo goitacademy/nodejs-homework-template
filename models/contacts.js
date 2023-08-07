@@ -86,7 +86,7 @@ const updateContact = async (contactId, body) => {
         return contacts;
       }
     } else {
-      message = { message: "Nothing to update" };
+      message = { message: "Nothing to Update" };
       return null;
     }
   });
