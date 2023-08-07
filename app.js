@@ -1,13 +1,22 @@
-// darynakarmazin
 // 39lNFivy9TLyWhle
 
-// mongodb+srv://darynakarmazin:39lNFivy9TLyWhle@cluster0.ii8or3n.mongodb.net/
+const mongoose = require("mongoose");
+const DB_HOST =
+  "mongodb+srv://darynakarmazin:39lNFivy9TLyWhle@cluster0.ii8or3n.mongodb.net/db-contacts?retryWrites=true&w=majority";
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log("Database connection successful"))
+  .catch((error) => {
+    console.log(error.message);
+    process.exit(1);
+  });
 
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
+const { error } = require("./schemas/contacts");
 
 const app = express();
 
