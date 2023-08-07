@@ -1,25 +1,19 @@
-const express = require('express')
+const express = require("express")
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {contacts: opera} = require("../../operations")
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', opera.getAll);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', opera.getById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+
+router.post('/', opera.add);
+
+router.delete('/:contactId', opera.removeById);
+
+router.put('/:contactId', opera.updateById);
 
 module.exports = router
