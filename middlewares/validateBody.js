@@ -1,5 +1,5 @@
 const { HttpError } = require("../helpers");
-
+//catch error and pass in next
 const validateBody = (schema) => {
   const func = (req, res, next) => {
     if(Object.keys(req.body).length === 0){
