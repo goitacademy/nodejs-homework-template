@@ -27,15 +27,16 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// contact.path("email").validate((value) => {
-//   const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-//   return re.test(String(value));
-// });
+contactSchema.path("email").validate((value) => {
+  const re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  return re.test(String(value));
+});
 
-// contact.path("phone").validate((value) => {
-//   const re = /^(\d*|\+*|-*| *|\(*|\)*)*$/;
-//   return re.test(String(value));
-// });
+contactSchema.path("phone").validate((value) => {
+  const re = /^(\d*|\+*|-*| *|\(*|\)*)*$/;
+  return re.test(String(value));
+});
+
 contactSchema.post("save", handleMongooseError);
 
 const Contact = mongoose.model("contact", contactSchema);

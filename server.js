@@ -13,11 +13,8 @@ const { MONGO_URL, PORT } = process.env;
 
 mongoose
   .connect(MONGO_URL, {
-    // promiseLibrary: global.Promise,
     useNewUrlParser: true,
-    // useCreateIndex: true,
     useUnifiedTopology: true,
-    // useFindAndModify: false,
   })
   .then(() => {
     app.listen(PORT, () => {

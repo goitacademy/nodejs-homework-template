@@ -10,7 +10,6 @@ const {
   removeContact,
   addContact,
   updateContact,
-  checkContact,
   updateStatusContact,
 } = require("../../controller/index.js");
 

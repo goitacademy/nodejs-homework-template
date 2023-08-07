@@ -1,7 +1,5 @@
 const service = require("../service");
 
-// const Contact = require("../service/schemas/contact");
-
 const { AppError, catchAsync, contactsValidators } = require("../utils");
 
 const listContacts = catchAsync(async (req, res, next) => {
