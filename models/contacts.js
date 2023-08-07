@@ -1,58 +1,42 @@
-const fs = require("fs").promises;
-const path = require("path");
-const { nanoid } = require("nanoid");
-const contactsPath = path.join(__dirname, "contacts.json");
-
-// const fs = require('fs/promises')
+const ContactModel = require("./model");
 
 const listContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
+  return ContactModel.find();
 };
 
 const getContactById = async contactId => {
-  const contacts = await listContacts();
-  const foundContact = contacts.find(item => item.id === contactId);
-  return foundContact ? foundContact : null;
-};
-
-const removeContact = async contactId => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(item => item.id === contactId);
-  if (index === -1) {
-    return null;
-  } else {
-    const foundContact = contacts[index];
-    contacts.splice(index, 1);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return foundContact;
-  }
+  return ContactModel.findById(contactId);
 };
 
 const addContact = async contact => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: nanoid(),
-    ...contact,
-  };
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
+  try {
+    return ContactModel.create(contact);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const removeContact = async contactId => {
+  try {
+    return ContactModel.findByIdAndRemove(contactId);
+  } catch (e) {
+    console.error(e);
+  }
 };
 
 const updateContact = async (contactId, contact) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(item => item.id === contactId);
-  if (index === -1) {
-    return null;
-  } else {
-    let foundContact = {
-      id: contactId,
-      ...contact,
-    };
-    contacts[index] = foundContact;
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return foundContact;
+  try {
+    return ContactModel.findByIdAndUpdate(contactId, contact);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const updateStatusContact = async (contactId, body) => {
+  try {
+    return ContactModel.findByIdAndUpdate(contactId, body);
+  } catch (e) {
+    console.error(e);
   }
 };
 
@@ -62,4 +46,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

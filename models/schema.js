@@ -6,6 +6,11 @@ const schema = Joi.object({
   phone: Joi.string().required(),
 });
 
+const statusSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
 module.exports = {
   schema,
+  statusSchema,
 };
