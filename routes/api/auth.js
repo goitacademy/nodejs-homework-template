@@ -3,7 +3,7 @@ const ctrl = require("../../controllers/auth");
 
 
 const { schemas } = require("../../models/user");
-const { validateBody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
 const router = express.Router();
 
 //signup
@@ -14,7 +14,9 @@ router.post("/login",validateBody(schemas.loginSchema), ctrl.login);
 router.get("/current", authenticate, ctrl.getCurrent);
 //Logout
 router.post("/logout", authenticate, ctrl.logout);
-//Logout
+//Update subcribe
 router.patch("/", authenticate, ctrl.updateUser);
+// Avatar
+router.patch("/avatars", authenticate, upload.single('avatar'), ctrl.updateAvatar);
 
 module.exports = router;
