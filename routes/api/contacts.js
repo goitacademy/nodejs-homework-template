@@ -64,7 +64,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-router.put("/", validation(contactSchema), ctrlWrapper(ctrl.updateContact));
+router.put("/: contactId", validation(contactSchema), ctrlWrapper(ctrl.updateContact));
 // router.put('/:contactId', async (req, res, next) => {
 //   try {
 //     const contactId = req.params.contactId;
