@@ -1,7 +1,13 @@
 const { Schema, model } = require("mongoose");
 const { handleSaveError } = require("../models/hooks");
-
+const gravatar = require("gravatar");
 const { emailRegexp } = require("../constants/email-constants");
+
+const avatar = gravatar.url(
+  "emerleite@gmail.com",
+  { s: "250", r: "x", d: "retro" },
+  true
+);
 
 const userSchema = new Schema(
   {
@@ -15,6 +21,18 @@ const userSchema = new Schema(
       match: emailRegexp,
       required: [true, "Email is required"],
       unique: true,
+    },
+    avatarLink: {
+      type: String,
+      default: "",
+    },
+    avatarPublickId: {
+      type: String,
+      default: "",
+    },
+    avatarUrl: {
+      type: String,
+      default: avatar,
     },
     subscription: {
       type: String,

@@ -8,9 +8,15 @@ const {
 } = require("../../schemas/users");
 const ctrl = require("../../controllers/auth/auth");
 
-const { validateBody, authentication } = require("../../middlewares");
+const { validateBody, authentication, upload } = require("../../middlewares");
 
-router.post("/register", validateBody(registerSchema), ctrl.register);
+router.post(
+  "/register",
+  upload.single("avatar"),
+  validateBody(registerSchema),
+
+  ctrl.register
+);
 router.post("/login", validateBody(loginSchema), ctrl.login);
 router.get("/current", authentication, ctrl.getCurrent);
 router.post("/logout", authentication, ctrl.logout);
@@ -20,5 +26,10 @@ router.patch(
   validateBody(subscriptionSchema),
   ctrl.updateSubscription
 );
-
+router.patch(
+  "/avatars",
+  authentication,
+  upload.single("avatar"),
+  ctrl.updateAvatar
+);
 module.exports = router;
