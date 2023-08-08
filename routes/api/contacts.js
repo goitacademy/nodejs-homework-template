@@ -20,13 +20,17 @@ router.get("/", ctrl.getListContacts);
 router.get("/:contactId", ctrl.getContactById);
 
 // додавання контакту
-router.post("/", validateBody(schemas.addSchema), ctrl.addContacts);
+router.post("/", validateBody(schemas.addSchema, "add"), ctrl.addContacts);
 
 // видалення контакту
 router.delete("/:contactId", ctrl.removeContacts);
 
 // внесення змін до контакту
-router.put("/:contactId", validateBody(schemas.addSchema), ctrl.updateContact);
+router.put(
+  "/:contactId",
+  validateBody(schemas.addSchema, "update"),
+  ctrl.updateContact
+);
 
 module.exports = router;
 

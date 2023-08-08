@@ -29,13 +29,9 @@ const removeContact = async (contactId) => {
   const [result] = contacts.splice(index, 1);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2)); // перезаписуємо файл з контактами
   return result; // повертаємо видалений контакт
-
-  //   // ...твой код. Возвращает объект удаленного контакта. Возвращает null, если объект с таким id не найден.
 };
 
 //* функція яка повeртає об'єкт доданого(створеного) контакту
-// const addContact = async (body) => {};
-
 const addContact = async ({ name, email, phone }) => {
   const contacts = await listContacts(); // отримуємо список всіх контактів
   const newContact = {
