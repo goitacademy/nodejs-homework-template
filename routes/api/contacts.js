@@ -13,6 +13,12 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 })
 
+const addPutSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+})
+
 router.get('/', async (_, res, next) => {
   try {
     const result = await contacts.listContacts();
@@ -69,7 +75,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const {error} = addSchema.validate(req.body);
+    const {error} = addPutSchema.validate(req.body);
     if (error) {
         throw HttpError(400, error.message);
     }
