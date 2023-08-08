@@ -1,19 +1,23 @@
-const express = require("express")
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-const {contacts: opera} = require("../../operations")
+const { contacts: opera } = require("../../operations");
 
+router.get("/", opera.getAll);
 
-router.get('/', opera.getAll);
+router.get("/:contactId", opera.getById);
 
-router.get('/:contactId', opera.getById);
+router.post("/", opera.add);
 
+router.delete("/:contactId", opera.removeById);
 
-router.post('/', opera.add);
+router.put("/:contactId", opera.updateById);
 
-router.delete('/:contactId', opera.removeById);
+// router.use((req, res) => {
+//     res.status(505).json({
+//         message: "Not found"
+//     });
+// })
 
-router.put('/:contactId', opera.updateById);
-
-module.exports = router
+module.exports = router;
