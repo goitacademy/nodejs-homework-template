@@ -26,13 +26,8 @@ const removeContact = async (contactId) => {
 };
 
 const updateContact = async (contactId, body) => {
-  if (!body) {
-    const updContact = Contact.findByIdAndUpdate(contactId, body, {
-      new: true,
-    });
-    return updContact;
-  }
-  return null;
+  const updContact = Contact.findByIdAndUpdate(contactId, body, { new: true });
+  return updContact;
 };
 
 module.exports = {
