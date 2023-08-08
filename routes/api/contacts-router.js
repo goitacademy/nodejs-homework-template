@@ -1,7 +1,8 @@
 import express from "express";
-import contactService, { updateContactById } from "../../models/contacts.js";
-import { HttpError } from "../../helpers/index.js";
 import Joi from "joi";
+import contactService from "../../models/contacts.js";
+import { HttpError } from "../../helpers/index.js";
+
 
 const contactsRouter = express.Router();
 
@@ -26,12 +27,6 @@ contactsRouter.get("/:id", async (req, res, next) => {
     const result = await contactService.getContactById(id);
     if (!result) {
       throw HttpError(400, `Contact with id ${id} not found`);
-      // const error = new Error(`Contact with id ${id} not found`);
-      // error.status = 404;
-      // throw error;
-      // return res.status(404).json({
-      //   message:
-      // })
     }
     res.json(result);
   } catch (error) {
@@ -61,7 +56,7 @@ contactsRouter.delete("/:id", async (req, res, next) => {
     }
     res.json({ message: "contact deleted" });
   } catch (error) {
-   next(error)
+    next(error);
   }
 });
 
@@ -72,12 +67,12 @@ contactsRouter.put("/:id", async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { id } = req.params;
-    const result = await contactService.updateContactById(id, req.body);;
+    const result = await contactService.updateContactById(id, req.body);
     if (!result) {
       throw HttpError(400, `Contact with id ${id} not found`);
     }
     res.json(result);
-  } catch(error) {
+  } catch (error) {
     next(error);
   }
 });
