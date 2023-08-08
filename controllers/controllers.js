@@ -28,8 +28,8 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await Contact.findById(contactId);
+    const { id } = req.params;
+    const result = await Contact.findById(id);
     if (!result) {
       throw ResponseError(404, "Not found");
     }
@@ -103,8 +103,8 @@ const patch = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await Contact.findByIdAndRemove(contactId);
+    const { id } = req.params;
+    const result = await Contact.findByIdAndRemove(id);
     if (!result) {
       throw ResponseError(404, "Not found");
     }
