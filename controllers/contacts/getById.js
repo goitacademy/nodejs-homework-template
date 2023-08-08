@@ -6,7 +6,7 @@ const getById = async (req, res) => {
 
   const result = await Contact.findById(id);
   if (!result) {
-    HttpError(404, "Not found");
+    throw HttpError(404, "Not found");
   }
 
   res.json(result);
