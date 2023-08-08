@@ -14,8 +14,10 @@
     "cross-env": "7.0.3",
     "express": "^4.17.1",
     "joi": "^17.9.2",
+    "mongoose": "^7.4.2",
     "morgan": "^1.10.0",
-    "nanoid": "^4.0.2"
+    "nanoid": "^4.0.2",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint": "7.19.0",
