@@ -1,9 +1,12 @@
+const nanoid = require("nanoid");
 const fs = require("fs/promises");
-const contacts = "../models/contacts.json";
+const path = require("path");
+
+const contactsPath = path.join(__dirname, "../models/contacts.json");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contacts, "utf-8");
-  return data;
+  const data = await fs.readFile(contactsPath, "utf-8");
+  return JSON.parse(data);
 };
 
 const getContactById = async (contactId) => {
@@ -19,7 +22,7 @@ const removeContact = async (contactId) => {
     return null;
   }
   const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  await fs.writeFile(contacts, JSON.stringify(contacts, null, 2));
   return result;
 };
 
@@ -32,7 +35,7 @@ const addContact = async (body) => {
     phone,
   };
   contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  await fs.writeFile(contacts, JSON.stringify(contacts, null, 2));
   return newContact;
 };
 
