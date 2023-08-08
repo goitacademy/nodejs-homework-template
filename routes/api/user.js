@@ -1,11 +1,13 @@
 const fs = require('fs').promises;
 const express = require("express");
-// const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const multer = require("multer");
 const Jimp = require("jimp");
 const path = require("path");
-
-// const jwtSecret = process.env.JWT_SECRET;
+const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
+dotenv.config();
+const jwtSecret = process.env.JWT_SECRET;
 
 const loginHandler = require("../../auth/loginHandler");
 const { auth } = require("../../auth/passportStrategy.js")
@@ -71,6 +73,16 @@ router.post("/login", async (req, res, next) => {
   try {
     const token = await loginHandler(email, password);
 
+    const user = await User.findOne({ email });
+
+    if (user && !user.verify) {
+      return res.status(403).json({
+        status: "error",
+        code: 403,
+        message: "Account not verified",
+        data: "forbidden",
+      });
+    }
     return res.status(200).send(token);
   } catch (err) {
     return res.status(401).send(err);
@@ -79,15 +91,27 @@ router.post("/login", async (req, res, next) => {
 
 router.get("/logout", auth, async (req, res) => {
   try {
-    await userControllers.logout(req.user._id);
-    res.status(204).send("Logout success");
+    const { token } = req.headers.authorization;
+    const verify = jwt.verify(token, jwtSecret);
+    const user = await userControllers.logout(verify);
+    res.status(204).send("Logout success", user);
   } catch (error) {
     res.status(500).send("Server error");
   }
 });
 
 router.get("/current", auth, async (req, res) => {
-  return res.status(200).json(req.user);
+  try {
+    const { token } = req.user;
+    const user = await userControllers.getUserByToken(token);
+
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 router.patch(
@@ -126,5 +150,61 @@ router.patch(
     }
   }
 );
+router.post("/verify", async (req, res) => {
+  const { email } = req.body;
 
+  if (!email) {
+    return res.status(400).send("Missing required filed mail");
+  }
+  try {
+    const user = await userControllers.getUserByEmail(email);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    if (user.verify) {
+      return res.status(400).send("Verification has already been passed");
+    }
+
+    const authVerify = await nodemailer.createTestAccount();
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false,
+      auth: authVerify,
+    });
+
+    const sendEmail = async () => {
+      const info = await transporter.sendMail({
+        from: { name: "Ewelina", address: "foo@example.com" },
+        to: user.email,
+        subject: `Verification ${new Date().toISOString()}`,
+        text: "Hello",
+        html: userControllers.templateHtml(),
+      });
+      const previewUrl = nodemailer.getTestMessageUrl(info);
+      console.log(previewUrl);
+    };
+
+    await transporter.sendMail(sendEmail);
+    res.status(200).send("Verification email sent");
+  } catch (err) {
+    return res.status(500).send("Server error");
+  }
+});
+
+router.get("/verify/:verificationToken", async (req, res) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await userControllers.verifyUser(verificationToken);
+
+    if (user) {
+      return res.status(200).send("Verification succesfull");
+    } else {
+      return res.status(404).send("User not found");
+    }
+  } catch (err) {
+    return res.status(500).send("Server error");
+  }
+});
 module.exports = router;

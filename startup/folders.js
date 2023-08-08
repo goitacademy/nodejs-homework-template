@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 
-const isExist = async (path) => {
+const doesExist = async (path) => {
     return fs
         .access(path)
         .then(() => true)
@@ -8,7 +8,7 @@ const isExist = async (path) => {
 };
 
 const createFolder = async (path) => {
-    if (!(await isExist(path))) {
+    if (!(await doesExist(path))) {
         await fs.mkdir(path);
     }
 };
