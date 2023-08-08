@@ -1,8 +1,8 @@
 const contactsOperations = require('../../models/contacts')
 
-const updateContact = async() => {
+const updateContact = async(contactId, body) => {
   try {
-    const data = await contactsOperations.updateContact()
+    const data = await contactsOperations.updateContact(contactId, body)
     return data
     
   } catch (err) {
