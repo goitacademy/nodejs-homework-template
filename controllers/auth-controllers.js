@@ -29,6 +29,7 @@ const signup = async (req, res) => {
 
   req.status(201).json({
     email: newUser.email,
+    avatarURL: newUser.avatarURL,
   });
 };
 
@@ -60,6 +61,7 @@ const getCurrent = (req, res) => {
   const { email } = req.user;
   res.json({
     email,
+    avatarURL,
   });
 };
 
@@ -72,9 +74,34 @@ const signout = async (req, res) => {
   });
 };
 
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const result = await User.findByIdAndUpdate(
+    _id,
+    { ...req.body },
+    { new: true }
+  );
+  if (!result) {
+    throw HttpError(404, `Contact with id=${_id} not found`);
+  }
+  res.json(result);
+};
+
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+
+  await Jimp.read(tempUpload)
+    .then((avatar) => {
+      return avatar
+        .resize(250, 250) // resize
+        .quality(60) // set JPEG quality
+        .write(tempUpload); // save
+    })
+    .catch((err) => {
+      throw err;
+    });
+
   const resultUpload = path.join(avatarPath, originalname);
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", originalname);
@@ -90,5 +117,6 @@ export default {
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
+  updateSubscription: ctrlWrapper(updateSubscription),
   updateAvatar: ctrlWrapper(updateAvatar),
 };
