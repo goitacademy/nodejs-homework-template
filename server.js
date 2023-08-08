@@ -1,9 +1,9 @@
 import app from './app.js';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 
-dotenv.config();
-const {DB_HOST, PORT} = process.env;
+const { DB_HOST, PORT } = process.env;
+console.log(process.env.JWT_SECRET);
 
 mongoose.connect(DB_HOST)
    .then(() => {
