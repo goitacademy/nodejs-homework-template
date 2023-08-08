@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 import app from "./app.js";
 
-import DB_HOST from "./config.js";
+// import DB_HOST from "./config.js";
+// console.log(process.env.DB_HOST);
+
+const { DB_HOST } = process.env;
 
 mongoose.set('strictQuery', true);
 
