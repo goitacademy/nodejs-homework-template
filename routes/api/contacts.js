@@ -12,38 +12,51 @@ const {
   updateContact,
 } = require(contactsPath);
 
-router.get("/", async (req, res) => {
+const { HttpError } = require("../../utils");
+
+router.get("/", async (req, res, next) => {
   try {
     const result = await listContacts();
     res.json(result);
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    next(error);
   }
 });
 
-router.get("/:contactId", async (req, res) => {
+router.get("/:contactId", async (req, res, next) => {
   try {
-    const result = await getContactById(req.params.contactId);
+    const { contactId } = req.params;
+    const result = await getContactById(contactId);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
     res.json(result);
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    next(error);
   }
 });
 
-router.post("/", async (req, res) => {
-  res.json({ message: "template message" });
+router.post("/", async (req, res, next) => {
+  try {
+    console.log(req.body);
+    // const result = await addContact()
+    // res.json({ message: "template message" });
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete("/:contactId", async (req, res) => {
+router.delete("/:contactId", async (req, res, next) => {
   try {
-    const result = await removeContact(req.params.contactId);
+    const { contactId } = req.params;
+    const result = await removeContact(contactId);
     res.json(result);
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    next(error);
   }
 });
 
-router.put("/:contactId", async (req, res) => {
+router.put("/:contactId", async (req, res, next) => {
   res.json({ message: "template message" });
 });
 
