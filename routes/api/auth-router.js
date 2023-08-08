@@ -2,7 +2,7 @@ const express = require("express");
 const authRouter = express.Router();
 
 const { userSchema } = require("../../schemas");
-const { validation, isAmptyBody, upload } = require("../../middlewares");
+const { validation, isAmptyBody, upload, resize } = require("../../middlewares");
 
 const validateMiddleWare = validation(userSchema);
 const ctrl = require("../../controllers/auth/auth-controllers");
@@ -23,7 +23,7 @@ authRouter.get("/current", authenticate, ctrl.getCurrent);
 
 authRouter.post("/logout", authenticate, ctrl.logout);
 
-authRouter.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updAvatar);
+authRouter.patch("/avatars", authenticate, upload.single("avatar"), resize, ctrl.updAvatar);
 
 
 module.exports = authRouter;
