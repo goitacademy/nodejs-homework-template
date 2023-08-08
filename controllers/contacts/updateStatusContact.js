@@ -1,21 +1,22 @@
 const { Contact } = require("../../models");
-const { contactSchema } = require("../../schemas");
+const { contactStatusSchema } = require("../../schemas");
 
-const updateById = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { error } = contactStatusSchema.validate(req.body);
     if (error) {
       res.status(400).json({
         status: "error",
         code: 400,
-        message: "missing fields",
+        message: "missing field favorite",
       });
       return;
     }
     const { contactId } = req.params;
+    const { favorite } = req.body;
     const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
-      req.body,
+      { favorite },
       { new: true }
     );
     if (!updatedContact) {
@@ -36,4 +37,4 @@ const updateById = async (req, res, next) => {
   }
 };
 
-module.exports = updateById;
+module.exports = updateStatusContact;
