@@ -1,27 +1,25 @@
 const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+
+const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
-app.listen(3001, () => console.log("The server was started on port 3001."));
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use((req, res, next) => {
-  console.log("Our middleware starts now.");
-  next();
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+
+app.use("/api/contacts", contactsRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
 });
 
-app.get("/", (req, res) => {
-  res.send("<h1>Main page</h1>");
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message });
 });
 
-app.get("/contacts", (req, res) => {
-  res.send(`<h1>Contact page</h1>`);
-});
-
-app.get("/contacts/:id", (req, res) => {
-  res.send(`<h1>Contact page</h1> Parameter: ${req.params.id} `);
-});
-
-app.get("*", (req, res) => {
-  res.send(`<h1>Page ${req.url} not found</h1>`);
-  console.log(req);
-});
+module.exports = app;
