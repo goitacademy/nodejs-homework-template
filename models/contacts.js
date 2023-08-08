@@ -48,12 +48,3 @@ module.exports = {
   addContact,
   updateContact,
 }
-
-// const updateContact = async (contactId, body) => {
-//   const contactsArray = await listContacts();
-//   const contactIndex = contactsArray.findIndex((el) => el.id === contactId);
-//   if (contactIndex === -1) return null;
-//   contactsArray[contactIndex] = { ...contactsArray[contactIndex], ...body };
-//   await fs.writeFile(contactsPath, JSON.stringify(contactsArray, null, 2));
-//   return contactsArray[contactIndex];
-// };
