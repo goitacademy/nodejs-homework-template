@@ -1,13 +1,12 @@
 import express from "express";
-
-import contactsController from "../../controllers/contacts-controller.js";
-import contactSchemas from "../../schemas/contacts-schemas.js";
+import contactsController from "../../controllers/contacts-controllers/contacts-controller.js";
+import { contactsSchemas } from "../../schemas/index.js";
 import { validateBody } from "../../decorator/index.js";
 import {
   authenticate,
   isValidId,
   isEmptyBody,
-  upload
+  upload,
 } from "../../middlewars/index.js";
 
 const contactsRouter = express.Router();
@@ -19,9 +18,10 @@ contactsRouter.get("/", contactsController.getAll);
 contactsRouter.get("/:id", isValidId, contactsController.getById);
 
 contactsRouter.post(
-  "/", upload.single('avatarURL'),
+  "/",
+  upload.single("avatarURL"),
   isEmptyBody,
-  validateBody(contactSchemas.addContactSchema),
+  validateBody(contactsSchemas.addContactSchema),
   contactsController.add
 );
 
@@ -29,7 +29,7 @@ contactsRouter.patch(
   "/:id",
   isEmptyBody,
   isValidId,
-  validateBody(contactSchemas.addContactSchema),
+  validateBody(contactsSchemas.addContactSchema),
   contactsController.updateById
 );
 
@@ -37,7 +37,7 @@ contactsRouter.patch(
   "/:id/favorite",
   isEmptyBody,
   isValidId,
-  validateBody(contactSchemas.contactUpdateFavoriteSchema),
+  validateBody(contactsSchemas.contactUpdateFavoriteSchema),
   contactsController.updateStatusContact
 );
 

@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-import Contact from "../models/contacts.js";
-import { ctrlWrapper } from "../decorator/index.js";
-import { HttpError } from "../helpers/index.js";
+import Contact from "../../models/contacts.js";
+import { ctrlWrapper } from "../../decorator/index.js";
+import { HttpError } from "../../helpers/index.js";
 
 
 const posterPath = path.resolve('public', 'avatars')
