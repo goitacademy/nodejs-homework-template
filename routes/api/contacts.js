@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const Joi = require("joi");
 
 const router = express.Router();
 const contactsPath = path.join(__dirname, "../../models/contacts.js");
@@ -13,6 +14,12 @@ const {
 } = require(contactsPath);
 
 const { HttpError } = require("../../utils");
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string(),
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -38,9 +45,12 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
-    // const result = await addContact()
-    // res.json({ message: "template message" });
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await addContact(req.body);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
