@@ -6,11 +6,12 @@ const { isEmptyBody } = require("../../helpers");
 
 const { isEmptyFavorites } = require("../../helpers");
 
+const {isValidId} = require("../..middlewares/")
 const ctrl = require("../../controllers/controllers");
 
 router.get("/", ctrl.getAll);
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", isValidId, ctrl.getById);
 
 router.post("/", isEmptyBody, ctrl.post);
 
