@@ -7,10 +7,10 @@
     },
     "servers": [
         {
-            "url": "https://my-rest-api-pra5.onrender.com",
-            "description": "SwaggerHub API Auto Mocking"
+            "url": "https://my-rest-api-pra5.onrender.com"
         }
     ],
+
     "paths": {
         "/devices": {
             "put": {
