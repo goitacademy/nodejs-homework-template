@@ -9,11 +9,12 @@ exports.createContactDataValidator = (data) =>
         .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
         .required(),
       phone: Joi.string()
-        .regex(/^[0-9]{10}$/)
+        .regex(/^(\d*|\+*|-*| *|\(*|\)*)*$/)
         .messages({
           "string.pattern.base": `Phone number must have 10 digits.`,
         })
         .required(),
+      favorite: Joi.boolean().default(false),
     })
     .validate(data);
 
@@ -26,7 +27,18 @@ exports.updateContactDataValidator = (data) =>
         minDomainSegments: 2,
         tlds: { allow: ["com", "net"] },
       }),
-      phone: Joi.number().integer().min(10).max(10),
+      phone: Joi.string().regex(/^(\d*|\+*|-*| *|\(*|\)*)*$/),
+      favorite: Joi.bool(),
     })
     .min(1)
+    .validate(data);
+
+exports.updateStatusContact = (data) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      favorite: Joi.bool()
+        .required()
+        .messages({ "any.required": "missing field favorite" }),
+    })
     .validate(data);
