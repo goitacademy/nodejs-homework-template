@@ -4,6 +4,11 @@ import { HttpError } from '../helpers/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import gravatar from 'gravatar';
+
+import fs from 'fs/promises';
+import path from 'path';
+import Jimp from 'jimp';
 
 // ####################################################
 
@@ -16,16 +21,21 @@ const authErrorMsg = 'Invalid email or password';
 const register = async (req, res) => {
   const { email, password } = req.body;
 
+  // Check if a user with this email already exists:
   const user = await User.findOne({ email });
   if (user) throw HttpError(409, emailErrorMsg);
 
   const hashedPass = await bcrypt.hash(password, 10);
-  const credentials = { ...req.body, password: hashedPass };
+
+  const avatarUrl = gravatar.url(email, { size: '400' });
+
+  const credentials = { ...req.body, password: hashedPass, avatarUrl };
   const newUser = await User.create(credentials);
 
   res.status(201).json({
     email: newUser.email,
     subscription: newUser.subscription,
+    avatarUrl: newUser.avatarUrl,
   });
 };
 
@@ -78,6 +88,33 @@ const updateSubscription = async (req, res) => {
   });
 };
 
+// Update avatar
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+
+  const { path: oldPath, filename } = req.file;
+  const avatarPath = path.resolve('public', 'avatars');
+  const newPath = path.join(avatarPath, filename);
+
+  Jimp.read(oldPath)
+    .then((image) => {
+      return image.resize(250, 250).write(newPath);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+  await fs.unlink(oldPath);
+
+  const avatar = path.join('avatars', filename); // 'public' is omitted because a middleware in app.js already tells Express to look for static files in the 'public' folder
+
+  await User.findByIdAndUpdate(
+    { _id: _id },
+    { avatarUrl: avatar },
+    { new: true }
+  );
+  res.status(200).json({ avatarUrl: avatar });
+};
 // ####################################################
 
 export default {
@@ -86,4 +123,5 @@ export default {
   logout: controllerWrapper(logout),
   getCurrent: controllerWrapper(getCurrent),
   updateSubscription: controllerWrapper(updateSubscription),
+  updateAvatar: controllerWrapper(updateAvatar),
 };

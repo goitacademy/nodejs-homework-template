@@ -11,12 +11,14 @@ const storage = multer.diskStorage({
     const { originalname } = file;
 
     const uniquePrefix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+
     const filename = `${uniquePrefix}_${originalname}`;
+
     cb(null, filename);
   },
 });
 
-const limits = { fileSize: 1024 ** 2 * 5 };
+const limits = { fileSize: 1024 ** 2 * 5 }; // 5 Mb
 
 const upload = multer({ storage, limits });
 

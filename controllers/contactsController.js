@@ -36,23 +36,28 @@ const add = async (req, res) => {
   const doesExist = await Contact.findOne({ email });
   if (doesExist) throw HttpError(409, alreadyExistsMsg);
 
-  const { path: oldPath, filename } = req.file;
+  // const { path: oldPath } = req.file; // For files stored in the cloud
+  // const { path: oldPath, filename } = req.file; // For locally stored files
 
   // For files stored in the cloud:
 
-  const fileData = await cloudinary.uploader.upload(oldPath, {
-    folder: 'avatars',
-  });
-  const { url: avatar } = fileData;
+  // const fileData = await cloudinary.uploader.upload(oldPath, {
+  //   folder: 'photos',
+  // });
+  // const { url: photo } = fileData;
+  // await fs.unlink(oldPath); // deletes temp file
 
   // For locally stored files:
-  // const avatarPath = path.resolve('public', 'avatars');
-  // const newPath = path.join(avatarPath, filename);
+  // const photoPath = path.resolve('public', 'photos');
+  // const newPath = path.join(photoPath, filename);
   // await fs.rename(oldPath, newPath);
-  // const avatar = path.join('avatars', filename); // 'public' is omitted because a middleware in app.js already tells Express to look for static files in the 'public' folder
+  // const photo = path.join('photos', filename); // 'public' is omitted because a middleware in app.js already tells Express to look for static files in the 'public' folder
 
-  await fs.unlink(oldPath); // deletes temp file
-  const result = await Contact.create({ ...req.body, avatar, owner });
+  const result = await Contact.create({
+    ...req.body,
+    // photo,
+    owner,
+  });
   res.status(201).json(result);
 };
 
