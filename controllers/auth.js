@@ -6,8 +6,21 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
+const nodemailer = require("nodemailer");
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, EMAIL_PASSWORD, EMAIL_USER, BASE_URL } = process.env;
+
+const nodemailerConfig = {
+  host: "sandbox.smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: EMAIL_USER,
+    pass: EMAIL_PASSWORD,
+  },
+};
+
+const transporter = nodemailer.createTransport(nodemailerConfig);
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -21,15 +34,67 @@ const register = async (req, res) => {
 
   const hashPass = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
+  const verificationToken = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPass,
     avatarURL,
+    verificationToken,
   });
+
+  const verifyEmail = {
+    to: email,
+    from: "boltnode@meta.ua",
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
+  };
+
+  await transporter.sendMail(verifyEmail);
+
   res.status(201).json({
     email: newUser.email,
     subscription: newUser.subscription,
+  });
+};
+
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+
+  res.json({
+    msg: "Verification successful",
+  });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    from: "boltnode@meta.ua",
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click verify email</a>`,
+  };
+
+  await transporter.sendMail(verifyEmail);
+
+  res.json({
+    msg: "Verification email sent",
   });
 };
 
@@ -40,6 +105,10 @@ const login = async (req, res) => {
 
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
+  }
+
+  if (!user.verify) {
+    throw HttpError(401, "Email not verified");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -88,7 +157,7 @@ const updateUser = async (req, res, next) => {
   );
 
   if (!updateUser) {
-    throw HttpError(404, "Not found user");
+    throw HttpError(404, "User not found");
   }
   res.status(201).json({
     msg: "User data update success!",
@@ -126,4 +195,6 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateUser: ctrlWrapper(updateUser),
   updateAvatar: ctrlWrapper(updateAvatar),
+  verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };
