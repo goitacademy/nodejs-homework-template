@@ -5,7 +5,7 @@ import app from "./app.js";
 // import DB_HOST from "./config.js";
 // console.log(process.env.DB_HOST);
 
-const { DB_HOST } = process.env;
+const {DB_HOST, PORT = 3000} = process.env;
 
 mongoose.set('strictQuery', true);
 
