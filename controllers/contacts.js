@@ -1,7 +1,7 @@
 const contacts = require("../models/contacts");
 const { HttpError } = require("../helpers/HttpError");
 const { ctrlWrapper } = require("../helpers");
-const Joi = require("joi");
+
 
 const getAllContactsList = async (req, res, next) => {
  
@@ -42,11 +42,15 @@ const deleteContact = async (req, res) => {
 const updateContact = async (req, res) => {
   
   
-    const { id } = req.params;
+  const { id } = req.params;
+  
       const result = await contacts.updateContact(id, req.body);
       if (!result) {
         throw HttpError(404, "Contact not found");
-      }
+  }
+  if (Object.keys(req.body).length === 0) {
+    throw HttpError(400, "missing fields");
+  }
     res.status(200).json(result)
 
  
