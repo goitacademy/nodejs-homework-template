@@ -27,7 +27,7 @@ router.put(
 router.patch(
   "/:id/favorite",
   validateBody(schemas.updateFavoriteSchema),
-  ctrlWrapper(ctrl.updateFavorite)
+  ctrlWrapper(ctrl.updateStatusContact)
 );
 
 module.exports = router;
