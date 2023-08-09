@@ -1,4 +1,4 @@
-const HttpError = require("./HttpError");
+const { HttpError } = require("../helpers");
 
 const checkBody = (request, response, next) => {
     const body = request.body;
