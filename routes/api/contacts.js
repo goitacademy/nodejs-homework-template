@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require("../../models/contacts");
-const { scheme } = require("../../models/auth");
+const scheme = require("../../models/auth");
 const joi = require("joi");
 
 router.get('/', async (req, res, next) => {
@@ -57,12 +57,12 @@ router.put('/:contactId', async (req, res, next) => {
 		email: req.body.email,
 		phone: req.body.phone,
 	};
-	const validatedBody = schema.validate(contact);
+	const validatedBody = schema.validate(newContact);
   if (validatedBody.error) {
     return res.status(404).json({ message: "Not found" });
   }
   try {
-    const updatedContact = await updateContact(newContact);
+    const updatedContact = await updateContact(req.params.contactId, newContact);
     return res.status(200).json(updatedContact);
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
