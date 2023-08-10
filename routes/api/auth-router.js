@@ -7,6 +7,7 @@ const {
   isAmptyBody,
   upload,
   resize,
+  isAmptyEmailField,
 } = require("../../middlewares");
 
 const validateMiddleWare = validation(userSchema);
@@ -24,7 +25,7 @@ authRouter.post(
 
 authRouter.get("/verify/:verificationToken", ctrl.verify);
 
-authRouter.post("/verify", isAmptyBody)
+authRouter.post("/verify", isAmptyEmailField, ctrl.resendEmail);
 
 authRouter.post("/login", isAmptyBody, validateMiddleWare, ctrl.login);
 
@@ -39,7 +40,6 @@ authRouter.patch(
   resize,
   ctrl.updAvatar
 );
-
 
 
 module.exports = authRouter;

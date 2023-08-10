@@ -4,7 +4,9 @@ const isAmptyBody = require("./isAmptyBody");
 const authenticate = require("./authenticate");
 const upload = require("./upload");
 const resize = require("./resize");
+const isAmptyEmailField = require("./isAmptyEmailField");
 
+	
 module.exports = {
   validation,
   isValidId,
@@ -12,4 +14,5 @@ module.exports = {
   authenticate,
 	upload,
 	resize,
+	isAmptyEmailField,
 };

@@ -3,7 +3,6 @@ const validation = (schema) => {
     const { error } = schema.validate(req.body);
     if (error) {
       error.status = 400;
-      console.log("error from validation middleware");
       next(error);
     }
     next();

@@ -12,6 +12,13 @@ const userSchema = Joi.object({
   avatarURL: Joi.string(),
 });
 
+const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).messages({
+    "any.required": "missing required field email"
+  }),
+});
+
 module.exports = {
   userSchema,
+  userEmailSchema,
 };
