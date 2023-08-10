@@ -1,9 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
-
 const fs = require("fs/promises");
-
 const path = require("path");
-
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
@@ -14,7 +11,7 @@ const listContacts = async () => {
   return contactsList;
 };
 
-const getContactById = async (contactId) => {
+const getById = async (contactId) => {
   const contactsList = await listContacts();
 
   const findContactById = contactsList.find(
@@ -28,7 +25,7 @@ const getContactById = async (contactId) => {
   return findContactById;
 };
 
-const addContact = async (body) => {
+const addNewContact = async (body) => {
   const contactsList = await listContacts();
 
   const newContact = { id: uuidv4(), ...body };
@@ -74,8 +71,8 @@ const removeContact = async (contactId) => {
 
 module.exports = {
   listContacts,
-  getContactById,
-  addContact,
+  getById,
+  addNewContact,
   updateContact,
   removeContact,
 };
