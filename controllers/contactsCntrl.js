@@ -16,10 +16,6 @@ async function getById(req, res, next) {
 }
 
 async function addContact(req, res, next) {
-    // const {error} = addSchema.validate(req.body);
-    // if (error) {
-    //   throw HttpError(400, 'missing required name field');
-    // }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
 }
@@ -33,10 +29,9 @@ async function removeById(req, res, next) {
 }
 
 async function updateById(req, res, next) {
-    // const {error} = addSchema.validate(req.body);
-    // if (error) {
-    //   throw HttpError(400, 'missing required name field');
-    // }
+  if (Object.keys(req.body).length === 0) {
+    throw HttpError(400, "Missing fields"); 
+  }
     const result = await contacts.updateContact(req.params.contactId, req.body);
     if (!result) {
       throw HttpError(404, "Not found");    

@@ -14,8 +14,8 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
-  const currentContact = contacts.filter((contact) => contact.id === contactId);
-  if (currentContact.length === 0) {
+  const currentContact = contacts.find((contact) => contact.id === contactId);
+  if (!currentContact) {
       return null;
   };
   return currentContact;
