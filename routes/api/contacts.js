@@ -57,7 +57,7 @@ router.put('/:contactId', async (req, res, next) => {
 		email: req.body.email,
 		phone: req.body.phone,
 	};
-	const validatedBody = schema.validate(newContact);
+	const validatedBody = scheme.validate(newContact);
   if (validatedBody.error) {
     return res.status(404).json({ message: "Not found" });
   }
