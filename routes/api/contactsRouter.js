@@ -7,6 +7,7 @@ import validateBody from "../../decorators/validateBody.js";
 import isValidId from "../../middlewars/isValidId.js";
 import isEmptyBody from "../../middlewars/isEmptyBody.js";
 import authenticate from "../../middlewars/authenticate.js";
+import upload from "../../middlewars/upload.js";
 
 export const contactsRouter = express.Router();
 contactsRouter.use(authenticate);
@@ -17,6 +18,9 @@ contactsRouter.get("/:contactId", isValidId, contactsController.getById);
 
 contactsRouter.post(
   "/",
+  // upload.array("poster", 8) Кілька файлів в одному полі
+  // upload.fields([{name: "poster", maxCount: 1}]) Очікуємо багато файлів в кількох полях
+  upload.single("poster"),
   isEmptyBody,
   validateBody(contactsSchemas.contactsAddSchema),
   contactsController.add

@@ -3,14 +3,19 @@ import Contact from "../models/contact.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
+import fs from "fs/promises";
+import path from "path";
+
+const posterPath = path.resolve("public", "posters");
+
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page, limit } = req.query;
+  const { page = 2, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, { skip, limit }).populate(
-    "owner",
-    "name email"
-  );
+  const result = await Contact.find(
+    { owner }
+    // { skip, limit }
+  ).populate("owner", "name email");
   res.json(result);
 };
 const getById = async (req, res) => {
@@ -24,7 +29,11 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.create({ ...req.body, owner });
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(posterPath, filename);
+  await fs.rename(oldPath, newPath);
+  const poster = path.join("posters", filename);
+  const result = await Contact.create({ ...req.body, poster, owner });
   res.status(201).json(result);
 };
 

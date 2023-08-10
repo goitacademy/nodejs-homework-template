@@ -2,11 +2,15 @@ import User from "../models/user.js";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import fs from "fs/promises";
+import path from "path";
 
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -22,6 +26,7 @@ const signup = async (req, res) => {
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      // avatarURL: gravatar.url(newUser.email),
     },
   });
 };
