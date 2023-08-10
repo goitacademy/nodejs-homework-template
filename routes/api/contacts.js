@@ -10,19 +10,23 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const result = await contacts.getContactById();
+  res.json(result);
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const result = await contacts.addContact();
+    res.json(result);
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const result = await contacts.removeContact();
+    res.json(result);
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const result = await contacts.updateContact();
+  res.json(result);
 })
 
 module.exports = router
