@@ -1,7 +1,7 @@
 const express = require("express");
 const authRouter = express.Router();
 
-const { userSchema } = require("../../schemas");
+const { userSchema, userEmailSchema } = require("../../schemas");
 const {
   validation,
   isAmptyBody,
@@ -11,6 +11,7 @@ const {
 } = require("../../middlewares");
 
 const validateMiddleWare = validation(userSchema);
+const validateEmailField = validation(userEmailSchema);
 const ctrl = require("../../controllers/auth/auth-controllers");
 
 const { authenticate } = require("../../middlewares");
@@ -25,7 +26,12 @@ authRouter.post(
 
 authRouter.get("/verify/:verificationToken", ctrl.verify);
 
-authRouter.post("/verify", isAmptyEmailField, ctrl.resendEmail);
+authRouter.post(
+  "/verify",
+  isAmptyEmailField,
+  validateEmailField,
+  ctrl.resendEmail
+);
 
 authRouter.post("/login", isAmptyBody, validateMiddleWare, ctrl.login);
 
@@ -40,6 +46,5 @@ authRouter.patch(
   resize,
   ctrl.updAvatar
 );
-
 
 module.exports = authRouter;
