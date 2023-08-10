@@ -1,15 +1,18 @@
 const express = require('express')
 const cors = require('cors')
+const logger = require("morgan")
 const mongoose = require('mongoose')
 
 require('dotenv').config()
 
-const routerApi = require('./api')
+const routerApi = require('./routes')
 
 const app = express()
 
-app.use(express.json())
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(express.json())
+app.use(logger(formatsLogger));
 app.use(cors())
 
 app.use('/api/contacts', routerApi)
@@ -25,17 +28,17 @@ app.use((err, _, res, __) => {
 })
 
 const PORT = process.env.PORT || 3000
-const uriDb = "mongodb+srv://phonebookgoit:phonebookgoit@cluster0.ei3qkbz.mongodb.net/";
-
+const uriDb = process.env.DATABASE_URL;
 
 const connection = mongoose.connect(uriDb, {
   useUnifiedTopology: true,
+  dbName: "db-contacts"
 })
 
 connection
   .then(() => {
     app.listen(PORT, function () {
-      console.log(`Server running. Use our API on port: ${PORT}`)
+      console.log(`Database connection successful. PORT: ${PORT}`);
     })
   })
   .catch((err) => {

@@ -1,11 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const Contact = require('../service/schemas/contact.js')
+const Contact = require('../models/contact.js')
 
 router.get('/', async (req, res, next) => {
     try {
         const contacts = await Contact.find({}, "-createdAt -updatedAt");
-        res.status(200).json(contacts);
+        console.log(contacts)
+        res.status(200).json(
+            {
+                status: "success",
+                data: contacts,
+            });
     } catch (error) {
         next(error)
     }
@@ -15,11 +20,21 @@ router.get('/:id', async (req, res, next) => {
     try {
         const { id } = req.params;
         const contact = await Contact.findById(id);
-        console.log(contact);
-        if (!contact) { return next(new Error("Contact not found.")) };
-        res.status(200).json(contact);
+        if (!contact) {
+            throw new Error('Contact not found.')
+        }
+        res.status(200).json(
+            {
+                status: "success",
+                data: contact,
+            });
     } catch (error) {
-        next(error)
+        res.status(400).json({
+            status: "error",
+            data: {
+                message: error.message,
+            }
+        })
     }
 })
 
