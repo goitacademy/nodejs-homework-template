@@ -1,17 +1,20 @@
 const User = require("../../models/user");
 const ctrlWrapper = require("../../decorators");
-const { HttpError } = require("../../helpers");
+const { HttpError, sendEmail } = require("../../helpers");
 const path = require("path");
 const fs = require("fs/promises");
+const shortId = require("shortid");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 dotenv.config();
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, BASE_URL } = process.env;
 
 const gravatar = require("gravatar");
 const avatarPath = path.resolve("public", "avatars");
+
+
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -20,12 +23,23 @@ const signup = async (req, res) => {
   if (user) throw HttpError(409, "Email in use");
 
   const avatar = gravatar.url(email);
-  const hashPassword = await bcrypt.hash(password, 10);
+	const hashPassword = await bcrypt.hash(password, 10);
+	const verificationCode = shortId.generate();
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL: avatar,
+    verificationCode,
   });
+
+	const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a href="${BASE_URL}/users/auth/verify/${verificationCode} target="_blank">Click to verify email<a>`,
+  };
+
+	await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
