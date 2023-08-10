@@ -25,5 +25,7 @@ authRouter.post("/logout", authenticate, ctrl.logout);
 
 authRouter.patch("/avatars", authenticate, upload.single("avatar"), resize, ctrl.updAvatar);
 
+// authRouter.get("/verify/:verificationToken");
+
 
 module.exports = authRouter;

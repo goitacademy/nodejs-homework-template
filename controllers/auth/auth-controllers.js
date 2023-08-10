@@ -14,8 +14,6 @@ const { JWT_SECRET, BASE_URL } = process.env;
 const gravatar = require("gravatar");
 const avatarPath = path.resolve("public", "avatars");
 
-
-
 const signup = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -23,23 +21,23 @@ const signup = async (req, res) => {
   if (user) throw HttpError(409, "Email in use");
 
   const avatar = gravatar.url(email);
-	const hashPassword = await bcrypt.hash(password, 10);
-	const verificationCode = shortId.generate();
+  const hashPassword = await bcrypt.hash(password, 10);
+  const verificationToken = shortId.generate();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL: avatar,
-    verificationCode,
+    verificationToken,
   });
 
-	const verifyEmail = {
+  const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a href="${BASE_URL}/users/auth/verify/${verificationCode} target="_blank">Click to verify email<a>`,
+    html: `<a href="${BASE_URL}/users/auth/verify/${verificationToken} target="_blank">Click to verify email<a>`,
   };
 
-	await sendEmail(verifyEmail);
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
@@ -54,6 +52,8 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) throw HttpError(401, "Email or password is wrong");
+
+  if (!user.verify) throw HttpError(401, "User not found");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password is wrong");
@@ -93,7 +93,7 @@ const logout = async (req, res) => {
 
 const updAvatar = async (req, res) => {
   const { _id } = req.user;
-	const { path: oldPath, filename } = req.file;
+  const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarPath, filename);
   const avatar = path.join("avatars", filename);
 
