@@ -9,7 +9,6 @@ const { SECRET_KEY } = process.env;
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(req.body);
   if (user) {
     throw HttpError(409, "Email in use");
   }
@@ -38,16 +37,31 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
-  console.log(payload);
-  console.log(SECRET_KEY);
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  console.log(token);
   res.json({
     token,
+  });
+};
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.json({
+    message: "Logout success",
   });
 };
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
 };
