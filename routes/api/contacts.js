@@ -15,7 +15,7 @@ const addSchema = Joi.object({
 
 const addPutSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string(),
+  email: Joi.string().email(),
   phone: Joi.string(),
 })
 
@@ -29,7 +29,7 @@ router.get('/', async (_, res, next) => {
   }
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const {id} = req.params;
     const result = await contacts.getContactById(id);
@@ -57,7 +57,7 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     const {id} = req.params;
     const result = await contacts.removeContact(id);
@@ -73,7 +73,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:id', async (req, res, next) => {
   try {
     const {error} = addPutSchema.validate(req.body);
     if (error) {
