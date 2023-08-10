@@ -13,7 +13,7 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const allContacts = await contacts.listContacts();
     res.json(allContacts);
@@ -40,7 +40,11 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, `The field ${error.message} to filling`);
+      console.log(error.details[0].path);
+      throw HttpError(
+        400,
+        `missing required ${error.details[0].path.toString()} field`
+      );
     }
     const contactToCreate = await contacts.addContact(req.body);
     res.status(201).json(contactToCreate);
@@ -67,8 +71,9 @@ router.delete("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
+
     if (error) {
-      throw HttpError(400, `The field ${error.message} to filling`);
+      throw HttpError(400, `missing fields`);
     }
 
     const { id } = req.params;
