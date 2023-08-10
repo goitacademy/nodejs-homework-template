@@ -4,28 +4,35 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import path from "path";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 const { JWT_SECRET } = process.env;
 const avatarsPath = path.resolve("public", "avatars");
+const tempPatch = path.resolve("tmp");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+  const avatar = gravatar.url(email);
+
   if (user) {
     throw HttpError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL: avatar,
+  });
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
-      // avatarURL: gravatar.url(newUser.email),
     },
   });
 };
@@ -66,6 +73,15 @@ const signout = async (req, res) => {
 const changeAvatar = async (req, res) => {
   const { _id: owner } = req.user;
   const { path: oldPath, filename } = req.file;
+  await Jimp.read(oldPath)
+    .then((avatar) => {
+      return avatar
+        .resize(250, 250) // resize
+        .write(oldPath); // save
+    })
+    .catch((err) => {
+      console.error(err);
+    });
   const newPath = path.join(avatarsPath, filename);
   await fs.rename(oldPath, newPath);
   const avatar = path.join("avatars", filename);
