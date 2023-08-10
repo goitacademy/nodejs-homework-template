@@ -40,7 +40,6 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      console.log(error.details[0].path);
       throw HttpError(
         400,
         `missing required ${error.details[0].path.toString()} field`
