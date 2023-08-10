@@ -30,7 +30,6 @@ const createContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  console.log(1);
   const result = await contacts.updateContact(req.params.contactId, req.body);
   if (!result) {
     throw HttpError(404, `id=${req.params.contactId} not found`);
