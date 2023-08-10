@@ -22,7 +22,15 @@ const schemaLogin = Joi.object({
   }),
 });
 
+const schemaEmail = Joi.object({
+  email: Joi.string().email().required().messages({
+    'any.required': 'Missing required <email> field',
+    'string.empty': 'Field <email> cannot be an empty string',
+  }),
+});
+
 module.exports = {
   schemaRegister,
   schemaLogin,
+  schemaEmail,
 };
