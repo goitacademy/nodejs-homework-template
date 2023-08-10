@@ -25,5 +25,8 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
+  },
+  "engines": {
+    "node": ">=14.20.1"
   }
 }
