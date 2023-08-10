@@ -2,7 +2,6 @@ import User from "../models/user.js";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import gravatar from "gravatar";
 import fs from "fs/promises";
 import path from "path";
 
@@ -64,10 +63,26 @@ const signout = async (req, res) => {
 
   res.status(204).json({ message: "_" });
 };
+const changeAvatar = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+  await fs.rename(oldPath, newPath);
+  const avatar = path.join("avatars", filename);
+  const result = await User.findByIdAndUpdate(
+    owner,
+    { avatarURL: avatar },
+    {
+      new: true,
+    }
+  );
+  res.status(201).json(result.avatarURL);
+};
 
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
+  changeAvatar: ctrlWrapper(changeAvatar),
 };
