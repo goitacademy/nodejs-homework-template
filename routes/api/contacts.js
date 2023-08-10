@@ -7,7 +7,7 @@ const joi = require("joi");
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
-})
+});
 
 router.get('/:contactId', async (req, res, next) => {
   const id = req.params.contactId;
@@ -17,7 +17,7 @@ router.get('/:contactId', async (req, res, next) => {
   } else {
     res.status(404).json({message: "Not found"})
   }
-})
+});
 
 router.post('/', async (req, res, next) => {
   const newContact = {
@@ -36,7 +36,7 @@ router.post('/', async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
-})
+});
 
 router.delete('/:contactId', async (req, res, next) => {
   const id = req.params.contactId;
@@ -46,7 +46,7 @@ router.delete('/:contactId', async (req, res, next) => {
   } else {
     res.status(404).json({message: "Not found"});
   }
-})
+});
 
 router.put('/:contactId', async (req, res, next) => {
   if (!req.body) {
@@ -67,6 +67,6 @@ router.put('/:contactId', async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
-})
+});
 
 module.exports = router
