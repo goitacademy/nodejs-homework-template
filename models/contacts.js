@@ -35,6 +35,7 @@ const removeContact = async (contactId) => {
 };
 
 const updateContact = async (contactId, body) => {
+  console.log("updateContact in models", contactId, body);
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) {
