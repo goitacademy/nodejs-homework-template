@@ -38,9 +38,12 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const { name, email, phone } = body;
   const validatedData = dataValidator({ name, email, phone });
+  // console.log(validatedData.value);
   if (validatedData.error) {
-    console.log(validatedData.error);
-    return null;
+    console.log(validatedData.error.details[0].message.split(" ")[0]);
+    const error = validatedData.error.details[0].message.split(" ")[0];
+    const finalError = error.slice(1, error.length - 1);
+    return finalError;
   }
   const contacts = await listContacts();
   const newContact = { id: nanoid(), ...{ name, email, phone } };
@@ -63,8 +66,10 @@ const updateContact = async (contactId, body) => {
   const validatedData = dataValidator({ name, email, phone });
   // console.log(validatedData.value);
   if (validatedData.error) {
-    // console.log(validatedData.error);
-    return undefined;
+    console.log(validatedData.error.details[0].message.split(" ")[0]);
+    const error = validatedData.error.details[0].message.split(" ")[0];
+    const finalError = error.slice(1, error.length - 1);
+    return finalError;
   }
 
   contacts[index] = { id: contactId, ...body };
