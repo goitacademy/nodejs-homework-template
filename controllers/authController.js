@@ -53,6 +53,7 @@ const login = async (req, res) => {
   const payload = { id };
   const secret = process.env.JWT_SECRET;
   const token = jwt.sign(payload, secret, { expiresIn: '23h' });
+
   await User.findByIdAndUpdate(id, { token });
 
   res.json({ token, user: { email, subscription } });
