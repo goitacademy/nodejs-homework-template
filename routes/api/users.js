@@ -1,11 +1,15 @@
 const express = require("express");
 const passport = require("passport");
+const jimp = require("jimp");
+const fs = require("fs/promises");
 const {
   register,
   getUserByEmail,
   login,
   logout,
 } = require("../../models/users/users");
+
+const { upload, updateAvatar } = require("../../models/users/upload");
 
 const router = express.Router();
 
@@ -98,5 +102,31 @@ router.post("/logout", auth, async (req, res, next) => {
     });
   }
 });
+
+router.patch(
+  "/avatars",
+  auth,
+  upload.single("picture"),
+  async (req, res, next) => {
+    const { path: tempUpload, originalname } = req.file;
+    const { _id } = req.user;
+    const user = await updateAvatar(_id, tempUpload, originalname);
+    if (user) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: {
+          avatarURL: user.avatarURL,
+        },
+      });
+    } else {
+      res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Error",
+      });
+    }
+  }
+);
 
 module.exports = router;

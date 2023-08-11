@@ -2,6 +2,7 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("./model");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 
 const getUserByEmail = async email => {
   return User.findOne({ email });
@@ -22,8 +23,10 @@ const register = async ({ email, password }) => {
   try {
     const hashedPassword = await hashPassword(password);
     const newUser = new User({ email, password: hashedPassword });
+    const url = gravatar.url(email);
+    newUser.avatarURL = url;
     await newUser.save();
-    return newUser;
+    return User.findOne({ email });
   } catch (e) {
     console.error(e);
   }
@@ -53,6 +56,8 @@ const logout = async id => {
     console.error(e);
   }
 };
+
+const uploadAvatar = async () => {};
 
 module.exports = {
   register,

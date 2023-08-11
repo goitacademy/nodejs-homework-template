@@ -11,6 +11,7 @@ const usersRouter = require("./routes/api/users");
 const connectDB = require("./db");
 
 const app = express();
+app.use(express.static("public"));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 

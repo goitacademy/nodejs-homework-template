@@ -18,6 +18,10 @@ const schema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  avatarURL: {
+    type: String,
+    default: null,
+  },
 });
 
 schema.methods.setPassword = function (password) {
