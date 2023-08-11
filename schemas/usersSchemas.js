@@ -3,10 +3,11 @@ import emailRegexp from '../constants/user-constants.js';
 // ####################################################
 
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string(),
   // email: Joi.string().email().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+  avatarUrl: Joi.string(),
 });
 
 const loginSchema = Joi.object({

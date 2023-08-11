@@ -1,9 +1,7 @@
 import mongoose from 'mongoose';
 // import dotenv from 'dotenv';
 import 'dotenv/config';
-
 import { exit } from 'node:process';
-
 import app from './app.js';
 
 // ##################################
@@ -20,7 +18,7 @@ mongoose
       );
     });
   })
-  .catch((err) => {
-    console.log(err.message);
+  .catch((error) => {
+    console.log(error.message);
     exit(1);
   });

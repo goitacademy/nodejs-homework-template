@@ -13,7 +13,7 @@ const secret = process.env.JWT_SECRET;
 const authenticate = async (req, res, next) => {
   const { authorization = '' } = req.headers;
   const [bearer, token] = authorization.split(' ');
-  console.log('bearer, token: ', bearer, token);
+
   if (bearer !== 'Bearer' && !token) throw HttpError(401);
 
   try {
@@ -27,7 +27,7 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch {
-    throw HttpError(401, 'WTF');
+    throw HttpError(401, 'Unauthorized (in catch in authenticate.js)');
   }
 };
 

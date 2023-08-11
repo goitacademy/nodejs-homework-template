@@ -1,10 +1,13 @@
 import Contact from '../models/contact.js';
 import { controllerWrapper } from '../decorators/index.js';
-import { HttpError } from '../helpers/index.js';
+import { HttpError, cloudinary } from '../helpers/index.js';
+import fs from 'fs/promises';
+// import path from 'path';
 
 // ####################################################
 
 const notFoundMsg = 'Could not find contact with the requested id';
+const alreadyExistsMsg = 'A contact with this email already exists';
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -28,7 +31,33 @@ const getById = async ({ params: { id } }, res) => {
 
 const add = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.create({ ...req.body, owner });
+
+  const { email } = req.body;
+  const doesExist = await Contact.findOne({ email });
+  if (doesExist) throw HttpError(409, alreadyExistsMsg);
+
+  // const { path: oldPath } = req.file; // For files stored in the cloud
+  // const { path: oldPath, filename } = req.file; // For locally stored files
+
+  // For files stored in the cloud:
+
+  // const fileData = await cloudinary.uploader.upload(oldPath, {
+  //   folder: 'photos',
+  // });
+  // const { url: photo } = fileData;
+  // await fs.unlink(oldPath); // deletes temp file
+
+  // For locally stored files:
+  // const photoPath = path.resolve('public', 'photos');
+  // const newPath = path.join(photoPath, filename);
+  // await fs.rename(oldPath, newPath);
+  // const photo = path.join('photos', filename); // 'public' is omitted because a middleware in app.js already tells Express to look for static files in the 'public' folder
+
+  const result = await Contact.create({
+    ...req.body,
+    // photo,
+    owner,
+  });
   res.status(201).json(result);
 };
 
