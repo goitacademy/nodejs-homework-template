@@ -1,10 +1,16 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const contacts = require("./models/contacts.json");
 
 const contactsRouter = require('./routes/api/contacts')
 
-const app = express()
+const app = express();   // aap -це веб сервер 
+
+app.get('/contacts',(request,  response)=>{ response.send(contacts)});
+
+
+app.listen(3002, ()=> console.log('server running1'))
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
