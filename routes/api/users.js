@@ -16,12 +16,6 @@ const {
   uploadUserAvatar,
 } = require("../../controllers/users");
 
-// const uploadUserAvatar = require("../../middlewares/uploadUserAvatar");
-
-// const path = require("path");
-// const fs = require("fs/promises");
-// const avatarsDir = path.join(process.cwd(), "public", "avatars");
-
 const router = express.Router();
 
 /**
@@ -53,5 +47,7 @@ router.patch(
   uploadAvatar.single("avatar"),
   uploadUserAvatar
 );
+
+router.get("/users/verify/:verificationToken")
 
 module.exports = router;
