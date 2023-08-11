@@ -25,8 +25,6 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
    const { _id: owner } = req.user;
-   // console.log(req.body);
-   // console.log(req.file);
    const { path: oldPath, filename } = req.file;
    const newPath = path.join(avatarPath, filename);
    await fs.rename(oldPath, newPath);

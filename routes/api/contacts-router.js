@@ -16,7 +16,7 @@ contactsRouter.post('/', upload.single('avatar'), isEmptyBody, validateBody(cont
 
 contactsRouter.put('/:id', isValidId, isEmptyBody,  validateBody(contactsSchemas.contactsAddSchema), contactsControllers.updateById);
 
-contactsRouter.patch('/:id/favorite', isValidId, isEmptyBody,  validateBody(contactsSchemas.contactsUpdateFavoriteShema), contactsControllers.updateFavorite);
+contactsRouter.patch('/:id/favorite', isValidId, isEmptyBody,  validateBody(contactsSchemas.contactsUpdateFavoriteSchema), contactsControllers.updateFavorite);
 
 contactsRouter.delete('/:id', isValidId, contactsControllers.deleteById);
 

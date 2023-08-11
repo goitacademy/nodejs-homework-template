@@ -13,12 +13,12 @@ const contactsAddSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const contactsUpdateFavoriteShema = Joi.object({
+const contactsUpdateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required()
 });
 
 
 export default {
     contactsAddSchema,
-    contactsUpdateFavoriteShema,
+    contactsUpdateFavoriteSchema,
 }
