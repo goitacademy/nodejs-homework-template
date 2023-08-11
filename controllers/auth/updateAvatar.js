@@ -15,7 +15,6 @@ const updateAvatar = async (req, res) => {
   }
 
   if (req.file !== undefined && avatarLink.length !== 0) {
-    console.log("sadasdasdasd");
     fs.unlink(avatarUrl);
 
     const { path: oldPath, filename } = req.file;
@@ -47,8 +46,6 @@ const updateAvatar = async (req, res) => {
   }
   if (req.file !== undefined && avatarLink.length === 0) {
     const { path: oldPath, filename } = req.file;
-    console.log(oldPath);
-    console.log(filename);
     const newPath = path.join(avatarPath, filename);
     await fs.rename(oldPath, newPath);
 

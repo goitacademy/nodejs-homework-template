@@ -3,8 +3,11 @@ const jimp = require("jimp");
 const bcrypt = require("bcrypt");
 const fs = require("fs").promises;
 const path = require("path");
-const { HttpError, cloudinary } = require("../../helpers");
+const { v4: uuidv4 } = require("uuid");
+
+const { HttpError, cloudinary, sendgridEmail } = require("../../helpers");
 const avatarPath = path.resolve("publick", "avatars");
+const { BASE_URL } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -12,6 +15,14 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(409, "Email in use");
   }
+  const verificationToken = uuidv4();
+  const verifyEmail = {
+    to: email,
+    subject: "Confirmation of registration.",
+    html: `<p>Hello, follow the link to confirm your registration. </p>
+<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
+  };
+
   const hashPass = await bcrypt.hash(password, 12);
 
   if (req.file !== undefined) {
@@ -27,12 +38,14 @@ const register = async (req, res) => {
       folder: "avatars",
     });
 
+    sendgridEmail(verifyEmail);
     const newUser = await User.create({
       ...req.body,
       avatarLink: uploadImg.url,
       avatarPublickId: uploadImg.public_id,
       avatarUrl: newPath,
       password: hashPass,
+      verificationToken,
     });
 
     res.status(201).json({
@@ -40,9 +53,10 @@ const register = async (req, res) => {
       subscription: newUser.subscription,
     });
   }
-
+  sendgridEmail(verifyEmail);
   const newUser = await User.create({
     ...req.body,
+    verificationToken,
     password: hashPass,
   });
 

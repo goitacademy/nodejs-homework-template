@@ -5,6 +5,7 @@ const {
   registerSchema,
   loginSchema,
   subscriptionSchema,
+  emailSchema,
 } = require("../../schemas/users");
 const ctrl = require("../../controllers/auth/auth");
 
@@ -17,6 +18,9 @@ router.post(
 
   ctrl.register
 );
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
+router.post("/verify", validateBody(emailSchema), ctrl.resendVerifyEmail);
+
 router.post("/login", validateBody(loginSchema), ctrl.login);
 router.get("/current", authentication, ctrl.getCurrent);
 router.post("/logout", authentication, ctrl.logout);
@@ -32,4 +36,5 @@ router.patch(
   upload.single("avatar"),
   ctrl.updateAvatar
 );
+
 module.exports = router;
