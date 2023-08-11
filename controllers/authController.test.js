@@ -3,7 +3,6 @@ import 'dotenv/config';
 import request from 'supertest';
 
 import app from '../app.js';
-import User from '../models/user.js';
 
 // ##########################################
 
@@ -24,13 +23,13 @@ describe('Test the login controller', () => {
 
   // ****************************************
 
-  beforeAll(async () => {
+  beforeAll(() => {
     mongoose.connect(DB_HOST_TEST);
     server = app.listen(PORT);
     // await User.create(credentials);
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     // await User.deleteMany({});
     mongoose.connection.close();
     server.close();
