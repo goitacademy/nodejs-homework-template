@@ -7,21 +7,13 @@ const getById = async (req, res, next) => {
     const result = await getContactById(contactId);
 
     if (!result) {
-      res.json({
-        status: "error",
-        code: 404,
+      res.status(404).json({
         message: "Not found",
       });
       return;
     }
 
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        result,
-      },
-    });
+    res.json(result);
   } catch (error) {
     next(error);
   }
