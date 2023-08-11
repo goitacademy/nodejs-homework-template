@@ -1,6 +1,8 @@
 const { User } = require("../../models");
 const { userSchema } = require("../../schemas");
 
+const bcrypt = require("bcryptjs");
+
 const register = async (req, res, next) => {
   try {
     const { error } = userSchema.validate(req.body);
@@ -8,7 +10,7 @@ const register = async (req, res, next) => {
       res.status(400).json({
         status: "Bad Request",
         code: 400,
-        message: "Missing required name field",
+        message: error.message,
       });
       return;
     }
@@ -22,7 +24,8 @@ const register = async (req, res, next) => {
       });
       return;
     }
-    const result = await User.create({ email, password });
+    const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+    const result = await User.create({ email, password: hashPassword });
     res.status(201).json({
       status: "Created",
       code: 201,
