@@ -8,12 +8,12 @@ const { SECRET_KEY } = process.env;
 
 const getCurrent = async (req, res, next) => {
   try {
-    const { email } = req.user;
+    const { email, subscription } = req.user;
     res.json({
       status: "success",
       code: 200,
       data: {
-        user: { email },
+        user: { email, subscription },
       },
     });
   } catch (error) {
