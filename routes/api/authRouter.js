@@ -7,7 +7,8 @@ import { authenticate, upload } from '../../middleware/index.js';
 // ####################################################
 
 const authRouter = express.Router();
-authRouter.use(authenticate); // for all
+
+// api/users/...
 
 authRouter.post(
   '/register',
@@ -17,12 +18,17 @@ authRouter.post(
 
 authRouter.post('/login', validateBody(schemas.loginSchema), controller.login);
 
-authRouter.get('/current', controller.getCurrent);
+authRouter.get('/current', authenticate, controller.getCurrent);
 
-authRouter.post('/logout', controller.logout);
+authRouter.post('/logout', authenticate, controller.logout);
 
-authRouter.patch('/', controller.updateSubscription);
+authRouter.patch('/', authenticate, controller.updateSubscription);
 
-authRouter.patch('/avatars', upload.single('avatar'), controller.updateAvatar);
+authRouter.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  controller.updateAvatar
+);
 
 export default authRouter;
