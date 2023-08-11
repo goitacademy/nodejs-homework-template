@@ -35,8 +35,11 @@ router.post("/", async (req, res, next) => {
   }
 
   if (typeof contact === "string") {
+    if (contact === "must be a string") {
+      res.status(400).json({ message: contact });
+      return;
+    }
     const errorMessage = `missing required ${contact} field`;
-    // console.log(contact);
     res.status(400).json({ message: errorMessage });
     return;
   }
@@ -54,6 +57,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const contact = await updateContact(req.params.contactId, req.body);
+  console.log(contact);
   if (Object.keys(req.body).length === 0) {
     res.status(400).json({ message: "missing fields" });
     return;
@@ -65,6 +69,12 @@ router.put("/:contactId", async (req, res, next) => {
   }
 
   if (typeof contact === "string") {
+    console.log(contact);
+
+    if (contact === "must be a string") {
+      res.status(400).json({ message: contact });
+      return;
+    }
     const errorMessage = `missing required ${contact} field`;
     res.status(400).json({ message: errorMessage });
     return;

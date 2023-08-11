@@ -38,11 +38,19 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const { name, email, phone } = body;
   const validatedData = dataValidator({ name, email, phone });
-  // console.log(validatedData.value);
   if (validatedData.error) {
-    console.log(validatedData.error.details[0].message.split(" ")[0]);
-    const error = validatedData.error.details[0].message.split(" ")[0];
-    const finalError = error.slice(1, error.length - 1);
+    console.log(validatedData);
+    console.log(validatedData.error);
+
+    const error = validatedData.error.details[0].message;
+    const finalError = error.split(" ")[0].replaceAll('"', "");
+    const errorText = error.split(" ").slice(1).join(" ");
+    if (errorText === "must be a string") {
+      return errorText;
+    }
+    console.log(errorText);
+    // console.log(finalError);
+
     return finalError;
   }
   const contacts = await listContacts();
@@ -64,11 +72,19 @@ const updateContact = async (contactId, body) => {
     return null;
   }
   const validatedData = dataValidator({ name, email, phone });
-  // console.log(validatedData.value);
   if (validatedData.error) {
-    console.log(validatedData.error.details[0].message.split(" ")[0]);
-    const error = validatedData.error.details[0].message.split(" ")[0];
-    const finalError = error.slice(1, error.length - 1);
+    console.log(validatedData);
+    console.log(validatedData.error);
+
+    const error = validatedData.error.details[0].message;
+    const finalError = error.split(" ")[0].replaceAll('"', "");
+    const errorText = error.split(" ").slice(1).join(" ");
+    if (errorText === "must be a string") {
+      return errorText;
+    }
+    console.log(errorText);
+    // console.log(finalError);
+
     return finalError;
   }
 
