@@ -23,7 +23,7 @@ const login = async (req, res, next) => {
     if (!user || !passCompare) {
       res.status(401).json({
         status: "Unauthorized",
-        code: 409,
+        code: 401,
         message: "Email or password is wrong",
       });
       return;
