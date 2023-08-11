@@ -29,10 +29,10 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const contact = await addContact(req.body);
 
-  // if (!newContact) {
-  //   res.status(400).json({ message: "missing required name field" });
-  //   return;
-  // }
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
 
   if (typeof contact === "string") {
     const errorMessage = `missing required ${contact} field`;
