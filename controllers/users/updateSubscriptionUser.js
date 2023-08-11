@@ -12,7 +12,7 @@ const updateSubscriptionUser = async (req, res, next) => {
       });
       return;
     }
-    const { _id, email } = req.user;
+    const { _id, email, token } = req.user;
     const { subscription } = req.body;
     await User.findByIdAndUpdate(_id, { subscription });
     res.status(200).json({
