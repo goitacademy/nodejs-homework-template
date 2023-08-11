@@ -26,10 +26,9 @@ const register = async (req, res) => {
   if (user) throw HttpError(409, emailErrorMsg);
 
   const hashedPass = await bcrypt.hash(password, 10);
-
   const avatarUrl = gravatar.url(email, { size: '400' });
-
   const credentials = { ...req.body, password: hashedPass, avatarUrl };
+
   const newUser = await User.create(credentials);
 
   res.status(201).json({
@@ -41,20 +40,22 @@ const register = async (req, res) => {
 
 // Log in
 const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email: reqEmail, password: reqPass } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: reqEmail });
   if (!user) throw HttpError(401, authErrorMsg);
 
-  const isPasswordValid = await bcrypt.compare(password, user.password); // As of bcryptjs 2.4.0, 'compare' returns a promise if callback (passed as the third argument) is omitted
-  if (!isPasswordValid) throw HttpError(401, authErrorMsg);
+  const { email, subscription, password, id } = user;
 
-  const payload = { id: user._id };
+  const isPasswordValid = await bcrypt.compare(reqPass, password); // As of bcryptjs 2.4.0, 'compare' returns a promise if callback (passed as the third argument) is omitted
+  if (!isPasswordValid) throw HttpError(401, 'in isPasswordValid');
+
+  const payload = { id };
   const secret = process.env.JWT_SECRET;
   const token = jwt.sign(payload, secret, { expiresIn: '23h' });
-  await User.findByIdAndUpdate(user.id, { token });
+  await User.findByIdAndUpdate(id, { token });
 
-  res.json({ token });
+  res.json({ token, email, subscription });
 };
 
 // Log out

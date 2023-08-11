@@ -12,7 +12,8 @@ import {
 // ####################################################
 
 const contactsRouter = express.Router();
-contactsRouter.use(authenticate); // for all
+
+contactsRouter.use(authenticate); // middleware to be executed for all routes
 
 contactsRouter.get('/', controller.getAll);
 

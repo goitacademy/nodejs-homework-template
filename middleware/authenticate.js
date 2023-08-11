@@ -27,7 +27,7 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch {
-    throw HttpError(401, 'WTF');
+    throw HttpError(401, 'Unauthorized (in catch in authenticate.js)');
   }
 };
 
