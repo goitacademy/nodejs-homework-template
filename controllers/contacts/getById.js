@@ -1,19 +1,20 @@
-const {contacts}=require('../../models')
+const {Contact}=require('../../models/contact')
+const {HttpErrors}=require('../../helpers')
 const getById=async (req, res, next) => {
-      const { contactId } = req.params;
-      const oneContact = await contacts.getContactById(contactId);
+      const { id } = req.params;
+      const oneContact = await Contact.findById(id);
       if (!oneContact) {
-        const error = new Error("Not found contact");
-        error.status = 404;
-        throw error;
+        next(HttpErrors(404, "Not found contact"))
+      }else{
+        return res.json({
+          status: "success",
+          code: 200,
+          data: {
+            oneContact,
+          },
+        });
       }
-      return res.json({
-        status: "success",
-        code: 200,
-        data: {
-          oneContact,
-        },
-      });
+      
   }
 
   module.exports=getById

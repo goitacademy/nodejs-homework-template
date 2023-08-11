@@ -1,6 +1,8 @@
 const validateBody=require('./validateBody')
-
-
+const isValideId=require('./isValidId')
+const isBodyForPatch=require('./isBodyForPatch')
 module.exports={
-    validateBody
+    validateBody,
+    isValideId,
+    isBodyForPatch
 }
