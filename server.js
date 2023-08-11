@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import 'dotenv/config';
 
 const { DB_HOST, PORT } = process.env;
-console.log(process.env.JWT_SECRET);
 
 mongoose.connect(DB_HOST)
    .then(() => {

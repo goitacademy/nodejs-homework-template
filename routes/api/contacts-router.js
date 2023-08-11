@@ -2,17 +2,17 @@ import express from "express";
 import contactsControllers from "../../controllers/contacts-controllers.js";
 import contactsSchemas from "../../schemas/contacts-schemas.js";
 import  validateBody  from "../../decorators/validateBody.js";
-import { isEmptyBody, isValidId, aythenticate } from "../../midllewars/index.js";
+import { isEmptyBody, upload, isValidId, authenticate } from "../../midllewars/index.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.use(aythenticate);
+contactsRouter.use(authenticate);
 
-contactsRouter.get('/',contactsControllers.getAll);
+contactsRouter.get('/', contactsControllers.getAll);
 
 contactsRouter.get('/:id', isValidId, contactsControllers.getById);
 
-contactsRouter.post('/', isEmptyBody, validateBody(contactsSchemas.contactsAddSchema), contactsControllers.add);
+contactsRouter.post('/', upload.single('avatar'), isEmptyBody, validateBody(contactsSchemas.contactsAddSchema), contactsControllers.add);
 
 contactsRouter.put('/:id', isValidId, isEmptyBody,  validateBody(contactsSchemas.contactsAddSchema), contactsControllers.updateById);
 

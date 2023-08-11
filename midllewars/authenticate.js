@@ -8,7 +8,7 @@ import ctrlWrapper from "../decorators/cntrWrapper.js";
 const { JWT_SECRET } = process.env;
 
 
-const aythenticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
    const { authorization = "" } = req.headers;
    const [bearer, token] = authorization.split(' ');
    if (bearer !== 'Bearer') {
@@ -27,4 +27,4 @@ const aythenticate = async (req, res, next) => {
    }
 }
   
-export default ctrlWrapper(aythenticate);
+export default ctrlWrapper(authenticate);
