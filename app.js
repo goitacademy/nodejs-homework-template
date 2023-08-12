@@ -5,7 +5,6 @@ require("dotenv").config();
 
 const app = express();
 
-
 const contactsRouter = require("./routes/api/contacts.routes");
 
 const PORT = process.env.PORT || 4000;
@@ -17,9 +16,10 @@ const connection = mongoose.connect(uriDb, {
 });
 
 app.use(express.json());
-app.use("/api/v1", contactsRouter);
+app.use("/api", contactsRouter);
 
-connection.then(() => {
+connection
+  .then(() => {
     console.log("Database connection successful");
     app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`);
