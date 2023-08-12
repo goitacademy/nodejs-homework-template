@@ -10,7 +10,8 @@ const {nanoid} = require("nanoid");
 
 const {User} = require("../models/user")
 
-const { HttpError,ctrlWrapper,sendEmail } = require("../helpers/");
+const { HttpError,ctrlWrapper,sendMail } = require("../helpers");
+
 
 
 const { SECRET_KEY, BASE_URL } = process.env;
@@ -39,9 +40,9 @@ const register = async (req, res) => {
     const verifyEmail = {
         to: email,
         subject: "Verify your email",
-        html: `<a target="_blanc" href="${BASE_URL}/users/verify/${verificationToken}">Verify your email</a>`,
+        html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Verify your email</a>`,
     };
-    await sendEmail(verifyEmail);
+    await sendMail(verifyEmail);
   
     res.status(201).json({ 
         user: { 
@@ -76,10 +77,10 @@ const resendVerifyEmail = async (req, res) => {
     const verifyEmail = {
       to: email,
       subject: "Verify Email",
-      html: `<a target="_blanc" href="${BASE_URL}/users/verify/${user.verificationToken}">Click to verify</a>`,
+      html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Verify your email</a>`
     };
     
-        await sendEmail(verifyEmail);
+    await sendMail(verifyEmail);
 
     res.status(200).json({
         message: "Verification email sent" });
@@ -95,11 +96,11 @@ const login = async(req, res)=> {
         }
 
         if (!user.verify) {
-            next(newError(409, "Verify your mail first, please"));
+            throw HttpError(409, "Verify your mail first, please");
           }
 
 
-    const passwordCompare = await bcrypt.compare(password, user.password);
+const passwordCompare = await bcrypt.compare(password, user.password);
         if(!passwordCompare) {
             throw HttpError(401, "Email or password is wrong");
         }
