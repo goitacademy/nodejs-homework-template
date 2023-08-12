@@ -28,7 +28,7 @@ router.get('/:id', async (req, res, next) => {
         const { id } = req.params;
         const contact = await Contact.findById(id);
         if (!contact) {
-            throw new Error('Contact not found.')
+            throw new Error('Contact not found')
         }
         res.status(200).json(
             {
@@ -83,11 +83,11 @@ router.put('/:id', async (req, res, next) => {
             body,
             { new: true });
         if (!updatedContact) {
-            throw new Error('Contact not found.')
+            throw new Error('Contact not found')
         };
         res.status(201).json({
             status: "success",
-            message: 'Contact updated.',
+            message: 'Contact updated',
             data: updatedContact
         })
     } catch (error) {
@@ -102,11 +102,11 @@ router.delete('/:id', async (req, res, next) => {
         const { id } = req.params;
         const deletedContact = await Contact.findByIdAndRemove(id);
         if (!deletedContact) {
-            throw new Error('Contact not found.')
+            throw new Error('Contact not found')
         }
         res.status(200).json({
             status: "success",
-            message: "Contact deleted.",
+            message: "Contact deleted",
             data: deletedContact
         })
     } catch (error) {
@@ -118,17 +118,25 @@ router.patch('/:id/favorite', async (req, res, next) => {
     try {
         const { id } = req.params;
         const { favorite } = req.body;
+        if (!favorite) {
+            return res.status(404).json({
+                message: "Missing field favorite"
+            })
+        }
         const updatedContact = await Contact.findByIdAndUpdate(id, { favorite }, {
             new: true
         })
-        if (!updatedContact) {
-            throw new Error('Contact not found.')
+        if (updatedContact) {
+            return res.status(200).json({
+                status: "success",
+                message: "Contact updated",
+                data: updatedContact
+            })
         }
-        res.status(200).json({
-            status: "success",
-            message: "Contact updated.",
-            data: updatedContact
-        })
+        return res.status(404).json({
+            status: "failed",
+            message: "Contact not found"
+        });
     } catch (error) {
         next(error);
     }
