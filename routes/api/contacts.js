@@ -13,7 +13,7 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (_, res, next) => {
   try {
     const result = await contacts.listContacts();
     res.json(result);
@@ -65,7 +65,7 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message);
+      throw HttpError(400, "missing fields" );
     }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
