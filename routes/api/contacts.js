@@ -44,7 +44,7 @@ router.put('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const updatedData = await schemaUpdate.validateAsync(req.body);
     const response = await updateContact(contactId, updatedData);
-    response ? res.status(200).send(response) : res.status(404).json({message: 'Not found'})
+    response ? res.status(200).send(response) : res.status(404).json({ message: 'Not found' })
   }
   catch (err) {
     res.status(400).json({ message: err.details[0].message });
