@@ -1,11 +1,18 @@
 const express = require('express')
 const router = express.Router()
+const Joi = require('joi')
 const Contact = require('../models/contact.js')
+
+const contactSchema = Joi.object({
+    name: Joi.string(),
+    email: Joi.string(),
+    phone: Joi.string(),
+    favorite: Joi.boolean(),
+});
 
 router.get('/', async (req, res, next) => {
     try {
         const contacts = await Contact.find({}, "-createdAt -updatedAt");
-        console.log(contacts)
         res.status(200).json(
             {
                 status: "success",
@@ -38,12 +45,63 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/contacts', () => { })
+router.post('/', async (req, res, next) => {
+    try {
+        const { name, phone, email } = req.body;
+        const favorite = false;
+        const validate = contactSchema.validate({
+            name, phone, email, favorite
+        });
+        validate.error && res.status(400).json({
+            status: "failed",
+            message: validate.error.message
+        });
+        const newContact = await Contact.create({ name, phone, email, favorite })
+        res.status(201).json({
+            status: "success",
+            data: newContact
+        });
+    } catch (error) {
+        next(error);
+    }
 
-router.put('/contacts/:id', () => { })
+})
 
-router.patch('/contacts/:id/status', () => { })
+router.put('/:id', async (req, res, next) => {
+    try {
+        const { body } = req;
+        const { id } = req.params;
+        const validate = contactSchema.validate(
+            body
+        );
+        validate.error && res.status(400).json({
+            status: "failed",
+            message: validate.error.message
+        });
+        const updatedContact = await Contact.findByIdAndUpdate(
+            id,
+            body,
+            { new: true });
+        if (!updatedContact) {
+            throw new Error('Contact not found.')
+        };
+        res.status(201).json({
+            status: "success",
+            message: 'Contact updated.',
+            data: updatedContact
+        })
+    } catch (error) {
+        console.log(error)
+        next(error);
+    }
 
-router.delete('/contacts/:id', () => { })
+})
+
+router.delete('//:id', () => { })
+
+router.patch('//:id/status', () => { })
+
 
 module.exports = router
+
+
