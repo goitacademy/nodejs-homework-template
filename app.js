@@ -1,26 +1,31 @@
-const express = require('express')
-const cors = require('cors')
+const express = require("express");
+const mongoose = require("mongoose");
 
-const contactsRouter = require('./routes/api/contacts')
+require("dotenv").config();
 
-const app = express()
-
-
+const app = express();
 
 
-app.use(cors())
-app.use(express.json())
+const contactsRouter = require("./routes/api/contacts.routes");
 
-app.use('/api/contacts', contactsRouter)
+const PORT = process.env.PORT || 4000;
+const uriDb = process.env.DATABASE_URL;
 
+const connection = mongoose.connect(uriDb, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
+app.use(express.json());
+app.use("/api/v1", contactsRouter);
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
-
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
-
-module.exports = app
+connection.then(() => {
+    console.log("Database connection successful");
+    app.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(`Server not running. Error message: [${err}]`);
+    process.exit(1);
+  });
