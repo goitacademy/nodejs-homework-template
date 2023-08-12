@@ -53,7 +53,7 @@ const verifyEmail = async (req, res) => {
   const user = await UserModel.findOne({ verificationToken });
 
   if (!user) {
-    throw HttpError(404, 'User not found ->verifyEmail not verify');
+    throw HttpError(404, 'User not found');
   }
 
   await UserModel.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
@@ -96,7 +96,7 @@ const login = async (req, res) => {
   }
 
   if (!user.verify) {
-    throw HttpError(404, 'User not found ->login not verify');
+    throw HttpError(404, 'User not found');
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
