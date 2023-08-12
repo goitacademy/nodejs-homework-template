@@ -9,7 +9,6 @@ const {
 } = require("../../controllers/contacts");
 
 const { contactSchema } = require("../../models/contact");
-const { createError } = require("../../helpers/createError");
 
 const router = express.Router()
 
@@ -28,7 +27,7 @@ router.get('/:contactId', async (req, res, next) => {
     const result = await getContactById(contactId);
 
     if (!result) {
-      throw createError(404);
+      return res.status(404).json({ message: 'Contact not found' });
     }
     res.json(result);
   } catch (error) {
@@ -38,12 +37,12 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = contactSchema.validate(req.body);
     if (error) {
-      throw createError(400, (error.message = 'missing required name field'));
+      return res.status(400).json({ message: 'Missing required name field' });
     }
     const result = await addContact(req.body);
-    res.status(201).json(result);
+    return res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -54,11 +53,9 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) {
-      throw createError(404);
+      return res.status(404).json({ message: 'Contact not found' });
     }
-    res.json({
-      message: "contact delated",
-    });
+    return res.json({ message: "Contact delated" });
   } catch (error) {
     next(error);
   }
@@ -68,12 +65,12 @@ router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      throw createError(400, (error.message = "missing fields"));
+      return res.status(400).json({ message: 'Missing required name field' });
     }
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
     if (!result) {
-      throw createError(404);
+      return res.status(404).json({ message: 'Contact not found' });
     }
     res.json(result);
   } catch (error) {
