@@ -1,103 +1,14 @@
-const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
-const path = require("path");
-const contactsPath = path.join(__dirname, "contacts.json");
-const dataValidator = require("../helpers/dataValidator");
+// const fs = require('fs/promises')
 
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const parsedData = await JSON.parse(data);
-  return parsedData;
-};
+const listContacts = async () => {};
 
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
+const getContactById = async (contactId) => {};
 
-  const contactById = contacts.filter((contact) => contact.id === contactId);
-  if (!contactById.length) {
-    return null;
-  }
-  return contactById[0];
-};
+const removeContact = async (contactId) => {};
 
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const restList = await contacts.filter((contact) => contact.id !== contactId);
+const addContact = async (body) => {};
 
-  const index = contacts.findIndex((element) => element.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-
-  const stringifiedData = [JSON.stringify(restList, null, 2)];
-  fs.writeFile(contactsPath, stringifiedData);
-  return restList;
-};
-// removeContact("ss-0Rw").then((data) => console.log(data));
-
-const addContact = async (body) => {
-  const { name, email, phone } = body;
-  const validatedData = dataValidator({ name, email, phone });
-  if (validatedData.error) {
-    console.log(validatedData);
-    console.log(validatedData.error);
-
-    const error = validatedData.error.details[0].message;
-    const finalError = error.split(" ")[0].replaceAll('"', "");
-    const errorText = error.split(" ").slice(1).join(" ");
-    if (errorText === "must be a string") {
-      return errorText;
-    }
-    console.log(errorText);
-    // console.log(finalError);
-
-    return finalError;
-  }
-  const contacts = await listContacts();
-  const newContact = { id: nanoid(), ...{ name, email, phone } };
-
-  contacts.push(newContact);
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
-};
-
-// addContact({ name: "ivan", phone: "09873" }).then((data) => console.log(data));
-
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-
-  const { name, email, phone } = body;
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const validatedData = dataValidator({ name, email, phone });
-  if (validatedData.error) {
-    console.log(validatedData);
-    console.log(validatedData.error);
-
-    const error = validatedData.error.details[0].message;
-    const finalError = error.split(" ")[0].replaceAll('"', "");
-    const errorText = error.split(" ").slice(1).join(" ");
-    if (errorText === "must be a string") {
-      return errorText;
-    }
-    console.log(errorText);
-    // console.log(finalError);
-
-    return finalError;
-  }
-
-  contacts[index] = { id: contactId, ...body };
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
-};
-
-// updateContact("vza2RIzNGIwutCVCs4mCL", {
-//   name: "ivan",
-//   email: "ivan@gmail.com",
-//   phone: "09873",
-// }).then((data) => console.log(data));
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
