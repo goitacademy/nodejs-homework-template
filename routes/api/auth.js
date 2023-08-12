@@ -4,7 +4,7 @@ const ctrll = require('../../controllers/auth');
 
 const { validateBody, authenticate, upload } = require('../../middlewares');
 
-const { schemaRegister, schemaLogin } = require('../../schema');
+const { schemaRegister, schemaLogin, schemaEmail } = require('../../schema');
 
 const router = express.Router();
 
@@ -12,6 +12,10 @@ const router = express.Router();
  * Sign-up
  */
 router.post('/register', validateBody(schemaRegister), ctrll.register);
+
+router.get('/verify/:verificationToken', ctrll.verifyEmail);
+
+router.post('/verify', validateBody(schemaEmail), ctrll.resendVerifyEmail);
 
 /**
  * Sign-in
