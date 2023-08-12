@@ -1,3 +1,9 @@
+const multer = require('multer');
+const pathFn = require('path');
+const uuid = require('uuid').v4;
+const fse = require('fs-extra');
+const Jimp = require("jimp");
+
 const User = require('../models/userModel')
 
 const {catchAsync} = require('../utils/catchAsync')
@@ -65,3 +71,45 @@ exports.currentUser = catchAsync(async(req, res) => {
 })
 
 exports.getUserById = (id) => User.findById(id)
+
+exports.addAvatar = catchAsync(async(req, res) => {
+
+    const {user, file, body} = req;
+    
+    if (file) {
+
+        user.avatarURL = await newImageUser()
+        
+        async function newImageUser () {
+            const {filename, path} = file
+            const {id} = user
+            const newPath =  pathFn.join(process.cwd(), 'public', 'avatars', id);
+
+
+            await fse.emptyDir(newPath)
+            await Jimp.read(path)
+                .then((avatar) => {
+                    return avatar
+                        .cover(500, 500) // resize
+                        .quality(90) // set JPEG quality
+                        .writeAsync(pathFn.join(newPath, filename)); // save
+
+                }).catch((err) => {
+                    console.error(err);
+                });
+
+            return pathFn.join('avatars', id, filename)
+            
+        }
+    }
+
+    Object.keys(req.body).forEach((key) => {
+        user[key] = req.body[key]
+    })
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+        "avatarURL": user.avatarURL
+    });
+})
