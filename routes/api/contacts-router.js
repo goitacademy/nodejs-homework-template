@@ -4,7 +4,7 @@ import contactsController from "../../controllers/contacts-controller.js";
 
 import { validateBody } from "../../decorators/index.js";
 
-import { isValidId } from "../../middlewares/index.js";
+import { authenticate, isValidId } from "../../middlewares/index.js";
 
 import {
   contactAddSchema,
@@ -14,6 +14,8 @@ import {
 } from "../../schemas/contacts-schemas.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll);
 
