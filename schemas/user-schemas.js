@@ -14,7 +14,18 @@ export const updateSubscriptionStatusSchema = Joi.object({
     .required(),
 });
 
+// export const userEmailVerifySchema = Joi.object({
+//   email: Joi.string().pattern(emailRegexp).required(),
+// }).messages("missing required field email");
+
+export const userEmailVerifySchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+}).messages({
+  "any.required": "missing required field email",
+});
+
 export default {
   userSingUpAndSingInSchema,
   updateSubscriptionStatusSchema,
+  userEmailVerifySchema,
 };

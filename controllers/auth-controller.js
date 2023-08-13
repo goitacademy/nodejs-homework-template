@@ -5,14 +5,15 @@ import fs from "fs/promises";
 import gravatar from "gravatar";
 import Jimp from "jimp";
 import "dotenv/config";
+import { nanoid } from "nanoid";
 
 import User from "../models/user.js";
 
-import HttpError from "../helpers/HttpError.js";
+import { HttpError, sendEmail } from "../helpers/index.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
 
-const { JWt_SECRET } = process.env;
+const { JWt_SECRET, BASE_URL } = process.env;
 
 const singUp = async (req, res) => {
   const { email, password } = req.body;
@@ -22,12 +23,34 @@ const singUp = async (req, res) => {
   }
 
   const url = gravatar.url(email, { s: "250", r: "x", d: "retro" });
+
   const hashPassword = await bcrypt.hash(password, 10);
+  const verificationToken = nanoid();
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL: url,
+    verificationToken,
   });
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<div>
+            <p>
+              Please,
+              <a href="${BASE_URL}/api/auth/verify/${verificationToken}" target="_blank">
+                CLICK
+              </a>
+              on this link to verify your email
+            </p>
+            <p style="color: orange"><strong>WARNING!!!</strong></p>
+            <p>If you have not registered with our app, <br>please ignore this email and <span style="color: red">do not click on this link!</span></p>
+          </div>`,
+  };
+
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
@@ -37,12 +60,54 @@ const singUp = async (req, res) => {
   });
 };
 
+const verify = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+  if (!user) throw HttpError(404, "User not found");
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.json({ message: "Verification successful" });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) throw HttpError(404, "User not found");
+  if (user.verify) throw HttpError(400, "Verification has already been passed");
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<div>
+          <p>
+            Please,
+            <a href="${BASE_URL}/api/auth/verify/${user.verificationToken}" target="_blank">
+              CLICK
+            </a>
+            on this link to verify your email
+          </p>
+          <p style="color: orange"><strong>WARNING!!!</strong></p>
+          <p>If you have not registered with our app, <br>please ignore this email and <span style="color: red">do not click on this link!</span></p>
+        </div>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.json({ message: "Email resend" });
+};
+
 const singIn = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (!user) throw HttpError(401, "Email or password invalid");
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) throw HttpError(401, "Email or password invalid");
+  if (!user.verify) throw HttpError(404, "User not found");
 
   const payload = {
     id: user._id,
@@ -121,6 +186,8 @@ const updateAvatarStatus = async (req, res) => {
 
 export default {
   singUp: ctrlWrapper(singUp),
+  verify: ctrlWrapper(verify),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   singIn: ctrlWrapper(singIn),
   getCurrent: ctrlWrapper(getCurrent),
   singOut: ctrlWrapper(singOut),

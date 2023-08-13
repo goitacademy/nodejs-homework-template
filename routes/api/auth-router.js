@@ -11,6 +11,14 @@ authRouter.post(
   authController.singUp
 );
 
+authRouter.get("/verify/:verificationToken", authController.verify);
+
+authRouter.post(
+  "/users/verify",
+  validateBody(userSchemas.userEmailVerifySchema),
+  authController.resendVerifyEmail
+);
+
 authRouter.post(
   "/singin",
   validateBody(userSchemas.userSingUpAndSingInSchema),
