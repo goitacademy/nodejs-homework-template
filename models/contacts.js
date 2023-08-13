@@ -38,6 +38,7 @@ const addContact = async (body) => {
     email,
     phone,
   };
+  console.log(newContact);
   const updatedContacts = [ ...contacts, newContact];
   await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2), { encoding: 'utf-8' });
   return newContact;
