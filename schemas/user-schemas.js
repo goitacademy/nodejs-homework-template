@@ -14,4 +14,7 @@ export const updateSubscriptionStatusSchema = Joi.object({
     .required(),
 });
 
-export default { userSingUpAndSingInSchema, updateSubscriptionStatusSchema };
+export default {
+  userSingUpAndSingInSchema,
+  updateSubscriptionStatusSchema,
+};
