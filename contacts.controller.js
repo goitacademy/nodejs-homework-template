@@ -30,8 +30,8 @@ const getById = async (req, res) => {
     }
 
     res.json({
-      status: 200,
-      statusText: "OK",
+      status: "success",
+      code: 200,
       data: {
         results,
       },
