@@ -1,9 +1,10 @@
 const { mongoose } = require("mongoose");
 const app = require("./app");
 
-const PORT = 3001
-const DB_HOST =
-  "mongodb+srv://Vlad-dyadya:JT6AvmjNI3WehBf6@cluster0.ohx0zsm.mongodb.net/contacts_reader?retryWrites=true&w=majority";
+const PORT = 3001;
+
+const { PASSWORD, USERNAME, CLASTERNAME, DB_NAME } = process.env;
+const DB_HOST = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLASTERNAME}.ohx0zsm.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
 mongoose.set("strictQuery", true);
 
