@@ -1,6 +1,5 @@
 const { HttpError } = require("../helpers/HttpError");
 const { ctrlWrapper } = require("../helpers/ctrlWrapper");
-const Joi = require("joi");
 
 const {
   listContacts,
@@ -10,19 +9,7 @@ const {
   updateContact,
 } = require("../models/contacts");
 
-const addSchema = Joi.object({
-  id: Joi.string().required(),
-  name: Joi.string().required(),
-  phone: Joi.string().required(),
-  email: Joi.string().required(),
-});
 
-const updateSchema = Joi.object({
-  id: Joi.string(),
-  name: Joi.string(),
-  phone: Joi.string(),
-  email: Joi.string(),
-});
 
 const getAll = async (req, res, next) => {
   const data = await listContacts();
@@ -41,23 +28,11 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const data = await addContact(req.body);
   res.status(201).json(data);
 };
 
 const updateById = async (req, res, next) => {
-  const { error } = updateSchema.validate(req.body);
-
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const {
     params: { contactId },
     body,
