@@ -1,14 +1,14 @@
-const contactsHandlers = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../helpers");
+const { Contact } = require("../models/contact");
 
-const getAllContacts = async (req, res) => {
-  const result = await contactsHandlers.listContacts();
+const getAllContacts = async (_, res) => {
+  const result = await Contact.find();
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsHandlers.getContactById(contactId);
+  const result = await Contact.findById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -16,13 +16,13 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newcontact = await contactsHandlers.addContact(req.body);
+  const newcontact = await Contact.create(req.body);
   res.status(201).json(newcontact);
 };
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contactsHandlers.removeContact(contactId);
+  const result = await Contact.findByIdAndRemove(contactId);
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -32,9 +32,24 @@ const deleteContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-  const updateContact = await contactsHandlers.updateContact(
-    contactId,
-    req.body
+  const updateContact = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    req.body,
+    { new: true }
+  );
+
+  if (!updateContact) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(updateContact);
+};
+
+const changeFavorite = async (req, res) => {
+  const { contactId } = req.params;
+  const updateContact = await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    req.body,
+    { new: true }
   );
 
   if (!updateContact) {
@@ -49,4 +64,5 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   deleteContact: ctrlWrapper(deleteContact),
   updateContact: ctrlWrapper(updateContact),
+  addToFavorite: ctrlWrapper(changeFavorite),
 };
