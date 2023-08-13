@@ -36,7 +36,8 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addShema.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing required name field");
+      console.log(error.details);
+      throw HttpError(400, `missing required ${error.details[0].path} field`);
     }
     const addContact = await contacts.addContact(req.body);
     res.status(201).json(addContact);
@@ -59,15 +60,18 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
+    if (Object.keys(req.body).length === 0) {
+      throw HttpError(400, "missing fields");
+    }
     const { error } = addShema.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing fields");
+      throw HttpError(400, `missing required ${error.details[0].path} field`);
     }
     const update = await contacts.updateContact(req.params.contactId, req.body);
     if (!update) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json({ message: "update was successful" });
+    res.status(200).json(update);
   } catch (error) {
     next(error);
   }
