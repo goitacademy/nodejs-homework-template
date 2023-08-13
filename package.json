@@ -1,6 +1,6 @@
 {
   "name": "template",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
