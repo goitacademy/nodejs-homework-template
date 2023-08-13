@@ -18,7 +18,7 @@ router.delete("/:contactId", ctrl.removeContact);
 
 router.put(
 	"/:contactId",
-	validateContactBody(schemas.addSchema, 400, "missing required name field"),
+	validateContactBody(schemas.addSchema, 400, "missing fields"),
 	ctrl.updateContact
 );
 
