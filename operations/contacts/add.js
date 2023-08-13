@@ -2,7 +2,13 @@ const contactsOperations = require("../../models/contacts");
 const { contactValid } = require("../../helpers/");
 
 const add = async (req, res, next) => {
-   
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({
+      massage: "misssing fields",
+    });
+    return;
+  }
+
   try {
     const { error } = contactValid(req.body);
     if (error) {
