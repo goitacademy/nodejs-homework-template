@@ -25,15 +25,15 @@ const getById = async (req, res, next) => {
     const results = await service.getOne(id);
 
     if (!results) {
-      res.status(404).json({
-        status: "Contact not found",
+      return res.status(404).json({
+        status: "error",
         code: 404,
         data: {
-          contact: results,
+          message: "Not found",
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -42,8 +42,13 @@ const getById = async (req, res, next) => {
     });
   } catch (e) {
     console.error("Error handling GET /api/contacts:", e);
-    res.status(500).json({ error: "Internal Server Error" });
-    next(e);
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      data: {
+        message: "Internal Server Error",
+      },
+    });
   }
 };
 
