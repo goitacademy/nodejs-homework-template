@@ -1,12 +1,14 @@
 import { Schema, model } from "mongoose";
-import Joi from "joi";
+import { addError, updateError } from "../helpers/hooks-errors.js";
 
-import { handleMongooseError } from "../helpers/index.js";
+// частина моделі, яка відповідає за Joi-схему
+// має бути імпортована в окремий файл:
+// import Joi from "joi";
 
 const contactSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'Set name for contact'],
   },
   email: {
     type: String,
@@ -22,28 +24,36 @@ const contactSchema = new Schema({
   }
 }, { versionKey: false, timestamps: true });
 
-contactSchema.post("save", handleMongooseError);
+contactSchema.pre("findOneAndUpdate", updateError);
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean(),
-});
+contactSchema.post("save", addError);
 
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
+contactSchema.post("findOneAndUpdate", addError);
 
-const schemas = {
-  contactAddSchema,
-  updateFavoriteSchema,
-}
+// частина моделі, яка відповідає за Joi-схему
+// має бути імпортована в окремий файл:
+// const contactAddSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+//   favorite: Joi.boolean(),
+// });
+
+// const updateFavoriteSchema = Joi.object({
+//   favorite: Joi.boolean().required(),
+// });
+
+// const schemas = {
+//   contactAddSchema,
+//   updateFavoriteSchema,
+// }
 
 const Contact = model("contact", contactSchema);
 console.log(Contact);
 
-export default {
-  Contact,
-  schemas,
-};
+// export default {
+//   Contact,
+//   schemas,
+// };
+
+export default Contact;
