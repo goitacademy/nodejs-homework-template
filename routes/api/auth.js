@@ -4,6 +4,7 @@ const {
   registerSchema,
   loginSchema,
   subscriptionSchema,
+  emailSchema,
 } = require("../../models/user");
 
 const {
@@ -22,6 +23,8 @@ const {
   logout,
   updateSubscriptionUser,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers");
 
 const router = express.Router();
@@ -31,6 +34,10 @@ router.post("/register", validation(registerSchema), ctrlWrapper(register));
 router.post("/login", validation(loginSchema), ctrlWrapper(login));
 
 router.get("/current", authenticate, ctrlWrapper(getCurrent));
+
+router.get("/verify/:verificationToken", ctrlWrapper(verifyEmail));
+
+router.post("/verify", validation(emailSchema), ctrlWrapper(resendVerifyEmail));
 
 router.post("/logout", authenticate, ctrlWrapper(logout));
 
