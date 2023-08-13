@@ -3,7 +3,10 @@ import { emailRegExp } from "../constants/user-constants.js";
 
 const userSignupSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().pattern(emailRegExp).required(),
+  email: Joi.string()
+    .pattern(emailRegExp)
+    .required()
+    .messages({ "any.required": "missing required field email" }),
   password: Joi.string().min(6).required(),
 });
 

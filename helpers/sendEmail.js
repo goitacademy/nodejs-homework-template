@@ -13,8 +13,7 @@ const nodemailerConfig = {
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
-  const email = { ...data, from: UKR_NET_EMAIL };
-  console.log("email: ", email);
+  const email = { from: UKR_NET_EMAIL, ...data };
   return transport
     .sendMail(email)
     .then(() => console.log("Email send success"))

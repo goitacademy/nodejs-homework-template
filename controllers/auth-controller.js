@@ -25,14 +25,14 @@ const signup = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const verificationCode = nanoid();
+  const verificationToken = nanoid();
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL: avatar,
-    verificationCode,
+    verificationToken,
   });
-  const verifyEmail = createVerifyEmail({ email, verificationCode });
+  const verifyEmail = createVerifyEmail({ email, verificationToken });
   await sendEmail(verifyEmail);
 
   res.status(201).json({
@@ -43,17 +43,17 @@ const signup = async (req, res) => {
   });
 };
 const verify = async (req, res) => {
-  const { verificationCode } = req.params;
-  const user = await User.findOne({ verificationCode });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
   if (!user) {
-    throw HttpError(404, "Email not found");
+    throw HttpError(404, "User not found");
   }
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationCode: "",
+    verificationToken: "null",
   });
 
-  res.status(200).json({ message: "Verify success" });
+  res.status(200).json({ message: "Verification successful" });
 };
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
@@ -62,15 +62,15 @@ const resendVerifyEmail = async (req, res) => {
     throw HttpError(404, "Email not found");
   }
   if (user.verify) {
-    throw HttpError(400, "Email already verify");
+    throw HttpError(400, "Verification has already been passed");
   }
   const verifyEmail = createVerifyEmail({
     email,
-    verificationCode: user.verificationCode,
+    verificationToken: user.verificationToken,
   });
   await sendEmail(verifyEmail);
 
-  res.json({ message: "Resend email success" });
+  res.json({ message: "Verification email sent" });
 };
 
 const signin = async (req, res) => {
@@ -79,7 +79,7 @@ const signin = async (req, res) => {
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
-  if (user.verify !== true) {
+  if (!user.verify) {
     throw HttpError(401, "Email not verify");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
