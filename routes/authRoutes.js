@@ -5,6 +5,7 @@ const { schema } = require('../models/user.models');
 const { users: ctrl } = require('../controlers');
 const authenticate = require('../Middlewares/authMiddlewares');
 const upload = require('../Middlewares/multerMiddlewares');
+const authController = require('../controlers/auth/index');
 
 const router = express.Router();
 
@@ -16,9 +17,11 @@ router.post(
 
 router.post("/login", validation.loginValid(schema.loginSchema), ctrl.login);
 
+router.post('/forgot-password', authController.forgotPassword);
+
 router.post("/logout", authenticate, ctrl.logout);
 
-router.get("/current", authenticate, ctrl.getCurrent);
+router.get('/current', authenticate, ctrl.getCurrent);
 
 router.patch(
   "/avatars",
@@ -26,5 +29,7 @@ router.patch(
   upload.single('avatar'),
   ctrl.updateAvatar
 );
+
+router.patch('/reset-password/:otp', authController.resetPassword);
 
 module.exports = router;

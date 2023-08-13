@@ -23,10 +23,26 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const sgMail = require('@sendgrid/mail');
 
 dotenv.config({
-  path: process.env.NODE_ENV === 'production' ? './environments/production.env.example' : './environments/development.env.example',
+  path: process.env.NODE_ENV === 'production' ? './environments/production.env.example' : './environments/development.env',
 });
+
+// const { SENDGRID_APIKEY } = process.env;
+
+// sgMail.setApiKey(SENDGRID_APIKEY);
+
+// const email = {
+//   to: 'resiva3110@touchend.com',
+//   from: 'userandrii@meta.ua',
+//   subject: 'Test email',
+//   html: '<p><strong>Test mail</strong> from localhost:3000</p>',
+// };
+
+// sgMail.send(email)
+//   .then(() => console.log("Email send success!"))
+//   .catch(error => console.log(error.message));
 
 const contactRoutes = require('./routes/api/contactsRoutes');
 const app = express();

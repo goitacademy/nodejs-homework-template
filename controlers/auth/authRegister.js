@@ -4,6 +4,7 @@ const gravatar = require('gravatar');
 
 const { User } = require('../../models/user.models');
 const { catchAsync } = require('../../utils');
+const Email = require('../../services/emailService');
 
 const register = catchAsync(async (req, res, next) => {
   try {
@@ -22,6 +23,12 @@ const register = catchAsync(async (req, res, next) => {
       password: hashPassword,
       avatarURL,
     });
+
+    try {
+      await new Email(user, 'localhost:3000').sendHello();
+    } catch (error) {
+      console.log(error);
+    };
 
     res.status(201).json({
       user: {
