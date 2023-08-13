@@ -5,9 +5,6 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// const DB_HOST =
-//   "mongodb+srv://Alinavr:mRBrkOHzta1Ld0f7@cluster0.ek3mzyj.mongodb.net/db-contacts?retryWrites=true&w=majority";
-
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -29,5 +26,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-
-// mRBrkOHzta1Ld0f7
