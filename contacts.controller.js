@@ -1,6 +1,6 @@
 const contactsService = require("./contacts.service");
 
-const get = async (req, res, next) => {
+const get = async (req, res) => {
   try {
     const results = await contactsService.getAll();
     res.json({
@@ -12,42 +12,39 @@ const get = async (req, res, next) => {
     });
   } catch (e) {
     console.error(e);
-    next(e);
   }
 };
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
   try {
     const { id } = req.params;
     const results = await contactsService.getOne(id);
 
+    console.log(results);
     if (!results) {
-      res.status(404).json({
-        status: "not found",
-        code: 404,
-        data: {contact: results}
+      return res.status(404).json({
+        status: 404,
+        statusText: "Not Found",
+        message: `Not found contact by id: ${id}`,
       });
     }
-    
+
     res.json({
-      status: "success",
-      code: 200,
+      status: 200,
+      statusText: "OK",
       data: {
-        contact: results,
+        results,
       },
     });
   } catch (e) {
-    res.status(400).json({
-      status: e,
-      code: 400,
-      data: {
-        message: e.message,
-      }
+    return res.status(404).json({
+      status: 404,
+      message: "Not Found",
     });
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res) => {
   try {
     const { body } = req;
     const results = await contactsService.create(body);
@@ -59,12 +56,14 @@ const create = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    return res.status(404).json({
+      status: 404,
+      message: "Not Found",
+    });
   }
 };
 
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { body } = req;
@@ -77,12 +76,14 @@ const update = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    return res.status(404).json({
+      status: 404,
+      message: "Not Found",
+    });
   }
 };
 
-const updateStatus = async (req, res, next) => {
+const updateStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { favorite } = req.body;
@@ -95,8 +96,10 @@ const updateStatus = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    return res.status(404).json({
+      status: 404,
+      message: "Not Found",
+    });
   }
 };
 
@@ -112,8 +115,10 @@ const remove = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
-    next(e);
+    return res.status(404).json({
+      status: 404,
+      message: "Not Found",
+    });
   }
 };
 
