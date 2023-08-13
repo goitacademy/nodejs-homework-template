@@ -14,10 +14,5 @@ router.delete("/:contactId", opera.removeById);
 
 router.put("/:contactId", opera.updateById);
 
-// router.use((req, res) => {
-//     res.status(505).json({
-//         message: "Not found"
-//     });
-// })
 
 module.exports = router;

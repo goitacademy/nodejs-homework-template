@@ -2,14 +2,26 @@ const contactsOperations = require("../../models/contacts");
 const { contactValid } = require("../../helpers/");
 
 const updateById = async (req, res, next) => {
+  // if (!req.body) {
+  //   console.log("no body");
+  //   res.status(400).json({
+  //     massage: "misssing fields",
+  //   });
+  //   return;
+  // }
+
+  const { error } = contactValid(req.body);
+  
   try {
-    const { error } = contactValid.validate(req.body);
+    
     if (error) {
+      const pathToField = error.details[0].path;
       res.status(400).json({
-        message: "missing fields",
+        message: `missing required ${pathToField} field`,
       });
       return;
     }
+
     const { contactId } = req.params;
     const updatedContact = await contactsOperations.updateContact(
       contactId,

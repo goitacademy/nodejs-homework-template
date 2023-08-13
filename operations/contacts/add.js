@@ -2,8 +2,9 @@ const contactsOperations = require("../../models/contacts");
 const { contactValid } = require("../../helpers/");
 
 const add = async (req, res, next) => {
+   
   try {
-    const { error } = contactValid.validate(req.body);
+    const { error } = contactValid(req.body);
     if (error) {
       const pathToField = error.details[0].path;
       res.status(400).json({
