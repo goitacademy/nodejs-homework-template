@@ -1,4 +1,5 @@
-import * as express from 'express';
+import express from 'express';
+import Joi from 'joi';
 
 import {
   listContacts,
@@ -13,13 +14,28 @@ const sendErrorResponse = (res, status, message) => {
   res.status(status).json({ message });
 };
 
+const schemaAdd = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
+
+const schemaEdit = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+}).unknown(false);
+
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
+
     if (!contacts) {
       sendErrorResponse(res, 404, `Contact list not found`);
+
       return false;
     }
+
     res.json({
       status: 'success',
       code: 200,
@@ -34,10 +50,13 @@ router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const contact = await getContactById(id);
+
     if (!contact) {
       sendErrorResponse(res, 404, `Contact with id ${id} not found`);
+
       return false;
     }
+
     res.json({
       status: 'success',
       code: 200,
@@ -50,21 +69,30 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   const body = req.body;
-  if (!body) {
-    sendErrorResponse(res, 400, `Missing fields: `);
+
+  if (Object.keys(body).length === 0) {
+    sendErrorResponse(res, 400, 'Error! Missing fields! Empty request is not allowed');
+
     return;
   }
-  const { name, email, phone } = body;
-  if (!name || !email || !phone) {
-    sendErrorResponse(res, 400, `Missing required fields: name, email, or phone`);
+
+  const { error } = schemaAdd.validate(body);
+
+  if (error) {
+    sendErrorResponse(res, 400, `Error: ${error.details[0].message}`);
+
     return;
   }
+
   try {
     const contact = await addContact(body);
+
     if (!contact) {
       sendErrorResponse(res, 404, `Contact not found`);
+
       return false;
     }
+
     res.status(201).json({
       status: 'success',
       code: 201,
@@ -79,10 +107,13 @@ router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const isContactRemoved = await removeContact(id);
+
     if (!isContactRemoved) {
       sendErrorResponse(res, 404, `Contact with id ${id} not found`);
+
       return false;
     }
+
     res.status(200).json({
       message: `Contact with ID ${id} has been successfully removed.`,
     });
@@ -94,16 +125,30 @@ router.delete('/:id', async (req, res, next) => {
 router.put('/:id', async (req, res, next) => {
   const { id } = req.params;
   const body = req.body;
-  if (!body) {
-    sendErrorResponse(res, 400, `Missing fields: `);
+
+  if (Object.keys(body).length === 0) {
+    sendErrorResponse(res, 400, 'Error! Missing fields! Empty request is not allowed');
+
     return;
   }
+
+  const { error } = schemaEdit.validate(body);
+
+  if (error) {
+    sendErrorResponse(res, 400, `Error field: ${error.details[0].message}`);
+
+    return;
+  }
+
   try {
     const updatedContact = await updateContact(id, body);
+
     if (!updatedContact) {
       sendErrorResponse(res, 404, `Contact with id ${id} not found`);
+
       return false;
     }
+
     res.json({
       status: 'success',
       code: 200,
