@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema({
             enum: ["starter", "pro", "business"],
             default: "starter"
         },
+        verify: {
+              type: Boolean,
+              default: false,
+        },
+        verificationToken: {
+              type: String,
+              required: [true, 'Verify token is required'],
+        },
         token: String,
         avatarURL: String,
     },
@@ -35,8 +43,19 @@ userSchema.pre('save', async function(next){
         // this.avatarURL = `https://www.gravatar.com/avatar/${hashForGravatar}.jpg`
 
         this.avatarURL = gravatar.url(this.email, {protocol: 'https',s: '250', d: 'retro'})
+
+        const verifyToken = this.verificationToken
+        this.verificationToken = crypto.createHash('sha256').update(verifyToken).digest('hex')
     }
 })
+
+userSchema.methods.createVerificationToken = function() {
+    const verifyToken = crypto.randomBytes(32).toString('hex')
+
+    this.verificationToken = crypto.createHash('sha256').update(verifyToken).digest('hex')
+
+    return verifyToken
+}
 
 const User = mongoose.model('User', userSchema);
 

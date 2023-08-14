@@ -3,6 +3,7 @@ const pathFn = require('path');
 const uuid = require('uuid').v4;
 const fse = require('fs-extra');
 const Jimp = require("jimp");
+const crypto = require('crypto');
 
 const User = require('../models/userModel')
 
@@ -11,7 +12,8 @@ const AppError = require('../utils/appError')
 const { userValidator } = require('../utils/joiValidator')
 const { bcryptPassword, checkBcryptPass } = require('../services/bcryptPassword')
 const { createToken } = require('../services/jwtToken')
-const { protect } = require('../middlewares/userMiddlewares')
+const { protect } = require('../middlewares/userMiddlewares');
+const SendEmail = require('../services/emailServise');
 
 exports.userSingUp = catchAsync(async (req, res) => {
 
@@ -23,11 +25,26 @@ exports.userSingUp = catchAsync(async (req, res) => {
     if(emailIsDb) throw new AppError(409, 'Email in use');
  
     const hashPass = await bcryptPassword(value.password)
+    const verToken = crypto.randomBytes(32).toString('hex')
+    console.log(verToken)
    
-        const newUser = await User.create({...value, password: hashPass})
+        const newUser = await User.create({...value, password: hashPass, verificationToken: verToken})
         newUser.password = undefined
 
         const token = createToken(newUser.id)
+
+    console.log(newUser)  
+
+
+        //sendEmail
+        try {
+            const resetUrl = `${req.protocol}://${req.get('host')}/users/verify/${verToken}`;
+
+            await new SendEmail(newUser, resetUrl).veryfiEmail()
+        } catch (error) {
+            console.log(error)
+        }
+
 
         res.status(201).json({
             user: newUser,
@@ -50,7 +67,9 @@ exports.userLogin = catchAsync( async (req, res) => {
         loginUser.password = undefined
 
         const token = await createToken(loginUser.id)
-        console.log(token)
+
+
+
 
         res.status(200).json({
             user: loginUser,
@@ -112,4 +131,50 @@ exports.addAvatar = catchAsync(async(req, res) => {
     res.status(200).json({
         "avatarURL": user.avatarURL
     });
+})
+
+exports.emailVerification = catchAsync( async (req, res) => {
+    console.log(req.params.verificationToken)
+    const hashedToken = crypto.createHash('sha256').update(req.params.verificationToken).digest('hex')
+
+    const user = await User.findOne({
+        verificationToken: hashedToken
+    })
+
+    console.log(user)
+
+    if(!user) throw new AppError(404, "User not found")
+
+    user.verify = true
+    user.verificationToken = "null"
+
+    await user.save()
+
+    res.status(200).json({
+        message: 'Verification successful',
+    })
+})
+
+exports.sendEmailForVerification = catchAsync(async(req, res) => {
+    const {email} = req.body
+    if(!email) throw new AppError(400, "missing required field email")
+
+    const user = await User.findOne({email})
+    if(!user) throw new AppError(400, 'User not found')
+    if(user.verify) throw new AppError(400, "Verification has already been passed")
+
+    const verifyToken = user.createVerificationToken()
+    await user.save()
+
+    try {
+        const resetUrl = `${req.protocol}://${req.get('host')}/users/verify/${verifyToken}`;
+
+        await new SendEmail(user, resetUrl).veryfiEmail()
+    } catch (error) {
+        console.log(error)
+    }
+
+    res.status(200).json({
+        "message": "Verification email sent"
+    })
 })
