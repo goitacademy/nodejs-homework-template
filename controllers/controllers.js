@@ -17,7 +17,8 @@ const updateFavoriteSchema = Joi.object({
 
 const getAll = async (req, res) => {
   try {
-    const result = await Contact.find();
+    const{_id: owner} = req.user
+    const result = await Contact.find({owner});
     res.json(result);
   } catch (error) {
     res.status(500).json({
@@ -47,8 +48,8 @@ const post = async (req, res, next) => {
       const [path] = error.details[0].path;
       throw ResponseError(400, `missing requaired ${path} field`);
     }
-
-    const result = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
     if (!result) {
       throw ResponseError(404, "Not found");
