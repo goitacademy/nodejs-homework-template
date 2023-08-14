@@ -1,8 +1,14 @@
+
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const {SECRET_KEY} = process.env;
+
+
+const { SECRET_KEY } = process.env;
+
+
 
 
 const { User } = require("../models/user");
@@ -11,7 +17,7 @@ const { ctrlWrapper, ResponseError } = require("../helpers");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+   const user = await User.findOne({ email });
 
   if (user) {
     throw ResponseError(409, "Email in use");
@@ -21,9 +27,10 @@ const register = async (req, res) => {
     const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    email: newUser.email,
-    name: newUser.name,
-    subscription: newUser.subscription, 
+      user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
     
   });
 };
@@ -31,9 +38,12 @@ const register = async (req, res) => {
 const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    
+
     if (!user) {
         throw ResponseError(401, "Email or password is wrong");
     }
+   
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
         throw ResponseError(401, "Email or password is wrong");
@@ -46,6 +56,11 @@ const login = async (req, res) => {
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
     res.json({
         token,
+        user: {
+            email:user.email,
+            subscription:user.subscription
+        }
+
     })
 
 }
