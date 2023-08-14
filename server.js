@@ -1,7 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-
-const { DB_HOST, PORT } = process.env;
+const { DB_HOST, PORT } = require("./config");
 
 mongoose
   .connect(DB_HOST)
@@ -15,7 +14,4 @@ mongoose
     process.exit(1);
   });
 
-// KEY = 0RDtc3DXPeHENTSZ
-
-// 1) Підключитись до бази
 // 2) Зробити один try catch
