@@ -10,6 +10,7 @@ const {
   add,
   updateById,
   deleteById,
+  updateFavoriteStatus,
 } = require("../../controllers/contacts");
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.post("/", validateBody(addSchema), add);
 router.put("/:contactId", isValidId, validateBody(updateSchema), updateById);
 
 router.delete("/:contactId", isValidId, deleteById);
+
+router.patch("/:contactId", isValidId, updateFavoriteStatus);
 
 module.exports = router;
