@@ -14,6 +14,8 @@ const {
   logOutUser,
   currentUser,
   uploadUserAvatar,
+  verificationEmail,
+  resendVerifyEmail
 } = require("../../controllers/users");
 
 const router = express.Router();
@@ -48,6 +50,16 @@ router.patch(
   uploadUserAvatar
 );
 
-router.get("/users/verify/:verificationToken")
+/**
+ * SEND VERIFICATION EMAIL
+ */
+router.get("/verify/:verificationToken", verificationEmail)
+
+
+/**
+ * RESEND VERIFICATION EMAIL
+ */
+router.post('/verify/', validateData(schemas.emailSchema), resendVerifyEmail)
+
 
 module.exports = router;

@@ -12,7 +12,7 @@ const nodemailerConfig = {
     pass: UKRNET_TOKEN,
   },
 };
-// 6ke9qK8AF73O5TqG
+
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 

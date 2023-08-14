@@ -1,6 +1,5 @@
 const { validateData } = require("../middlewares");
 const { Contact, schemas } = require("../models/contact");
-
 const { HttpError } = require("../utils/");
 
 /** ===============

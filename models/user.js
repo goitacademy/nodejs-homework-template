@@ -1,10 +1,7 @@
 const { Schema, model } = require("mongoose");
-
-const crypto = require("crypto");
-
 const Joi = require("joi");
-
 const { handleMongooseError } = require("../utils");
+
 
 const userSchema = Schema(
   {
@@ -43,15 +40,6 @@ const userSchema = Schema(
   { versionKey: false, timestamps: true }
 );
 
-// userSchema.pre('save', function() {
-
-// if(this.isNew){
-
-//     const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
-
-//     this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
-// }
-// });
 
 userSchema.post("save", handleMongooseError);
 
@@ -66,9 +54,14 @@ const loginSchema = Joi.object({
   email: Joi.string().email().required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().email().required(),
+})
+
 const schemas = {
   registerSchema,
   loginSchema,
+  emailSchema
 };
 
 const User = model("user", userSchema);
