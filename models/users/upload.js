@@ -21,6 +21,17 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
 });
+function createDirectories(pathname) {
+  const __dirname = path.resolve();
+  pathname = pathname.replace(/^\.*\/|\/?[^\/]+\.[a-z]+|\/$/g, "");
+  fs.mkdir(path.resolve(__dirname, pathname), { recursive: true }, e => {
+    if (e) {
+      console.error(e);
+    } else {
+      console.log("Success");
+    }
+  });
+}
 
 const updateAvatar = async (_id, tempUpload, originalname) => {
   const imageName = `${_id}_${originalname}`;
@@ -39,5 +50,7 @@ const updateAvatar = async (_id, tempUpload, originalname) => {
     throw error;
   }
 };
+
+createDirectories("public/temp");
 
 module.exports = { upload, updateAvatar };
