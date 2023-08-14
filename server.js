@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 import app from './app.js'
 
-const DB_HOST="mongodb+srv://Orest:1sky1TK2wxvtBDmp@atlascluster.cuopqrv.mongodb.net/db-contact?retryWrites=true&w=majority"
+dotenv.config();
+
+const { DB_HOST } = process.env;
 
 mongoose.connect(DB_HOST)
   .then(() => {

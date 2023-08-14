@@ -19,4 +19,53 @@ contactsRouter.get('/', async (req, res, next) => {
   }
 })
 
+contactsRouter.post('/', async (req, res, next) => {
+  try {
+    const { error, value } = contactSchema.validate(req.body);
+    if (error) {
+      throw new Error(error.details[0].message)
+    }
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (err) {
+    next(err);
+  }
+});
+
+contactsRouter.put('/:contactID', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error, value } = contactSchema.validate(req.body);
+    if (error) {
+      throw new Error(error.details[0].message);
+    }
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true }
+    );
+    if (updatedContact) {
+      res.json(updatedContact);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
+
+contactsRouter.delete('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const deletedContact = await Contact.findByIdAndDelete(contactId);
+    if (deletedContact) {
+      res.json({ message: 'Contact deleted' });
+    } else {
+      res.status(404).json({message:'Not found'})
+    }
+  } catch (err) {
+    next(err);
+  }
+})
+
 export default contactsRouter;
