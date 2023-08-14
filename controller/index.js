@@ -1,5 +1,5 @@
 const service = require('../service');
-const {schemaAdd, schemaUpdate} = require('../service/schemas/validation');
+const {schemaAdd, schemaUpdate, schemaUpdateFavorite} = require('../service/schemas/validation');
 
 const listContacts = async (req, res, next) => {
     try {
@@ -116,16 +116,13 @@ const updateContact = async (req, res, next) => {
 const updateStatusContact = async (req, res, next) => {
     try {
         const { contactId } = req.params;
+        const { error } = schemaUpdateFavorite.validate(req.body);
         const { favorite } = req.body;
-        const result = await service.updateStatusContact(contactId, { favorite });
-        if (favorite == null) {
-            res.status(400).json({
-                status: 'error',
-                code: 400,
-                message: "missing field favorite",
-            })
+        if (error) {
+            res.status(400).json({ error: error.message });
         }
-        else if (result) {
+        const result = await service.updateStatusContact(contactId, { favorite });
+        if (result) {
             res.json({
                 status: 'success',
                 code: 200,
