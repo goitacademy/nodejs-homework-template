@@ -1,7 +1,7 @@
 const contactsOperations = require("../../models/contacts");
 const { contactValid } = require("../../helpers/");
 
-const add = async (req, res, next) => {
+const updateById = async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     res.status(400).json({
       massage: "misssing fields",
@@ -9,8 +9,9 @@ const add = async (req, res, next) => {
     return;
   }
 
+  const { error } = contactValid(req.body);
+
   try {
-    const { error } = contactValid(req.body);
     if (error) {
       const pathToField = error.details[0].path;
       res.status(400).json({
@@ -18,11 +19,22 @@ const add = async (req, res, next) => {
       });
       return;
     }
-    const newContact = await contactsOperations.addContact(req.body);
-    res.status(201).json(newContact);
+
+    const { contactId } = req.params;
+    const updatedContact = await contactsOperations.updateContact(
+      contactId,
+      req.body
+    );
+    if (!updatedContact) {
+      res.status(404).json({
+        message: "Not found",
+      });
+      return;
+    }
+    res.json(updatedContact);
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = add;
+module.exports = updateById;
