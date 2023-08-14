@@ -11,7 +11,7 @@ const schemas = require("../../schemas/contacts");
 
 const { validateBody } = require("../../decorators");
 
-const { isValidId, authenticate } = require("../../middlewares");
+const { isValidId, authenticate, upload } = require("../../middlewares");
 
 const router = express.Router();
 
@@ -21,7 +21,14 @@ router.get("/", getAllContacts);
 
 router.get("/:id", isValidId, getContactById);
 
-router.post("/", validateBody(schemas.contactAddSchema), addContact);
+// upload.fields([{name: "poster", maxCount: 1}]);
+// upload.array("poster", 8)
+router.post(
+  "/",
+  upload.single("posterURL"),
+  validateBody(schemas.contactAddSchema),
+  addContact
+);
 
 router.put(
   "/:id",
