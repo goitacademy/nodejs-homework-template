@@ -25,5 +25,18 @@ const validateBody = (schema) => {
   return func;
 };
 
-module.exports = validateBody;
+const validateFavorite = (schema) => {
+  const func = (req, res, next) => {
+    // проверка на пустое тело при updateStatusContact
+    const { favorite } = req.body;
+    if (!favorite && favorite !== false) {
+      throw HttpError(400, `missing field favorite`)
+    };
+    next();
+  };
+
+  return func;
+};
+
+module.exports = {validateBody, validateFavorite};
 
