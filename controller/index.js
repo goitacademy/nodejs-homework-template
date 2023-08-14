@@ -4,7 +4,7 @@ const {schemaAdd, schemaUpdate, schemaUpdateFavorite} = require('../service/sche
 const listContacts = async (req, res, next) => {
     try {
         const results = await service.listContacts()
-        res.json({
+        return res.json({
             status: 'success',
             code: 200,
             data: {
@@ -13,7 +13,7 @@ const listContacts = async (req, res, next) => {
         });
     } catch (err) {
         console.error(err);
-        next(err);
+        return res.status(500).json({ error: "Unknown error" })
     }
 };
 
@@ -22,7 +22,7 @@ const getContactById = async (req, res, next) => {
         const { contactId } = req.params;
         const result = await service.getContactById(contactId);
         if (result) {
-            res.json({
+            return res.json({
                 status: 'success',
                 code: 200,
                 data: {
@@ -30,7 +30,7 @@ const getContactById = async (req, res, next) => {
                 },
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 status: 'error',
                 code: 404,
                 message: `Not found contact id: ${contactId}`,
@@ -39,7 +39,7 @@ const getContactById = async (req, res, next) => {
         }
     } catch (err) {
         console.error(err);
-        next(err);
+        return res.status(500).json({ error: "Unknown error" })
     }
 };
 
@@ -47,7 +47,7 @@ const addContact = async (req, res, next) => {
     try {
         const body = await schemaAdd.validateAsync(req.body);
         const result = await service.addContact({ body });
-        res.status(201).json({
+        return res.status(201).json({
             status: 'success',
             code: 201,
             data: {
@@ -56,7 +56,7 @@ const addContact = async (req, res, next) => {
         })
     } catch (err) {
         console.error(err);
-        next(err);
+        return res.status(500).json({ error: "Unknown error" })
     }
 };
 
@@ -65,7 +65,7 @@ const removeContact = async (req, res, next) => {
         const { contactId } = req.params;
         const result = await service.removeContact(contactId);
         if (result) {
-            res.json({
+            return res.json({
                 status: 'success',
                 code: 200,
                 data: {
@@ -73,7 +73,7 @@ const removeContact = async (req, res, next) => {
                 },
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 status: 'error',
                 code: 404,
                 message: `Not found contact id: ${contactId}`,
@@ -82,7 +82,7 @@ const removeContact = async (req, res, next) => {
         }
     } catch (err) {
         console.error(err);
-        next(err);
+        return res.status(500).json({ error: "Unknown error" })
     }
 };
 
@@ -92,7 +92,7 @@ const updateContact = async (req, res, next) => {
         const updatedData = await schemaUpdate.validateAsync(req.body);
         const result = await service.updateContact(contactId, { updatedData });
         if (result) {
-            res.json({
+            return res.json({
                 status: 'success',
                 code: 200,
                 data: {
@@ -100,7 +100,7 @@ const updateContact = async (req, res, next) => {
                 },
             })
         } else {
-            res.status(404).json({
+            return res.status(404).json({
                 status: 'error',
                 code: 404,
                 message: `Not found contact id: ${contactId}`,
@@ -109,20 +109,30 @@ const updateContact = async (req, res, next) => {
         }
     } catch (err) {
         console.error(err);
-        next(err);
+        return res.status(500).json({ error: "Unknown error" })
     }
 };
 
 const updateStatusContact = async (req, res, next) => {
     try {
         const { contactId } = req.params;
+        const contact = await service.getContactById(contactId);
+        if (!contact) {
+            return res.status(400).json({
+                status: 'error',
+                code: 404,
+                message: `Not found contact id: ${contactId}`,
+                data: 'Not Found',
+            })
+
+        }
         const { error } = schemaUpdateFavorite.validate(req.body);
         const { favorite } = req.body;
         if (error) {
-            res.status(400).json({ error: error.message });
+            return res.status(400).json({ error: error.message });
         }
         const result = await service.updateStatusContact(contactId, { favorite });
-        res.json({
+        return res.json({
             status: 'success',
             code: 200,
             data: {
@@ -131,7 +141,7 @@ const updateStatusContact = async (req, res, next) => {
         })
     } catch (err) {
         console.error(err);
-        next(err);
+        return res.status(500).json({ error: "Unknown error" })
     }
 };
 

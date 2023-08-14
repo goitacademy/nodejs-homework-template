@@ -13,7 +13,7 @@ const logger = require('morgan')
 app.use(logger(formatsLogger))
 
 const contactsRouter = require('./api')
-app.use('/api', contactsRouter)
+app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
