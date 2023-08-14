@@ -3,7 +3,6 @@ const Contact = require('./schemas/contacts');
 const listContacts = async () => {
   try {
     const response = await Contact.find();
-    console.log(response)
     return response
   } catch (err) {
     throw err;
