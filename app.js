@@ -1,8 +1,12 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const dotenv = require("dotenv"); // імпортуємо пакет doterv який завантажує змінні середовища з .env
+
+dotenv.config(); // викликаємо метод config який у корні проєкту шукає файл .env і дані з цього файлу додає у змінні оточення (об'єкт process.env)
 
 const contactsRouter = require("./routes/api/contacts"); // імпортуємо "сторінку записної книжки"
+
 const app = express(); // створюємо веб-сервер
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -24,23 +28,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
-
-  // res.status(500).json({ message: err.message });
 });
 
 module.exports = app;
-
-// =====================================================================
-/**
- ** Прим.1
- * створюємо міделвару яка дозволяє кросдомені запити тобто запити які приходять з адреси яка відрізніється від адреси на якій запущений сервер.
- * 
- * повний запис:
- * const corsMiddleware = cors();
- * app.use(corsMiddleware);
- * 
- * 
- * 
-
- 
- */
