@@ -1,5 +1,6 @@
 const { listContacts, getContactById, addContact, removeContact, updateContact  } = require('../models/contacts');
-const { contactValidator } = require('../shemas/validatorContacts');
+const { contactValidator } = require('../schemas/validatorContacts');
+const { HttpError } = require("../helpers");
 
 const getAll = async (req, res, next) => {
   try {
@@ -17,8 +18,7 @@ const getById = async (req, res, next) => {
     if (contact) {
       res.status(200).json(contact)      
     } else {
-      res.status(404).json( {message: 'Not found'} )
-      // throw HttpError(404, 'Not found')
+      throw HttpError(404, 'Not found')
     };
   } catch (error) {
     next(error)
@@ -31,9 +31,9 @@ const add = async (req, res, next) => {
     if (error) {
       const errorType = error.details[0];
       if (errorType.type === 'any.required') {
-        return res.status(400).json( {message: `missing required ${errorType.path[0]} field`} )
+        throw HttpError(400, `missing required ${errorType.path[0]} field`)
       }
-      return res.status(400).json({ message: `${errorType.message}` })
+      throw HttpError(400, `${errorType.message}`)
     };
 
     const contact = await addContact(req.body);
@@ -55,15 +55,15 @@ const updateById = async (req, res, next) => {
     if (error) {
       const errorType = error.details[0];
       if (errorType.type === 'any.required') {
-        return res.status(400).json( {message: `missing required ${errorType.path[0]} field`} )
+        throw HttpError(400, `missing required ${errorType.path[0]} field`)
       }
-      return res.status(400).json({ message: `${errorType.message}` })
+      throw HttpError(400, `${errorType.message}`)
     };
 
     const { contactId } = req.params;
     const contact = await updateContact(contactId, req.body);
     if (!contact) {
-      return res.status(404).json( {message: `Not found`} )
+      throw HttpError(404, 'Not found')
     };    
     res.status(200).json(contact)
   } catch (error) {
@@ -76,7 +76,7 @@ const deleteById = async (req, res, next) => {
     const { contactId } = req.params;
 	  const contact = await removeContact(contactId);
     if (!contact) {
-      return res.status(404).json({message: 'Not found'})
+      throw HttpError(404, 'Not found')
     };    
     res.status(200).json({message: 'contact deleted'})
   } catch (error) {
