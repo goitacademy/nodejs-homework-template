@@ -118,7 +118,15 @@ const updateStatusContact = async (req, res, next) => {
         const { contactId } = req.params;
         const { favorite } = req.body;
         const result = await service.updateStatusContact(contactId, { favorite });
-        if (result) {
+        console.log(result);
+        if (favorite == null) {
+            res.status(400).json({
+                status: 'error',
+                code: 400,
+                message: "missing field favorite",
+            })
+        }
+        else if (result) {
             res.json({
                 status: 'success',
                 code: 200,

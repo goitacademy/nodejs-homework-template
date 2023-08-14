@@ -3,6 +3,7 @@ const Contact = require('./schemas/contacts');
 const listContacts = async () => {
   try {
     const response = await Contact.find();
+    console.log(response)
     return response
   } catch (err) {
     throw err;
@@ -31,14 +32,13 @@ const addContact = async ({ body }) => {
   try {
     const { name, email, phone } = body;
     const response = await Contact.create({ name, email, phone });
-    console.log(response);
     return response
   } catch (err) {
     throw err;
   }
 };
 
-const updateContact = async (contactId, updatedData) => {
+const updateContact = async (contactId, { updatedData }) => {
   try {
     const response = await Contact.findByIdAndUpdate({ _id: contactId }, updatedData, { new: true });
     return response
@@ -49,7 +49,7 @@ const updateContact = async (contactId, updatedData) => {
 
 const updateStatusContact = async (contactId, favorite) => {
   try {
-    const response = await Contact.findByIdAndUpdate({ _id: contactId, favorite });
+    const response = await Contact.findByIdAndUpdate({ _id: contactId }, favorite, { new: true });
     return response
   } catch (err) {
     throw err;
