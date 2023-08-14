@@ -3,6 +3,7 @@ const { HttpError, sendEmail } = require("../../utils");
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
+  const { verificationToken } = req.params;
   const user = await User.findOne({ email });
 
   if (!user) {
