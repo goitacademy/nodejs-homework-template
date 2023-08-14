@@ -1,7 +1,9 @@
 const express = require("express");
 
 const { validateBody } = require("../../middlewares/validateBody");
-const { addSchema, updateSchema } = require("../../schemas/contacts");
+const { isValidId } = require("../../middlewares/isValidId");
+const { addSchema, updateSchema } = require("../../models/contact");
+
 const {
   getAll,
   getById,
@@ -18,8 +20,8 @@ router.get("/:contactId", getById);
 
 router.post("/", validateBody(addSchema), add);
 
-router.put("/:contactId",validateBody(updateSchema), updateById);
+router.put("/:contactId", isValidId, validateBody(updateSchema), updateById);
 
-router.delete("/:contactId", deleteById);
+router.delete("/:contactId", isValidId, deleteById);
 
 module.exports = router;
