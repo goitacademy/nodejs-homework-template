@@ -1,23 +1,25 @@
 const express = require('express')
 
+const contactsController = require("../../controllers/contacts-controller");
+
+const schemas = require("../../schemas/contacts");
+
+const { validateBody } = require("../../decorators");
+
 const router = express.Router()
 
-const {
-  getAllContacts,
-  getContactById,
-  addContact,
-  updateContactById,
-  deleteContact,
-} = require("../../controllers/contacts-controllers");
 
-router.get('/', getAllContacts)
+router.get("/",contactsController.getAllContacts)
 
-router.get('/:contactId', getContactById)
+router.get("/:contactId", contactsController.getContactById)
 
-router.post('/', addContact)
+router.post("/", validateBody(schemas.contactsAddSchema),
+contactsController.addContact)
 
-router.delete('/:contactId', updateContactById)
+router.put("/:contactId", validateBody(schemas.contactsAddSchema),
+contactsController.updateContactById)
 
-router.put('/:contactId', deleteContact)
+router.delete("/:contactId", contactsController.deleteContact)
+
 
 module.exports = router
