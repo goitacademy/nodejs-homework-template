@@ -1,33 +1,50 @@
 const Joi = require("joi");
 
-const { phoneRegexp } = require("../constants/contacts");
+const { subscriptionList } = require("../constants/users");
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(20).required().messages({
-    "string.empty": `"name" cannot be an empty field`,
-    "any.required": `missing required "name" field`,
+const { emailRegexp } = require("../constants/users");
+
+const userRegisterSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.empty": `"email" cannot be an empty field`,
+    "any.required": `missing required "email" field`,
   }),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required()
-    .messages({
-      "string.empty": `"email" cannot be an empty field`,
-      "any.required": `missing required "email" field`,
-    }),
-  phone: Joi.string().pattern(phoneRegexp).required().messages({
-    "string.empty": `"phone" cannot be an empty field`,
-    "any.required": `missing required "phone" field`,
+  password: Joi.string().min(6).required().messages({
+    "string.empty": `"password" cannot be an empty field`,
+    "any.required": `missing required "password" field`,
   }),
-  favorite: Joi.boolean(),
 });
 
-const contactUpdateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().messages({
-    "any.required": `missing field "favorite"`,
+const userLoginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.empty": `"email" cannot be an empty field`,
+    "any.required": `missing required "email" field`,
+  }),
+  password: Joi.string().min(6).required().messages({
+    "string.empty": `"password" cannot be an empty field`,
+    "any.required": `missing required "password" field`,
+  }),
+});
+
+const userSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionList)
+    .required()
+    .messages({
+      "any.required": `missing required "subscription" field`,
+    }),
+});
+
+const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.empty": `"email" cannot be an empty field`,
+    "any.required": `missing required "email" field`,
   }),
 });
 
 module.exports = {
-  contactAddSchema,
-  contactUpdateFavoriteSchema,
+  userRegisterSchema,
+  userLoginSchema,
+  userSubscriptionSchema,
+  userEmailSchema,
 };

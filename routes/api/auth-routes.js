@@ -6,6 +6,8 @@ const { logout } = require("../../controllers/auth");
 const { getCurrent } = require("../../controllers/auth");
 const { updateUserSubscription } = require("../../controllers/auth");
 const { updateAvatar } = require("../../controllers/auth");
+const { verify } = require("../../controllers/auth");
+const { resendVerify } = require("../../controllers/auth");
 
 const router = express.Router();
 
@@ -16,6 +18,10 @@ const { validateBody } = require("../../decorators");
 const { authenticate, upload } = require("../../middlewares");
 
 router.post("/register", validateBody(schemas.userRegisterSchema), register);
+
+router.get("/verify/:verificationToken", verify);
+
+router.post("/verify", validateBody(schemas.userEmailSchema), resendVerify);
 
 router.post("/login", validateBody(schemas.userLoginSchema), login);
 
