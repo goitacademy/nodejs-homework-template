@@ -9,7 +9,7 @@ const editById = async (req, res, next) => {
 
     if (!result) {
       res.json({
-        message: "Missing fields"
+        message: "Not found"
       });
     } else {
       res.json(result);
