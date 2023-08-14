@@ -1,5 +1,5 @@
 const { listContacts, getContactById, addContact, removeContact, updateContact  } = require('../models/contacts');
-const { contactValidator } = require('../schemas/validatorContacts');
+// const { contactValidator } = require('../schemas/validatorContacts');
 const { HttpError } = require("../helpers");
 
 const getAll = async (req, res, next) => {
@@ -27,15 +27,6 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   try {
-    const { error } = contactValidator(req.body);
-    if (error) {
-      const errorType = error.details[0];
-      if (errorType.type === 'any.required') {
-        throw HttpError(400, `missing required ${errorType.path[0]} field`)
-      }
-      throw HttpError(400, `${errorType.message}`)
-    };
-
     const contact = await addContact(req.body);
     res.status(201).json(contact)
   } catch (error) {
@@ -46,20 +37,6 @@ const add = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   try {
-    const { name, email, phone } = req.body;
-    if (!name && !email && !phone) {
-      res.status(400).json( {message: `missing fields`} )
-    };
-
-    const { error } = contactValidator(req.body);
-    if (error) {
-      const errorType = error.details[0];
-      if (errorType.type === 'any.required') {
-        throw HttpError(400, `missing required ${errorType.path[0]} field`)
-      }
-      throw HttpError(400, `${errorType.message}`)
-    };
-
     const { contactId } = req.params;
     const contact = await updateContact(contactId, req.body);
     if (!contact) {
