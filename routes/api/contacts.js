@@ -8,6 +8,7 @@ const { isEmptyFavorites } = require("../../helpers");
 
 const { isValidId, authenticate} = require("../../middlewares/")
 
+
 const ctrl = require("../../controllers/controllers");
 
 router.get("/", authenticate,  ctrl.getAll);
