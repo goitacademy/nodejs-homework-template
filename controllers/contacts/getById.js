@@ -4,7 +4,7 @@ const getById=async (req, res, next) => {
       const { id } = req.params;
       const oneContact = await Contact.findById(id).exec();
       if (!oneContact) {
-        next(HttpErrors(404, "Not found contact"))
+        throw HttpErrors(404, "Not found contact")
       }else{
         return res.json({
           status: "success",

@@ -5,7 +5,7 @@ const updateById=async (req, res, next) => {
       const body=req.body;
       const updatedContact=await Contact.findByIdAndUpdate(id, body, {new: true}).exec();
       if(!updatedContact){
-        next(HttpErrors(404, 'Not found' ))
+        throw HttpErrors(404, 'Not found' )
       } else{
         res.json({
           status:'success',

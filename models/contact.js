@@ -16,17 +16,21 @@ const contactSchema=new Schema({
         type: String,
         match: [emailRegexp, 'Enter correct email'],
         required: [true, 'Set email'],
-        unique: true, 
       },
       phone: {
         type: String,
-        match:[phoneRegexp, 'Enter phoneNumber in format "+3809322..." or "3809322..."'],
+        match:[phoneRegexp, 'Enter phoneNumber in format "+380931111111" or "380931111111"'],
         required: [true, 'Set phoneNumber']
       },
       favorite: {
         type: Boolean,
         default: false,
       },
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required:true
+      }
 }, {versionKey: false, timestamps: true})
 
 // if unique
