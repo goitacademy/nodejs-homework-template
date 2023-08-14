@@ -1,5 +1,10 @@
 const app = require("./app");
 const mongoose = require("mongoose");
+const {
+  createFolderIfNotExist,
+  uploadDir,
+  imageStore,
+} = require("./middlewares/upload");
 require("dotenv").config();
 require("colors");
 
@@ -17,6 +22,8 @@ connection
   .then(() => {
     console.log("\nDatabase connection successful".green);
     app.listen(PORT, () => {
+      createFolderIfNotExist(uploadDir);
+      createFolderIfNotExist(imageStore);
       console.log(`Server running. Use our API on port: ${PORT}`.green);
     });
   })
