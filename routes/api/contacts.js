@@ -9,10 +9,10 @@ router.get("/:contactId", isValid, ctrl.getById);
 
 router.post("/", ctrl.addContact);
 
-router.delete("/:contactId", isValid, ctrl.remove);
+router.delete("/:contactId", isValid, ctrl.removeById);
 
-router.put("/:contactId", isValid, ctrl.update);
+router.put("/:contactId", isValid, ctrl.updateById);
 
-router.patch("/:contactId/favorite", isValid, ctrl.updateFavorite);
+router.patch("/:contactId/favorite", isValid, ctrl.updateStatusContact);
 
 module.exports = router;
