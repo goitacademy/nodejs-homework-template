@@ -1,12 +1,10 @@
 const { Schema, model } = require("mongoose");
 
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 const Joi = require("joi");
 
-const handleMongooseError = require('../utils/handleMongooseError');
-
-
+const { handleMongooseError } = require("../utils");
 
 const userSchema = Schema(
   {
@@ -38,10 +36,9 @@ const userSchema = Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, 'Verify token is required'],
+      required: [true, "Verify token is required"],
     },
     avatarURL: String,
-
   },
   { versionKey: false, timestamps: true }
 );
@@ -51,7 +48,7 @@ const userSchema = Schema(
 // if(this.isNew){
 
 //     const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
-    
+
 //     this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=wavatar`;
 // }
 // });
@@ -72,8 +69,8 @@ const loginSchema = Joi.object({
 const schemas = {
   registerSchema,
   loginSchema,
-}
+};
 
 const User = model("user", userSchema);
 
-module.exports = { User, schemas};
+module.exports = { User, schemas };

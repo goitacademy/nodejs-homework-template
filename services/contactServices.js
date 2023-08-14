@@ -1,17 +1,14 @@
-const validateData = require("../middlewares/validateData");
-const {
-  Contact,
-  schemas,
-} = require("../models/contact");
+const { validateData } = require("../middlewares");
+const { Contact, schemas } = require("../models/contact");
 
-const HttpError = require("../utils/HttpError");
+const { HttpError } = require("../utils/");
 
 /** ===============
  * GET ALL CONTACTS ===============
  * @returns {Array<object>}
  */
-const findContacts = async(...options) => {
-   return await Contact.find(...options);
+const findContacts = async (...options) => {
+  return await Contact.find(...options);
 };
 
 /** ===============

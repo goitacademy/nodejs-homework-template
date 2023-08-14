@@ -4,48 +4,23 @@ const path = require("path");
 const fs = require("fs/promises");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
-const nanoid = require('nanoid');
-const nodemailer = require("nodemailer");
+const nanoid = require("nanoid");
 
 require("dotenv").config();
-const { SECRET_KEY, UKRNET_PASSWORD } = process.env;
+const { SECRET_KEY } = process.env;
 
 const { User } = require("../models/user");
 
-const HttpError = require("../utils/HttpError");
+const { HttpError, sendVerificationEmail } = require("../utils");
 
+sendVerificationEmail({
+  to: "strheadshot1997@gmail.com",
+  subject: "Second Test",
+  html: "<p><strong>Hello, second TEST</strong></p>",
+});
 // const verificationToken = nanoid();
 
 const avatarsDir = path.join(process.cwd(), "./", "public", "avatars");
-
-const sendVerifyEmail = () => {
-
-  const nodemailerConfig = {
-    host: "smtp.ukr.net",
-    port: 465,
-    secure: true,
-    auth: {
-      user: "valentinepylypchuk@ukr.net",
-      pass: UKRNET_PASSWORD
-    },
-  }
-  // 6ke9qK8AF73O5TqG
-
-  const transport = nodemailer.createTransport(nodemailerConfig);
-
-  const email = {
-    to: "strheadshot1997@gmail.com",
-    from: "valentinepylypchuk@ukr.net",
-    subject: "Test mail",
-    html: "<p>Testik email</p>"
-  };
-
-  const sendTestEmail = transport.sendMail(email).then(() => console.log("Email send success")).catch( e => console.log(e.message))
-
-  return sendTestEmail;
-}
-
-sendVerifyEmail();
 
 const register = async (data) => {
   const { email, password } = data.body;
@@ -64,8 +39,6 @@ const register = async (data) => {
     avatarURL,
     // verificationToken,
   });
-
-
 
   return newUser;
 };
