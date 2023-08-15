@@ -6,20 +6,21 @@ const { isEmptyBody } = require("../../helpers");
 
 const { isEmptyFavorites } = require("../../helpers");
 
-const { isValidId } = require("../../middlewares/")
+const { isValidId, authenticate} = require("../../middlewares/")
+
 
 const ctrl = require("../../controllers/controllers");
 
-router.get("/", ctrl.getAll);
+router.get("/", authenticate,  ctrl.getAll);
 
-router.get("/:id", isValidId, ctrl.getById);
+router.get("/:id", authenticate, isValidId, ctrl.getById);
 
-router.post("/", isEmptyBody, ctrl.post);
+router.post("/", authenticate, isEmptyBody, ctrl.post);
 
-router.delete("/:id", isValidId, ctrl.remove);
+router.delete("/:id", authenticate, isValidId, ctrl.remove);
 
-router.put("/:id",isValidId, isEmptyBody, ctrl.put);
+router.put("/:id",isValidId, authenticate, isEmptyBody, ctrl.put);
 
-router.patch("/:id/favorite", isValidId , isEmptyFavorites, ctrl.patch);
+router.patch("/:id/favorite", authenticate, isValidId , isEmptyFavorites, ctrl.patch);
 
 module.exports = router;
