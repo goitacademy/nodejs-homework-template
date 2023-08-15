@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const filePath = path.join(__dirname, "contacts.json");
-const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+let data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
 const listContacts = async () => {
 	return data;
@@ -23,7 +23,7 @@ const addContact = async (body) => {
 	};
 
 	body = {
-		id: uniqueId,
+		id: uniqueId(),
 		...body,
 	};
 
@@ -38,14 +38,25 @@ const addContact = async (body) => {
 	return body;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+	const newContacts = data.filter((el) => el.id !== contactId);
+	data = [...newContacts];
+
+	fs.writeFile(filePath, JSON.stringify(data, null, 2), (error) => {
+		if (error) {
+			throw error;
+		}
+	});
+
+	return data;
+};
 
 const updateContact = async (contactId, body) => {};
 
 module.exports = {
 	listContacts,
 	getContactById,
-	removeContact,
 	addContact,
+	removeContact,
 	updateContact,
 };

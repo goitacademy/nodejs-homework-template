@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { listContacts, getContactById, addContact } = require("../../models/contacts.js");
+const { listContacts, getContactById, addContact, removeContact } = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
 	try {
@@ -70,7 +70,27 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-	res.json({ message: "template message" });
+	try {
+		const contactId = req.params.contactId;
+		const contact = await removeContact(contactId);
+		if (contact) {
+			res.json({
+				status: "success",
+				code: 200,
+				message: "contact deleted",
+				data: {
+					contact,
+				},
+			});
+		} else {
+			res.status(404).json({
+				status: "fail",
+				message: "Not found",
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
 });
 
 router.put("/:contactId", async (req, res, next) => {
