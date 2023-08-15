@@ -14,7 +14,7 @@ const connection = mongoose.connect(process.env.DATABASE_URL, {
 });
 
 app.use(express.json());
-app.use(contactRoutes);
+app.use("/contacts", contactRoutes);
 
 connection
   .then(() => {
