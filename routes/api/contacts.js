@@ -10,9 +10,6 @@ import {
 } from './../../models/contacts.js';
 
 export const router = express.Router();
-const sendErrorResponse = (res, status, message) => {
-  res.status(status).json({ message });
-};
 
 const schemaAdd = Joi.object({
   name: Joi.string().required(),
@@ -30,19 +27,13 @@ router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
 
-    if (!contacts) {
-      sendErrorResponse(res, 404, `Contact list not found`);
-
-      return false;
-    }
-
-    res.json({
+    return res.json({
       status: 'success',
       code: 200,
       data: { contacts },
     });
   } catch (err) {
-    sendErrorResponse(res, 500, `An error occurred while getting the contact list: ${err}`);
+    res.status(500).json(`An error occurred while getting the contact list: ${err}`);
   }
 });
 
@@ -52,18 +43,18 @@ router.get('/:id', async (req, res, next) => {
     const contact = await getContactById(id);
 
     if (!contact) {
-      sendErrorResponse(res, 404, `Contact with id ${id} not found`);
+      res.status(404).json(`Contact with id ${id} not found`);
 
       return false;
     }
 
-    res.json({
+    return res.json({
       status: 'success',
       code: 200,
       data: { contact },
     });
   } catch (err) {
-    sendErrorResponse(res, 500, `An error occurred while getting the contact: ${err}`);
+    res.status(500).json(`An error occurred while getting the contact: ${err}`);
   }
 });
 
@@ -71,7 +62,7 @@ router.post('/', async (req, res, next) => {
   const body = req.body;
 
   if (Object.keys(body).length === 0) {
-    sendErrorResponse(res, 400, 'Error! Missing fields! Empty request is not allowed');
+    res.status(400).json('Error! Missing fields! Empty request is not allowed');
 
     return;
   }
@@ -79,7 +70,7 @@ router.post('/', async (req, res, next) => {
   const { error } = schemaAdd.validate(body);
 
   if (error) {
-    sendErrorResponse(res, 400, `Error: ${error.details[0].message}`);
+    res.status(400).json(`Error: ${error.details[0].message}`);
 
     return;
   }
@@ -88,7 +79,7 @@ router.post('/', async (req, res, next) => {
     const contact = await addContact(body);
 
     if (!contact) {
-      sendErrorResponse(res, 404, `Contact not found`);
+      res.status(404).json(`Contact not found`);
 
       return false;
     }
@@ -99,7 +90,7 @@ router.post('/', async (req, res, next) => {
       data: { contact },
     });
   } catch (err) {
-    sendErrorResponse(res, 500, `An error occurred while adding the contact: ${err}`);
+    res.status(500).json(`An error occurred while adding the contact: ${err}`);
   }
 });
 
@@ -109,7 +100,7 @@ router.delete('/:id', async (req, res, next) => {
     const isContactRemoved = await removeContact(id);
 
     if (!isContactRemoved) {
-      sendErrorResponse(res, 404, `Contact with id ${id} not found`);
+      res.status(404).json(`Contact with id ${id} not found`);
 
       return false;
     }
@@ -118,7 +109,7 @@ router.delete('/:id', async (req, res, next) => {
       message: `Contact with ID ${id} has been successfully removed.`,
     });
   } catch (err) {
-    sendErrorResponse(res, 500, `An error occurred while removing the contact: ${err}`);
+    res.status(500).json(`An error occurred while removing the contact: ${err}`);
   }
 });
 
@@ -127,7 +118,7 @@ router.put('/:id', async (req, res, next) => {
   const body = req.body;
 
   if (Object.keys(body).length === 0) {
-    sendErrorResponse(res, 400, 'Error! Missing fields! Empty request is not allowed');
+    res.status(400).json('Error! Missing fields! Empty request is not allowed');
 
     return;
   }
@@ -135,7 +126,7 @@ router.put('/:id', async (req, res, next) => {
   const { error } = schemaEdit.validate(body);
 
   if (error) {
-    sendErrorResponse(res, 400, `Error field: ${error.details[0].message}`);
+    res.status(400).json(`Error field: ${error.details[0].message}`);
 
     return;
   }
@@ -144,7 +135,7 @@ router.put('/:id', async (req, res, next) => {
     const updatedContact = await updateContact(id, body);
 
     if (!updatedContact) {
-      sendErrorResponse(res, 404, `Contact with id ${id} not found`);
+      res.status(404).json(`Contact with id ${id} not found`);
 
       return false;
     }
@@ -155,6 +146,6 @@ router.put('/:id', async (req, res, next) => {
       data: { updatedContact },
     });
   } catch (err) {
-    sendErrorResponse(res, 500, `An error occurred while updating the contact: ${err}`);
+    res.status(500).json(`An error occurred while updating the contact: ${err}`);
   }
 });
