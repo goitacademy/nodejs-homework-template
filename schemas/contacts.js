@@ -1,8 +1,9 @@
 const Joi = require("joi");
 
 const addSchema = Joi.object({
-  title: Joi.string().required(),
-  author: Joi.string().required(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.number().required(),
 });
 
 module.exports={addSchema,}
