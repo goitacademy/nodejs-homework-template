@@ -2,10 +2,10 @@ const express = require('express')
 const cors = require('cors')
 const logger = require("morgan")
 const mongoose = require('mongoose')
-
 require('dotenv').config()
 
-const routerApi = require('./routes')
+const authApi = require('./routes/auth');
+const routerApi = require('./routes/contacts')
 
 const app = express()
 
@@ -15,6 +15,9 @@ app.use(express.json())
 app.use(logger(formatsLogger));
 app.use(cors())
 
+require('./middleware/passport');
+
+app.use('/api/users', authApi);
 app.use('/api/contacts', routerApi)
 
 app.use((_, res, __) => {

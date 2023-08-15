@@ -20,4 +20,10 @@ const user = Schema({
         type: String,
         default: null
     }
-})
+},
+    { versionKey: false, timestamps: true }
+)
+
+const User = mongoose.model("user", user);
+
+module.exports = User;

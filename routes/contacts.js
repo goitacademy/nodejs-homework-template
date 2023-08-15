@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Joi = require('joi')
 const Contact = require('../models/contact.js')
+const auth = require('../middleware/authorization.js')
 
 const contactSchema = Joi.object({
     name: Joi.string(),
@@ -10,9 +11,10 @@ const contactSchema = Joi.object({
     favorite: Joi.boolean(),
 });
 
-router.get('/', async (req, res, next) => {
+router.get('/', auth, async (req, res, next) => {
     try {
-        const contacts = await Contact.find({}, "-createdAt -updatedAt");
+        const { _id: owner } = req.user;
+        const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
         res.status(200).json(
             {
                 status: "success",
@@ -23,10 +25,12 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', auth, async (req, res, next) => {
     try {
         const { id } = req.params;
-        const contact = await Contact.findById(id);
+        const { _id: owner } = req.user;
+        const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
+        const contact = contacts.filter(contact => contact.id === id);
         if (!contact) {
             throw new Error('Contact not found')
         }
@@ -45,7 +49,7 @@ router.get('/:id', async (req, res, next) => {
     }
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', auth, async (req, res, next) => {
     try {
         const { name, phone, email } = req.body;
         const favorite = false;
@@ -56,7 +60,8 @@ router.post('/', async (req, res, next) => {
             status: "failed",
             message: validate.error.message
         });
-        const newContact = await Contact.create({ name, phone, email, favorite })
+        const { _id: owner } = req.user;
+        const newContact = await Contact.create({ name, phone, email, favorite, owner })
         res.status(201).json({
             status: "success",
             data: newContact
@@ -67,7 +72,7 @@ router.post('/', async (req, res, next) => {
 
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', auth, async (req, res, next) => {
     try {
         const { body } = req;
         const { id } = req.params;
@@ -97,7 +102,7 @@ router.put('/:id', async (req, res, next) => {
 
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', auth, async (req, res, next) => {
     try {
         const { id } = req.params;
         const deletedContact = await Contact.findByIdAndRemove(id);
@@ -114,7 +119,7 @@ router.delete('/:id', async (req, res, next) => {
     }
 })
 
-router.patch('/:id/favorite', async (req, res, next) => {
+router.patch('/:id/favorite', auth, async (req, res, next) => {
     try {
         const { id } = req.params;
         const { favorite } = req.body;
