@@ -15,8 +15,13 @@
 // };
 
 export const addError = (error, data, next) => {
-  error.status = 400;
-  next(error);
+  console.log(error.code);
+  console.log(error.name);
+  const { code, name } = error;
+  error.status = (code === 11000 && name === "MongoServerError") ? 409 : 400;
+  next();
+  // error.status = 400;
+  // next(error);
 };
 
 export const updateError = function(next){

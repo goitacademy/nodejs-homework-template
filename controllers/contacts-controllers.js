@@ -1,8 +1,13 @@
 import Contact from "../models/contact.js";
+
 import { HttpError, ctrlWrapper } from "../helpers/index.js";
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  // console.log(req.query);
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner }, {skip, limit}).populate("owner", "name email");
   console.log(Contact);
   res.json(result);
 }
@@ -16,8 +21,10 @@ const getById = async (req, res) => {
   res.json(result);
 }
 
-const add = async(req, res) => {
-  const result = await Contact.create(req.body);
+const add = async (req, res) => {
+  // console.log("added by user", req.user);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({...req.body, owner});
   res.status(201).json(result);
 }
 

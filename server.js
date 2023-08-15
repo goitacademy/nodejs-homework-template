@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import "dotenv/config";
+
 import app from "./app.js";
 
 const { DB_HOST, PORT = 3000 } = process.env;
@@ -15,8 +17,6 @@ mongoose.connect(DB_HOST)
     console.log(`Server not running. Error message: ${error.message}`);
     process.exit(1);
 	});
-
-// import dotenv from "dotenv";
 
 // import process from "node:process";
 
