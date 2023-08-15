@@ -2,7 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
-const { isValidId } = require("../../utils");
+const { isValidId } = require("../../utils/validation");
+const { authenticate } = require("../../middlewares");
 
 const {
   listContacts,
@@ -11,18 +12,34 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
-} = require("../../controller/index.js");
+} = require("../../controller/contacts");
 
-router.route("/").post(addContact).get(listContacts);
+const {
+  createContactValidator,
+  updateContactValidator,
+  updateStatusContactValidator,
+} = require("../../utils/validation");
 
-router.use("/:id", isValidId);
+router
+  .route("/")
+  .post(authenticate, createContactValidator, addContact)
+  .get(authenticate, listContacts);
+
+router.use("/:id", authenticate, isValidId);
 
 router
   .route("/:id")
-  .get(isValidId, getContactById)
-  .put(isValidId, updateContact)
-  .delete(isValidId, removeContact);
+  .get(authenticate, isValidId, getContactById)
+  .put(authenticate, isValidId, updateContactValidator, updateContact)
+  .delete(authenticate, isValidId, removeContact);
 
-router.route("/:id/favorite").patch(isValidId, updateStatusContact);
+router
+  .route("/:id/favorite")
+  .patch(
+    authenticate,
+    isValidId,
+    updateStatusContactValidator,
+    updateStatusContact
+  );
 
 module.exports = router;

@@ -8,6 +8,7 @@ dotenv.config({
       ? "./environments/production.env"
       : "./environments/development.env",
 });
+// dotenv.config();
 
 const { MONGO_URL, PORT } = process.env;
 

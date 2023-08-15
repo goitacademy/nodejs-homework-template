@@ -1,7 +1,19 @@
+const { query } = require("express");
 const Contact = require("./schemas/contact");
+const User = require("./schemas/user");
 
-const getAllContacts = async () => {
-  return Contact.find({}, "-createdAt -updatedAt");
+const getAllContacts = async (owner, params) => {
+  return Contact.find(owner, "-createdAt -updatedAt", params).populate(
+    "owner",
+    "name email"
+  );
+};
+
+const getFavoriteContacts = async (query, params) => {
+  return await Contact.find(query, "-createdAt -updatedAt", params).populate(
+    "owner",
+    "name email"
+  );
 };
 
 const getContactById = (id) => {
@@ -22,6 +34,7 @@ const removeContact = (id) => {
 
 module.exports = {
   getAllContacts,
+  getFavoriteContacts,
   getContactById,
   createContact,
   updateContact,
