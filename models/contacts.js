@@ -1,5 +1,4 @@
 const fs = require("fs/promises");
-// const nanoid = require("nanoid");
 
 const { generateRandomId } = require("../helpers");
 
