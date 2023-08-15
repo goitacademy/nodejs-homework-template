@@ -20,23 +20,23 @@ const listContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const result = await service.getContactById(contactId);
-        if (result) {
-            return res.json({
-                status: 'success',
-                code: 200,
-                data: {
-                    contact: result,
-                },
-            })
-        } else {
-            return res.status(404).json({
+        const contact = await service.getContactById(contactId);
+        if (!contact) {
+            return res.status(400).json({
                 status: 'error',
-                code: 404,
+                code: 400,
                 message: `Not found contact id: ${contactId}`,
-                data: 'Not Found',
+                data: 'Bad request',
             })
         }
+        const result = await service.getContactById(contactId);
+        return res.json({
+            status: 'success',
+            code: 200,
+            data: {
+                contact: result,
+            },
+        })
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: "Unknown error" })
@@ -63,23 +63,23 @@ const addContact = async (req, res, next) => {
 const removeContact = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const result = await service.removeContact(contactId);
-        if (result) {
-            return res.json({
-                status: 'success',
-                code: 200,
-                data: {
-                    contact: result,
-                },
-            })
-        } else {
-            return res.status(404).json({
+        const contact = await service.getContactById(contactId);
+        if (!contact) {
+            return res.status(400).json({
                 status: 'error',
-                code: 404,
+                code: 400,
                 message: `Not found contact id: ${contactId}`,
-                data: 'Not Found',
+                data: 'Bad request',
             })
         }
+        const result = await service.removeContact(contactId);
+        return res.json({
+            status: 'success',
+            code: 200,
+            data: {
+                contact: result,
+            },
+        })
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: "Unknown error" })
@@ -89,24 +89,24 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const updatedData = await schemaUpdate.validateAsync(req.body);
-        const result = await service.updateContact(contactId, { updatedData });
-        if (result) {
-            return res.json({
-                status: 'success',
-                code: 200,
-                data: {
-                    contact: result,
-                },
-            })
-        } else {
-            return res.status(404).json({
+        const contact = await service.getContactById(contactId);
+        if (!contact) {
+            return res.status(400).json({
                 status: 'error',
-                code: 404,
+                code: 400,
                 message: `Not found contact id: ${contactId}`,
-                data: 'Not Found',
+                data: 'Bad request',
             })
         }
+        const updatedData = await schemaUpdate.validateAsync(req.body);
+        const result = await service.updateContact(contactId, { updatedData });
+        return res.json({
+            status: 'success',
+            code: 200,
+            data: {
+                contact: result,
+            },
+        })
     } catch (err) {
         console.error(err);
         return res.status(500).json({ error: "Unknown error" })
@@ -120,11 +120,10 @@ const updateStatusContact = async (req, res, next) => {
         if (!contact) {
             return res.status(400).json({
                 status: 'error',
-                code: 404,
+                code: 400,
                 message: `Not found contact id: ${contactId}`,
-                data: 'Not Found',
+                data: 'Bad request',
             })
-
         }
         const { error } = schemaUpdateFavorite.validate(req.body);
         const { favorite } = req.body;
