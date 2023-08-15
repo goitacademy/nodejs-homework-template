@@ -11,7 +11,6 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
 	const foundContact = data.find((el) => el.id === contactId);
-	console.log(foundContact);
 	return foundContact;
 };
 
@@ -51,7 +50,26 @@ const removeContact = async (contactId) => {
 	return data;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+	const contactIndex = data.findIndex((el) => el.id === contactId);
+
+	if (contactIndex === -1) {
+		throw new Error("Contact not found");
+	}
+
+	data[contactIndex] = {
+		...data[contactId],
+		...body,
+	};
+
+	fs.writeFile(filePath, JSON.stringify(data, null, 2), (error) => {
+		if (error) {
+			throw error;
+		}
+	});
+
+	return data[contactIndex];
+};
 
 module.exports = {
 	listContacts,
