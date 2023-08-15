@@ -1,16 +1,18 @@
-const app = require("./app");
 const mongoose = require("mongoose");
 
-// iBZsIfwMHchJphax
+const app = require("./app");
+
+// 8trROvdDe11DilYW
 
 const DB_HOST =
-  "mongodb+srv://Sergii:iBZsIfwMHchJphax@cluster0.uvvqxha.mongodb.net/db-contacts?retryWrites=true&w=majority";
-
-// mongoose.set("strictQuery", true);
+  "mongodb+srv://SergiiNew:8trROvdDe11DilYW@cluster0.uvvqxha.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 mongoose
   .connect(DB_HOST)
-  .then(() => app.listen(3000))
+  .then(() => {
+    app.listen(3000);
+    console.log("All OK");
+  })
   .catch((error) => {
     console.log(error.message);
     process.exit(1);
