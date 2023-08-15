@@ -15,6 +15,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-// 1) Зробити один try catch
-// 2) Зедеплоїти на render.com
