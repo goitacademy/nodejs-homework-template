@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { listContacts, getContactById } = require("../../models/contacts.js");
+const { listContacts, getContactById, addContact } = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
 	try {
@@ -45,7 +45,28 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-	res.json({ message: "template message" });
+	try {
+		const { name, email, phone } = await req.body;
+
+		if (!name || !email || !phone) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Missing required fields: name, email, phone",
+			});
+		}
+
+		const newContact = await addContact({ name, email, phone });
+
+		res.json({
+			status: "success",
+			code: 201,
+			data: {
+				newContact,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
 });
 
 router.delete("/:contactId", async (req, res, next) => {

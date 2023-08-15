@@ -2,7 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const data = JSON.parse(fs.readFileSync(path.join(__dirname, "contacts.json"), "utf-8"));
+const filePath = path.join(__dirname, "contacts.json");
+const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
 const listContacts = async () => {
 	return data;
@@ -14,9 +15,30 @@ const getContactById = async (contactId) => {
 	return foundContact;
 };
 
-const removeContact = async (contactId) => {};
+const addContact = async (body) => {
+	const uniqueId = () => {
+		const dateString = Date.now().toString(36);
+		const randomness = Math.random().toString(36).substr(2);
+		return dateString + randomness;
+	};
 
-const addContact = async (body) => {};
+	body = {
+		id: uniqueId,
+		...body,
+	};
+
+	data.push(body);
+
+	fs.writeFile(filePath, JSON.stringify(data, null, 2), (error) => {
+		if (error) {
+			throw error;
+		}
+	});
+
+	return body;
+};
+
+const removeContact = async (contactId) => {};
 
 const updateContact = async (contactId, body) => {};
 
