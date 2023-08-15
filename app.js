@@ -9,7 +9,7 @@ const app = express();
 const path = require("path");
 require("./config/config-passport");
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
+require("dotenv").config();
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());

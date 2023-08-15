@@ -9,6 +9,10 @@ const path = require("path");
 const jimp = require("jimp");
 const nodemailer = require("nodemailer");
 const { nanoid } = require("nanoid");
+require("dotenv").config();
+
+const sendMail = process.env.sendEmail;
+const passMail = process.env.passwordSend;
 
 function generateVerificationToken() {
   return nanoid();
@@ -76,13 +80,13 @@ router.post("/signup", upload.single("avatar"), async (req, res, next) => {
       service: "outlook",
       secure: false,
       auth: {
-        user: "szpnfaceit@outlook.com",
-        pass: "qwerty1234%",
+        user: sendMail,
+        pass: passMail,
       },
     });
     const html = `<a href='http://localhost:3000/api/users/verify/${newUser.verificationToken}'>Confirm email</a>`;
     const emailOptions = {
-      from: "szpnfaceit@outlook.com",
+      from: sendMail,
       to: newUser.email,
       subject: "Varify email",
       html: html,
@@ -272,14 +276,14 @@ router.post("/verify", async (req, res, next) => {
       service: "outlook",
       secure: false,
       auth: {
-        user: "szpnfaceit@outlook.com",
-        pass: "qwerty1234%",
+        user: sendMail,
+        pass: passMail,
       },
     });
     const html = `<p>Click on the link below to verify your account</p>
     <a href='http://localhost:3000/api/users/verify/${user.verificationToken}'>VERIFY</a>`;
     const emailOptions = {
-      from: "szpnfaceit@outlook.com",
+      from: sendMail,
       to: email,
       subject: "Veryfication",
       text: "Mail verification link",
