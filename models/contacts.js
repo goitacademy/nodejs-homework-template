@@ -58,7 +58,7 @@ const updateContact = async (contactId, body) => {
 	}
 
 	data[contactIndex] = {
-		...data[contactId],
+		...data[contactIndex],
 		...body,
 	};
 

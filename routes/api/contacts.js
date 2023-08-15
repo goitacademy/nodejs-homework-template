@@ -1,8 +1,14 @@
 const express = require("express");
-
+const Joi = require("joi");
 const router = express.Router();
 
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require("../../models/contacts.js");
+
+const contactSchema = Joi.object({
+	name: Joi.string().required(),
+	email: Joi.string().email().required(),
+	phone: Joi.string().required(),
+});
 
 router.get("/", async (req, res, next) => {
 	try {
@@ -55,6 +61,16 @@ router.post("/", async (req, res, next) => {
 			});
 		}
 
+		const validateNewContact = contactSchema.validate({ name, email, phone });
+
+		if (validateNewContact.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateNewContact.error,
+			});
+		}
+
 		const newContact = await addContact({ name, email, phone });
 
 		res.json({
@@ -102,6 +118,16 @@ router.put("/:contactId", async (req, res, next) => {
 			return res.status(400).json({
 				status: "fail",
 				message: "Missing fields",
+			});
+		}
+
+		const validateNewContact = contactSchema.validate({ name, email, phone });
+
+		if (validateNewContact.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateNewContact.error,
 			});
 		}
 
