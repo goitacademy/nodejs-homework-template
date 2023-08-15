@@ -19,6 +19,12 @@ export const userSigninSchema = Joi.object({
   }),
 });
 
+export const userEmailSchema = Joi.object({
+  email: Joi.string().required().messages({
+    "any.required": `"email" missing field`,
+  }),
+});
+
 export const updateUserAvatar = Joi.object({
   avatarURL: Joi.boolean(),
 });

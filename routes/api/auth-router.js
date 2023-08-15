@@ -8,6 +8,8 @@ import {
   getCurrent,
   logout,
   updateAvatar,
+  verify,
+  resendVerifyEmail,
 } from "../../controllers/auth-conrollers/index.js";
 
 import { upload } from "../../middlewars/index.js";
@@ -17,6 +19,7 @@ import { validateBody } from "../../decorators/index.js";
 import {
   userSignupSchema,
   userSigninSchema,
+  userEmailSchema,
 } from "../../schemas/users-schemas.js";
 
 import { authenticate } from "../../middlewars/index.js";
@@ -28,6 +31,14 @@ authRouter.post(
   upload.single("avatar"),
   validateBody(userSignupSchema),
   ctrlWrapper(signup)
+);
+
+authRouter.get("/verify/:verificationToken", ctrlWrapper(verify));
+
+authRouter.post(
+  "/verify",
+  validateBody(userEmailSchema),
+  ctrlWrapper(resendVerifyEmail)
 );
 
 authRouter.post("/login", validateBody(userSigninSchema), ctrlWrapper(signin));
