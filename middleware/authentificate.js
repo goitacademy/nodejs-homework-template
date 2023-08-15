@@ -10,8 +10,8 @@ if(bearer!=='Bearer' || !token){
 }
 try{
     const {id}=jwt.verify(token, SECRET_KEY)
-    const user=await User.findById(id)
-    if(!user || !user.token || token!==user.token){
+    const user=await User.findById(id).exec()
+    if(!user?.token || token!==user.token){
        throw HttpErrors(401, 'Not authorized');
     }
     req.user=user
