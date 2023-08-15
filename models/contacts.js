@@ -8,7 +8,11 @@ const listContacts = async () => {
 	return data;
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+	const foundContact = data.find((el) => el.id === contactId);
+	console.log(foundContact);
+	return foundContact;
+};
 
 const removeContact = async (contactId) => {};
 
