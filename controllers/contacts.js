@@ -1,91 +1,53 @@
-const modelsContacts = require("../models/contacts");
-const schema = require("../schemas/contacts");
+const {listContacts, getContactById, addContact, removeContact, updateContact } = require("../models/contacts");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
-const listContacts = async (req, res, next) => {
-  try {
-    const contacts = await modelsContacts.listContacts();
-    res.status(200).json(contacts);
-  } catch (error) {
-    next(error);
-  }
+const getAll = async (req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json(contacts);
 };
 
-const getContactById = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await modelsContacts.getContactById(contactId);
+const getById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
 
-    if (!contact) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-
-    res.status(200).json(contact);
-  } catch (error) {
-    next(error);
+  if (!contact) {
+    throw HttpError(404, "Not found");
   }
+
+  res.status(200).json(contact); 
 };
 
-const addContact = async (req, res, next) => {
-  try {
-    const { error } = schema.validate(req.body);
-
-    if (error) {
-      res.status(400).json({ message: error.message });
-      return;
-    }
-
-    const contact = await modelsContacts.addContact(req.body);
-    res.status(201).json(contact);
-  } catch (error) {
-    next(error);
-  }
+const add = async (req, res, next) => {
+  const contact = await addContact(req.body);
+  res.status(201).json(contact);
 };
 
-const removeContact = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
+const removeById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await removeContact(contactId);
 
-    const contact = await modelsContacts.removeContact(contactId);
-
-    if (!contact) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-
-    res.json({ message: "contact deleted" });
-  } catch (error) {
-    next(error);
+  if (!contact) {
+    throw HttpError(404, "Not found");
   }
+
+  res.status(200).json({ message: "contact deleted" });
 };
 
-const updateContact = async (req, res, next) => {
-  try {
-    const { error } = schema.validate(req.body);
+const updateById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await updateContact(contactId, req.body);
 
-    if (error) {
-      res.status(400).json({ message: error.message });
-      return;
-    }
-  
-    const { contactId } = req.params;
-    const contact = await modelsContacts.updateContact(contactId, req.body);
-
-    if (!contact) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-
-    res.status(200).json(contact);
-  } catch (error) {
-    next(error);
+  if (!contact) {
+    throw HttpError(404, "Not found");
   }
+
+  res.status(200).json(contact);
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
+  removeById: ctrlWrapper(removeById),
+  updateById: ctrlWrapper(updateById),
 };
