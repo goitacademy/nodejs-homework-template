@@ -9,6 +9,7 @@ const schemaCreateContact = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .optional(),
   phone: Joi.string().pattern(phonePattern).min(7).max(18).optional(),
+  favorite: Joi.boolean().optional().default(false),
 }).options({ abortEarly: false });
 
 const schemaUpdateContact = Joi.object({
@@ -17,8 +18,9 @@ const schemaUpdateContact = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .optional(),
   phone: Joi.string().pattern(phonePattern).min(7).max(18).optional(),
+  favorite: Joi.boolean().optional(),
 })
-  .or("name", "email", "phone")
+  .or("name", "email", "phone", "favorite")
   .options({ abortEarly: false });
 
 module.exports = {
