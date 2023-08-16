@@ -5,7 +5,7 @@ const contacts = require("../../models/contacts");
 
 const router = express.Router();
 
-const { httpErr } = require("../../helpers/HtppError");
+const { httpError } = require("../../helpers/HttpError");
 
 const addSchema = Joi.object({
   name: Joi.string(),
@@ -14,6 +14,11 @@ const addSchema = Joi.object({
     tlds: { allow: ["net", "com"] },
   }),
   phone: Joi.string().pattern(/^\d+$/),
+  favorite: Joi.boolean(),
+});
+
+const addSchemaFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const addSchemaReq = Joi.object({
@@ -27,6 +32,7 @@ const addSchemaReq = Joi.object({
   phone: Joi.string()
     .pattern(/^[0-9]+$/, "numbers")
     .required(),
+  favorite: Joi.boolean(),
 });
 
 router.get("/", async (req, res, next) => {
@@ -43,7 +49,8 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await contacts.getContactById(contactId);
     if (!contact) {
-      throw httpErr(404, "Not found");
+      console.error(error);
+      next(error)
     }
     res.json(contact);
   } catch (err) {
@@ -55,10 +62,11 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchemaReq.validate(req.body);
     if (error) {
-      throw httpErr(400, error.message);
+      console.error(error);
+      next(error)
     }
-    const { name, email, phone } = req.body;
-    const newContact = await contacts.addContact({ name, email, phone });
+    const { name, email, phone, favorite = false } = req.body;
+    const newContact = await contacts.addContact({ name, email, phone, favorite});
     res.status(201).json(newContact);
   } catch (err) {
     next(err);
@@ -70,7 +78,8 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const removeContact = await contacts.removeContact(contactId);
     if (!removeContact) {
-      throw httpErr(404, "Not Found");
+      console.error(error);
+      next(error)
     }
     res.json({ message: "Delete success" });
   } catch (err) {
@@ -85,6 +94,27 @@ router.put("/:contactId", async (req, res, next) => {
     }
 
     const { error, value } = addSchema.validate(req.body);
+    if (error) {
+      return res
+        .status(400)
+        .json({ message: "Validation error", details: error.details });
+    }
+
+    const { contactId } = req.params;
+    const updateContactId = await contacts.updateContact(contactId, req.body);
+    res.json(updateContactId);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    if (Object.keys(req.body).length < 1) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+
+    const { error, value } = addSchemaFavorite.validate(req.body);
     if (error) {
       return res
         .status(400)

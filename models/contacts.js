@@ -3,44 +3,59 @@ const path = require("path");
 const { nanoid } = require("nanoid");
 const contactsPath = path.join(__dirname, "contacts.json");
 
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const contacts = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  }, 
+  { versionKey: false }
+);
+
+const Contacts = mongoose.model("contacts", contacts);
+
 const listContacts = async () => {
-  const data = await fs.readFile(`${contactsPath}`, "utf-8");
-  return JSON.parse(data);
+  return Contacts.find();
 };
 
-const getContactById = async (contactId) => {
-  const data = await listContacts();
-  const result = data.find((contact) => contact.id === contactId);
-  return result || null;
+const getContactById = async (id) => {
+  return Contacts.findOne({ _id: id });
 };
 
-const removeContact = async (contactId) => {
-  const data = await listContacts();
-  const result = data.filter((contact) => contact.id !== contactId);
-  await fs.writeFile(`${contactsPath}`, JSON.stringify(result, null, 2));
-  return result || null;
+const removeContact = async (id) => {
+  const result = await getContactById(id)
+  console.log(result)
+  if(result) {
+    return Contacts.findByIdAndRemove({ _id: id })
+  } else { 
+    return null
+  }
 };
 
 const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: nanoid(),
-    ...body,
-  };
-  contacts.push(newContact);
-  await fs.writeFile(`${contactsPath}`, JSON.stringify(contacts, null, 2));
-  return newContact;
+  return Contacts.create(body);
 };
 
 const updateContact = async (id, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  if (index === -1) {
-    return null;
-  };
-  contacts[index] = { ...contacts[index], ...body };
-  await fs.writeFile(`${contactsPath}`, JSON.stringify(contacts, null, 2));
-  return contacts[index];
+  return Contacts.findByIdAndUpdate({ _id: id }, body, { new: true });
+};
+
+const patchContact = async (id, body) => {
+  return Contacts.findByIdAndUpdate({ _id: id }, body, { new: true });
 };
 
 module.exports = {
@@ -49,4 +64,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  patchContact,
 };
