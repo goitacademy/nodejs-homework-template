@@ -4,8 +4,7 @@ const app = require("./app");
 
 // 8trROvdDe11DilYW
 
-const DB_HOST =
-  "mongodb+srv://SergiiNew:8trROvdDe11DilYW@cluster0.uvvqxha.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const { DB_HOST } = process.env;
 
 mongoose
   .connect(DB_HOST)
