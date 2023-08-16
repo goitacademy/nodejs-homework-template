@@ -2,6 +2,7 @@ const Joi = require("joi");
 const { findUser, checkUser } = require("../helpers");
 
 const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+const subscriptions = ["starter", "pro", "business"];
 
 const schemaRegistration = Joi.object()
   .options({ abortEarly: false })
@@ -9,6 +10,10 @@ const schemaRegistration = Joi.object()
     name: Joi.string().min(3).max(12).required(),
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
+    subscription: Joi.any()
+      .valid(...subscriptions)
+      .default("starter"),
+    token: Joi.string().default(null),
   })
   .external(findUser);
 
@@ -19,6 +24,12 @@ const schemaLogin = Joi.object()
     password: Joi.string().min(6).required(),
   });
 // .external(checkUser);
+
+const schemaSubscription = Joi.object({
+  subscription: Joi.any()
+    .valid(...subscriptions)
+    .required(),
+});
 
 const validate = async (schema, obj, next) => {
   try {
@@ -41,7 +52,7 @@ module.exports = {
   login: async (req, res, next) => {
     return await validate(schemaLogin, req.body, next);
   },
-  // updateSubscription: async (req, res, next) => {
-  //   return await validate(schemaSubscription, req.body, next);
-  // },
+  updateSubscription: async (req, res, next) => {
+    return await validate(schemaSubscription, req.body, next);
+  },
 };
