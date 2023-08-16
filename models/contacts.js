@@ -1,7 +1,47 @@
+const express = require("express");
 const Contact = require("./schemas/contact");
 const User = require("./schemas/users");
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
+const jwt = require("jsonwebtoken");
+const secret = "secret word";
+const passportJWT = require("passport-jwt");
+const passport = require("passport");
+const ExtractJWT = passportJWT.ExtractJwt;
+const Strategy = passportJWT.Strategy;
+const params = {
+  secretOrKey: secret,
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+};
+
+passport.use(
+  new Strategy(params, function (payload, done) {
+    User.find({ _id: payload.id })
+      .then(([user]) => {
+        if (!user) {
+          return done(new Error("User not found"));
+        }
+        return done(null, user);
+      })
+      .catch((err) => done(err));
+  })
+);
+const auth = (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, (err, user) => {
+    if (!user || err) {
+      console.log("Authentication failed:", err);
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Unauthorized",
+        data: "Unauthorized",
+      });
+    }
+    req.user = user;
+    console.log("Authenticated user:", user);
+    next();
+  })(req, res, next);
+};
 
 const listContacts = async () => {
   try {
@@ -80,22 +120,35 @@ const signup = async (email, password) => {
 
 const login = async (email, password) => {
   try {
-    return await User.findOne({ email }).then(async (user) => {
-      if (!user) {
-        return { message: "401" };
-      }
-      const match = await bcrypt.compare(password, user.password);
-      if (!match) {
-        return { message: "401" };
-      }
-      return user;
-    });
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return { message: "401" };
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return { message: "401" };
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+    };
+
+    const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+
+    user.token = token;
+    await user.save();
+
+    return { user, token };
   } catch (err) {
     return err;
   }
 };
 
 module.exports = {
+  auth,
   login,
   signup,
   listContacts,

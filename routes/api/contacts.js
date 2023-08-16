@@ -4,7 +4,8 @@ const router = express.Router();
 
 const contactsFunc = require("../../models/contacts");
 
-router.get("/", async (req, res, next) => {
+router.get("/", contactsFunc.auth, async (req, res, next) => {
+  console.log(req.user);
   const list = await contactsFunc.listContacts();
   console.log("Contacts:");
   console.log(list);
@@ -110,16 +111,27 @@ router.post("/users/login", async (req, res, next) => {
     return res.status(400).json({ message: "please enter email and password" });
   }
 
-  const signup = await contactsFunc.login(email, password);
-  console.log("signup: ", signup);
-  if (signup.message === "401") {
-    return res.status(401).json({ message: "Email or password is wrong" });
-  }
-  if (signup.message === "400") {
-    return res.status(400).json({ message: "Registration validation error" });
-  }
+  try {
+    const loginResult = await contactsFunc.login(email, password);
 
-  return res.status(200).json(signup);
+    if (loginResult.message === "401") {
+      return res.status(401).json({ message: "Email or password is wrong" });
+    }
+    if (loginResult.message === "400") {
+      return res.status(400).json({ message: "Registration validation error" });
+    }
+    const token = loginResult.token;
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        token,
+      },
+    });
+    // return res.status(200).json({ token: `Bearer ${loginResult.token}` });
+  } catch (err) {
+    return res.status(500).json({ message: "Something went wrong" });
+  }
 });
 
 module.exports = router;

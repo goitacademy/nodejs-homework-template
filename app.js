@@ -7,8 +7,6 @@ const contactsRouter = require("./routes/api/contacts");
 const uriDb =
   "mongodb+srv://cmdspeed:qwertyuiop69@goit.yo8ofoh.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
-  
-
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -41,7 +39,6 @@ connection
   .catch((err) => {
     console.log(`Server not running. Error message: ${err.message}`);
     process.exit(1);
-  }
-  );
+  });
 
 module.exports = app;
