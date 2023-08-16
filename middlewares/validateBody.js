@@ -17,21 +17,24 @@ const validateBody = (schema, operation) => {
 
       // Якщо є помилка "required", виводимо кастомнє повідомлення
       if (operation === "add" && requiredError) {
-        errorMessage = `Missing required ${fieldName} field`;
+        const errorMessage = `Missing required ${fieldName} field`;
+        return res.status(400).json({ message: errorMessage });
       } else if (operation === "update") {
         if (!req.body || Object.keys(req.body).length === 0) {
           // Якщо тіло запиту відсутнє або воно пусте, виводимо кастомнє повідомлення
-          errorMessage = "Missing fields";
+          const errorMessage = "Missing fields";
+          return res.status(400).json({ message: errorMessage });
         } else if (!req.body[fieldName]) {
           // Якщо якесь поле запиту відсутнє, виводимо кастомнє повідомлення
-          errorMessage = `Missing required ${fieldName} field`;
+          const errorMessage = `Missing required ${fieldName} field`;
+          return res.status(400).json({ message: errorMessage });
+        } else {
+          // В інших випадках, використовуємо дефолтне повідомлення від Joi
+          errorMessage = error.details[0].message;
         }
-      } else {
-        // В інших випадках, використовуємо дефолтне повідомлення від Joi
-        errorMessage = error.details[0].message;
-      }
 
-      next(HttpError(400, errorMessage));
+        next(HttpError(400, errorMessage));
+      }
     }
     next();
   };

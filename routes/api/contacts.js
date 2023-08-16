@@ -20,12 +20,12 @@ router.get("/:contactId", isValidId, ctrl.getContactById);
 router.post("/", validateBody(schemas.addSchema, "add"), ctrl.addContacts);
 
 // видалення контакту
-router.delete("/:contactId", ctrl.removeContacts);
+router.delete("/:contactId", isValidId, ctrl.removeContacts);
 
 // внесення змін до контакту
 router.put("/:contactId", [
   isValidId,
-  validateBody(schemas.addSchema),
+  validateBody(schemas.addSchema, "update"),
   ctrl.updateContact,
 ]);
 
@@ -33,7 +33,7 @@ router.put("/:contactId", [
 router.patch(
   "/:contactId/favorite",
   isValidId,
-  validateBody(schemas.updateFavoriteSchema),
+  validateBody(schemas.updateFavoriteSchema, "update"),
   ctrl.updateStatusContact
 );
 

@@ -41,14 +41,14 @@ const removeContacts = async (req, res) => {
 
 // внесення змін до контакту
 const updateContact = async (req, res) => {
-  console.log("updateContact-terminal");
+  // console.log("updateContact-terminal");
   const { contactId } = req.params;
-  console.log("contactIdUpdate - ", contactId);
+  // console.log("contactIdUpdate - ", contactId);
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
 
-  console.log("result-updateContact - ", result);
+  // console.log("result-updateContact - ", result);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -57,12 +57,12 @@ const updateContact = async (req, res) => {
 
 // оновлення поля favorite
 const updateStatusContact = async (req, res) => {
-  console.log("updateStatusContact-terminal");
+  // console.log("updateStatusContact-terminal");
   const { contactId } = req.params;
-  console.log("contactIdFavorite - ", contactId);
+  // console.log("contactIdFavorite - ", contactId);
 
   const { favorite } = req.body;
-  console.log("favorite - ", favorite);
+  // console.log("favorite - ", favorite);
 
   if (favorite === undefined) {
     throw HttpError(400, "missing field favorite");
@@ -74,7 +74,7 @@ const updateStatusContact = async (req, res) => {
     { new: true }
   );
 
-  console.log("result-updateStatusContact - ", result);
+  // console.log("result-updateStatusContact - ", result);
   if (!result) {
     throw HttpError(404, `Contact with id= ${contactId} not found`);
   }
