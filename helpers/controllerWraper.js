@@ -1,5 +1,5 @@
 const conrollerWraper = (controller) => {
-  const func = async (req, res, next) => {
+  return async (req, res, next) => {
     try {
       await controller(req, res, next);
     } catch (error) {
@@ -10,7 +10,6 @@ const conrollerWraper = (controller) => {
       res.status(status).json({ status: "fail", code: status, message });
     }
   };
-  return func;
 };
 
 module.exports = { conrollerWraper };

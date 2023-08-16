@@ -1,24 +1,26 @@
 const express = require("express");
 const {
-  getAll,
-  getById,
-  createContact,
-  deleteContact,
-  rewriteContact,
+  getAllContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
 } = require("../../controllers/contacts");
 const { validationBody } = require("../../middlewares/validationBody");
-const { addSchema } = require("../../schemas/contacts");
+const {
+  addSchema,
+} = require("../../utils/validation/contactValidationSchemas");
 
 const router = express.Router();
 
-router.get("/", getAll);
+router.get("/", getAllContacts);
 
-router.get("/:contactId", getById);
+router.get("/:contactId", getContactById);
 
-router.post("/", validationBody(addSchema), createContact);
+router.post("/", validationBody(addSchema), addContact);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", validationBody(addSchema), rewriteContact);
+router.put("/:contactId", validationBody(addSchema), updateContact);
 
 module.exports = router;

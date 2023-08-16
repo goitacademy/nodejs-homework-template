@@ -2,21 +2,21 @@ const path = require("path");
 const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 // const contactsList = require("./contacts.json");
-const contactsPath = path.join(__dirname, "./contacts.json");
+const contactsPath = path.join(__dirname, "../models/contacts.json");
 
-const listContacts = async () => {
+const getAllContactsService = async () => {
   const contacts = await fs.readFile(contactsPath);
   return JSON.parse(contacts);
 };
 
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
+const getContactByIdService = async (contactId) => {
+  const contacts = await getAllContactsService();
   const [contact] = contacts.filter(({ id }) => contactId === id);
   return contact;
 };
 
-const addContact = async (body) => {
-  const contacts = await listContacts();
+const addContactService = async (body) => {
+  const contacts = await getAllContactsService();
   const newContact = {
     id: nanoid(),
     ...body,
@@ -26,8 +26,8 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
+const removeContactService = async (contactId) => {
+  const contacts = await getAllContactsService();
   const deletedContact = contacts.filter(({ id }) => contactId !== id);
 
   if (deletedContact.length !== contacts.length) {
@@ -37,8 +37,8 @@ const removeContact = async (contactId) => {
   return false;
 };
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
+const updateContactService = async (contactId, body) => {
+  const contacts = await getAllContactsService();
   const findContactIndex = contacts.findIndex(({ id }) => id === contactId);
   if (findContactIndex === -1) {
     return false;
@@ -50,9 +50,9 @@ const updateContact = async (contactId, body) => {
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  getAllContactsService,
+  getContactByIdService,
+  removeContactService,
+  addContactService,
+  updateContactService,
 };
