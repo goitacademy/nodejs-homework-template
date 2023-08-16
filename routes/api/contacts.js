@@ -5,14 +5,13 @@ const router = express.Router();
 const contactsFunc = require("../../models/contacts");
 
 router.get("/", contactsFunc.auth, async (req, res, next) => {
-  console.log(req.user);
   const list = await contactsFunc.listContacts();
   console.log("Contacts:");
   console.log(list);
   res.status(200).json(list);
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", contactsFunc.auth, async (req, res, next) => {
   const contact = await contactsFunc.getContactById(req.params.contactId);
 
   if (!contact) {
@@ -21,7 +20,7 @@ router.get("/:contactId", async (req, res, next) => {
   res.status(200).json(contact);
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", contactsFunc.auth, async (req, res, next) => {
   const { name, email, phone } = req.body;
 
   if (!name || !email || !phone) {
@@ -35,7 +34,7 @@ router.post("/", async (req, res, next) => {
   res.status(201).json(newContact);
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", contactsFunc.auth, async (req, res, next) => {
   const { contactId } = req.params;
 
   const contacts = await contactsFunc.listContacts();
@@ -52,7 +51,7 @@ router.delete("/:contactId", async (req, res, next) => {
   });
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", contactsFunc.auth, async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
   if (!name && !email && !phone) {
@@ -71,26 +70,30 @@ router.put("/:contactId", async (req, res, next) => {
   return res.status(200).json({ message: "contact updated" });
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
-  const { contactId } = req.params;
-  const { favorite } = req.body;
-  if (!favorite) {
-    return res.status(400).json({ message: "missing field favorite" });
+router.patch(
+  "/:contactId/favorite",
+  contactsFunc.auth,
+  async (req, res, next) => {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    if (!favorite) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+    const updateStatus = await contactsFunc.updateStatusContact(
+      contactId,
+      req.body
+    );
+    if (updateStatus.message === "validationError") {
+      return res
+        .status(404)
+        .json({ message: "validation failed, " + updateStatus.err.message });
+    }
+    if (!updateStatus) {
+      return res.status(404).json({ message: "not found" });
+    }
+    return res.status(200).json(updateStatus);
   }
-  const updateStatus = await contactsFunc.updateStatusContact(
-    contactId,
-    req.body
-  );
-  if (updateStatus.message === "validationError") {
-    return res
-      .status(404)
-      .json({ message: "validation failed, " + updateStatus.err.message });
-  }
-  if (!updateStatus) {
-    return res.status(404).json({ message: "not found" });
-  }
-  return res.status(200).json(updateStatus);
-});
+);
 
 router.post("/users/signup", async (req, res, next) => {
   const { email, password } = req.body;
