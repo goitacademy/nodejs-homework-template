@@ -19,7 +19,7 @@ contactsRouter.post('/',validateBody(contactsSchema.contactsAddSchema), contacts
 
 contactsRouter.delete('/:contactId', isValidId, contactsController.deleteById);
 
-contactsRouter.put('/:contactId', isValidId, isEmptyBody, contactsController.updateById);
+contactsRouter.put('/:contactId', isValidId, isEmptyBody, validateBody(contactsSchema.contactsAddSchema), contactsController.updateById);
 
 contactsRouter.patch('/:contactId/favorite', isValidId, isEmptyBody, validateBody(contactsSchema.contactUpdateFavoriteSchema), contactsController.updateFavorite);
 
