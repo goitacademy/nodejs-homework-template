@@ -22,7 +22,7 @@ app.get("/contacts", (req, res) => {
 });
 
 app.get("/contacts/:id", (req, res) => {
-  res.send(`<h1>Contact page</h1> Parameter: ${req.params.id} `);
+  res.send(`<h1>Contact page</h1> Parameter: ${req.params.id}`);
 });
 
 app.use((req, res, next) => {
