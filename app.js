@@ -1,19 +1,20 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+require('dotenv').config();
+// const mongoose = require('mongoose');
 
-const mongoose = require('mongoose');
+// const DB_HOST = 'mongodb+srv://user_24:x2fiWo32LJ257GCR@cluster0.zzgsa5u.mongodb.net/Contacts_list?retryWrites=true&w=majority';
+// const DB_HOST = 'mongodb+srv://user_24:x2fiWo32LJ257GCR@cluster0.zzgsa5u.mongodb.net/Contacts_list';
 
-const DB_HOST = 'mongodb+srv://user_24:x2fiWo32LJ257GCR@cluster0.zzgsa5u.mongodb.net/Contacts_list?retryWrites=true&w=majority';
+// mongoose.set('strictQuery', true);
 
-mongoose.set('strictQuery', true);
+// mongoose
+//   .connect(DB_HOST)
+//   .then(() => console.log('Database connection successful'))
+//   .catch((error) => console.log(error.message));
 
-mongoose
-  .connect(DB_HOST)
-  .then(() => console.log('Database connection successful'))
-  .catch((error) => console.log(error.message));
-
-const contactsRouter = require('./routes/api/contacts');
+// const contactsRouter = require('./routes/api/contacts');
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/contacts', contactsRouter);
+// app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
