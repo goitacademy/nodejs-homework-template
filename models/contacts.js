@@ -1,5 +1,6 @@
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
+import nanoid from "nanoid";
 
 const contactsPath = path.join("models", "contacts.json");
 
@@ -53,7 +54,7 @@ export const addContact = async (body) => {
     const contacts = await listContacts();
     const { email, phone, name } = body;
     const newContact = {
-      id: (contacts.length + 1).toString(),
+      id: nanoid(),
       name,
       email,
       phone,

@@ -56,7 +56,7 @@ router.post("/", async (req, res, next) => {
   const body = req.body;
   try {
     const { error } = contactSchema.validate(body);
-    const contact = await addContact(body);
+
     if (error) {
       return res.status(400).json({
         message: `missing required field`,
@@ -64,6 +64,8 @@ router.post("/", async (req, res, next) => {
         code: 400,
       });
     }
+
+    const contact = await addContact(body);
     res.json({
       message: "contact added",
       status: "success",
@@ -97,7 +99,6 @@ router.put("/:id", async (req, res, next) => {
 
   try {
     const { error } = contactSchema.validate(body);
-    const contact = await getContactById(id);
 
     if (error) {
       return res.status(400).json({
@@ -106,6 +107,9 @@ router.put("/:id", async (req, res, next) => {
         code: 400,
       });
     }
+
+    const contact = await getContactById(id);
+
     if (!contact) {
       return res.status(404).json({
         message: "Contact not found",
