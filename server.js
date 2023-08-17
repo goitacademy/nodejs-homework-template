@@ -1,8 +1,6 @@
-const path = require("path");
 const app = require("./app");
 require("colors");
-const configPath = path.join(__dirname, "./config/.env");
-require("dotenv").config({ path: configPath });
+require("dotenv").config();
 
 const { DEV_SERVER_PORT = 3000 } = process.env;
 
