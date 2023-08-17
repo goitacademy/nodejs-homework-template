@@ -28,6 +28,12 @@ const validateBody = (schema, operation) => {
           // Якщо якесь поле запиту відсутнє, виводимо кастомнє повідомлення
           const errorMessage = `Missing required ${fieldName} field`;
           return res.status(400).json({ message: errorMessage });
+        }
+      } else if (operation === "updateStatus") {
+        if (!req.body || Object.keys(req.body).length === 0) {
+          // Якщо тіло запиту відсутнє або воно пусте, виводимо кастомнє повідомлення
+          const errorMessage = "Missing fields favorite";
+          return res.status(400).json({ message: errorMessage });
         } else {
           // В інших випадках, використовуємо дефолтне повідомлення від Joi
           errorMessage = error.details[0].message;
