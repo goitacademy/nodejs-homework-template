@@ -1,5 +1,7 @@
 const fs = require("fs/promises");
+
 const path = require("path");
+
 const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
@@ -19,14 +21,11 @@ const removeContact = async (contactId) => {
   const contactIndex = contacts.findIndex(
     (contact) => contact.id === contactId
   );
-
   if (contactIndex === -1) {
     return null;
   }
-
   const removedContact = contacts.splice(contactIndex, 1)[0];
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
   return removedContact;
 };
 
