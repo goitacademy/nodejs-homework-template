@@ -5,7 +5,16 @@ const router = express.Router();
 const contactsFunc = require("../../models/contacts");
 
 router.get("/", contactsFunc.auth, async (req, res, next) => {
-  const list = await contactsFunc.listContacts();
+  const { page = 1, limit = 20, favorite } = req.query;
+
+  const parsedPage = parseInt(page);
+  const parsedLimit = parseInt(limit);
+
+  const list = await contactsFunc.listContacts(
+    parsedPage,
+    parsedLimit,
+    favorite
+  );
   console.log("Contacts:");
   console.log(list);
   res.status(200).json(list);
@@ -158,6 +167,27 @@ router.get("/users/current", contactsFunc.auth, async (req, res, next) => {
     });
   } catch (err) {
     return res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+router.patch("/users", contactsFunc.auth, async (req, res, next) => {
+  const { subscription } = req.body;
+  const allowedSubscriptions = ["starter", "pro", "business"];
+  if (!allowedSubscriptions.includes(subscription)) {
+    return res.status(400).json({ message: "Invalid subscription value" });
+  }
+
+  const user = req.user;
+
+  try {
+    user.subscription = subscription;
+    await user.save();
+    res.status(200).json({
+      email: user.email,
+      subscription: user.subscription,
+    });
+  } catch (err) {
+    return res.status(500).json({ message: "Error updating subscription" });
   }
 });
 
