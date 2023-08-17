@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const { handlerSchemaValidationErrors } = require("../helpers/index");
+
 const contactSchema = new Schema(
   {
     name: {
@@ -30,14 +32,7 @@ const addSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
-const handlerErrors = (error, data, next) => {
-  const { name, code } = error;
-  console.log(name);
-  console.log(code);
-  console.log("handler working");
-};
-
-contactSchema.post("save", handlerErrors);
+contactSchema.post("save", handlerSchemaValidationErrors);
 
 const schemas = {
   addSchema,
