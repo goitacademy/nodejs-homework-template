@@ -13,7 +13,7 @@ const updateSubscription = catchAsync(async (req, res, next) => {
 
   await service.updateSubscription(_id, subscription);
 
-  return res.status(200).json({
+  res.status(200).json({
     data: {
       user: {
         email: email,
