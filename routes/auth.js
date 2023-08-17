@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const passport = require('passport');
 const User = require('../models/user.js')
 const { validate } = require('uuid')
-const auth = require('../middleware/authorization.js')
+const auth = require('../middleware/auth.js')
 
 const { SECRET } = process.env;
 
@@ -86,15 +86,23 @@ router.post('/login', async (req, res, next) => {
 
 router.get('/logout', auth, async (req, res, next) => {
     try {
-        let { _id } = req.user;
-        console.log(_id);
+        const { _id } = req.user;
         await User.findByIdAndUpdate(_id, { token: null });
-       _id = null;
+        req = null;
         res.json({ message: "logged out" });
     } catch (error) {
         next(error);
     }
 
+})
+
+router.get('/current', auth, async (req, res, next) => {
+    try {
+        const {email, subscription } = req.user;
+        res.json({email, subscription})
+    } catch (error) {
+        next(error)
+    }
 })
 
 module.exports = router; 
