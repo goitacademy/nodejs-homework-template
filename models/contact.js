@@ -32,10 +32,15 @@ const addSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
 contactSchema.post("save", handlerSchemaValidationErrors);
 
 const schemas = {
   addSchema,
+  updateFavoriteSchema,
 };
 
 const Contact = model("contact", contactSchema);
