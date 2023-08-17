@@ -4,6 +4,12 @@ const path = require("path");
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
+  // try {
+  //   const docs = await Book.find().exec();
+  //   res.json(docs);
+  // } catch (error) {
+  //   throw errorHandler(404, "Not found");
+  // }
   const data = await fs.readFile(contactsPath, "utf-8");
   const parsedData = await JSON.parse(data);
   return parsedData;
@@ -54,7 +60,6 @@ const updateContact = async (contactId, body) => {
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
-
 
 module.exports = {
   listContacts,
