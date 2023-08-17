@@ -4,10 +4,11 @@ require("colors");
 const configPath = path.join(__dirname, "./config/.env");
 require("dotenv").config({ path: configPath });
 
-const SERVER_PORT = process.env.SERVER_PORT || 3000;
+const { DEV_SERVER_PORT = 3000 } = process.env;
 
-app.listen(SERVER_PORT, () => {
+app.listen(DEV_SERVER_PORT, () => {
   console.log(
-    `Server running. Use our API on port: ${SERVER_PORT}`.black.bgBrightGreen
+    `Server running. Use our API on port: ${DEV_SERVER_PORT}`.black
+      .bgBrightGreen
   );
 });
