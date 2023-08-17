@@ -31,6 +31,9 @@ const addSchema = Joi.object({
 });
 
 const handlerErrors = (error, data, next) => {
+  const { name, code } = error;
+  console.log(name);
+  console.log(code);
   console.log("handler working");
 };
 
