@@ -1,4 +1,3 @@
-const express = require("express");
 const Contact = require("./schemas/contact");
 const User = require("./schemas/users");
 const bcrypt = require("bcryptjs");
@@ -45,7 +44,7 @@ const auth = (req, res, next) => {
 const listContacts = async (page, limit, favorite) => {
   try {
     const skip = (page - 1) * limit;
-    let query = {};
+    const query = {};
     if (favorite !== undefined) {
       query.favorite = favorite;
     }
