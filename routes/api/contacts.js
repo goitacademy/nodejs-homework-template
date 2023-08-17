@@ -142,7 +142,20 @@ router.post("/users/logout", contactsFunc.auth, async (req, res, next) => {
       return res.status(400).json({ message: "You're not logged in" });
     }
     const logout = await contactsFunc.logout(req.user.id);
+    req.user = null;
     return res.status(204).json({ message: "No Content" });
+  } catch (err) {
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+router.get("/users/current", contactsFunc.auth, async (req, res, next) => {
+  try {
+    console.log(req.user);
+    res.status(200).json({
+      email: req.user.email,
+      subscription: req.user.subscription,
+    });
   } catch (err) {
     return res.status(500).json({ message: "Something went wrong" });
   }
