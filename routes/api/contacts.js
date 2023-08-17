@@ -6,7 +6,7 @@ import {
   removeContact,
   addContact,
   updateContact,
-  patchContact,
+  updatedStatusContact,
 } from './../../models/contacts.js';
 
 export const router = express.Router();
@@ -97,19 +97,20 @@ router.put('/:id', async (req, res, next) => {
 
 router.patch('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const body = req.body;
+  const { body } = req;
+  const { favorite } = body;
 
   if (!('favorite' in body) || Object.keys(body).length === 0) {
     return res.status(400).json('Error! Missing field favorite!');
   }
 
   try {
-    const updatedContact = await patchContact(id, body);
+    const updatedStatus = await updatedStatusContact(id, favorite);
 
     return res.json({
       status: 'success',
       code: 200,
-      data: { updatedContact },
+      data: { updatedStatus },
     });
   } catch (err) {
     res.status(500).json(`An error occurred while updating the contact: ${err}`);

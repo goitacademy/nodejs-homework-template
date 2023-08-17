@@ -45,11 +45,11 @@ export const updateContact = async (contactId, body) => {
   }
 };
 
-export const patchContact = async (contactId, body) => {
+export const updatedStatusContact = async (contactId, favorite) => {
   try {
     return await Contact.findByIdAndUpdate(
       { _id: contactId },
-      { $set: { favorite: body.favorite } },
+      { $set: { favorite: favorite } },
       { new: true }
     );
   } catch (err) {
