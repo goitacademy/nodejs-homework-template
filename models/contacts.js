@@ -1,19 +1,38 @@
-// const fs = require('fs/promises')
+const mongoose = require('mongoose');
 
-const listContacts = async () => {}
+const contactSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  author: {
+    type: String,
+    required: true
+  },
+  genre: {
+    type: String,
+    required: true,
+    enum: [
+      "Action",
+      "Biography",
+      "History",
+      "Horroe",
+      "Kids",
+      "Learning",
+      "Sci-Fi",
+      "Thrailer",
+      "History drama",
+      "War",
+    ],
+  },
+  year: {
+    type: Number,
+    required: true
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const getContactById = async (contactId) => {}
-
-const removeContact = async (contactId) => {}
-
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = mongoose.model("Book", contactSchema)
