@@ -42,7 +42,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const body = req.body;
+  const { body } = req;
 
   if (Object.keys(body).length === 0) {
     return res.status(400).json('Error! Missing fields! Empty request is not allowed');
@@ -76,7 +76,7 @@ router.delete('/:id', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const body = req.body;
+  const { body } = req;
 
   if (Object.keys(body).length === 0) {
     return res.status(400).json('Error! Missing fields! Empty request is not allowed');
