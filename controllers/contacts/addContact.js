@@ -1,5 +1,5 @@
-const Contact = require("../../models/contact");
-const { schemas } = require("../../models/contact");
+// const Contact = require("../../models/contact");
+const { Contact, schemas } = require("../../models/contact");
 
 const addContact = async (req, res, next) => {
   try {
