@@ -29,7 +29,6 @@ passport.use(
 const auth = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
     if (!user || err) {
-      console.log("Authentication failed:", err);
       return res.status(401).json({
         status: "error",
         code: 401,
@@ -38,7 +37,7 @@ const auth = (req, res, next) => {
       });
     }
     req.user = user;
-    console.log("Authenticated user:", user);
+
     next();
   })(req, res, next);
 };
@@ -147,7 +146,16 @@ const login = async (email, password) => {
   }
 };
 
+const logout = async (id) => {
+  const user = await User.findById(id);
+
+  user.token = null;
+  await user.save();
+  return user;
+};
+
 module.exports = {
+  logout,
   auth,
   login,
   signup,

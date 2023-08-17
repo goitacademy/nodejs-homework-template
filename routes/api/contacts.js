@@ -131,7 +131,18 @@ router.post("/users/login", async (req, res, next) => {
         token,
       },
     });
-    // return res.status(200).json({ token: `Bearer ${loginResult.token}` });
+  } catch (err) {
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+});
+
+router.post("/users/logout", contactsFunc.auth, async (req, res, next) => {
+  try {
+    if (!req.user.id) {
+      return res.status(400).json({ message: "You're not logged in" });
+    }
+    const logout = await contactsFunc.logout(req.user.id);
+    return res.status(204).json({ message: "No Content" });
   } catch (err) {
     return res.status(500).json({ message: "Something went wrong" });
   }
