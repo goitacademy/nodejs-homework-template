@@ -2,6 +2,17 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
+const mongoose = require('mongoose');
+
+const DB_HOST = 'mongodb+srv://user_24:x2fiWo32LJ257GCR@cluster0.zzgsa5u.mongodb.net/Contacts_list?retryWrites=true&w=majority';
+
+mongoose.set('strictQuery', true);
+
+mongoose
+  .connect(DB_HOST)
+  .then(() => console.log('Database connection successful'))
+  .catch((error) => console.log(error.message));
+
 const contactsRouter = require('./routes/api/contacts');
 
 const app = express();
