@@ -20,8 +20,6 @@
     "mongose": "^0.0.2-security",
     "morgan": "1.10.0",
     "nanoid": "^4.0.2",
-    "passport": "^0.6.0",
-    "passport-jwt": "^4.0.1",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
