@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Joi = require('joi')
 const Contact = require('../models/contact.js')
-const auth = require('../middleware/authorization.js')
+const auth = require('../middleware/auth.js')
 
 const contactSchema = Joi.object({
     name: Joi.string(),
@@ -30,8 +30,8 @@ router.get('/:id', auth, async (req, res, next) => {
         const { id } = req.params;
         const { _id: owner } = req.user;
         const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
-        const contact = contacts.filter(contact => contact.id === id);
-        if (!contact) {
+        const contact = contacts && contacts.filter(contact => contact.id === id);
+        if (!contact.length) {
             throw new Error('Contact not found')
         }
         res.status(200).json(
@@ -76,6 +76,7 @@ router.put('/:id', auth, async (req, res, next) => {
     try {
         const { body } = req;
         const { id } = req.params;
+        const { _id: owner } = req.user;
         const validate = contactSchema.validate(
             body
         );
@@ -83,6 +84,11 @@ router.put('/:id', auth, async (req, res, next) => {
             status: "failed",
             message: validate.error.message
         });
+        const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
+        const contact = contacts.filter(contact => contact.id === id);
+        if (!contact.length) {
+            throw new Error('Contact not found')
+        }
         const updatedContact = await Contact.findByIdAndUpdate(
             id,
             body,
@@ -105,6 +111,12 @@ router.put('/:id', auth, async (req, res, next) => {
 router.delete('/:id', auth, async (req, res, next) => {
     try {
         const { id } = req.params;
+        const { _id: owner } = req.user;
+        const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
+        const contact = contacts.filter(contact => contact.id === id);
+        if (!contact.length) {
+            throw new Error('Contact not found')
+        }
         const deletedContact = await Contact.findByIdAndRemove(id);
         if (!deletedContact) {
             throw new Error('Contact not found')
