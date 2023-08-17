@@ -33,17 +33,18 @@
 // //   console.log(req);
 // // });
 const path = require("path");
-const env = path.join(__dirname, "config", ".env");
+const env = path.join(__dirname, "..", ".env");
 require("dotenv").config({ path: env });
 const mongoose = require("mongoose");
 
-console.log(process.env.DB_NAME);
-// const DB_USER = process.env.DB_USER;
+const { DB_USER, DB_PASS, DB_NAME } = process.env;
+console.log(DB_USER);
+console.log(DB_PASS);
+console.log(DB_NAME);
 
-const DB_HOST = null;
-
+const HOST = `mongodb+srv://${DB_USER}:${DB_PASS}@cluster0.domin4s.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 mongoose
-  .connect(DB_HOST)
+  .connect(HOST)
   .then(() => {
     console.log("Database success connect");
   })
