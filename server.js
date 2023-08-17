@@ -15,3 +15,5 @@ mongoose
     console.log(error.message);
     procces.exit(1);
   });
+
+// config.js
