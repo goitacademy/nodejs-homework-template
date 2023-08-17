@@ -1,5 +1,5 @@
 const fs = require("fs/promises");
-
+// coś nie działa
 const path = require("path");
 
 const contactsPath = path.join("models", "contacts.json");
