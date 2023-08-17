@@ -49,6 +49,8 @@ const addContact = async (name, email, phone) => {
   return newContact;
 };
 
+// For the option to retrieve data from a file
+
 const updateContact = async (
   contactId,
   name = null,
