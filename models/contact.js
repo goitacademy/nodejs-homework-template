@@ -30,11 +30,11 @@ const addSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
-const handlerErrors = (error, data, next) => {
-  console.log("handler working");
-};
+// const handlerErrors = (error, data, next) => {
+//   console.log("handler working");
+// };
 
-contactSchema.post("save", handlerErrors);
+// contactSchema.post("save", handlerErrors);
 
 const schemas = {
   addSchema,
