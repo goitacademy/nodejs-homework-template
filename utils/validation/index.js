@@ -4,7 +4,7 @@ const {
   updateStatusContactValidator,
 } = require("./contactsValidators");
 const isValidId = require("./isValidId");
-const { registration, login } = require("./usersValidation");
+const { registration, login, emailValidation } = require("./usersValidation");
 
 module.exports = {
   createContactValidator,
@@ -13,4 +13,5 @@ module.exports = {
   registration,
   login,
   isValidId,
+  emailValidation,
 };

@@ -16,6 +16,7 @@ const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
   const user = await service.findUserByEmail(email);
+
   if (!user) throw new AppError(401, "email or password is invalid");
 
   const passwordCompare = await bcrypt.compare(password, user.password);
