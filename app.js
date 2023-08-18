@@ -1,25 +1,33 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+const dotenv = require("dotenv"); // імпортуємо пакет doterv який завантажує змінні середовища з .env
 
-const contactsRouter = require('./routes/api/contacts')
+dotenv.config(); // викликаємо метод config який у корні проєкту шукає файл .env і дані з цього файлу додає у змінні оточення (об'єкт process.env)
 
-const app = express()
+const contactsRouter = require("./routes/api/contacts"); // імпортуємо "сторінку записної книжки"
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const app = express(); // створюємо веб-сервер
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use('/api/contacts', contactsRouter)
+app.use(logger(formatsLogger)); // міделвара яка виводить у консоль інформацію про запит
 
+app.use(cors()); // міделвара кросдомених запитів-скорочений запис(Прим.1)
+
+app.use(express.json()); // міделвара яка перевіряє чи є тіло в запиті при виклику функції додавання контакту
+
+app.use("/api/contacts", contactsRouter); // вказуємо серверу де знаходяться маршрути для всіх запитів які починаються з - /api/contacts
+
+// обробляємо помилку 404 в ситуації коли запит прийшов на адресу якої не має
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found" });
+});
 
+// обробка помилок
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+module.exports = app;
