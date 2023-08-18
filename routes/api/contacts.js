@@ -114,7 +114,9 @@ router.post("/users/signup", async (req, res, next) => {
     return res.status(409).json({ message: "Email in use" });
   }
 
-  return res.status(201).json(newUser);
+  return res
+    .status(201)
+    .json({ message: "new User " + newUser.email + " created!" });
 });
 
 router.post("/users/login", async (req, res, next) => {
