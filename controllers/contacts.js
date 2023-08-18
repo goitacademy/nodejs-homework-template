@@ -17,8 +17,10 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
+    const { _id: owner } = req.user;
     const { contactId } = req.params;
-    const result = await Contact.findById(contactId);
+
+    const result = await Contact.findOne({ _id: contactId, owner });
     if (!result) {
         throw HttpError(404, 'Not found');
     }
@@ -27,15 +29,15 @@ const getById = async (req, res) => {
 
 const addContact = async (req, res) => {
     const { _id: owner } = req.user;
-    console.log(owner);
     const result = await Contact.create({ ...req.body, owner });
 
     res.status(201).json(result);
 };
 
 const deleteContact = async (req, res) => {
+    const { _id: owner } = req.user;
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndDelete(contactId);
+    const result = await Contact.findOneAndDelete({ _id: contactId, owner });
     if (!result) {
         throw HttpError(404, 'Not found');
     }
@@ -43,8 +45,9 @@ const deleteContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
+    const { _id: owner } = req.user;
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    const result = await Contact.findOneAndUpdate({ _id: contactId, owner }, req.body, { new: true });
     if (!result) {
         throw HttpError(404, 'Not found');
     }
@@ -52,8 +55,9 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+    const { _id: owner } = req.user;
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    const result = await Contact.findOneAndUpdate({ _id: contactId, owner }, req.body, { new: true });
     if (!result) {
         throw HttpError(404, 'Not found');
     }
