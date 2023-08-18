@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const addSchema = Joi.object({
+const contactSchema = Joi.object({
     name: Joi.string()
         .min(2)
         .max(20)
@@ -21,8 +21,8 @@ const addSchema = Joi.object({
         'any.required': `missing required phone field`,
         })
         .required(),
-    });
+        favorite: Joi.boolean(),
+});
 
-module.exports = {
-    addSchema,
-};
+
+module.exports = contactSchema;
