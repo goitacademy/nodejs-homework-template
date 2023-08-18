@@ -6,13 +6,16 @@ const {
   getById,
   add,
   updateById,
-  updateFavorite,
+  updateStatusContact,
   deleteById,
 } = require("../../controllers/contacts");
 
 const { validateBody, isValidId } = require("../../middlewares");
 
-const { addSchema, updateFavoriteSchema } = require("../../schemas/contacts");
+const {
+  addSchema,
+  updateStatusContactSchema,
+} = require("../../schemas/contacts");
 
 router.get("/", getAll);
 
@@ -25,8 +28,8 @@ router.put("/:contactId", isValidId, validateBody(addSchema), updateById);
 router.patch(
   "/:contactId/favorite",
   isValidId,
-  validateBody(updateFavoriteSchema),
-  updateFavorite
+  validateBody(updateStatusContactSchema),
+  updateStatusContact
 );
 
 router.delete("/:contactId", isValidId, deleteById);
