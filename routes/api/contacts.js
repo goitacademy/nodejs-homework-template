@@ -42,11 +42,17 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const body = req.body;
+
+    if (!body || Object.keys(body).length === 0) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
     const { error } = schema.validate(body);
     if (error) {
+      const fieldName = error.details[0].context.label;
       return res
         .status(400)
-        .json({ message: `Missing field  ${error.details[0].message}` });
+        .json({ message: `Missing required ${fieldName} field` });
     }
     const newContact = await addContact(req.body);
     res.status(201).json(newContact);
@@ -74,11 +80,17 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const body = req.body;
+
+    if (!body || Object.keys(body).length === 0) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
     const { error } = schema.validate(body);
     if (error) {
+      const fieldName = error.details[0].context.label;
       return res
         .status(400)
-        .json({ message: `Missing field  ${error.details[0].message}` });
+        .json({ message: `Missing required ${fieldName} field` });
     }
     const updatedContact = await updateContact(contactId, body);
 
