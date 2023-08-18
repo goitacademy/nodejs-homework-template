@@ -6,4 +6,11 @@ const scheme = joi.object({
     phone: joi.string().required(),
 });
 
-module.exports = scheme;
+const statusSchema = joi.object({
+    favorite: joi.bool().required(),
+  });
+  
+  module.exports = {
+    scheme,
+    statusSchema,
+  };
