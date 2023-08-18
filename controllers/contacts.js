@@ -46,3 +46,6 @@ module.exports = {
   deleteContact: ctrlWrapper(deleteContact),
   editContact: ctrlWrapper(editContact),
 };
+
+// mongodb + srv://IsaienkoViktor:<Test123456>@cluster0.fq7vncz.mongodb.net/?retryWrites=true&w=majority
+// mongodb+srv://IsaienkoViktor:<7sGiWdp8CRx1IrRV>@cluster0.fq7vncz.mongodb.net/
