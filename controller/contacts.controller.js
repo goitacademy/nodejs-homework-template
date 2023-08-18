@@ -94,7 +94,7 @@ const updateFavorite = async (req, res, next) => {
 			});
 		}
 
-		const updateData = await contactService.updateFavorite(contactId, { favorite });
+		const updateData = await contactService.updateFavorite(contactId, favorite);
 
 		res.json({
 			status: "success",
