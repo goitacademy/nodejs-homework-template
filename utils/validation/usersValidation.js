@@ -22,8 +22,8 @@ const schemaLogin = Joi.object()
   .keys({
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
-  });
-// .external(checkUser);
+  })
+  .external(checkUser);
 
 const schemaSubscription = Joi.object({
   subscription: Joi.any()
