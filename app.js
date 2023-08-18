@@ -6,7 +6,7 @@ require("dotenv").config();
 const app = express();
 
 const contactsRoutes = require("./routes/api/contacts.routes");
-const authRoutes = require("./routes/api/auth.routes");
+const usersRoutes = require("./routes/api/auth.routes");
 
 const PORT = process.env.PORT || 4000;
 const uriDb = process.env.DATABASE_URL;
@@ -18,7 +18,9 @@ const connection = mongoose.connect(uriDb, {
 
 app.use(express.json());
 app.use("/api", contactsRoutes);
-app.use("/api/auth", authRoutes)
+app.use("/api/users", usersRoutes);
+
+require("./config/config-passport");
 
 connection
   .then(() => {
