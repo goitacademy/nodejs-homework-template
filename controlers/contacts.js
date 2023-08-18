@@ -33,7 +33,7 @@ const removeContact = async (req, res) => {
     throw new CreateHttpError(404, "Not found");
   }
   res.status(200).send({ message: "Contact deleted" });
-};
+}; 
 
 const updateContact = async (req, res) => {
   const { error } = contactSchema.validate(req.body);
