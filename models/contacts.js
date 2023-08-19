@@ -3,7 +3,9 @@ const User = require("./schemas/users");
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 const jwt = require("jsonwebtoken");
+
 const secret = "secret word";
+
 const passportJWT = require("passport-jwt");
 const passport = require("passport");
 const ExtractJWT = passportJWT.ExtractJwt;
