@@ -5,6 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "dev": "node --watch -r dotenv/config mongoose.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
@@ -13,10 +14,13 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.9.2",
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.4.3",
     "morgan": "1.10.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "dotenv": "^16.3.1",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
