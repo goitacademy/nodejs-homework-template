@@ -7,6 +7,8 @@ const STATUS_SUBSCRIPTION = {
   BUSINESS: "business",
 };
 
+const regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
 // Валідатор даних на сервері
 const schemaDBUserValidator = new Schema(
   {
@@ -18,6 +20,7 @@ const schemaDBUserValidator = new Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
+      match: regexEmail,
     },
     subscription: {
       type: String,
@@ -47,7 +50,7 @@ const User = model("user", schemaDBUserValidator);
 // Валідатори отриманих з клієнта даних
 const userValidator = Joi.object({
   password: Joi.string().min(3).required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().pattern(regexEmail).required(),
 });
 
 const userSubscriptionValidator = Joi.object({
@@ -55,7 +58,7 @@ const userSubscriptionValidator = Joi.object({
 });
 
 const userEmailValidator = Joi.object({
-  email: Joi.string().email(),
+  email: Joi.string().pattern(regexEmail).required(),
 });
 
 const schemas = {
