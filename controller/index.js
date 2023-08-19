@@ -1,5 +1,5 @@
 const service = require('../service');
-const {schemaAdd, schemaUpdate, schemaUpdateFavorite} = require('../service/schemas/validation');
+const {schemaAdd, schemaUpdate, schemaUpdateFavorite} = require('../service/schemas/joiValidation');
 
 const listContacts = async (req, res, next) => {
     try {
@@ -144,6 +144,42 @@ const updateStatusContact = async (req, res, next) => {
     }
 };
 
+const userSignup = async (req, res, next) => {
+    try {
+        
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Unknown error" });
+    };
+};
+
+const userLogin = async (req, res, next) => {
+    try {
+        
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Unknown error" });
+    };
+};
+        
+const userLogout = async (req, res, next) => {
+    try {
+        
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Unknown error" });
+    };
+};
+            
+const userCurrent = async (req, res, next) => {
+    try {
+        
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Unknown error" });
+    };
+};
+
 module.exports = {
     listContacts,
     getContactById,
@@ -151,4 +187,8 @@ module.exports = {
     removeContact,
     updateContact,
     updateStatusContact,
+    userSignup,
+    userLogin,
+    userLogout,
+    userCurrent,
 }
