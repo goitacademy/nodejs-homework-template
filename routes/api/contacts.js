@@ -1,14 +1,11 @@
 const express = require("express");
-
 const Joi = require("joi");
-
 const contactsService = require("../../models/contacts.js");
-
 const { HttpError } = require("../../helpers");
-
 const router = express.Router();
+const crypto = require("crypto");
 
-const movieAddSchema = Joi.object({
+const contactAddSchema = Joi.object({
   title: Joi.string().required().messages({
     "any.required": `"title" must be exist`,
   }),
@@ -26,7 +23,6 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
     const contact = await contactsService.getContactById(req.params.id);
 
@@ -41,7 +37,17 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  //res.json({ message: "template message" });
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await contactsService.addContact(req.body);
+
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
@@ -60,7 +66,20 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  //res.json({ message: "template message" });
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await contactsService.updateContact(id, req.body);
+    if (!result) {
+      throw HttpError(404, `Movie with id=${id} not found`);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

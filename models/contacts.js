@@ -2,7 +2,7 @@ const crypto = require("crypto");
 const { join } = require("path");
 const fs = require("fs").promises;
 
-const contactsPath = join(__dirname, "models", "contacts.json");
+const contactsPath = join(__dirname, "contacts.json");
 
 const listContacts = async () => {
   const contacts = await fs.readFile(contactsPath);
