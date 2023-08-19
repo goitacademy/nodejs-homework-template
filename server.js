@@ -5,7 +5,7 @@ import app from "./app.js"
 
 
 
-
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 const {DB_HOST, PORT} = process.env;
 
 mongoose.connect(DB_HOST)
