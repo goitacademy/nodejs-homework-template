@@ -1,25 +1,66 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const Joi = require("joi");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsService = require("../../models/contacts.js");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { HttpError } = require("../../helpers");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const movieAddSchema = Joi.object({
+  title: Joi.string().required().messages({
+    "any.required": `"title" must be exist`,
+  }),
+  director: Joi.string().required(),
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const result = await contactsService.listContacts();
 
-module.exports = router
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:contactId", async (req, res, next) => {
+  // res.json({ message: "template message" });
+  try {
+    const contact = await contactsService.getContactById(req.params.id);
+
+    if (!result) {
+      throw HttpError(404, `Contact with id=${id} not found`);
+    }
+
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  //res.json({ message: "template message" });
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsService.removeContact(id);
+    if (!result) {
+      throw HttpError(404, `Movie with id=${id} not found`);
+    }
+    res.json({
+      message: "Delete success",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  //res.json({ message: "template message" });
+});
+
+module.exports = router;
