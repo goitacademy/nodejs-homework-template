@@ -23,4 +23,7 @@ contactsRouter.put('/:contactId', isValidId, isEmptyBody, validateBody(contactsS
 
 contactsRouter.patch('/:contactId/favorite', isValidId, validateFavoriteBody(contactsSchema.contactUpdateFavoriteSchema), contactsController.updateFavorite);
 
+contactsRouter.put('/:contactId', isEmptyBody, validateBody(contactsSchema.contactsAddSchema), contactsController.updateById);
+
+
 export default contactsRouter;
