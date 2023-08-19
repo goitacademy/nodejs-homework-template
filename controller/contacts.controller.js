@@ -1,4 +1,20 @@
+const Joi = require("joi");
 const contactService = require("../services/contacts.service");
+
+const contactSchema = Joi.object({
+	name: Joi.string().required(),
+	email: Joi.string().email().required(),
+	phone: Joi.string().required(),
+});
+const updateContactSchema = Joi.object({
+	name: Joi.string(),
+	email: Joi.string().email(),
+	phone: Joi.string(),
+});
+
+const updateFavoriteSchema = Joi.object({
+	favorite: Joi.boolean().required(),
+});
 
 const get = async (req, res, next) => {
 	try {
@@ -44,6 +60,16 @@ const create = async (req, res, next) => {
 	try {
 		const { body } = req;
 
+		const validateNewContact = contactSchema.validate(body);
+
+		if (validateNewContact.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateNewContact.error,
+			});
+		}
+
 		const newContact = await contactService.create(body);
 
 		res.json({
@@ -62,6 +88,16 @@ const update = async (req, res, next) => {
 	try {
 		const { contactId } = req.params;
 		const { body } = req;
+
+		const validateNewContact = updateContactSchema.validate(body);
+
+		if (validateNewContact.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateNewContact.error,
+			});
+		}
 		const updateData = await contactService.update(contactId, body);
 
 		res.json({
@@ -87,10 +123,13 @@ const updateFavorite = async (req, res, next) => {
 		const { contactId } = req.params;
 		const { favorite } = req.body;
 
-		if (typeof favorite !== "boolean") {
-			return res.status(404).json({
+		const validateFavorite = updateFavoriteSchema.validate({ favorite });
+
+		if (validateFavorite.error) {
+			return res.status(400).json({
 				status: "fail",
-				message: "Missing field favorite",
+				message: "Invalid data",
+				error: validateFavorite.error,
 			});
 		}
 
