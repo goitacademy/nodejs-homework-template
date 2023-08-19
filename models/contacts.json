@@ -1,11 +1,5 @@
 [
   {
-    "id": "AeHIrLTr6JkxGE6SN-0Rw",
-    "name": "Allen Raymond",
-    "email": "nulla.ante@vestibul.co.uk",
-    "phone": "(992) 914-3792"
-  },
-  {
     "id": "qdggE76Jtbfd9eWJHrssH",
     "name": "Chaim Lewis",
     "email": "dui.in@egetlacus.ca",
@@ -58,5 +52,11 @@
     "name": "Oksana Frolikova",
     "email": "oksana@gmail.com",
     "phone": "0669448586"
+  },
+  {
+    "id": "JissbZ_0qPE-c-ghv9og9",
+    "name": "Serhii Frolikov",
+    "email": "serhii.frolikov@gmail.com",
+    "phone": "0965550571"
   }
 ]
