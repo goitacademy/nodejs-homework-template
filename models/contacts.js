@@ -106,7 +106,7 @@ const updateStatusContact = async (contactId, body) => {
   }
 };
 
-const signup = async (email, password) => {
+const signup = async (email, password, avatar) => {
   try {
     const hash = bcrypt.hashSync(password, salt);
     return User.findOne({ email }).then((data) => {
@@ -116,6 +116,7 @@ const signup = async (email, password) => {
       return User.create({
         email,
         password: hash,
+        avatarURL: avatar,
       });
     });
   } catch (err) {

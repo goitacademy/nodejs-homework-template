@@ -1,6 +1,7 @@
 const express = require("express");
 
 const router = express.Router();
+const gravatar = require("gravatar");
 
 const contactsFunc = require("../../models/contacts");
 
@@ -109,7 +110,8 @@ router.post("/users/signup", async (req, res, next) => {
   if (!email || !password) {
     return res.status(400).json({ message: "Registration validation error" });
   }
-  const newUser = await contactsFunc.signup(email, password);
+  const avatar = gravatar.url(email, { s: "200", r: "pg", d: "wavatar" });
+  const newUser = await contactsFunc.signup(email, password, avatar);
   if (newUser.message === "Email in use") {
     return res.status(409).json({ message: "Email in use" });
   }
