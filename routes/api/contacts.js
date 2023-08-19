@@ -1,25 +1,40 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  getContacts,
+  getContactById,
+  deleteContact,
+  postContact,
+  putContact,
+} = require("../../controllers");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { schemas } = require("../../models/contact");
+const { authenticate, isValidId, validateBody } = require("../../middlewares");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use(authenticate);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getContacts);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", isValidId, getContactById);
 
-module.exports = router
+router.post("/", validateBody(schemas.contactValidator), postContact);
+
+router.delete("/:id", isValidId, deleteContact);
+
+router.put(
+  "/:id",
+  isValidId,
+  validateBody(schemas.contactValidator, "missing required name field"),
+  putContact
+);
+
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.contactFavoriteValidator, "missing field favorite"),
+  putContact
+);
+
+module.exports = router;
