@@ -6,6 +6,7 @@ import {
   authenticate,
   isValidId,
   isBodyEmpty,
+  upload,
 } from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
@@ -16,6 +17,8 @@ contactsRouter.get("/", contactsControllers.getAll);
 
 contactsRouter.get("/:id", isValidId, contactsControllers.getById);
 
+// upload.fields([{name:"poster", maxCount: 1}])
+// upload.array("poster", 8)
 contactsRouter.post(
   "/",
   validateBody(contactSchemas.contactSchema),

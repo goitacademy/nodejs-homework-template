@@ -1,7 +1,6 @@
 import Contact from "../models/contact.js";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
-import { query } from "express";
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
