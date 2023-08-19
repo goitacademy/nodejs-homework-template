@@ -9,9 +9,9 @@ import {
   updatedStatusContact,
 } from './../../models/contacts.js';
 
-export const router = express.Router();
+export const contactsRouter = express.Router();
 
-router.get('/', async (req, res, next) => {
+contactsRouter.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
 
@@ -25,7 +25,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+contactsRouter.get('/:id', async (req, res, next) => {
   const { id } = req.params;
   console.log('this is id: ', id);
   try {
@@ -41,7 +41,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+contactsRouter.post('/', async (req, res, next) => {
   const { body } = req;
 
   if (Object.keys(body).length === 0) {
@@ -61,7 +61,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+contactsRouter.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
   try {
     const isContactRemoved = await removeContact(id);
@@ -74,7 +74,7 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+contactsRouter.put('/:id', async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
 
@@ -95,7 +95,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.patch('/:id', async (req, res, next) => {
+contactsRouter.patch('/:id', async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
   const { favorite } = body;
