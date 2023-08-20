@@ -1,25 +1,51 @@
-const express = require('express')
+// в цей файл винесені всі маршрути які стосуюсться контактів
 
-const router = express.Router()
+const express = require("express");
+const router = express.Router(); // створюємо "сторінку записної книжки"
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  validateBody,
+  isValidId,
+  authentificate,
+} = require("../../middlewares");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const schemas = require("../../shemas/contacts");
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// створюємо мартшрути
+// отритмання всіх контактів
+router.get("/", authentificate, ctrl.getListContacts);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// отримання контакту по id
+router.get("/:contactId", authentificate, isValidId, ctrl.getContactById);
 
-module.exports = router
+// додавання контакту
+router.post(
+  "/",
+  authentificate,
+  validateBody(schemas.addSchema, "add"),
+  ctrl.addContacts
+);
+
+// видалення контакту
+router.delete("/:contactId", authentificate, isValidId, ctrl.removeContacts);
+
+// внесення змін до контакту
+router.put("/:contactId", [
+  authentificate,
+  isValidId,
+  validateBody(schemas.addSchema, "update"),
+  ctrl.updateContact,
+]);
+
+// оновлення поля favorite
+router.patch(
+  "/:contactId/favorite",
+  authentificate,
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema, "updateStatus"),
+  ctrl.updateStatusContact
+);
+
+module.exports = router;

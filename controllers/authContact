@@ -1,0 +1,88 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv"); // імпортуємо пакет doterv який завантажує змінні середовища з .env
+
+dotenv.config(); // викликаємо метод config який у корні проєкту шукає файл .env і дані з цього файлу додає у змінні оточення (об'єкт process.env)
+
+const User = require("../models/user"); // імпорт функції моделі
+
+const { ctrlWrapper, HttpError } = require("../helpers"); // імпортуємо функцію генерації та виводу помилки
+
+const { SECRET_KEY } = process.env;
+
+const register = async (req, res) => {
+  // створюємо кастомне повідомлення - перед створенням нового користувача проводимо перевірку чи існує користувач з таким email та якщо так виводимо кастомне повідомлення
+  const { email, password } = req.body; // витягуємо значенния полів email та password з тіла запиту
+  const user = await User.findOne({ email }); // шукаємо в базі email вказаний в тілі запиту
+
+  // робимо перевірку, якщо такий email в базі є - виводимо повідомлення про помилку, інакше створюємо нового користовуча
+  if (user) {
+    throw HttpError(409, "Email in use");
+  }
+
+  const hashPassword = await bcrypt.hash(password, 10); // хешируеємо пароль, другим аргументом передаємо сіль тобто складність хешируання паролю
+
+  const newUser = await User.create({ ...req.body, password: hashPassword }); // зберігаємо хеширований пароль(розпилюємо тіло body та значення поля password замінюємо на результат хеширування паролю )
+
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  });
+};
+
+const login = async (req, res) => {
+  const { email, password } = req.body; // витягуємо значенния полів email та password з тіла запиту
+  const user = await User.findOne({ email }); // шукаємо в базі email вказаний в тілі запиту
+
+  // робимо перевірку, якщо такий email в базі відсутній - виводимо повідомлення про помилку, інакше створюємо нового користовуча
+  if (!user) {
+    throw HttpError(401, "Email or password is wtrong");
+  }
+
+  // перевіряємо(порівнюємо) пароль - перший аргумент пароль з тіла запиту другий аргумент пароль який зберігаеється в базі в захешированому вигляді
+  // якщо паролі не співпадають вівидимо повідомлення про помилку, інакше створюємо токен
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare) {
+    throw HttpError(401, "Email or password is wtrong");
+  }
+
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token }); // Оновлення користувача за його _id, з встановленням значення токена
+
+  res.json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
+};
+
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user; // отримуємо _id користуача який хоче розлогінитись
+  await User.findByIdAndUpdate(_id, { token: "" }); // оновлюємо значення поля токет на пусту строку(видаляємо токен)
+
+  res.status(204).json(); // відправляємо відповідь зі статусом 204 та без вмісту тексту помилки
+};
+
+module.exports = {
+  register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
+};
