@@ -7,7 +7,7 @@ const {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContact
 } = require('../../models/contacts');
 
 const contactSchema = Joi.object({
@@ -83,12 +83,12 @@ router.put('/:contactId', async (req, res, next) => {
     const { error } = contactSchema.validate(req.body);
 
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({ message: "missing fields" });
     }
-    const updateContact = await updateContact(contactId, req.body);
+    const updatedContact = await updateContact(contactId, req.body);
 
-    if (!updateContact) {
-      return res.status(400).json({ message: "Not found" });
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Not found" });
     }
 
     res.status(200).json(updateContact);

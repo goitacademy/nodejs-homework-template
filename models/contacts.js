@@ -36,10 +36,10 @@ const updateContact = async (contactId, body) => {
   }
 
   const updatedContact = { ...contacts[index], ...body };
-  contacts[index] = updateContact;
+  contacts[index] = updatedContact;
   await fs.writeFile(contactsFilePath, JSON.stringify(contacts, null, 2));
 
-  return updateContact;
+  return updatedContact;
 };
 
 module.exports = {
