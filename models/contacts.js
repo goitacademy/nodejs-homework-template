@@ -26,16 +26,17 @@ const getContactById = (contactId) => {
 const removeContact = (contactId) => {
 	try {
 		const data = JSON.parse(fs.readFileSync(pathContacts));
-		const deletedContact = data.find((item) => item.id === contactId);
+		const deletedContact = data.filter((item) => item.id === contactId);
 		return deletedContact;
 	} catch (err) {
 		console.log(err);
 	}
 };
 
-const addContact = (name, email, phone) => {
+const addContact = (body) => {
 	try {
 		const data = JSON.parse(fs.readFileSync(pathContacts));
+		const { name, email, phone } = body;
 		const newContact = {
 			id: uuidv1(),
 			name,
@@ -43,22 +44,24 @@ const addContact = (name, email, phone) => {
 			phone,
 		};
 		data.push(newContact);
-		console.log(data);
+		return newContact;
 	} catch (err) {
 		console.log(err);
 	}
 };
 
-const updateContact = (contactId, name, email, phone) => {
-	fs.readFile(pathContacts)
-		.then((data) => JSON.parse(data))
-		.then((data) => {
-			const oneContact = data.find((item) => item.id === contactId);
-			oneContact.name = name;
-			oneContact.email = email;
-			oneContact.phone = phone;
-		})
-		.catch((err) => console.log(err));
+const updateContact = (contactId, body) => {
+	try {
+		const { name, email, phone } = body;
+		const data = JSON.parse(fs.readFileSync(pathContacts));
+		const editContact = data.find((item) => item.id === contactId);
+		editContact.name = name;
+		editContact.email = email;
+		editContact.phone = phone;
+		return editContact;
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 module.exports = {
