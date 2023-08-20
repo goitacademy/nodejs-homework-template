@@ -1,7 +1,7 @@
 const express = require("express");
 
 const mongoose = require("mongoose");
-
+mongoose.Promise = global.Promise;
 require("dotenv").config();
 
 const app = express();
