@@ -11,14 +11,39 @@ const contactSchema = Joi.object({
     favorite: Joi.boolean(),
 });
 
+const favoriteSchema = Joi.object({
+    favorite: Joi.boolean()
+})
+
 router.get('/', auth, async (req, res, next) => {
     try {
         const { _id: owner } = req.user;
-        const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
+        const { page = 1, limit = 1, favorite } = req.query;
+        const validate = favoriteSchema.validate({ favorite });
+        validate.error && res.status(400).json({
+            status: "failed",
+            message: validate.error
+        })
+        if (page < 1 || limit < 1) {
+            res.status(400).json({
+                status: "failed",
+                error: "query params incorrect"
+            })
+        };
+
+        const contacts = await Contact.find({ owner, favorite }, "-createdAt -updatedAt")
+            .limit(limit)
+            .skip(((page - 1) * limit))
+        const totalContacts = await Contact.countDocuments({ owner })
+        const totalPages = totalContacts / limit;
         res.status(200).json(
             {
                 status: "success",
-                data: contacts,
+                total_contacts: totalContacts,
+                total_pages: totalPages,
+                current_page: page,
+                limit_per_page: limit,
+                data: contacts
             });
     } catch (error) {
         next(error)
@@ -158,8 +183,6 @@ router.patch('/:id/favorite', auth, async (req, res, next) => {
         next(error);
     }
 })
-
-
 
 module.exports = router
 
