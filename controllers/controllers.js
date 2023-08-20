@@ -7,6 +7,8 @@ const {
   removeContact,
 } = require("../services/services");
 
+const schemaJoiValidate = require("../validate/validate");
+
 const getAllContactsController = async (req, res, next) => {
   try {
     const contactsJson = await listContacts();
@@ -34,16 +36,13 @@ const getContactByIdController = async (req, res, next) => {
 const createContactController = async (req, res, next) => {
   try {
     const { body } = req;
-    const requiredField = ["name", "email", "phone"];
+    const { error } = schemaJoiValidate(body);
 
-    const objectKeys = Object.keys(body);
-    const findValue = requiredField.filter(
-      (value) => !objectKeys.includes(value)
-    );
+    if (error)
+      res.status(400).json({
+        message: `Missing required ${error.details[0].message} field`,
+      });
 
-    if (findValue.length > 0) {
-      res.status(400).json({ message: `Missing required ${findValue} field` });
-    }
     const dataContacts = await addContact(body);
 
     res.status(201).json(dataContacts);
