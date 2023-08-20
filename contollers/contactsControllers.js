@@ -44,24 +44,25 @@ const addContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const contact = await contacts.updateContact(req.params.contactId, req.body);
-  console.log(contact);
-  if (Object.keys(req.body).length === 0) {
-    throw errorHandler(400, "missing fields");
-  }
-  console.log(`contact: ${contact}`);
-  if (contact === null) {
-    throw errorHandler(404, "Not found");
+  // console.log(contact);
+
+  // console.log(`contact: ${contact}`);
+  // if (contact === null) {
+  //   throw errorHandler(404, "Not found");
+  // }
+  if (!contact) {
+    throw errorHandler(404, "Not Found");
   }
 
-  if (typeof contact === "string") {
-    console.log(contact);
+  // if (typeof contact === "string") {
+  //   console.log(contact);
 
-    if (contact === "must be a string") {
-      throw errorHandler(400, contact);
-    }
-    const errorMessage = `missing required ${contact} field`;
-    throw errorHandler(400, errorMessage);
-  }
+  //   if (contact === "must be a string") {
+  //     throw errorHandler(400, contact);
+  //   }
+  //   const errorMessage = `missing required ${contact} field`;
+  //   throw errorHandler(400, errorMessage);
+  // }
   res.status(200).json(contact);
 };
 
@@ -72,12 +73,6 @@ const updateStatusContact = async (req, res) => {
   );
   if (!contact) {
     throw errorHandler(404, "Not Found");
-  }
-  if (
-    Object.keys(req.body).length === 0 ||
-    !Object.keys(req.body).includes("favorite")
-  ) {
-    throw errorHandler(400, "missing field favorite");
   }
   res.status(200).json(contact);
 };
