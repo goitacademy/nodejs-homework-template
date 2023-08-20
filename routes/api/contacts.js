@@ -1,25 +1,39 @@
-const express = require('express')
+// ywxjZlzJkzN5NjW6
 
-const router = express.Router()
+// mongodb+srv://lnteplova:ywxjZlzJkzN5NjW6@cluster0.2e3qn3j.mongodb.net/
+const express = require("express");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers");
+const {
+  validateBody,
+  isValidId,
+  validateBodyFavorite,
+} = require("../../middlewares");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { schemas } = require("../../models/contacts");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrl.getAllListContacts);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", isValidId, ctrl.getById);
 
-module.exports = router
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
+
+router.delete("/:contactId", isValidId, ctrl.deleteById);
+
+router.put(
+  "/:contactId",
+  isValidId,
+  validateBody(schemas.addSchema),
+  ctrl.updateById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBodyFavorite(schemas.updateFavoriteSchema),
+  ctrl.updateStatusContact
+);
+
+module.exports = router;
