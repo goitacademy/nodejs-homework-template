@@ -1,8 +1,8 @@
-const express = require('express')
-const router = express.Router()
-const Joi = require('joi')
-const Contact = require('../models/contact.js')
-const auth = require('../middleware/auth.js')
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
+const Contact = require('../models/contact.js');
+const auth = require('../middleware/auth.js');
 
 const contactSchema = Joi.object({
     name: Joi.string(),
@@ -13,7 +13,7 @@ const contactSchema = Joi.object({
 
 const favoriteSchema = Joi.object({
     favorite: Joi.boolean()
-})
+});
 
 router.get('/', auth, async (req, res, next) => {
     try {
@@ -23,18 +23,18 @@ router.get('/', auth, async (req, res, next) => {
         validate.error && res.status(400).json({
             status: "failed",
             message: validate.error
-        })
+        });
         if (page < 1 || limit < 1) {
             res.status(400).json({
                 status: "failed",
                 error: "query params incorrect"
-            })
-        };
+            });
+        }
 
         const contacts = await Contact.find({ owner, favorite }, "-createdAt -updatedAt")
             .limit(limit)
-            .skip(((page - 1) * limit))
-        const totalContacts = await Contact.countDocuments({ owner })
+            .skip(((page - 1) * limit));
+        const totalContacts = await Contact.countDocuments({ owner });
         const totalPages = totalContacts / limit;
         res.status(200).json(
             {
@@ -46,9 +46,9 @@ router.get('/', auth, async (req, res, next) => {
                 data: contacts
             });
     } catch (error) {
-        next(error)
+        next(error);
     }
-})
+});
 
 router.get('/:id', auth, async (req, res, next) => {
     try {
@@ -57,7 +57,7 @@ router.get('/:id', auth, async (req, res, next) => {
         const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
         const contact = contacts && contacts.filter(contact => contact.id === id);
         if (!contact.length) {
-            throw new Error('Contact not found')
+            throw new Error('Contact not found');
         }
         res.status(200).json(
             {
@@ -70,9 +70,9 @@ router.get('/:id', auth, async (req, res, next) => {
             data: {
                 message: error.message,
             }
-        })
+        });
     }
-})
+});
 
 router.post('/', auth, async (req, res, next) => {
     try {
@@ -86,7 +86,7 @@ router.post('/', auth, async (req, res, next) => {
             message: validate.error.message
         });
         const { _id: owner } = req.user;
-        const newContact = await Contact.create({ name, phone, email, favorite, owner })
+        const newContact = await Contact.create({ name, phone, email, favorite, owner });
         res.status(201).json({
             status: "success",
             data: newContact
@@ -95,7 +95,7 @@ router.post('/', auth, async (req, res, next) => {
         next(error);
     }
 
-})
+});
 
 router.put('/:id', auth, async (req, res, next) => {
     try {
@@ -112,26 +112,26 @@ router.put('/:id', auth, async (req, res, next) => {
         const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
         const contact = contacts.filter(contact => contact.id === id);
         if (!contact.length) {
-            throw new Error('Contact not found')
+            throw new Error('Contact not found');
         }
         const updatedContact = await Contact.findByIdAndUpdate(
             id,
             body,
             { new: true });
         if (!updatedContact) {
-            throw new Error('Contact not found')
-        };
+            throw new Error('Contact not found');
+        }
         res.status(201).json({
             status: "success",
             message: 'Contact updated',
             data: updatedContact
-        })
+        });
     } catch (error) {
-        console.log(error)
+        console.log(error);
         next(error);
     }
 
-})
+});
 
 router.delete('/:id', auth, async (req, res, next) => {
     try {
@@ -140,21 +140,21 @@ router.delete('/:id', auth, async (req, res, next) => {
         const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
         const contact = contacts.filter(contact => contact.id === id);
         if (!contact.length) {
-            throw new Error('Contact not found')
+            throw new Error('Contact not found');
         }
         const deletedContact = await Contact.findByIdAndRemove(id);
         if (!deletedContact) {
-            throw new Error('Contact not found')
+            throw new Error('Contact not found');
         }
         res.status(200).json({
             status: "success",
             message: "Contact deleted",
             data: deletedContact
-        })
+        });
     } catch (error) {
         next(error);
     }
-})
+});
 
 router.patch('/:id/favorite', auth, async (req, res, next) => {
     try {
@@ -163,17 +163,17 @@ router.patch('/:id/favorite', auth, async (req, res, next) => {
         if (!favorite) {
             return res.status(404).json({
                 message: "Missing field favorite"
-            })
+            });
         }
         const updatedContact = await Contact.findByIdAndUpdate(id, { favorite }, {
             new: true
-        })
+        });
         if (updatedContact) {
             return res.status(200).json({
                 status: "success",
                 message: "Contact updated",
                 data: updatedContact
-            })
+            });
         }
         return res.status(404).json({
             status: "failed",
@@ -182,8 +182,8 @@ router.patch('/:id/favorite', auth, async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-})
+});
 
-module.exports = router
+module.exports = router;
 
 
