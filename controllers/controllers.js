@@ -56,12 +56,17 @@ const updateContactController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
+    const dataContact = await listContacts();
+    const findIndexContact = dataContact.findIndex(
+      (contact) => contact.id === id
+    );
 
-    if (!body) {
-      res.status(400).json({ message: "Missing fields" });
-    }
+    if (findIndexContact === -1)
+      return res.status(404).json({ Message: "Bad id, please correct." });
 
-    const dataContacts = updateContact(id, body);
+    if (body === {}) return res.status(400).json({ message: "Missing fields" });
+
+    const dataContacts = await updateContact(id, body);
 
     res.status(200).json(dataContacts);
   } catch (error) {
