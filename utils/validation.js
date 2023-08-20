@@ -10,3 +10,18 @@ const validateUser = (user) => {
 }
 
 module.exports = validateUser;
+
+
+
+
+// const schema = Joi.object({
+//     name: Joi.string()
+//     .required(),
+//     email: Joi.string()
+//     .email()
+//     .required(),
+//     phone: Joi.number().required(),
+//     // id: Joi.string().required(),
+// }) 
+
+// module.exports = {schema}

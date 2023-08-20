@@ -1,6 +1,6 @@
 const User = require('./models/user.model')
 const validateUser = require('./utils/validation')
-const service = require('./users.service');
+const userLogout = require('./users.service');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const secret = process.env.SECRET;
@@ -92,7 +92,7 @@ const current = async (req, res, next) => {
 const logout = async (req, res, next) => {
   const { id } = req.user;
   try {
-      await service.userLogout(id);
+      await userLogout(id);
       res.status(204).json();
   } catch (error) {
       next(error);
