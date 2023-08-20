@@ -3,6 +3,9 @@ const User = require("./schemas/users");
 const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 const jwt = require("jsonwebtoken");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs").promises;
 
 const secret = "secret word";
 
@@ -161,7 +164,37 @@ const logout = async (id) => {
   return user;
 };
 
+const updateAvatar = async (user, avatarFile) => {
+  try {
+    const { originalname, buffer } = avatarFile;
+
+    const tmpFilePath = path.join(__dirname, "../tmp", originalname);
+
+    await fs.writeFile(tmpFilePath, buffer);
+
+    const image = await Jimp.read(tmpFilePath);
+    await image.resize(250, 250);
+    const avatarFileName = `${user._id.toString()}-${Date.now()}.jpg`;
+    const avatarFilePath = path.join(
+      __dirname,
+      "../public/avatars",
+      avatarFileName
+    );
+    await image.writeAsync(avatarFilePath);
+
+    user.avatarURL = `/avatars/${avatarFileName}`;
+    await user.save();
+
+    await fs.unlink(tmpFilePath);
+
+    return user;
+  } catch (error) {
+    return null;
+  }
+};
+
 module.exports = {
+  updateAvatar,
   logout,
   auth,
   login,
