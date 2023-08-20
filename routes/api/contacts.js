@@ -10,7 +10,7 @@ const {
   validateBodyFavorite,
 } = require("../../middlewares");
 
-const { schemas } = require("../../models/contacts");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
