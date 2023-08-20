@@ -1,10 +1,10 @@
-const contactsOperations = require("../../models/contacts");
+const {Contact} = require("../../models");
 const { contactValid } = require("../../helpers/");
 
 const updateById = async (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     res.status(400).json({
-      massage: "misssing fields",
+      message: "misssing fields",
     });
     return;
   }
@@ -21,7 +21,7 @@ const updateById = async (req, res, next) => {
     }
 
     const { contactId } = req.params;
-    const updatedContact = await contactsOperations.updateContact(
+    const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
       req.body
     );

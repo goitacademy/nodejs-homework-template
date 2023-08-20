@@ -11,6 +11,7 @@ const contactsPath = path.join(__dirname, "contacts.json");
   const contacts = JSON.parse(data);
   return contacts;
  }
+ 
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
@@ -20,6 +21,7 @@ const getContactById = async (contactId) => {
   }
   return result;
 }
+
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
@@ -31,6 +33,7 @@ const removeContact = async (contactId) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
   return removedContact;
 }
+
 
 const addContact = async ({name, email, phone}) => {
   const contacts = await listContacts();

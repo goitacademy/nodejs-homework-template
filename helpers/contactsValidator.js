@@ -5,9 +5,9 @@ const contactValid = (data) => {
     name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.string().required(),
+    favorite: Joi.boolean(),
   });
-  return schema.validate(data)
+  return schema.validate(data);
 };
-
 
 module.exports = contactValid;
