@@ -12,9 +12,9 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/api', contactsRouter)
-app.use('/add', contactsRouter)
 app.use('/', contactsRouter)
+app.use('/api/contacts', contactsRouter)
+
 app.use('/list', contactsRouter)
 app.use('/test', contactsRouter)
 
