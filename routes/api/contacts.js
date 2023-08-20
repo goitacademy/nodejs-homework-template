@@ -1,32 +1,22 @@
-const express = require('express')
+const express = require('express');
+const ctrl = require('../../controllers/contacts');
+// const validateBody = require('../../middlewares/validateBody');
+// const {schema} = require ('../../schemas/contacts')
 
 const router = express.Router();
-const models = require('../../models/contacts');
 
-router.get('/', async (req, res, next) => {
-  const { listContacts } = models;
-  const allContacts = await listContacts();
-  console.log(allContacts)
-  res.send(allContacts)
-})
 
-router.get('/:contactId', async (req, res, next) => {
-  const { getContactById } = models;
-  const { id } = req.params;
-  const contact = await(getContactById(id))
-  res.json(contact)
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ctrl.getContacts);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', ctrl.getContactById);
+
+router.post('/', ctrl.postContact);
+
+router.delete('/:contactId', ctrl.deleteContact);
+
+router.put('/:contactId', ctrl.putContact);
+
 
 module.exports = router
