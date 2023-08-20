@@ -1,5 +1,5 @@
 const { Contact } = require('../../models');
-const { httpError } = require('../../helpers');
+const { httpError, ctrlWrapper } = require('../../helpers');
 
 const updateContact = async (req, res) => {
     const { contactId } = req.params;
@@ -15,4 +15,4 @@ const updateContact = async (req, res) => {
     return res.json(result);
 };
 
-module.exports = updateContact;
+module.exports = ctrlWrapper(updateContact);

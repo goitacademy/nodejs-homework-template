@@ -1,5 +1,5 @@
 const { Contact } = require('../../models');
-const { httpError } = require('../../helpers');
+const { httpError, ctrlWrapper } = require('../../helpers');
 
 const getContactById = async (req, res) => {
     const { contactId } = req.params;
@@ -13,4 +13,4 @@ const getContactById = async (req, res) => {
     return res.json(result);
 };
 
-module.exports = getContactById;
+module.exports = ctrlWrapper(getContactById);

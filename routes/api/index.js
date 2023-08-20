@@ -1,6 +1,6 @@
-const contactsRoutes = require('./contactsRoutes');
+const contactsRouter = require('./contactsRoutes');
 
 
 module.exports = {
-    contactsRoutes,
+    contactsRouter,
 };
