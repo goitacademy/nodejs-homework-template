@@ -7,6 +7,7 @@ const signup = async (req, res, next) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
+
   if (user) {
     return res
       .status(409)
@@ -45,7 +46,7 @@ const login = async (req, res, next) => {
   const user = await User.findOne({ email });
 
   if (!user || !user.validPassword(password)) {
-    res.status(401).json({
+    return res.status(401).json({
       status: "unauthorized",
       code: 401,
       ResponseBody: {
@@ -56,24 +57,24 @@ const login = async (req, res, next) => {
 
   const payload = {
     id: user.id,
-  }
+  };
 
-  const token = jwt.sign(payload, process.env.SECRET, { epiresIn: "1h" });
-  
-   res
-     .status(200)
-     .header("Content-Type", "application/json")
-     .json({
-       status: "created",
-       code: 201,
-       ResponseBody: {
-         token,
-         user: {
-           email,
-           subscription: "starter", // TODO
-         },
-       },
-     });
+  const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1h" });
+
+  res
+    .status(200)
+    .header("Content-Type", "application/json")
+    .json({
+      status: "created",
+      code: 201,
+      ResponseBody: {
+        token,
+        user: {
+          email,
+          subscription: "starter", // TODO
+        },
+      },
+    });
 };
 module.exports = {
   signup,

@@ -34,3 +34,6 @@ connection
     console.log(`Server not running. Error message: [${err}]`);
     process.exit(1);
   });
+
+
+  
