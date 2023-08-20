@@ -12,8 +12,8 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 const logger = require('morgan')
 app.use(logger(formatsLogger))
 
-const contactsRouter = require('./api')
-app.use('/api/contacts', contactsRouter)
+const router = require('./api')
+app.use('/api', router)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
