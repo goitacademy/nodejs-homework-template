@@ -68,4 +68,7 @@ const putContact = async (req, res) => {
 module.exports = {
     getContactById: ctrlWrapper(getContactById),
     getContacts: ctrlWrapper(getContacts),
-    postContact: ctrlWrapper(postContact),deleteContact:ctrlWrapper(deleteContact), putContact:ctrlWrapper(putContact)}
+    postContact: ctrlWrapper(postContact),
+    deleteContact: ctrlWrapper(deleteContact),
+    putContact: ctrlWrapper(putContact)
+}
