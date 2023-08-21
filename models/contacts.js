@@ -9,15 +9,15 @@ const listContacts = async () => {
   return JSON.parse(data);
 }
 
-const getById = async (contactId) => {
+const getById = async (id) => {
   const contacts = await listContacts();
-  const result = contacts.find(contact => contact.id === contactId);
+  const result = contacts.find(contact => contact.id === id);
   return result || null;
 }
 
-const removeContact = async (contactId) => {
+const removeContact = async (id) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex(contact => contact.id === contactId);
+  const index = contacts.findIndex(contact => contact.id === id);
   if(index === -1){
       return null;
   }
@@ -27,6 +27,7 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
+  console.log('addContact');
   const contacts = await listContacts();
   const newContact = {
       id: crypto.randomUUID(),
@@ -37,13 +38,14 @@ const addContact = async (body) => {
   return newContact;
 }
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
+  console.log('updateContact');
   const contacts = await listContacts();
-  const index = contacts.findIndex(contact => contact.id === contactId);
+  const index = contacts.findIndex(contact => contact.id === id);
   if(index === -1){
       return null;
   }
-  contacts[index] = {contactId, ...body};
+  contacts[index] = {id, ...body};
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 }
