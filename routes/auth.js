@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
+const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
 const auth = require('../middleware/auth.js');
@@ -15,7 +16,8 @@ const registerSchema = Joi.object({
     password: Joi.string()
         .required(),
     subscription: Joi.string()
-        .default("starter")
+        .default("starter"),
+    avatarURL: Joi.string()
 });
 
 const loginSchema = Joi.object({
@@ -35,9 +37,9 @@ const subscriptionSchema = Joi.object({
 router.post("/signup", async (req, res, next) => {
     try {
         const { email, password, subscription } = req.body;
-
+        const avatarURL = gravatar.url(email);
         const validate = registerSchema.validate({
-            email, password, subscription
+            email, password, subscription, avatarURL
         });
 
         validate.error && res.status(400).json(validate.error);
@@ -52,7 +54,8 @@ router.post("/signup", async (req, res, next) => {
         await User.create({
             email,
             password: hashedPassword,
-            subscription
+            subscription,
+            avatarURL
         });
 
         res.status(201).json({
@@ -60,7 +63,8 @@ router.post("/signup", async (req, res, next) => {
             message: {
                 user: {
                     email,
-                    subscription
+                    subscription,
+                    avatarURL
                 }
             },
         });
