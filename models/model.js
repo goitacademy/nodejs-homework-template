@@ -1,22 +1,33 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+	password: {
+		type: String,
+		required: [true, 'Password is required'],
+	},
+	email: {
+		type: String,
+		required: [true, 'Email is required'],
+	},
+	subscription: {
+		type: String,
+		enum: ['starter', 'pro', 'business'],
+		default: 'starter',
+	},
+	token: {
+		type: String,
+		default: null,
+	},
+})
 
-const ContactModel = mongoose.model("contacts", schema);
+schema.methods.setPassword = function (password) {
+	this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6))
+}
 
-module.exports = ContactModel;
+schema.methods.validPassword = function (password) {
+	return bCrypt.compareSync(password, this.password)
+}
+
+const UserModel = mongoose.model('users', schema)
+
+module.exports = UserModel
