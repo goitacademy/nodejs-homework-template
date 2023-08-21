@@ -9,19 +9,33 @@ import {
   updatedStatusContact,
 } from './../../models/contacts.js';
 
-import passport, { auth } from '../../config/config-passport.js';
+import { auth } from '../../config/config-passport.js';
 
 export const contactsRouter = express.Router();
+
+const paginatedResults = (array, page, limit) => {
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+
+  const results = array.slice(startIndex, endIndex);
+  return results;
+};
 
 contactsRouter.get('/', auth, async (req, res, next) => {
   try {
     const { id: userID } = req.user;
     const contacts = await listContacts(userID);
+    const { page = 1, limit = 20, favorite } = req.query;
+    let filteredContacts = contacts;
+    if (favorite === 'true') {
+      filteredContacts = contacts.filter(contact => contact.favorite);
+    }
+    const paginatedContacts = paginatedResults(filteredContacts, page, limit);
 
     return res.status(200).json({
       status: 'success',
       code: 200,
-      data: { contacts },
+      data: { contacts: paginatedContacts },
     });
   } catch (error) {
     res.status(500).json({

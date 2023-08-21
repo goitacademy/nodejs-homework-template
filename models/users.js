@@ -50,3 +50,20 @@ export const loginUser = async body => {
     throw err;
   }
 };
+
+export const patchUser = async (subscription, userId) => {
+  const availableSubscriptions = User.schema.path('subscription').enumValues;
+  if (!subscription || !availableSubscriptions.includes(subscription)) {
+    return 400;
+  }
+  try {
+    return await User.findByIdAndUpdate(
+      { _id: userId },
+      { $set: { subscription: subscription } },
+      { new: true, select: 'email subscription' }
+    );
+  } catch (err) {
+    console.error('An error occurred while updating user: ', err);
+    throw err;
+  }
+};
