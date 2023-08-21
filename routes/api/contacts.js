@@ -9,29 +9,36 @@ import {
   updatedStatusContact,
 } from './../../models/contacts.js';
 
+import passport, { auth } from '../../config/config-passport.js';
+
 export const contactsRouter = express.Router();
 
-contactsRouter.get('/', async (req, res, next) => {
+contactsRouter.get('/', auth, async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const { id: userID } = req.user;
+    const contacts = await listContacts(userID);
 
-    return res.json({
+    return res.status(200).json({
       status: 'success',
       code: 200,
       data: { contacts },
     });
-  } catch (err) {
-    res.status(500).json(`An error occurred while getting the contact list: ${err}`);
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      code: 500,
+      message: `An error occurred while getting the contact list: ${err}`,
+    });
   }
 });
 
-contactsRouter.get('/:id', async (req, res, next) => {
-  const { id } = req.params;
-  console.log('this is id: ', id);
+contactsRouter.get('/:id', auth, async (req, res, next) => {
+  const { id: userId } = req.user;
+  const { id: contactId } = req.params;
   try {
-    const contact = await getContactById(id);
+    const contact = await getContactById(userId, contactId);
 
-    return res.json({
+    return res.status(200).json({
       status: 'success',
       code: 200,
       data: { contact },
@@ -41,15 +48,16 @@ contactsRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-contactsRouter.post('/', async (req, res, next) => {
-  const { body } = req;
+contactsRouter.post('/', auth, async (req, res, next) => {
+  const body = req.body;
+  const { id: userId } = req.user;
 
   if (Object.keys(body).length === 0) {
     return res.status(400).json('Error! Missing fields! Empty request is not allowed');
   }
 
   try {
-    const contact = await addContact(body);
+    const contact = await addContact(body, userId);
 
     return res.status(201).json({
       status: 'success',
@@ -61,21 +69,23 @@ contactsRouter.post('/', async (req, res, next) => {
   }
 });
 
-contactsRouter.delete('/:id', async (req, res, next) => {
-  const { id } = req.params;
+contactsRouter.delete('/:id', auth, async (req, res, next) => {
+  const { id: userId } = req.user;
+  const { id: contactId } = req.params;
   try {
-    const isContactRemoved = await removeContact(id);
+    await removeContact(contactId, userId);
 
     return res.status(200).json({
-      message: `Contact with ID ${id} has been successfully removed.`,
+      message: `Contact with ID ${contactId} has been successfully removed.`,
     });
   } catch (err) {
     res.status(500).json(`An error occurred while removing the contact: ${err}`);
   }
 });
 
-contactsRouter.put('/:id', async (req, res, next) => {
-  const { id } = req.params;
+contactsRouter.put('/:id', auth, async (req, res, next) => {
+  const { id: userId } = req.user;
+  const { id: contactId } = req.params;
   const { body } = req;
 
   if (Object.keys(body).length === 0) {
@@ -83,7 +93,7 @@ contactsRouter.put('/:id', async (req, res, next) => {
   }
 
   try {
-    const updatedContact = await updateContact(id, body);
+    const updatedContact = await updateContact(contactId, body, userId);
 
     return res.json({
       status: 'success',
@@ -95,8 +105,9 @@ contactsRouter.put('/:id', async (req, res, next) => {
   }
 });
 
-contactsRouter.patch('/:id', async (req, res, next) => {
-  const { id } = req.params;
+contactsRouter.patch('/:id', auth, async (req, res, next) => {
+  const { id: userId } = req.user;
+  const { id: contactId } = req.params;
   const { body } = req;
   const { favorite } = body;
 
@@ -105,7 +116,7 @@ contactsRouter.patch('/:id', async (req, res, next) => {
   }
 
   try {
-    const updatedStatus = await updatedStatusContact(id, favorite);
+    const updatedStatus = await updatedStatusContact(contactId, favorite, userId);
 
     return res.json({
       status: 'success',

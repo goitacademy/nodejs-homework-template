@@ -1,7 +1,7 @@
 import User from './../service/schemas/users.js';
 import bcrypt from 'bcrypt';
 
-export const listUsers = async () => {
+export const getAllUsers = async () => {
   try {
     return await User.find();
   } catch (err) {
@@ -10,9 +10,18 @@ export const listUsers = async () => {
   }
 };
 
+export const getUser = async id => {
+  try {
+    return await User.findById(id);
+  } catch (err) {
+    console.log('Error getting user list: ', err);
+    throw err;
+  }
+};
+
 export const addUser = async body => {
   const { email, password } = body;
-  const users = await listUsers();
+  const users = await User.find();
   const userExist = users.find(user => user.email === email);
   if (userExist) return 409;
   try {
@@ -29,7 +38,7 @@ export const addUser = async body => {
 
 export const loginUser = async body => {
   const { email, password } = body;
-  const users = await listUsers();
+  const users = await User.find();
   const user = users.find(user => user.email === email);
   if (!user) return false;
   try {
