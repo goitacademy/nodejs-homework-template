@@ -1,12 +1,8 @@
-const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
-const path = require("path");
-const contactsPath = path.join(__dirname, "contacts.json");
+const Contact = require("../models/contactModel");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  const parsedData = await JSON.parse(data);
-  return parsedData;
+  const docs = await Contact.find().exec();
+  return docs;
 };
 
 const getContactById = async (contactId) => {
@@ -21,40 +17,51 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
-  const restList = await contacts.filter((contact) => contact.id !== contactId);
 
   const index = contacts.findIndex((element) => element.id === contactId);
   if (index === -1) {
     return null;
   }
-
-  const stringifiedData = [JSON.stringify(restList, null, 2)];
-  fs.writeFile(contactsPath, stringifiedData);
-  return restList;
+  const deletedContact = await Contact.findOneAndDelete(contactId);
+  return deletedContact;
 };
 
 const addContact = async (body) => {
   const { name, email, phone } = body;
-  const contacts = await listContacts();
-  const newContact = { id: nanoid(), ...{ name, email, phone } };
-
-  contacts.push(newContact);
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
+  const user = await Contact.create({ name, email, phone });
+  console.log(user);
+  return user;
 };
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
+  const { name, email, phone } = body;
+
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) {
     return null;
   }
 
-  contacts[index] = { id: contactId, ...body };
-  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
+  const updatedUser = await Contact.findByIdAndUpdate(contactId, {
+    name,
+    email,
+    phone,
+  });
+
+  return updatedUser;
 };
 
+const updateStatusContact = async (contactId, favorite) => {
+  const contacts = await listContacts();
+  const contactById = contacts.filter((contact) => contact.id === contactId);
+  if (!contactById.length) {
+    return null;
+  }
+  const changeFavorite = await Contact.findByIdAndUpdate(contactId, favorite, {
+    new: true,
+  });
+  return changeFavorite;
+};
 
 module.exports = {
   listContacts,
@@ -62,4 +69,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
