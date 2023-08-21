@@ -53,6 +53,8 @@ const removeContact = async (contactId) => {
 
 
 const updateContact = async (contactId, updatedData) => {
+
+  
   let contacts = [];
   const fileContent = await fs.readFile(contactsFilePath, 'utf-8');
   contacts = JSON.parse(fileContent);

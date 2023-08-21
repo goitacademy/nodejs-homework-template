@@ -65,26 +65,29 @@ const removeContactController = async (req, res, next) => {
 
 
 const updateContactController = async (req, res, next) => {
-  const { contactId } = req.params;
-  const updatedData = req.body;
-
-  if (!updatedData || Object.keys(updatedData).length === 0) {
+    const { contactId } = req.params;
+    const updatedData = req.body;
+  
+    if (!updatedData || Object.keys(updatedData).length === 0) {
       return res.status(400).json({ message: 'missing fields' });
-  }
-
-
-  try {
+    }
+  
+    try {
       const updatedContact = await updateContact(contactId, updatedData);
       if (!updatedContact) {
-          return res.status(404).json({ message: 'Not found' });
+        return res.status(404).json({ message: 'Not found' });
       }
-
+  
       res.status(200).json(updatedContact);
-  } catch (error) {
+    } catch (error) {
+      if (error.message === 'Contact not found') {
+        return res.status(404).json({ message: 'Not found' });
+      }
+  
       console.error(error);
       return res.status(500).json({ message: 'Internal server error' });
-  }
-};
+    }
+  };
 
 module.exports = {
     listContactsController,

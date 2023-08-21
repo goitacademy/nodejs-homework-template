@@ -16,3 +16,4 @@ router.put('/:contactId', validateData, updateContactController);
 router.delete('/:contactId', removeContactController);
 
 module.exports = router;
+
