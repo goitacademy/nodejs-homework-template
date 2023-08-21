@@ -1,8 +1,5 @@
 const service = require("../services/contacts.service");
 
-
-
-
 const get = async (req, res, next) => {
   try {
     const { query } = req;

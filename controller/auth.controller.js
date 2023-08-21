@@ -80,32 +80,68 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   const id = req.user._id;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(401)
+        .header("Content-Type", "application/json")
+        .json({
+          status: "Unauthorized",
+          code: 401,
+          ResponseBody: {
+            message: "Not authorized",
+          },
+        });
+    }
 
-  const user = await User.findById(id);
-  if (!user) {
-    return res
-      .status(401)
+    user.token = null;
+    await user.save();
+
+    res.status(204).json({
+      status: "no content",
+      code: 204,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getCurrent = async (req, res, next) => {
+  const { _id, email } = req.user;
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      return res
+        .status(401)
+        .header("Content-Type", "application/json")
+        .json({
+          status: "Unauthorized",
+          code: 401,
+          ResponseBody: {
+            message: "Not authorized",
+          },
+        });
+    }
+    res
+      .status(200)
       .header("Content-Type", "application/json")
       .json({
-        status: "Unauthorized",
-        code: 401,
+        status: "OK",
+        code: 200,
         ResponseBody: {
-          message: "Not authorized",
+          email: email,
+          subscription: "starter",
         },
       });
+  } catch (error) {
+    next(error);
   }
-
-  user.token = null;
-  await user.save();
-
-  res.status(204).json({
-    status: "no content",
-    code: 204,
-  });
 };
 
 module.exports = {
   signup,
   login,
   logout,
+  getCurrent,
 };

@@ -4,8 +4,7 @@ const passport = require("passport");
 const contactsController = require("../../controller/contacts.controller");
 
 const auth = (req, res, next) => {
-    passport.authenticate("jwt", { session: false }, (err, user) => {
-        
+  passport.authenticate("jwt", { session: false }, (err, user) => {
     if (!user || err) {
       return res
         .status(401)
