@@ -1,17 +1,39 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 const contactsController = require("../../controller/contacts.controller");
 
-router.get("/contacts", contactsController.get);
+const auth = (req, res, next) => {
+    passport.authenticate("jwt", { session: false }, (err, user) => {
+        console.log('user', user);
+          console.log("er", err);
+    if (!user || err) {
+      return res
+        .status(401)
+        .header("Content-Type", "application/json")
+        .json({
+          status: "unauthorized",
+          code: 401,
+          ResponseBody: {
+            message: "Not authorized",
+          },
+        });
+    }
+    req.user = user;
+    next();
+  })(req, res, next);
+};
 
-router.get("/contacts/:id", contactsController.getById);
+router.get("/contacts", auth, contactsController.get);
 
-router.post("/contacts", contactsController.create);
+router.get("/contacts/:id", auth, contactsController.getById);
 
-router.put("/contacts/:id", contactsController.update);
+router.post("/contacts", auth, contactsController.create);
 
-router.patch("/contacts/:id/favorite", contactsController.updateFavorite);
+router.put("/contacts/:id", auth, contactsController.update);
 
-router.delete("/contacts/:id", contactsController.remove);
+router.patch("/contacts/:id/favorite", auth, contactsController.updateFavorite);
+
+router.delete("/contacts/:id", auth, contactsController.remove);
 
 module.exports = router;
