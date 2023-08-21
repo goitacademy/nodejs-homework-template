@@ -174,7 +174,7 @@ const updateAvatar = async (user, avatarFile) => {
 
     const image = await Jimp.read(tmpFilePath);
     await image.resize(250, 250);
-    const avatarFileName = `${user._id.toString()}-${Date.now()}.jpg`;
+    const avatarFileName = `${user._id.toString()}.jpg`;
     const avatarFilePath = path.join(
       __dirname,
       "../public/avatars",
