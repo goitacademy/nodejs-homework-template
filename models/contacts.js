@@ -65,7 +65,7 @@ const removeContact = async (contactId) => {
     });
 }
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   const contactsPath = path.format({
     root: "C:UsersUserDocumentsGitHubGRUPA-11-nodejs-homework-template",
     dir: "models",
@@ -76,9 +76,9 @@ fs.readFile(contactsPath)
     const contacts = JSON.parse(data.toString());
     const newContact = {
       id: uuidv4(),
-      name: name,
-      email: email,
-      phone: phone,
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
     };
     contacts.push(newContact);
     const updatedData = JSON.stringify(contacts, null, 2);
@@ -86,15 +86,8 @@ fs.readFile(contactsPath)
       .then(() => {
         console.log(`Contact added successfully: ${JSON.stringify(newContact)}`);
       })
-      .catch((error) => {
-        console.log("error:");
-        console.log(error.message);
-      });
   })
-  .catch((error) => {
-    console.log("error:");
-    console.log(error.message);
-  });}
+}
 
 const updateContact = async (contactId, body) => {
   const contactsPath = path.format({

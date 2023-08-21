@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const express = require('express')
 const { 
   listContacts,
@@ -25,17 +26,32 @@ router.get('/api/contacts/:contactId', async (req, res, next) => {
 })
 
 router.post('/api/contacts', async (req, res, next) => {
-  const body = req.query
-  res.status(201)
-  res.json({
-    name: body.name,
-    email: body.email,
-    phone: body.phone,
-  })
-  addContact( 
-    body.name,
-    body.email,
-    body.phone,)
+    const schema = Joi.object({
+      name: Joi.string()
+          .alphanum()
+          .min(3)
+          .max(30)
+          .required(),
+      email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'pl'] } })
+      .required(),
+      phone: Joi.string()
+      .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+      .required(),
+    })
+    try{
+      const body = await schema.validateAsync({
+        name: req.query.name,
+        email: req.query.email,
+        phone: req.query.phone,
+      }) 
+      addContact( body )
+      res.status(201).json(body)
+    }catch(err){
+      res.status(400).json({
+        message: err
+      })
+    }
 })
 
  router.delete('/api/contacts/:contactId', async (req, res, next) => {
@@ -48,11 +64,32 @@ router.post('/api/contacts', async (req, res, next) => {
 
 router.put('/api/contacts/:contactId', async (req, res, next) => {
   const data = req.params.contactId
-  const body = req.query
-  res.status(201).json({
-    message: "updated succesfully",
-    id: data})
-  updateContact(data, body) 
+  const schema = Joi.object({
+    name: Joi.string()
+        .alphanum()
+        .min(3)
+        .max(30)
+        .required(),
+    email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'pl'] } })
+    .required(),
+    phone: Joi.string()
+    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+    .required(),
+  })
+  try{
+    const body = await schema.validateAsync({
+      name: req.query.name,
+      email: req.query.email,
+      phone: req.query.phone,
+    }) 
+    updateContact(data, body)
+    res.status(201).json(body).json({id: data})
+  }catch(err){
+    res.status(400).json({
+      message: err
+    })
+  }
 })
 
 module.exports = router
