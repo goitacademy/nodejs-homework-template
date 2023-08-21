@@ -1,10 +1,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-
 require("dotenv").config();
-
-
 
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -35,7 +32,7 @@ const signup = async (req, res, next) => {
         code: 201,
         ResponseBody: {
           user: {
-            email: "example@example.com",
+            email: email,
             subscription: "starter",
           },
         },
@@ -59,11 +56,12 @@ const login = async (req, res, next) => {
   }
 
   const payload = {
-    id: user.id,
+    id: user._id,
   };
 
   const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1h" });
-
+  user.token = token;
+  await user.save();
   res
     .status(200)
     .header("Content-Type", "application/json")
@@ -79,7 +77,35 @@ const login = async (req, res, next) => {
       },
     });
 };
+
+const logout = async (req, res, next) => {
+  const id = req.user._id;
+
+  const user = await User.findById(id);
+  if (!user) {
+    return res
+      .status(401)
+      .header("Content-Type", "application/json")
+      .json({
+        status: "Unauthorized",
+        code: 401,
+        ResponseBody: {
+          message: "Not authorized",
+        },
+      });
+  }
+
+  user.token = null;
+  await user.save();
+
+  res.status(204).json({
+    status: "no content",
+    code: 204,
+  });
+};
+
 module.exports = {
   signup,
   login,
+  logout,
 };
