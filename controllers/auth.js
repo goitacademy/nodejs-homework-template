@@ -93,8 +93,8 @@ const logout = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
-  const jimpresize = await Jimp.read(tmpUpload)
-  await jimpresize
+  const jimpResize = await Jimp.read(tmpUpload)
+  await jimpResize
     .resize(250, 250)
     .writeAsync(tmpUpload);
     
