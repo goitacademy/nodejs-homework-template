@@ -8,19 +8,20 @@ const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data);
-    console.log(contacts);
+    console.log("Contacts:", contacts);
     return contacts;
   } catch (err) {
     console.error(err);
   }
 };
 
-const getContactById = async ({ id }) => {
+const getContactsById = async ({ id }) => {
   try {
     const contacts = await listContacts();
     const index = await contacts.findIndex((item) => item.id === id);
     if (index === -1) return null;
     const contact = contacts.find((c) => c.id === id);
+    console.log("Contacts:", contacts);
     return contact;
   } catch (err) {
     console.error(err);
@@ -68,7 +69,7 @@ const updateContact = async ({ id }, data) => {
 
 module.exports = {
   listContacts,
-  getContactById,
+  getContactsById,
   removeContact,
   addContact,
   updateContact,
