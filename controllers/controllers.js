@@ -36,7 +36,7 @@ const getContactByIdController = async (req, res, next) => {
 const createContactController = async (req, res, next) => {
   try {
     const { body } = req;
-    const { error } = schemaJoiValidate(body);
+    const { error } = await schemaJoiValidate(body);
 
     if (error)
       res.status(400).json({
@@ -55,6 +55,8 @@ const updateContactController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
+    const { error } = await schemaJoiValidate(body);
+
     const dataContact = await listContacts();
     const findIndexContact = dataContact.findIndex(
       (contact) => contact.id === id
@@ -63,7 +65,7 @@ const updateContactController = async (req, res, next) => {
     if (findIndexContact === -1)
       return res.status(404).json({ Message: "Bad id, please correct." });
 
-    if (body === {}) return res.status(400).json({ message: "Missing fields" });
+    if (error) return res.status(400).json({ message: "Missing fields" });
 
     const dataContacts = await updateContact(id, body);
 
