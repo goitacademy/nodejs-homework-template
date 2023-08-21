@@ -93,7 +93,15 @@ const logout = async (req, res, next) => {
   const { id } = req.user;
   try {
       await userLogout(id);
-      res.status(204).json();
+
+      res.json({
+    status: 'success',
+    code: 204,
+    data: {
+     message: "You has been logged out",
+     
+    },
+  })
   } catch (error) {
       next(error);
   }
