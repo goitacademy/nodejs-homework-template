@@ -1,4 +1,5 @@
 const contactService = require("../service/contacts.service");
+const alert = require('alert');
 
 const get = async (req, res, next) => {
     try {
@@ -105,6 +106,9 @@ const remove = async (req, res, next) => {
     try {
         const { id } = req.params;
         const results = await contactService.remove(id);
+        if(results) {
+            alert("The user is deleted")
+        }
         res.json({
             status: "success",
             code: 200,

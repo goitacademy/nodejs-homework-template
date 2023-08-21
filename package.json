@@ -16,7 +16,9 @@
     "express": "4.17.1",
     "joi": "^17.9.2",
     "mongoose": "^7.4.3",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "ng-notifications-bar": "^0.0.16",
+    "push.js": "^1.0.12"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
