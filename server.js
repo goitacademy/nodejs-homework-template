@@ -3,14 +3,14 @@ const app = require("./app");
 
 const colors = require("colors");
 
-const { DB_HOST, PORT } = process.env;
+const { DB_HOST, PORT = 5050 } = process.env;
 
 mongoose.set("strictQuery", true);
 
 mongoose
 	.connect(DB_HOST)
 	.then(() => {
-		app.listen(3000, () =>
+		app.listen(PORT, () =>
 			console.log(`Server running. Use our API on port: ${PORT}`.blue.bold)
 		);
 		console.log("Database connection successful".green.bold);
