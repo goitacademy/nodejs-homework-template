@@ -1,24 +1,18 @@
 const contactsRoutes = require("express").Router();
-const contactsControllers = require("../controllers/contactsController");
+const contacts = require("../controllers/index").contacts; 
+const { authorizeUser } = require("../midlewares/authorization");
+
 
 // додати контакт
-contactsRoutes.post(
-  "/contacts",
-  (req, res, next) => {
-    console.log("joi");
-    next();
-  },
-  contactsControllers.addContact
-);
+contactsRoutes.post("/", authorizeUser, contacts.addContact);
 // отримати всі контакти
-contactsRoutes.get("/contacts", contactsControllers.getAll);
+contactsRoutes.get("/", authorizeUser, contacts.getAll);
 // отримати один контакт
-contactsRoutes.get("/contacts/:id", contactsControllers.getById);
+contactsRoutes.get("/:id", authorizeUser, contacts.getById);
 // оновити контакт
-contactsRoutes.put("/contacts/:id", contactsControllers.update);
-contactsRoutes.patch("/contacts/:id/favorite", contactsControllers.updateContactStatus);
+contactsRoutes.put("/:id", authorizeUser, contacts.update);
+contactsRoutes.patch("/:id/favorite",  authorizeUser,  contacts.updateContactStatus);
 // видалити контакт
-contactsRoutes.delete("/contacts/:id", contactsControllers.remove);
+contactsRoutes.delete("/:id", authorizeUser, contacts.remove);
 
 module.exports = contactsRoutes;
-// Cannot GET /api/v1/contacts
