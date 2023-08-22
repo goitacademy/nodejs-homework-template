@@ -1,6 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
+
+const DB_HOST = "mongodb+srv://Alex-XAG:Pigeon87@cluster0.tdqkcfp.mongodb.net/";
+
+mongoose.connect();
 
 const contactsRouter = require("./routes/api/contacts.js");
 
