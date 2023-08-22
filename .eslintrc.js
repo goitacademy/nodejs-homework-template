@@ -9,4 +9,12 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {},
-}
+  overrides: [
+    {
+      files: ['**/*.js'],
+      rules: {
+        'no-useless-catch': 'off',
+      },
+    },
+  ],
+};
