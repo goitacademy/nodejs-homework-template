@@ -1,8 +1,16 @@
-const contactSchema = require("../validation/contacts");
+const {
+    joiContactSchema,
+  joiToggleFavouriteContactSchema,
+} = require("../validation/contacts");
 
 const validateContact = (req, res, next) => {
-  const { error } = contactSchema.validate(req.body);
-  
+    const { error } = joiContactSchema.validate(req.body);
+    const { name, email, phone } = req.body;
+
+      if (!name && !email && !phone) {
+    res.status(400).json({ message: "missing fields" });
+      }
+    
   if (error) {
       const errorMessages = error.details.map((detail) => {
       if (detail.type === 'any.required') {
@@ -21,16 +29,6 @@ const validateContact = (req, res, next) => {
   }
 };
 
-const handleMissingFields = (req, res, next) => {
-    const { name, email, phone } = req.body;
-  if (!name && !email && !phone) {
-    res.status(400).json({ message: "missing fields" });
-  } else {
-    next();
-  }
-};
-
 module.exports = {
-  validateContact,
-  handleMissingFields
+  validateContact
 };

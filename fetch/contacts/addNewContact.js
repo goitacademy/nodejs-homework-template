@@ -1,13 +1,24 @@
-const {validateContact, handleMissingFields} = require('../../middleware/validationMiddleware')
-const { addContact } = require("../../models/contacts");
+const { joiContactSchema } = require("../../validation/contacts");
+
+const Contact = require("../../models/contacts");
 
 const createNew = async (req, res, next) => {
-    try {
-    const result = await addContact(req.body);
+  try {
+    const { error } = joiContactSchema.validate(req.body);
+    if (error) {
+      console.log(error);
+      res.json({
+        message: "Bad request",
+      });
+      return;
+    }
+
+    const result = await Contact.create(req.body);
+
     res.status(201).json(result);
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = [handleMissingFields, validateContact, createNew];
+module.exports = createNew;

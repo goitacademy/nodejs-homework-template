@@ -4,14 +4,19 @@ const router = express.Router();
 
 const { contacts: ctrl } = require("../../fetch");
 
+const { isValidId } = require("../../middleware");
+const { validateContact } = require("../../middleware/validationMiddleware")
+
 router.get("/", ctrl.getAll);
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", isValidId, ctrl.getById);
 
-router.post("/", ctrl.addNewContact);
+router.post("/", validateContact, ctrl.addNewContact);
 
-router.delete("/:contactId", ctrl.removeById);
+router.delete("/:contactId", isValidId, ctrl.removeById);
 
-router.put("/:contactId", ctrl.editById);
+router.put("/:contactId", isValidId, ctrl.editById);
+
+router.patch("/:contactId/favorite", isValidId, ctrl.updateStatusContact);
 
 module.exports = router;

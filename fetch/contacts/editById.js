@@ -1,22 +1,30 @@
-const {validateContact, handleMissingFields} = require('../../middleware/validationMiddleware')
-const { updateContact } = require("../../models/contacts");
-
+const { joiContactSchema } = require("../../validation/contacts");
+const Contact = require("../../models/contacts");
 
 const editById = async (req, res, next) => {
   try {
+    const { error } = joiContactSchema.validate(req.body);
+    if (error) {
+      res.json({message: "Bad request"});
+      return;
+    }
+
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
 
     if (!result) {
       res.json({
         message: "Not found"
       });
-    } else {
-      res.json(result);
+      return;
     }
+
+    res.json(result);
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = [handleMissingFields, validateContact, editById];
+module.exports = editById;
