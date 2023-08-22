@@ -1,9 +1,9 @@
 const HttpError = require('./httpErrors');
 const ctrlWrapper = require('./ctrlWrapper');
-const handleMongooseError = require('./handleMongooseError')
+const isIdValid = require('./isIdValid')
 
 module.exports = {
   HttpError,
   ctrlWrapper,
-  handleMongooseError,
+  isIdValid,
 };
