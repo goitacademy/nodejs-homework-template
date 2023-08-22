@@ -1,7 +1,11 @@
 const Contact = require("../models/contact.model");
 
 const getAll = async (query) => {
-  return Contact.find(query);
+  const page = parseInt(query.page) || 1;
+  const limit = parseInt(query.limit) || 10;
+  const startIndex = (page - 1) * limit;
+
+  return Contact.find().skip(startIndex).limit(limit);
 };
 
 const getOne = async (id) => {
