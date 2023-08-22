@@ -6,6 +6,7 @@ const fs = require("fs/promises");
 require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/auth");
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((_, res) => {
