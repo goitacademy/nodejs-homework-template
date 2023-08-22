@@ -26,8 +26,19 @@ const getContactById = (contactId) => {
 const removeContact = (contactId) => {
 	try {
 		const data = JSON.parse(fs.readFileSync(pathContacts));
-		const deletedContact = data.filter((item) => item.id === contactId);
-		return deletedContact;
+		const contactToDelete = data.filter((item) => item.id === contactId);
+
+		if (!contactToDelete) {
+			console.log(`Contact with id ${contactId} not found.`);
+
+			return false;
+		}
+
+		const newArrContacts = data.filter((item) => item.id !== contactId);
+		console.log(newArrContacts);
+		fs.writeFileSync(pathContacts, JSON.stringify(newArrContacts));
+
+		return true;
 	} catch (err) {
 		console.log(err);
 	}
@@ -44,6 +55,9 @@ const addContact = (body) => {
 			phone,
 		};
 		data.push(newContact);
+
+		fs.writeFileSync(pathContacts, JSON.stringify(data));
+
 		return newContact;
 	} catch (err) {
 		console.log(err);
@@ -58,6 +72,9 @@ const updateContact = (contactId, body) => {
 		editContact.name = name;
 		editContact.email = email;
 		editContact.phone = phone;
+
+		fs.writeFileSync(pathContacts, JSON.stringify(data));
+
 		return editContact;
 	} catch (err) {
 		console.log(err);
