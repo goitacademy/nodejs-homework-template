@@ -30,6 +30,7 @@ const getById = async (req, res) => {
                     contact: results,
                 },
             });    
+            return;
         }
         res.json({
             status: "success",
@@ -107,7 +108,7 @@ const remove = async (req, res, next) => {
         const { id } = req.params;
         const results = await contactService.remove(id);
         if(results) {
-            alert("The user is deleted")
+            alert("Contact has been deleted")
         }
         res.json({
             status: "success",
