@@ -6,7 +6,6 @@ const router = express.Router();
 const contacts = require("../../models/contacts");
 
 const contactsSchema = Joi.object({
-  id: Joi.string().required(),
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
@@ -29,6 +28,7 @@ router.get("/:id", async (req, res, next) => {
       notFoundError.status = 404;
       throw notFoundError;
     }
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -38,9 +38,9 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
-      const validationError = new Error(error.message);
-      validationError.status = 400;
-      throw validationError;
+      return res.status(400).json({
+        error: error.message,
+      });
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -53,11 +53,11 @@ router.delete("/:id", async (req, res, next) => {
   try {
     const result = await contacts.removeContact(req.params.id);
     if (!result) {
-      const notFoundError = new Error("Contact not found");
-      notFoundError.status = 404;
-      throw notFoundError;
+      return res.status(404).json({
+        error: "Not found",
+      });
     }
-    res.status(204);
+    res.status(204).json(result);
   } catch (error) {
     next(error);
   }
@@ -67,16 +67,17 @@ router.put("/:id", async (req, res, next) => {
   try {
     const { error } = contactsSchema.validate(req.body);
     if (error) {
-      const validationError = new Error(error.message);
-      validationError.status = 400;
-      throw validationError;
+      return res.status(400).json({
+        error: error.message,
+      });
     }
     const result = await contacts.updateContact(req.params.id, req.body);
     if (!result) {
-      const notFoundError = new Error("Contact not found");
-      notFoundError.status = 404;
-      throw notFoundError;
+      return res.status(404).json({
+        error: "Contact not found",
+      });
     }
+    res.status(200).json({ message: "Contact updated successfully" });
   } catch (error) {
     next(error);
   }
