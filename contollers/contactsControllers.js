@@ -5,12 +5,6 @@ const errorHandler = require("../helpers/errorsHandler");
 const listContacts = async (req, res) => {
   const result = await contacts.listContacts();
   res.json(result);
-  // try {
-  //   const docs = await Contact.find().exec();
-  //   res.json(docs);
-  // } catch (error) {
-  //   throw errorHandler(404, "Not found");
-  // }
 };
 
 const getContactById = async (req, res) => {
@@ -44,25 +38,9 @@ const addContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const contact = await contacts.updateContact(req.params.contactId, req.body);
-  // console.log(contact);
-
-  // console.log(`contact: ${contact}`);
-  // if (contact === null) {
-  //   throw errorHandler(404, "Not found");
-  // }
   if (!contact) {
     throw errorHandler(404, "Not Found");
   }
-
-  // if (typeof contact === "string") {
-  //   console.log(contact);
-
-  //   if (contact === "must be a string") {
-  //     throw errorHandler(400, contact);
-  //   }
-  //   const errorMessage = `missing required ${contact} field`;
-  //   throw errorHandler(400, errorMessage);
-  // }
   res.status(200).json(contact);
 };
 

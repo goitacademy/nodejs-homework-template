@@ -3,7 +3,7 @@ const errorHandler = require("../helpers/errorsHandler");
 const validateBody = (schema) => {
   const func = (req, res, next) => {
     if (Object.keys(req.body).length === 0) {
-      let message = "";
+      let message = "missing fields";
       console.log(req.method);
       if (req.method === "PUT") {
         message = "missing fields";
