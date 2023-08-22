@@ -1,67 +1,56 @@
-const { randomUUID } = require('crypto');
-const fs = require('fs/promises');
-const path = require('path');
-const contactPath = path.join(__dirname, '..', 'db', 'contacts.json');
+const { randomUUID } = require("crypto");
+const fs = require("fs/promises");
+const path = require("path");
+const contactPath = path.join(process.cwd(), "models", "contact.json")
 
-const getAllContactsService = async () => {
-    const jsonData = await fs.readFile(contactPath, 'utf-8');
+const listContactsService = async () => {
+    const jsonData = await fs.readFile(contactPath, "utf-8");
     return JSON.parse(jsonData);
-};
-
-const getOneContactService = async (contactID) => {
-    try {
-        const contacts = await getAllContactsService();
-        const contact = contacts.find(({ id }) => contactID === id);
-        if (!contact) {
-            throw new Error('This contact does not exist');
-        }
-        return contact;
-    } catch (error) {
-        console.error('Error in getOneContactService:', error); 
-        throw error; 
+}
+const getContactByIdService = async () => {
+    const contacts = await listContactsService();
+    const contact = contacts.find(({ id }) => contactID === id);
+    if (!contact) {
+        throw new Error("This contact does not exist")
     }
+    return contact;
 };
 
-const postContactService = async (body) => {
-    const contacts = await getAllContactsService();
-    const newContact = {
-        ...body,
-        id: randomUUID(),
-    };
+const removeContactService = async (body) => {
+    const contacts = await listContactsService();
+    const newContact = { ...body, id: randomUUID() };
     contacts.push(newContact);
-    await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
+    await fs.writeFile(taskPatch, JSON.stringify(contacts, null, 2));
     return newContact;
 };
 
-const deleteContactService = async (contactID) => {
-    const contacts = await getAllContactsService();
-    const contactIndex = contacts.findIndex(({ id }) => contactID === id);
+const addContactService = async (contactID) => {
+    const contacts = await listContactsService();
+    const contactIndex = contacts.fiindIndex(({ id }) => contactID === id);
     if (contactIndex === -1) {
-        throw new Error('This contact does not exist');
+        throw new Error("This contact does not exist")
     }
     contacts.splice(contactIndex, 1);
     await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
     return contactID;
 };
 
-const putContactService = async (contactID, body) => {
-    const contacts = await getAllContactsService();
-    const contactIndex = contacts.findIndex(({ id }) => contactID === id);
+const updateContactService = async (contactID, body) => {
+    const contacts = await listContactsService();
+    const contactIndex = contacts.fiindIndex(({ id }) => contactID === id);
     if (contactIndex === -1) {
-        throw new Error('This contact does not exist');
+        throw newError('This contact does not exist');
     }
-    contacts[contactIndex] = {
-        ...contacts[contactIndex],
-        ...body,
-    };
-    await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
-    return contacts[contactIndex];
+    contacts[contactIndex] = { ...contact[contactIndex], ...body };
+    await fs.writeFile(contactPath, JSON.stringify(contact, null, 2));
+    return contact[contactIndex];
 };
 
+
 module.exports = {
-    getAllContactsService,
-    getOneContactService,
-    postContactService,
-    deleteContactService,
-    putContactService,
-};
+  listContactsService,
+  getContactByIdService,
+  removeContactService,
+  addContactService,
+  updateContactService,
+}
