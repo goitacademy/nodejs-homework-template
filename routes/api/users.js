@@ -81,7 +81,7 @@ router.get('/current', auth, (req, res, next) => {
 	})
 })
 
-router.post('/logout', auth, async (req, res, next) => {
+router.get('/logout', auth, async (req, res, next) => {
 	const user = await logout(req.user._doc._id)
 	if (user) {
 		res.json({
