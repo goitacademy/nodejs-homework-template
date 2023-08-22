@@ -2,7 +2,7 @@ const Contact = require("../models/contact.model");
 
 const getAll = async (query) => {
   const page = parseInt(query.page) || 1;
-  const limit = parseInt(query.limit) || 10;
+  const limit = parseInt(query.limit) || 20;
   const startIndex = (page - 1) * limit;
   const filter = {};
   
