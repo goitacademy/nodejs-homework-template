@@ -1,25 +1,22 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { contacts: ctrl } = require("../../fetch");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { isValidId } = require("../../middleware");
+const { validateContact } = require("../../middleware/validationMiddleware")
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrl.getAll);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", isValidId, ctrl.getById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validateContact, ctrl.addNewContact);
 
-module.exports = router
+router.delete("/:contactId", isValidId, ctrl.removeById);
+
+router.put("/:contactId", isValidId, ctrl.editById);
+
+router.patch("/:contactId/favorite", isValidId, ctrl.updateStatusContact);
+
+module.exports = router;
