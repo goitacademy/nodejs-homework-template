@@ -53,7 +53,7 @@ const updateStatusContact = async (req, res, next) => {
         const updatedContact = await Contact.updateContact(contactId, { favorite });
 
         if (!updatedContact) {
-            return res.status(404).json({ message: 'Not found' });
+            throw HttpError(404, "Not found");
         }
 
         res.status(200).json(updatedContact);
