@@ -28,11 +28,13 @@ const contactShema = Schema({
     type: Boolean,
     default: false,
   },
+
   owner: {
     type: Schema.Types.ObjectId,
     ref: "user",
     required: true,
   },
+
 });
 
 const addSchema = Joi.object({
@@ -43,6 +45,7 @@ const addSchema = Joi.object({
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
+
 const userSchemas = {
   addSchema,
   favoriteSchema,
