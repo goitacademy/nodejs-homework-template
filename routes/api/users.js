@@ -2,8 +2,9 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
-import { getUser, addUser, loginUser, patchUser } from '../../models/users.js';
+import { getUser, addUser, loginUser, patchUser, patchAvatar } from '../../models/users.js';
 import { auth } from '../../config/config-passport.js';
+import { upload } from '../../config/config-multer.js';
 
 dotenv.config();
 const secret = process.env.SECRET;
@@ -120,7 +121,7 @@ usersRouter.patch('/', auth, async (req, res, next) => {
   const { body } = req;
   const { subscription } = body;
 
-  if (!('subscription' in body) || Object.keys(body).length === 0) {
+  if (!('subscription' in body)) {
     return res.status(400).json('Error! Missing field subscription!');
   }
 
@@ -136,5 +137,24 @@ usersRouter.patch('/', auth, async (req, res, next) => {
     });
   } catch (err) {
     res.status(500).json(`An error occurred while updating the contact: ${err}`);
+  }
+});
+
+usersRouter.patch('/avatars', auth, upload.single('avatar'), async (req, res) => {
+  const file = req.file;
+  if (!file) {
+    return res.status(400).json('Error! Missing file!');
+  }
+  const { path } = file;
+  const { id: userId } = req.user;
+  try {
+    const newAvatarPath = await patchAvatar(path, userId);
+    return res.json({
+      status: 'success',
+      code: 200,
+      avatarURL: newAvatarPath,
+    });
+  } catch (err) {
+    res.status(500).json(`An error occurred while updating the avatar: ${err}`);
   }
 });
