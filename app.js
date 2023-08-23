@@ -15,10 +15,6 @@ app.use(express.json())
 app.use('/', contactsRouter)
 app.use('/api/contacts', contactsRouter)
 
-app.use('/list', contactsRouter)
-app.use('/test', contactsRouter)
-
-
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })

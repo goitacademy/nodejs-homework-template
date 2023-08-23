@@ -11,7 +11,7 @@ const {
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template mess' })
+  res.json({ message: 'template message' })
 })
 
 router.get('/api/contacts', async (req, res, next) => {
@@ -21,7 +21,6 @@ router.get('/api/contacts', async (req, res, next) => {
 
 router.get('/api/contacts/:contactId', async (req, res, next) => {
   const data = await getContactById(req.params.contactId) 
-  console.log( await getContactById(req.params.contactId) ) 
   res.json( {contacts: data} )
 })
 
