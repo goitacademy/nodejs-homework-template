@@ -9,6 +9,7 @@ const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 const globalErrorHandler = require('./middlewares/globalErrorHandler');
+const notFoundHandler = require('./middlewares/notFoundHandler.js');
 
 app.use(logger(formatsLogger));
 app.use(cors());
@@ -24,6 +25,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 });
 
+app.use(notFoundHandler);
 app.use(globalErrorHandler);
 
 module.exports = app;

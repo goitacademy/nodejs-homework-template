@@ -11,13 +11,13 @@ const express = require('express')
 const listContacts = async (req, res, next) => {
   try {
     const contacts = await listContactsService();
-  res.json(contacts);
-} catch (error) {
+    res.status(200).json(contacts);
+  } catch (error) {
     next(error);
   }
 };
 
-const getContactById = async (req, res, next, contactId) => {
+const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await getContactByIdService(contactId);
@@ -27,29 +27,36 @@ const getContactById = async (req, res, next, contactId) => {
   }
 };
 
-const removeContact = async (req, res, next, contactId) => {
+const removeContact = async (req, res, next) => {
   try {
-    const newContact = await removeContactService(req.body);
+    const newContact = await removeContactService(contactId);
     res.status(201).json(newContact);
-  } catch (error) {
-    next(errror);
-  }
-};
-
-const addContact = async (req, res, next, body) => {
-  try {
-    const { contactID } = req.params;
-    const addContactID = await addContactService(contactID);
-    res.status(200).json({ message: `Contact ${addContactID} has been deleted` })
   } catch (error) {
     next(error);
   }
 };
 
-const updateContact = async (req, res, next, contactId, body) => {
+const addContact = async (req, res, next) => {
   try {
-    const { contactID } = req.params;
-    const updateContact = await updateContactService(contactID, req.body);
+    const { name, email, phone } = req.body;
+
+    if (!name || !email || !phone) {
+      return res.status(400).json({ message: 'missing required name, email, or phone field' });
+    }
+
+    const newContact = { name, email, phone };
+    const addedContact = await addContactService(newContact);
+
+    res.status(201).json(addedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const updateContact = await updateContactService(contactId);
     res.status(200).json(updateContact)
   } catch (error) {
     next(error);
