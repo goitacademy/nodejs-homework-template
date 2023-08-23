@@ -35,11 +35,7 @@ const deleteContact = async (req, res) => {
   res.json({ message: "contact deleted" })
 };
 
-const putContact = async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    throw HttpError(400, "missing fields");
-  };
-
+const putContact = async (req, res, next) => {
   const { contactId } = req.params;
   const updatedContact = await updateContact(contactId, req.body);
 
