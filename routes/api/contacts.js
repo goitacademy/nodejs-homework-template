@@ -23,7 +23,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
 	const { contactId } = req.params;
 	const id = getContactById(contactId);
-	if (id === undefined) {
+	if (!id) {
 		return res.status(404).json({ message: "Not found" });
 	} else {
 		return res.status(200).json(await id);
@@ -56,7 +56,7 @@ router.put("/:contactId", async (req, res, next) => {
 	const { contactId } = req.params;
 	const { name, email, phone } = req.body;
 
-	if (name === "" || email === "" || phone === "") {
+	if (!name || !email || !phone) {
 		return res.status(400).json({ message: "missing fields" });
 	}
 	const validation = schema.validate({ name, email, phone });
@@ -68,7 +68,7 @@ router.put("/:contactId", async (req, res, next) => {
 	}
 
 	const editedContact = updateContact(contactId, { name, email, phone });
-	if (editedContact === undefined) {
+	if (!editedContact) {
 		return res.status(404).json({ message: "Not found" });
 	}
 	res.status(200).json(editedContact);
