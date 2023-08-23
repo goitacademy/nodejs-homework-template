@@ -10,12 +10,24 @@ import {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
+  const result = await listContacts();
 
-  if (!contacts) {
-    res.status(404).json({ message: "Not found" });
+  if (result.hasOwnProperty("message")) {
+    res.status(404).json({
+      status: "error",
+      code: 404,
+      message: result.message,
+      data: "Not found",
+    });
   }
-  res.json({ contacts });
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
 });
 
 router.get("/:contactId", async (req, res, next) => {

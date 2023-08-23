@@ -3,12 +3,12 @@ import { nanoid } from "nanoid";
 
 const readContacts = async () => {
   try {
-    const data = await fs.readFile("./contacts.json", "utf-8");
+    const data = await fs.readFile("./models/contacts.json", "utf-8");
     const contacts = JSON.parse(data);
 
     return contacts;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
@@ -18,7 +18,7 @@ const listContacts = async () => {
 
     return contacts;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
@@ -29,7 +29,7 @@ const getContactById = async (contactId) => {
 
     return contact;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
@@ -41,7 +41,7 @@ const removeContact = async (contactId) => {
 
     return filteredContacts;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
@@ -54,7 +54,7 @@ const addContact = async (body) => {
 
     return newContact;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
