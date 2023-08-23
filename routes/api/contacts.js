@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 const { authenticate, isValidId, validateBody } = require("../../middlewares");
 
@@ -29,13 +30,17 @@ router.put(
   authenticate,
   isValidId,
   validateBody(userSchemas.addSchema),
+
   ctrlWrapper(updateById)
 );
 router.patch(
   "/:contactId/favorite",
+
   authenticate,
   isValidId,
   validateBody(userSchemas.favoriteSchema),
+
+
   ctrlWrapper(updateFavorite)
 );
 module.exports = router;
