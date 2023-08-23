@@ -9,11 +9,11 @@ const requiredFieldsSchema = Joi.object({
     .required(),
 });
 
-const validateData = (request, response, next) => {
-  const { error } = requiredFieldsSchema.validate(request.body);
+const validateData = (req, res, next) => {
+  const { error } = requiredFieldsSchema.validate(req.body);
   if (error) {
     const fieldName = error.details[0].path[0];
-    throw HttpError(400, `missing required ${fieldName} field`);
+    throw HttpError(400, fieldName );
   }
   next();
 };
