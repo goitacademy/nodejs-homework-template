@@ -6,9 +6,15 @@ const Contact = require("../../models/contacts");
 const updateStatusContact = async (req, res, next) => {
   try {
     const { error } = joiToggleFavouriteContactSchema.validate(req.body);
+    if (!req.body.hasOwnProperty('favorite')) {
+       res.status(400).json({
+        message: "Missing field favorite",
+      });
+      return;
+    }
     if (error) {
       res.status(400).json({
-        message: "Missing field favorite",
+        message: "Incorrect field favorite",
       });
       return;
     }

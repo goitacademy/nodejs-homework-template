@@ -1,6 +1,5 @@
 const {
-    joiContactSchema,
-  joiToggleFavouriteContactSchema,
+    joiContactSchema
 } = require("../validation/contacts");
 
 const validateContact = (req, res, next) => {

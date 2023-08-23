@@ -5,7 +5,7 @@ const editById = async (req, res, next) => {
   try {
     const { error } = joiContactSchema.validate(req.body);
     if (error) {
-      res.json({message: "Bad request"});
+      res.status(400).json({message: "Missing fields"});
       return;
     }
 
