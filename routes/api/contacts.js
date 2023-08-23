@@ -1,42 +1,28 @@
-const { Schema, model } = require("mongoose");
-const { handleMogooseError } = require("../helpers/index");
-const Joi = require("joi");
+const express = require("express");
 
-const phoneRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
+const ctrl = require("../../controllers/contacts");
 
-const contactSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Set name for contact"],
-    },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  { versionKey: false, timestamps: true }
+const { validateBody, isValidId } = require("../../midlewares");
+
+const { addSchema, updateFavotiteSchema } = require("../../models/contact");
+
+const router = express.Router();
+
+router.get("/", ctrl.getAll);
+
+router.get("/:id", isValidId, ctrl.getById);
+
+router.post("/", validateBody(addSchema), ctrl.add);
+
+router.put("/:id", isValidId, validateBody(addSchema), ctrl.updateById);
+
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(updateFavotiteSchema),
+  ctrl.updateFavorite
 );
 
-contactSchema.post("save", handleMogooseError);
+router.delete("/:id", isValidId, ctrl.deleteById);
 
-const addSchema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().pattern(phoneRegexp).required(),
-  favorite: Joi.boolean(),
-});
-
-const updateFavotiteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
-
-const Contact = model("contact", contactSchema);
-
-module.exports = { Contact, addSchema, updateFavotiteSchema };
+module.exports = router;
