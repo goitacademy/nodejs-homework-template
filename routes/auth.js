@@ -2,11 +2,15 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
+const path = require('path');
+const Jimp = require('jimp');
+const fs = require('fs').promises;
 const gravatar = require('gravatar');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
 const auth = require('../middleware/auth.js');
-
+const upload = require('../middleware/multer.js');
+const storeImage = path.join(process.cwd(), 'public/avatars');
 const { SECRET } = process.env;
 
 const registerSchema = Joi.object({
@@ -34,7 +38,7 @@ const subscriptionSchema = Joi.object({
         .valid("pro", "starter", "business")
 });
 
-router.post("/signup", async (req, res, next) => {
+router.post("/signup", async (req,res,next) => {
     try {
         const { email, password, subscription } = req.body;
         const avatarURL = gravatar.url(email);
@@ -89,18 +93,19 @@ router.post('/login', async (req, res, next) => {
         const payload = { id: isUser._id, email };
         const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
         await User.findByIdAndUpdate(payload.id, { token });
-        res.status(200).json(token);
+        return res.status(200).json(token);
     } catch (error) {
         next(error);
     }
-});
+}
+);
 
 router.get('/logout', auth, async (req, res, next) => {
     try {
         const { _id } = req.user;
         await User.findByIdAndUpdate(_id, { token: null }, { new: true });
         req = null;
-        res.json({ message: "logged out" });
+        return res.json({ message: "logged out" });
     } catch (error) {
         next(error);
     }
@@ -130,5 +135,25 @@ router.patch("/", auth, async (req, res, next) => {
         next(error);
     }
 });
+
+router.patch('/avatars', auth, upload.single('avatar'), async (req, res, next) => {
+    const { path: tempUpload, originalname } = req.file;
+    const { _id: id } = req.user;
+    const imageName = `${id}_${originalname}`;
+    const avatarURL = path.join(storeImage, imageName);
+    try {
+        const image = await Jimp.read(tempUpload);
+        image.resize(150, 150);
+        await image.writeAsync(avatarURL);
+        await fs.unlink(tempUpload);
+        await User.findByIdAndUpdate(id, { avatarURL });
+        return res.status(200).json({message: "succes", avatarURL});
+    } catch (err) {
+        await fs.unlink(tempUpload);
+        return next(err);
+    }
+});
+
+
 
 module.exports = router; 
