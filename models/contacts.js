@@ -25,15 +25,15 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const indexContact = contacts.findIndex((item) => (item.id = contactId));
-  if (indexContact === -1) {
+const updateContact = async (id, body) => {
+  const data = await listContacts();
+  const indexContacts = data.findIndex((obj) => obj.id === id);
+  if (indexContacts === -1) {
     return null;
   }
-  contacts[indexContact] = { id: contactId, ...body };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[indexContact];
+  data[indexContacts] = { id, ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(data, null, 3));
+  return data[indexContacts];
 };
 
 const removeContact = async (contactId) => {
