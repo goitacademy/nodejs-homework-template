@@ -1,22 +1,17 @@
 const{ HttpError, ctrlWrapper} = require('../helpers');
-const contacts = require('../models/contacts');
+const {Book, JoiSchema} = require('../models/contacts');
 
-const Joi = require('joi');
 
-const Schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    phone: Joi.string().required()
-});
+
 
 const getContacts = async (_, res) => {
     
-    res.json(await contacts.listContacts())
+    res.json(await Book.find())
 };
 
 const getContactById = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await (contacts.getContactById(contactId))
+    const contact = await (Book.findById(contactId));
     
     if (!contact) {
         throw HttpError(404, 'Not found');
@@ -26,19 +21,19 @@ const getContactById = async (req, res) => {
 
 const postContact = async (req, res, next) => {
 
-        const { error } = Schema.validate(req.body);
+        const { error } = JoiSchema.validate(req.body);
         if (error) {
             throw HttpError(400,error.message)
         };
 
-        const result = await contacts.addContact(req.body);
+        const result = await Book.create(req.body);
         res.status(201).json(result) 
 };
 
 const deleteContact = async (req, res, next) => {
   
         const { contactId } = req.params; 
-        const result = await contacts.removeContact(contactId);
+        const result = await Book.findByIdAndRemove(contactId);
         if (!result) {
             throw HttpError(404, 'Not Found')
         }
@@ -47,7 +42,7 @@ const deleteContact = async (req, res, next) => {
 };
 
 const putContact = async (req, res) => {
-    const { error } = Schema.validate(req.body);
+    const { error } = JoiSchema.validate(req.body);
         if (error) {
             throw HttpError(400,error.message)
     };
@@ -57,7 +52,7 @@ const putContact = async (req, res) => {
     if (!req.body) {
         res.status(400).json({ "message": "missing fields" });
     }
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await Book.findByIdAndUpdate(contactId, req.body);
     if (!result) {
         res.status(404).json({"message": "Not found"})
     }
