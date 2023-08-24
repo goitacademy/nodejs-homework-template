@@ -4,8 +4,8 @@ const { handleMongooseError } = require("../helpers");
 
 const Joi = require("joi");
 
-const passwordRegexp =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ -/:-@\[-`{-~]).{6,64}$/;
+// const passwordRegexp =
+//   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ -/:-@\[-`{-~]).{6,64}$/;
 
 const emailRegexp =
   /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -29,6 +29,10 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: { type: String, default: "" },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -37,12 +41,12 @@ userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().pattern(passwordRegexp).required(),
+  password: Joi.string().required(),
 });
 
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().pattern(passwordRegexp).required(),
+  password: Joi.string().required(),
 });
 
 const schemas = {
