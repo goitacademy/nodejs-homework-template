@@ -63,9 +63,19 @@ const logout = async (req, res) => {
 	res.json({ code: 204, message: "No Content" });
 };
 
+const updateSubscription = async (req, res) => {
+	const { id } = req.params;
+	const result = await User.findByIdAndUpdate(id, req.body, { new: true });
+	if (!result) {
+		throw HttpError(404, "Not found");
+	}
+	res.json(result);
+};
+
 module.exports = {
 	register: ctrlWrapper(register),
 	login: ctrlWrapper(login),
 	getCurrent: ctrlWrapper(getCurrent),
 	logout: ctrlWrapper(logout),
+	updateSubscription: ctrlWrapper(updateSubscription),
 };
