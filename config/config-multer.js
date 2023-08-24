@@ -8,7 +8,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const storage = multer.diskStorage({
+const storageImage = multer.diskStorage({
   destination: 'tmp',
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now();
@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   },
 });
 
-export const upload = multer({
-  storage: storage,
+export const uploadImage = multer({
+  storage: storageImage,
   fileFilter: fileFilter,
 });
