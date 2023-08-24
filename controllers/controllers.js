@@ -7,7 +7,7 @@ const {
   removeContact,
 } = require("../services/services");
 
-const schemaJoiValidate = require("../validate/validate");
+const contactValidationSchemas = require("../utils/validation/contactValidationSchemas");
 
 const getAllContactsController = async (req, res, next) => {
   try {
@@ -36,7 +36,7 @@ const getContactByIdController = async (req, res, next) => {
 const createContactController = async (req, res, next) => {
   try {
     const { body } = req;
-    const { error } = await schemaJoiValidate(body);
+    const { error } = await contactValidationSchemas(body);
 
     if (error)
       res.status(400).json({
@@ -55,7 +55,7 @@ const updateContactController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const { error } = await schemaJoiValidate(body);
+    const { error } = await contactValidationSchemas(body);
 
     const dataContact = await listContacts();
     const findIndexContact = dataContact.findIndex(
