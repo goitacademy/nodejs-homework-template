@@ -8,7 +8,15 @@ const readContacts = async () => {
 
     return contacts;
   } catch (err) {
-    return err;
+    throw new Error(`While processing ./models/contacts.json`, { cause: err });
+  }
+};
+
+const writeContacts = async (contacts) => {
+  try {
+    await fs.writeFile("./models/contacts.json", JSON.stringify(contacts));
+  } catch (err) {
+    throw new Error(`While processing ./models/contacts.json`, { cause: err });
   }
 };
 
@@ -33,26 +41,34 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {
-  try {
-    const contacts = await readContacts();
-    const filteredContacts = contacts.filter((item) => item.id !== contactId);
-    await fs.writeFile("./contacts.json", JSON.stringify(filteredContacts));
-
-    return filteredContacts;
-  } catch (err) {
-    return err;
-  }
-};
-
 const addContact = async (body) => {
   try {
     const contacts = await readContacts();
     const newContact = { ...body, id: nanoid() };
     contacts.push(newContact);
-    await fs.writeFile("./contacts.json", JSON.stringify(contacts));
+    await writeContacts(contacts);
 
     return newContact;
+  } catch (err) {
+    return err;
+  }
+};
+
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await readContacts();
+
+    const index = contacts.findIndex((item) => item.id === contactId);
+
+    if (index === -1) {
+      return null;
+    }
+
+    const filteredContacts = contacts.filter((item) => item.id !== contactId);
+
+    await writeContacts(filteredContacts);
+
+    return filteredContacts;
   } catch (err) {
     return err;
   }
@@ -63,24 +79,24 @@ const updateContact = async (contactId, body) => {
     const contacts = await readContacts();
     const index = contacts.findIndex((item) => item.id === contactId);
 
-    // if (index === -1) {
-    //   return null;
-    // }
+    if (index === -1) {
+      return null;
+    }
 
     contacts[index] = { ...contacts[index], ...body };
 
-    await fs.writeFile("./contacts.json", JSON.stringify(contacts));
+    await writeContacts(contacts);
 
     return contacts[index];
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
 export {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 };
