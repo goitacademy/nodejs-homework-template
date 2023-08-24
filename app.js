@@ -22,4 +22,4 @@ app.use((err, _, res, __) => {
   res.status(500).json({ message: err.message })
 })
 
-module.exports = app
+module.exports = app;

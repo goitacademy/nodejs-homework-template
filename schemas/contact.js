@@ -13,4 +13,5 @@ const contactSchema = Joi.object({
     .pattern(/^\(\d{3}\)\s\d{3}-\d{4}$/)
     .required(),
 });
+
 module.exports = contactSchema;
