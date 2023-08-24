@@ -1,19 +1,24 @@
 import express from "express";
-import constactsController from "../../controllers/index.js";
+import contactsController from "../../controllers/index.js";
 import { validateData, checkBody } from "../../helpers/index.js";
 
 const router = express.Router();
 
 
-router.get("/", constactsController.getContacts);
-router.get("/:contactId", constactsController.getContact);
-router.post("/", validateData, constactsController.addContact);
-router.delete("/:contactId", constactsController.deleteContact);
+router.get("/", contactsController.getContacts);
+router.get("/:contactId", contactsController.getContact);
+router.post("/", validateData, contactsController.addContact);
+router.delete("/:contactId", contactsController.deleteContact);
 router.put(
     "/:contactId",
     checkBody,
     validateData,
-    constactsController.updateContact
+    contactsController.updateContact
 );
+router.patch(
+  "/:contactId/favorite",
+  contactsController.updateStatusContact
+);
+
 
 export default router;
