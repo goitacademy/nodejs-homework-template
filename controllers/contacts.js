@@ -45,7 +45,7 @@ const removeContactControllers = async (req, res, next) => {
     const contact = await Contacts.removeContact(contactId);
 
     if (contact !== null) {
-      res.status(200).json(contact);
+      res.status(200).json({ message: "contact deleted" });
     } else {
       res.status(404).json({ message: "Not found" });
     }
