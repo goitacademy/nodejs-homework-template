@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { getUser, addUser, loginUser, patchUser, patchAvatar } from '../../models/users.js';
 import { auth } from '../../config/config-passport.js';
 import { uploadImage } from '../../config/config-multer.js';
+import { signupMiddleware } from './users.middleware.js';
 
 dotenv.config();
 const secret = process.env.SECRET;
@@ -29,28 +30,7 @@ usersRouter.get('/current', auth, async (req, res, next) => {
   }
 });
 
-usersRouter.post('/signup', async (req, res, next) => {
-  const { body } = req;
-
-  if (!('email' in body) || !('password' in body)) {
-    return res.status(400).json('Error! Missing password or email field!');
-  }
-
-  try {
-    const user = await addUser(body);
-    if (user === 409) {
-      return res.status(409).json({ message: 'Email in use' });
-    }
-    const { email, subscription } = user;
-    return res.status(201).json({
-      status: 'success',
-      code: 201,
-      user: { email, subscription },
-    });
-  } catch (err) {
-    res.status(500).json(`An error occurred while adding the user: ${err}`);
-  }
-});
+usersRouter.post('/signup', signupMiddleware(addUser));
 
 usersRouter.post('/login', async (req, res, next) => {
   const { body } = req;
