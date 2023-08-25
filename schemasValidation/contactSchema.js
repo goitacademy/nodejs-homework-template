@@ -23,10 +23,11 @@ const contactSchemaPut = Joi.object({
   email: Joi.string().messages({ "any.required": "missing required fields" }),
   phone: Joi.string().messages({ "any.required": "missing required fields" }),
   favorite: Joi.boolean(),
+
 });
 
 const contactSchemaFavotite = Joi.object({
-  favorite: Joi.boolean().required,
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = { contactSchemaPost, contactSchemaPut, contactSchemaFavotite };
