@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
 const path = require('path');
-// const { nanoid } = require('nanoid');
+const contactSchema = require('../models/contactModel');
+const { nanoid } = require('nanoid');
 
 const contactsPath = path.join(__dirname, 'contacts.json');
 
@@ -41,6 +42,7 @@ const getContactById = async (req, res) => {
     res.status(200).json({ status: 'success', data: contact });
   } catch (err) {
     console.log(err.message);
+    res.status(400).json({ status: 'fail', message: err.message });
   }
 };
 
@@ -69,25 +71,21 @@ const removeContact = async (req, res) => {
     res.status(200).json({ status: 'success', message: 'Contact deleted' });
   } catch (err) {
     console.log(err.message);
+    res.status(400).json({ status: 'fail', message: err.message });
   }
 };
 
 const addContact = async (req, res) => {
   try {
-    // 1. Check for filled fields
-    const { name, email, number } = req.body;
-    if (!name || !email || !number) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'All fields are required (email, name, number)',
-      });
-    }
+    // 1. Validate input
+    const validatedContact = await contactSchema.validateAsync(req.body);
 
     // 2. Check for the same email contact
     const contacts = await getContacts();
 
     const contactExists = contacts.some(
-      (contact) => contact.email.toLowerCase() === email.toLowerCase()
+      (contact) =>
+        contact.email.toLowerCase() === validatedContact.email.toLowerCase()
     );
 
     if (contactExists)
@@ -97,7 +95,7 @@ const addContact = async (req, res) => {
       });
 
     // 3. Add contact
-    const newContact = { id: `${Date.now()}`, ...req.body };
+    const newContact = { id: nanoid(), ...validatedContact };
 
     const newContacts = [...contacts, newContact];
 
@@ -107,19 +105,14 @@ const addContact = async (req, res) => {
     res.status(201).json({ status: 'success', data: newContact });
   } catch (err) {
     console.log(err.message);
+    res.status(400).json({ status: 'fail', message: err.message });
   }
 };
 
 const updateContact = async (req, res) => {
   try {
-    // 1. Check for filled fields
-    const { name, email, number } = req.body;
-    if (!name || !email || !number) {
-      return res.status(400).json({
-        status: 'fail',
-        message: 'All fields are required (email, name, number)',
-      });
-    }
+    // 1. Validate input
+    const validatedContact = await contactSchema.validateAsync(req.body);
 
     // 2. Check if contact exists
     const contacts = await getContacts();
@@ -136,7 +129,7 @@ const updateContact = async (req, res) => {
     // 3. Update contact
     const updatedContact = {
       ...contacts[updatedContactIndex],
-      ...req.body,
+      ...validatedContact,
     };
 
     // 4. Update contacts list
@@ -154,7 +147,7 @@ const updateContact = async (req, res) => {
     res.status(200).json({ status: 'success', data: updatedContact });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ status: 'error', message: 'Server error' });
+    res.status(400).json({ status: 'fail', message: err.message });
   }
 };
 
