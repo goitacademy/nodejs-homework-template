@@ -29,8 +29,13 @@ const schemaEmail = Joi.object({
   }),
 });
 
+const schemaRefreshToken = Joi.object({
+  refreshToken: Joi.string().required(),
+});
+
 module.exports = {
   schemaRegister,
   schemaLogin,
   schemaEmail,
+  schemaRefreshToken,
 };

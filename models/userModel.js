@@ -30,7 +30,8 @@ const userSchema = new Schema(
       default: userRolesEnum.STARTER,
     },
 
-    token: String,
+    accessToken: String,
+    refreshToken: String,
 
     avatarURL: String,
 
@@ -51,7 +52,6 @@ const userSchema = new Schema(
 );
 
 userSchema.post('save', handleMongooseError);
-
 // userSchema.pre('save', async (next) => {
 //   if (!this.isModified('password')) return next(); // password not modified
 

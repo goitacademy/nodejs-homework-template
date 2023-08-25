@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const { v4: uuidv4 } = require('uuid');
 
-const { SECRET_KEY, BASE_URL } = process.env;
+const { ACCESS_SECRET_KEY, REFRESH_SECRET_KEY, BASE_URL } = process.env;
 
 const { UserModel } = require('../models');
 
@@ -90,6 +90,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await UserModel.findOne({ email });
+  console.log('user--->>>', user);
 
   if (!user) {
     throw HttpError(401, 'Email or password is wrong');
@@ -109,11 +110,14 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
-  await UserModel.findByIdAndUpdate(user._id, { token });
+  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: '23h' });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '23h' });
+
+  await UserModel.findByIdAndUpdate(user._id, { accessToken, refreshToken });
 
   res.status(200).json({
-    token,
+    accessToken,
+    refreshToken,
     user: {
       email: user.email,
       subscription: user.subscription,
@@ -121,12 +125,42 @@ const login = async (req, res) => {
   });
 };
 
+const refresh = async (req, res) => {
+  const { refreshToken: token } = req.body;
+
+  const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
+  const isExist = await UserModel.findOne({ refreshToken: token });
+
+  if (!isExist) throw HttpError(403, 'Token does not valid');
+
+  const payload = {
+    id,
+  };
+
+  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, { expiresIn: '23h' });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '23h' });
+
+  await UserModel.findByIdAndUpdate(id, { accessToken, refreshToken });
+
+  res.status(200).json({
+    accessToken,
+    refreshToken,
+    // user: {
+    //   email: user.email,
+    //   subscription: user.subscription,
+    // },
+  });
+};
+
 const logout = async (req, res) => {
   const { _id } = req.user;
 
-  await UserModel.findByIdAndUpdate(_id, { token: '' });
+  await UserModel.findByIdAndUpdate(_id, { accessToken: '', refreshToken: '' });
 
-  res.status(204).json();
+  // res.status(204).json();
+  res.json({
+    msg: 'Logout success',
+  });
 };
 
 const current = async (req, res) => {
@@ -156,8 +190,13 @@ module.exports = {
   register: ctrlWrapper(register),
   verifyEmail: ctrlWrapper(verifyEmail),
   resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+
   login: ctrlWrapper(login),
+  refresh: ctrlWrapper(refresh),
+
   logout: ctrlWrapper(logout),
+
   current: ctrlWrapper(current),
+
   updateAvatar: ctrlWrapper(updateAvatar),
 };
