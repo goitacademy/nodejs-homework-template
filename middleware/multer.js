@@ -1,7 +1,14 @@
 const multer = require('multer');
 const path = require('path');
 const uploadDir = path.join(process.cwd(), 'temp');
+const fs = require('fs');
 
+const createDirIfNotExists = dir =>
+  !fs.existsSync(dir) ? fs.mkdirSync(dir) : undefined;
+
+createDirIfNotExists('temp')
+createDirIfNotExists('public')
+createDirIfNotExists('public/avatars')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
