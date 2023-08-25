@@ -16,6 +16,7 @@ const contacts = new Schema({
     default: false,
   },
 });
+
 const Contacts = model("contacts", contacts);
 
 export default Contacts;
