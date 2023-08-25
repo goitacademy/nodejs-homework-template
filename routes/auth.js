@@ -38,7 +38,7 @@ const subscriptionSchema = Joi.object({
         .valid("pro", "starter", "business")
 });
 
-router.post("/signup", async (req,res,next) => {
+router.post("/signup", async (req, res, next) => {
     try {
         const { email, password, subscription } = req.body;
         const avatarURL = gravatar.url(email);
@@ -48,8 +48,8 @@ router.post("/signup", async (req,res,next) => {
 
         validate.error && res.status(400).json(validate.error);
 
-        const usedUser = await User.findOne({ email });
-        usedUser && res.status(409).json({
+        const isUser = await User.findOne({ email });
+        isUser && res.status(409).json({
             message: "Email in use"
         });
 
@@ -62,7 +62,7 @@ router.post("/signup", async (req,res,next) => {
             avatarURL
         });
 
-        res.status(201).json({
+        return res.status(201).json({
             status: "success",
             message: {
                 user: {
@@ -84,11 +84,11 @@ router.post('/login', async (req, res, next) => {
         validate.error && res.status(400).json({ error: validate.error });
         const isUser = await User.findOne({ email });
         if (!isUser) {
-            res.status(401).json({ message: "Email or password is wrong" });
+            return res.status(401).json({ message: "Email or password is wrong" });
         }
         const validPassword = await bcrypt.compare(password, isUser.password);
         if (!validPassword) {
-            res.status(401).json({ message: "Email or password is wrong" });
+            return res.status(401).json({ message: "Email or password is wrong" });
         }
         const payload = { id: isUser._id, email };
         const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
@@ -104,7 +104,6 @@ router.get('/logout', auth, async (req, res, next) => {
     try {
         const { _id } = req.user;
         await User.findByIdAndUpdate(_id, { token: null }, { new: true });
-        req = null;
         return res.json({ message: "logged out" });
     } catch (error) {
         next(error);
@@ -147,7 +146,7 @@ router.patch('/avatars', auth, upload.single('avatar'), async (req, res, next) =
         await image.writeAsync(avatarURL);
         await fs.unlink(tempUpload);
         await User.findByIdAndUpdate(id, { avatarURL });
-        return res.status(200).json({message: "succes", avatarURL});
+        return res.status(200).json({ message: "succes", avatarURL });
     } catch (err) {
         await fs.unlink(tempUpload);
         return next(err);

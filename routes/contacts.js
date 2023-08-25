@@ -25,7 +25,7 @@ router.get('/', auth, async (req, res, next) => {
             message: validate.error
         });
         if (page < 1 || limit < 1) {
-            res.status(400).json({
+            return res.status(400).json({
                 status: "failed",
                 error: "query params incorrect"
             });
@@ -36,7 +36,7 @@ router.get('/', auth, async (req, res, next) => {
             .skip(((page - 1) * limit));
         const totalContacts = await Contact.countDocuments({ owner });
         const totalPages = totalContacts / limit;
-        res.status(200).json(
+        return res.status(200).json(
             {
                 status: "success",
                 total_contacts: totalContacts,
@@ -59,7 +59,7 @@ router.get('/:id', auth, async (req, res, next) => {
         if (!contact.length) {
             throw new Error('Contact not found');
         }
-        res.status(200).json(
+        return res.status(200).json(
             {
                 status: "success",
                 data: contact,
@@ -87,7 +87,7 @@ router.post('/', auth, async (req, res, next) => {
         });
         const { _id: owner } = req.user;
         const newContact = await Contact.create({ name, phone, email, favorite, owner });
-        res.status(201).json({
+        return res.status(201).json({
             status: "success",
             data: newContact
         });
@@ -121,7 +121,7 @@ router.put('/:id', auth, async (req, res, next) => {
         if (!updatedContact) {
             throw new Error('Contact not found');
         }
-        res.status(201).json({
+        return res.status(201).json({
             status: "success",
             message: 'Contact updated',
             data: updatedContact
@@ -146,7 +146,7 @@ router.delete('/:id', auth, async (req, res, next) => {
         if (!deletedContact) {
             throw new Error('Contact not found');
         }
-        res.status(200).json({
+        return res.status(200).json({
             status: "success",
             message: "Contact deleted",
             data: deletedContact
