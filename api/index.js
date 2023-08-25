@@ -18,7 +18,7 @@ router.post("/", add);
 
 router.put("/:id", update);
 
-router.patch("/:id/status", updateStatus);
+router.patch("/:id/favorite", updateStatus);
 
 router.delete("/:id", remove);
 
