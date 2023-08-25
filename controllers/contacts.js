@@ -47,7 +47,6 @@ const putContact = async (req, res, next) => {
 };
 
 const patchContact = async (req, res, next) => {
-  console.log(req.path.split("/").includes("favorite"))
   const { contactId } = req.params;
   const updateStatusContact = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
 
