@@ -9,7 +9,7 @@ const uriDb = process.env.DB_HOST;
 
 const connection = async () => {
   try {
-    const db = await mongoose.connect(uriDb);
+    const db = await mongoose.connect(uriDb, { dbName: "contacts" });
     console.log("DB connected");
 
     app.listen(3000, () => {

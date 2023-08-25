@@ -5,12 +5,11 @@ import {
   getContactById,
   updateContact,
 } from "../service/contacts.js";
-import Contacts from "../service/schemas/contacts.js";
 
 export const get = async (req, res, next) => {
   try {
     const contacts = await listContacts();
-    // console.log(contacts, listContacts());
+    console.log(contacts);
     res.json({
       message: "response ok",
       status: "success",
@@ -72,6 +71,7 @@ export const remove = async (req, res, next) => {
     const contact = await removeContact(id);
     if (contact) {
       res.json({
+        message: "contact deleted",
         status: "success",
         code: 200,
         data: contact,
@@ -99,6 +99,7 @@ export const update = async (req, res, next) => {
 
     if (contact) {
       res.json({
+        message: "contact updated",
         status: "success",
         code: 200,
         data: contact,
@@ -107,7 +108,7 @@ export const update = async (req, res, next) => {
       res.status(404).json({
         status: "error",
         code: 404,
-        message: `Not found task id: ${id}`,
+        message: `Not found contact with id: ${id}`,
         data: "Not Found",
       });
     }
@@ -126,7 +127,7 @@ export const updateStatus = async (req, res, next) => {
 
     if (contact) {
       res.json({
-        message: "Contact updated",
+        message: "status updated",
         status: "success",
         code: 200,
         data: contact,
