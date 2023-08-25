@@ -11,13 +11,12 @@ export const get = async (req, res, next) => {
   try {
     const contacts = await listContacts();
     // console.log(contacts, listContacts());
-    res.json(contacts);
-    // res.json({
-    //   message: "response ok",
-    //   status: "success",
-    //   code: 200,
-    //   data: contacts,
-    // });
+    res.json({
+      message: "response ok",
+      status: "success",
+      code: 200,
+      data: contacts,
+    });
   } catch (err) {
     console.error("Error while reading contacts");
     next(err);
