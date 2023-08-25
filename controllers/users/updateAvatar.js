@@ -12,23 +12,22 @@ const updateAvatar = async (req, res, next) => {
   const { description } = req.body;
   const { path: temporaryName } = req.file;
   const fileName = path.join(imageStore, req.file.filename);
-
   const newUser = await User.updateUserAvatar(req.body.id, fileName);
   try {
     await fs.rename(temporaryName, fileName);
   } catch (err) {
     await fs.unlink(temporaryName);
     return next(err);
-  }
-
+	}
+	
   const isValid = await isCorrectResizedImage(fileName);
   if (!isValid) {
     await fs.unlink(fileName);
     return res
       .status(400)
       .json({ message: "File is not a photo or problem during resizing" });
-  }
-
+	}
+	
   res.json({
     description,
     fileName,
