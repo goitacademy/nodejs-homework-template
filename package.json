@@ -8,7 +8,6 @@
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
-  
   "dependencies": {
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
@@ -30,5 +29,5 @@
   },
   "engines": {
     "node": ">=16.0.0"
-}
+  }
 }
