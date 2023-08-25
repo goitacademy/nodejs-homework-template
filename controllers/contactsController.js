@@ -5,6 +5,7 @@ const { nanoid } = require('nanoid');
 
 const contactsPath = path.join(__dirname, 'contacts.json');
 
+// Helpers
 const getContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath, 'utf-8');
@@ -15,6 +16,8 @@ const getContacts = async () => {
     return [];
   }
 };
+
+// Functions
 
 const listContacts = async (req, res) => {
   try {
@@ -57,10 +60,12 @@ const removeContact = async (req, res) => {
 
     if (!contact)
       res.status(404).json({ status: 'fail', message: 'Not found' });
+
     // 3. Remove contact from list
     const newContacts = contacts.filter(
       (contact) => contact.id !== req.params.contactId
     );
+
     // 4. Save new list to the file
     await fs.writeFile(
       contactsPath,
@@ -96,7 +101,6 @@ const addContact = async (req, res) => {
 
     // 3. Add contact
     const newContact = { id: nanoid(), ...validatedContact };
-
     const newContacts = [...contacts, newContact];
 
     // 4. Save new list to the file
