@@ -13,6 +13,11 @@ app.use("/api/v1/contacts", require("./routes/contactsRoutes"));
 app.use("/api/v1/users", require("./routes/usersRoutes"));
 const ErrorHandler = require("./midlewares/errorHandler")
 app.use(ErrorHandler)
+app.use(
+  "/avatars",
+  express.static(path.join(process.cwd(), "public", "avatars"))
+);
+
 
 connectDb()
 app.listen(process.env.PORT, ()=>{

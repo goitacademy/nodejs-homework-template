@@ -6,6 +6,7 @@ const getUsers = require("./getUsers");
 const updateSubscription = require("./updateSubscription");
 const deleteUserByMail = require("./deleteUserByMail");
 const verifyUserByToken = require("./verifyUserByToken");
+const updateAvatar = require("./updateAvatar");
 
 
 module.exports = {
@@ -17,4 +18,5 @@ module.exports = {
   updateSubscription,
   deleteUserByMail,
   verifyUserByToken,
+  updateAvatar,
 };

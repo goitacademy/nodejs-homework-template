@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const { userValidator } = require("../../utils/validation/validator");
 const userModel = require("../../models/userModel");
 const User = require("../../models/userModel");
+const gravatar = require("gravatar");
 
 const register = asyncHandler(async (req, res) => {
   const { error } = userValidator(req.body);
@@ -17,10 +18,17 @@ const register = asyncHandler(async (req, res) => {
     });
   }
 
+  const avatarURL = gravatar.url(email, {
+    s: "200",
+    r: "pg",
+    d: "mm",
+  });
+
   const newUser = new User({
     email,
     password,
     subscription,
+    avatarURL,
   });
   newUser.setPassword(password);
   await newUser.save();
