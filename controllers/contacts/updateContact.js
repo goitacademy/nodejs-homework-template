@@ -2,8 +2,8 @@ const contactsBook = require("../../models/contacts.js");
 const errorMessage = require("../../helpers/errorMessage.js");
 
 const updateContact = async (req, res, next) => {
-  if (Object.keys(req.body).length === 0) {
-    return next(errorMessage(400, "missing fields"));
+  if (Object.keys(req.body).length === null) {
+    throw errorMessage(400, "missing fields");
   }
   const id = req.params.contactId;
 
@@ -19,3 +19,6 @@ const updateContact = async (req, res, next) => {
 };
 
 module.exports = updateContact;
+
+// uYYQGME2leJa1W2V;
+// alessio;
