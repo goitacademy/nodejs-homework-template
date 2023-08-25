@@ -17,6 +17,10 @@ const contactSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
   },
   { versionKey: false }
 );
@@ -39,6 +43,6 @@ const updateFavoriteSchema = Joi.object({
 });
 
 const schemas = { addSchema, updateFavoriteSchema };
-const Contact = mongoose.model("Contact", contactSchema);
+const Contact = mongoose.model("Contacts", contactSchema);
 
 module.exports = { Contact, schemas };

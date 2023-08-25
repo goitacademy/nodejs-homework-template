@@ -16,7 +16,6 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
-  console.log(req.body);
   res.status(201).json({
     user: {
       email: newUser.email,
@@ -32,15 +31,15 @@ const login = async (req, res) => {
     throw errorHandler(401, "Email or password invalid");
   }
   const comparePassword = await bcrypt.compare(password, user.password);
-  console.log(comparePassword);
+  console.log(`comparePassword ${comparePassword}`);
   if (!comparePassword) {
     throw errorHandler(401, "Email or password invalid");
   }
 
   const payload = { id: user._id };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "20h" });
+  await User.findByIdAndUpdate(user._id, { token });
   res.json({ token });
 };
 

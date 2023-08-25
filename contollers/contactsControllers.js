@@ -1,9 +1,12 @@
 const contacts = require("../models/contactsBL");
 const controllerWrapper = require("../helpers/controllerWrapper");
 const errorHandler = require("../helpers/errorsHandler");
+// const { Contact } = require("../models/contactModel");
 
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const { _id: owner } = req.user;
+  console.log(req);
+  const result = await contacts.listContacts(owner);
   res.json(result);
 };
 
@@ -18,7 +21,7 @@ const getContactById = async (req, res) => {
 
 const removeContact = async (req, res) => {
   const contact = await contacts.removeContact(req.params.contactId);
-  console.log(contact);
+  // console.log(contact);
   if (!contact) {
     throw errorHandler(404, "Not found");
   }
@@ -26,13 +29,10 @@ const removeContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  console.log(req.body);
-  const contact = await contacts.addContact(req.body);
-
-  if (Object.keys(req.body).length === 0) {
-    throw errorHandler(400, "missing fields");
-  }
-
+  // console.log(req.body);
+  const { _id: owner } = req.user;
+  console.log(req.user);
+  const contact = await contacts.addContact({ ...req.body, owner });
   res.status(201).json(contact);
 };
 

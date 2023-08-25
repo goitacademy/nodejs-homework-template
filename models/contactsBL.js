@@ -1,7 +1,7 @@
 const { Contact } = require("../models/contactModel");
 
-const listContacts = async () => {
-  const docs = await Contact.find().exec();
+const listContacts = async (owner) => {
+  const docs = await Contact.find({ owner }).exec();
   return docs;
 };
 
@@ -27,9 +27,9 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const { name, email, phone } = body;
-  const user = await Contact.create({ name, email, phone });
-  console.log(user);
+  const { name, email, phone, owner } = body;
+  const user = await Contact.create({ name, email, phone, owner });
+  console.log(`user: ${user}`);
   return user;
 };
 
