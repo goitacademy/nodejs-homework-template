@@ -46,8 +46,7 @@ router.post("/signup", async (req, res, next) => {
             email, password, subscription, avatarURL
         });
 
-        validate.error && res.status(400).json(validate.error);
-
+        if (validate.error) { return res.status(400).json(validate.error) };
         const isUser = await User.findOne({ email });
         isUser && res.status(409).json({
             message: "Email in use"
@@ -81,7 +80,7 @@ router.post('/login', async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const validate = loginSchema.validate({ email, password });
-        validate.error && res.status(400).json({ error: validate.error });
+        if (validate.error) { return res.status(400).json(validate.error) };
         const isUser = await User.findOne({ email });
         if (!isUser) {
             return res.status(401).json({ message: "Email or password is wrong" });

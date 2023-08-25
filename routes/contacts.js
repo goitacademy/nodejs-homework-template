@@ -20,10 +20,7 @@ router.get('/', auth, async (req, res, next) => {
         const { _id: owner } = req.user;
         const { page = 1, limit = 1, favorite } = req.query;
         const validate = favoriteSchema.validate({ favorite });
-        validate.error && res.status(400).json({
-            status: "failed",
-            message: validate.error
-        });
+        if (validate.error) { return res.status(400).json(validate.error) };
         if (page < 1 || limit < 1) {
             return res.status(400).json({
                 status: "failed",
@@ -81,10 +78,7 @@ router.post('/', auth, async (req, res, next) => {
         const validate = contactSchema.validate({
             name, phone, email, favorite
         });
-        validate.error && res.status(400).json({
-            status: "failed",
-            message: validate.error.message
-        });
+        if (validate.error) { return res.status(400).json(validate.error) };
         const { _id: owner } = req.user;
         const newContact = await Contact.create({ name, phone, email, favorite, owner });
         return res.status(201).json({
@@ -105,10 +99,7 @@ router.put('/:id', auth, async (req, res, next) => {
         const validate = contactSchema.validate(
             body
         );
-        validate.error && res.status(400).json({
-            status: "failed",
-            message: validate.error.message
-        });
+        if (validate.error) { return res.status(400).json(validate.error) };
         const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
         const contact = contacts.filter(contact => contact.id === id);
         if (!contact.length) {
