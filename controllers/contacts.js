@@ -50,6 +50,7 @@ const { HttpError, ctrlWrapper } = require("../helpers");
     }
 
 
+
   module.exports = {
     getAll: ctrlWrapper(getAll),
     getById: ctrlWrapper(getById),
