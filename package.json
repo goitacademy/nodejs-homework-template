@@ -11,6 +11,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
+<<<<<<< Updated upstream
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "joi": "^17.9.2",
@@ -18,6 +19,11 @@
     "mongoose": "^7.4.4",
     "morgan": "^1.10.0",
     "nanoid": "^3.3.4"
+=======
+    "express": "4.17.1",
+    "mongodb": "^5.8.0",
+    "morgan": "1.10.0"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "7.19.0",
