@@ -11,7 +11,6 @@ const updateContactSchema = Joi.object({
 	email: Joi.string().email(),
 	phone: Joi.string(),
 });
-
 const updateFavoriteSchema = Joi.object({
 	favorite: Joi.boolean().required(),
 });
