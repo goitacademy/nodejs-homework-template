@@ -31,7 +31,7 @@ const addSсhema = Joi.object({
 });
 
 const updateFavoriteSchema = Joi.object({
-	 favoritte: Joi.boolean().required(),
+	 favorite: Joi.boolean().required(),
 });
 
 const schemas = {
