@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
 userSchema.post("save", handlerMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string(),
   email: Joi.string().pattern(EMAIL_PATTERN).required(),
   password: Joi.string().min(6).required(),
 });
