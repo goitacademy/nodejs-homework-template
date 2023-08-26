@@ -9,7 +9,7 @@ const port = process.env.PORT;
 const server = process.env.SERVER;
 export const serverAddress = `${server}:${port}`;
 
-const startServer = async () => {
+export const startServer = async () => {
   try {
     const connection = await mongoose.connect(uriDb);
     // console.log('Database connection successful');

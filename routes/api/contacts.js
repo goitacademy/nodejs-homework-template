@@ -9,7 +9,7 @@ import {
   updatedStatusContact,
 } from './../../models/contacts.js';
 
-import { auth } from '../../config/config-passport.js';
+import { checkContact } from './../../config/config-mongoose.js';
 
 export const contactsRouter = express.Router();
 
@@ -21,12 +21,14 @@ const paginatedResults = (array, page, limit) => {
   return results;
 };
 
-contactsRouter.get('/', auth, async (req, res, next) => {
+contactsRouter.get('/', async (req, res, next) => {
+  const { id: userId } = req.user;
   try {
-    const { id: userID } = req.user;
-    const contacts = await listContacts(userID);
+    const contacts = await listContacts(userId);
     const { page = 1, limit = 20, favorite } = req.query;
+
     let filteredContacts = contacts;
+
     if (favorite === 'true') {
       filteredContacts = contacts.filter(contact => contact.favorite);
     }
@@ -46,9 +48,10 @@ contactsRouter.get('/', auth, async (req, res, next) => {
   }
 });
 
-contactsRouter.get('/:id', auth, async (req, res, next) => {
+contactsRouter.get('/:id', checkContact, async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: contactId } = req.params;
+
   try {
     const contact = await getContactById(userId, contactId);
 
@@ -62,7 +65,7 @@ contactsRouter.get('/:id', auth, async (req, res, next) => {
   }
 });
 
-contactsRouter.post('/', auth, async (req, res, next) => {
+contactsRouter.post('/', async (req, res, next) => {
   const body = req.body;
   const { id: userId } = req.user;
 
@@ -83,9 +86,10 @@ contactsRouter.post('/', auth, async (req, res, next) => {
   }
 });
 
-contactsRouter.delete('/:id', auth, async (req, res, next) => {
+contactsRouter.delete('/:id', checkContact, async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: contactId } = req.params;
+
   try {
     await removeContact(contactId, userId);
 
@@ -97,7 +101,7 @@ contactsRouter.delete('/:id', auth, async (req, res, next) => {
   }
 });
 
-contactsRouter.put('/:id', auth, async (req, res, next) => {
+contactsRouter.put('/:id', checkContact, async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: contactId } = req.params;
   const { body } = req;
@@ -119,7 +123,7 @@ contactsRouter.put('/:id', auth, async (req, res, next) => {
   }
 });
 
-contactsRouter.patch('/:id', auth, async (req, res, next) => {
+contactsRouter.patch('/:id', checkContact, async (req, res, next) => {
   const { id: userId } = req.user;
   const { id: contactId } = req.params;
   const { body } = req;

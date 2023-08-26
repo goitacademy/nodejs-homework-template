@@ -5,6 +5,7 @@ import cors from 'cors';
 import { contactsRouter } from './routes/api/contacts.js';
 import { usersRouter } from './routes/api/users.js';
 import passport from './config/config-passport.js';
+import { auth } from './config/config-passport.js';
 
 export const app = express();
 const logger = morgan;
@@ -15,7 +16,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/contacts', contactsRouter);
+app.use('/api/contacts', auth, contactsRouter);
 app.use('/api/users', usersRouter);
 app.use(passport.initialize());
 app.use(express.static('public'));

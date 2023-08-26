@@ -94,3 +94,14 @@ export const patchAvatar = async (filePath, userId) => {
     throw err;
   }
 };
+
+export const usersService = {
+  getAllUsers,
+  getUser,
+  addUser,
+  loginUser,
+  patchUser,
+  patchAvatar,
+};
+
+export default usersService;

@@ -28,7 +28,7 @@ passport.use(
 
 export default passport;
 
-import { getAllUsers } from '../models/users.js';
+import defaultExport, { getAllUsers } from '../models/users.js';
 
 export const auth = async (req, res, next) => {
   try {
@@ -57,6 +57,18 @@ export const auth = async (req, res, next) => {
       }
 
       req.user = user;
+
+      const { id: userId } = user;
+
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({
+          status: 'error',
+          code: 400,
+          message: 'User is not a valid user',
+          data: 'User is not a valid user',
+        });
+      }
+
       next();
     })(req, res, next);
   } catch (error) {
