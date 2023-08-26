@@ -10,7 +10,7 @@ const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw errorHandler(409, "Email is already in use");
+    throw errorHandler(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -18,7 +18,6 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
     user: {
-      name: newUser.name,
       email: newUser.email,
       subscription: newUser.subscription,
     },
@@ -34,21 +33,27 @@ const login = async (req, res) => {
   const comparePassword = await bcrypt.compare(password, user.password);
   console.log(`comparePassword ${comparePassword}`);
   if (!comparePassword) {
-    throw errorHandler(401, "Email or password invalid");
+    throw errorHandler(401, "Email or password is wrong");
   }
 
   const payload = { id: user._id };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "20h" });
   await User.findByIdAndUpdate(user._id, { token });
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name } = req.user;
+  const { email, subscription } = req.user;
   res.json({
-    name,
     email,
+    subscription,
   });
 };
 
@@ -56,7 +61,24 @@ const logOut = async (req, res) => {
   console.log(req.user);
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  res.json({ message: "Logout success" });
+  res.status(204).end();
+};
+const updateSubscriptionContact = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+  console.log(_id);
+  console.log(subscription);
+  const contact = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    {
+      new: true,
+    }
+  );
+  if (!contact) {
+    throw errorHandler(404, "Not Found");
+  }
+  res.status(200).json(contact);
 };
 
 module.exports = {
@@ -64,4 +86,5 @@ module.exports = {
   login: controllerWrapper(login),
   getCurrent: controllerWrapper(getCurrent),
   logOut: controllerWrapper(logOut),
+  updateSubscriptionContact: controllerWrapper(updateSubscriptionContact),
 };

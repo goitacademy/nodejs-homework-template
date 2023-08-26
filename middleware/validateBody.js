@@ -13,7 +13,6 @@ const validateBody = (schema) => {
       next(errorHandler(400, message));
     }
     const { error } = schema.validate(req.body);
-    // console.log(error);
     if (error) {
       const keyName = error.details[0].message;
       next(errorHandler(400, ` ${keyName} `));

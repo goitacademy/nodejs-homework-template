@@ -11,6 +11,13 @@ router.post(
   validateBody(schemas.registerSchema),
   controllers.register
 );
+router.patch(
+  "/subscription",
+  authenticate,
+  validateBody(schemas.subscriptionSchema),
+  controllers.updateSubscriptionContact
+);
+
 router.post("/login", validateBody(schemas.loginSchema), controllers.login);
 router.get("/current", authenticate, controllers.getCurrent);
 router.post("/logout", authenticate, controllers.logOut);
