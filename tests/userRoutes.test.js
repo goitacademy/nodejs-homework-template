@@ -3,6 +3,7 @@ import { jest } from '@jest/globals';
 import { app } from '../app.js';
 import { usersService } from '../models/users.js';
 
+import { signUpUserMiddleware } from '../middleware/middlewareUsers.js';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
 import mongoose from 'mongoose';
@@ -36,7 +37,7 @@ jest.mock('../models/users.js', () => {
   return jest.fn(() => mockFunction);
 });
 
-//const mockAddUser = jest.fn(() => Promise.resolve(userPayload));
+const mockAddUser = jest.fn(() => Promise.resolve(userPayload));
 
 describe('register and login user', () => {
   // beforeAll(async () => {
@@ -62,12 +63,14 @@ describe('register and login user', () => {
 
   describe(' login given a username and password', () => {
     test('should respond with a 200 status code', async () => {
-      const response = await request(app).post('/api/users/login').send({
-        id: '12345',
-        email: 'test@example.com',
-        password: 'hashedPassword',
-        token: null,
-      });
+      const response = await request(app)
+        .post('/api/users/login', signUpUserMiddleware(mockAddUser))
+        .send({
+          id: '12345',
+          email: 'test@example.com',
+          password: 'hashedPassword',
+          token: null,
+        });
       expect(response.status).toBe(200);
     });
   });
