@@ -7,7 +7,7 @@ import { auth } from '../../config/config-passport.js';
 import { uploadImage } from '../../config/config-multer.js';
 
 dotenv.config();
-const secret = process.env.SECRET;
+const secret = 'GOIT2023';
 const { getUser, addUser, loginUser, patchUser, patchAvatar } = usersService;
 
 export const usersRouter = express.Router();

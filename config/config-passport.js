@@ -4,7 +4,7 @@ import User from '../service/schemas/users.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const secret = process.env.SECRET;
+const secret = 'GOIT2023';
 
 const ExtractJWT = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
@@ -28,7 +28,7 @@ passport.use(
 
 export default passport;
 
-import defaultExport, { getAllUsers } from '../models/users.js';
+import { getAllUsers } from '../models/users.js';
 
 export const auth = async (req, res, next) => {
   try {

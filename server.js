@@ -4,9 +4,10 @@ import { config } from 'dotenv';
 
 config();
 
-const uriDb = process.env.DB_HOST;
-const port = process.env.PORT;
-const server = process.env.SERVER;
+const uriDb = 'mongodb+srv://krozbicki:GOIT2023@cluster0.qe16opn.mongodb.net/db-contacts';
+const port = 3000;
+const server = 'http://localhost';
+
 export const serverAddress = `${server}:${port}`;
 
 export const startServer = async () => {
