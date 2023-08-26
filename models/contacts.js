@@ -6,6 +6,18 @@ const jwt = require("jsonwebtoken");
 const Jimp = require("jimp");
 const path = require("path");
 const fs = require("fs").promises;
+const { nanoid } = require("nanoid");
+const id = nanoid();
+
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: "learn2313@gmail.com",
+    pass: "dpcjkqgdtoaitwcf",
+  },
+});
 
 const secret = "secret word";
 
@@ -112,16 +124,34 @@ const updateStatusContact = async (contactId, body) => {
 const signup = async (email, password, avatar) => {
   try {
     const hash = bcrypt.hashSync(password, salt);
-    return User.findOne({ email }).then((data) => {
+    const user = await User.findOne({ email }).then((data) => {
       if (data) {
         return { message: "Email in use" };
       }
+
       return User.create({
         email,
         password: hash,
         avatarURL: avatar,
+        verificationToken: id,
       });
     });
+
+    const mailOptions = {
+      from: "learn2313@gmail.com",
+      to: user.email,
+      subject: `Verification email`,
+      text: `please verify your email address: http://localhost:3000/api/contacts/users/verify/${user.verificationToken} best regards, Kamil ;) `,
+    };
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error:", error);
+      } else {
+        console.log("Email sent:", info.response);
+      }
+    });
+
+    return user;
   } catch (err) {
     return err;
   }
@@ -133,6 +163,9 @@ const login = async (email, password) => {
 
     if (!user) {
       return { message: "401" };
+    }
+    if (!user.verify) {
+      return { message: "403" };
     }
 
     const match = await bcrypt.compare(password, user.password);
@@ -193,7 +226,45 @@ const updateAvatar = async (user, avatarFile) => {
   }
 };
 
+const verificationEmail = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    return { message: "404" };
+  }
+  user.verify = true;
+  user.verificationToken = "null";
+  await user.save();
+
+  return user;
+};
+
+const sendVerificationemail = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    return { message: "404" };
+  }
+  if (user.verify) {
+    return { message: "400" };
+  }
+  const mailOptions = {
+    from: "learn2313@gmail.com",
+    to: email,
+    subject: `Verification email`,
+    text: `please verify your email address: http://localhost:3000/api/contacts/users/verify/${user.verificationToken} best regards, Kamil ;) `,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Error:", error);
+    } else {
+      console.log("Email sent:", info.response);
+    }
+  });
+  return user;
+};
+
 module.exports = {
+  sendVerificationemail,
+  verificationEmail,
   updateAvatar,
   logout,
   auth,

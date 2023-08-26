@@ -136,6 +136,11 @@ router.post("/users/login", async (req, res, next) => {
     if (loginResult.message === "400") {
       return res.status(400).json({ message: "Registration validation error" });
     }
+    if (loginResult.message === "403") {
+      return res
+        .status(403)
+        .json({ message: "Please, check and verify your email!" });
+    }
     const token = loginResult.token;
     res.json({
       status: "success",
@@ -192,6 +197,43 @@ router.patch("/users", contactsFunc.auth, async (req, res, next) => {
     });
   } catch (err) {
     return res.status(500).json({ message: "Error updating subscription" });
+  }
+});
+
+router.get("/users/verify/:verificationToken", async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const veryfication = await contactsFunc.verificationEmail(
+      verificationToken
+    );
+
+    if (veryfication.message === "404") {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json({ message: "Verification successful" });
+  } catch (err) {
+    return err;
+  }
+});
+
+router.post("/users/verify", async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "missing required field email" });
+    }
+    const checkEmail = await contactsFunc.sendVerificationemail(email);
+    if (checkEmail.message === "404") {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (checkEmail.message === "400") {
+      return res
+        .status(400)
+        .json({ message: "verification has alredy been passed" });
+    }
+    res.status(200).json({ message: "verification email sent" });
+  } catch (err) {
+    return err;
   }
 });
 
