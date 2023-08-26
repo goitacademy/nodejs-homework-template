@@ -8,14 +8,10 @@ const { schemas } = require("../../models/user");
 const router = express.Router();
 
 //signup
-router.post(
-  "/register",
-  validateBody(schemas.registerAndLoginSchema),
-  ctrl.register
-);
+router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
 // signin
-router.post("/login", validateBody(schemas.registerAndLoginSchema), ctrl.login);
+router.post("/login", validateBody(schemas.registerSchema), ctrl.login);
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
