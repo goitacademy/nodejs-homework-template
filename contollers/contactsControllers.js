@@ -1,12 +1,22 @@
 const contacts = require("../models/contactsBL");
 const controllerWrapper = require("../helpers/controllerWrapper");
 const errorHandler = require("../helpers/errorsHandler");
-// const { Contact } = require("../models/contactModel");
+const { Contact } = require("../models/contactModel");
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  console.log(req);
-  const result = await contacts.listContacts(owner);
+  console.log(req.user);
+  const { page = 1, limit = 2 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner })
+    .skip(skip)
+    .limit(limit)
+    .populate("owner", "name email");
+  // const result = await Contact.find({}, {}, { skip, limit }).populate(
+  //   "owner",
+  //   "name email"
+  // );
+  // const result = await contacts.listContacts(owner);
   res.json(result);
 };
 
@@ -31,7 +41,7 @@ const removeContact = async (req, res) => {
 const addContact = async (req, res) => {
   // console.log(req.body);
   const { _id: owner } = req.user;
-  console.log(req.user);
+  // console.log(req.user);
   const contact = await contacts.addContact({ ...req.body, owner });
   res.status(201).json(contact);
 };

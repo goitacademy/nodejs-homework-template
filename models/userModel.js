@@ -5,6 +5,9 @@ const EMAIL_PATTERN = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,8})+$/;
 
 const userSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+    },
     password: {
       type: String,
       minlength: 6,
@@ -40,6 +43,6 @@ const loginSchema = Joi.object({
 });
 
 const schemas = { registerSchema, loginSchema };
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model("users", userSchema);
 
 module.exports = { User, schemas };

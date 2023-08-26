@@ -18,6 +18,7 @@ const register = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
     user: {
+      name: newUser.name,
       email: newUser.email,
       subscription: newUser.subscription,
     },
@@ -43,7 +44,24 @@ const login = async (req, res) => {
   res.json({ token });
 };
 
+const getCurrent = async (req, res) => {
+  const { email, name } = req.user;
+  res.json({
+    name,
+    email,
+  });
+};
+
+const logOut = async (req, res) => {
+  console.log(req.user);
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.json({ message: "Logout success" });
+};
+
 module.exports = {
   register: controllerWrapper(register),
   login: controllerWrapper(login),
+  getCurrent: controllerWrapper(getCurrent),
+  logOut: controllerWrapper(logOut),
 };
