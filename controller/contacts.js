@@ -60,7 +60,7 @@ const getContactById = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-  const body = req.query;
+  const body = req;
   const { name, email, phone } = req.query;
 
   try {
