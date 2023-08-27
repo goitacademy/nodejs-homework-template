@@ -1,5 +1,7 @@
 const app = require('./app');
 require("dotenv").config();
+const { createFolderIfNotExist, uploadDir, imageStore } = require('./upload');
+
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
@@ -17,6 +19,8 @@ connection
   .then(() => {
     console.log("OK");
     app.listen(PORT, () => {
+      createFolderIfNotExist(uploadDir);
+			createFolderIfNotExist(imageStore);
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   })

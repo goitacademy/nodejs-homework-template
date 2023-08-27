@@ -1,6 +1,9 @@
 const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+
+const logger = require('morgan');
+const cors = require('cors');
+const path = require('path');
+
 
 const contactsRouter = require('./routes')
 
@@ -13,6 +16,10 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api', contactsRouter)
+
+app.use('/avatars', express.static(path.join(process.cwd(), 'public', 'avatars')));
+
+
 
 require('./config-passport')
 
@@ -38,12 +45,5 @@ app.use((err, _, res, __) => {
   })
 })
 
-// app.use((_, res) => {
-//   res.status(404).json({ message: 'Not found' })
-// })
-
-// app.use((_, res) => {
-//   res.status(500).json({message: "Internal Server Error"})
-// })
 
 module.exports = app

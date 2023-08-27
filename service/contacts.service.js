@@ -1,4 +1,4 @@
-const Contact = require("./models/contact.model");
+const Contact = require("../models/contact.model");
 
 const getAll = async () => {
   return Contact.find();
@@ -12,10 +12,10 @@ const create = async (data) => {
   return Contact.create(data);
 };
 const update = async (id, data) => {
-  return Contact.findByIdAndUpdate(id, data, {new: true});
+  return Contact.findByIdAndUpdate(id, data, { new: true });
 };
 const updateStatus = async (id, favorite) => {
-  return Contact.findByIdAndUpdate(id, {favorite}, {new: true});
+  return Contact.findByIdAndUpdate(id, { favorite }, { new: true });
 };
 
 const remove = async (id) => {
