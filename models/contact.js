@@ -1,9 +1,9 @@
 const {Schema, model} = require("mongoose");
-// const Joi = require("joi");
+const Joi = require("joi");
 
-// const {handleMongooseError} = require('../helpers');
+const { handleMongooseError } = require("../helpers");
 
-const schema = new Schema({
+const contactSchema = new Schema({
   name: {
     type: String,
     required: [true, 'Set name for contact'],
@@ -21,11 +21,37 @@ const schema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+  }
 },
-// щоб не було запису в БД версії але не часу
+// щоб уникнути запису в БД версії але не часу
 { versionKey: false, timestamps: true }
 );
 
-const Contact = model('contact', schema);
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
 
-module.exports = Contact;
+contactSchema.post("save", handleMongooseError);
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+  addSchema,
+  updateFavoriteSchema,
+};
+
+const Contact = model("contact", contactSchema);
+
+module.exports = {
+  Contact,
+  schemas,
+};
