@@ -11,8 +11,14 @@ const contactAddSchema = Joi.object({
   phone: Joi.string().optional().messages({
     'string.base': 'phone number field should be a string',
   }),
+  favorite: Joi.boolean(),
+});
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   contactAddSchema,
+  contactUpdateFavoriteSchema,
 };
