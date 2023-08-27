@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const createError = require("http-errors");
 const asyncHandler = require("express-async-handler");
-const User = require("../../models/users");
+const { User } = require("../../models/users");
 
 const signUp = asyncHandler(async (req, res) => {
   const { email, password, subscription } = req.body;

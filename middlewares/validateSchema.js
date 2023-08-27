@@ -1,4 +1,4 @@
-const validation = (schema) => {
+const validateSchema = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
 
@@ -10,4 +10,4 @@ const validation = (schema) => {
   };
 };
 
-module.exports = validation;
+module.exports = validateSchema;

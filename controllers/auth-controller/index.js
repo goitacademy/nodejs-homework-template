@@ -1,13 +1,13 @@
-const signUp = require("./signUp");
-const logIn = require("./logIn");
-const logOut = require("./logOut");
+const signup = require("./signup");
+const login = require("./login");
+const logout = require("./logout");
 const getCurrent = require("./getCurrent");
 const updateSubscription = require("./updateSubscription");
 
 module.exports = {
-  signUp,
-  logIn,
-  logOut,
+  signup,
+  login,
+  logout,
   getCurrent,
   updateSubscription,
 };

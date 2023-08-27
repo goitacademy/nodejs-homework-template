@@ -1,23 +1,21 @@
 const { Contact } = require("../../models/contacts");
-const { schemas } = require("../../schemas/contacts");
-const asyncHandler = require("express-async-handler");
+const createError = require("http-errors");
 
-const updateStatusContact = asyncHandler(async (req, res, next) => {
-  const { error } = schemas.updateFavoriteSchema.validate(req.body);
-  if (error) {
-    error.status = 404;
-    throw error;
-  }
+const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
   if (!result) {
-    const error = new Error("missing field favorite");
-    error.status = 400;
-    throw error;
+    throw createError(404, "missing field favorite");
   }
-  res.json(result);
-});
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      result,
+    },
+  });
+};
 
 module.exports = updateStatusContact;

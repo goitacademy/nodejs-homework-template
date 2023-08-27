@@ -1,23 +1,21 @@
 const { Contact } = require("../../models/contacts");
-const { schemas } = require("../../schemas/contacts");
-const asyncHandler = require("express-async-handler");
+const createError = require("http-errors");
 
-const updateById = asyncHandler(async (req, res, next) => {
-  const { error } = schemas.addSchema.validate(req.body);
-  if (error) {
-    error.status = 400;
-    throw error;
-  }
+const updateById = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
   if (!result) {
-    const error = new Error(`Contact with id=${contactId} not found`);
-    error.status = 404;
-    throw error;
+    throw createError(404, `Contact with id=${contactId} not found`);
   }
-  res.json(result);
-});
+  res.json({
+    status: "success",
+    code: 201,
+    data: {
+      result,
+    },
+  });
+};
 
 module.exports = updateById;

@@ -1,4 +1,4 @@
-const User = require("../../models/users");
+const { User } = require("../../models/users");
 const asyncHandler = require("express-async-handler");
 
 const logOut = asyncHandler(async (req, res) => {

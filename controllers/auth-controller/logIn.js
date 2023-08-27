@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
-const User = require("../../models/users");
+const { User } = require("../../models/users");
 const dotenv = require("dotenv");
 
 dotenv.config();

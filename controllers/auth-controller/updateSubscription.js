@@ -1,5 +1,5 @@
 const createError = require("http-errors");
-const User = require("../../models/users");
+const { User } = require("../../models/users");
 const asyncHandler = require("express-async-handler");
 
 const updateSubscription = asyncHandler(async (req, res) => {
