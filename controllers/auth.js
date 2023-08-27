@@ -8,8 +8,9 @@ require('dotenv').config();
 const {SECRET_KEY} = process.env;
 
 const register = async (req, res) => {
-  const {name, email, password} = req.body;  
-  const user = await User.findOne({email}); //первіряємо унікальність email
+  const { email, password } = req.body;  
+  const user = await User.findOne({ email }); //первіряємо унікальність email
+  console.log("email:", email);
   console.log("user:", user);
   if (user){
     throw HttpError(409, "Email already in use");
@@ -28,21 +29,22 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-  const {email, password} = req.body;
-  const user = await User.findOne({email});
+  const { email, password } = req.body;
+  console.log("email:", email);
+  const user = await User.findOne({ email });
   if(!user){
-    throw HttpError(401, "Email or password invalid");
+    throw HttpError(401, "Email invalid");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if(!passwordCompare) {
-    throw HttpError(401, "Email or password invalid");
+    throw HttpError(401, "Password invalid");
   }
   // створюємо token
   const payload = {
     id: user._id,
   }
   const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"}); //{expiresIn: "23h"} - час можливості використання
-  // console.log(token);
+  console.log(token);
   // const decodeToken = jwt.decode(token);
   res.json({
     token,
@@ -64,7 +66,7 @@ const logout = async (req, res) => {
 
   res.json({
       message: "Logout success"
-  })
+  })                                                                                                                      
 };
 
 module.exports = {
