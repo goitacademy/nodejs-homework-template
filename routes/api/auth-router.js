@@ -6,7 +6,7 @@ import { authenticate, upload } from "../../middlewares/index.js";
 const authRouter = express.Router();
 
 authRouter.post(
-  "/singup",
+  "/signup",
   validateBody(userSchemas.userSingUpAndSingInSchema),
   authController.singUp
 );
@@ -20,7 +20,7 @@ authRouter.post(
 );
 
 authRouter.post(
-  "/singin",
+  "/signin",
   validateBody(userSchemas.userSingUpAndSingInSchema),
   authController.singIn
 );
