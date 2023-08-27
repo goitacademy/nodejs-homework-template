@@ -34,7 +34,7 @@ const connection = mongoose.connect(uriDb, {
 
 connection
   .then(() => {
-    app.listen(3000, "localhost", function () {
+    app.listen(3000, "0.0.0.0", function () {
       console.log(`Database connection successful`);
     });
   })
