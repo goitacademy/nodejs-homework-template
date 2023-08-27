@@ -1,16 +1,17 @@
 const ContactModel = require("./model");
+const UserModel = require("./model");
 
 const listContacts = async () => {
-  return ContactModel.find();
+  return UserModel.find();
 };
 
 const getContactById = async contactId => {
-  return ContactModel.findById(contactId);
+  return UserModel.findById(contactId);
 };
 
 const addContact = async contact => {
   try {
-    return ContactModel.create(contact);
+    return UserModel.create(contact);
   } catch (e) {
     console.error(e);
   }
@@ -18,7 +19,7 @@ const addContact = async contact => {
 
 const removeContact = async contactId => {
   try {
-    return ContactModel.findByIdAndRemove(contactId);
+    return UserModel.findByIdAndRemove(contactId);
   } catch (e) {
     console.error(e);
   }
@@ -26,7 +27,7 @@ const removeContact = async contactId => {
 
 const updateContact = async (contactId, contact) => {
   try {
-    return ContactModel.findByIdAndUpdate(contactId, contact);
+    return UserModel.findByIdAndUpdate(contactId, contact);
   } catch (e) {
     console.error(e);
   }
@@ -34,7 +35,7 @@ const updateContact = async (contactId, contact) => {
 
 const updateStatusContact = async (contactId, body) => {
   try {
-    return ContactModel.findByIdAndUpdate(contactId, body);
+    return UserModel.findByIdAndUpdate(contactId, body);
   } catch (e) {
     console.error(e);
   }
