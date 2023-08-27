@@ -8,9 +8,9 @@ const {
   updateContactFavorite,
 } = require("../../controllers/contacts");
 const {
-  validationBody,
-  validationById,
-  validationFavorite,
+  validateBody,
+  validateById,
+  validateFavorite,
 } = require("../../middlewares/validation");
 const {
   addSchema,
@@ -22,18 +22,18 @@ const router = express.Router();
 
 router.get("/", getAllContacts);
 
-router.get("/:contactId", validationById(byIdSchema), getContactById);
+router.get("/:contactId", validateById(byIdSchema), getContactById);
 
-router.post("/", validationBody(addSchema), addContact);
+router.post("/", validateBody(addSchema), addContact);
 
-router.delete("/:contactId", validationById(byIdSchema), removeContact);
+router.delete("/:contactId", validateById(byIdSchema), removeContact);
 
-router.put("/:contactId", validationBody(addSchema), updateContact);
+router.put("/:contactId", validateBody(addSchema), updateContact);
 
 router.patch(
   "/:contactId/favorite",
-  validationById(byIdSchema),
-  validationFavorite(changeFavotiteSchema),
+  validateById(byIdSchema),
+  validateFavorite(changeFavotiteSchema),
   updateContactFavorite
 );
 

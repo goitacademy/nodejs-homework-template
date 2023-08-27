@@ -1,6 +1,6 @@
 const { HttpError } = require("../helpers/HttpError");
 
-const validationBody = (schema) => {
+const validateBody = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -10,7 +10,7 @@ const validationBody = (schema) => {
   };
 };
 
-const validationById = (schema) => {
+const validateById = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.params);
     if (error) {
@@ -20,7 +20,7 @@ const validationById = (schema) => {
   };
 };
 
-const validationFavorite = (schema) => {
+const validateFavorite = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
@@ -31,7 +31,7 @@ const validationFavorite = (schema) => {
 };
 
 module.exports = {
-  validationBody,
-  validationById,
-  validationFavorite,
+  validateBody,
+  validateById,
+  validateFavorite,
 };
