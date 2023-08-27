@@ -1,11 +1,22 @@
-const {Contact} = require("../models/contacts");
+// імпортую модель
+const { Contact } = require("../models/contacts");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;  
+  console.log(req.query);
+  // pagination
+  const { page = 1, limit = 5 } = req.query;
+  const skip = (page-1)*limit
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "email subscription");
+  // res.render("contacts", {result});
   res.json(result);
 };
+
 
 const getById = async (req, res, next) => {
   const { id } = req.params;
@@ -17,7 +28,9 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  
+  const { _id: owner } = req.user;  
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -46,6 +59,22 @@ const deleteById = async (req, res) => {
   }
   res.json({ message: "Delete success" });
 };
+
+
+const renderHomepage = (req, res) => {
+  res.send(`<form action="/users" method="POST">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email"><br><br>
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password"><br><br>
+        <button type="submit">Register</button>
+    </form>`);
+};
+
+// const getUserList = (req, res) => {
+//   res.render("users", { users });
+// };
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
@@ -53,4 +82,6 @@ module.exports = {
   updateById: ctrlWrapper(updateById),
   updateFavorite: ctrlWrapper(updateFavorite),
   deleteById: ctrlWrapper(deleteById),
+  renderHomepage
+  
 };
