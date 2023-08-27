@@ -20,6 +20,8 @@ const listContacts = async (req, res) => {
 		message: "success",
 		data: result,
 		qty: result.length,
+		page,
+		total_pages: result.length % limit,
 	});
 };
 
