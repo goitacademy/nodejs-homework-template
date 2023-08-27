@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 import app from "./app.js";
 
-const PORT = 3000;
+const PORT = 2200;
 const SRV_DB = process.env.DB_HOST;
 
 const connection = mongoose.connect(SRV_DB, {
