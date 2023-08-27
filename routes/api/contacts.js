@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ctrl = require("../../controllers/contacts");
-const {validateBody, isValidId} = require("../../middlewapres");
+const {validateBody, isValidId, validateStatusBody} = require("../../middlewapres");
 const {schemas} = require("../../models/cotact");
 
 router.get('/', ctrl.listContacts);
@@ -14,6 +14,6 @@ router.delete('/:contactId', isValidId,  ctrl.removeContact);
 
 router.put('/:contactId', isValidId, validateBody(schemas.addSсhema), ctrl.updateContact);
 
-router.patch('/:contactId/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
+router.patch('/:contactId/favorite', isValidId, validateStatusBody(schemas.updateFavoriteSchema), ctrl.updateStatusContact)
 
 module.exports = router;
