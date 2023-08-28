@@ -15,6 +15,9 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+require("./config/config-passport");
+app.use("/api", routerApi);
+
 app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);
 
