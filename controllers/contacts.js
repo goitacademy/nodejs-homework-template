@@ -1,17 +1,17 @@
 const{ HttpError, ctrlWrapper} = require('../helpers');
-const {Book, JoiSchema} = require('../models/contacts');
-
-
+const {Contact, JoiSchema, favoriteSchema} = require('../models/contacts');
 
 
 const getContacts = async (_, res) => {
-    
-    res.json(await Book.find())
+
+    const result = await Contact.find({});
+   
+    res.json(result);
 };
 
 const getContactById = async (req, res) => {
     const { contactId } = req.params;
-    const contact = await (Book.findById(contactId));
+    const contact = await (Contact.findById(contactId));
     
     if (!contact) {
         throw HttpError(404, 'Not found');
@@ -19,21 +19,21 @@ const getContactById = async (req, res) => {
     res.json(contact)
 };
 
-const postContact = async (req, res, next) => {
+const postContact = async (req, res) => {
 
         const { error } = JoiSchema.validate(req.body);
         if (error) {
             throw HttpError(400,error.message)
         };
 
-        const result = await Book.create(req.body);
+        const result = await Contact.create(req.body);
         res.status(201).json(result) 
 };
 
 const deleteContact = async (req, res, next) => {
   
         const { contactId } = req.params; 
-        const result = await Book.findByIdAndRemove(contactId);
+        const result = await Contact.findByIdAndRemove(contactId);
         if (!result) {
             throw HttpError(404, 'Not Found')
         }
@@ -43,20 +43,34 @@ const deleteContact = async (req, res, next) => {
 
 const putContact = async (req, res) => {
     const { error } = JoiSchema.validate(req.body);
-        if (error) {
-            throw HttpError(400,error.message)
+    if (error) {
+        throw HttpError(400, error.message)
     };
     
     const { contactId } = req.params;
-    
-    if (!req.body) {
-        res.status(400).json({ "message": "missing fields" });
-    }
-    const result = await Book.findByIdAndUpdate(contactId, req.body);
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body,{new:true});
     if (!result) {
-        res.status(404).json({"message": "Not found"})
+        res.status(404).json({ "message": "Not found" })
     }
    
+    res.status(200).json(result);
+};
+
+const patchContact = async (req, res) => {
+    const { error } = favoriteSchema.validate(req.body);
+    if (error) {
+        throw HttpError(400, error.message);
+    };
+
+    const { contactId } = req.params;
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    
+    if (!result) {
+        res.status(404).json({ "message": "Not found" })
+    };
+
     res.status(200).json(result);
 }
 
@@ -65,5 +79,6 @@ module.exports = {
     getContacts: ctrlWrapper(getContacts),
     postContact: ctrlWrapper(postContact),
     deleteContact: ctrlWrapper(deleteContact),
-    putContact: ctrlWrapper(putContact)
+    putContact: ctrlWrapper(putContact),
+    patchContact:ctrlWrapper(patchContact)
 }
