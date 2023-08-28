@@ -58,7 +58,7 @@ const updateContact = async (req, res) => {
         throw HttpError(404, "Contact not found");
   }
   if (Object.keys(req.body).length === 0) {
-    throw HttpError(400, "missing fields");
+    throw HttpError(400, "missing fields");   
   }
     res.status(200).json(result)
 
