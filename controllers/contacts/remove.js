@@ -1,12 +1,12 @@
 const contactsBook = require("../../models/contacts.js");
 const errorMessage = require("../../helpers/errorMessage.js");
 
-const deleteContact = async (req, res, next) => {
+const remove = async (req, res, next) => {
   const id = req.params.contactId;
 
   try {
-    const deleteContact = await contactsBook.removeContact(id);
-    if (deleteContact === null) {
+    const result = await contactsBook.findByIdAndRemove(id);
+    if (result === null) {
       throw errorMessage(404, "Not found");
     }
     res.status(200).json({ message: "contact deleted" });
@@ -15,4 +15,4 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-module.exports = deleteContact;
+module.exports = remove;

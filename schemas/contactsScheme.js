@@ -29,6 +29,14 @@ const contactsScheme = Joi.object({
       "string.pattern.base": "Invalid phone format",
       "any.required": "Missing required phone field",
     }),
+  favorite: Joi.boolean(),
 });
 
-module.exports = contactsScheme;
+const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "boolean.base": "Favorite should be a boolean",
+    "any.required": "Missing required favorite field",
+  }),
+});
+
+module.exports = { contactsScheme, updateStatusSchema };

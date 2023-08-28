@@ -2,8 +2,8 @@ const contactsBook = require("../../models/contacts.js");
 
 const getAll = async (_, res, next) => {
   try {
-    const listedContacts = await contactsBook.listContacts();
-    res.status(200).json(listedContacts);
+    const result = await contactsBook.find().exec();
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }

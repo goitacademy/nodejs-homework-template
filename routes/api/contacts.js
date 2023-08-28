@@ -2,23 +2,35 @@ const express = require("express");
 
 const getAll = require("../../controllers/contacts/getAll.js");
 const getById = require("../../controllers/contacts/getById.js");
-const addContact = require("../../controllers/contacts/addContact.js");
-const deleteContact = require("../../controllers/contacts/deleteContact.js");
-const updateContact = require("../../controllers/contacts/updateContact.js");
+const add = require("../../controllers/contacts/add.js");
+const remove = require("../../controllers/contacts/remove.js");
+const update = require("../../controllers/contacts/update.js");
+const updateStatusContact = require("../../controllers/contacts/getByFavorite.js");
 
 const validateBody = require("../../middlewares/validateBody.js");
-const contactsScheme = require("../../schemas/contactsScheme.js");
+const {
+  contactsScheme,
+  updateStatusSchema,
+} = require("../../schemas/contactsScheme.js");
+const checkValidId = require("../../middlewares/checkValidId.js");
 
 const router = express.Router();
 
 router.get("/", getAll);
 
-router.get("/:contactId", getById);
+router.get("/:contactId", checkValidId, getById);
 
-router.post("/", validateBody(contactsScheme), addContact);
+router.post("/", validateBody(contactsScheme), add);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", checkValidId, remove);
 
-router.put("/:contactId", validateBody(contactsScheme), updateContact);
+router.put("/:contactId", checkValidId, validateBody(contactsScheme), update);
+
+router.patch(
+  "/:contactId/favorite",
+  checkValidId,
+  validateBody(updateStatusSchema),
+  updateStatusContact
+);
 
 module.exports = router;
