@@ -1,63 +1,50 @@
-const fs = require("fs/promises");
-const path = require("path");
-const ObjectID = require("bson-objectid");
+const { Schema } = require("mongoose");
+const mongoose = require("mongoose");
+const contactSchema = Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+      match:
+        /(^[A-Z]{1}[a-z]{1,14} [A-Z]{1}[a-z]{1,14}$)|(^[А-Я]{1}[а-я]{1,14} [А-Я]{1}[а-я]{1,14}$)/,
+    },
+    email: {
+      type: String,
+      match: /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/gim,
+    },
+    phone: {
+      type: String,
+      required: true,
+      match: /^((\+?3)?8)?((0\(\d{2}\)?)|(\(0\d{2}\))|(0\d{2}))\d{7}$/,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true, versionKey: false }
+);
 
-const contactsPath = path.join(__dirname, "contacts.json");
-
-const updateData = async (data) => {
-  try {
-    await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-  } catch (error) {
-    console.error("Error updating data:", error);
-    throw error;
-  }
-};
+const Contact = mongoose.model("contact", contactSchema);
 
 const listContacts = async () => {
-  try {
-    const res = await fs.readFile(contactsPath);
-    return JSON.parse(res);
-  } catch (error) {
-    console.error("Error reading contacts:", error);
-    throw error;
-  }
+  return Contact.find();
 };
 
 const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const res = contacts.find((contact) => contact.id === id);
-  return res || null;
+  return Contact.findById(id);
 };
 
 const addContact = async (contact) => {
-  const contacts = await listContacts();
-  const newContact = { id: ObjectID(), ...contact };
-  contacts.push(newContact);
-  await updateData(contacts);
-  return newContact;
+  return Contact.create(contact);
 };
 
 const updateContact = async (id, contact) => {
-  const contacts = await listContacts();
-  const idx = contacts.findIndex((e) => e.id === id);
-  if (idx === -1) {
-    return null;
-  }
-  const updatedContact = { ...contacts[idx], ...contact };
-  contacts[idx] = updatedContact;
-  await updateData(contacts);
-  return updatedContact;
+  return Contact.findByIdAndUpdate(id, contact, { new: true });
 };
 
 const removeContact = async (id) => {
-  const contacts = await listContacts();
-  const idx = contacts.findIndex((e) => e.id === id);
-  if (idx === -1) {
-    return null;
-  }
-  const [result] = contacts.splice(idx, 1);
-  await updateData(contacts);
-  return result;
+  return Contact.findByIdAndDelete(id);
 };
 
 module.exports = {
