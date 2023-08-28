@@ -1,84 +1,112 @@
 const express = require('express');
-const Joi = require('joi');
-const fs = require('fs');
-
 const router = express.Router();
-
-const contacts = require('../../models/contacts.json');
-
+const Contact = require('../../models/contacts');
+const Joi = require('joi');
 
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  phone: Joi.string().required()
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
-function validateContactData(req, res, next) {
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    return res.status(400).json({ message: error.details[0].message });
-  }
-  next();
-}
-
-
-function saveContactsToFile() {
-  fs.writeFileSync(
-    './models/contacts.json',
-    JSON.stringify(contacts, null, 2),
-    'utf8'
-  );
-}
-
 router.get('/', async (req, res, next) => {
-  res.json(contacts);
+  try {
+    const contacts = await Contact.find();
+    res.json(contacts);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = contacts.find(contact => contact.id === contactId);
-
-  if (contact) {
-    res.json(contact);
-  } else {
-    res.status(404).json({ message: 'Not found' });
+  try {
+    const { contactId } = req.params;
+    const contact = await Contact.findById(contactId);
+    console.log('Successful')
+    if (contact) {
+      res.json(contact);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
-router.post('/', validateContactData, async (req, res, next) => {
-  const newContact = {
-    id: Date.now().toString(),
-    ...req.body
-  };
-  contacts.push(newContact);
-  saveContactsToFile();
-  res.status(201).json(newContact);
+router.post('/', async (req, res, next) => {
+  try {
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error } = contactSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true }
+    );
+    if (updatedContact) {
+      res.json(updatedContact);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const index = contacts.findIndex(contact => contact.id === contactId);
-
-  if (index !== -1) {
-    contacts.splice(index, 1);
-    saveContactsToFile();
-    res.json({ message: 'Contact deleted' });
-  } else {
-    res.status(404).json({ message: 'Not found' });
+  try {
+    const { contactId } = req.params;
+    const deletedContact = await Contact.findByIdAndDelete(contactId);
+    if (deletedContact) {
+      res.json({ message: 'Contact deleted' });
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
-router.put('/:contactId', validateContactData, async (req, res, next) => {
+router.patch('/:contactId/favorite', async (req, res, next) => {
   const { contactId } = req.params;
-  const index = contacts.findIndex(contact => contact.id === contactId);
+  const { favorite } = req.body;
 
-  if (index !== -1) {
-    contacts[index] = { ...contacts[index], ...req.body };
-    saveContactsToFile();
-    res.json(contacts[index]);
-  } else {
-    res.status(404).json({ message: 'Not found' });
+  if (favorite === undefined) {
+    return res.status(400).json({ message: 'missing field favorite' });
+  }
+
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (updatedContact) {
+      res.json(updatedContact);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-module.exports = router;
+module.exports = router
