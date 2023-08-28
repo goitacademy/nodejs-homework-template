@@ -16,12 +16,15 @@ const validateBody = (schema) => {
 };
 
 const validateBodyFavorite = (schema) => {
-  const func = (req, res, next) => {
-    if (Object.keys(req.body).length === 0) {
-      throw HttpError(400, "missing field favorite");
+  return (req, res, next) => {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      const errorMessage = error.details[0].message;
+      return res.status(400).json({ error: errorMessage });
     }
+
     next();
   };
-  return func;
 };
 module.exports = { validateBody, validateBodyFavorite };
