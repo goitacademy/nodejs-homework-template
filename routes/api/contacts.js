@@ -1,21 +1,23 @@
 const express = require("express");
 const Joi = require("joi");
-const contactsService = require("../../models/contacts.js");
+
+const Contact = require("../../models/contacts");
 const { HttpError } = require("../../helpers");
+
 const router = express.Router();
-const crypto = require("crypto");
 
 const contactAddSchema = Joi.object({
   title: Joi.string().required().messages({
     "any.required": `"title" must be exist`,
   }),
-  director: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean().required(),
 });
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contactsService.listContacts();
-
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -24,7 +26,9 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const contact = await contactsService.getContactById(req.params.id);
+    const { id } = req.params;
+
+    const contact = await Contact.findById(id);
 
     if (!result) {
       throw HttpError(404, `Contact with id=${id} not found`);
@@ -42,7 +46,7 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contactsService.addContact(req.body);
+    const result = await Contact.create(req.body);
 
     res.status(201).json(result);
   } catch (error) {
@@ -53,7 +57,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contactsService.removeContact(id);
+    const result = await Contact.findByIdAndDelete(id);
     if (!result) {
       throw HttpError(404, `Movie with id=${id} not found`);
     }
@@ -71,7 +75,24 @@ router.put("/:contactId", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contactsService.updateContact(id, req.body);
+    const result = await Contact.findByIdAndUpdate(id, req.body);
+    if (!result) {
+      throw HttpError(404, `Movie with id=${id} not found`);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await Contact.findByIdAndUpdate(id, req.body);
     if (!result) {
       throw HttpError(404, `Movie with id=${id} not found`);
     }
