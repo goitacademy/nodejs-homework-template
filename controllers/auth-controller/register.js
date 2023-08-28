@@ -3,7 +3,7 @@ const createError = require("http-errors");
 const asyncHandler = require("express-async-handler");
 const { User } = require("../../models/users");
 
-const signUp = asyncHandler(async (req, res) => {
+const register = asyncHandler(async (req, res) => {
   const { email, password, subscription } = req.body;
   const user = await User.findOne({ email });
 
@@ -30,4 +30,4 @@ const signUp = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = signUp;
+module.exports = register;
