@@ -11,9 +11,12 @@
   "dependencies": {
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.3.1",
     "express": "^4.17.1",
     "generate-unique-id": "^2.0.3",
     "joi": "^17.9.2",
+    "mongodb": "^5.8.1",
+    "mongoose": "^7.4.5",
     "morgan": "^1.10.0"
   },
   "devDependencies": {

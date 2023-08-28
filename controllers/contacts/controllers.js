@@ -1,32 +1,39 @@
 const {
-listContacts,
-getById,
-addContact,
-removeContact,
-updateContact,
-} = require("../../models/contacts"); 
+  getAllContacts,
+  getById,
+  createContact,
+  updateContact,
+  removeContact,
+  updateStatus,
+} = require("../../service"); 
 
 const getContacts = async (req, res, next) => {
   try {
-    const contacts = await listContacts()
-
-    res.status(200).json(contacts)
+    const results = await getAllContacts()
+    res.status(200).json(results)
   } catch (error) {
+    console.error(error);
     next(error)
   }
 };
 
 const getContactById = async (req, res, next) => {
+  const { contactId } = req.params;
   try {
-    const contact = await getById(req.params.contactId)
-
-    if (!contact) {
-      return res.status(404).json({ message: 'Not found' })
+    const result = await getById(contactId);
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: `Not found task id: ${contactId}`,
+        data: 'Not Found',
+      });
     }
-
-    res.status(200).json(contact)
-  } catch (error) {
-    next(error)
+  } catch (e) {
+    console.error(e);
+    next(e);
   }
 };
 
@@ -46,7 +53,7 @@ const deleteContact = async (req, res, next) => {
 
 const addContacts = async (req, res, next) => {
   try {
-    const contact = await addContact(req.body)
+    const contact = await createContact(req.body)
 
     res.status(201).json(contact)
   } catch (error) {
@@ -68,11 +75,33 @@ const patchContact = async (req, res, next) => {
   }
 }; 
 
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+
+    if (favorite === undefined) {
+      return res.status(400).json({ message: 'missing field favorite' });
+    }
+
+    const updatedContact = await updateStatus(contactId, favorite);
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+}; 
+
 module.exports = {
     getContacts,
     getContactById,
     deleteContact,
     addContacts,
     patchContact,
+    updateStatusContact,
     
 }
