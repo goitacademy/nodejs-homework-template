@@ -1,36 +1,48 @@
-const express = require("express");
-const ctrl = require("../../controllers/contacts");
-const router = express.Router();
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const {
-  validateBody,
-  validateUpdateBody,
-  validateUpdateBodyFavorite,
-  isValidId,
-} = require("../../middlewares");
+const { handleMongooseError } = require("../helpers");
 
-const { schemas } = require("../../models/contact");
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-router.get("/", ctrl.getAll);
+contactSchema.post("save", handleMongooseError);
 
-router.get("/:id", isValidId, ctrl.getById);
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
 
-router.post("/", validateBody(schemas.addSchema), ctrl.add);
+const updateFavoriteSchemas = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
-router.put(
-  "/:id",
-  isValidId,
-  validateUpdateBody(schemas.addSchema),
-  ctrl.updateById
-);
+const schemas = {
+  addSchema,
+  updateFavoriteSchemas,
+};
 
-router.patch(
-  "/:id/favorite",
-  isValidId,
-  validateUpdateBodyFavorite(schemas.updateFavoriteSchemas),
-  ctrl.updateStatusContact
-);
+const Contact = model("contact", contactSchema);
 
-router.delete("/:id", isValidId, ctrl.deleteById);
-
-module.exports = router;
+module.exports = {
+  Contact,
+  schemas,
+};
