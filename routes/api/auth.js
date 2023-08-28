@@ -2,10 +2,10 @@ const express = require('express');
 
 const authRouter = express.Router();
 
-const ctrl = require('../controllers/auth');
-const { validateBody } = require('../middleware');
-const isTokenValid = require('../middleware/isTokenValid');
-const { userSchemas } = require('../models/users');
+const ctrl = require('../../controllers/auth');
+const { validateBody } = require('../../middleware');
+const isTokenValid = require('../../middleware/isTokenValid');
+const { userSchemas } = require('../../models/users');
 
 authRouter.post('/register', validateBody(userSchemas.registerUser), ctrl.register);
 
