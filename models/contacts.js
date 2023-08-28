@@ -41,8 +41,8 @@ const updateContact = async (contactId, body) => {
     return null;
   }
   const updatedContact = { ...contacts[index], ...body };
-  const updatedContacts = contacts.splice(index, 1, updatedContact);
-  fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+  contacts.splice(index, 1, updatedContact);
+  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return updatedContact;
 };
 
