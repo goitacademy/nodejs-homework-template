@@ -1,5 +1,5 @@
-const { Schema, model } = require("mongoose");
-
+const { Schema } = require("mongoose");
+const mongoose = require("mongoose");
 const contactSchema = Schema(
   {
     name: {
@@ -25,6 +25,32 @@ const contactSchema = Schema(
   { timestamps: true, versionKey: false }
 );
 
-const Contact = model("contact", contactSchema);
+const Contact = mongoose.model("contact", contactSchema);
 
-module.exports = Contact;
+const listContacts = async () => {
+  return Contact.find();
+};
+
+const getContactById = async (id) => {
+  return Contact.findById(id);
+};
+
+const addContact = async (contact) => {
+  return Contact.create(contact);
+};
+
+const updateContact = async (id, contact) => {
+  return Contact.findByIdAndUpdate(id, contact, { new: true });
+};
+
+const removeContact = async (id) => {
+  return Contact.findByIdAndDelete(id);
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
