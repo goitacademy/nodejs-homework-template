@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import "dotenv/config";
 import app from "./app.js";
 
 const PORT = 2200;
@@ -12,7 +11,8 @@ const connection = mongoose.connect(SRV_DB, {
 
 connection
   .then(() => {
-    app.listen(PORT, () => console.log("Database connection successful"));
+    app.listen(PORT, () =>
+    console.log(`Database connection successful on port ${PORT}`));
   })
   .catch(err => {
     console.log(`Server not running. Error message: ${err.message}`);
