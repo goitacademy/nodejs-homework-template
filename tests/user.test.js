@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const app = require("../server");
 const supertest = require('supertest');
 require('dotenv').config();
-const { DB_HOST } = process.env;
+const { DB_HOST, EMAIL, SECRET_EMAIL } = process.env;
 
 beforeAll(async () => {
 	await mongoose.connect(DB_HOST, {
@@ -15,8 +15,8 @@ mongoose.set('strictQuery', false);
 
 describe('login/signup controller', () => {
 	const credentials = {
-    email: "kcn.9i@meta.ua",
-    password: "M1e2t3a4",
+    email: EMAIL,
+    password: SECRET_EMAIL,
   };
 	test('Should create user', async () => {
 		const resSignup = await supertest(app).post('/api/v1/users/signup').send(credentials);
