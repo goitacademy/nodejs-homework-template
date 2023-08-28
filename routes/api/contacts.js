@@ -4,21 +4,24 @@ const ctrl = require('../../controllers/contactsCntrl')
 const validateBody = require('../../middleware/validateBody');
 const validationFavorite = require('../../middleware/validationFavorite');
 const { isIdValid } = require('../../helpers');
+const isTokenValid = require('../../middleware/isTokenValid');
 const { addSchema, favoriteJoiSchema }= require('../../schemas/addContactSchema');
 
 
 
-router.get('/', ctrl.getAll)
+router.get('/', isTokenValid, ctrl.getAll)
 
-router.get('/:id', isIdValid, ctrl.getById)
+router.get('/:id', isIdValid, isTokenValid, ctrl.getById)
 
-router.post('/', validateBody(addSchema), ctrl.addContact)
+router.post('/', validateBody(addSchema), isTokenValid, ctrl.addContact)
 
-router.delete('/:id', isIdValid, ctrl.removeById)
+router.delete('/:id', isIdValid, isTokenValid, ctrl.removeById)
 
-router.put('/:id', isIdValid, validateBody(addSchema), ctrl.updateById)
+router.put('/:id', isIdValid, isTokenValid, validateBody(addSchema), ctrl.updateById)
 
-router.patch('/:id/favorite', isIdValid, validationFavorite(favoriteJoiSchema), ctrl.updateStatusContact);
+router.patch('/:id/favorite', isIdValid, isTokenValid, validationFavorite(favoriteJoiSchema), ctrl.updateStatusContact);
+
+router.get('/', isTokenValid, ctrl.filterByStatus)
 
 
 module.exports = router;
