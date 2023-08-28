@@ -1,4 +1,4 @@
-const {HttpError} = require("../helpers/HttpError");
+const {HttpError} = require("../helpers");
 const jwt = require("jsonwebtoken")
 const User = require("../models/user")
 const { SECRET_KEY } = process.env;
