@@ -2,9 +2,9 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 
-import router from "./routes/api/contacts.js";
+import router from "./api/index.js";
 
-const app = express();
+export const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -21,5 +21,3 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
-
-export default app;
