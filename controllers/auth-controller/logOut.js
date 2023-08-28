@@ -1,7 +1,7 @@
 const { User } = require("../../models/users");
 const asyncHandler = require("express-async-handler");
 
-const logOut = asyncHandler(async (req, res) => {
+const logout = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
 
@@ -12,4 +12,4 @@ const logOut = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = logOut;
+module.exports = logout;

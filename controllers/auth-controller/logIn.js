@@ -9,7 +9,7 @@ dotenv.config();
 
 const { SECRET_KEY } = process.env;
 
-const logIn = asyncHandler(async (req, res) => {
+const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -41,4 +41,4 @@ const logIn = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = logIn;
+module.exports = login;
