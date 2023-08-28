@@ -25,8 +25,11 @@ router.get("/:contactId", async (req, res, next) => {
 
   const { contactId } = req.params;
   const findContactId = jsonData.find((contact) => contact.id === contactId);
-
-  res.json({ status: "success", code: 200, contact: findContactId });
+  if (findContactId) {
+    res.json({ status: "success", code: 200, contact: findContactId });
+  }else{
+    res.json({ status: "Error", code: 404,   message: "Contact not found",  });
+  }
 });
 
 router.post("/", async (req, res, next) => {
