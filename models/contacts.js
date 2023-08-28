@@ -1,13 +1,5 @@
-const Joi = require("joi");
 const { HttpError } = require("../helpers");
 const { schemas, Contact } = require("../models/contact");
-const {
-  getAllContacts,
-  getById,
-  createContact,
-  deleteContact,
-  changeContact,
-} = require("./requests.js");
 
 const listContacts = async (req, res, next) => {
   try {
@@ -77,7 +69,7 @@ const updateContact = async (req, res, next) => {
 const updateStatusContact = async (req, res, next) => {
   try {
     const { error } = schemas.updateFavoriteSchema.validate(req.body);
-    
+
     const emptyBody = Object.keys(req.body);
     if (!emptyBody.length) {
       throw HttpError(400, `missing field favorite`);

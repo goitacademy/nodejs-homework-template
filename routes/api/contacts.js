@@ -1,7 +1,6 @@
 const express = require("express");
 
 const { isValidId } = require("../../middleVares");
-const { schemas } = require("../../models/contact");
 
 const contacts = require("../../models/contacts.js");
 
