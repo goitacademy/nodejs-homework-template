@@ -17,4 +17,3 @@ mongoose
     process.exit(1);
   });
 
-// zadanie 4
