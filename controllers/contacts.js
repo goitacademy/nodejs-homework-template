@@ -55,7 +55,7 @@ const updateContact = async (req, res) => {
   
       const result = await Contact.findByIdAndUpdate({_id:id,owner}, req.body, {new: true});
       if (!result) {
-        throw HttpError(404, "Contact not found");
+        throw HttpError(404, "Contact not found ");
   }
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "missing fields");   
