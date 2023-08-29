@@ -1,7 +1,6 @@
-const service = require("../service");
-// const service = require("../models/contacts");
 
 const Joi = require("joi");
+const service = require("../service");
 
 // konfiguracja joi do walidancji danych
 const schema = Joi.object({
@@ -32,7 +31,8 @@ const listContacts = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
+    console.error("Error reading file: ", e.message);
+    next(e)
   }
 };
 
@@ -55,40 +55,31 @@ const getContactById = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
+    next(e);
   }
 };
 
 const createContact = async (req, res, next) => {
-  const body = req;
-  const { name, email, phone } = req.query;
-
   try {
-    const validation = schema.validate({ name, email, phone });
+const body = req;
+
+    const validation = schema.validate(body);
     if (validation.error) {
       return res
         .status(400)
         .json({ message: validation.error.details[0].message });
     }
-    // sprawdzam czy nie ma kontaktu o takim imieniu
-    const contacts = await service.listContacts();
-    const isNameUnique = !contacts.some((elem) => elem.name === name);
-    if (!isNameUnique) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        data: { message: "you already have contact with that name" },
-      });
-    } else {
+    
+  
       const result = await service.addContact(body);
       res.status(201).json({
         status: "success",
         code: 201,
         data: { addedContact: result },
       });
-    }
+    
   } catch (e) {
-    console.error(e);
+    next(e);
   }
 };
 
@@ -120,7 +111,7 @@ const updateContact = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
+    next(e);
   }
 };
 
@@ -143,7 +134,7 @@ const removeContact = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
+    next(e);
   }
 };
 
@@ -174,7 +165,7 @@ const updateStatusContact = async (req, res, next) => {
       });
     }
   } catch (e) {
-    console.error(e);
+    next(e);
   }
 };
 module.exports = {
