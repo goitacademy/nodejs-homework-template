@@ -7,6 +7,7 @@ const gravatar = require("gravatar");
 const path = require("path");
 const avatartDir = path.join(__dirname, "../", "public", "avatars");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const register = async (req, res) => {
  const { email, password } = req.body;
@@ -87,10 +88,13 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
  const { _id } = req.user;
-    const { path: tmpUpload, originalname } = req.file;
-    const filename = `${_id}_${originalname}`;
+ const { path: tmpUpload, originalname } = req.file;
+ const filename = `${_id}_${originalname}`;
  const resultUpload = path.join(avatartDir, filename);
  await fs.rename(tmpUpload, resultUpload);
+ const avatar = await Jimp.read(resultUpload);
+ avatar.resize(250, 250);
+ avatar.write(resultUpload);
  const avatarURL = path.join("avatars", filename);
  await User.findByIdAndUpdate(_id, { avatarURL });
  res.json({ avatarURL });
