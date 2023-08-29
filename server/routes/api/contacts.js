@@ -1,18 +1,19 @@
 import express from "express";
-import ctrlContacts from "../controllers/contacts.js";
+import auth from "./authorization.js";
+import contactsController from "../controllers/contacts.js";
 
 const router = express.Router();
 
-router.get("/", ctrlContacts.get);
+router.get("/", auth, contactsController.get);
 
-router.get("/:id", ctrlContacts.getById);
+router.get("/:id", auth, contactsController.getById);
 
-router.post("/", ctrlContacts.create);
+router.post("/", auth, contactsController.create);
 
-router.delete("/:id", ctrlContacts.remove);
+router.delete("/:id", auth, contactsController.remove);
 
-router.put("/:id", ctrlContacts.update);
+router.put("/:id", auth, contactsController.update);
 
-router.patch("/:id/favorite", ctrlContacts.updateFavoriteStatus);
+router.patch("/:id/favorite", auth, contactsController.updateFavorite);
 
 export default router;
