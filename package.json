@@ -10,14 +10,18 @@
   },
   "dependencies": {
     "alert": "^5.1.4",
+    "bcrypt": "^5.1.1",
     "cors": "2.8.5",
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "express": "4.17.1",
     "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.3",
     "morgan": "1.10.0",
     "ng-notifications-bar": "^0.0.16",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
     "push.js": "^1.0.12"
   },
   "devDependencies": {

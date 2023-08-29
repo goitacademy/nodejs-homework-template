@@ -3,8 +3,8 @@ const alert = require('alert');
 
 const get = async (req, res, next) => {
     try {
-        const { query } = req;
-        const results = await contactService.getAll(query);
+        const { query, user } = req;
+        const results = await contactService.getAll({ ...query, owner: user._id});
         res.json({
             status: "success",
             code: 200,
@@ -20,8 +20,9 @@ const get = async (req, res, next) => {
 
 const getById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const results = await contactService.getOne(id);
+        const { params, user } = req;
+        const { id } = params;
+        const results = await contactService.getOne(id, user._id);
         if(!results) {
             res.status(404).json({
                 status: "not-found",
@@ -52,8 +53,8 @@ const getById = async (req, res) => {
 
 const create = async (req, res, next) => {
     try {
-        const { body } = req;
-        const results = await contactService.create(body);
+        const { body, user } = req;
+        const results = await contactService.create({ ...body, owner: user._id });
         res.json({
             status: "success",
             code: 200,
@@ -70,8 +71,8 @@ const create = async (req, res, next) => {
 const update = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { body } = req;
-        const results = await contactService.update(id, body);
+        const { body, user } = req;
+        const results = await contactService.update(id, user._id, body);
         res.json({
             status: "success",
             code: 200,
@@ -87,9 +88,10 @@ const update = async (req, res, next) => {
 
 const updateFavorite = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const { favorite } = req.body;
-        const results = await contactService.updateFavorite(id, favorite);
+       const { body, params, user } = req;
+        const { id } = params;
+        const { favorite } = body;
+        const results = await contactService.updateFavorite(id, user._id, favorite);
         res.json({
             status: "success",
             code: 200,
@@ -106,7 +108,8 @@ const updateFavorite = async (req, res, next) => {
 const remove = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const results = await contactService.remove(id);
+        const { user } = req;
+        const results = await contactService.remove(id, user._id);
         if(results) {
             alert("Contact has been deleted")
         }
