@@ -59,14 +59,14 @@ async function updateStatusContact(req, res, next) {
     res.status(200).json(result);
 };
 
-async function filterByStatus(req, res) {
-  const { _id: owner } = req.user;
-  const { favorite } = req.query;
-  if (favorite === 'true') {
-    const result = await Contact.find({ owner, favorite: true });
-  res.json(result)
-  };
-};
+// async function filterByStatus(req, res) {
+//   const { _id: owner } = req.user;
+//   const { favorite } = req.query;
+//   if (favorite === 'true') {
+//     const result = await Contact.find({ owner, favorite: true });
+//   res.json(result)
+//   };
+// };
 
 
 module.exports = {
@@ -76,5 +76,5 @@ module.exports = {
   removeById: ctrlWrapper(removeById),
   updateById: ctrlWrapper(updateById),
   updateStatusContact: ctrlWrapper(updateStatusContact),
-  filterByStatus: ctrlWrapper(filterByStatus),
+  // filterByStatus: ctrlWrapper(filterByStatus),
 };

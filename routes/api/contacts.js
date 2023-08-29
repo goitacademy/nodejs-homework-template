@@ -21,7 +21,7 @@ router.put('/:id', isIdValid, isTokenValid, validateBody(addSchema), ctrl.update
 
 router.patch('/:id/favorite', isIdValid, isTokenValid, validationFavorite(favoriteJoiSchema), ctrl.updateStatusContact);
 
-router.get('/', isTokenValid, ctrl.filterByStatus)
+// router.get('/', isTokenValid, ctrl.filterByStatus)
 
 
 module.exports = router;
