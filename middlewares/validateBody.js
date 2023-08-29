@@ -15,4 +15,16 @@ const validateBody = (schema) => {
   return func;
 };
 
-module.exports = validateBody;
+const validateBodyFavorite = (schema) => {
+  return (req, res, next) => {
+    const { error, value } = schema.validate(req.body);
+
+    if (error) {
+      const errorMessage = error.details[0].message;
+      return res.status(400).json({ error: errorMessage });
+    }
+
+    next();
+  };
+};
+module.exports = { validateBody, validateBodyFavorite };
