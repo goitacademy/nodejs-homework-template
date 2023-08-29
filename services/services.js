@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const pathContacts = require("path");
 const crypto = require("crypto");
+const dataContacts = require("../models/contacts");
 
 const contactPath = pathContacts.join(__dirname, "..", "db", "contacts.json");
 
