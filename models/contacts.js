@@ -1,4 +1,4 @@
-import Contacts from "./schemas/contacts.js";
+import Contacts from "../service/schemas/contacts.js";
 
 export const listContacts = async () => {
   try {

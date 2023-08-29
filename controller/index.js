@@ -4,7 +4,7 @@ import {
   removeContact,
   getContactById,
   updateContact,
-} from "../service/contacts.js";
+} from "../models/contacts.js";
 
 export const get = async (req, res, next) => {
   try {
