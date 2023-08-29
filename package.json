@@ -1,17 +1,22 @@
 {
-	"name": "goit-node-hw-02-REST-API",
+	"name": "goit-node-hw-04-auth",
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"start": "cross-env NODE_ENV=production node ./server.js",
-		"start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+		"start": "node server.js",
+		"start:dev": "nodemon server.js",
 		"lint": "eslint **/*.js",
 		"lint:fix": "eslint --fix **/*.js"
 	},
 	"dependencies": {
+		"bcrypt": "^5.1.1",
 		"cors": "2.8.5",
 		"cross-env": "7.0.3",
+		"dotenv": "^16.3.1",
 		"express": "4.17.1",
+		"joi": "^17.9.2",
+		"jsonwebtoken": "^9.0.1",
+		"mongoose": "^7.4.4",
 		"morgan": "1.10.0"
 	},
 	"devDependencies": {
