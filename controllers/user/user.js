@@ -4,6 +4,7 @@ const { HttpError } = require("../../utils");
 const { User } = require("../../models/user");
 
 async function uploadAvatar(req, res, next) {
+  console.log(req.file)
   try {
     await fs.rename(
       req.file.path,
