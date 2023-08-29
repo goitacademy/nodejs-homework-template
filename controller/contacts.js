@@ -1,178 +1,188 @@
 
 const Joi = require("joi");
-const service = require("../service");
+const contactService = require("../services/contacts.service");
 
-// konfiguracja joi do walidancji danych
-const schema = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-
-  phone: Joi.string().pattern(/[0-9]{9}/),
-
-  favorite: Joi.bool(),
-
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "pl", "gov", "net"] },
-  }),
+const contactSchema = Joi.object({
+	name: Joi.string().required(),
+	email: Joi.string().email().required(),
+	phone: Joi.string().required(),
 });
-// konfiguracja joi do sprawdzenia favorite
-const checkFavorite = Joi.object({
-  favorite: Joi.bool(),
+const updateContactSchema = Joi.object({
+	name: Joi.string(),
+	email: Joi.string().email(),
+	phone: Joi.string(),
+});
+const updateFavoriteSchema = Joi.object({
+	favorite: Joi.boolean().required(),
 });
 
-const listContacts = async (req, res, next) => {
-  try {
-    const contacts = await service.listContacts();
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        contacts: contacts,
-      },
-    });
-  } catch (e) {
-    console.error("Error reading file: ", e.message);
-    next(e)
-  }
+const get = async (req, res, next) => {
+	try {
+		const results = await contactService.getAll();
+		res.json({
+			status: "success",
+			code: 200,
+			results: results.length,
+			data: {
+				contacts: results,
+			},
+		});
+	} catch (error) {
+		console.error("Error reading file: ", error.message);
+		next(error);
+	}
 };
 
-const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
-  try {
-    const result = await service.getContactById(contactId);
-    if (result) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { findContact: result },
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found Contact with id: ${contactId}`,
-        data: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
+const getById = async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const contact = await contactService.getById(contactId);
+		if (contact) {
+			res.json({
+				status: "success",
+				code: 200,
+				data: {
+					contact,
+				},
+			});
+		} else {
+			res.status(404).json({
+				status: "fail",
+				message: "Not found",
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
 };
 
-const createContact = async (req, res, next) => {
-  try {
-const body = req;
+const create = async (req, res, next) => {
+	try {
+		const { body } = req;
 
-    const validation = schema.validate(body);
-    if (validation.error) {
-      return res
-        .status(400)
-        .json({ message: validation.error.details[0].message });
-    }
-    
-  
-      const result = await service.addContact(body);
-      res.status(201).json({
-        status: "success",
-        code: 201,
-        data: { addedContact: result },
-      });
-    
-  } catch (e) {
-    next(e);
-  }
+		const validateNewContact = contactSchema.validate(body);
+
+		if (validateNewContact.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateNewContact.error,
+			});
+		}
+
+		const newContact = await contactService.create(body);
+
+		res.json({
+			status: "success",
+			code: 201,
+			data: {
+				newContact,
+			},
+		});
+	} catch (error) {
+		next(error);
+	}
 };
 
-const updateContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const body = req.query;
-  console.log(body);
-  const { name, email, phone } = req.query;
-  try {
-    const validation = schema.validate({ name, email, phone });
-    if (validation.error) {
-      return res
-        .status(400)
-        .json({ message: validation.error.details[0].message });
-    }
-    const result = await service.updateContact(contactId, body);
-    if (result) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { updated: result },
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
+const update = async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const { body } = req;
+
+		const validateNewContact = updateContactSchema.validate(body);
+
+		if (validateNewContact.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateNewContact.error,
+			});
+		}
+		const updateData = await contactService.update(contactId, body);
+
+		res.json({
+			status: "success",
+			code: 200,
+			data: {
+				updateData,
+			},
+		});
+	} catch (error) {
+		if (error.message === "Contact not found") {
+			res.status(404).json({
+				status: "fail",
+				message: "Not found",
+			});
+		} else {
+			next(error);
+		}
+	}
+};
+const updateFavorite = async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const { favorite } = req.body;
+
+		const validateFavorite = updateFavoriteSchema.validate({ favorite });
+
+		if (validateFavorite.error) {
+			return res.status(400).json({
+				status: "fail",
+				message: "Invalid data",
+				error: validateFavorite.error,
+			});
+		}
+
+		const updateData = await contactService.updateFavorite(contactId, favorite);
+
+		res.json({
+			status: "success",
+			code: 200,
+			data: {
+				updateData,
+			},
+		});
+	} catch (error) {
+		if (error.message === "Contact not found") {
+			res.status(404).json({
+				status: "fail",
+				message: "Not found",
+			});
+		} else {
+			next(error);
+		}
+	}
 };
 
-const removeContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  try {
-    const result = await service.removeContact(contactId);
-    if (result) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { deletedContact: result },
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
+const remove = async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const contact = await contactService.remove(contactId);
+		if (contact) {
+			res.json({
+				status: "success",
+				code: 200,
+				message: "contact deleted",
+				data: {
+					contact,
+				},
+			});
+		} else {
+			res.status(404).json({
+				status: "fail",
+				message: "Not found",
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
 };
 
-const updateStatusContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const body = req.query;
-  const { favorite } = req.query;
-  try {
-    const validation = checkFavorite.validate({ favorite });
-    if (validation.error) {
-      return res
-        .status(400)
-        .json({ message: validation.error.details[0].message });
-    }
-    const result = await service.updateContact(contactId, body);
-    if (result && Object.keys(req.query).length !== 0) {
-      res.json({
-        status: "success",
-        code: 200,
-        data: { updated: result },
-      });
-    } else {
-      res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "missing field favorite",
-        data: "Not Found",
-      });
-    }
-  } catch (e) {
-    next(e);
-  }
-};
 module.exports = {
-  listContacts,
-  getContactById,
-  createContact,
-  updateContact,
-  removeContact,
-  updateStatusContact,
+	get,
+	getById,
+	create,
+	update,
+	updateFavorite,
+	remove,
 };
