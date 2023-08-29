@@ -1,52 +1,65 @@
-const path = require("path");
-const fs = require("fs/promises");
-const { nanoid } = require("nanoid");
-// const contactsList = require("./contacts.json");
-const contactsPath = path.join(__dirname, "../models/contacts.json");
+const contactSchemaDB = require("../models/contact");
 
 const getAllContactsService = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
+  const contacts = await contactSchemaDB.find();
+  return contacts;
 };
 
 const getContactByIdService = async (contactId) => {
-  const contacts = await getAllContactsService();
-  const [contact] = contacts.filter(({ id }) => contactId === id);
-  return contact;
+  const contacts = await contactSchemaDB.findById(contactId);
+  return contacts;
 };
 
 const addContactService = async (body) => {
-  const contacts = await getAllContactsService();
   const newContact = {
-    id: nanoid(),
-    ...body,
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+    favorite: body.favorite,
   };
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+
+  await contactSchemaDB.create(newContact);
+
   return newContact;
 };
 
 const removeContactService = async (contactId) => {
-  const contacts = await getAllContactsService();
-  const deletedContact = contacts.filter(({ id }) => contactId !== id);
+  const contacts = await contactSchemaDB.findByIdAndDelete(contactId);
 
-  if (deletedContact.length !== contacts.length) {
-    await fs.writeFile(contactsPath, JSON.stringify(deletedContact, null, 2));
-    return true;
+  if (contacts === null) {
+    return false;
   }
-  return false;
+  return true;
 };
 
 const updateContactService = async (contactId, body) => {
-  const contacts = await getAllContactsService();
-  const findContactIndex = contacts.findIndex(({ id }) => id === contactId);
-  if (findContactIndex === -1) {
-    return false;
-  }
-  const changedContact = { ...contacts[findContactIndex], ...body };
-  contacts.splice(findContactIndex, 0, changedContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return changedContact;
+  const newContact = {
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+  };
+
+  const contacts = await contactSchemaDB.findByIdAndUpdate(
+    contactId,
+    newContact,
+    { new: true }
+  );
+
+  return contacts;
+};
+
+const updateContactFavoriteService = async (contactId, body) => {
+  const newContact = {
+    favorite: body.favorite,
+  };
+
+  const contacts = await contactSchemaDB.findByIdAndUpdate(
+    contactId,
+    newContact,
+    { new: true }
+  );
+
+  return contacts;
 };
 
 module.exports = {
@@ -55,4 +68,5 @@ module.exports = {
   removeContactService,
   addContactService,
   updateContactService,
+  updateContactFavoriteService,
 };
