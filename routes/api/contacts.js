@@ -5,7 +5,10 @@ const router = express.Router();
 const { contacts: ctrl } = require("../../fetch");
 
 const { isValidId } = require("../../middleware");
-const { validateContact } = require("../../middleware/validationMiddleware")
+const { validateContact } = require("../../middleware/validationMiddleware");
+const { tokenValidation } = require("../../middleware");
+
+router.use(tokenValidation)
 
 router.get("/", ctrl.getAll);
 

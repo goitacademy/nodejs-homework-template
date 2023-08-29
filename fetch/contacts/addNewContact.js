@@ -13,7 +13,10 @@ const createNew = async (req, res, next) => {
       return;
     }
 
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({
+      ...req.body,
+      ownerId: req.user.id,
+    });
 
     res.status(201).json(result);
   } catch (error) {
