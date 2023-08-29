@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
+import bcrypt from "bcryptjs";
 
-const users = new Schema({
+const userSchema = new Schema({
   password: {
     type: String,
     required: [true, "Password is required"],
@@ -21,6 +22,10 @@ const users = new Schema({
   },
 });
 
-const Users = model("users", users);
+userSchema.methods.setPassword = function (password) {
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(6));
+};
 
-export default Users;
+const User = model("User", userSchema);
+
+export default User;
