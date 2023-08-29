@@ -1,9 +1,10 @@
 const express = require("express");
 const Joi = require("joi");
-
+const passport = require("passport");
 const router = express.Router();
 
 const contacts = require("../../models/contacts");
+const authorize = require("../../middleware/authorize");
 
 const contactsSchema = Joi.object({
   name: Joi.string().required(),
@@ -11,7 +12,7 @@ const contactsSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-router.get("/", async (req, res, next) => {
+router.get("/", authorize, async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
     res.status(200).json({ result });
@@ -20,7 +21,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", authorize, async (req, res, next) => {
   try {
     const result = await contacts.getContactById(req.params.id);
     if (!result) {
