@@ -1,6 +1,9 @@
 // const updateFavoriteSchema = require("../../models");
 
-const { Contact } = require("../../models");
+const { cntrlWrappers } = require("../../helpers");
+const {
+  updateFavoriteSchema: { Contact },
+} = require("../../models");
 
 const Joi = require("joi");
 
@@ -21,40 +24,29 @@ const putSchema = Joi.object({
 }).or("name", "phone", "email");
 
 const listContacts = async (req, res, next) => {
-  try {
-    const contacts = await Contact.find();
-    res.json(contacts);
-  } catch {
-    console.log("error");
-    res.status(500).json({ message: "Server error" });
-  }
+  const contacts = await Contact.find();
+  res.json(contacts);
 };
 
 const getContactById = async (req, res, next) => {
   const id = req.params.contactId;
-  try {
-    const conntactsById = await Contact.findById(id);
 
-    if (!conntactsById) {
-      res.status(404).json({ message: "Not found" });
-    }
-    res.send(conntactsById);
-  } catch {
-    res.status(500).json({ message: "Server error" });
+  const conntactsById = await Contact.findById(id);
+
+  if (!conntactsById) {
+    res.status(404).json({ message: "Not found" });
   }
+  res.send(conntactsById);
 };
 
 const removeContact = async (req, res, next) => {
   const id = req.params.contactId;
-  try {
-    const deleteContact = await Contact.findByIdAndRemove(id);
-    if (!deleteContact) {
-      res.status(404).json({ message: "Not found" });
-    }
-    res.status(200).json({ message: "contact deleted" });
-  } catch {
-    res.status(500).json({ message: "Server error" });
+
+  const deleteContact = await Contact.findByIdAndRemove(id);
+  if (!deleteContact) {
+    res.status(404).json({ message: "Not found" });
   }
+  res.status(200).json({ message: "contact deleted" });
 };
 
 const addContact = async (req, res, next) => {
@@ -66,12 +58,8 @@ const addContact = async (req, res, next) => {
     return;
   }
 
-  try {
-    const newContact = await Contact.create(req.body);
-    res.status(201).json(newContact);
-  } catch {
-    res.status(500).json({ message: "Server error" });
-  }
+  const newContact = await Contact.create(req.body);
+  res.status(201).json(newContact);
 };
 
 const updateContact = async (req, res, next) => {
@@ -81,19 +69,15 @@ const updateContact = async (req, res, next) => {
     return;
   }
 
-  try {
-    const id = req.params.contactId;
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    if (updatedContact === null) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-    res.status(200).json(updatedContact);
-  } catch {
-    res.status(500).json({ message: "Server error" });
+  const id = req.params.contactId;
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  if (updatedContact === null) {
+    res.status(404).json({ message: "Not found" });
+    return;
   }
+  res.status(200).json(updatedContact);
 };
 
 const updateStatusContact = async (req, res, next) => {
@@ -105,26 +89,22 @@ const updateStatusContact = async (req, res, next) => {
     return;
   }
 
-  try {
-    const id = req.params.contactId;
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    if (updatedContact === null) {
-      res.status(404).json({ message: "Not found" });
-      return
-    }
-    res.status(200).json(updatedContact);
-  } catch {
-    res.status(500).json({ message: "Server error" });
+  const id = req.params.contactId;
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  if (updatedContact === null) {
+    res.status(404).json({ message: "Not found" });
+    return;
   }
+  res.status(200).json(updatedContact);
 };
 
 module.exports = {
-  updateStatusContact,
-  updateContact,
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
+  updateStatusContact: cntrlWrappers(updateStatusContact),
+  updateContact: cntrlWrappers(updateContact),
+  listContacts: cntrlWrappers(listContacts),
+  getContactById: cntrlWrappers(getContactById),
+  removeContact: cntrlWrappers(removeContact),
+  addContact: cntrlWrappers(addContact),
 };
