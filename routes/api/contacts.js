@@ -7,7 +7,7 @@ const remove = require("../../controllers/contacts/remove.js");
 const update = require("../../controllers/contacts/update.js");
 const updateStatusContact = require("../../controllers/contacts/getByFavorite.js");
 
-const validateBody = require("../../middlewares/validateBody.js");
+const validateBody = require("../../middlewares/middleware.js");
 const {
   contactsScheme,
   updateStatusSchema,
