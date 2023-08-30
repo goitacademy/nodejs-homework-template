@@ -1,10 +1,14 @@
-import User from './../service/schemas/users.js';
 import bcrypt from 'bcrypt';
 import gravatar from 'gravatar';
 import Jimp from 'jimp';
 import fs from 'fs/promises';
+import jwt from 'jsonwebtoken';
+
+import User from './../service/schemas/users.js';
 
 import { serverAddress } from '../server.js';
+
+const secret = 'GOIT2023';
 
 export const getAllUsers = async () => {
   try {
@@ -17,7 +21,21 @@ export const getAllUsers = async () => {
 
 export const getUser = async id => {
   try {
-    return await User.findById(id);
+    const user = await User.findById(id);
+    return user;
+  } catch (err) {
+    console.log('Error getting user list: ', err);
+    throw err;
+  }
+};
+
+export const logOutUser = async id => {
+  try {
+    const user = await User.findById(id);
+    if (!user) return false;
+    user.token = null;
+    await user.save();
+    return user;
   } catch (err) {
     console.log('Error getting user list: ', err);
     throw err;
@@ -49,6 +67,15 @@ export const loginUser = async body => {
   try {
     const isUser = await bcrypt.compare(password, user.password);
     if (!isUser) return false;
+
+    const payload = {
+      id: user.id,
+      username: user.email,
+    };
+    const token = jwt.sign(payload, secret, { expiresIn: '1h' });
+
+    user.token = token;
+    await user.save();
     return user;
   } catch (err) {
     console.log('Error adding new user: ', err);
@@ -98,6 +125,7 @@ export const patchAvatar = async (filePath, userId) => {
 export const usersService = {
   getAllUsers,
   getUser,
+  logOutUser,
   addUser,
   loginUser,
   patchUser,

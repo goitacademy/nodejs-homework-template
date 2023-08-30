@@ -2,6 +2,7 @@ import passport from 'passport';
 import passportJWT from 'passport-jwt';
 import User from '../service/schemas/users.js';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
 dotenv.config();
 const secret = 'GOIT2023';
@@ -33,6 +34,7 @@ import { getAllUsers } from '../models/users.js';
 export const auth = async (req, res, next) => {
   try {
     await passport.authenticate('jwt', { session: false }, async (err, user) => {
+      console.log(err);
       if (!user || err) {
         return res.status(401).json({
           status: 'error',
@@ -47,7 +49,9 @@ export const auth = async (req, res, next) => {
 
       const allUsers = await getAllUsers();
       const tokenExists = allUsers.some(user => user.token === token);
+
       if (!tokenExists) {
+        console.log('TokenError');
         return res.status(401).json({
           status: 'error',
           code: 401,
