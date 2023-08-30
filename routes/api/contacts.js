@@ -7,8 +7,8 @@ const contactSModel = require('./../../models/contacts')
 
 const contactSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.number()
+  email: Joi.string().email(),
+  phone: Joi.string()
 })
 
 
@@ -41,9 +41,7 @@ router.post('/', async (req, res, next) => {
   if (error) {
     return res.status(400).json({ message: `Missing required ${error.details[0].context.key}` });
   }
-  const newContact = await contactsModel.addContact(req.body);
-  res.status(201).json(newContact);
-  // res.json({ message: 'template message' })
+  
 })
 
 
