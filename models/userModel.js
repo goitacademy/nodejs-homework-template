@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
-
 const bCrypt = require('bcryptjs');
 
 const userSchema = new Schema(
@@ -26,6 +25,19 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
       default: null,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamp: true }

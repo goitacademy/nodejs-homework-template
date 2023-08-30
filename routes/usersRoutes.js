@@ -17,6 +17,6 @@ router.patch(
   uploadMiddleware.single("avatar"),
   userController.updateAvatar.updateAvatar
 );
-
+router.post("verify", userController.resendVerificationMail.resendVerificationMail);
 
 module.exports = router;

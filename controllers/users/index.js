@@ -7,6 +7,7 @@ const updateSubscription = require("./updateSubscription");
 const deleteUserByMail = require("./deleteUserByMail");
 const verifyUserByToken = require("./verifyUserByToken");
 const updateAvatar = require("./updateAvatar");
+const resendVerificationMail = require("./resendVerificationMail");
 
 
 module.exports = {
@@ -19,4 +20,5 @@ module.exports = {
   deleteUserByMail,
   verifyUserByToken,
   updateAvatar,
+  resendVerificationMail,
 };
