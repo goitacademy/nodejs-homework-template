@@ -6,8 +6,9 @@ const ctrl = require('../../controllers/auth');
 const { validateBody } = require('../../middleware');
 const isTokenValid = require('../../middleware/isTokenValid');
 const { userSchemas } = require('../../models/users');
+const upload = require('../../middleware/upload');
 
-authRouter.post('/register', validateBody(userSchemas.registerUser), ctrl.register);
+authRouter.post('/register', upload.single('avatar'), validateBody(userSchemas.registerUser), ctrl.register);
 
 authRouter.post('/login', validateBody(userSchemas.loginUser), ctrl.login);
 
@@ -16,5 +17,7 @@ authRouter.post('/logout', isTokenValid, ctrl.logout);
 authRouter.get('/current', isTokenValid, ctrl.current);
 
 authRouter.patch('/subscription', validateBody(userSchemas.updateSubscription), isTokenValid, ctrl.updateSubscription);
+
+authRouter.patch('/avatars', isTokenValid, upload.single('avatar'), ctrl.updateAvatar);
 
 module.exports = authRouter;

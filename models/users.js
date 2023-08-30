@@ -31,6 +31,10 @@ const userSchema = new Schema(
     name: {
       type: String,
     },
+    avatar: {
+      type: String,
+      required: true,
+    }
   },
   { versionKey: false, timeStamps: true }
 );
