@@ -1,4 +1,4 @@
-import { addSchema } from "../../schemas/schemas";
+const { addSchema } = require("../../schemas/schemas");
 
 const express = require("express");
 
