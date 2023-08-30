@@ -1,20 +1,15 @@
-const { 
-  listContacts, 
-  getContactById, 
-  addContact, 
-  updateContact, 
-  removeContact, 
-} = require("../models/contacts");
+const {Contact} = require("../schemas");
+
 const { ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await listContacts();
+  const result = await Contact.find({}, "-createdAt -updatedAt");
   res.status(200).json(result);
 }
 
-const getById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await getContactById(contactId);
+const getById = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await Contact.findById(id);
   if (!result) {
     return res.status(404).json({ message: "Not found"});
   } 
@@ -22,13 +17,13 @@ const getById = async (req, res) => {
 }
 
 const add = async (req, res) => {
-  const result = await addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 }
 
 const updateById = async (req, res) => {
-  const {contactId} = req.params;
-  const result = await updateContact(contactId, req.body);
+  const {id} = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!result) {
     return res.status(404).json({ message: "Not found"});
   }
@@ -36,12 +31,17 @@ const updateById = async (req, res) => {
 }
 
 const updateStatus = async (req, res) => {
-  const {contactId} = req.params;
+  const {id} = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+  if (!result) {
+    return res.status(404).json({ message: "Not found"});
+  }
+  res.status(200).json(result);
 }
 
 const deleteById = async (req, res) => {
-  const {contactId} = req.params;
-  const result = await removeContact(contactId);
+  const {id} = req.params;
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     return res.status(404).json({ message: "Not found"});
   }
