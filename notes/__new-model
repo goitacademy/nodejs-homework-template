@@ -1,0 +1,68 @@
+const fs = require('fs/promises')
+const path = require('path')
+// const { nanoid } = require('nanoid')
+const { fileURLToPath } = require('url');
+
+
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
+
+const contactsFilePath = path.join(__dirname, './contacts.json')
+
+const listContacts = async () => {
+  let contactsList = []
+  await fs
+    .readFile(contactsPath, "utf8")
+    .then((contacts) => {
+      contactsList = JSON.parse(contacts)
+    })
+    .catch((error) => console.log(error.message))
+  return contactsList
+
+}
+
+const getContactById = async (contactId) => {
+  const contacts = await listContacts()
+  const contactById = contacts.find((contact) => contact.id === contactId)
+  return contactById
+}
+
+const removeContact = async (contactId) => {
+  const contacts = await listContacts()
+  const changeContact = contacts.find((contact) => contact.id === contactId)
+  if (!changeContact) {
+    return null
+  }
+  const filtredContact = contacts.filter((contact) => contact.id === contactId)
+  fs.writeFile(contactsFilePath, JSON.stringify(filtredContact))
+  return filtredContact
+}
+
+const addContact = async (body) => {
+  const newContact = { ...body }
+  const contacts = await listContacts()
+  const updatedContactsList = [...contacts, newContact]
+  fs.writeFile(contactsPath, JSON.stringify(updatedContactsList))
+  return newContact
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts()
+  const contactById = contacts.find((c) => c.id === contactId)
+  if (!contactById) {
+    return null
+  }
+  const updatedContact = { ...body, id: contactId }
+  const filteredContacts = contacts.filter((c) => c.id !== contactId)
+  const updatedContactsList = [...filteredContacts, updatedContact]
+  fs.writeFile(contactsPath, JSON.stringify(updatedContactsList))
+  return updatedContact
+};
+
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+}
