@@ -1,9 +1,7 @@
 // const updateFavoriteSchema = require("../../models");
 
 const { cntrlWrappers } = require("../../helpers");
-const {
-  updateFavoriteSchema: { Contact },
-} = require("../../models");
+const { Contact } = require("../../models/contact");
 
 const Joi = require("joi");
 

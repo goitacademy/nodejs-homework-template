@@ -5,7 +5,6 @@ const handleMongooseError = (error, data, next) => {
     error.message = "Email in use";
   }
   error.status = status;
-
   next();
 };
 
