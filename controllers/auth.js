@@ -33,6 +33,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const userExist = await User.findOne({ email });
+  console.log(userExist);
   if (!userExist) {
     throw HttpError(401, 'Email or password is wrong');
   }
@@ -59,6 +60,7 @@ const logout = async (req, res) => {
 };
 
 const current = async (req, res) => {
+  console.log(req.headers);
   const { email, subscription } = req.user;
   res.status(200).json({ email, subscription });
 };
