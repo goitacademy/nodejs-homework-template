@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 import { config } from 'dotenv';
 import { makeApp } from './app.js';
-import { usersService } from './models/users.js';
+import { controllerMongoDB } from './controllers/mongoDB.controller.js';
 
 config();
 
@@ -17,7 +17,7 @@ export const startServer = async () => {
     const connection = await mongoose.connect(uriDb);
     // console.log('Database connection successful');
 
-    const app = await makeApp(usersService);
+    const app = await makeApp(controllerMongoDB);
     app.listen(port, () => {
       // console.log(`Server running. Use our API on server: ${serverAddress}`);
     });

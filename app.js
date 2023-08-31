@@ -2,12 +2,13 @@ import express from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
-import { contactsRouter } from './routes/api/contacts.js';
+import { contactsRouterFunction } from './routes/api/contacts.js';
 import { usersRouterFunction } from './routes/api/users.js';
 import passport from './config/config-passport.js';
 import { auth } from './config/config-passport.js';
 
-export const makeApp = usersService => {
+export const makeApp = controllerDatabase => {
+  const { contactsService, usersService } = controllerDatabase;
   const app = express();
   const logger = morgan;
 
@@ -17,7 +18,7 @@ export const makeApp = usersService => {
   app.use(cors());
   app.use(express.json());
 
-  app.use('/api/contacts', auth, contactsRouter);
+  app.use('/api/contacts', auth, contactsRouterFunction(contactsService));
   app.use('/api/users', usersRouterFunction(usersService));
   app.use(passport.initialize());
   app.use(express.static('public'));

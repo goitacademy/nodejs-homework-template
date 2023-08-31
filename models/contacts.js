@@ -1,6 +1,6 @@
 import Contact from '../service/schemas/contacts.js';
 
-export const listContacts = async userId => {
+const listContacts = async userId => {
   try {
     return await Contact.find({ owner: userId });
   } catch (err) {
@@ -9,7 +9,7 @@ export const listContacts = async userId => {
   }
 };
 
-export const getContactById = async (userId, contactId) => {
+const getContactById = async (userId, contactId) => {
   try {
     return await Contact.findOne({ owner: userId, _id: contactId });
   } catch (err) {
@@ -18,7 +18,7 @@ export const getContactById = async (userId, contactId) => {
   }
 };
 
-export const removeContact = async (contactId, userId) => {
+const removeContact = async (contactId, userId) => {
   try {
     return await Contact.findByIdAndRemove({ owner: userId, _id: contactId });
   } catch (err) {
@@ -27,7 +27,7 @@ export const removeContact = async (contactId, userId) => {
   }
 };
 
-export const addContact = async (body, userId) => {
+const addContact = async (body, userId) => {
   try {
     const contactData = {
       ...body,
@@ -40,7 +40,7 @@ export const addContact = async (body, userId) => {
   }
 };
 
-export const updateContact = async (contactId, body, userId) => {
+const updateContact = async (contactId, body, userId) => {
   try {
     return await Contact.findByIdAndUpdate({ owner: userId, _id: contactId }, body, { new: true });
   } catch (err) {
@@ -49,7 +49,7 @@ export const updateContact = async (contactId, body, userId) => {
   }
 };
 
-export const updatedStatusContact = async (contactId, favorite, userId) => {
+const updatedStatusContact = async (contactId, favorite, userId) => {
   try {
     return await Contact.findByIdAndUpdate(
       { owner: userId, _id: contactId },
@@ -61,3 +61,14 @@ export const updatedStatusContact = async (contactId, favorite, userId) => {
     throw err;
   }
 };
+
+export const contactsService = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+  updatedStatusContact,
+};
+
+export default contactsService;
