@@ -1,7 +1,9 @@
 import { contactsService } from '../models/contacts.js';
-import usersService from '../models/users.js';
+import { usersService } from '../models/users.js';
 
 export const controllerMongoDB = {
-  contactsService,
   usersService,
+  contactsService,
 };
+
+export default controllerMongoDB;

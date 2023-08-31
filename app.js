@@ -7,8 +7,7 @@ import { usersRouterFunction } from './routes/api/users.js';
 import passport from './config/config-passport.js';
 import { auth } from './config/config-passport.js';
 
-export const makeApp = controllerDatabase => {
-  const { contactsService, usersService } = controllerDatabase;
+export const makeApp = (usersService, contactsService) => {
   const app = express();
   const logger = morgan;
 

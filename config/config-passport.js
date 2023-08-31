@@ -29,12 +29,12 @@ passport.use(
 
 export default passport;
 
-import { getAllUsers } from '../models/users.js';
+import { usersService } from '../models/users.js';
+const { getAllUsers } = usersService;
 
 export const auth = async (req, res, next) => {
   try {
     await passport.authenticate('jwt', { session: false }, async (err, user) => {
-      console.log(err);
       if (!user || err) {
         return res.status(401).json({
           status: 'error',
@@ -51,7 +51,6 @@ export const auth = async (req, res, next) => {
       const tokenExists = allUsers.some(user => user.token === token);
 
       if (!tokenExists) {
-        console.log('TokenError');
         return res.status(401).json({
           status: 'error',
           code: 401,

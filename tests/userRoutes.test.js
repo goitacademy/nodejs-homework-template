@@ -30,16 +30,24 @@ const loginPayload = {
 
 const addUser = jest.fn();
 const loginUser = jest.fn();
+const addContact = jest.fn();
+const listContacts = jest.fn();
 addUser.mockResolvedValue(userPayload);
 loginUser.mockResolvedValue(userPayload);
+const usersService = {
+  addUser: () => addUser,
+  loginUser: () => loginUser,
+};
+const contactsService = {
+  listContacts: () => listContacts,
+  addContact: () => addContact,
+};
 
-const app = makeApp({
-  addUser,
-  loginUser,
-});
+const app = makeApp(usersService, contactsService);
 
 describe('register and login user', () => {
   describe(' register given a username and password', () => {
+    console.log('start test');
     test('should respond with a 201 status code', async () => {
       const response = await request(app).post('/api/users/signup').send(registerPayload);
       expect(response.status).toBe(201);
@@ -50,7 +58,6 @@ describe('register and login user', () => {
   describe(' login given a username and password', () => {
     test('should respond with a 200 status code', async () => {
       const response = await request(app).post('/api/users/login').send(loginPayload);
-      console.log(response);
       expect(response.status).toBe(200);
       //expect(loginUser).toHaveBeenCalled();
     });

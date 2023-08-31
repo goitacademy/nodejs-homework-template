@@ -10,7 +10,7 @@ import { serverAddress } from '../server.js';
 
 const secret = 'GOIT2023';
 
-export const getAllUsers = async () => {
+const getAllUsers = async () => {
   try {
     return await User.find();
   } catch (err) {
@@ -19,7 +19,7 @@ export const getAllUsers = async () => {
   }
 };
 
-export const getUser = async id => {
+const getUser = async id => {
   try {
     const user = await User.findById(id);
     return user;
@@ -29,7 +29,7 @@ export const getUser = async id => {
   }
 };
 
-export const logOutUser = async id => {
+const logOutUser = async id => {
   try {
     const user = await User.findById(id);
     if (!user) return false;
@@ -42,7 +42,7 @@ export const logOutUser = async id => {
   }
 };
 
-export const addUser = async body => {
+const addUser = async body => {
   const { email, password } = body;
   const userExist = await User.findOne({ email });
   if (userExist) return 409;
@@ -59,7 +59,7 @@ export const addUser = async body => {
   }
 };
 
-export const loginUser = async body => {
+const loginUser = async body => {
   const { email, password } = body;
   const users = await User.find();
   const user = users.find(user => user.email === email);
@@ -83,7 +83,7 @@ export const loginUser = async body => {
   }
 };
 
-export const patchUser = async (subscription, userId) => {
+const patchUser = async (subscription, userId) => {
   const availableSubscriptions = User.schema.path('subscription').enumValues;
   if (!availableSubscriptions.includes(subscription)) {
     return 400;
@@ -100,7 +100,7 @@ export const patchUser = async (subscription, userId) => {
   }
 };
 
-export const patchAvatar = async (filePath, userId) => {
+const patchAvatar = async (filePath, userId) => {
   try {
     const localPath = `public/avatars/avatar-${userId}.jpg`;
     const serverPath = `${serverAddress}/${localPath.replace(/^public\//, '')}`;
