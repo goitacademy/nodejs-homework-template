@@ -1,5 +1,3 @@
-// const updateFavoriteSchema = require("../../models");
-
 const { cntrlWrappers } = require("../../helpers");
 const { Contact } = require("../../models/contact");
 
