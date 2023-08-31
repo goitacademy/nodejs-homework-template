@@ -1,28 +1,16 @@
 {
-  "name": "template",
+  "name": "nodejs-homework-template",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "cross-env": "7.0.3",
-    "experr": "^1.1.7",
-    "express": "^4.17.1",
-    "joi": "^17.10.0",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "eslint": "7.19.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "16.0.3",
-    "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1"
   }
 }
