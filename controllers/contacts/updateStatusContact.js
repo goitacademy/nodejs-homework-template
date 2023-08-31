@@ -2,15 +2,14 @@ const { Contact } = require('../../models');
 const { httpError, ctrlWrapper } = require('../../helpers');
 
 const updateStatusContact = async (req, res) => {
-    const { contactId } = req.params;
+    const { id } = req.params;
 
-    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    const result = await Contact.findByIdAndUpdate(id, req.body, {
     new: true,
 });
 
-    if (!result) {
-    throw httpError(404, 'Not found');
-}
+    if (!result) throw httpError(404, 'Not found');
+
 
     return res.json(result);
 };

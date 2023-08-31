@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { phoneRegExp } = require('../../helpers');
 
 const contactSchema = Joi.object({
     name: Joi.string()
@@ -15,8 +16,8 @@ const contactSchema = Joi.object({
         })
         .required(),
     phone: Joi.string()
-        .min(5)
-        .max(20)
+        .pattern(phoneRegExp)
+        .message('Phone format: (xxx) xxx-xxxx')
         .messages({
         'any.required': `missing required phone field`,
         })
