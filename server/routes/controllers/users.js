@@ -93,7 +93,6 @@ const login = async (req, res, next) => {
       data: {
         token,
         user: {
-          username: user.username,
           email: user.email,
           subscription: user.subscription,
         },

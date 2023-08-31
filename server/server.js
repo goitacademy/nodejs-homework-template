@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import app from "./app.js";
 
-const PORT = 2200;
+const PORT = 3000;
 const SRV_DB = process.env.DB_HOST;
 
 const connection = mongoose.connect(SRV_DB, {
@@ -12,7 +12,8 @@ const connection = mongoose.connect(SRV_DB, {
 connection
   .then(() => {
     app.listen(PORT, () =>
-    console.log(`Database connection successful on port ${PORT}`));
+      console.log(`Database connection successful on port ${PORT}`)
+    );
   })
   .catch(err => {
     console.log(`Server not running. Error message: ${err.message}`);
