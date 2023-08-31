@@ -23,14 +23,11 @@ const removeContact = async (contactId) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((c) => c.id === contactId);
   if (index !== -1) {
-    const removedContact = contacts.splice(index, 1);
+    contacts.splice(index, 1);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    const response = { "removed contact": removedContact };
-    console.log(response);
-    return response;
+    return { message: "contact deleted" };
   } else {
-    const response = "no such contact";
-    return response;
+    return { message: "Not found" };
   }
 };
 

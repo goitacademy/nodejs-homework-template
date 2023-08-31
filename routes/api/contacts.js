@@ -9,16 +9,24 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   const response = await pls.getContactById(req.params.contactId);
-  res.json(response);
-});
-
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  if (response === undefined) {
+    res.status(404).json({ message: "Not found" });
+  } else {
+    res.json(response);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const response = await pls.removeContact(req.params.contactId);
-  res.json(response);
+  if (response.message === "Not found") {
+    res.status(404).json(response);
+  } else {
+    res.status(200).json(response);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  res.json({ message: "template message" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
