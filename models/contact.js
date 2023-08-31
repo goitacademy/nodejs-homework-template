@@ -40,7 +40,7 @@ const contactSchema = new Schema(
         {
           validator: (v) => v.length <= 30,
           message: (props) =>
-            `Invalid name. Must be no more 30 characters. Got ${props.value.length}`,
+            `Invalid name! Must be no more 30 characters. Got ${props.value.length}`,
         },
       ],
       required: [true, "The name is required. Set it for contact"],
