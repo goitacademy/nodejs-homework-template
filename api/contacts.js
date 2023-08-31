@@ -6,7 +6,7 @@ import {
   update,
   updateStatus,
   remove,
-} from "../controller/index.js";
+} from "../controller/contacts.js";
 
 const contactsRouter = express.Router();
 

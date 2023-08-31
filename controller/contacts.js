@@ -7,9 +7,15 @@ import {
 } from "../models/contacts.js";
 
 export const get = async (req, res, next) => {
+  const { page = 1, limit = 10, favorite } = req.query;
+  const filters = {};
+
+  if (favorite !== undefined) {
+    filters.favorite = favorite === "true";
+  }
+
   try {
-    const contacts = await listContacts();
-    console.log(contacts);
+    const contacts = await listContacts(page, limit, filters);
     res.json({
       message: "response ok",
       status: "success",

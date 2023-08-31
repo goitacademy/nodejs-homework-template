@@ -4,6 +4,7 @@ import cors from "cors";
 
 import contactsRouter from "./api/contacts.js";
 import usersRouter from "./api/users.js";
+import passport from "./config/config-passport.js";
 
 export const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", usersRouter);
+app.use(passport.initialize());
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
