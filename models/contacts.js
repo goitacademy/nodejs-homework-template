@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs/promises");
 const { v4: uuidv4 } = require("uuid");
+const Joi = require("joi");
 
 const contactsPath = path.resolve("models", "contacts.json");
 
@@ -31,9 +32,19 @@ const removeContact = async (contactId) => {
     return { message: "Not found" };
   }
 };
+const postBodyScheme = Joi.object({
+  email: Joi.string().required(),
+  name: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
 const addContact = async (body) => {
   const contacts = await listContacts();
+  const validatedBody = postBodyScheme.validate(body);
+  // console.log(validatedBody.error?.details.length);
+  if (validatedBody.error?.details.length > 0) {
+    return { message: "missing required name - field" };
+  }
   const { name, email, phone } = body;
   const newContact = {
     id: uuidv4(),
@@ -45,9 +56,13 @@ const addContact = async (body) => {
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
+  // return validatedBody;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  // const cotnactToPatch = await getContactById(contactId);
+  // const { name, email, phone } = body;
+};
 
 module.exports = {
   listContacts,
