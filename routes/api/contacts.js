@@ -99,7 +99,7 @@ export const contactsRouterFunction = contactsService => {
 
     try {
       const contact = await removeContact(contactId, userId);
-      if (contact === 404) {
+      if (!contact) {
         return res.status(404).json({
           status: 'error',
           code: 404,
@@ -126,7 +126,7 @@ export const contactsRouterFunction = contactsService => {
 
     try {
       const updatedContact = await updateContact(contactId, body, userId);
-      if (updatedContact === 404) {
+      if (!updatedContact) {
         return res.status(404).json({
           status: 'error',
           code: 404,
@@ -155,7 +155,7 @@ export const contactsRouterFunction = contactsService => {
 
     try {
       const updatedStatus = await updatedStatusContact(contactId, favorite, userId);
-      if (updatedStatus === 404) {
+      if (!updatedStatus) {
         return res.status(404).json({
           status: 'error',
           code: 404,

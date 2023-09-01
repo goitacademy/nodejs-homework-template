@@ -22,9 +22,7 @@ const getContactById = async (userId, contactId) => {
 
 const removeContact = async (contactId, userId) => {
   try {
-    const contact = await Contact.findOne({ owner: userId, _id: contactId });
-    if (!contact) return 404;
-    return await Contact.findByIdAndRemove({ owner: userId, _id: contactId });
+    return await Contact.findOneAndDelete({ owner: userId, _id: contactId });
   } catch (err) {
     console.log(`Error removing contact with id ${contactId}: `, err);
     throw err;
@@ -47,9 +45,7 @@ const addContact = async (body, userId) => {
 const updateContact = async (contactId, body, userId) => {
   console.log('Update Contact UserID:', userId);
   try {
-    const contact = await Contact.findOne({ owner: userId, _id: contactId });
-    if (!contact) return 404;
-    return await Contact.findByIdAndUpdate({ owner: userId, _id: contactId }, body, { new: true });
+    return await Contact.findOneAndUpdate({ owner: userId, _id: contactId }, body, { new: true });
   } catch (err) {
     console.error('An error occurred while updating contact: ', err);
     throw err;
@@ -58,9 +54,7 @@ const updateContact = async (contactId, body, userId) => {
 
 const updatedStatusContact = async (contactId, favorite, userId) => {
   try {
-    const contact = await Contact.findOne({ owner: userId, _id: contactId });
-    if (!contact) return 404;
-    return await Contact.findByIdAndUpdate(
+    return await Contact.findOneAndUpdate(
       { owner: userId, _id: contactId },
       { $set: { favorite: favorite } },
       { new: true }
