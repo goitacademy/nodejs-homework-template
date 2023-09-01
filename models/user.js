@@ -26,12 +26,14 @@ const usersSchema = new Schema(
     },
     token: {
       type: String,
+
       default: "",
     },
     avatarUrl: {
       type: String,
       required: [true, "upload avatar for user"],
     },
+
   },
   { versionKey: false, timestamps: true }
 );
