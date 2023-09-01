@@ -13,7 +13,7 @@ const getAll = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "email subscription");
-  res.render("contacts", {result});
+  // res.render("contacts", {result});
   res.json(result);
 };
 
