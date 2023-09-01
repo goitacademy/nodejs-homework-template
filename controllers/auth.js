@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       user: {
         email: email,
-        subscription: "starter",
+        subscription: "Starter",
       },
     });
   } catch (error) {
@@ -77,6 +77,7 @@ const login = async (req, res, next) => {
 const getCurrentUser = async (req, res) => {
   try {
     const { email, subscription } = req.user;
+    console.log(subscription);
 
     res.json({ email, subscription });
   } catch (error) {
@@ -88,9 +89,7 @@ const logOut = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.status(204).json({
-    message: "No content",
-  });
+  res.status(204).json();
 };
 
 module.exports = {

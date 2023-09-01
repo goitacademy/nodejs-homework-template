@@ -7,10 +7,6 @@ const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
       match: emailRegexp,
@@ -21,6 +17,10 @@ const userSchema = new Schema(
       type: String,
       minle: 6,
       required: true,
+    },
+    subscription: {
+      type: String,
+      default: "Starter",
     },
     token: {
       type: String,
@@ -33,11 +33,6 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "string.base": `"name" should be a type of 'text'`,
-    "string.empty": `"name" cannot be an empty field`,
-    "any.required": `missing required name field`,
-  }),
   email: Joi.string().pattern(emailRegexp).required().messages({
     "string.base": `"email" should be a type of 'text'`,
     "string.empty": `"email" cannot be an empty field`,
