@@ -1,13 +1,13 @@
 const contacts = require("../models/contacts.js");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const getAllContacts = async (req, res, next) => {
+const getAllContacts = async (req, res) => {
   const result = await contacts.listContacts();
   console.log("result: ", result);
   res.json(result);
 };
 
-const getContact = async (req, res, next) => {
+const getContact = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.getContactById(id);
 
@@ -17,12 +17,12 @@ const getContact = async (req, res, next) => {
   res.json(result);
 };
 
-const addContact = async (req, res, next) => {
+const addContact = async (req, res) => {
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
-const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.removeContact(id);
   if (!result) {
@@ -31,7 +31,7 @@ const deleteContact = async (req, res, next) => {
   res.json({ message: "delete success" });
 };
 
-const updateContact = async (req, res, next) => {
+const updateContact = async (req, res) => {
   const { id } = req.params;
   const result = await contacts.updateContact(id, req.body);
   if (!result) {
