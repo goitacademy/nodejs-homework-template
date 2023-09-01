@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import Joi from 'joi';
 
 import { auth } from '../../config/config-passport.js';
 import { uploadImage } from '../../config/config-multer.js';
@@ -9,6 +10,16 @@ dotenv.config();
 export const usersRouterFunction = usersService => {
   const { logOutUser, getUser, addUser, loginUser, patchUser, patchAvatar } = usersService;
   const usersRouter = express.Router();
+
+  const schemaEmailPassword = Joi.object({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+    subscription: Joi.string(),
+  });
+
+  const schemaSubscription = Joi.object({
+    subscription: Joi.string().required(),
+  });
 
   usersRouter.get('/current', auth, async (req, res, next) => {
     const { id: userId } = req.user;
@@ -30,9 +41,10 @@ export const usersRouterFunction = usersService => {
 
   usersRouter.post('/signup', async (req, res, next) => {
     const { body } = req;
+    const { error } = schemaEmailPassword.validate(body);
 
-    if (!('email' in body) || !('password' in body)) {
-      return res.status(400).json('Error! Missing password or email field!');
+    if (error) {
+      return res.status(400).json(`Error: ${error.details[0].message}`);
     }
 
     try {
@@ -53,9 +65,10 @@ export const usersRouterFunction = usersService => {
 
   usersRouter.post('/login', async (req, res, next) => {
     const { body } = req;
+    const { error } = schemaEmailPassword.validate(body);
 
-    if (!('email' in body) || !('password' in body)) {
-      return res.status(400).json('Error! Missing password or email field!');
+    if (error) {
+      return res.status(400).json(`Error: ${error.details[0].message}`);
     }
 
     try {
@@ -105,10 +118,11 @@ export const usersRouterFunction = usersService => {
   usersRouter.patch('/', auth, async (req, res, next) => {
     const { id: userId } = req.user;
     const { body } = req;
-    const { subscription } = body;
+    const { subscription, userId: id } = body;
+    const { error } = schemaSubscription.validate(body);
 
-    if (!('subscription' in body)) {
-      return res.status(400).json('Error! Missing field subscription!');
+    if (error) {
+      return res.status(400).json(`Error: ${error.details[0].message}`);
     }
 
     try {
@@ -116,13 +130,13 @@ export const usersRouterFunction = usersService => {
       if (updatedStatus === 400) {
         return res.status(400).json('Error! Invalid subscription type!');
       }
-      return res.json({
+      return res.status(200).json({
         status: 'success',
         code: 200,
         data: { updatedStatus },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while updating the contact: ${err}`);
+      res.status(500).json(`An error occurred while updating the user: ${err}`);
     }
   });
 
@@ -135,7 +149,7 @@ export const usersRouterFunction = usersService => {
     const { id: userId } = req.user;
     try {
       const newAvatarPath = await patchAvatar(path, userId);
-      return res.json({
+      return res.status(200).json({
         status: 'success',
         code: 200,
         avatarURL: newAvatarPath,

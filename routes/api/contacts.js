@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { checkContact } from './../../config/config-mongoose.js';
+import { checkContactId } from './../../config/config-mongoose.js';
 
 export const contactsRouterFunction = contactsService => {
   const {
@@ -49,13 +49,19 @@ export const contactsRouterFunction = contactsService => {
     }
   });
 
-  contactsRouter.get('/:id', checkContact, async (req, res, next) => {
+  contactsRouter.get('/:id', checkContactId, async (req, res, next) => {
     const { id: userId } = req.user;
     const { id: contactId } = req.params;
 
     try {
       const contact = await getContactById(userId, contactId);
-
+      if (contact === 404) {
+        return res.status(404).json({
+          status: 'error',
+          code: 404,
+          message: 'Contact not found',
+        });
+      }
       return res.status(200).json({
         status: 'success',
         code: 200,
@@ -87,12 +93,19 @@ export const contactsRouterFunction = contactsService => {
     }
   });
 
-  contactsRouter.delete('/:id', checkContact, async (req, res, next) => {
+  contactsRouter.delete('/:id', checkContactId, async (req, res, next) => {
     const { id: userId } = req.user;
     const { id: contactId } = req.params;
 
     try {
-      await removeContact(contactId, userId);
+      const contact = await removeContact(contactId, userId);
+      if (contact === 404) {
+        return res.status(404).json({
+          status: 'error',
+          code: 404,
+          message: 'Contact not found',
+        });
+      }
 
       return res.status(200).json({
         message: `Contact with ID ${contactId} has been successfully removed.`,
@@ -102,7 +115,7 @@ export const contactsRouterFunction = contactsService => {
     }
   });
 
-  contactsRouter.put('/:id', checkContact, async (req, res, next) => {
+  contactsRouter.put('/:id', checkContactId, async (req, res, next) => {
     const { id: userId } = req.user;
     const { id: contactId } = req.params;
     const { body } = req;
@@ -113,8 +126,14 @@ export const contactsRouterFunction = contactsService => {
 
     try {
       const updatedContact = await updateContact(contactId, body, userId);
-
-      return res.json({
+      if (updatedContact === 404) {
+        return res.status(404).json({
+          status: 'error',
+          code: 404,
+          message: 'Contact not found',
+        });
+      }
+      return res.status(200).json({
         status: 'success',
         code: 200,
         data: { updatedContact },
@@ -124,7 +143,7 @@ export const contactsRouterFunction = contactsService => {
     }
   });
 
-  contactsRouter.patch('/:id', checkContact, async (req, res, next) => {
+  contactsRouter.patch('/:id', checkContactId, async (req, res, next) => {
     const { id: userId } = req.user;
     const { id: contactId } = req.params;
     const { body } = req;
@@ -136,8 +155,14 @@ export const contactsRouterFunction = contactsService => {
 
     try {
       const updatedStatus = await updatedStatusContact(contactId, favorite, userId);
-
-      return res.json({
+      if (updatedStatus === 404) {
+        return res.status(404).json({
+          status: 'error',
+          code: 404,
+          message: 'Contact not found',
+        });
+      }
+      return res.status(200).json({
         status: 'success',
         code: 200,
         data: { updatedStatus },

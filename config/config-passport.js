@@ -21,7 +21,8 @@ passport.use(
         if (!user) {
           return done(new Error('User not found'));
         }
-        return done(null, user);
+        const { id, email, subscription, avatarUrl } = user;
+        return done(null, { id, email, subscription, avatarUrl });
       })
       .catch(err => done(err));
   })
