@@ -67,10 +67,12 @@ const updateContact = async (contactId, body) => {
   const index = contacts.findIndex((c) => c.id === contactId);
   const contactToUpdate = contacts[index];
   const validatedBody = putBodyScheme.validate(body);
+
   if (validatedBody.error?.details.length > 0) {
     return { message: "Your request is not in proper format." };
   }
   const updatedContact = { ...contactToUpdate, ...body };
+
   if (index !== -1) {
     contacts.splice(index, 1, updatedContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
