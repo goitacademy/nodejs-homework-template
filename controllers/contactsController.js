@@ -2,7 +2,10 @@ import Contact from "../models/contact.js";
 import { HttpError, controllerWrapper } from "../helpers/index.js";
 
 const getContacts = async (req, res, next) => {
-    const result = await Contact.find();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find(owner, "-createdAt -updatedAt",{skip, limit}).populate();
     if (!result) {
         throw HttpError(404, "Not found");
     }
@@ -19,7 +22,8 @@ const getContact = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-    const result = await Contact.addContact(req.body);
+    const {_id: owner} = req.user;
+    const result = await Contact.addContact(...req.body, owner);
     res.status(201).json(result);
 };
 

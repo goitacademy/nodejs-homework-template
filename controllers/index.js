@@ -1,3 +1,4 @@
+import auth from "./auth.js";
 import contactsController from './contactsController.js';
 
-export default contactsController;
+export { auth, contactsController };

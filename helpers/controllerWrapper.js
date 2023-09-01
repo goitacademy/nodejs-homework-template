@@ -1,7 +1,7 @@
 const controllerWrapper = controller => {
-    const func = async (request, response, next) => {
+    const func = async (req, res, next) => {
         try {
-            await controller(request, response, next);
+            await controller(req, res, next);
         } catch (error) {
             next(error);
         }
