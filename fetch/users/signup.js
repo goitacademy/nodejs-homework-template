@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
 const { joiUserSignupSchema } = require("../../validation/users");
 const User = require("../../models/users");
 
@@ -35,13 +36,15 @@ const signup = async (req, res, next) => {
       return;
     }
 
+    const avatarUrl = gravatar.url(email);
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
-    const result = await User.create({ ...req.body, password: hashedPassword });
+    const result = await User.create({ ...req.body, password: hashedPassword, avatarUrl });
     res.status(201).json({
       user: {
         email: result.email,
         subscription: result.subscription,
+        avatarUrl: result.avatarUrl
       },
     });
   } catch (error) {
