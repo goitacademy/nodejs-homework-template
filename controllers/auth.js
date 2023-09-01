@@ -3,10 +3,12 @@ const jwt = require('jsonwebtoken')
 const gravatar = require('gravatar') 
 const path = require("path");
 const fs = require("fs/promises")
+const Jimp = require ("jimp")
 // імпортую модель
 const { User } = require("../models/user");
 // обробник помилок і обгортка для try&catch
 const { HttpError, ctrlWrapper } = require("../helpers");
+
 // витягую секрет з .env
 const { SECRET_KEY } = process.env;
 
@@ -71,8 +73,13 @@ const logout = async (req, res) => {
 }
 
 const updateAvatar = async (req, res) => {
+    
     const { _id } = req.user; 
     const { path: tempUpload, originalname } = req.file;
+    // зменшую розмір аватарки
+    const image = await Jimp.read(tempUpload);
+    const newHeight = Jimp.AUTO;
+    await image.resize(250, newHeight).write(tempUpload);
     // записуємо унікальне ім"я для авки
     const fileName = `${_id}_${originalname}` 
 
