@@ -24,6 +24,7 @@ const addContact = async (body) => {
   const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
+    id: Joi.string().required(),
     phone: Joi.string().required(),
   });
 
