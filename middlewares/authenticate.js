@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
     console.table(req);
     const {authorization = ""} = req.headers;
     const [bearer, token] = authorization.split(" ");
-    if(bearer !== "Bearer") {
+    if(bearer !== "Bearer" || !token) {
         next(HttpError(401));
     }
     try {
@@ -25,6 +25,6 @@ const authenticate = async (req, res, next) => {
     catch {
         next(HttpError(401));
     }
-}
+};
 
 module.exports = authenticate;

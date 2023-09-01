@@ -13,26 +13,23 @@ const {
 
 const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
-const {
-  addSchema, 
-  updateStatusContactSchema
-}  = require("../../schemas/contacts");
+const { schemas } = require("../../models/contact");
 
 router.get('/', authenticate, getAll);
 
 router.get('/:contactId', authenticate, isValidId, getById);
 
-router.post('/', authenticate, validateBody(addSchema), add);
+router.post('/', authenticate, validateBody(schemas.addSchema), add);
 
 router.delete('/:contactId', authenticate, isValidId, deleteById);
 
-router.put('/:contactId',  authenticate, isValidId, validateBody(addSchema), updateById);
+router.put('/:contactId',  authenticate, isValidId, validateBody(schemas.addSchema), updateById);
 
 router.patch(
   "/:contactId/favorite",
   authenticate,
   isValidId,
-  validateBody(updateStatusContactSchema),
+  validateBody(schemas.updateStatusContactSchema),
   updateStatusContact
 );
 
