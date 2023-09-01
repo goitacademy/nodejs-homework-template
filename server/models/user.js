@@ -28,7 +28,9 @@ user.methods.setPassword = function (password) {
 };
 
 user.methods.validPassword = function (password) {
-  return bCrypt.compareSync(password, this.password);
+  if (password) {
+    return bCrypt.compareSync(password, this.password);
+  }
 };
 
 const User = mongoose.model("user", user, "users");

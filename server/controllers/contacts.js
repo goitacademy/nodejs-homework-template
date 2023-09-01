@@ -55,7 +55,10 @@ const getById = async (req, res, next) => {
 const create = async (req, res, next) => {
   try {
     const { user, body } = req;
-    await contactCreateSchema.validateAsync(body);
+    const { error } = contactCreateSchema.validate(req.body);
+    if (error?.message) {
+      return res.status(400).send({ error: error.message });
+    }
     const results = await contactsService.create(user.id, body);
     return res.json({
       status: "success",
@@ -74,7 +77,10 @@ const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { user, body } = req;
-    await contactUpdateSchema.validateAsync(body);
+    const { error } = contactUpdateSchema.validate(req.body);
+    if (error?.message) {
+      return res.status(400).send({ error: error.message });
+    }
     const results = await contactsService.update(id, user.id, body);
     return res.json({
       status: "success",
@@ -94,12 +100,11 @@ const updateFavorite = async (req, res, next) => {
     const { user, params, body } = req;
     const { id } = params;
     const { favorite } = body;
-    await contactUpdateFavSchema.validateAsync(body);
-    const results = await contactsService.updateFavorite(
-      id,
-      user.id,
-      favorite
-    );
+    const { error } = contactUpdateFavSchema.validate(req.body);
+    if (error?.message) {
+      return res.status(400).send({ error: error.message });
+    }
+    const results = await contactsService.updateFavorite(id, user.id, favorite);
     return res.json({
       status: "success",
       code: 200,

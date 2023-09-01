@@ -59,14 +59,13 @@ const getById = async (req, res, next) => {
 
 const getCurrent = async (req, res, next) => {
   try {
-    const { id } = req.user;
-    const results = await usersService.getOne(id);
+    const results = req.user;
     if (!results) {
       return res.status(404).json({
         status: "not-found",
         code: 404,
         data: {
-          user: results,
+          user: req.user,
         },
       });
     }
@@ -74,7 +73,7 @@ const getCurrent = async (req, res, next) => {
       status: "success",
       code: 200,
       data: {
-        user: results,
+        user: req.user,
       },
     });
   } catch (e) {
@@ -85,7 +84,10 @@ const getCurrent = async (req, res, next) => {
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
-  await userRegisterSchema.validateAsync(req.body);
+  const { error } = userRegisterSchema.validate(req.body);
+  if (error?.message) {
+    return res.status(400).send({ error: error.message });
+  }
   const user = await User.findOne({ email }).lean();
 
   if (user) {
@@ -120,7 +122,10 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
-  await userLoginSchema.validateAsync(req.body);
+  const { error } = userLoginSchema.validate(req.body);
+  if (error?.message) {
+    return res.status(400).send({ error: error.message });
+  }
   const user = await User.findOne({ email });
 
   if (!user || !user.validPassword(password)) {
@@ -161,8 +166,11 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    await userLogoutSchema.validateAsync(req.body);
     const { id } = req.user;
+    const { error } = userLogoutSchema.validate(req.body);
+    if (error?.message) {
+      return res.status(400).send({ error: error.message });
+    }
     await usersService.update(id, { token: null });
     return res.json({
       status: "No content",
@@ -197,7 +205,10 @@ const updateSubscription = async (req, res, next) => {
   try {
     const { id } = req.user;
     const { subscription } = req.body;
-    await userUpdateSubSchema.validateAsync(req.body);
+    const { error } = userUpdateSubSchema.validate(req.body);
+    if (error?.message) {
+      return res.status(400).send({ error: error.message });
+    }
     const results = await usersService.update(id, {
       subscription: subscription,
     });
