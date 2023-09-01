@@ -33,7 +33,7 @@ const removeContact = async (contactId) => {
   }
 };
 const postBodyScheme = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().email().required(),
   name: Joi.string().required(),
   phone: Joi.string().required(),
 });
@@ -41,9 +41,8 @@ const postBodyScheme = Joi.object({
 const addContact = async (body) => {
   const contacts = await listContacts();
   const validatedBody = postBodyScheme.validate(body);
-  // console.log(validatedBody.error?.details.length);
   if (validatedBody.error?.details.length > 0) {
-    return { message: "missing required name - field" };
+    return { message: "Your request is not in proper format." };
   }
   const { name, email, phone } = body;
   const newContact = {
@@ -52,16 +51,33 @@ const addContact = async (body) => {
     email,
     phone,
   };
-  console.log(newContact);
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
-  // return validatedBody;
 };
 
+const putBodyScheme = Joi.object({
+  email: Joi.string().email(),
+  name: Joi.string(),
+  phone: Joi.string(),
+});
+
 const updateContact = async (contactId, body) => {
-  // const cotnactToPatch = await getContactById(contactId);
-  // const { name, email, phone } = body;
+  const contacts = await listContacts();
+  const index = contacts.findIndex((c) => c.id === contactId);
+  const contactToUpdate = contacts[index];
+  const validatedBody = putBodyScheme.validate(body);
+  if (validatedBody.error?.details.length > 0) {
+    return { message: "Your request is not in proper format." };
+  }
+  const updatedContact = { ...contactToUpdate, ...body };
+  if (index !== -1) {
+    contacts.splice(index, 1, updatedContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return updatedContact;
+  } else {
+    return { message: "Not found" };
+  }
 };
 
 module.exports = {
