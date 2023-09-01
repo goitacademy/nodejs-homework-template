@@ -3,7 +3,17 @@ const { schemas, Contact } = require("../models/contact");
 
 const listContacts = async (req, res, next) => {
   try {
-    const allContacts = await Contact.find({}, "name email phone favorite");
+    const { _id: owner } = req.user;
+
+    const { page = 1, limit = 20 } = req.query;
+
+    const skip = (page - 1) * limit;
+
+    const allContacts = await Contact.find(
+      { owner },
+      "name email phone favorite",
+      { skip, limit }
+    ).populate("owner", "name email");
     res.json(allContacts);
   } catch (error) {
     next(error);
@@ -31,7 +41,10 @@ const addContact = async (req, res, next) => {
 
       throw HttpError(400, missingFieldName);
     }
-    const contactToCreate = await Contact.create(req.body);
+
+    const { _id: owner } = req.user;
+
+    const contactToCreate = await Contact.create({ ...req.body, owner });
     res.status(201).json(contactToCreate);
   } catch (error) {
     next(error);
