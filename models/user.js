@@ -35,6 +35,7 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+
 const schemas = { registerSchema, loginSchema };
 
 const User = model("user", userSchema);

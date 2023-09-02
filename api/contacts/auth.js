@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
   res.status(201).json({
     user: {
       email: newUser.email,
-      password,
+      password: newUser.password,
     },
   });
 };
@@ -55,11 +55,19 @@ const login = async (req, res, next) => {
     token,
     user: {
       email: user.email,
+      password: user.password,
       subscription: "starter",
     },
   });
 };
+
+const currentUser = async (req, res, next) => {
+  const { email, subscription } = req.user;
+
+  res.json({ email, subscription });
+};
 module.exports = {
   register: cntrlWrappers(register),
   login: cntrlWrappers(login),
+  currentUser,
 };

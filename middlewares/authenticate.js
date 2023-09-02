@@ -12,7 +12,7 @@ const authenticate = async (req, res, next) => {
   const [bearer, token] = authorization.split(" ");
 
   if (bearer !== "Bearer") {
-    next(HttpError(401, "unvalidated bearer"));
+    next(HttpError(401, "Not authorized"));
   }
 
   try {
@@ -22,9 +22,11 @@ const authenticate = async (req, res, next) => {
     if (!user) {
       next(HttpError(401, "user not found"));
     }
-    next();
+
+     req.user = user; 
+     next();
   } catch {
-    next(HttpError(401, "unvalidated token"));
+    next(HttpError(401, "Not authorized"));
   }
 };
 
