@@ -39,7 +39,6 @@ const login = async (req, res, next) => {
   }
 
   const correctPassword = await checkHashPassword(password, user.password);
-  console.log("correctPassword", correctPassword);
 
   if (!correctPassword) {
     res.status(401).json({ message: "Email or password is wrong" });
@@ -50,12 +49,12 @@ const login = async (req, res, next) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
   res.status(200).json({
-    token,
+    token: token,
     user: {
       email: user.email,
-      password: user.password,
       subscription: "starter",
     },
   });
@@ -66,8 +65,26 @@ const currentUser = async (req, res, next) => {
 
   res.json({ email, subscription });
 };
+
+const logOut = async (req, res) => {
+  const { _id } = req.user;
+
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.status(204).json({});
+};
+
+const updateSubscription = async (req, res) => {
+  const subscription = req.body.subscription;
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { subscription }, { runValidators: true });
+  res.status(200).json({ message: `Update subscription to ${subscription}` });
+};
+
 module.exports = {
   register: cntrlWrappers(register),
   login: cntrlWrappers(login),
-  currentUser,
+  currentUser: cntrlWrappers(currentUser),
+  logOut: cntrlWrappers(logOut),
+  updateSubscription: cntrlWrappers(updateSubscription),
 };

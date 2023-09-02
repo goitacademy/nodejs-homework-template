@@ -20,8 +20,22 @@ const putSchema = Joi.object({
 }).or("name", "phone", "email");
 
 const listContacts = async (req, res, next) => {
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
   const { _id: owner } = req.user;
-  const contacts = await Contact.find({ owner },);
+  const contacts = await Contact.find({
+    $and: [{ owner }, favorite ? { favorite } : {}],
+  })
+    .skip(skip)
+    .limit(limit);
+
+  if (contacts.length === 0) {
+    res
+      .status(200)
+      .json({ message: "Сontacts are missing" });
+  }
+
   res.json(contacts);
 };
 
