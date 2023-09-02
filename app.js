@@ -1,25 +1,22 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
-
-const contactsRouter = require('./routes/api/contacts')
+const express = require("express");
 
 const app = express()
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const routes = require("./routes/index")
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
-
-app.use('/api/contacts', contactsRouter)
-
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
+app.get("/ping", (req, res) => {
+    res.send("pong")
 })
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+app.use('/api', routes);
+
+app.use((req, res, next) => {
+    res.status(404).send({ message: "Not Found" })
 })
 
-module.exports = app
+app.use((error, req, res, next) => {
+    console.error(error)
+    res.status(500).send({ message: "internal Server Error" })
+})
+
+module.exports = app;
