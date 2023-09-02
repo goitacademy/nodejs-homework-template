@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("node:path");
 const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
@@ -13,6 +14,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use("/api", routes);
+app.use("/avatars", express.static(path.join(__dirname, "public/avatars")));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
