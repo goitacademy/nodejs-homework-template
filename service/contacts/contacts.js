@@ -32,10 +32,10 @@ const updateStatusContact = async (contactId, favorite) => {
 };
 
 module.exports = {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact,
-    updateStatusContact,
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+  updateStatusContact,
 };

@@ -4,4 +4,4 @@ const usersService = require('./users/users');
 module.exports = {
   contactsService,
   usersService,
-}
+};
