@@ -1,25 +1,17 @@
-const express = require("express");
+import express from "express";
+import contactControllers from "../../controllers/contacts-controller.js";
+import contactValidate from "../../middleware/validation/movie-validation.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/", contactControllers.getAll);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/:contactId", contactControllers.getById);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.post("/", contactValidate, contactControllers.add);
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:contactId", contactControllers.deleteById);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:contactId", contactValidate, contactControllers.updateById);
 
-module.exports = router;
+export default router;
