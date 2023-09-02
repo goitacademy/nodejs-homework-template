@@ -6,6 +6,7 @@ const add = async (req, res, next) => {
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
+      owner: req.user.id,
     };
     const result = await contactsBook.create(newContact);
 

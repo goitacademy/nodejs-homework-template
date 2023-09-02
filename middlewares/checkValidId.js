@@ -11,9 +11,6 @@ const checkValidId = (req, _, next) => {
         400,
         ` ID: ${id} isn't valid. ID format must be a 24-character combination of numbers and letters`
       )
-      //     errorMessage(
-      //     404, "Not Found"
-      //   )
     );
   }
   next();
