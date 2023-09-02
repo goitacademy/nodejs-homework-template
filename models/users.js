@@ -61,10 +61,10 @@ const addUser = async body => {
 
 const loginUser = async body => {
   const { email, password } = body;
-  const users = await User.find();
-  const user = users.find(user => user.email === email);
-  if (!user) return false;
+
   try {
+    const user = await User.findOne({ email });
+    if (!user) return false;
     const isUser = await bcrypt.compare(password, user.password);
     if (!isUser) return false;
 
