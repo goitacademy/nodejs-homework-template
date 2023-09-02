@@ -1,5 +1,4 @@
-const { Contact } = require("../models/contact");
-const { RequestError } = require("../helpers");
+const { User } = require("../models/user");
 
 const updateStatusContact = async (req, res) => {
   const { subscription } = req.body;
