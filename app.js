@@ -4,8 +4,8 @@ const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-const contactsRouter = require("./routes/api/contacts.routes");
-const usersRouter = require("./routes/api/users.routes");
+const contactsRouter = require("./api/contacts.routes");
+const usersRouter = require("./api/users.routes");
 const SRV_DB = process.env.DATABASE_URL;
 
 const app = express();
