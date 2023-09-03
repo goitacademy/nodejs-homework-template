@@ -17,7 +17,7 @@ const validateBody = (schema) => {
 
 const validateBodyFavorite = (schema) => {
   return (req, res, next) => {
-    const { error, value } = schema.validate(req.body);
+    const { error } = schema.validate(req.body);
 
     if (error) {
       const errorMessage = error.details[0].message;
