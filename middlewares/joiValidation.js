@@ -40,9 +40,16 @@ const schemaUser = Joi.object({
   subscription: Joi.string(),
 });
 
+const schemaSubscription = Joi.object({
+  subscription: Joi.string()
+    .valid('starter', 'pro', 'business')
+    .required(),
+});
+
 module.exports = {
   schemaAddContact,
   schemaUpdateContact,
   schemaUpdateFavoriteContact,
-  schemaUser
+  schemaUser,
+  schemaSubscription,
 };

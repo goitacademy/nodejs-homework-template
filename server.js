@@ -12,6 +12,8 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 const logger = require('morgan')
 app.use(logger(formatsLogger))
 
+require("./config/passport");
+
 const router = require('./api')
 app.use('/api', router)
 

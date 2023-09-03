@@ -3,7 +3,8 @@ const { schemaAddContact, schemaUpdateContact, schemaUpdateFavoriteContact } = r
 
 const listContacts = async (req, res, next) => {
   try {
-    const results = await contactsService.listContacts();
+    const { query, user } = req;
+    const results = await contactsService.listContacts({ ...query, owner: user._id });
     return res.json({
       status: 'success',
       code: 200,
@@ -13,14 +14,15 @@ const listContacts = async (req, res, next) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Unknown error" })
+    next(err);
   }
 };
 
 const getContactById = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const contact = await contactsService.getContactById(contactId);
+    const { params, user } = req;
+    const { contactId } = params;
+    const contact = await contactsService.getContactById(contactId, user._id);
     if (!contact) {
       return res.status(400).json({
         status: 'error',
@@ -38,14 +40,18 @@ const getContactById = async (req, res, next) => {
     })
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Unknown error" })
+    next(err);
   }
 };
 
 const addContact = async (req, res, next) => {
   try {
-    const body = await schemaAddContact.validateAsync(req.body);
-    const result = await contactsService.addContact({ body });
+    const { error } = schemaAddContact.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    const { body, user } = req;
+    const result = await contactsService.addContact({ ...body, owner: user._id });
     return res.status(201).json({
       status: 'success',
       code: 201,
@@ -55,14 +61,15 @@ const addContact = async (req, res, next) => {
     })
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Unknown error" })
+    next(err);
   }
 };
 
 const removeContact = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const contact = await contactsService.getContactById(contactId);
+    const { params, user } = req;
+    const { contactId } = params;
+    const contact = await contactsService.getContactById( contactId, user._id );
     if (!contact) {
       return res.status(400).json({
         status: 'error',
@@ -71,7 +78,7 @@ const removeContact = async (req, res, next) => {
         data: 'Bad request',
       })
     }
-    const result = await contactsService.removeContact(contactId);
+    const result = await contactsService.removeContact(contactId, user._id);
     return res.json({
       status: 'success',
       code: 200,
@@ -81,14 +88,15 @@ const removeContact = async (req, res, next) => {
     })
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Unknown error" })
+    next(err);
   }
 };
 
 const updateContact = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const contact = await contactsService.getContactById(contactId);
+    const { params, user } = req;
+    const { contactId } = params;
+    const contact = await contactsService.getContactById(contactId, user._id);
     if (!contact) {
       return res.status(400).json({
         status: 'error',
@@ -98,7 +106,7 @@ const updateContact = async (req, res, next) => {
       })
     }
     const updatedData = await schemaUpdateContact.validateAsync(req.body);
-    const result = await contactsService.updateContact(contactId, { updatedData });
+    const result = await contactsService.updateContact(contactId, user._id, { updatedData });
     return res.json({
       status: 'success',
       code: 200,
@@ -108,14 +116,19 @@ const updateContact = async (req, res, next) => {
     })
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Unknown error" })
+    next(err);
   }
 };
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const contact = await contactsService.getContactById(contactId);
+    const { error } = schemaUpdateFavoriteContact.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    const { params, user } = req;
+    const { contactId } = params;
+    const contact = await contactsService.getContactById(contactId, user._id);
     if (!contact) {
       return res.status(400).json({
         status: 'error',
@@ -124,12 +137,8 @@ const updateStatusContact = async (req, res, next) => {
         data: 'Bad request',
       })
     }
-    const { error } = schemaUpdateFavoriteContact.validate(req.body);
-    if (error) {
-      return res.status(400).json({ error: error.message });
-    }
     const { favorite } = req.body;
-    const result = await contactsService.updateStatusContact(contactId, { favorite });
+    const result = await contactsService.updateStatusContact(contactId, user._Id, { favorite });
     return res.json({
       status: 'success',
       code: 200,
@@ -139,7 +148,7 @@ const updateStatusContact = async (req, res, next) => {
     })
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: "Unknown error" })
+    next(err);
   }
 };
 

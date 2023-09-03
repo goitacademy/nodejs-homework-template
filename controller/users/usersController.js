@@ -1,6 +1,6 @@
 const User = require('../../schemas/users');
 const { usersService } = require('../../service');
-const { schemaUser } = require('../../middlewares/joiValidation');
+const { schemaUser, schemaSubscription } = require('../../middlewares/joiValidation');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -26,10 +26,12 @@ const userSignup = async (req, res, next) => {
     return res.status(201).json({
       status: 'success',
       code: 201,
-      user: {
-        email: result.email,
-        subscription: result.subscription,
-      },
+      data: {
+        user: {
+          email: result.email,
+          subscription: result.subscription,
+        }
+      }
     });
   } catch (error) {
     next(error);
@@ -63,9 +65,11 @@ const userLogin = async (req, res, next) => {
       status: 'success',
       code: 200,
       token: result.token,
-      user: {
-        email: result.email,
-        subscription: result.subscription,
+      data: {
+        user: {
+          email: result.email,
+          subscription: result.subscription,
+        }
       }
     });
   } catch (error) {
@@ -73,26 +77,55 @@ const userLogin = async (req, res, next) => {
   };
 };
 
-const userLogout = async (req, res) => {
+const userLogout = async (req, res, next) => {
   try {
-    return res.status(200).json({
-      message: 'Logout'
-    })
+    await usersService.userLogout(req.user.id);
+    return res.status(204).end();
   } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: "Unknown error" });
+    next(err);
   };
 };
             
 const userCurrent = async (req, res) => {
   try {
-    res.status(200).json({
-      message: 'current'
-    })
-
+    const result = await usersService.userCurrent(req.user.id);
+    return res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        user: {
+          email: result.email,
+          subscription: result.subscription,
+        }
+      }
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Unknown error" });
+  };
+};
+
+const userUpdate = async (req, res, next) => {
+  try {
+    const { error } = schemaSubscription.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    };
+    const { subscription } = req.body;
+    const result = await usersService.userUpdate(req.user.id, subscription);
+    return res.json({
+      status: 'success',
+      code: 200,
+      message: 'Subscription updated successfully',
+      data: {
+        user: {
+          email: result.email,
+          subscription: result.subscription,
+        }
+      },
+    })
+  } catch (err) {
+    next(err);
   };
 };
 
@@ -101,4 +134,5 @@ module.exports = {
   userLogin,
   userLogout,
   userCurrent,
+  userUpdate,
 };

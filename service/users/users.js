@@ -10,20 +10,25 @@ const userLogin = async (user, token) => {
   return response
 };
 
-const userLogout = async (body) => {
-  const { email } = body;
-  console.log(email);
-  const response = await User.findOne({ email: email });
+const userLogout = async (id) => {
+  const response = await User.findOneAndUpdate({ _id: id }, { token: null }, { new: true });
   return response
 };
 
-const userCurrent = async () => {
-
+const userCurrent = async (id) => {
+  const response = await User.findOne({ _id: id });
+  return response
 };
+
+const userUpdate = async (id, subscription) => {
+  const response = await User.findOneAndUpdate({ _id: id }, { subscription: subscription }, { new: true });
+  return response
+}
 
 module.exports = {
   userSignup,
   userLogin,
   userLogout,
   userCurrent,
+  userUpdate,
 };

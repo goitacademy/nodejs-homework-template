@@ -1,33 +1,32 @@
 const Contact = require('../../schemas/contacts');
 
-const listContacts = async () => {
-  const response = await Contact.find();
+const listContacts = async (query) => {
+  const response = await Contact.find(query);
   return response
 };
 
-const getContactById = async (contactId) => {
-  const response = await Contact.findOne({ _id: contactId });
+const getContactById = async (contactId, userId) => {
+  const response = await Contact.findOne({ _id: contactId, owner: userId });
   return response
 };
 
-const removeContact = async (contactId) => {
-  const response = await Contact.findByIdAndRemove({ _id: contactId });
+const removeContact = async (contactId, userId) => {
+  const response = await Contact.findByIdAndRemove({ _id: contactId, owner: userId });
   return response
 };
 
-const addContact = async ({ body }) => {
-  const { name, email, phone } = body;
-  const response = await Contact.create({ name, email, phone });
+const addContact = async (data) => {
+  const response = await Contact.create(data);
   return response
 };
 
-const updateContact = async (contactId, { updatedData }) => {
-  const response = await Contact.findByIdAndUpdate({ _id: contactId }, updatedData, { new: true });
+const updateContact = async (contactId, userId, { updatedData }) => {
+  const response = await Contact.findByIdAndUpdate({ _id: contactId, owner: userId }, updatedData, { new: true });
   return response
 };
 
-const updateStatusContact = async (contactId, favorite) => {
-  const response = await Contact.findByIdAndUpdate({ _id: contactId }, favorite, { new: true });
+const updateStatusContact = async (contactId, userId, favorite) => {
+  const response = await Contact.findByIdAndUpdate({ _id: contactId, owner: userId }, favorite, { new: true });
   return response
 };
 
