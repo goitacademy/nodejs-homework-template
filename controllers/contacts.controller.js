@@ -1,9 +1,10 @@
-const contactsService = require("../services/contacts.service");
+const service = require("../services/contacts.service");
 
 const get = async (req, res, next) => {
   try {
     const { query } = req;
-    const results = await contactsService.getAll(query);
+    const results = await service.getAll(query);
+
     res.json({
       status: "success",
       code: 200,
@@ -12,37 +13,40 @@ const get = async (req, res, next) => {
       },
     });
   } catch (e) {
-    console.error(e);
+    console.error("Error handling GET /api/contacts:", e);
+    res.status(500).json({ error: "Internal Server Error" });
     next(e);
   }
 };
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const results = await contactsService.getOne(id);
+    const results = await service.getOne(id);
+
     if (!results) {
-      res.status(404).json({
-        status: "not-found",
+      return res.status(404).json({
+        status: "error",
         code: 404,
         data: {
-          contact: results,
+          message: "Not found",
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
-        contact: results,
+        contacts: results,
       },
     });
   } catch (e) {
-    res.status(400).json({
+    console.error("Error handling GET /api/contacts:", e);
+    return res.status(500).json({
       status: "error",
-      code: 400,
+      code: 500,
       data: {
-        message: e.message,
+        message: "Internal Server Error",
       },
     });
   }
@@ -51,16 +55,18 @@ const getById = async (req, res) => {
 const create = async (req, res, next) => {
   try {
     const { body } = req;
-    const results = await contactsService.create(body);
-    res.json({
+    const results = await service.create(body);
+
+    res.status(201).json({
       status: "success",
-      code: 200,
+      code: 201,
       data: {
         contact: results,
       },
     });
   } catch (e) {
-    console.error(e);
+    console.error("Error handling POST /api/contacts:", e);
+    res.status(500).json({ error: "Internal Server Error" });
     next(e);
   }
 };
@@ -69,16 +75,56 @@ const update = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { body } = req;
-    const results = await contactsService.update(id, body);
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        contact: results,
-      },
-    });
+
+    if (!body) {
+      res.status(400).json({ message: "missing fields" });
+    }
+
+    const results = await service.update(id, body);
+
+    if (results) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: { contact: results },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact id: ${id}`,
+        data: "Not Found",
+      });
+    }
   } catch (e) {
-    console.error(e);
+    console.error("Error handling POST /api/contacts/:id:", e);
+    res.status(500).json({ error: "Internal Server Error" });
+    next(e);
+  }
+};
+
+const remove = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const results = await service.remove(id);
+
+    if (results) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: { task: results },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact id: ${id}`,
+        data: "Not Found",
+      });
+    }
+  } catch (e) {
+    console.error("Error handling DELETED /api/contacts/:id:", e);
+    res.status(500).json({ error: "Internal Server Error" });
     next(e);
   }
 };
@@ -88,44 +134,29 @@ const updateFavorite = async (req, res, next) => {
     const { id } = req.params;
     const { favorite } = req.body;
 
-    if (favorite === undefined) {
-      res.status(400).json({
-        message: "missing field favorite",
-      });
-      return;
+    if (!favorite) {
+      res.status(400).json({ message: "missing field favorite" });
     }
 
-    const results = await contactsService.updateFavorite(id, favorite);
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        contact: results,
-      },
-    });
-  } catch (e) {
-    console.error(e);
-    next(e);
-  }
-};
+    const results = await service.updateStatusContact(id, favorite);
 
-const remove = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const results = await contactsService.remove(id);
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        id,
-        data: {
-          contact: results,
-        },
-      },
-    });
+    if (results) {
+      res.json({
+        status: "success",
+        code: 200,
+        data: { contact: results },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact id: ${id}`,
+        data: "Not Found",
+      });
+    }
   } catch (e) {
-    console.error(e);
-    next(e);
+    console.error("Error handling UPDATE FAVORITE /api/contacts/:id:", e);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -134,6 +165,6 @@ module.exports = {
   getById,
   create,
   update,
-  updateFavorite,
   remove,
+  updateFavorite,
 };
