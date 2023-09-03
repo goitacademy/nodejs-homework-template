@@ -1,75 +1,73 @@
-const fs = require("fs/promises");
-const Joi = require("joi");
-const { v4: uuidv4 } = require("uuid");
-const path = require("path");
-
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
-const contactsFilePath = path.join(__dirname, "contacts.json");
-
-const saveContacts = async (contacts) => {
-  await fs.writeFile(contactsFilePath, JSON.stringify(contacts, null, 2));
-};
+const Contact = require("../service/shemas/contacts");
 
 const listContacts = async () => {
   try {
-    const data = await fs.readFile(contactsFilePath, "utf-8");
-    return JSON.parse(data);
+    return await Contact.find();
   } catch (error) {
-    return [];
+    console.log("Error getting contact list", error);
+    throw error;
   }
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  return contacts.find((contact) => contact.id === contactId);
+  try {
+    return await Contact.findById(contactId);
+  } catch (error) {
+    console.log(`Error getting contact with id ${contactId}: `, error);
+    throw error;
+  }
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    contacts.splice(index, 1);
-    await saveContacts(contacts);
-    return true;
+  try {
+    const result = await Contact.findByIdAndDelete(contactId);
+    return result !== null;
+  } catch (error) {
+    console.log(`Error removing contact with id ${contactId}: `, error);
+    throw error;
   }
-  return false;
 };
 
 const addContact = async (body) => {
-  const { error } = contactSchema.validate(body);
-  if (error) {
-    throw new Error(`Validation error: ${error.details[0].message}`);
+  try {
+    return await Contact.create(body);
+  } catch (error) {
+    console.log("Error adding new contact: ", error);
+    throw error;
   }
-
-  const contacts = await listContacts();
-  const newContact = {
-    id: uuidv4(),
-    ...body,
-  };
-  contacts.push(newContact);
-  await saveContacts(contacts);
-  return newContact;
 };
 
 const updateContact = async (contactId, body) => {
-  const { error } = contactSchema.validate(body);
-  if (error) {
-    throw new Error(`Validation error: ${error.details[0].message}`);
+  try {
+    return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+  } catch (error) {
+    console.log("an error occurred during updating the contact:", error);
+    throw error;
   }
+};
 
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
-  if (index !== -1) {
-    contacts[index] = { ...contacts[index], ...body };
-    await saveContacts(contacts);
-    return contacts[index];
+const updateStatusContact = async (contactId, body) => {
+  try {
+    const { favorite } = body;
+    if (favorite === undefined) {
+      throw new Error("Missing field favorite");
+    }
+
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      throw new Error("Not found");
+    }
+
+    return updatedContact;
+  } catch (error) {
+    console.log("an error occurred during updating the contact:", error);
+    throw error;
   }
-  return null;
 };
 
 module.exports = {
@@ -78,4 +76,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
