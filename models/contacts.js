@@ -1,19 +1,42 @@
-// const fs = require('fs/promises')
+const Contact = require('../services/contactMongoose') // dostosuj ścieżkę do lokalizacji pliku modelu
 
-const listContacts = async () => {}
+const listContacts = async () => {
+    try {
+        return await Contact.find()
+    } catch (err) {
+        console.log('Error getting contact list: ', err)
+        throw err
+    }
+}
+const getContactById = async (contactId) => {
+    return await Contact.findById(contactId)
+}
 
-const getContactById = async (contactId) => {}
+const removeContact = async (contactId) => {
+    return await Contact.findByIdAndDelete(contactId)
+}
 
-const removeContact = async (contactId) => {}
+const addContact = async (body) => {
+    return await Contact.create(body)
+}
 
-const addContact = async (body) => {}
+const updateContact = async (contactId, body) => {
+    return await Contact.findByIdAndUpdate(contactId, body, { new: true })
+}
 
-const updateContact = async (contactId, body) => {}
+const updateStatusContact = async (contactId, body) => {
+    return await Contact.findByIdAndUpdate(
+        contactId,
+        { favorite: body.favorite },
+        { new: true }
+    )
+}
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+    listContacts,
+    getContactById,
+    removeContact,
+    addContact,
+    updateContact,
+    updateStatusContact,
 }
