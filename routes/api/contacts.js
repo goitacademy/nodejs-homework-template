@@ -6,7 +6,7 @@ const {
     addContact,
     updateContact,
     updateStatusContact,
-} = require('../../models/contactMongoose')
+} = require('../../models/contacts')
 
 const router = express.Router()
 
@@ -14,7 +14,11 @@ const router = express.Router()
 router.get('/', async (req, res, next) => {
     try {
         const contacts = await listContacts()
-        res.json(contacts)
+        return res.json({
+            status: 'success',
+            code: 200,
+            data: { contacts },
+        })
     } catch (err) {
         next(err)
     }

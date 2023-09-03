@@ -1,9 +1,13 @@
-const Contact = require('./contactMongoose') // dostosuj ścieżkę do lokalizacji pliku modelu
+const Contact = require('../services/contactMongoose') // dostosuj ścieżkę do lokalizacji pliku modelu
 
 const listContacts = async () => {
-    return await Contact.find({})
+    try {
+        return await Contact.find()
+    } catch (err) {
+        console.log('Error getting contact list: ', err)
+        throw err
+    }
 }
-
 const getContactById = async (contactId) => {
     return await Contact.findById(contactId)
 }
