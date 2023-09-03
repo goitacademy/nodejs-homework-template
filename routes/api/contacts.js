@@ -65,15 +65,26 @@ contactsRouter.delete("/:id", async (req, res, next) => {
 
 contactsRouter.put("/:id", async (req, res, next) => {
   try {
-    const { error } = contactsAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const { id } = req.params;
-    const result = await contactsService.updateContact(id, req.body);
-    if (!result) {
+    const contactToUpdate = req.body;
+    const existingContact = await contactsService.getContactById(id);
+
+    if (!existingContact) {
       throw HttpError(404, `Contact with id=${id} not found!`);
     }
+
+    if (contactToUpdate.name) {
+      existingContact.name = contactToUpdate.name;
+    }
+    if (contactToUpdate.email) {
+      existingContact.email = contactToUpdate.email;
+    }
+    if (contactToUpdate.phone) {
+      existingContact.phone = contactToUpdate.phone;
+    }
+
+    const result = await contactsService.updateContact(id, existingContact);
+
     res.json(result);
   } catch (error) {
     next(error);
