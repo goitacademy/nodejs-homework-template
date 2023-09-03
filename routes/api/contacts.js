@@ -13,6 +13,12 @@ const contactsAddSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
+const contactsUpdateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
+
 contactsRouter.get("/", async (req, res, next) => {
   try {
     const result = await contactsService.getAllContacts();
@@ -71,6 +77,11 @@ contactsRouter.put("/:id", async (req, res, next) => {
 
     if (!existingContact) {
       throw HttpError(404, `Contact with id=${id} not found!`);
+    }
+
+    const { error } = contactsUpdateSchema.validate(contactToUpdate);
+    if (error) {
+      throw HttpError(400, error.message);
     }
 
     if (contactToUpdate.name) {
