@@ -1,6 +1,8 @@
 const Joi = require("joi");
 const fs = require("fs/promises");
 
+const contactsFilePath = "contacts.json";
+
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsFilePath, "utf8");
