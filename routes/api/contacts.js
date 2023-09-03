@@ -1,12 +1,17 @@
 const express = require("express");
+const Joi = require("joi");
 
 const router = express.Router();
 
-const contactsModel = require("../../models/contacts.json");
+const contactsModel = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
-  const contacts = await contactsModel.listContacts();
-  res.json(contacts);
+  try {
+    const contacts = await contactsModel.listContacts();
+    res.status(200).json(contacts);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
