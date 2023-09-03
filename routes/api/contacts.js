@@ -32,4 +32,4 @@ router.patch(
 router.delete("/:id", authenticate, isValidId, ctrl.deleteById);
 
 module.exports = router;
-module.exports = router;
+

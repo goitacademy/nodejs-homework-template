@@ -1,3 +1,6 @@
+
+// імпортую модель
+
 const { Contact } = require("../models/contacts");
 
 const { HttpError, ctrlWrapper } = require("../helpers");

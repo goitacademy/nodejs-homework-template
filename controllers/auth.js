@@ -1,12 +1,22 @@
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
- 
+
+const gravatar = require('gravatar') 
+const path = require("path");
+const fs = require("fs/promises")
+const Jimp = require ("jimp")
+
 // імпортую модель
 const { User } = require("../models/user");
 // обробник помилок і обгортка для try&catch
 const { HttpError, ctrlWrapper } = require("../helpers");
+
+
 // витягую секрет з .env
 const { SECRET_KEY } = process.env;
+
+// шлях до аватарок
+const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 // запит реєстрації
 const register = async (req, res) => {
@@ -19,8 +29,12 @@ const register = async (req, res) => {
     }
     // якщо немає хешую пароль
     const hashPassword = await bcrypt.hash(password, 10);
+
+    // тимчасовий avatar
+    const avatarUrl = gravatar.url(email)
     // стоврюю нового Юзера з мейлом та хешованим паролем
-    const newUser = await User.create({...req.body, password: hashPassword})
+    const newUser = await User.create({...req.body, password: hashPassword, avatarUrl})
+
     // відправляю відповідь, що користувач створений
     res.status(201).json({
         email: newUser.email
@@ -46,6 +60,7 @@ const login = async(req, res) => {
     // записую токен до об"єкту
     await User.findByIdAndUpdate(user._id, { token })
     // повертаю токен
+
     res.json({
         token: token,
     })
@@ -64,6 +79,32 @@ const logout = async (req, res) => {
 }
 
 
+const updateAvatar = async (req, res) => {
+    
+    const { _id } = req.user; 
+    const { path: tempUpload, originalname } = req.file;
+    // зменшую розмір аватарки
+    const image = await Jimp.read(tempUpload);
+    const newHeight = Jimp.AUTO;
+    await image.resize(250, newHeight).write(tempUpload);
+    // записуємо унікальне ім"я для авки
+    const fileName = `${_id}_${originalname}` 
+
+    // cтворюємо папку для зберігання аватарок
+    const resultUpload = path.join(avatarDir, fileName);
+    // переміщуємо 
+    await fs.rename(tempUpload, resultUpload);
+    // записуємо аватарУРЛ
+    const avatarUrl = path.join("avatars", fileName);
+    // оновлення аватарки
+    await User.findByIdAndUpdate(_id, { avatarUrl });
+    
+    res.json(avatarUrl, )
+    
+
+}
+
+
 
 
 
@@ -72,5 +113,7 @@ module.exports = {
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
- 
+
+  updateAvatar: ctrlWrapper(updateAvatar),
+
 };
