@@ -35,6 +35,7 @@ const listContacts = async (req, res, next) => {
 
   if (contacts.length === 0) {
     res.status(200).json({ message: "Сontacts are missing" });
+    return;
   }
 
   res.json(contacts);
@@ -95,7 +96,7 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   const { error } = updateFavoriteSchema.validate(req.body);
-  console.log("Example", req.body);
+
   if (error) {
     const emptyRequired = error.details[0].path;
     res.status(400).json({ message: `missing required ${emptyRequired}` });
