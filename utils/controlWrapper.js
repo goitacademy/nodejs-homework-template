@@ -9,6 +9,4 @@ const controlWrapper = (control) => {
   return foo;
 };
 
-module.exports = {
-  controlWrapper,
-};
+module.exports = controlWrapper;

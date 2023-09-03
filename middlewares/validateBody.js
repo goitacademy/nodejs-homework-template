@@ -1,8 +1,8 @@
-const { httpError } = require("../utils/httpError");
+const { httpError } = require("../utils");
 
-const validateBody = (schema) => {
-  const foo = (req, res, next) => {
-    const { error } = schema.validate(req.body);
+const validateBody = (scheme) => {
+  const foo = (req, _, next) => {
+    const { error } = scheme.validate(req.body);
     if (error) {
       next(httpError(400, error.message));
     }
@@ -11,6 +11,4 @@ const validateBody = (schema) => {
   return foo;
 };
 
-module.exports = {
-  validateBody,
-};
+module.exports = validateBody
