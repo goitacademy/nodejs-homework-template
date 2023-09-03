@@ -1,80 +1,79 @@
-const Contacts = require("../models/contacts.js");
-const wrapController = require("../helpers/wrapController.js");
+const { Contact } = require("../models/contact.js");
+const {HttpError, wrapController} = require("../helpers")
 
-const listContactsControllers = async (_, res, next) => {
-  try {
-    const contacts = await Contacts.listContacts();
-    res.status(200).json(contacts);
-  } catch (error) {
-    next(error);
+const listContacts = async (_, res) => {
+  const contacts = await Contact.find().exec();
+
+  res.status(200).json(contacts);
+};
+
+const getById = async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await Contact.findById(contactId).exec();
+
+  if (contact !== null) {
+    res.status(200).json(contact);
+  } else {
+    throw HttpError(404, "Not found");
   }
 };
 
-const getByIdControllers = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await Contacts.getById(contactId);
+async function addContact(req, res) {
+  const newContact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+  const doc = await Contact.create(newContact);
+  console.log(doc);
 
-    if (contact !== null) {
-      res.status(200).json(contact);
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    next(error);
+  res.status(201).json(doc);
+}
+
+const removeContact = async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await Contact.findByIdAndDelete(contactId).exec();
+
+  if (contact !== null) {
+    res.status(200).json({ message: "contact deleted" });
+  } else {
+    throw HttpError(404, "Not found");
+  }
+};
+const updateContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    throw HttpError(404, "Not found");
   }
 };
 
-const addContactControllers = async (req, res, next) => {
-  try {
-    const newContact = await Contacts.addContact({
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-    });
+const updateStatusContact= async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite = false } = req.body;
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  ).exec();
 
-    res.status(201).json(newContact);
-  } catch (error) {
-    next(error);
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    throw HttpError(404, "Not found");
   }
 };
 
-const removeContactControllers = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await Contacts.removeContact(contactId);
-
-    if (contact !== null) {
-      res.status(200).json({ message: "contact deleted" });
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-const updateContactControllers = async (req, res, next) => {
-  try {
-
-    const { contactId } = req.params;
-    const updatedContact = await Contacts.updateContact(
-      contactId,
-      req.body
-    );
-
-    if (updatedContact) {
-      res.status(200).json(updatedContact);
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (error) {
-    next(error);
-  }
-};
 module.exports = {
-  listContacts: wrapController(listContactsControllers),
-  getById: wrapController(getByIdControllers),
-  addContact: wrapController(addContactControllers),
-  removeContact: wrapController(removeContactControllers),
-  updateContact: wrapController(updateContactControllers),
+  listContacts: wrapController(listContacts),
+  getById: wrapController(getById),
+  addContact: wrapController(addContact),
+  removeContact: wrapController(removeContact),
+  updateContact: wrapController(updateContact),
+  updateStatusContact: wrapController(updateStatusContact),
 };
