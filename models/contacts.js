@@ -1,4 +1,4 @@
-const Contact = require("../service/shemas/contacts");
+const Contact = require("../service/schemas/task");
 
 const listContacts = async () => {
   try {

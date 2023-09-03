@@ -1,14 +1,10 @@
 const express = require("express");
-const Joi = require("joi");
+
 const contacts = require("../../models/contacts.js");
 
 const router = express.Router();
 
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+const contactSchema = require("../../service/schemas/task.js");
 
 router.get("/", async (req, res) => {
   const allContacts = await contacts.listContacts();
