@@ -21,7 +21,7 @@ export const getContactById = async (id) => {
   return result || null;
 };
 
-export const addContact = async ({name, email, phone}) => {
+export const addContact = async ({ name, email, phone }) => {
   // .Повертає об'єкт доданого контакту.
   const contacts = await listContacts();
   const newContact = {
@@ -41,7 +41,19 @@ export const updateContactById = async (id, data) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, ...data };
+
+  const updateName = !data.name ? contacts[index].name : data.name;
+  const updateEmail = !data.email ? contacts[index].email : data.email;
+  const updatePhone = !data.phone ? contacts[index].phone : data.phone;
+
+  const updatedContact = {
+    id,
+    name: updateName,
+    email: updateEmail,
+    phone: updatePhone,
+  };
+
+  contacts[index] = { id, ...updatedContact };
   await updateContacts(contacts);
   return contacts[index];
 };
