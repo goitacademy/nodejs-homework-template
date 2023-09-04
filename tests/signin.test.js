@@ -2,19 +2,33 @@
 const express = require("express");
 const request = require("supertest");
 const { getAll } = require("../controllers/contacts");
+const { login } = require("../controllers/auth");
+const mongoose = require("mongoose");
+// const app = require("../app");
+
+require("dotenv").config();
 
 const app = express();
 
-app.get("/api/contacts", getAll);
+app.post("/api/users/login", login);
 
-describe("testing", () => {
-  beforeAll(() => app.listen(3000));
-
-  test("return email and subscibe test", async () => {
-    const response = await request(app).get("/api/contacts/");
-    console.log("RESPONSE", response.status);
-    expect(response.status).toBe(200);
-  });
+beforeEach(async () => {
+  await mongoose.connect(process.env.DB_HOST);
 });
 
-//   afterAll(() => app.close());
+afterEach(async () => {
+  await mongoose.connection.close();
+});
+
+describe("POST /api/users/login", () => {
+  //   beforeAll(() => app.listen(3000));
+  //   afterAll(() => app.close());
+  test("return email and subscibe test", async () => {
+    const response = await request(app).post("/api/users/login").send({
+      email: "testuser@mail.com",
+      password: "123456",
+    });
+    console.log(response.body);
+    expect(response.statusCode).toBe(200);
+  });
+});
