@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const routerApi = require("./api");
 
 require("dotenv").config();
 
@@ -11,14 +12,15 @@ app.use(express.json());
 // cors
 app.use(cors());
 
-const routerApi = require("./api");
+require("./config/config-passport");
+
 app.use("/api", routerApi);
 
 app.use((_, res, __) => {
   res.status(404).json({
     status: "error",
     code: 404,
-    message: "Use api on routes: /api/contacts",
+    message: "Use api on routes: /api/contacts, api/users",
     data: "Not found",
   });
 });
