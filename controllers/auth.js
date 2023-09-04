@@ -37,7 +37,7 @@ const register = async (req, res) => {
 
   const verifyEmail = {
     to: email, subject: "Verify email",
-    html: `<html><a target="_blank" href='${BASE_URL}/api/auth/verify/${verificationCode}'>Click to verify email</a></html>`,
+    html: `<a target="_blank" href='${BASE_URL}/api/auth/verify/${verificationCode}'>Click to verify email</a>`,
  
 
   }
@@ -52,6 +52,17 @@ const register = async (req, res) => {
   });
 };
 
+const verifyEmail = async (req, res) => {
+  const { verificationCode } = req.params;
+  const user = await User.findOne({ verificationCode });
+  if (!user) {
+    throw ResponseError (404, 'User not found');
+  }
+  await User.findByIdAndUpdate(user._id, { verify: true, verificationCode: null });
+  res.status(200).json({ message: 'Verification successful' });
+
+
+}
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -59,6 +70,12 @@ const login = async (req, res) => {
   if (!user) {
     throw ResponseError(401, "Email or password is wrong");
   }
+
+  if (!user.verify) {
+    throw ResponseError(401, 'Email is not verified');
+  }
+
+
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
@@ -126,8 +143,10 @@ const updateAvatar = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
+  verifyEmail: ctrlWrapper(verifyEmail),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
+  
 };

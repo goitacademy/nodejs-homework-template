@@ -13,6 +13,9 @@ const { schemas } = require("../../models/user")
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
+router.get("/verify/:verificationCode", ctrl.verifyEmail);
+
+
 
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
