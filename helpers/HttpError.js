@@ -1,6 +1,6 @@
 const messageList = {
   400: "Bad Request",
-  401: "Unauthorized",
+  401: "Unathorized",
   403: "Forbidden",
   404: "Not Found",
   409: "Conflict",
