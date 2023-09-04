@@ -45,17 +45,20 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const idx = contacts.findIndex((item) => item.id === contactId);
+  // Функція для оновлення контакту
+  const contacts = await listContacts(); // Отримання списку контактів
+  const idx = contacts.findIndex((item) => item.id === contactId); // Пошук індексу контакту за його ідентифікатором
   if (idx === -1) {
-    return null;
+    // Якщо контакт не знайдено
+    return null; // Повернення значення null
   }
-  contacts[idx] = { id: contactId, ...body };
-  await updateContacts(contacts);
-  return contacts[idx];
+  contacts[idx] = { id: contactId, ...body }; // Оновлення контакту з новими даними;
+  await fs.writeFile(contactsPath, JSON.stringify(contactId, null, 2)); // Асинхронне записування оновленого списку контактів у файл contacts.json
+  return contacts[idx]; // Повернення оновленого контакту
 };
 
 module.exports = {
+  // Експорт функцій для використання у інших файлах
   listContacts,
   getContactById,
   removeContact,

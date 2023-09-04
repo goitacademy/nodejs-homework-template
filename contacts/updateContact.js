@@ -1,23 +1,17 @@
-const contactsOperations = require("../../models/contacts");
-
-const { addSchema } = require("../../schemas/contacts");
 const { createError } = require("../../helpers/createError");
 
-const updateContact = async (req, res, next) => {
-  try {
+const updateContact = (addSchema) => {
+  const func = (req, res, next) => {
+    if (Object.keys(req.body).length === 0) {
+      next(createError(400, "Missing fields"));
+    }
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw createError(400, (error.message = "missing fields"));
+      next(createError(400, error.message));
     }
-    const { contactId } = req.params;
-    const result = await contactsOperations.updateContact(contactId, req.body);
-    if (!result) {
-      throw createError(404);
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+    next();
+  };
+  return func;
 };
 
 module.exports = updateContact;
