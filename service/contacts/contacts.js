@@ -1,7 +1,8 @@
 const Contact = require('../../schemas/contacts');
 
-const listContacts = async (query) => {
-  const response = await Contact.find(query);
+const listContacts = async ({ page = 1, limit = 20, favorite }, userId) => {
+  const query = favorite ? { favorite, owner: userId } : { owner: userId };
+  const response = await Contact.find(query).skip((page - 1) * limit).limit(limit).lean();
   return response
 };
 

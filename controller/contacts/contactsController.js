@@ -4,7 +4,7 @@ const { schemaAddContact, schemaUpdateContact, schemaUpdateFavoriteContact } = r
 const listContacts = async (req, res, next) => {
   try {
     const { query, user } = req;
-    const results = await contactsService.listContacts({ ...query, owner: user._id });
+    const results = await contactsService.listContacts(query, user._id);
     return res.json({
       status: 'success',
       code: 200,
