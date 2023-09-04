@@ -8,31 +8,34 @@ const getOne = async (id) => {
   return Contact.findById(id);
 };
 
-const create = async (data) => {
-  return Contact.create(data);
+const create = async (body) => {
+  return Contact.create(body);
 };
 
-const update = async (id, data) => {
-  return Contact.findByIdAndUpdate(id, data, {
-    new: true,
-  });
-};
-
-const updateFavorite = async (id, favorite) => {
-  return Contact.findByIdAndUpdate(id, { favorite }, {
+const update = async (id, body) => {
+  return Contact.findByIdAndUpdate(id, body, {
     new: true,
   });
 };
 
 const remove = async (id) => {
-  return Contact.findByIdAndDelete(id);
+  return Contact.findByIdAndRemove(id);
 };
 
+const updateStatusContact = async (id, favorite) => {
+  return Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    {
+      new: true,
+    }
+  );
+};
 module.exports = {
   getAll,
   getOne,
   create,
   update,
-  updateFavorite,
   remove,
+  updateStatusContact,
 };

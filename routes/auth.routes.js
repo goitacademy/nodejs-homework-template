@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const authController = require("../controllers/auth.controller");
 const passport = require("passport");
-const contactsController = require("../controllers/contacts.controller");
 
 const auth = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
@@ -22,16 +22,9 @@ const auth = (req, res, next) => {
   })(req, res, next);
 };
 
-router.get("/contacts", auth, contactsController.get);
-
-router.get("/contacts/:id", auth, contactsController.getById);
-
-router.post("/contacts", auth, contactsController.create);
-
-router.put("/contacts/:id", auth, contactsController.update);
-
-router.patch("/contacts/:id/favorite", auth, contactsController.updateFavorite);
-
-router.delete("/contacts/:id", auth, contactsController.remove);
+router.post("/signup", authController.signup);
+router.post("/login", authController.login);
+router.get("/logout", auth, authController.logout);
+router.get("/current", auth, authController.getCurrent);
 
 module.exports = router;
