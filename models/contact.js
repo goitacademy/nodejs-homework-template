@@ -13,7 +13,10 @@ const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const schemas = { addSchema, updateFavoriteSchema };
+const schemas = {
+  addSchema,
+  updateFavoriteSchema,
+};
 
 const options = { versionKey: false, timestamps: true };
 
