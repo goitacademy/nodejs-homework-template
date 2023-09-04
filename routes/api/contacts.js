@@ -1,25 +1,60 @@
-const express = require('express')
+const express = require("express");
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res) => {
+  const list = await listContacts();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json(list);
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  const contact = await getContactById(req.params.contactId);
+  if (!contact) {
+    res.status(404).json({ message: "Not found" });
+    return;
+  }
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  res.json(contact);
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  const { name, email, phone } = req.body;
+  if (name && email && phone) {
+    const newContact = await addContact(req.body);
+    res.status(201).json(newContact);
+    return;
+  }
 
-module.exports = router
+  res.status(400).json({ message: "missing required name field" });
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  if (!req.body) {
+    res.status(400).json({ message: "missing fields" });
+  }
+  const updatedContact = await updateContact(req.params.contactId, req.body);
+  if (!updatedContact) {
+    res.status(404).json({ message: "Not found" });
+    return;
+  }
+  res.json(updatedContact);
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  const status = await removeContact(req.params.contactId);
+  if (!status) {
+    res.status(404).json({ message: "Not found" });
+    return;
+  }
+  res.json({ message: "contact deleted" });
+});
+
+module.exports = router;
