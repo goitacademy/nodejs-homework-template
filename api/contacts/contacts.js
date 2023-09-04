@@ -1,6 +1,5 @@
-// const updateFavoriteSchema = require("../../models");
-
-const { Contact } = require("../../models");
+const { cntrlWrappers, HttpError } = require("../../helpers");
+const { Contact } = require("../../models/contact");
 
 const Joi = require("joi");
 
@@ -20,44 +19,8 @@ const putSchema = Joi.object({
   email: Joi.string().email(),
 }).or("name", "phone", "email");
 
-const listContacts = async (req, res, next) => {
-  try {
-    const contacts = await Contact.find();
-    res.json(contacts);
-  } catch {
-    console.log("error");
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-const getContactById = async (req, res, next) => {
-  const id = req.params.contactId;
-  try {
-    const conntactsById = await Contact.findById(id);
-
-    if (!conntactsById) {
-      res.status(404).json({ message: "Not found" });
-    }
-    res.send(conntactsById);
-  } catch {
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-const removeContact = async (req, res, next) => {
-  const id = req.params.contactId;
-  try {
-    const deleteContact = await Contact.findByIdAndRemove(id);
-    if (!deleteContact) {
-      res.status(404).json({ message: "Not found" });
-    }
-    res.status(200).json({ message: "contact deleted" });
-  } catch {
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
 const addContact = async (req, res, next) => {
+  const { _id: owner } = req.user;
   const { error } = addSchema.validate(req.body);
 
   if (error) {
@@ -66,12 +29,46 @@ const addContact = async (req, res, next) => {
     return;
   }
 
-  try {
-    const newContact = await Contact.create(req.body);
-    res.status(201).json(newContact);
-  } catch {
-    res.status(500).json({ message: "Server error" });
+  const newContact = await Contact.create({ ...req.body, owner });
+  res.status(201).json(newContact);
+};
+
+const listContacts = async (req, res, next) => {
+  const { page = 1, limit = 20, favorite = null } = req.query;
+  const skip = (page - 1) * limit;
+
+  const { _id: owner } = req.user;
+
+  const filterConditions = { owner };
+
+  if (favorite !== null) {
+    filterConditions.favorite = favorite;
   }
+
+  const contacts = await Contact.find(filterConditions).skip(skip).limit(limit);
+
+  if (contacts.length === 0) {
+    return res.status(200).json({ message: "Сontacts are missing" });
+  }
+
+  res.json(contacts);
+};
+
+const getContactById = async (req, res, next) => {
+  const id = req.params.contactId;
+  const owner = req.user._id;
+
+  await Contact.findOne({ _id: id, owner })
+    .then((user) => {
+      if (user) {
+        return res.json(user);
+      } else {
+        res.status(404).json({ message: "Contact not found" });
+      }
+    })
+    .catch((err) => {
+      HttpError(err.status, `${err.message}`);
+    });
 };
 
 const updateContact = async (req, res, next) => {
@@ -81,50 +78,69 @@ const updateContact = async (req, res, next) => {
     return;
   }
 
-  try {
-    const id = req.params.contactId;
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-      new: true,
+  const id = req.params.contactId;
+  const { _id: owner } = req.user;
+
+  await Contact.findOneAndUpdate({ _id: id, owner }, req.body, { new: true })
+    .then((updatedContact) => {
+      if (updatedContact) {
+        return res.status(200).json(updatedContact);
+      } else {
+        res.status(404).json({ message: "Contact not found" });
+      }
+    })
+    .catch((err) => {
+      HttpError(err.status, `${err.message}`);
     });
-    if (updatedContact === null) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-    res.status(200).json(updatedContact);
-  } catch {
-    res.status(500).json({ message: "Server error" });
-  }
 };
 
 const updateStatusContact = async (req, res, next) => {
   const { error } = updateFavoriteSchema.validate(req.body);
-  console.log("Example", req.body);
+
   if (error) {
     const emptyRequired = error.details[0].path;
     res.status(400).json({ message: `missing required ${emptyRequired}` });
     return;
   }
 
-  try {
-    const id = req.params.contactId;
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-      new: true,
+  const id = req.params.contactId;
+  const { _id: owner } = req.user;
+
+  await Contact.findOneAndUpdate({ _id: id, owner }, req.body, { new: true })
+    .then((updatedContact) => {
+      if (updatedContact) {
+        return res.status(200).json(updatedContact);
+      } else {
+        res.status(404).json({ message: "Contact not found" });
+      }
+    })
+    .catch((err) => {
+      HttpError(err.status, `${err.message}`);
     });
-    if (updatedContact === null) {
-      res.status(404).json({ message: "Not found" });
-      return
-    }
-    res.status(200).json(updatedContact);
-  } catch {
-    res.status(500).json({ message: "Server error" });
-  }
+};
+
+const removeContact = async (req, res, next) => {
+  const id = req.params.contactId;
+  const owner = req.user._id;
+
+  await Contact.findByIdAndRemove({ _id: id, owner })
+    .then((user) => {
+      if (user) {
+        return res.status(200).json({ user, message: "Contact deleted" });
+      } else {
+        res.status(404).json({ message: "Contact not found" });
+      }
+    })
+    .catch((err) => {
+      HttpError(err.status, `${err.message}`);
+    });
 };
 
 module.exports = {
-  updateStatusContact,
-  updateContact,
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
+  updateStatusContact: cntrlWrappers(updateStatusContact),
+  updateContact: cntrlWrappers(updateContact),
+  listContacts: cntrlWrappers(listContacts),
+  getContactById: cntrlWrappers(getContactById),
+  removeContact: cntrlWrappers(removeContact),
+  addContact: cntrlWrappers(addContact),
 };
