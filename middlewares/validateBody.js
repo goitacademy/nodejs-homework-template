@@ -4,9 +4,8 @@ const validateBody = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      next(
-        HttpError(400, `missing required ${error.details[0].path[0]} field`)
-      );
+      console.log(error.details);
+      next(HttpError(400, error));
     }
     next();
   };
