@@ -19,27 +19,22 @@ const contactAddSchema = Joi.object({
 
 contactsRouter.get("/", async (req, res, next) => {
   try {
-    const result = await contactsService.getAllContacts();
+    const result = await contactsService.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
   }
 });
 
-contactsRouter.get("/:contactId", async (req, res, next) => {
+contactsRouter.get("/:id", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    const { id } = req.params;
 
-    const result = await contactsService.getContactById(contactId);
+    const result = await contactsService.getContactById(id);
     if (!result) {
-      // const error = new Error(`Movie with id=${contactId} not found`);
-      // error.status = 404;
-      // throw error;
-      throw HttpError(404, `Movie with id=${contactId} not found`);
-      // return res.status(404).json({
-      //   message: `Movie with id=${contactId} not found`,
-      // });
+      throw HttpError(404, `Contact with id=${id} not found`);
     }
+    
     res.json(result);
   } catch (error) {
     next(error);
@@ -60,18 +55,30 @@ contactsRouter.post("/", async (req, res, next) => {
   }
 });
 
-contactsRouter.put("/:contactId", async (req, res, next) => {
+contactsRouter.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsService.removeContactById(id);
+    if (!result) {
+      throw HttpError(404, `Contact with id=${id} not found`);
+    }
+    res.json({ message: "Contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+contactsRouter.put("/:id", async (req, res, next) => {
   try {
     const { error } = contactAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
-    // console.log(req.body)
-    const { contactId } = req.params;
-    const result = await contactsService.updateContactById(contactId, req.body);
+    const { id } = req.params;
+    const result = await contactsService.updateContactById(id, req.body);
     console.log(result);
     if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
+      throw HttpError(404, `Contact with id=${id} not found`);
     }
 
     res.json(result);
@@ -79,18 +86,4 @@ contactsRouter.put("/:contactId", async (req, res, next) => {
     next(error);
   }
 });
-
-contactsRouter.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsService.removeContactById(contactId);
-    if (!result) {
-      throw HttpError(404, `Contact with id=${id} not found`);
-    }
-    res.json({ message: "Delete success" });
-  } catch (error) {
-    next(error);
-  }
-});
-
 export default contactsRouter;

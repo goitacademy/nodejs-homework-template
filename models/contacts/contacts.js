@@ -2,23 +2,24 @@ import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
 
-export const contactsPath = path.resolve("models", "contacts", "contacts.json");
+const contactsPath = path.resolve("models", "contacts", "contacts.json");
+
 const updateALLContacts = (allContacts) =>
   fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
 
-export const getAllContacts = async () => {
-  const dataGetAllContacts = await fs.readFile(contactsPath);
-  return JSON.parse(dataGetAllContacts);
+export const listContacts = async () => {
+  const datalistContacts = await fs.readFile(contactsPath);
+  return JSON.parse(datalistContacts);
 };
 
-export const getContactById = async (contactId) => {
-  const allContacts = await getAllContacts();
-  const contactById = allContacts.find((contact) => contact.id === contactId);
+export const getContactById = async (id) => {
+  const allContacts = await listContacts();
+  const contactById = allContacts.find((contact) => contact.id === id);
   return contactById || null;
 };
 
 export const addContact = async ({ name, email, phone }) => {
-  const allContacts = await getAllContacts();
+  const allContacts = await listContacts();
   const newContact = {
     id: nanoid(),
     name,
@@ -30,25 +31,22 @@ export const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-export const updateContactById = async (contactId, body) => {
-  const allContacts = await getAllContacts();
-  // console.log(allContacts)
-  const indexContact = allContacts.findIndex(
-    (contact) => contact.id === contactId
-  );
+export const updateContactById = async (id, body) => {
+  const allContacts = await listContacts();
+  const indexContact = allContacts.findIndex((contact) => contact.id === id);
   if (indexContact === -1) {
     return null;
   }
   console.log(indexContact);
-  allContacts[indexContact] = { contactId, ...body };
+  allContacts[indexContact] = { id, ...body };
   await updateALLContacts(allContacts);
   return allContacts[indexContact];
 };
 
-export const removeContactById = async (contactId) => {
-  const allContacts = await getAllContacts();
+export const removeContactById = async (id) => {
+  const allContacts = await listContacts();
 
-  const indexContact = allContacts.findIndex((item) => item.id === contactId);
+  const indexContact = allContacts.findIndex((item) => item.id === id);
   if (indexContact === -1) {
     return null;
   }
@@ -58,7 +56,7 @@ export const removeContactById = async (contactId) => {
 };
 
 export default {
-  getAllContacts,
+  listContacts,
   getContactById,
   removeContactById,
   addContact,
