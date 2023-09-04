@@ -1,25 +1,21 @@
-const express = require('express')
+import express from "express";
+import validateBody from "../../decorators/validateBody.js";
+import contactSchema from "../../schema/schema.js"
 
-const router = express.Router()
+const contactRouter = express.Router();
+const ctrlContacts = "../../controllers/ctrlContacts.js";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactAddValidate = validateBody(contactSchema.addContactSchema);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactRouter.get("/", ctrlContacts.getAll);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactRouter.get(":contactId",ctrlContacts.getById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactRouter.post("/", contactAddValidate, ctrlContacts.add);
 
-module.exports = router
+contactRouter.put("/:contactId",contactAddValidate, ctrlContacts.put );
+
+contactRouter.delete("/:contactId", ctrlContacts.remove);
+
+export default contactRouter
