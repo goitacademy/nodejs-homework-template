@@ -12,8 +12,10 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 const logger = require('morgan')
 app.use(logger(formatsLogger))
 
-const contactsRouter = require('./api')
-app.use('/api/contacts', contactsRouter)
+require("./config/passport");
+
+const router = require('./api')
+app.use('/api', router)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
@@ -27,6 +29,7 @@ const PORT = process.env.PORT || 3000
 const uriDb = process.env.DB_HOST
 
 const connection = mongoose.connect(uriDb, {
+  dbName: 'db-contacts',
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
