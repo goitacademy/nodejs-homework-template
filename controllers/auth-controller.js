@@ -7,7 +7,10 @@ const { SECRET_KEY, BASE_URL, PORT } = process.env;
 const gravatar = require('gravatar');
 const fs = require('fs/promises');
 const path = require('path');
+
 const { nanoid } = require("nanoid");
+=======
+
 const Jimp = require('jimp');
 
 const avatarDir = path.resolve('public', 'avatars');
