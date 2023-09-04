@@ -22,6 +22,15 @@ const addSchema = Joi.object({
     })
 });
 
+const updateSchema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+}) 
+
+
+
 module.exports = {
-    addSchema,
+  addSchema,
+  updateSchema
 }
