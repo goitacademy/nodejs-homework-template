@@ -3,6 +3,7 @@ const isEmptyBody = require("./emptyBody")
 const handleMongooseError = require("./handleMongooseError")
 const isEmptyFavorites = require("./emptyFavorites")
 const ctrlWrapper = require("./ctrlWrapper")
+const sendEmail = require("./sendEmail")
 
 module.exports = {
     ResponseError,
@@ -10,4 +11,5 @@ module.exports = {
     handleMongooseError,
     isEmptyFavorites,
     ctrlWrapper,
+    sendEmail
 }
