@@ -60,7 +60,7 @@ async function updateContactById(contactId, updatedData) {
   if (index === -1) {
     return null;
   }
-  contacts[index] = {contactId, ...updatedData};
+  contacts[index] = {id: contactId, ...updatedData};
   await writeFile(contactsPath, contacts);
   return contacts[index];
 }
@@ -72,7 +72,6 @@ async function writeFile(filename, data) {
     console.error(error.message);
   }
 }
-
 
 module.exports = {
   listContacts,
