@@ -2,9 +2,16 @@ const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../utils');
 const Joi = require('joi');
 
-const registerSchema = Joi.object({});
+const registerSchema = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string().required(),
+  subscription: Joi.string(),
+});
 
-const loginSchema = Joi.object({});
+const loginSchema = Joi.object({
+  password: Joi.string().required(),
+  email: Joi.string().required(),
+});
 
 const schemas = {
   registerSchema,
@@ -40,4 +47,7 @@ const User = model('user', userSchema);
 
 userSchema.post('save', handleMongooseError);
 
-module.exports = { User, schemas };
+module.exports = {
+  User,
+  schemas,
+};

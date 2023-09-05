@@ -4,7 +4,8 @@ const { HttpError, ctrlWrapper } = require('../utils');
 const findFilter = '-createdAt -updatedAt';
 
 const getContacts = async (req, res) => {
-  const result = await Contact.find({});
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner });
   res.json(result);
 };
 
@@ -18,8 +19,9 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { body } = req;
-  const result = await Contact.create(body);
+  const result = await Contact.create({ ...body, owner });
   res.status(201).json(result);
 };
 
