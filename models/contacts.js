@@ -54,10 +54,10 @@ const removeContact = async (contactId) => {
     return index;
   }
 
-  const [conDel] = list.splice(index, 1);
+  const [deletedContact] = list.splice(index, 1);
 
   await writeJSONToFile(contactsPath, list);
-  return conDel;
+  return deletedContact;
 };
 
 module.exports = {
