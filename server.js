@@ -17,3 +17,14 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
+
+  module.exports = {
+    mongoose,
+    connect: () => {
+      mongoose.Promise = Promise;
+      mongoose.connect(DB_HOST);
+    },
+    disconnect: (done) => {
+      mongoose.disconnect(done);
+    },
+  };
