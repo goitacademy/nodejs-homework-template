@@ -1,7 +1,7 @@
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-const { readJSONFromFile, writeJSONToFile, getIndex } = require("../utils");
+const { readJSONFromFile, writeJSONToFile } = require("../utils");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
 
@@ -13,9 +13,10 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   const list = await readJSONFromFile(contactsPath);
-  const index = getIndex(list, contactId);
-  if (index === null) {
-    return index;
+
+  const index = list.findIndex((el) => el.id === contactId);
+  if (index === -1) {
+    return null;
   }
 
   return list[index];
@@ -33,10 +34,9 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const list = await readJSONFromFile(contactsPath);
-  const index = getIndex(list, contactId);
-
-  if (index === null) {
-    return index;
+  const index = list.findIndex((el) => el.id === contactId);
+  if (index === -1) {
+    return null;
   }
 
   list[index] = { ...list[index], ...body };
@@ -48,10 +48,9 @@ const updateContact = async (contactId, body) => {
 
 const removeContact = async (contactId) => {
   const list = await readJSONFromFile(contactsPath);
-  const index = getIndex(list, contactId);
-
-  if (index === null) {
-    return index;
+  const index = list.findIndex((el) => el.id === contactId);
+  if (index === -1) {
+    return null;
   }
 
   const [deletedContact] = list.splice(index, 1);
