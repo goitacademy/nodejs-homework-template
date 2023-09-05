@@ -1,0 +1,1 @@
+export { default as validateContacts } from "./validateContacts.js"
