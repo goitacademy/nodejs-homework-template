@@ -1,25 +1,26 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { isEmptyBody } = require("../../helpers");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { isEmptyFavorites } = require("../../helpers");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { isValidId, authenticate} = require("../../middlewares/")
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers/controllers");
 
-module.exports = router
+router.get("/", authenticate,  ctrl.getAll);
+
+router.get("/:id", authenticate, isValidId, ctrl.getById);
+
+router.post("/", authenticate, isEmptyBody, ctrl.post);
+
+router.delete("/:id", authenticate, isValidId, ctrl.remove);
+
+router.put("/:id",isValidId, authenticate, isEmptyBody, ctrl.put);
+
+router.patch("/:id/favorite", authenticate, isValidId , isEmptyFavorites, ctrl.patch);
+
+module.exports = router;
