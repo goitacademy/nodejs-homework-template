@@ -2,6 +2,7 @@ const User = require('../../models/user');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 const Joi = require('joi');
+const sendEmail = require('../../controllers/email/sendEmail');
 
 const registerSchema = Joi.object({
     email: Joi.string()
@@ -14,15 +15,29 @@ const registerSchema = Joi.object({
     avatarURL: Joi.string()
 });
 
+const verificationSchema = Joi.object({
+    verify: Joi.boolean()
+        .required(),
+    verificationToken: Joi.number()
+        .required()
+})
+
 const signup = async (req, res, next) => {
     try {
         const { email, password, subscription } = req.body;
         const avatarURL = gravatar.url(email);
-        const validate = registerSchema.validate({
+        const verificationToken = Math.floor(Math.random(10) * 1000000);
+        const verify = false;
+        const validateRegister = registerSchema.validate({
             email, password, subscription, avatarURL
         });
 
-        if (validate.error) { return res.status(400).json(validate.error) };
+        const validateVerification = verificationSchema.validate({
+            verify, verificationToken
+        });
+
+        if (validateRegister.error) { return res.status(400).json(validateRegister.error) };
+        if (validateVerification.error) { return res.status(400).json(validateVerification.error) };
         const isUser = await User.findOne({ email });
         isUser && res.status(409).json({
             message: "Email in use"
@@ -34,8 +49,12 @@ const signup = async (req, res, next) => {
             email,
             password: hashedPassword,
             subscription,
-            avatarURL
+            avatarURL,
+            verify,
+            verificationToken,
         });
+
+        sendEmail(email, verificationToken);
 
         return res.status(201).json({
             status: "success",
@@ -43,10 +62,12 @@ const signup = async (req, res, next) => {
                 user: {
                     email,
                     subscription,
-                    avatarURL
+                    avatarURL,
+                    verify,
+                    verificationToken
                 }
             },
-        })
+        });
     } catch (error) {
         next(error);
     }

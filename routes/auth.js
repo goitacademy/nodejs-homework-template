@@ -9,6 +9,8 @@ const logout = require('../controllers/auth/logout.js');
 const current = require('../controllers/auth/current.js');
 const subscriptionUpdate = require('../controllers/auth/subscriptionUpdate.js');
 const updateAvatar = require('../controllers/auth/updateAvatar.js');
+const checkIsVerify = require('../controllers/auth/checkIsVerify.js');
+const verify = require('../controllers/auth/verify.js');
 
 router.post("/signup", signup);
 
@@ -21,5 +23,10 @@ router.get('/current', auth, current);
 router.patch("/", auth, subscriptionUpdate);
 
 router.patch('/avatars', auth, upload.single('avatar'), updateAvatar);
+
+router.post('/verify', checkIsVerify);
+
+router.get('/verify/:verificationToken', verify);
+
 
 module.exports = router; 
