@@ -2,7 +2,7 @@ const fs = require('fs/promises');
 const path = require('path');
 const {v4: uuid} = require('uuid');
 
-const contactsPath = path.join(__dirname, 'db', 'contacts.json');
+const contactsPath = path.join(__dirname, 'contacts.json');
 
 async function listContacts() {
   try {
@@ -50,7 +50,19 @@ async function addContact(name, email, phone) {
   contactList.push(contactToAdd);
   await writeFile(contactsPath, contactList);
 
+  console.log('contactToAdd', contactToAdd)
   return contactToAdd;
+}
+
+async function updateContactById(contactId, updatedData) {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(item => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = {contactId, ...updatedData};
+  await writeFile(contactsPath, contacts);
+  return contacts[index];
 }
 
 async function writeFile(filename, data) {
@@ -61,9 +73,11 @@ async function writeFile(filename, data) {
   }
 }
 
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
+  updateContactById,
 };
