@@ -1,9 +1,9 @@
 const{ HttpError} = require('../../helpers');
-const {Contact, JoiSchema} = require('../../models/contacts');
+const {Contact, joiSchema} = require('../../models/contacts');
 
 
 const updateContact = async (req, res) => {
-    const { error } = JoiSchema.validate(req.body);
+    const { error } = joiSchema.validate(req.body);
     if (error) {
         throw HttpError(400, error.message)
     };
