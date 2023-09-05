@@ -62,7 +62,7 @@ module.exports = {
   // Експорт функцій для використання у інших файлах
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 };

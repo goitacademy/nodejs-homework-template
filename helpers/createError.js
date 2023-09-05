@@ -1,14 +1,7 @@
-const messages = {
-  400: "Bad Request",
-  401: "Unauthorized",
-  403: "Forbidden",
-  404: "Not found",
-  409: "Conflict",
-};
-const createError = (status, message = messages[status]) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
+const createError = (status, message) => {
+  const error = new Error(message); // Створення нового об'єкта помилки з переданим повідомленням
+  error.status = status; // Присвоєння статусу помилки до властивості "status" об'єкта помилки
+  return error; // Повернення об'єкта помилки
 };
 
-module.exports = createError;
+module.exports = createError; // Експорт функції createError для використання
