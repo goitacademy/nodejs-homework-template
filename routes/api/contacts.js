@@ -6,12 +6,18 @@ const postContactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean().required(),
 });
 
 const putContactSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string(),
+  favorite: Joi.boolean(),
+});
+
+const patchContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 const contacts = require("../../models/contacts");
@@ -49,24 +55,17 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const body = req.body;
-
     const { error } = postContactSchema.validate(body);
-    if (error) {
-      res.status(400).json({
-        message: "missing required name - field",
-        error: error.details[0].message,
-      });
-      return;
-    }
 
-    const createdContact = await contacts.addContact(body);
+    if (error) return res.status(400).json({ message: "missing required name field" });
 
+    const newContactsList = await contacts.addContact(body);
     res.status(201).json({
-      message: "success",
-      data: { createdContact },
+      message: "success contact added",
+      data: { newContactsList },
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json(`Contact create error`);
   }
 });
 
@@ -118,4 +117,35 @@ router.put("/:contactId", async (req, res, next) => {
     });
   }
 });
+
+router.patch("/:contactId", async (req, res, next) => {
+  try {
+    const body = req.body;
+    const { contactId } = req.params;
+    const { error } = patchContactSchema.validate(body);
+
+    if (error)
+      return res
+        .status(400)
+        .json({ message: "Too much fields or missing field favorite" });
+
+
+    const contactFavorite = await contacts.updateStatusContact(contactId, body);
+
+    if (contactFavorite) {
+      res.status(200).json({
+        message: "success",
+        data: contactFavorite,
+      });
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: "error",
+      error: error.message,
+    });
+  }
+});
+
 module.exports = router;
