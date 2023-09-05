@@ -1,16 +1,14 @@
 const mongoose = require("mongoose");
 
 const app = require("./app");
+const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose.set("strictQuery", true);
-
-const DB_HOST =
-  "mongodb+srv://Anton:ddance@cluster0.2visb3k.mongodb.net/contacts";
 
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000);
+    app.listen(PORT);
   })
   .catch((error) => {
     console.log(error.message);
