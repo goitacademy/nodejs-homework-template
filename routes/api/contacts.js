@@ -1,14 +1,10 @@
 const express = require("express");
-const Joi = require("joi");
+
 const contacts = require("../../models/contacts.js");
 
 const router = express.Router();
 
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+const contactSchema = require("../../service/schemas/task.js");
 
 router.get("/", async (req, res) => {
   const allContacts = await contacts.listContacts();
@@ -63,6 +59,27 @@ router.put("/:contactId", async (req, res) => {
     res.json(updatedContact);
   } else {
     res.status(404).json({ message: "Not found" });
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res) => {
+  try {
+    const contactId = req.params.contactId;
+    const body = req.body;
+
+    if (!body || !body.favorite) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
+
+    const updatedContact = await contacts.updateStatusContact(contactId, body);
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    if (error.message === "Not found") {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(500).json({ message: error.message });
   }
 });
 
