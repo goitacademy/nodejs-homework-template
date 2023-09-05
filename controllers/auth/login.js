@@ -13,6 +13,9 @@ const login = async(req, res)=> {
     if(!user){
         throw HttpError(401, "Email or password is wrong");
     }
+    if(!user.verify) {
+        throw HttpError(401, "You email not verified.");
+    }
     const passwordCompare = await bcrypt.compare(password, user.password);
     if(!passwordCompare) {
         throw HttpError(401, "Email or password is wrong");
@@ -20,7 +23,7 @@ const login = async(req, res)=> {
 
     const payload = {
         id: user._id,
-    }
+    };
 
     const token = jwt.sign(payload, SECRET_KEY, {expiresIn: "23h"});
     await User.findByIdAndUpdate(user._id, {token});
@@ -30,8 +33,8 @@ const login = async(req, res)=> {
         user: {
             email: user.email,
             subscription: user.subscription,
-        }
-    })
+        },
+    });
 };
 
 module.exports = { login: ctrlWrapper(login) };
