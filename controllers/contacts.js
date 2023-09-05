@@ -5,7 +5,13 @@ const findFilter = '-createdAt -updatedAt';
 
 const getContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner });
+  const { page = 1, limit = 20 } = req.query;
+  const findOptions = { skip: limit * (page - 1), limit };
+  const result = await Contact.find(
+    { owner },
+    findFilter,
+    findOptions
+  ).populate('owner', 'name email');
   res.json(result);
 };
 
