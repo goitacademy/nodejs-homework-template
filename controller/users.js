@@ -1,4 +1,9 @@
-import { listUsers, getUserById, loginUser } from "../models/users.js";
+import {
+  listUsers,
+  getUserById,
+  loginUser,
+  updateSubscription,
+} from "../models/users.js";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import User from "../service/schemas/users.js";
@@ -126,7 +131,6 @@ export const logout = async (req, res) => {
     });
   }
 };
-// logout();
 
 export const auth = async (req, res, next) => {
   try {
@@ -167,5 +171,30 @@ export const auth = async (req, res, next) => {
       code: 500,
       message: "An error occurred during authentication.",
     });
+  }
+};
+export const update = async (req, res) => {
+  const { id: userId } = req.user;
+  const { body } = req;
+  const { subscription } = body;
+
+  if (!("subscription" in body) || Object.keys(body).length === 0) {
+    return res.status(400).json("Error! Missing field subscription!");
+  }
+
+  try {
+    const updatedStatus = await patchUser(subscription, userId);
+    if (updatedStatus === 400) {
+      return res.status(400).json("Error! Invalid subscription type!");
+    }
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { updatedStatus },
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json(`An error occurred while updating the contact: ${err}`);
   }
 };

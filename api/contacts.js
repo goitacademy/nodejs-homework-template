@@ -7,19 +7,20 @@ import {
   updateStatus,
   remove,
 } from "../controller/contacts.js";
+import { auth } from "../controller/users.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", get);
+contactsRouter.get("/", auth, get);
 
-contactsRouter.get("/:id", getById);
+contactsRouter.get("/:id", auth, getById);
 
-contactsRouter.post("/", add);
+contactsRouter.post("/", auth, add);
 
-contactsRouter.put("/:id", update);
+contactsRouter.put("/:id", auth, update);
 
-contactsRouter.patch("/:id/favorite", updateStatus);
+contactsRouter.patch("/:id/favorite", auth, updateStatus);
 
-contactsRouter.delete("/:id", remove);
+contactsRouter.delete("/:id", auth, remove);
 
 export default contactsRouter;

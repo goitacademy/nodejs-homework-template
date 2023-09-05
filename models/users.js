@@ -32,22 +32,21 @@ export const loginUser = async (body) => {
     return user;
   } catch (err) {
     console.log("Error adding new user: ", err);
-    throw err;
   }
 };
 
-export const updateUser = (UserId, body) => {
-  return User.findByIdAndUpdate({ _id: UserId }, body, {
-    new: true,
-  });
-};
-
-export const updateStatus = (UserId, body) => {
-  return User.findByIdAndUpdate(
-    { _id: UserId },
-    { $set: { favorite: true } },
-    {
-      new: true,
-    }
-  );
+export const updateSubscription = async (subscription, userId) => {
+  const availableSubscriptions = User.schema.path("subscription").enumValues;
+  if (!subscription || !availableSubscriptions.includes(subscription)) {
+    return 400;
+  }
+  try {
+    return await User.findByIdAndUpdate(
+      { _id: userId },
+      { $set: { subscription: subscription } },
+      { new: true, select: "email subscription" }
+    );
+  } catch (err) {
+    console.error("An error occurred while updating user: ", err);
+  }
 };
