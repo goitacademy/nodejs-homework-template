@@ -1,106 +1,27 @@
 const express = require("express");
-const Joi = require("joi");
 
-const Contact = require("../../models/contacts");
-const { HttpError } = require("../../helpers");
+const ctrl = require("../../controllers/contacts");
+
+const { authenticate, isValidId } = require("../../middlewares");
 
 const router = express.Router();
 
-const contactAddSchema = Joi.object({
-  title: Joi.string().required().messages({
-    "any.required": `"title" must be exist`,
-  }),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean().required(),
-});
+router.use(authenticate);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await Contact.find();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", ctrl.getAll);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const { id } = req.params;
+router.get("/:id", ctrl.getById);
 
-    const contact = await Contact.findById(id);
+router.post("/", ctrl.add);
 
-    if (!result) {
-      throw HttpError(404, `Contact with id=${id} not found`);
-    }
+router.put("/:id", ctrl.updateById);
 
-    res.json(contact);
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch(
+  "/:id/favorite",
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await Contact.create(req.body);
+  ctrl.updateFavorite
+);
 
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndDelete(id);
-    if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
-    }
-    res.json({
-      message: "Delete success",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await Contact.findByIdAndUpdate(id, req.body);
-    if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
-    }
-
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.patch("/:contactId/favorite", async (req, res, next) => {
-  try {
-    const { error } = contactAddSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-    const result = await Contact.findByIdAndUpdate(id, req.body);
-    if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
-    }
-
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete("/:id", ctrl.deleteById);
 
 module.exports = router;
