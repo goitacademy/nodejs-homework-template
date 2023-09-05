@@ -70,15 +70,10 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body)
-    if (error) {
-      throw HttpError(400, error.message)
-    }
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
-    console.log("result", result)
     if (!result) {
-      throw HttpError(404, "Not found");
+      throw HttpError(400, "Not found");
     }
     res.json(result)
 
