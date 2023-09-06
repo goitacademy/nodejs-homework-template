@@ -1,5 +1,5 @@
 const errorMessageList = {
-  400: "Bag request",
+  400: "Bad request",
   401: "Not authorized",
   403: "Forbidden",
   404: "Not found",
