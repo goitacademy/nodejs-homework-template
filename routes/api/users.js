@@ -8,13 +8,26 @@ import { uploadImage } from '../../config/config-multer.js';
 dotenv.config();
 
 export const usersRouterFunction = usersService => {
-  const { logOutUser, getUser, addUser, loginUser, patchUser, patchAvatar } = usersService;
+  const {
+    logOutUser,
+    getUser,
+    verifyUserEmail,
+    sendVerificationMail,
+    addUser,
+    loginUser,
+    patchUser,
+    patchAvatar,
+  } = usersService;
   const usersRouter = express.Router();
 
   const schemaEmailPassword = Joi.object({
     email: Joi.string().required(),
     password: Joi.string().required(),
     subscription: Joi.string(),
+  });
+
+  const schemaVerifyEmail = Joi.object({
+    email: Joi.string().required(),
   });
 
   const schemaSubscription = Joi.object({
@@ -35,7 +48,7 @@ export const usersRouterFunction = usersService => {
         data: { email, subscription },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while getting the contact: ${err}`);
+      res.status(500).json(`An error occurred while getting the user: ${err}`);
     }
   });
 
@@ -158,5 +171,39 @@ export const usersRouterFunction = usersService => {
       res.status(500).json(`An error occurred while updating the avatar: ${err}`);
     }
   });
+
+  usersRouter.get('/verify/:verificationToken', async (req, res, next) => {
+    const { verificationToken } = req.params;
+    try {
+      await verifyUserEmail(verificationToken);
+
+      return res.status(200).json({ message: 'Verification successful' });
+    } catch (err) {
+      res
+        .status(err.code || 500)
+        .json(err.message || `An udentified error occured while sending verification email`);
+    }
+  });
+
+  usersRouter.post('/verify/', async (req, res, next) => {
+    const { body } = req;
+    const { error } = schemaVerifyEmail.validate(body);
+
+    if (error) {
+      return res.status(400).json(`Error: ${error.details[0].message}`);
+    }
+
+    const { email } = body;
+
+    try {
+      await sendVerificationMail(email);
+      return res.status(200).json('Verification email sent');
+    } catch (err) {
+      res
+        .status(err.code || 500)
+        .json(err.message || `An udentified error occured while sending verification email`);
+    }
+  });
+
   return usersRouter;
 };

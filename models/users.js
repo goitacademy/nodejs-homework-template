@@ -3,12 +3,28 @@ import gravatar from 'gravatar';
 import Jimp from 'jimp';
 import fs from 'fs/promises';
 import jwt from 'jsonwebtoken';
+import { nanoid } from 'nanoid';
+import dotenv from 'dotenv';
+import sgMail from '@sendgrid/mail';
 
 import User from './../service/schemas/users.js';
-
 import { serverAddress } from '../server.js';
 
+dotenv.config();
+
 const secret = 'GOIT2023';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const createVerificationMsg = (email, verificationToken) => {
+  return {
+    to: email,
+    from: 'plkrozbicki@gmail.com',
+    subject: 'PLease verify your email',
+    text: 'Please click the link below to verify your email:',
+    html: `<a href="${serverAddress}/api/users/verify/${verificationToken}">Verify your email </a>`,
+  };
+};
 
 const getAllUsers = async () => {
   try {
@@ -25,6 +41,55 @@ const getUser = async id => {
     return user;
   } catch (err) {
     console.log('Error getting user list: ', err);
+    throw err;
+  }
+};
+
+const sendVerificationMail = async email => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      const error = new Error();
+      error.code = 400;
+      error.message = 'User not found';
+      throw error;
+    }
+    const { verify, verificationToken } = user;
+    if (verify) {
+      const error = new Error();
+      error.code = 400;
+      error.message = 'Verification has already been passed';
+      throw error;
+    }
+
+    await sgMail.send(createVerificationMsg(email, verificationToken));
+  } catch (err) {
+    console.log('Error getting user list: ', err);
+    throw err;
+  }
+};
+
+const verifyUserEmail = async verificationToken => {
+  try {
+    const user = await User.findOne({ verificationToken });
+    if (!user) {
+      const error = new Error();
+      error.code = 400;
+      error.message = 'User not found';
+      throw error;
+    }
+
+    if (user.verify) {
+      const error = new Error();
+      error.code = 400;
+      error.message = 'Verification has already been passed';
+      throw error;
+    }
+    user.verify = true;
+    user.verificationToken = null;
+    await user.save();
+  } catch (err) {
+    console.log('Error getting user: ', err);
     throw err;
   }
 };
@@ -50,8 +115,15 @@ const addUser = async body => {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
     const userAvatar = gravatar.url(email, { s: '250' });
-    const user = { ...body, password: hashedPassword, avatarURL: userAvatar };
+    const verificationToken = nanoid();
+    const user = {
+      ...body,
+      password: hashedPassword,
+      avatarURL: userAvatar,
+      verificationToken,
+    };
     await User.create(user);
+    await sgMail.send(createVerificationMsg(email, verificationToken));
     return user;
   } catch (err) {
     console.log('Error adding new user: ', err);
@@ -65,6 +137,7 @@ const loginUser = async body => {
   try {
     const user = await User.findOne({ email });
     if (!user) return false;
+
     const isUser = await bcrypt.compare(password, user.password);
     if (!isUser) return false;
 
@@ -125,6 +198,8 @@ const patchAvatar = async (filePath, userId) => {
 export const usersService = {
   getAllUsers,
   getUser,
+  verifyUserEmail,
+  sendVerificationMail,
   logOutUser,
   addUser,
   loginUser,
