@@ -29,7 +29,10 @@ const addContact = async (req, res, next) => {
     return;
   }
 
-  const newContact = await Contact.create({ ...req.body, owner });
+  const newContact = await Contact.create({
+    ...req.body,
+    owner,
+  });
   res.status(201).json(newContact);
 };
 
@@ -66,9 +69,6 @@ const getContactById = async (req, res, next) => {
         res.status(404).json({ message: "Contact not found" });
       }
     })
-    .catch((err) => {
-      HttpError(err.status, `${err.message}`);
-    });
 };
 
 const updateContact = async (req, res, next) => {
@@ -123,17 +123,13 @@ const removeContact = async (req, res, next) => {
   const id = req.params.contactId;
   const owner = req.user._id;
 
-  await Contact.findByIdAndRemove({ _id: id, owner })
-    .then((user) => {
-      if (user) {
-        return res.status(200).json({ user, message: "Contact deleted" });
-      } else {
-        res.status(404).json({ message: "Contact not found" });
-      }
-    })
-    .catch((err) => {
-      HttpError(err.status, `${err.message}`);
-    });
+  await Contact.findByIdAndRemove({ _id: id, owner }).then((user) => {
+    if (user) {
+      return res.status(200).json({ user, message: "Contact deleted" });
+    } else {
+      res.status(404).json({ message: "Contact not found" });
+    }
+  });
 };
 
 module.exports = {

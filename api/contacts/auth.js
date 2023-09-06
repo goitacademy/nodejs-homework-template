@@ -7,10 +7,16 @@ const {
 } = require("../../helpers");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const gravatar = require("gravatar");
 const { SECRET_KEY } = process.env;
+const path = require("path");
+const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
+const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const register = async (req, res, next) => {
   const { password, email } = req.body;
+  const avatarURL = gravatar.url(email);
 
   const user = await User.findOne({ email });
 
@@ -20,7 +26,11 @@ const register = async (req, res, next) => {
 
   const hashPassword = await createHashPassword(password);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
@@ -81,10 +91,40 @@ const updateSubscription = async (req, res) => {
   res.status(200).json({ message: `Update subscription to ${subscription}` });
 };
 
+const updateAvatar = async (req, res, next) => {
+  const { _id } = req.user;
+
+  const { path: tempUpload, filename } = req.file;
+
+  const resultUpload = path.join(avatarsDir, filename);
+
+  await fs.rename(tempUpload, resultUpload);
+
+  Jimp.read(resultUpload)
+    .then((avatar) => {
+      return avatar
+        .resize(256, 256) // resize
+        .write(`public/avatars/avatar_${_id}.jpg`); // save
+    })
+    .then(() => {
+      fs.unlink(resultUpload);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+
+  const avatarURL = path.join(`public/avatars/avatar_${_id}.jpg`);
+
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({ avatarURL });
+};
+
 module.exports = {
   register: cntrlWrappers(register),
   login: cntrlWrappers(login),
   currentUser: cntrlWrappers(currentUser),
   logOut: cntrlWrappers(logOut),
   updateSubscription: cntrlWrappers(updateSubscription),
+  updateAvatar: cntrlWrappers(updateAvatar),
 };
