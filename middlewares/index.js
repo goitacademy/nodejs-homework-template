@@ -1,0 +1,1 @@
+export { default as validatedContacts } from "./validatedContacts.js";
