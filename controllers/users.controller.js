@@ -111,10 +111,10 @@ const currentUser = async (req, res) => {
 }
 
 const updateAvatar = async (req, res, next) => {
-    const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
-    const { path: tempUpload, originalname } = req.file;
+    const avatarDir = path.join(process.cwd(), 'public/avatars');
+    const { path: tempUpload } = req.file;
     const  { _id } = req.user
-    const imageName = `${_id}_${originalname}`;
+    const imageName = `${_id}_avatar.png`;
     const avatarPath = path.join(avatarDir, imageName)
     await optimizeImage(tempUpload);
 
