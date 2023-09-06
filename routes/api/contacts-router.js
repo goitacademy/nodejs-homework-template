@@ -11,14 +11,14 @@ const contactsAddSchema = Joi.object({
     'any.required': `'name' must be exist`,
   }),
   email: Joi.string().required(),
-  phone: Joi.number().required().messages({
+  phone: Joi.string().required().messages({
     'any.required': `'number' must be exist`,
   }),
 });
 
 contactsRouter.get('/', async (req, res, next) => {
   try {
-    const result = await contactsService.getAllMovies();
+    const result = await contactsService.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
@@ -27,10 +27,10 @@ contactsRouter.get('/', async (req, res, next) => {
 
 contactsRouter.get('/:contactId', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactsService.getMovieById(id);
+    const { contactId } = req.params;
+    const result = await contactsService.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, `Contact with id=${id} not found`);
+      throw HttpError(404, `Contact with id=${contactId} not found`);
     }
     res.json(result);
   } catch (error) {
@@ -44,7 +44,7 @@ contactsRouter.post('/', async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contactsService.addMovie(req.body);
+    const result = await contactsService.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -53,10 +53,10 @@ contactsRouter.post('/', async (req, res, next) => {
 
 contactsRouter.delete('/:contactId', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactsService.deleteMovieById(id);
+    const { contactId } = req.params;
+    const result = await contactsService.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
+      throw HttpError(404, `Contact with id=${contactId} not found`);
     }
     res.json({
       message: 'Delete successfull',
@@ -72,10 +72,10 @@ contactsRouter.put('/:contactId', async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const { id } = req.params;
-    const result = await contactsService.updateMovieById(id, req.body);
+    const { contactId } = req.params;
+    const result = await contactsService.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
+      throw HttpError(404, `Contact with id=${contactId} not found`);
     }
     res.json(result);
   } catch (error) {

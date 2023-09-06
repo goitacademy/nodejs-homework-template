@@ -4,6 +4,10 @@ import path from 'path';
 
 const contactsPath = path.resolve('models', 'contacts', 'contacts.json');
 
+const writeContactsData = async (data) => {
+  await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
+};
+
 export const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
@@ -22,11 +26,11 @@ export const removeContact = async (contactId) => {
     return null;
   }
   const [result] = data.splice(index, 1);
-  await updateContact(data);
+  await writeContactsData(data);
   return result;
 };
 
-export const addContact = async (name, email, phone) => {
+export const addContact = async ({ name, email, phone }) => {
   const data = await listContacts();
   const newContact = {
     id: nanoid(),
@@ -35,12 +39,19 @@ export const addContact = async (name, email, phone) => {
     phone,
   };
   data.push(newContact);
-  await updateContact(data);
+  await writeContactsData(data);
   return newContact;
 };
 
 export const updateContact = async (contactId, body) => {
-  fs.writeFile(contactsPath, JSON.stringify(contactId, body, null, 2));
+  const data = await listContacts();
+  const index = data.findIndex((item) => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  data[index] = { id: contactId, ...body };
+  await writeContactsData(data);
+  return data[index];
 };
 
 export default {
