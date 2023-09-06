@@ -1,6 +1,15 @@
 const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
+const Joi = require("joi");
+
+const schema = Joi.object().keys({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string()
+    .regex(/^\d{3}-\d{3}-\d{4}$/)
+    .required(),
+});
 
 const contactsPath = path.join(process.cwd(), "models", "contacts.json");
 const delContactsPath = path.join(
@@ -43,47 +52,26 @@ const removeContact = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const contactsAll = await readContacts(contactsPath);
-  //  const Joi = require("joi");
-
-  //  const data = req.body;
-
-  //  const schema = Joi.object().keys({
-  //    name: Joi.string().required(),
-  //    email: Joi.string().email().required(),
-  //    phone: Joi.string()
-  //      .regex(/^\d{3}-\d{3}-\d{4}$/)
-  //      .required(),
-  //  });
-
-  //  Joi.validate(data, schema, (err, value) => {
-  //    if (err) {
-  //      return res.status(422).json({
-  //        status: "error",
-  //        message: "Invalid request data",
-  //        data: data,
-  //      });
-  //    } else {
-  //      res.json({
-  //        status: "success",
-  //        message: "User created successfully",
-  //        data: value,
-  //      });
-  //    }
-  //  });
-
-  if (req.body.name && req.body.email && req.body.phone) {
-    const newContact = { id: crypto.randomUUID(), ...req.body };
-    //  const newContact = { id: crypto.randomUUID(), ...data };
-    contactsAll.unshift(newContact);
-    await reWriteCOntacts(contactsPath, contactsAll);
-    return res.status(201).json(newContact);
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.send({
+      message: `Error in required field: ${error.details[0].path[0]}`,
+    });
   }
-
-  return res.status(400).json({ message: "missing required name field" });
+  const contactsAll = await readContacts(contactsPath);
+  const newContact = { id: crypto.randomUUID(), ...req.body };
+  contactsAll.unshift(newContact);
+  await reWriteCOntacts(contactsPath, contactsAll);
+  return res.status(201).json(newContact);
 };
 
 const updateContact = async (req, res, next) => {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.send({
+      message: `Error in required field: ${error.details[0].path[0]}`,
+    });
+  }
   const contactsAll = await readContacts(contactsPath);
   const delContactsAll = await readContacts(delContactsPath);
   const indexContact = contactsAll.findIndex(
