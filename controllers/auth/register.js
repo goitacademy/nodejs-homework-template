@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
-const { randomUUID } = require("crypto");
+const crypto = require("crypto");
 
 const {User} = require("../../models/user");
 
@@ -23,9 +23,9 @@ const register = async(req, res)=> {
         false
         );
     
-    const verificationToken = randomUUID();
+    const verificationToken = crypto.randomBytes(16).toString("hex");
 
-    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationToken });
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationToken, });
 
     const verifyEmail = {
         to: email,

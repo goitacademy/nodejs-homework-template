@@ -1,24 +1,30 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
+ const nodemailer = require("nodemailer");
+ require("dotenv").config();
 
 const {UKRNET_PASSWORD} = process.env;
 
-const config = {
-    host: "smtp.ukr.net",
-    port: "456",
-    secure: true,
-    auth: {
-        user: "usovajulia23@ukr.net",
-        password: UKRNET_PASSWORD,
-},
-};
+       const nodemailerConfig = {
+        host: "smtp.ukr.net",
+        port: 465,
+         secure: true,
+           auth: {
+           user: "usovajulia23@ukr.net",
+           pass: UKRNET_PASSWORD,
+     },
+    };
+     const transport = nodemailer.createTransport(nodemailerConfig);
 
-const transporter = nodemailer.createTransport(config);
+   
+     const sendEmail = async (data) => {
+          const email = {
+         to: "xiyono4691@docwl.com",
+         from: "usovajulia23@ukr.net",
+         subject: "Click here",
+         html: "<p>Click here</p>"
+     };
+ await transporter.sendEmail(email);
+  return true;
+ };
 
-const sendEmail = async (data) => {
-    const email = {...data, from: "usovajulia23@ukr.net"};
-    await transporter.sendEmail(email);
-    return true;
-};
+  module.exports = sendEmail;
 
-module.exports = sendEmail;
