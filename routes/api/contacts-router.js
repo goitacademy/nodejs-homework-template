@@ -1,10 +1,17 @@
 import express from "express";
 import contactsController from "../../controllers/contact-controller.js";
-import { isEmptyBody, isValidId } from "../../middlewars/index.js";
+import {
+  isEmptyBody,
+  isValidId,
+  authenticate,
+} from "../../middlewars/index.js";
 import { validateBody } from "../../decorators/index.js";
 import contactsSchema from "../../schemas/contacts-schemas.js";
 
 const contactsRouter = express.Router();
+
+// auth cheking token for contactsRouter
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll);
 
