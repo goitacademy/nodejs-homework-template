@@ -45,7 +45,7 @@ const removeContact = async (contactId) => {
     return result;
   }
 };
-const updateContact = async (contactId, { name, email, phone }) => {
+const updateContact = async (contactId, body) => {
   // Функція для оновлення контакту
   const contacts = await listContacts(); // Отримання списку контактів
   const idx = contacts.findIndex((el) => el.id === contactId); // Пошук індексу контакту за його ідентифікатором
@@ -53,7 +53,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
     // Якщо контакт не знайдено
     return null; // Повернення значення null
   }
-  contacts[idx] = { id: contactId, name, email, phone }; // Оновлення контакту з новими даними;
+  contacts[idx] = { id: contactId, ...body }; // Оновлення контакту з новими даними;
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2)); // Асинхронне записування оновленого списку контактів у файл contacts.json
   return contacts[idx]; // Повернення оновленого контакту
 };

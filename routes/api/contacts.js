@@ -15,7 +15,7 @@ const addSchema = Joi.object({
 router.get("/", ctrl.getAll); // Роут для отримання всіх контактів
 router.get("/:contactId", ctrl.getById); // Роут для отримання контакту за його ідентифікатором
 router.post("/", validateBody(addSchema), ctrl.addContact); // Роут для додавання контакту з використанням мідлвари валідації
-router.delete("/:contactId", validateBody(addSchema), ctrl.deleteContact); // Роут для видалення контакту з використанням мідлвари валідації
+router.delete("/:contactId", ctrl.deleteContact); // Роут для видалення контакту з використанням мідлвари валідації
 router.put("/:contactId", validateBody(addSchema), ctrl.updateContact); // Роут для оновлення контакту з використанням мідлвари валідації
 
 module.exports = router;
