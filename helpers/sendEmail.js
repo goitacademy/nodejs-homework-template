@@ -3,7 +3,7 @@
 
 const {UKRNET_PASSWORD} = process.env;
 
-       const nodemailerConfig = {
+       const config = {
         host: "smtp.ukr.net",
         port: 465,
          secure: true,
@@ -12,7 +12,7 @@ const {UKRNET_PASSWORD} = process.env;
            pass: UKRNET_PASSWORD,
      },
     };
-     const transport = nodemailer.createTransport(nodemailerConfig);
+     const transporter = nodemailer.createTransport(config);
 
    
      const sendEmail = async (data) => {
@@ -22,7 +22,7 @@ const {UKRNET_PASSWORD} = process.env;
          subject: "Click here",
          html: "<p>Click here</p>"
      };
- await transporter.sendEmail(email);
+ await transporter.sendMail(email);
   return true;
  };
 
