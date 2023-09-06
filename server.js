@@ -1,5 +1,32 @@
-const app = require('./app')
+//import { app } from './app.js';
+import mongoose from 'mongoose';
+import { config } from 'dotenv';
+import { makeApp } from './app.js';
+import { usersService } from './models/users.js';
+import { contactsService } from './models/contacts.js';
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+config();
+
+const uriDb = 'mongodb+srv://krozbicki:GOIT2023@cluster0.qe16opn.mongodb.net/db-contacts';
+const port = 3000;
+const server = 'http://localhost';
+
+export const serverAddress = `${server}:${port}`;
+
+export const startServer = async () => {
+  try {
+    const connection = await mongoose.connect(uriDb);
+    // console.log('Database connection successful');
+
+    const app = await makeApp(usersService, contactsService);
+    app.listen(port, () => {
+      // console.log(`Server running. Use our API on server: ${serverAddress}`);
+    });
+  } catch (error) {
+    console.error('Cannot connect to Mongo Database');
+    console.error(error);
+    process.exit(1);
+  }
+};
+
+startServer();
