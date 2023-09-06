@@ -10,7 +10,7 @@ const { conrollerWraper } = require("../helpers/controllerWraper");
 const { HttpError } = require("../helpers/HttpError");
 
 const getAllContacts = async (req, res) => {
-  const contacts = await getAllContactsService();
+  const contacts = await getAllContactsService(req.query);
   res.json(contacts);
 };
 

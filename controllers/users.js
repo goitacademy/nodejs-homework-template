@@ -3,6 +3,7 @@ const {
   registerUserService,
   loginUserService,
   logoutUserService,
+  subscriptionUserService,
 } = require("../secrive/usersServices");
 
 const registrationUser = async (req, res) => {
@@ -26,10 +27,18 @@ const logoutUser = async (req, res) => {
 };
 
 const currentUser = async (req, res) => {
-  //   await logoutUserService(req.user._id);
   const { email, subscription } = req.user;
 
   res.status(200).send({ email, subscription });
+};
+
+const subscriptionUser = async (req, res) => {
+  const updateUser = await subscriptionUserService(
+    req.user._id,
+    req.body.subscription
+  );
+
+  res.status(200).json({ status: "success", code: 200, data: updateUser });
 };
 
 module.exports = {
@@ -37,4 +46,5 @@ module.exports = {
   loginUser: conrollerWraper(loginUser),
   logoutUser: conrollerWraper(logoutUser),
   currentUser: conrollerWraper(currentUser),
+  subscriptionUser: conrollerWraper(subscriptionUser),
 };

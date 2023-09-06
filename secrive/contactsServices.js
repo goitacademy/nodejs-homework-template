@@ -1,7 +1,18 @@
 const contactSchemaDB = require("../models/contact");
 
-const getAllContactsService = async () => {
-  const contacts = await contactSchemaDB.find();
+const getAllContactsService = async ({
+  page = 0,
+  limit = 0,
+  favorite = false,
+}) => {
+  if (favorite) {
+    const contacts = await contactSchemaDB.find({ favorite: true });
+    return contacts;
+  }
+  const contacts = await contactSchemaDB
+    .find()
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
   return contacts;
 };
 

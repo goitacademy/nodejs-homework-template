@@ -41,12 +41,20 @@ const loginUserService = async (userData) => {
 };
 
 const logoutUserService = async (userId) => {
-  console.log(userId);
   await userSchemaDB.findByIdAndUpdate(userId, { token: null });
+};
+
+const subscriptionUserService = async (userId, subscription) => {
+  return await userSchemaDB.findByIdAndUpdate(
+    userId,
+    { subscription },
+    { new: true }
+  );
 };
 
 module.exports = {
   registerUserService,
   loginUserService,
   logoutUserService,
+  subscriptionUserService,
 };
