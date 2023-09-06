@@ -10,12 +10,13 @@ const getContactByIdService = async (contactId) => {
   return contacts;
 };
 
-const addContactService = async (body) => {
+const addContactService = async (userId, body) => {
   const newContact = {
     name: body.name,
     email: body.email,
     phone: body.phone,
     favorite: body.favorite,
+    owner: userId,
   };
 
   await contactSchemaDB.create(newContact);

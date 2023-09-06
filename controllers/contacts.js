@@ -29,7 +29,7 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newContact = await addContactService({ ...req.body });
+  const newContact = await addContactService(req.user._id, req.body);
   res.json({ status: "success", code: 201, data: { contact: newContact } });
 };
 

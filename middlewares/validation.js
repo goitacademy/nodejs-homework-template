@@ -10,7 +10,7 @@ const validateBody = (schema) => {
   };
 };
 
-const validateById = (schema) => {
+const validateParams = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.params);
     if (error) {
@@ -20,18 +20,7 @@ const validateById = (schema) => {
   };
 };
 
-const validateFavorite = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      throw new HttpError(400, error.message);
-    }
-    next();
-  };
-};
-
 module.exports = {
   validateBody,
-  validateById,
-  validateFavorite,
+  validateParams,
 };

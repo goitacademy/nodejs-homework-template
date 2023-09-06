@@ -9,31 +9,37 @@ const {
 } = require("../../controllers/contacts");
 const {
   validateBody,
-  validateById,
-  validateFavorite,
+  validateParams,
 } = require("../../middlewares/validation");
 const {
   addSchema,
   byIdSchema,
   changeFavotiteSchema,
 } = require("../../utils/validation/contactValidationSchemas");
+const { verefyToken } = require("../../middlewares/verefyToken");
 
 const router = express.Router();
 
 router.get("/", getAllContacts);
 
-router.get("/:contactId", validateById(byIdSchema), getContactById);
+router.get("/:contactId", validateParams(byIdSchema), getContactById);
 
-router.post("/", validateBody(addSchema), addContact);
+router.post("/", validateBody(addSchema), verefyToken, addContact);
 
-router.delete("/:contactId", validateById(byIdSchema), removeContact);
+router.delete(
+  "/:contactId",
+  validateParams(byIdSchema),
+  verefyToken,
+  removeContact
+);
 
-router.put("/:contactId", validateBody(addSchema), updateContact);
+router.put("/:contactId", validateBody(addSchema), verefyToken, updateContact);
 
 router.patch(
   "/:contactId/favorite",
-  validateById(byIdSchema),
-  validateFavorite(changeFavotiteSchema),
+  validateParams(byIdSchema),
+  validateBody(changeFavotiteSchema),
+  verefyToken,
   updateContactFavorite
 );
 
