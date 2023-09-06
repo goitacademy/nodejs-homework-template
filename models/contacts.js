@@ -12,7 +12,6 @@ const listContacts = async userId => {
 const getContactById = async (userId, contactId) => {
   try {
     const contact = await Contact.findOne({ owner: userId, _id: contactId });
-    if (!contact) return 404;
     return contact;
   } catch (err) {
     console.log(`Error getting contact with id ${contactId}: `, err);

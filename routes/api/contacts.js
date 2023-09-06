@@ -55,7 +55,7 @@ export const contactsRouterFunction = contactsService => {
 
     try {
       const contact = await getContactById(userId, contactId);
-      if (contact === 404) {
+      if (!contact) {
         return res.status(404).json({
           status: 'error',
           code: 404,
@@ -68,7 +68,7 @@ export const contactsRouterFunction = contactsService => {
         data: { contact },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while getting the contact: ${err}`);
+      res.status(500).json({ message: `An error occurred while getting the contact: ${err}` });
     }
   });
 
@@ -77,7 +77,9 @@ export const contactsRouterFunction = contactsService => {
     const { id: userId } = req.user;
 
     if (Object.keys(body).length === 0) {
-      return res.status(400).json('Error! Missing fields! Empty request is not allowed');
+      return res
+        .status(400)
+        .json({ message: 'Error! Missing fields! Empty request is not allowed' });
     }
 
     try {
@@ -89,7 +91,7 @@ export const contactsRouterFunction = contactsService => {
         data: { contact },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while adding the contact: ${err}`);
+      res.status(500).json({ message: `An error occurred while adding the contact: ${err}` });
     }
   });
 
@@ -111,7 +113,7 @@ export const contactsRouterFunction = contactsService => {
         message: `Contact with ID ${contactId} has been successfully removed.`,
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while removing the contact: ${err}`);
+      res.status(500).json({ message: `An error occurred while removing the contact: ${err}` });
     }
   });
 
@@ -121,7 +123,9 @@ export const contactsRouterFunction = contactsService => {
     const { body } = req;
 
     if (Object.keys(body).length === 0) {
-      return res.status(400).json('Error! Missing fields! Empty request is not allowed');
+      return res
+        .status(400)
+        .json({ message: 'Error! Missing fields! Empty request is not allowed' });
     }
 
     try {
@@ -139,7 +143,7 @@ export const contactsRouterFunction = contactsService => {
         data: { updatedContact },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while updating the contact: ${err}`);
+      res.status(500).json({ message: `An error occurred while updating the contact: ${err}` });
     }
   });
 
@@ -150,7 +154,7 @@ export const contactsRouterFunction = contactsService => {
     const { favorite } = body;
 
     if (!('favorite' in body) || Object.keys(body).length === 0) {
-      return res.status(400).json('Error! Missing field favorite!');
+      return res.status(400).json({ message: 'Error! Missing field favorite!' });
     }
 
     try {
@@ -168,7 +172,7 @@ export const contactsRouterFunction = contactsService => {
         data: { updatedStatus },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while updating the contact: ${err}`);
+      res.status(500).json({ message: `An error occurred while updating the contact: ${err}` });
     }
   });
 

@@ -39,7 +39,7 @@ export const usersRouterFunction = usersService => {
     try {
       const user = await getUser(userId);
       if (!user) {
-        return res.status(404).json(`Error! User not found!`);
+        return res.status(404).json({ message: `Error: User not found!` });
       }
       const { email, subscription } = user;
       return res.status(200).json({
@@ -48,7 +48,7 @@ export const usersRouterFunction = usersService => {
         data: { email, subscription },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while getting the user: ${err}`);
+      res.status(500).json({ message: `An error occurred while getting the user: ${err}` });
     }
   });
 
@@ -57,13 +57,13 @@ export const usersRouterFunction = usersService => {
     const { error } = schemaEmailPassword.validate(body);
 
     if (error) {
-      return res.status(400).json(`Error: ${error.details[0].message}`);
+      return res.status(400).json({ message: `Error: ${error.details[0].message}` });
     }
 
     try {
       const user = await addUser(body);
-      if (user === 409) {
-        return res.status(409).json({ message: 'Email in use' });
+      if (!user) {
+        return res.status(409).json({ message: 'Error: Email in use' });
       }
       const { email, subscription } = user;
       return res.status(201).json({
@@ -72,7 +72,7 @@ export const usersRouterFunction = usersService => {
         user: { email, subscription },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while adding the user: ${err}`);
+      res.status(500).json({ message: `An error occurred while adding the user: ${err}` });
     }
   });
 
@@ -81,14 +81,14 @@ export const usersRouterFunction = usersService => {
     const { error } = schemaEmailPassword.validate(body);
 
     if (error) {
-      return res.status(400).json(`Error: ${error.details[0].message}`);
+      return res.status(400).json({ message: `Error: ${error.details[0].message}` });
     }
 
     try {
       const user = await loginUser(body);
 
       if (!user) {
-        return res.status(400).json(`Error! Email or password is wrong!`);
+        return res.status(400).json({ message: `Error! Email or password is wrong!` });
       }
 
       const { email, subscription, token } = user;
@@ -100,7 +100,7 @@ export const usersRouterFunction = usersService => {
         user: { email, subscription },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while logging the user! ${err}`);
+      res.status(500).json({ message: `An error occurred while logging the user! ${err}` });
     }
   });
 
@@ -111,20 +111,12 @@ export const usersRouterFunction = usersService => {
       const user = await logOutUser(userId);
 
       if (!user) {
-        return res.status(401).json({
-          status: 'error',
-          code: 401,
-          message: 'Unauthorized',
-        });
+        return res.status(401).json({ message: 'Error: Unauthorized' });
       }
 
       res.status(204).json();
     } catch (error) {
-      res.status(500).json({
-        status: 'error',
-        code: 500,
-        message: 'An error occurred during logout.',
-      });
+      res.status(500).json({ message: 'An error occurred during logout.' });
     }
   });
 
@@ -135,13 +127,13 @@ export const usersRouterFunction = usersService => {
     const { error } = schemaSubscription.validate(body);
 
     if (error) {
-      return res.status(400).json(`Error: ${error.details[0].message}`);
+      return res.status(400).json({ message: `Error: ${error.details[0].message}` });
     }
 
     try {
       const updatedStatus = await patchUser(subscription, userId);
-      if (updatedStatus === 400) {
-        return res.status(400).json('Error! Invalid subscription type!');
+      if (!updatedStatus) {
+        return res.status(400).json({ message: 'Error! Invalid subscription type!' });
       }
       return res.status(200).json({
         status: 'success',
@@ -149,14 +141,14 @@ export const usersRouterFunction = usersService => {
         data: { updatedStatus },
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while updating the user: ${err}`);
+      res.status(500).json({ message: `An error occurred while updating the user: ${err}` });
     }
   });
 
   usersRouter.patch('/avatars', auth, uploadImage.single('avatar'), async (req, res) => {
     const file = req.file;
     if (!file) {
-      return res.status(400).json('Error! Missing file!');
+      return res.status(400).json({ message: 'Error! Missing file!' });
     }
     const { path } = file;
     const { id: userId } = req.user;
@@ -168,7 +160,7 @@ export const usersRouterFunction = usersService => {
         avatarURL: newAvatarPath,
       });
     } catch (err) {
-      res.status(500).json(`An error occurred while updating the avatar: ${err}`);
+      res.status(500).json({ message: `An error occurred while updating the avatar: ${err}` });
     }
   });
 
@@ -179,9 +171,9 @@ export const usersRouterFunction = usersService => {
 
       return res.status(200).json({ message: 'Verification successful' });
     } catch (err) {
-      res
-        .status(err.code || 500)
-        .json(err.message || `An udentified error occured while sending verification email`);
+      res.status(err.code || 500).json({
+        message: err.message || `An udentified error occured while verifying user:  ${err}`,
+      });
     }
   });
 
@@ -190,18 +182,20 @@ export const usersRouterFunction = usersService => {
     const { error } = schemaVerifyEmail.validate(body);
 
     if (error) {
-      return res.status(400).json(`Error: ${error.details[0].message}`);
+      return res.status(400).json({ message: `Error: ${error.details[0].message}` });
     }
 
     const { email } = body;
 
     try {
       await sendVerificationMail(email);
-      return res.status(200).json('Verification email sent');
+      return res.status(200).json({ message: 'Verification email sent' });
     } catch (err) {
-      res
-        .status(err.code || 500)
-        .json(err.message || `An udentified error occured while sending verification email`);
+      res.status(err.code || 500).json({
+        message:
+          err.message ||
+          `An udentified error occured while sending verification email user:  ${err}`,
+      });
     }
   });
 

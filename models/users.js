@@ -16,6 +16,20 @@ const secret = 'GOIT2023';
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+class UserNotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 404;
+  }
+}
+
+class VerificationAlreadyPassedError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 400;
+  }
+}
+
 const createVerificationMsg = (email, verificationToken) => {
   return {
     to: email,
@@ -37,8 +51,7 @@ const getAllUsers = async () => {
 
 const getUser = async id => {
   try {
-    const user = await User.findById(id);
-    return user;
+    return await User.findById(id);
   } catch (err) {
     console.log('Error getting user list: ', err);
     throw err;
@@ -49,17 +62,11 @@ const sendVerificationMail = async email => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      const error = new Error();
-      error.code = 400;
-      error.message = 'User not found';
-      throw error;
+      throw new UserNotFoundError('User not found');
     }
     const { verify, verificationToken } = user;
     if (verify) {
-      const error = new Error();
-      error.code = 400;
-      error.message = 'Verification has already been passed';
-      throw error;
+      throw new VerificationAlreadyPassedError('Verification has already been passed');
     }
 
     await sgMail.send(createVerificationMsg(email, verificationToken));
@@ -73,17 +80,11 @@ const verifyUserEmail = async verificationToken => {
   try {
     const user = await User.findOne({ verificationToken });
     if (!user) {
-      const error = new Error();
-      error.code = 400;
-      error.message = 'User not found';
-      throw error;
+      throw new UserNotFoundError('Error: User not found');
     }
-
-    if (user.verify) {
-      const error = new Error();
-      error.code = 400;
-      error.message = 'Verification has already been passed';
-      throw error;
+    const { verify } = user;
+    if (verify) {
+      throw new VerificationAlreadyPassedError('Error: Verification has already been passed');
     }
     user.verify = true;
     user.verificationToken = null;
@@ -110,7 +111,7 @@ const logOutUser = async id => {
 const addUser = async body => {
   const { email, password } = body;
   const userExist = await User.findOne({ email });
-  if (userExist) return 409;
+  if (userExist) return false;
   try {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -159,7 +160,7 @@ const loginUser = async body => {
 const patchUser = async (subscription, userId) => {
   const availableSubscriptions = User.schema.path('subscription').enumValues;
   if (!availableSubscriptions.includes(subscription)) {
-    return 400;
+    return false;
   }
   try {
     return await User.findByIdAndUpdate(
