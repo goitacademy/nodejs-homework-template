@@ -3,10 +3,12 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const { User, schemas } = require("../models/user");
 
 const { HttpError } = require("../helpers");
+const { error } = require("console");
 
 const { SECRET_KEY } = process.env;
 
@@ -62,7 +64,8 @@ const login = async (req, res, next) => {
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-      throw HttpError(401, "Email or password is wrong");
+      const errMessage = "Email or password is wrong";
+      HttpError(401, errMessage);
     }
 
     const payload = {
@@ -102,18 +105,35 @@ const logOut = async (req, res) => {
   res.status(204).json();
 };
 
-const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const fileName = `${_id}_${originalname}`;
+const updateAvatar = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      const errMessage = "File is required!";
+      throw HttpError(400, errMessage);
+    }
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
 
-  const resultUpload = path.join(avatarsDir, fileName);
-  await fs.rename(tempUpload, resultUpload);
+    const fileName = `${_id}_${originalname}`;
+    Jimp.read(originalname, (err, filename) => {
+      if (err) throw err;
+      filename
+        .resize(250, 250) // resize
+        .quality(60) // set JPEG quality
+        .greyscale() // set greyscale
+        .write(fileName);
+    });
 
-  const avatarURL = path.join("avatars", fileName);
-  await User.findByIdAndUpdate(_id, { avatarURL });
+    const resultUpload = path.join(avatarsDir, fileName);
+    await fs.rename(tempUpload, resultUpload);
 
-  res.json({ avatarURL });
+    const avatarURL = path.join("avatars", fileName);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({ avatarURL });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
