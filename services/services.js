@@ -6,8 +6,9 @@ const dataContacts = require("../models/contacts");
 const contactPath = pathContacts.join(__dirname, "..", "db", "contacts.json");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactPath, "utf8");
-  return JSON.parse(data);
+  const data = await dataContacts.find();
+  console.log(data, "data");
+  return data;
 };
 
 const getById = async (id) => {

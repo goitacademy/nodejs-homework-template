@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const schemaContacts = new mongoose.Schema = {
+const schemaContacts = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
@@ -15,6 +15,6 @@ const schemaContacts = new mongoose.Schema = {
     type: Boolean,
     default: false,
   },
-};
+});
 
-module.exports = mongoose.model('Contacts', schemaContacts)
+module.exports = mongoose.model("Contacts", schemaContacts);
