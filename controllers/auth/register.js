@@ -25,12 +25,12 @@ const register = async(req, res)=> {
     
     const verificationToken = crypto.randomBytes(16).toString("hex");
 
-    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationToken, });
+    const newUser = await User.create({...req.body, password: hashPassword, avatarURL, verificationToken });
 
     const verifyEmail = {
         to: email,
         subject: "Verify your email",
-        html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">
+        html: `<a target ="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">
         Click here to verify your email.
         </a>`,
     };

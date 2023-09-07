@@ -12,7 +12,7 @@ const verifyEmail = async (req, res) => {
 
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationToken: "null",
+    verificationToken: null,
   });
 
   res.status(200).json({ message: "Verification successful" });

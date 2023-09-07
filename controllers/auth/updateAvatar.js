@@ -6,7 +6,7 @@ const {User} = require("../../models/user");
 
 const { HttpError, ctrlWrapper } = require("../../helpers");
 
-const avatarsDir = path.join(__dirname, "..", "..", "public", "avatars");
+const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
 
 const updateAvatar = async(req, res)=> {
     const {_id} = req.user;
