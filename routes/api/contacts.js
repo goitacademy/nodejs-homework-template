@@ -12,13 +12,17 @@ router.get('/', controllers.listContacts);
 
 router.get('/:contactId', controllers.getContactById);
 
-router.post('/', validateBody(schemas.addSchema), controllers.addContact);
+router.post(
+  '/',
+  validateBody(schemas.addContactSchema),
+  controllers.addContact
+);
 
 router.delete('/:contactId', controllers.removeContact);
 
 router.put(
   '/:contactId',
-  validateBody(schemas.updateSchema),
+  validateBody(schemas.updateContactSchema),
   controllers.updateContact
 );
 
