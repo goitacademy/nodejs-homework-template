@@ -31,7 +31,6 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const response = await listContacts();
-  console.log(body);
   const newContact = {
     id: nanoid(),
     ...body,
@@ -41,7 +40,13 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const response = await listContacts();
+  const iDx = response.findIndex((contact) => contact.id === contactId);
+  response[iDx] = { contactId, ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(response, null, 2));
+  return response[iDx];
+};
 
 module.exports = {
   listContacts,

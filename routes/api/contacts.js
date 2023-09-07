@@ -26,7 +26,9 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const result = await contactFunction.updateContact(contactId, req.body);
+  res.json(result);
 });
 
 module.exports = router;
