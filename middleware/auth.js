@@ -14,11 +14,11 @@ async function authMiddleware(req, res, next) {
 
     const user = await User.findOne({ _id: decoded.userId, token });
 
-    if (!user) {
+    if (!user || !user.token) {
       return res.status(401).json({ message: "Not authorized" });
     }
 
-    req.user = user; 
+    req.user = user;
 
     next();
   } catch (error) {
