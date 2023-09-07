@@ -12,9 +12,6 @@ const connection = mongoose.connect(SRV_DB, {
 
 connection
   .then(() => {
-    app.listen(PORT, () =>
-      console.log(`Database connection successful on port ${PORT}`)
-    );
     app.listen(PORT, async () => {
       await initFolders();
       console.log(`Database connection successful on port ${PORT}`);

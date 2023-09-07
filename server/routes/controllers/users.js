@@ -196,6 +196,7 @@ const updateAvatar = async (req, res, next) => {
         "avatars",
         avatarName
       );
+    
       await service.updateUser({ email }, { avatarURL });
 
       res.json({
@@ -227,6 +228,7 @@ const usersController = {
   logout,
   getCurrent,
   setSubscription,
+  updateAvatar,
 };
 
 export default usersController;
