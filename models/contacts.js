@@ -8,8 +8,13 @@ const listContacts = async () => {
   return JSON.parse(response);
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const response = await listContacts();
+  const findContact = response.find((contact) => contact.id === contactId);
+  return findContact || null;
+};
 
+getContactById();
 const removeContact = async (contactId) => {};
 
 const addContact = async (body) => {};

@@ -9,7 +9,9 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const result = await contactFunction.getContactById(contactId);
+  res.json(result);
 });
 
 router.post("/", async (req, res, next) => {
