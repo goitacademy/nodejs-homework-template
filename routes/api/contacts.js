@@ -4,14 +4,14 @@ import contactValidate from "../../middleware/validation/movie-validation.js";
 
 const router = express.Router();
 
-router.get("/", contactControllers.getAll);
+// router.get("/", contactControllers.getAll);
 
-router.get("/:contactId", contactControllers.getById);
+// router.get("/:contactId", contactControllers.getById);
 
-router.post("/", contactValidate, contactControllers.add);
+// router.post("/", contactValidate, contactControllers.add);
 
-router.delete("/:contactId", contactControllers.deleteById);
+// router.delete("/:contactId", contactControllers.deleteById);
 
-router.put("/:contactId", contactValidate, contactControllers.updateById);
+// router.put("/:contactId", contactValidate, contactControllers.updateById);
 
 export default router;
