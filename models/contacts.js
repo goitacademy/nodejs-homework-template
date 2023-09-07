@@ -56,7 +56,9 @@ const updateContact = async (contactId, body) => {
   if (contactIndex === -1) {
     return null;
   }
-  data[contactIndex] = { id: contactId, ...body };
+  const contactOld = data[contactIndex];
+  const contactUpdate = { ...contactOld, ...body };
+  data[contactIndex] = contactUpdate;
   writeContacts(data);
   return data[contactIndex];
 };

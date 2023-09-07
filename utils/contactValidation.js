@@ -6,4 +6,13 @@ const addContactValid = joi.object({
   phone: joi.number().required(),
 });
 
+const contactChangeSchema = joi
+  .object({
+    name: joi.string(),
+    email: joi.string(),
+    phone: joi.string(),
+  })
+  .min(1);
+
 module.exports = addContactValid;
+module.exports = contactChangeSchema;

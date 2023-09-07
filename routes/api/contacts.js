@@ -5,7 +5,7 @@ const router = express.Router();
 const { HttpError } = require("../../helpers");
 
 const addContactValid = require("../../utils/contactValidation");
-
+const contactChangeSchema = require("../../utils/contactValidation");
 const contacts = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
@@ -59,7 +59,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = addContactValid.validate(req.body);
+    const { error } = contactChangeSchema.validate(req.body);
     if (error) {
       const err = new HttpError(400, error.message);
       throw err;
