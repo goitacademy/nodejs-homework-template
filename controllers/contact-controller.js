@@ -1,6 +1,6 @@
 import Contact from "../models/contact.js";
 import { ctrlWrapper } from "../decorators/index.js";
-import HttpError from "../helpers/HttpError.js";
+import { checkContactAndAccess } from "../utils/index.js";
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -8,9 +8,10 @@ const getAll = async (req, res) => {
   const skip = (page - 1) * limit;
 
   const filter = { owner };
+  const favorite = req.query.favorite;
 
-  if ("favorite" in req.query && req.query.favorite === "true") {
-    filter.favorite = true;
+  if (favorite) {
+    filter.favorite = favorite ? favorite === "true" : "false";
   }
 
   const result = await Contact.find(filter, "-createdAt -updatedAt", {
@@ -22,11 +23,12 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findById(id);
-  if (!result) {
-    throw HttpError(404, `Contact with id=${id} not found!`);
-  }
-  res.json(result);
+  const currentUserId = req.user._id;
+  const contact = await Contact.findById(id);
+
+  checkContactAndAccess(contact, currentUserId);
+
+  res.json(contact);
 };
 
 const add = async (req, res) => {
@@ -37,28 +39,35 @@ const add = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { id } = req.params;
+  const currentUserId = req.user._id;
+  const contact = await Contact.findById(id);
+
+  checkContactAndAccess(contact, currentUserId);
+
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
-    throw HttpError(404, `Contact with id=${id} not found!`);
-  }
   res.json(result);
 };
 
 const updateFavorite = async (req, res) => {
   const { id } = req.params;
+  const currentUserId = req.user._id;
+  const contact = await Contact.findById(id);
+
+  checkContactAndAccess(contact, currentUserId);
+
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
-    throw HttpError(404, `Contact with id=${id} not found!`);
-  }
   res.json(result);
 };
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id);
-  if (!result) {
-    throw HttpError(404, `Contact with id=${id} not found!`);
-  }
+  const currentUserId = req.user._id;
+  const contact = await Contact.findById(id);
+
+  checkContactAndAccess(contact, currentUserId);
+
+  await contact.deleteOne();
+
   res.json({
     message: "Delete success",
   });
