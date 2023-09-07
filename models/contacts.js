@@ -54,7 +54,7 @@ const removeContact = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
-    return res.send({
+    return res.status(400).send({
       message: `Error in required field: ${error.details[0].path[0]}`,
     });
   }
@@ -68,7 +68,7 @@ const addContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   const { error } = schema.validate(req.body);
   if (error) {
-    return res.send({
+    return res.status(400).send({
       message: `Error in required field: ${error.details[0].path[0]}`,
     });
   }
