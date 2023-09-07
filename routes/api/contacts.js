@@ -4,7 +4,7 @@ import contactValidate from "../../middleware/validation/movie-validation.js";
 
 const router = express.Router();
 
-// router.get("/", contactControllers.getAll);
+router.get("/", contactControllers.getAll);
 
 // router.get("/:contactId", contactControllers.getById);
 
