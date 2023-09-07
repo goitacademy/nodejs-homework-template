@@ -1,60 +1,61 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const { mongooseErrors } = require("../middleware");
+const { REGEXP } = require("../constants");
 
-const listContacts = async () => {
-	const contacts = await fs.readFile(contactsPath);
-	return JSON.parse(contacts);
-};
+const contactSchema = new Schema(
+	{
+		name: {
+			type: String,
+			minLength: 4,
+			maxLength: 255,
+			required: [true, "Set name for contact"],
+		},
+		email: {
+			type: String,
+			minlength: 4,
+			maxlength: 255,
+			match: REGEXP.email,
+			required: true,
+		},
+		phone: {
+			type: String,
+			match: REGEXP.phone,
+			required: true,
+		},
+		favorite: {
+			type: Boolean,
+			default: false,
+		},
+	},
+	{ versionKey: false, timestamps: true }
+);
 
-const getContactById = async (contactId) => {
-	const contacts = await listContacts();
-	const result = contacts.find((contact) => contact.id === contactId);
-	return result || null;
-};
+contactSchema.post("save", mongooseErrors);
 
-const removeContact = async (contactId) => {
-	const contacts = await listContacts();
-	const idx = contacts.findIndex((contact) => contact.id === contactId);
-	if (idx === -1) {
-		return null;
-	}
-	const [result] = contacts.splice(idx, 1);
-	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	return result;
-};
+const Contact = model("contact", contactSchema);
 
-const addContact = async (body) => {
-	const contacts = await listContacts();
-	const newContact = {
-		...body,
-		id: nanoid(),
-	};
-	contacts.push(newContact);
-	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	return newContact;
-};
+const updateContactStatusByIdSchema = Joi.object({
+	favorite: Joi.boolean().required(),
+});
+const addContactSchema = Joi.object({
+	name: Joi.string().min(4).max(255).required(),
+	email: Joi.string().min(4).max(255).pattern(REGEXP.email).required(),
+	phone: Joi.string()
+		.pattern(
+			REGEXP.phone,
+			"pattern: /\\d{3}-\\d{3}-\\d{4}/ example: 123-456-7890"
+		)
+		.required(),
+});
 
-const updateContact = async (contactId, body) => {
-	const contacts = await listContacts();
-	const idx = contacts.findIndex((contact) => contact.id === contactId);
-	if (idx === -1) {
-		return null;
-	}
-	contacts[idx] = {
-		...body,
-		id: contactId,
-	};
-	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	return contacts[idx];
+const schemas = {
+	addContactSchema,
+	updateContactStatusByIdSchema,
 };
 
 module.exports = {
-	listContacts,
-	getContactById,
-	removeContact,
-	addContact,
-	updateContact,
+	Contact,
+	schemas,
 };
