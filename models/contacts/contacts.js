@@ -4,7 +4,7 @@ import path from 'path';
 
 const contactsPath = path.resolve('models', 'contacts', 'contacts.json');
 
-const writeContactsData = async (data) => {
+export const writeContactsData = async (data) => {
   await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
 };
 
