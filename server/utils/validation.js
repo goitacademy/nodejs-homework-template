@@ -72,6 +72,11 @@ export const userSubSchema = Joi.object().keys({
     }),
 });
 
+export const userAvatarSchema = Joi.string().trim().messages({
+  "string.base": "Avatar name must be a string",
+  "any.required": "Missing avatar name",
+});
+
 export const contactSchema = Joi.object().keys({
   name: Joi.string()
     .pattern(/^[A-Za-z\s]+$/)

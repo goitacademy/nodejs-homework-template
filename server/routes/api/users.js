@@ -1,5 +1,6 @@
 import express from "express";
-import auth from "./authorization.js";
+import auth from "../middlewares/authorization.js";
+import upload from "../middlewares/upload.js";
 import usersController from "../controllers/users.js";
 
 const router = express.Router();
@@ -13,5 +14,7 @@ router.post("/logout", auth, usersController.logout);
 router.get("/current", auth, usersController.getCurrent);
 
 router.patch("/subscription", auth, usersController.setSubscription);
+
+router.patch("/avatars", auth, upload.single("avatar"), usersController.updateAvatar);
 
 export default router;

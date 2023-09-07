@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import app from "./app.js";
+import { initFolders } from "./utils/manageUploadFolders.js";
 
 const PORT = 3000;
 const SRV_DB = process.env.DB_HOST;
@@ -14,8 +15,14 @@ connection
     app.listen(PORT, () =>
       console.log(`Database connection successful on port ${PORT}`)
     );
+    app.listen(PORT, async () => {
+      await initFolders();
+      console.log(`Database connection successful on port ${PORT}`);
+    });
   })
   .catch(err => {
     console.log(`Server not running. Error message: ${err.message}`);
     process.exit(1);
   });
+
+export default PORT;
