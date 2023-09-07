@@ -5,6 +5,7 @@ import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
   const contacts = await Contact.find();
+  console.log(contacts);
   res.json(contacts);
 };
 
