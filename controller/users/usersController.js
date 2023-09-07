@@ -3,6 +3,10 @@ const { usersService } = require('../../service');
 const { schemaUser, schemaSubscription } = require('../../middlewares/joiValidation');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const gravatar = require('gravatar');
+const Jimp = require('jimp');
+const path = require('path');
+const fs = require('fs').promises;
 
 const userSignup = async (req, res, next) => {
   try {
@@ -21,8 +25,10 @@ const userSignup = async (req, res, next) => {
         data: 'Conflict',
       });
     }
+
+    const avatarURL = gravatar.url(email, {s: '200', r: 'pg', d: 'robohash'});
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(6));
-    const result = await usersService.userSignup(email, hashedPassword);
+    const result = await usersService.userSignup(email, hashedPassword, avatarURL);
     return res.status(201).json({
       status: 'success',
       code: 201,
@@ -59,7 +65,7 @@ const userLogin = async (req, res, next) => {
       username: user.username,
     };
     const secret = process.env.SECRET;
-    const token = await jwt.sign(payload, secret, { expiresIn: '1h' });
+    const token = await jwt.sign(payload, secret, { expiresIn: '2h' });
     const result = await usersService.userLogin(user, token);
     return res.json({
       status: 'success',
@@ -105,14 +111,14 @@ const userCurrent = async (req, res) => {
   };
 };
 
-const userUpdate = async (req, res, next) => {
+const userUpdateSubscription = async (req, res, next) => {
   try {
     const { error } = schemaSubscription.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.message });
     };
     const { subscription } = req.body;
-    const result = await usersService.userUpdate(req.user.id, subscription);
+    const result = await usersService.userUpdateSubscription(req.user.id, subscription);
     return res.json({
       status: 'success',
       code: 200,
@@ -129,10 +135,44 @@ const userUpdate = async (req, res, next) => {
   };
 };
 
+const userUpdateAvatar = async (req, res, next) => {
+  const { path: tempPath, filename } = req.file;
+  const avatarsDirectory = path.join(process.cwd(), 'public/avatars/' + filename);
+  const avatar = await Jimp.read(tempPath);
+  await avatar.resize(250, 250).writeAsync(tempPath);
+
+  try {
+    await fs.rename(tempPath, avatarsDirectory)
+  } catch (err) {
+    await fs.unlink(tempPath);
+    console.log(err);
+  };
+
+  if (req.file) {
+    const result = await usersService.userUpdateAvatar(req.user.id, avatarsDirectory);
+    return res.json({
+      status: 'success',
+      code: 200,
+      data: {
+        user: {
+          avatarURL: result.avatarURL,
+        }
+      }
+    });
+  } else {
+    return res.status(401).json({
+      status: 'Unauthorized',
+      code: 401,
+      message: 'Not authorized',
+    });
+  }
+};
+
 module.exports = {
   userSignup,
   userLogin,
   userLogout,
   userCurrent,
-  userUpdate,
+  userUpdateSubscription,
+  userUpdateAvatar
 };

@@ -5,5 +5,4 @@ const uploadController =
 module.exports = {
     contactsController,
     usersController,
-    uploadController,
 }
