@@ -4,23 +4,51 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const User = require("../services/schemas/user");
 const Joi = require("joi");
-const { getUserById } = require("../services");
 require("dotenv").config();
 const secret = process.env.SECRET;
 
-const auth = (req, res, next) => {
-	passport.authenticate("jwt", { session: false }, (err, user) => {
-		if (!user || err) {
-			return res.status(401).json({
-				status: "error",
-				code: 401,
-				message: "Not authorized",
-				data: "Unauthorized",
-			});
-		}
-		req.user = user;
-		next();
-	})(req, res, next);
+const auth = async (req, res, next) => {
+	try {
+		await passport.authenticate(
+			"jwt",
+			{ session: false },
+			async (err, user) => {
+				if (!user || err) {
+					return res.status(401).json({
+						status: "error",
+						code: 401,
+						message: "Unauthorized",
+						data: "Unauthorized",
+					});
+				}
+
+				const authHeader = req.headers.authorization;
+				const token = authHeader && authHeader.split(" ")[1];
+
+				const allUsers = await User.find();
+				const tokenExists = allUsers.some(
+					(user) => user.token === token
+				);
+				if (!tokenExists) {
+					return res.status(401).json({
+						status: "error",
+						code: 401,
+						message: "Token is not authorized",
+						data: "Token not authorized",
+					});
+				}
+
+				req.user = user;
+				next();
+			}
+		)(req, res, next);
+	} catch (error) {
+		res.status(500).json({
+			status: "error",
+			code: 500,
+			message: "An error occurred during authentication.",
+		});
+	}
 };
 
 const schema = Joi.object({
@@ -76,11 +104,13 @@ router.post("/login", async (req, res, next) => {
 	}
 
 	const payload = {
+		id: user.id,
 		email: user.email,
-		password: user.password,
 	};
 
 	const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+	user.token = token;
+	await user.save();
 	res.status(200).json({
 		data: {
 			token,
@@ -92,21 +122,49 @@ router.post("/login", async (req, res, next) => {
 	});
 });
 
-// router.get("/logout");
+router.post("/logout", auth, async (req, res, next) => {
+	try {
+		const id = req.user.id;
 
-// router.get("/current", auth, async (req, res, next) => {
-// 	const { id: userId } = req.user;
-// 	const user = await getUserById(userId);
-// 	if (!user) {
-// 		return res.status(401).json({ message: "Not authorized" });
-// 	}
-// 	res.json({
-// 		status: "success",
-// 		code: 200,
-// 		data: {
-// 			message: `Authorization was successful: ${id}`,
-// 		},
-// 	});
-// });
+		const user = await User.findById({ _id: id });
+
+		if (!user) {
+			return res.status(401).json({
+				status: "error",
+				code: 401,
+				message: "Unauthorized",
+			});
+		}
+
+		user.token = null;
+		await user.save();
+
+		res.status(204).json();
+	} catch (error) {
+		res.status(500).json({
+			status: "error",
+			code: 500,
+			message: "An error occurred during logout.",
+		});
+	}
+});
+
+router.get("/current", auth, async (req, res, next) => {
+	const { _id: userId } = req.user;
+	try {
+		const user = await User.findById(userId);
+		if (!user) {
+			return res.status(401).json({ message: "Not authorized" });
+		}
+		const { email, subscription } = user;
+		return res.status(200).json({
+			data: { email, subscription },
+		});
+	} catch (err) {
+		res.status(500).json(
+			`An error occurred while getting the contact: ${err}`
+		);
+	}
+});
 
 module.exports = router;
