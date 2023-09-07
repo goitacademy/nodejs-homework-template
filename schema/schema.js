@@ -20,6 +20,9 @@ const addSchema = Joi.object({
   .messages({
     'any.required': 'missing required email field',
   }),
+
+  favorite: Joi.boolean(),
 })
 
-export default addSchema
+
+export default {addSchema}

@@ -1,9 +1,9 @@
 import contacts from "../models/contacts.js";
-import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import Contact from "../models/contact.js";
 
 export const getAll = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.status(200).json(result);
 };
 
@@ -17,8 +17,9 @@ export const getById = async (req, res, next) => {
 };
 
 export const add = async (req, res) => {
-  const result = await contacts.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
+  console.log(result)
 };
 
 export const put = async (req, res) => {
@@ -40,6 +41,7 @@ export const remove = async (req, res) => {
     message: "contact deleted",
   });
 };
+
 
 export default {
   getAll: ctrlWrapper(getAll),

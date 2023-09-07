@@ -1,16 +1,14 @@
 import express from "express";
-import validateBody from "../../decorators/validateBody.js";
+
 import contactSchema from "../../schema/schema.js"
 import ctrlContacts from "../../controllers/ctrlContacts.js";
+import { validateBody } from "../../decorators/validateBody.js";
 
 const contactRouter = express.Router();
 
+const contactAddValidate = validateBody(contactSchema.addSchema);
 
-
-
-const contactAddValidate = validateBody(contactSchema.addContactSchema);
-
-contactRouter.get("/", ctrlContacts.getAll)
+contactRouter.get("/", ctrlContacts.getAll) 
 
 contactRouter.get(":contactId",ctrlContacts.getById);
 
@@ -21,3 +19,4 @@ contactRouter.put("/:contactId",contactAddValidate, ctrlContacts.put );
 contactRouter.delete("/:contactId", ctrlContacts.remove);
 
 export default contactRouter
+  
