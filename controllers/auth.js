@@ -115,17 +115,19 @@ const updateAvatar = async (req, res, next) => {
     const { path: tempUpload, originalname } = req.file;
 
     const fileName = `${_id}_${originalname}`;
-    Jimp.read(originalname, (err, filename) => {
-      if (err) throw err;
-      filename
-        .resize(250, 250) // resize
-        .quality(60) // set JPEG quality
-        .greyscale() // set greyscale
-        .write(fileName);
-    });
 
     const resultUpload = path.join(avatarsDir, fileName);
     await fs.rename(tempUpload, resultUpload);
+    Jimp.read(resultUpload)
+      .then((avatar) => {
+        return avatar
+          .resize(250, 250) // resize
+          .quality(60) // set JPEG quality
+          .write(resultUpload); // save
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     const avatarURL = path.join("avatars", fileName);
     await User.findByIdAndUpdate(_id, { avatarURL });
