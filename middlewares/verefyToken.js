@@ -13,7 +13,6 @@ const verefyToken = async (req, res, next) => {
   const userData = jwt.decode(token);
   const isUser = await userSchemaDB.findById(userData?.id);
   const isTokenVerify = isUser?.token === token;
-  console.log(!isUser && !isTokenVerify);
 
   if (!isUser || !isTokenVerify) {
     next({ status: 401, message: "Not authorized" });

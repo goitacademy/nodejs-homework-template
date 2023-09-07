@@ -9,7 +9,7 @@ const {
 const registrationUser = async (req, res) => {
   const subscription = await registerUserService(req.body);
 
-  res.status(201).send({ user: { email: req.body.email, subscription } });
+  res.status(201).json({ user: { email: req.body.email, subscription } });
 };
 
 const loginUser = async (req, res) => {
@@ -17,7 +17,7 @@ const loginUser = async (req, res) => {
 
   res
     .status(200)
-    .send({ user: { token, email: req.body.email, subscription } });
+    .json({ user: { token, email: req.body.email, subscription } });
 };
 
 const logoutUser = async (req, res) => {
@@ -29,7 +29,7 @@ const logoutUser = async (req, res) => {
 const currentUser = async (req, res) => {
   const { email, subscription } = req.user;
 
-  res.status(200).send({ email, subscription });
+  res.status(200).json({ email, subscription });
 };
 
 const subscriptionUser = async (req, res) => {
