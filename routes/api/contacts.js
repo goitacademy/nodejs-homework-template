@@ -5,8 +5,9 @@ const { HttpError } = require("../../helpers");
 const router = express.Router();
 
 const addSchema = Joi.object({
-  title: Joi.string().required(),
-  author: Joi.string().required(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
 });
 
 router.get("/", async (_, res, next) => {
