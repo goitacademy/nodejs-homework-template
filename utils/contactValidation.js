@@ -14,5 +14,4 @@ const contactChangeSchema = joi
   })
   .min(1);
 
-module.exports = addContactValid;
-module.exports = contactChangeSchema;
+module.exports = { addContactValid, contactChangeSchema };

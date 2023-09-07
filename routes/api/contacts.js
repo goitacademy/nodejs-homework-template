@@ -4,8 +4,10 @@ const router = express.Router();
 
 const { HttpError } = require("../../helpers");
 
-const addContactValid = require("../../utils/contactValidation");
-const contactChangeSchema = require("../../utils/contactValidation");
+const {
+  addContactValid,
+  contactChangeSchema,
+} = require("../../utils/contactValidation");
 const contacts = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
