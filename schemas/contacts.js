@@ -8,6 +8,7 @@ const addContactSchema = Joi.object({
   'any.required': `{#key} is a required field`,
   'string.email': 'email field must be a valid email',
   'string.base': `{#key} field must be a string`,
+  'object.unknown': `{#key} field is not allowed`,
 });
 
 const updateContactSchema = Joi.object({
@@ -19,6 +20,7 @@ const updateContactSchema = Joi.object({
   .messages({
     'object.min': 'missing fields',
     'string.base': `{#key} field must be a string`,
+    'object.unknown': `{#key} field is not allowed`,
   });
 
 module.exports = {
