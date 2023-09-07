@@ -19,7 +19,9 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const result = await contactFunction.removeContact(contactId);
+  res.json(result);
 });
 
 router.put("/:contactId", async (req, res, next) => {
