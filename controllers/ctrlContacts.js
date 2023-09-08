@@ -1,4 +1,5 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import HttpError from "../helpers/HttpError.js";
 import Contact from "../models/contact.js";
 
 export const listContacts = async (req, res) => {
@@ -6,7 +7,7 @@ export const listContacts = async (req, res) => {
   res.status(200).json(result);
 };
 
-export const getById = async (req, res, next) => {
+export const getById = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findById(contactId);
   if (!result) {
@@ -18,7 +19,7 @@ export const getById = async (req, res, next) => {
 export const addContact = async (req, res) => {
   const result = await Contact.create(req.body);
   res.status(201).json(result);
-  console.log(result)
+  
 };
 
 export const updateContact = async (req, res) => {
