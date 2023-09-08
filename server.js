@@ -7,7 +7,7 @@ mongoose.set('strictQuery', false)
 mongoose.connect(DB_HOST, { useNewUrlParser: true })
   .then(() => {
     app.listen(3000)
-    console.log("Database connected")
+    console.log("Database connection successful")
   })
   .catch(error => {
     console.log(error.message)
