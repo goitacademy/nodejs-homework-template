@@ -4,6 +4,8 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
 
+const ErrorHandler = require("./middlewares/ErrorHandler");
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -18,9 +20,6 @@ app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, req, res, next) => {
-  const { status = 500, message = "Server error" } = err;
-  res.status(status).json({ message });
-});
+app.use(ErrorHandler);
 
 module.exports = app;

@@ -42,13 +42,13 @@ const removeContact = async (contactId) => {
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => {
-    console.log(contactId, contact.id);
     return contact.id === contactId;
   });
   if (index === -1) {
     return null;
   } else {
     const updatedContact = { ...contacts[index], ...body };
+  contacts[index] = updatedContact;
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return updatedContact;
   }
