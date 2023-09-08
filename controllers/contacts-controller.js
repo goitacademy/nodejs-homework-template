@@ -30,7 +30,7 @@ const removeContactById = async (req, res) => {
   if (!result) {
     throw HttpError(404, `Contact with id: ${contactId} not found`);
   } else {
-    res.json(result);
+    res.status(200).json({ message: "Contact deleted successfully" });
   }
 };
 // ? // Контроллер запиту оновлення існуючого контакту ;
