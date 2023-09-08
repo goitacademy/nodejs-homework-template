@@ -5,10 +5,13 @@ const {
 	registerUser,
 	logInUser,
 	logOutUser,
-	getCurrentUser
+	getCurrentUser,
+	changeAvatar,
 } = require('../../controllers/usersController.js')
 const auth = require("../../middleware/auth.js")
+const avatar = require("../../middleware/avatar.js")
 
+router.get('/current', auth, jsonParcer, getCurrentUser)
 
 router.post('/register', jsonParcer, registerUser)
 
@@ -16,7 +19,7 @@ router.post('/login', jsonParcer, logInUser)
 
 router.post('/logout', auth, jsonParcer, logOutUser)
 
-router.get('/current', auth, jsonParcer, getCurrentUser)
+router.patch('/:id/avatar', auth, avatar.single('avatar'), changeAvatar)
 
 
 module.exports = router

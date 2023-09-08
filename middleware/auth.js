@@ -27,7 +27,7 @@ function auth(req, res, next) {
 				return res.status(401).send({ message: "You are not authorized!" })
 			}
 
-			req.user = { id: user.id, name: user.name }
+			req.user = { id: user.id, email: user.email }
 
 			next()
 		} catch (error) {

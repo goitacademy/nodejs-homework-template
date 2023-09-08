@@ -9,7 +9,7 @@ const {
 	removeContact,
 	addContact,
 	updateContact,
-	updateContactField
+	updateFavoriteField
 } = require(contactsPath)
 
 router.get('/', getContacts)
@@ -20,9 +20,9 @@ router.post('/', jsonParcer, addContact)
 
 router.delete('/:id', removeContact)
 
-router.put("/:contactId", jsonParcer, updateContact)
+router.put("/:id", jsonParcer, updateContact)
 
-router.patch('/:id/favorite', jsonParcer, updateContactField)
+router.patch('/:id/favorite', jsonParcer, updateFavoriteField)
 
 
 module.exports = router

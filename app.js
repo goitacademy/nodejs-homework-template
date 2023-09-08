@@ -1,5 +1,6 @@
 const express = require('express')
 const logger = require('morgan')
+const path = require('node:path')
 const cors = require('cors')
 require('dotenv').config();
 const appRouter = require('./routes/api/index')
@@ -12,6 +13,7 @@ require('./db')
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
+app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")))
 app.use('/api', appRouter)
 
 app.use((_, res, __) => {

@@ -8,20 +8,17 @@ const contactSchema = new mongoose.Schema({
 	email: {
 		type: String,
 		required: true,
-		unique: true
 	},
 	phone: {
 		type: String,
 		required: true,
-		unique: true
 	},
 	favorite: {
 		type: Boolean,
 		default: false,
 	},
-	owner: {
+	ownerId: {
 		type: mongoose.Schema.Types.ObjectId,
-		// required: true,
 		ref: 'user',
 	}
 }, { versionKey: false, timestamps: true })

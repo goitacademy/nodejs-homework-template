@@ -2,12 +2,12 @@ const contactModel = require("../models/contactsModel")
 const contactSchema = require("../validation/contactValidationSchema")
 
 async function getContacts(req, res, next) {
-	try {
-		const userId = req.user.id
-		if (userId === undefined) {
-			return res.status(401).send("Login or register to get contacts!")
-		}
+	const userId = req.user.id
+	if (userId === undefined) {
+		return res.status(401).send("Login or register to get contacts!")
+	}
 
+	try {
 		const contacts = await contactModel.find({ ownerId: userId }).exec()
 		return res.send(contacts)
 	} catch (error) {
@@ -16,19 +16,19 @@ async function getContacts(req, res, next) {
 }
 
 async function getContactById(req, res, next) {
+	const contact = await contactModel.findById(req.params.id).exec()
+
+	if (!contact) {
+		return res.status(404).send({ message: "Contact is not found!" });
+	}
+
+	if (contact.ownerId.toString() !== req.user.id) {
+		return res.status(403).send({ message: "You don't have permission to get this contact!" });
+		// OR
+		// return res.status(404).send({ message: "Contact is not found!" })
+	}
+
 	try {
-		const contact = await contactModel.findById(req.params.id).exec()
-
-		if (contact === null) {
-			return res.status(404).send({ message: "Contact is not found!" });
-		}
-
-		if (contact.ownerId !== req.user.id) {
-			return res.status(403).send({ message: "You don't have permission to get this book!" });
-			// OR
-			// return res.status(404).send({ message: "Book is not found!" })
-		}
-
 		return res.status(200).send(contact)
 	} catch (error) {
 		next(error)
@@ -36,7 +36,8 @@ async function getContactById(req, res, next) {
 }
 
 async function addContact(req, res, next) {
-	const { name, email, phone } = req.body
+	const ownerId = req.user.id;
+	const { name, email, phone, favorite } = req.body
 
 	const { error } = contactSchema.validate(req.body);
 	if (error) {
@@ -44,8 +45,13 @@ async function addContact(req, res, next) {
 		return res.status(400).send({ message: "Missing required field(s)!" });
 	}
 
+	const existingPhoneContact = await contactModel.findOne({ phone, ownerId });
+	if (existingPhoneContact) {
+		return res.status(400).send({ message: "Contact with this phone number already exists!" });
+	}
+
 	try {
-		const newContact = { name, email, phone }
+		const newContact = { name, email, phone, favorite, ownerId }
 
 		const contact = await contactModel.create(newContact)
 
@@ -57,24 +63,27 @@ async function addContact(req, res, next) {
 
 async function updateContact(req, res, next) {
 	const { name, email, phone } = req.body
-	const response = await contactSchema.validate(req.body);
-	if (typeof response.error !== "undefined") {
-		return res.status(400).json({ message: "Missing required field(s)!" });
+	const { error } = contactSchema.validate(req.body);
+	if (error) {
+		console.error(error);
+		return res.status(400).send({ message: "Missing required field(s)!" });
+	}
+
+	const contact = await contactModel.findById(req.params.id).exec()
+
+	if (!contact) {
+		return res.status(404).send({ message: "Contact is not found!" });
+	}
+
+	if (contact.ownerId.toString() !== req.user.id) {
+		return res.status(403).send({ message: "You don't have permission to update this contact!" });
+		// OR
+		// return res.status(404).send({ message: "Contact is not found!" })
 	}
 
 	try {
 		const newContact = { name, email, phone }
-
 		const result = await contactModel.findByIdAndUpdate(req.params.id, newContact, { new: true }).exec()
-		if (result === null) {
-			return res.status(404).send({ message: "Contact is not found!" });
-		}
-
-		if (result.ownerId !== req.user.id) {
-			return res.status(403).send({ message: "You don't have permission to update this book!" });
-			// OR
-			// return res.status(404).send({ message: "Book is not found!" })
-		}
 
 		return res.send(result)
 	} catch (error) {
@@ -82,22 +91,24 @@ async function updateContact(req, res, next) {
 	}
 }
 
-async function updateContactField(req, res, next) {
-	try {
-		if (!Object.keys(req.body).includes('favorite')) {
-			return res.status(400).send({ message: "Missing field - favorite!" });
-		}
-		const result = await contactModel.findByIdAndUpdate(
-			req.params.id,
-			{ $set: { favorite: req.body.favorite } },
-			{ new: true }
-		).exec()
+async function updateFavoriteField(req, res, next) {
+	if (!Object.keys(req.body).includes('favorite')) {
+		return res.status(400).send({ message: "Missing field - favorite!" });
+	}
+	const contact = await contactModel.findById(req.params.id).exec()
 
-		if (result.ownerId !== req.user.id) {
-			return res.status(403).send({ message: "You don't have permission to update this book!" });
-			// OR
-			// return res.status(404).send({ message: "Book is not found!" })
-		}
+	if (!contact) {
+		return res.status(404).send({ message: "Contact is not found!" });
+	}
+
+	if (contact.ownerId.toString() !== req.user.id) {
+		return res.status(403).send({ message: "You don't have permission to update this contact!" });
+		// OR
+		// return res.status(404).send({ message: "Contact is not found!" })
+	}
+
+	try {
+		const result = await contactModel.findByIdAndUpdate(req.params.id, { $set: { favorite: req.body.favorite } }, { new: true }).exec()
 
 		return res.send(result)
 	} catch (error) {
@@ -106,19 +117,20 @@ async function updateContactField(req, res, next) {
 }
 
 async function removeContact(req, res, next) {
+	const contact = await contactModel.findById(req.params.id).exec()
+
+	if (contact === null) {
+		return res.status(404).send({ message: "Contact is not found!" });
+	}
+
+	if (contact.ownerId.toString() !== req.user.id) {
+		return res.status(403).send({ message: "You don't have permission to delete this contact!" });
+		// OR
+		// return res.status(404).send({ message: "Contact is not found!" })
+	}
+
 	try {
 		const result = await contactModel.findByIdAndRemove(req.params.id).exec()
-
-		if (result === null) {
-			return res.status(404).send({ message: "Contact is not found!" });
-		}
-
-		if (result.ownerId !== req.user.id) {
-			return res.status(403).send({ message: "You don't have permission to delete this book!" });
-			// OR
-			// return res.status(404).send({ message: "Book is not found!" })
-		}
-
 		return res.send(result)
 	} catch (error) {
 		next(error)
@@ -132,5 +144,5 @@ module.exports = {
 	removeContact,
 	addContact,
 	updateContact,
-	updateContactField
+	updateFavoriteField
 }

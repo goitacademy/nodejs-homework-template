@@ -1,25 +1,31 @@
+const fs = require("node:fs/promises")
+const path = require("node:path")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+var gravatar = require('gravatar');
+const Jimp = require('jimp')
 const userModel = require("../models/usersModel")
 const userSchema = require("../validation/userValidationSchema")
 
 async function registerUser(req, res, next) {
 	const { email, password, subscription } = req.body
+
+	const { error } = await userSchema.validate(req.body)
+	if (error) {
+		console.error(error);
+		return res.status(400).send({ message: "Validation error, check the required fields or body you sent!" });
+	}
+
+	const user = await userModel.findOne({ email }).exec()
+	if (user !== null) {
+		return res.status(409).send({ message: 'This email is already is use!' })
+	}
+
 	try {
-		const { error } = await userSchema.validate(req.body)
-		if (error) {
-			console.error(error);
-			return res.status(400).send({ message: "Validation error, check the required fields or body you sent!" });
-		}
-
-		const user = await userModel.findOne({ email }).exec()
-		if (user !== null) {
-			return res.status(409).send({ message: 'This email is already is use!' })
-		}
-
 		const passwordHash = await bcrypt.hash(password, 10);
 		const checkedSubscription = subscription || "starter";
-		await userModel.create({ email, password: passwordHash, subscription: checkedSubscription })
+		const avatar = gravatar.url(email, { s: '500' }, true)
+		await userModel.create({ email, password: passwordHash, subscription: checkedSubscription, avatar })
 
 		res.status(201).send({
 			user: {
@@ -34,28 +40,30 @@ async function registerUser(req, res, next) {
 
 async function logInUser(req, res, next) {
 	const { email, password } = req.body
+
+	const { error } = await userSchema.validate(req.body)
+	if (error) {
+		console.error(error);
+		return res.status(400).send({ message: "Validation error, check the required fields or body you sent!" });
+	}
+
+	const user = await userModel.findOne({ email }).exec()
+	if (user === null) {
+		return res.status(400).send({ message: 'Email or password is incorrect!' })
+	}
+
+	const isPasswordMatching = await bcrypt.compare(password, user.password);
+	if (!isPasswordMatching) {
+		return res.status(401).send({ message: 'Email or password is incorrect!' })
+	}
+
 	try {
-		const response = await userSchema.validate(req.body)
-		if (typeof response.error !== "undefined") {
-			console.log(response.error);
-			return res.status(401).send({ message: "Missing required field(s)!" });
-		}
-
-		const user = await userModel.findOne({ email }).exec()
-		if (user === null) {
-			return res.status(400).send({ message: 'Email or password is incorrect!' })
-		}
-
-		const isPasswordMatching = await bcrypt.compare(password, user.password);
-		if (!isPasswordMatching) {
-			return res.status(401).send({ message: 'Email or password is incorrect!' })
-		}
-
-		const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECREET, { expiresIn: 300 })
+		const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECREET, { expiresIn: '1d' })
+		// 600
 
 		await userModel.findByIdAndUpdate(user._id, { token })
 
-		return res.status(200).send({ message: 'Logged in successfully! Your token will expire in 5 minutes.', token })
+		return res.status(200).send({ message: 'Logged in successfully! Your Token will expire in 10 minutes.', token })
 	} catch (error) {
 		next(error)
 	}
@@ -72,15 +80,38 @@ async function logOutUser(req, res, next) {
 
 async function getCurrentUser(req, res, next) {
 	const authHeader = req.headers.authorization
-	try {
-		const [bearer, token] = authHeader.split(" ", 2)
-		if (bearer !== "Bearer") {
-			return res.status(401).send({ message: 'No token provided!' })
-		}
 
+	const [bearer, token] = authHeader.split(" ", 2)
+	if (bearer !== "Bearer") {
+		return res.status(401).send({ message: 'No token provided!' })
+	}
+
+	try {
 		const { email, subscription } = await userModel.findOne({ token }).exec()
-		console.log({ user: { email, subscription } });
+
 		res.status(200).send({ user: { email, subscription } })
+	} catch (error) {
+		next(error)
+	}
+}
+
+async function changeAvatar(req, res, next) {
+	const user = await userModel.findById(req.user.id).exec()
+	if (user === null) {
+		return res.status(404).send({ message: 'User is not found!' })
+	}
+
+	try {
+		await fs.rename(req.file.path, path.join(__dirname, "..", "public", "avatars", req.file.filename))
+
+		const avatar = Jimp.read(req.file.path)
+			.then((image) => { return image.resize(250, 250).write(req.file.filename); })
+			.catch((err) => { console.error(err) });
+		console.log(avatar);
+
+		await userModel.findByIdAndUpdate(req.user.id, { avatar: req.file.filename }, { new: true }).exec()
+
+		res.status(200).send({ message: "Your avatar is successfully updated!", avatarURL: path.join(__dirname, "..", "public", "avatars", req.file.filename) })
 	} catch (error) {
 		next(error)
 	}
@@ -90,5 +121,6 @@ module.exports = {
 	registerUser,
 	logInUser,
 	logOutUser,
-	getCurrentUser
+	getCurrentUser,
+	changeAvatar
 }
