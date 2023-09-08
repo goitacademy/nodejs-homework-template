@@ -4,6 +4,7 @@ const crypto = require("node:crypto");
 const { User } = require("../models/user");
 const { RequestError, sendEmail } = require("../helpers");
 const { BASE_URL } = process.env;
+
 const register = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -21,7 +22,7 @@ const register = async (req, res, next) => {
      avatarURL, 
      verificationToken: verificationCode,
     });
-    
+
   const verifyEmail = {
       to: email,
       suject: "Verify email",
