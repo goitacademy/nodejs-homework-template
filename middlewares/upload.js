@@ -1,7 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 
-const publicDir = path.join(__dirname, 'public', 'avatars');
+const publicDir = path.join(__dirname, '../', 'temp');
 
 const multerConfig = multer.diskStorage({
   destination: publicDir,

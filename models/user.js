@@ -39,6 +39,7 @@ const mongooseSchema = {
     type: String,
     default: null,
   },
+  avatarURL: String,
 };
 
 const userSchema = new Schema(mongooseSchema, options);
