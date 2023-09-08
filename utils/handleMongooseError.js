@@ -1,5 +1,7 @@
 const handleMongooseError = (error, data, next) => {
-  error.status = 400;
+  const { name, code } = error;
+  const isDuplicateEmail = name === 'MongoServerError' && code === 11000;
+  error.status = isDuplicateEmail ? 409 : 400;
   next();
 };
 
