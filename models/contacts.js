@@ -12,7 +12,7 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   // Функція для отримання контакту за його ідентифікатором
   const contacts = await listContacts(); // Отримання списку контактів
-  const contact = contacts.find((el) => el.id === contactId); // Пошук контакту за його ідентифікатором
+  const contact = contacts.find((item) => item.id === contactId); // Пошук контакту за його ідентифікатором
   return contact || null; // Повернення знайденого контакту або значення null, якщо контакт не знайдено
 };
 
@@ -34,7 +34,7 @@ const addContact = async (body) => {
 const removeContact = async (contactId) => {
   // Функція для видалення контакту
   const contacts = await listContacts(); // Отримання списку контактів
-  const idx = contacts.findIndex((el) => el.id === contactId); // Пошук індексу контакту за його ідентифікатором
+  const idx = contacts.findIndex((item) => item.id === contactId); // Пошук індексу контакту за його ідентифікатором
   const result = contacts[idx];
   if (!result) {
     // Якщо контакт не знайдено
@@ -46,16 +46,20 @@ const removeContact = async (contactId) => {
   }
 };
 const updateContact = async (contactId, body) => {
-  // Функція для оновлення контакту
-  const contacts = await listContacts(); // Отримання списку контактів
-  const idx = contacts.findIndex((el) => el.id === contactId); // Пошук індексу контакту за його ідентифікатором
-  if (idx === -1) {
-    // Якщо контакт не знайдено
-    return null; // Повернення значення null
-  }
-  contacts[idx] = { id: contactId, ...body }; // Оновлення контакту з новими даними;
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2)); // Асинхронне записування оновленого списку контактів у файл contacts.json
-  return contacts[idx]; // Повернення оновленого контакту
+  const contacts = await listContacts();
+  const idx = contacts.findIndex((item) => item.id === contactId);
+  console.log(contacts[idx].email);
+  console.log(contacts[idx].phone);
+  if (idx === -1) return null;
+  contacts[idx] = {
+    id: contactId,
+    name: body.name || contacts[idx].name,
+    email: body.email || contacts[idx].email,
+    phone: body.phone || contacts[idx].phone,
+  };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  console.log(contacts[idx]);
+  return contacts[idx];
 };
 
 module.exports = {

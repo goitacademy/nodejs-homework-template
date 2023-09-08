@@ -1,7 +1,7 @@
-const createError = (status, message) => {
+const HttpError = (status, message) => {
   const error = new Error(message); // Створення нового об'єкта помилки з переданим повідомленням
   error.status = status; // Присвоєння статусу помилки до властивості "status" об'єкта помилки
   return error; // Повернення об'єкта помилки
 };
 
-module.exports = createError; // Експорт функції createError для використання
+module.exports = HttpError; // Експорт функції HttpError для використання

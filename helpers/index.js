@@ -1,7 +1,6 @@
-const createError = require("./createError"); // Підключення модуля createError з файлу createError.js
-const CtrlWrapper = require("./CtrlWrapper.js");
-
+const HttpError = require("./HttpError");
+const ctrlWrapper = require("./ctrlWrapper");
 module.exports = {
-  createError, // Експорт модуля
-  CtrlWrapper, // Експорт модуля
+  HttpError,
+  ctrlWrapper,
 };
