@@ -102,12 +102,13 @@ async function changeAvatar(req, res, next) {
 	}
 
 	try {
-		await fs.rename(req.file.path, path.join(__dirname, "..", "public", "avatars", req.file.filename))
+		const oldFilePath = req.file.path;
+		const newFilePath = path.join(__dirname, '..', 'public', 'avatars', req.file.filename);
 
-		const avatar = Jimp.read(req.file.path)
-			.then((image) => { return image.resize(250, 250).write(req.file.filename); })
-			.catch((err) => { console.error(err) });
-		console.log(avatar);
+		await fs.rename(oldFilePath, newFilePath);
+
+		const image = await Jimp.read(newFilePath);
+		await image.resize(250, 250).writeAsync(newFilePath);
 
 		await userModel.findByIdAndUpdate(req.user.id, { avatar: req.file.filename }, { new: true }).exec()
 
