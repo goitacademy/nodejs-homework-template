@@ -13,9 +13,9 @@ export const get = async (req, res, next) => {
   if (favorite !== undefined) {
     filters.favorite = favorite === "true";
   }
-
+  const { id: userID } = req.user;
   try {
-    const contacts = await listContacts(page, limit, filters);
+    const contacts = await listContacts(page, limit, filters, userID);
     res.json({
       message: "response ok",
       status: "success",
@@ -30,8 +30,9 @@ export const get = async (req, res, next) => {
 
 export const getById = async (req, res, next) => {
   const { id } = req.params;
+  const { id: userID } = req.user;
   try {
-    const contact = await getContactById(id);
+    const contact = await getContactById(id, userID);
     if (contact) {
       res.json({
         message: "contact found",
@@ -55,9 +56,10 @@ export const getById = async (req, res, next) => {
 
 export const add = async (req, res, next) => {
   const body = req.body;
+  const { id: userID } = req.user;
 
   try {
-    const contact = await addContact(body);
+    const contact = await addContact(body, userID);
     res.json({
       message: "contact added",
       status: "success",
@@ -72,9 +74,10 @@ export const add = async (req, res, next) => {
 
 export const remove = async (req, res, next) => {
   const { id } = req.params;
+  const { id: userID } = req.user;
 
   try {
-    const contact = await removeContact(id);
+    const contact = await removeContact(id, userID);
     if (contact) {
       res.json({
         message: "contact deleted",
@@ -99,9 +102,10 @@ export const remove = async (req, res, next) => {
 export const update = async (req, res, next) => {
   const { id } = req.params;
   const body = req.body;
+  const { id: userID } = req.user;
 
   try {
-    const contact = await updateContact(id, body);
+    const contact = await updateContact(id, body, userID);
 
     if (contact) {
       res.json({
@@ -127,9 +131,10 @@ export const update = async (req, res, next) => {
 export const updateStatus = async (req, res, next) => {
   const { id } = req.params;
   const { favorite = false } = req.body;
+  const { id: userID } = req.user;
 
   try {
-    const contact = await updateContact(id, { favorite });
+    const contact = await updateContact(id, { favorite }, userID);
 
     if (contact) {
       res.json({
