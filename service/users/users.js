@@ -1,7 +1,7 @@
 const User = require('../../schemas/users');
 
-const userSignup = async (email, password) => {
-  const response = await User.create({ email, password });
+const userSignup = async (email, password, avatarURL) => {
+  const response = await User.create({ email, password, avatarURL });
   return response
 };
 
@@ -20,15 +20,21 @@ const userCurrent = async (id) => {
   return response
 };
 
-const userUpdate = async (id, subscription) => {
+const userUpdateSubscription = async (id, subscription) => {
   const response = await User.findOneAndUpdate({ _id: id }, { subscription: subscription }, { new: true });
   return response
 }
+
+const userUpdateAvatar = async (id, avatarURL) => {
+  const response = await User.findOneAndUpdate({ _id: id }, { avatarURL }, { new: true });
+  return response
+};
 
 module.exports = {
   userSignup,
   userLogin,
   userLogout,
   userCurrent,
-  userUpdate,
+  userUpdateSubscription,
+  userUpdateAvatar,
 };
