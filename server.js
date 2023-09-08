@@ -13,8 +13,3 @@ mongoose.connect(DB_HOST, { useNewUrlParser: true })
     console.log(error.message)
     process.exit(1)
   })
-
-
-
-
-
