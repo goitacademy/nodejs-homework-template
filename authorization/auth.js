@@ -1,20 +1,22 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const passport = require("passport");
 
-module.exports = async (req, res, next) => {
-  try {
-    const token = req.header("Authorization").replace("Bearer ", "");
-    const decoded = jwt.verify(token, "your-secret-key");
-    const user = await User.findOne({ _id: decoded.userId, token });
-
-    if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
+const auth = (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, (err, user) => {
+    if (!user || err) {
+      return res.status(401).json({
+        status: "fail",
+        code: 401,
+        data: "Unauthorized",
+        ResponseBody: {
+          message: "Not authorized",
+        },
+      });
     }
-
     req.user = user;
     next();
-  } catch (error) {
-    console.error(error);
-    return res.status(401).json({ message: "Not authorized" });
-  }
+  })(req, res, next);
+};
+
+module.exports = {
+  auth,
 };
