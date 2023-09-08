@@ -1,12 +1,12 @@
 const express = require('express');
-const routnoer = express.Router();
+const router = express.Router();
 const {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('./models/contacts');
+} = require('../../models/contacts');
 
 router.get('/', async (req, res, next) => {
   try {
