@@ -7,13 +7,13 @@ const listContacts = async (_, res) => {
   res.json(listContacts);
 };
 
-const getContactById = async (req, res) => {
+const getById = async (req, res) => {
   const { id } = req.params;
-      const singleContact = await contacts.getContactById(id);
-      if (!singleContact) {
-        throw HttpError(404, "Not found");
-      }
-      res.json(singleContact);
+  const singleContact = await contacts.getContactById(id);
+  if (!singleContact) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(singleContact);
 };
 
 const addContact = async (req, res) => {
@@ -21,16 +21,16 @@ const addContact = async (req, res) => {
       res.status(201).json(addedContact);
 };
 
-const updateContactById = async (req, res) => {
+const updateContact = async (req, res) => {
   const { id } = req.params;
-      const updatedContact = await contacts.updateContact(id, req.body);
-      if (!updatedContact) {
-        throw HttpError(404, "Not found");
-      }
-      res.json(updatedContact);
+  const updatedContact = await contacts.updateContact(id, req.body);
+  if (!updatedContact) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(updatedContact);
 };
 
-const deleteContactById = async (req, res) => {
+const removeContact = async (req, res) => {
   const { id } = req.params;
       const removedContact = await contacts.removeContact(id);
       if (!removedContact) {
@@ -43,8 +43,8 @@ const deleteContactById = async (req, res) => {
 
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
-  getContactById: ctrlWrapper(getContactById),
+  getById: ctrlWrapper(getById),
   addContact: ctrlWrapper(addContact),
-  updateContactById: ctrlWrapper(updateContactById),
-  deleteContactById: ctrlWrapper(deleteContactById),
+  updateContact: ctrlWrapper(updateContact),
+  removeContact: ctrlWrapper(removeContact),
 };
