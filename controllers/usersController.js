@@ -112,7 +112,7 @@ async function changeAvatar(req, res, next) {
 
 		await userModel.findByIdAndUpdate(req.user.id, { avatar: req.file.filename }, { new: true }).exec()
 
-		res.status(200).send({ message: "Your avatar is successfully updated!", avatarURL: path.join(__dirname, "..", "public", "avatars", req.file.filename) })
+		res.status(200).send({ message: "Your avatar has been updated successfully. Keep in mind that it has been resized to 250x250 px.", avatarURL: path.join(__dirname, "..", "public", "avatars", req.file.filename) })
 	} catch (error) {
 		next(error)
 	}
