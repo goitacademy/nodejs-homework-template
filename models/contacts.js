@@ -1,9 +1,6 @@
-const { request } = require("express");
-
 const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
-const { log } = require("console");
 
 const contactsPath = path.join(__dirname, ".", "contacts.json");
 // const contactsPath = path.join(process.cwd(), ".", "contacts.json");
