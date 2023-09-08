@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
     })(req, res, next)
 }
 
-const passport = require('passport');
 module.exports = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, user) => {
         if(!user || err) {
