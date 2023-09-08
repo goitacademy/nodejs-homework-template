@@ -1,6 +1,6 @@
 import Joi from "joi"
 
-const addSchema = Joi.object({
+export const addSchema = Joi.object({
   name: Joi.string()
     .min(2)
     .max(20)
@@ -25,4 +25,7 @@ const addSchema = Joi.object({
 })
 
 
-export default {addSchema}
+
+export const updateFavoriteSchema = Joi.object({favorite: Joi.boolean().required()})
+
+export default {addSchema,updateFavoriteSchema }

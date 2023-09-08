@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
-import handleMongooseError from "../helpers/handleMongooseError";
+import { handleMongooseError, runValidateAtUpdate } from "./hook.js";
 
+const releaseYearRegexp = /^\d{4}$/;
 const contactSchema = new Schema(  {
     name: {
       type: String,
@@ -16,9 +17,13 @@ const contactSchema = new Schema(  {
       type: Boolean,
       default: false,
     },
+   
   }, {versionKey: false, timestamps: true});
 
   contactSchema.post("save", handleMongooseError)
+  contactSchema.pre("findOneAndUpdate", runValidateAtUpdate);
+
+  contactSchema.post("findOneAndUpdate", handleMongooseError);
 
 const Contact = model("contact",  contactSchema )
 
