@@ -1,4 +1,3 @@
-/* const { v4: uuidv4 } = require("uuid"); */
 const ContactModel = require("../models/contacts"); // Importa las funciones directamente
 
 const listContacts = async (req, res) => {
@@ -97,18 +96,4 @@ module.exports = {
   updateContact,
 };
 
-/* 
 
-
-
-const updateContact = async (req, res) => {
-  const { contactId } = req.params;
-  const { body } = req;
-  try {
-    const updatedContact = await contactModel.updateContact(contactId, body);
-    res.status(200).json({ status: 'success', code: 200, contact: updatedContact });
-  } catch (error) {
-    console.error('Error:', error);
-    res.status(404).json({ error: 'Contact not found' });
-  }
-}; */
