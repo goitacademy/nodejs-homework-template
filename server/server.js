@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import app from "./app.js";
 import { initFolders } from "./utils/manageUploadFolders.js";
 
-const PORT = 3000;
+const PORT = 2200;
 const SRV_DB = process.env.DB_HOST;
 
 const connection = mongoose.connect(SRV_DB, {
