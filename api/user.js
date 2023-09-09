@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const User = require("../services/schemas/user");
 const Joi = require("joi");
+require("../config/config-passport");
 require("dotenv").config();
 const secret = process.env.SECRET;
 
@@ -126,14 +127,10 @@ router.post("/logout", auth, async (req, res, next) => {
 	try {
 		const id = req.user.id;
 
-		const user = await User.findById({ _id: id });
+		const user = await User.findById(id);
 
 		if (!user) {
-			return res.status(401).json({
-				status: "error",
-				code: 401,
-				message: "Unauthorized",
-			});
+			return res.status(404).json(`Error! User not found!`);
 		}
 
 		user.token = null;
@@ -150,14 +147,16 @@ router.post("/logout", auth, async (req, res, next) => {
 });
 
 router.get("/current", auth, async (req, res, next) => {
-	const { _id: userId } = req.user;
+	const { id: userId } = req.user;
 	try {
 		const user = await User.findById(userId);
 		if (!user) {
-			return res.status(401).json({ message: "Not authorized" });
+			return res.status(404).json(`Error! User not found!`);
 		}
 		const { email, subscription } = user;
 		return res.status(200).json({
+			status: "success",
+			code: 200,
 			data: { email, subscription },
 		});
 	} catch (err) {
