@@ -25,5 +25,6 @@ router.post("/register", validateBody(registerSchema), registrationUser);
 router.post("/login", validateBody(registerSchema), loginUser);
 router.post("/logout", verefyToken, logoutUser);
 router.get("/current", verefyToken, currentUser);
+router.patch("/avatars");
 
 module.exports = router;
