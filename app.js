@@ -1,4 +1,4 @@
-import express, { json } from 'express'
+import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
 import dotenv from 'dotenv'
