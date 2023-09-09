@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 const { Schema, model } = require("mongoose");
 const handleMongooseError = require("../helpers/handleMongooswError");
 
@@ -31,6 +32,10 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: "",
+    },
+    avatarURL: {
+      type: String,
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }
