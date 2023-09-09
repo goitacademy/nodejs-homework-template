@@ -10,7 +10,7 @@ const { conrollerWraper } = require("../helpers/controllerWraper");
 const { HttpError } = require("../helpers/HttpError");
 
 const getAllContacts = async (req, res) => {
-  const contacts = await getAllContactsService();
+  const contacts = await getAllContactsService(req.query);
   res.json(contacts);
 };
 
@@ -29,7 +29,7 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const newContact = await addContactService({ ...req.body });
+  const newContact = await addContactService(req.user._id, req.body);
   res.json({ status: "success", code: 201, data: { contact: newContact } });
 };
 

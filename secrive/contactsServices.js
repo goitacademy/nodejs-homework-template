@@ -1,7 +1,18 @@
 const contactSchemaDB = require("../models/contact");
 
-const getAllContactsService = async () => {
-  const contacts = await contactSchemaDB.find();
+const getAllContactsService = async ({
+  page = 0,
+  limit = 0,
+  favorite = false,
+}) => {
+  if (favorite) {
+    const contacts = await contactSchemaDB.find({ favorite: true });
+    return contacts;
+  }
+  const contacts = await contactSchemaDB
+    .find()
+    .limit(limit * 1)
+    .skip((page - 1) * limit);
   return contacts;
 };
 
@@ -10,12 +21,13 @@ const getContactByIdService = async (contactId) => {
   return contacts;
 };
 
-const addContactService = async (body) => {
+const addContactService = async (userId, body) => {
   const newContact = {
     name: body.name,
     email: body.email,
     phone: body.phone,
     favorite: body.favorite,
+    owner: userId,
   };
 
   await contactSchemaDB.create(newContact);
