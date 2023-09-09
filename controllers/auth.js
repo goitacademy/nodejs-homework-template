@@ -121,9 +121,9 @@ const updateAvatar = async (req, res, next) => {
     Jimp.read(resultUpload)
       .then((avatar) => {
         return avatar
-          .resize(250, 250) // resize
-          .quality(60) // set JPEG quality
-          .write(resultUpload); // save
+          .resize(250, 250) 
+          .quality(60) 
+          .write(resultUpload); 
       })
       .catch((err) => {
         console.error(err);
