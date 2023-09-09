@@ -2,8 +2,9 @@ import express from "express";
 
 import * as contactSchema from "../../schema/schema.js"
 import ctrlContacts from "../../controllers/ctrlContacts.js";
-import { validateBody } from "../../decorators/validateBody.js";
+
 import { isValidId } from "../../middlewars/isvalidId.js";
+import validateBody from "../../decorators/validateBody.js";
 
 const contactRouter = express.Router();
 
