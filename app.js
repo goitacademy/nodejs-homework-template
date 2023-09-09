@@ -19,7 +19,12 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  res.status(err.code).json({
+    message: err.message || '',
+    status: err.status,
+    code: err.code,
+  });
+  
 })
 
 module.exports = app
