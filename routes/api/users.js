@@ -17,9 +17,10 @@ router.patch(
   ctrl.updateAvatar
 );
 
-/*
-update subscription "starter", "pro", "business"
-*/
 router.patch("/", tokenValidation, ctrl.updateSubscription);
+
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
+
+router.post("/verify", ctrl.resendEmail);
 
 module.exports = router;
