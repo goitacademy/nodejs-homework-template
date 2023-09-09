@@ -1,11 +1,5 @@
 const contacts = require("../models/contacts");
-
 const HttpError = require("../helpers/HttpError");
-
-const {
-  validateContactSchema,
-  validateUpdateContactSchema,
-} = require("../middlewares/ValidateShemas");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -18,6 +12,7 @@ const getAllContacts = async (req, res, next) => {
     next(error);
   }
 };
+
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
@@ -33,10 +28,6 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = validateContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message || "Bad request");
-    }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
     if (!result) {
@@ -63,10 +54,6 @@ const deleteContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const { error } = validateUpdateContactSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message || "Bad request");
-    }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (result) {
