@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { handleMongooseError, runValidateAtUpdate } from "./hook.js";
 
-const releaseYearRegexp = /^\d{4}$/;
 const contactSchema = new Schema(
   {
     name: {

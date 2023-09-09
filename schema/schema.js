@@ -13,11 +13,11 @@ export const addSchema = Joi.object({
     "any.required": "missing required email field",
   }),
 
-  favorite: Joi.boolean().messages({ "any.required": "missing required favorite field"}),
+  favorite: Joi.boolean()
 });
 
 export const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({ "any.required": "missing required favorite field"}),
 });
 
 export default { addSchema, updateFavoriteSchema };
