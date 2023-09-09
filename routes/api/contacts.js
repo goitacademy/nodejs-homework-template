@@ -36,9 +36,8 @@ router.get('/:contactId', async (req, res, next) => {
         code: 200,
         data,
         });
-    }else next(createError('NOT_FOUND'));
-    
-    
+    }else next(createError('NOT_FOUND','Not found by id'));
+        
   } catch(err){
     next(createError('INTERNAL_SERVER_ERROR',err));
   }
@@ -75,7 +74,7 @@ router.delete('/:contactId', async (req, res, next) => {
         data,
       })
       
-    }else next(createError('NOT_FOUND'));
+    }else next(createError('NOT_FOUND','Not found by id'));
   } catch(err){
     next(createError('INTERNAL_SERVER_ERROR', err));
   }
