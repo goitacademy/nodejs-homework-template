@@ -49,6 +49,7 @@ router.post("/", async (req, res, next) => {
       res.status(400).json({
         message: `missing required ${missingField} field`,
       });
+      return;
     }
     const { name, email, phone } = req.body;
     const contact = await addContact(name, email, phone);
@@ -85,7 +86,7 @@ router.put("/:contactId", async (req, res, next) => {
       });
       return;
     }
-    
+
     const contact = await updateContact(contactId, body);
     if (!contact) {
       throw HttpError(404, "Not found");
@@ -95,7 +96,7 @@ router.put("/:contactId", async (req, res, next) => {
       contact,
     });
   } catch (e) {
-    next(e)
+    next(e);
   }
 });
 
