@@ -4,7 +4,7 @@ const passport = require("passport");
 const router = express.Router();
 
 const contacts = require("../../models/contacts");
-const authorize = require("../../middleware/authorize");
+const authorize = require("../../middlewares/authorize");
 
 const contactsSchema = Joi.object({
   name: Joi.string().required(),
