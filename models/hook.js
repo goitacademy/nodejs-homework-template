@@ -3,7 +3,7 @@ export const handleMongooseError = (error, data, next) => {
     next();
   }
 
-  export const runValidateAtUpdate = function(next) {
+export const runValidateAtUpdate = function(next) {
     this.options.runValidators = true;
     next();
 }
