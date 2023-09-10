@@ -85,15 +85,10 @@ const updateAvatar = async (req, res) => {
   const resultUpload = path.join(avatarDir, fileName);
   await fs.rename(tempUpload, resultUpload);
 
+  const avatar = path.join('avatars', fileName);
+  await User.findByIdAndUpdate({ _id }, { avatar });
 
-
-    const avatar = path.join('avatars', fileName);
-    await User.findByIdAndUpdate({ _id }, { avatar });
-
-  res.status(200).json({
-    message: 'avatar added',
-    avatar,
-  });
+  res.status(200).json({ avatar });
 };
 
 module.exports = {
