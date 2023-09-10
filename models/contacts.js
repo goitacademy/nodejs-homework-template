@@ -1,21 +1,26 @@
-const { Schema } = require("mongoose");
-const mongoose = require("mongoose");
+const { Schema, model } = require('mongoose');
+const { handleErrors } = require('../middlewares');
+const Joi = require('joi');
 
-const contactSchema = Schema(
+const emailRegex = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-z]+)$/;
+const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+
+const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
-      match: /^(?:[A-Z][a-z]{1,14} ){2}(?:[A-Z][a-z]{1,14})$/,
+      minlength: 2,
+      required: [true, 'Set name for contact'],
     },
     email: {
       type: String,
-      match: /[A-Z0-9._%+-]+@[A-Z0-9-]+\.[A-Z]{2,4}/gim,
+      unique: true,
+      mattch: emailRegex,
+      required: [true, 'Set email for contact'],
     },
     phone: {
       type: String,
-      required: true,
-      match: /^((\+?3)?8)?(?:0(?:\(\d{2}\)|\d{2}))\d{7}$/,
+      mattch: phoneRegex,
     },
     favorite: {
       type: Boolean,
@@ -23,38 +28,26 @@ const contactSchema = Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: 'user',
+      required: true,
     },
   },
-  { timestamps: true, versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
-const Contact = mongoose.model("contact", contactSchema);
+contactSchema.post('save', handleErrors);
 
-const listContacts = async () => {
-  return Contact.find();
-};
+const joiSchema = Joi.object({
+  name: Joi.string().min(2).required(),
+  email: Joi.string().email().pattern(emailRegex).required(),
+  phone: Joi.string().pattern(phoneRegex).required(),
+  favorite: Joi.bool(),
+});
 
-const getContactById = async (id) => {
-  return Contact.findById(id);
-};
+const favoriteJoiSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
 
-const addContact = async (contact) => {
-  return Contact.create(contact);
-};
+const Contact = model('contact', contactSchema);
 
-const updateContact = async (id, contact) => {
-  return Contact.findByIdAndUpdate(id, contact, { new: true });
-};
-
-const removeContact = async (id) => {
-  return Contact.findByIdAndDelete(id);
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+module.exports = { Contact, joiSchema, favoriteJoiSchema };
