@@ -1,11 +1,17 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  phone: Joi.string().required(),
+  title: Joi.string().required().messages({
+    "any.required": `"title" must be exist`,
+  }),
+  email: Joi.string().email().required().messages({
+    "any.required": `"email" must be exist`,
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": `"phone" must be exist`,
+  }),
 });
 
-module.exports = { contactAddSchema };
+export default {
+  contactAddSchema,
+};
