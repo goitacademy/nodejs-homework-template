@@ -1,12 +1,14 @@
 const User = require('../../schemas/users');
 const { usersService } = require('../../service');
-const { schemaUser, schemaSubscription } = require('../../middlewares/joiValidation');
+const { schemaUser, schemaSubscription, schemaValidationResend } = require('../../middlewares/joiValidation');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const gravatar = require('gravatar');
 const Jimp = require('jimp');
 const path = require('path');
 const fs = require('fs').promises;
+const { v4: uuidv4 } = require('uuid');
+const { send } = require('../../middlewares/verificationEmail');
 
 const userSignup = async (req, res, next) => {
   try {
@@ -25,10 +27,13 @@ const userSignup = async (req, res, next) => {
         data: 'Conflict',
       });
     }
-
-    const avatarURL = gravatar.url(email, {s: '200', r: 'pg', d: 'robohash'});
+    const avatarURL = gravatar.url(email, { s: '200', r: 'pg', d: 'robohash' });
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(6));
-    const result = await usersService.userSignup(email, hashedPassword, avatarURL);
+    const verificationToken = uuidv4();
+
+    send(email, verificationToken);
+
+    const result = await usersService.userSignup(email, hashedPassword, avatarURL, verificationToken);
     return res.status(201).json({
       status: 'success',
       code: 201,
@@ -52,6 +57,7 @@ const userLogin = async (req, res, next) => {
     }
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user || !bcrypt.compareSync(password, user.password)) {
       return res.status(401).json({
         status: 'error',
@@ -59,6 +65,13 @@ const userLogin = async (req, res, next) => {
         message: 'Incorrect email or password',
         data: 'Unauthorized',
       });
+    } else if (!user.verify) {
+      return res.status(403).json({
+        status: 'error',
+        code: 403,
+        message: 'Email not verified',
+        data: 'Forbidden',
+      })
     }
     const payload = {
       id: user.id,
@@ -168,11 +181,57 @@ const userUpdateAvatar = async (req, res, next) => {
   }
 };
 
+const userVerification = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  try {
+    const result = await usersService.userVerification(verificationToken);
+    if (!result) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    return res.json({
+      status: 'success',
+      code: 200,
+      message: 'Verification successful',
+    })
+  } catch (err) {
+    next(err);
+  };
+};
+
+const userVerificationResend = async (req, res, next) => {
+  try {
+    const { error } = schemaValidationResend.validate(req.body);
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    };
+    const { email } = req.body;
+    const user = await User.findOne({ email }).lean();
+    if (!user) {
+      return res.status(400).json({
+        message: 'User not found',
+      });
+    } else if (user.verify) {
+      return res.status(400).json({
+        message: 'Verification has already been passed',
+      });
+    } else {
+      send(email, user.verificationToken);
+      return res.status(200).json({
+        message: 'Verification email sent',
+      });
+    }
+  } catch (err) {
+    next(err)
+  }
+};
+
 module.exports = {
   userSignup,
   userLogin,
   userLogout,
   userCurrent,
   userUpdateSubscription,
-  userUpdateAvatar
+  userUpdateAvatar,
+  userVerification,
+  userVerificationResend,
 };

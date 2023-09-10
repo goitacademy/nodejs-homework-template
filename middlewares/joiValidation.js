@@ -46,10 +46,18 @@ const schemaSubscription = Joi.object({
     .required(),
 });
 
+const schemaValidationResend = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2 })
+    .trim()
+    .required(),
+});
+
 module.exports = {
   schemaAddContact,
   schemaUpdateContact,
   schemaUpdateFavoriteContact,
   schemaUser,
   schemaSubscription,
+  schemaValidationResend,
 };

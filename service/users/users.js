@@ -1,7 +1,7 @@
 const User = require('../../schemas/users');
 
-const userSignup = async (email, password, avatarURL) => {
-  const response = await User.create({ email, password, avatarURL });
+const userSignup = async (email, password, avatarURL, verificationToken) => {
+  const response = await User.create({ email, password, avatarURL, verificationToken });
   return response
 };
 
@@ -30,6 +30,11 @@ const userUpdateAvatar = async (id, avatarURL) => {
   return response
 };
 
+const userVerification = async (verificationToken) => {
+  const response = await User.findOneAndUpdate({ verificationToken: verificationToken }, { verificationToken: null, verify: true }, { new: true });
+  return response
+};
+
 module.exports = {
   userSignup,
   userLogin,
@@ -37,4 +42,5 @@ module.exports = {
   userCurrent,
   userUpdateSubscription,
   userUpdateAvatar,
+  userVerification,
 };
