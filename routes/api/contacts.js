@@ -1,6 +1,6 @@
 import express from "express";
 
-import * as contactSchema from "../../schema/schema.js"
+import contactSchema from "../../schema/schema.js"
 import ctrlContacts from "../../controllers/ctrlContacts.js";
 
 import { isValidId } from "../../middlewars/index.js";
