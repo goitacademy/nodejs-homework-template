@@ -16,6 +16,10 @@ async function login(req, res, next) {
       if (user === null) {
         return res.status(401).json({ error: "Email or password is wrong" });
       }
+
+      if (user.isVerify !== true) {
+        return res.status(401).send({ message: "Please verify your email" });
+      }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         return res.status(401).json({ error: "Email or password is wrong" });

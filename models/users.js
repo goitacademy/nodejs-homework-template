@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  verifyToken: {
+    type: String,
+    default: null,
+  },
+  isVerify: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
