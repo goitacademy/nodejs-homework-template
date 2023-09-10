@@ -123,11 +123,18 @@ router.post("/login", async (req, res, next) => {
 	});
 });
 
-router.post("/logout", auth, async (req, res, next) => {
+const getUserbyId = async (id) => {
 	try {
-		const id = req.user.id;
+		return await User.findById(id);
+	} catch (e) {
+		console.log(e);
+	}
+};
 
-		const user = await User.findById(id);
+router.get("/logout", auth, async (req, res, next) => {
+	try {
+		const userId = req.user.id;
+		const user = await getUserbyId(userId);
 
 		if (!user) {
 			return res.status(404).json(`Error! User not found!`);
@@ -147,9 +154,9 @@ router.post("/logout", auth, async (req, res, next) => {
 });
 
 router.get("/current", auth, async (req, res, next) => {
-	const { id: userId } = req.user;
+	const { userId } = req.user.id;
 	try {
-		const user = await User.findById(userId);
+		const user = await getUserbyId(userId);
 		if (!user) {
 			return res.status(404).json(`Error! User not found!`);
 		}
