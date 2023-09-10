@@ -13,7 +13,6 @@ const secret = process.env.JWT_SECRET;
 export const get = async (req, res, next) => {
   try {
     const contacts = await listUsers();
-    console.log(contacts);
     res.json({
       message: "response ok",
       status: "success",
