@@ -16,20 +16,4 @@ const addSchema = Joi.object({
   }),
 });
 
-const data = {
-  name: '',
-  email: 'invalid_email',
-  phone: '',
-};
-
-const result = addSchema.validate(data, { abortEarly: false });
-
-if (result.error) {
-  const errorMessages = result.error.details.map((error) => error.message);
-  console.log('Validation errors:');
-  console.log(errorMessages);
-} else {
-  console.log('Data is valid.');
-}
-
 module.exports = { addSchema };
