@@ -5,6 +5,7 @@ import Contact from "../models/contact.js";
 export const listContacts = async (req, res) => {
   const result = await Contact.find();
   res.status(200).json(result);
+  console.log("результат", result)
 };
 
 export const getById = async (req, res) => {

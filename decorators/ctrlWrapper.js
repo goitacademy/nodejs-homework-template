@@ -1,7 +1,8 @@
-const ctrlWrapper = getAll => {
+const ctrlWrapper = ctrl => {
     const func = async(req, res, next) => {
         try {
-            await getAll(req, res, next);
+            await ctrl(req, res, next);
+            console.log("піймалося")
         }
         catch(error) {
             next(error);
