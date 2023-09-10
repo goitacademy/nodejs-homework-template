@@ -1,5 +1,5 @@
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
-import HttpError from "../helpers/HttpError.js";
+import {ctrlWrapper} from "../decorators/index.js";
+import {HttpError} from "../helpers/index.js";
 import Contact from "../models/contact.js";
 
 export const listContacts = async (req, res) => {
