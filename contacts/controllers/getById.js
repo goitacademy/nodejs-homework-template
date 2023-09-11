@@ -3,7 +3,7 @@ const { HttpError } = require("../../helpers");
 
 const getContactById = async (req, res) => {
 	const { id } = req.params;
-	const result = await Contacts.findById(id, "-createdAt -updatedAt");
+	const result = await Contacts.findById(id, "-createdAt -updatedAt -owner");
 
 	if (!result) {
 		throw HttpError(404);
@@ -11,5 +11,4 @@ const getContactById = async (req, res) => {
 
 	res.json(result);
 };
-
 module.exports = getContactById;

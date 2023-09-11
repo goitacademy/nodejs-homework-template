@@ -5,7 +5,7 @@ const updateContactById = async (req, res) => {
 	const { id } = req.params;
 	const result = await Contacts.findByIdAndUpdate(id, req.body, {
 		new: true,
-	}).select("-createdAt -updatedAt");
+	}).select("-createdAt -updatedAt -owner");
 
 	if (!result) {
 		throw HttpError(404);

@@ -1,14 +1,14 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { mongooseErrors } = require("../middleware");
+const { handleMongooseError } = require("../helpers");
 const { REGEXP } = require("../constants");
 
 const contactSchema = new Schema(
 	{
 		name: {
 			type: String,
-			minLength: 4,
+			minLength: 2,
 			maxLength: 255,
 			required: [true, "Set name for contact"],
 		},
@@ -28,11 +28,15 @@ const contactSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: "user",
+			required: true,
+		},
 	},
 	{ versionKey: false, timestamps: true }
 );
-
-contactSchema.post("save", mongooseErrors);
+contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
