@@ -2,7 +2,7 @@ const service = require("../service");
 
 const get = async (req, res, next) => {
   try {
-    const results = await service.getAllContacts();
+    const results = await service.getAllContacts(req.user.id);
     res.json({
       status: "success",
       code: 200,
