@@ -9,6 +9,8 @@ require("dotenv").config();
 const secret = process.env.SECRET;
 
 const auth = async (req, res, next) => {
+	const authorizationHeader = req.header("Authorization");
+	console.log(authorizationHeader);
 	try {
 		await passport.authenticate(
 			"jwt",
@@ -131,10 +133,22 @@ const getUserbyId = async (id) => {
 	}
 };
 
+console.log(getUserbyId("64ff628c184d380db334d16b"));
+
+const usersList = async () => {
+	try {
+		const users = await User.find();
+		return users;
+	} catch (e) {
+		console.log(e);
+	}
+};
+console.log(usersList());
+
 router.get("/logout", auth, async (req, res, next) => {
 	try {
-		const userId = req.user.id;
-		const user = await getUserbyId(userId);
+		const { id } = req.user;
+		const user = await getUserbyId(id);
 
 		if (!user) {
 			return res.status(404).json(`Error! User not found!`);
