@@ -1,25 +1,17 @@
 import express from "express";
+import moviesController from "../../controllers/contact-controller.js";
+import contactValidation from "../../middleware/validation/contact-validation.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/", moviesController.getAll);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/:contactId", moviesController.getById);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.post("/", contactValidation, moviesController.add);
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:contactId", moviesController.removeById);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:contactId", contactValidation, moviesController.updateById);
 
 export default router;
