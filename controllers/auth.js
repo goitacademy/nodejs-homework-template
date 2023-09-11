@@ -5,23 +5,35 @@ const gravatar = require('gravatar');
 const fs = require('fs/promises');
 const path = require('path');
 const Jimp = require('jimp');
+const { v4: uuidv4 } = require('uuid');
 
 const { HttpError } = require('../helpers');
 const ctrlWrapper = require('../helpers/ctrlWrapper')
 const { User } = require('../models/users');
+const sendEmail = require('../helpers/sendEmail');
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
   const userExist = await User.findOne({ email });
   const avatar = gravatar.url(email);
+  // const verificationToken = uuidv4();
+
   if (userExist) {
     throw HttpError(409, 'Email in use');
   }
   const hashPass = await bcrypt.hash(password, 10);
   const newUser = await User.create({ ...req.body, password: hashPass, avatar });
+
+  // const verifyEmail = {
+  //   to: email,
+  //   subject: 'Verify email',
+  //   html: `<a href = "${BASE_URL}/users/verify/${verificationToken}">Click here</a>`
+  // }
+  // await sendEmail(verifyEmail);
+
   res.status(201).json({
     user: {
       email: newUser.email,
