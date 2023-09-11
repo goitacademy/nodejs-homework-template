@@ -44,7 +44,7 @@ const signup = async (req, res, next) => {
     const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     const verificationToken = uuid();
 
-    const result = await User.create({ ...req.body, password: hashedPassword, avatarUrl, verificationToken });
+    const result = await User.create({ ...req.body, password: hashedPassword, avatarUrl, verificationToken, verify: true });
 
      const mail = {
       to: email,

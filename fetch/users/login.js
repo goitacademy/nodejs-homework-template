@@ -39,6 +39,13 @@ const login = async (req, res, next) => {
       return;
     }
 
+    if (user.verify === false) {
+      res.status(401).json({
+        message: "User is not verified",
+      });
+      return;
+    }
+
     const comparePassword = bcrypt.compareSync(password, user.password);
 
     if (!comparePassword) {
