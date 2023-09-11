@@ -1,6 +1,6 @@
 const contacts = require("../models/contactsModel");
 
-const { createError, ctrlWrapper } = require("../helpers");
+const { cteateError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
   const result = await contacts.listContacts();
@@ -12,7 +12,7 @@ const getContactById = async (req, res) => {
   const result = await contacts.getContactById(contactId);
 
   if (!result) {
-    throw createError(404, "Not found");
+    throw cteateError(404, "Not found");
   }
   res.json(result);
 };
@@ -21,7 +21,7 @@ const removeContactById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contacts.removeContact(contactId);
   if (!result) {
-    throw createError(404, "Not found");
+    throw cteateError(404, "Not found");
   }
   res.json({ message: "Deleted successfully" });
 };
@@ -35,7 +35,7 @@ const updateContactById = async (req, res) => {
     phone,
   });
   if (!result) {
-    throw createError(404, "Not found");
+    throw cteateError(404, "Not found");
   }
   res.json(result);
 };
