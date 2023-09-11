@@ -4,6 +4,7 @@ const authRouter = express.Router();
 
 const ctrl = require('../../controllers/auth');
 const { validateBody } = require('../../middleware');
+const validateUserVerify = require('../../middleware/validateUserVerify');
 const isTokenValid = require('../../middleware/isTokenValid');
 const { userSchemas } = require('../../models/users');
 const upload = require('../../middleware/upload');
@@ -22,6 +23,6 @@ authRouter.patch('/avatars', isTokenValid, upload.single('avatar'), ctrl.updateA
 
 authRouter.get("/verify/:verificationToken", ctrl.userVerify);
 
-authRouter.post("/verify", validateBody(userSchemas.resendEmail), ctrl.userReVerify);
+authRouter.post("/verify", validateUserVerify(userSchemas.resendVerify), ctrl.verifyAgain);
 
 module.exports = authRouter;

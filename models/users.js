@@ -64,10 +64,15 @@ const updateSubscription = Joi.object({
   subscription: Joi.string().valid(...typesOfSubscriptions),
 });
 
+const resendVerify = Joi.object({
+  email: Joi.string().required().pattern(emailRegexp),
+});
+
 const userSchemas = {
   registerUser,
   loginUser,
   updateSubscription,
+  resendVerify
 };
 
 const User = model('user', userSchema);
