@@ -13,19 +13,19 @@ const customMessages = {
 
 const schema = Joi.object({
   name: Joi.string()
-    .pattern(/^[A-Za-z\s-]+$/)
+    .pattern(/^[A-Za-z\s\-]+$/)
     .min(3)
     .max(30)
     .trim()
-    .required()
+
     .messages(customMessages.name),
-  email: Joi.string().email().trim().required(),
+  email: Joi.string().email().trim(),
   phone: Joi.string()
-    .pattern(/^[\d-]+$/)
+    .pattern(/^[\d\-]+$/)
     .min(3)
     .max(16)
     .trim()
-    .required()
+
     .messages(customMessages.phone),
 });
 
