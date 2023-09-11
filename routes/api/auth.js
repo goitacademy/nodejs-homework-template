@@ -20,8 +20,8 @@ authRouter.patch('/subscription', validateBody(userSchemas.updateSubscription), 
 
 authRouter.patch('/avatars', isTokenValid, upload.single('avatar'), ctrl.updateAvatar);
 
-authRouter.get("/verify/:verificationToken", ctrl.verifyEmail);
+authRouter.get("/verify/:verificationToken", ctrl.userVerify);
 
-authRouter.post("/verify", validateBody(userSchemas.resendEmail), ctrl.resendVerifyEmail);
+authRouter.post("/verify", validateBody(userSchemas.resendEmail), ctrl.userReVerify);
 
 module.exports = authRouter;
