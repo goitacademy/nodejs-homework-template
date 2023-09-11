@@ -1,4 +1,4 @@
-const User = require("./schemas/user");
+const User = require("./schemas/users");
 
 const getUser = async (body) => User.findOne(body);
 
