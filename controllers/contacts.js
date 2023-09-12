@@ -14,7 +14,6 @@ const getById = async (req, res) => {
     if (!result) {
       throw HttpError(404, "Not found")
     }
-    console.log(result)
     res.status(200).json(result);
 }
 
@@ -24,9 +23,9 @@ const add = async (req, res) => {
 }
 
 const updateById = async (req, res) => {
-    if (Object.keys(req.body).length === 0) {
-    throw HttpError(400, "missing required name field");
-    }
+    // if (Object.keys(req.body).length === 0) {
+    // throw HttpError(400, "missing required name field");
+    // }
     
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body );
