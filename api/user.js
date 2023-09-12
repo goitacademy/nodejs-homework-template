@@ -1,190 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
-const User = require("../services/schemas/user");
-const Joi = require("joi");
-require("../config/config-passport");
-require("dotenv").config();
-const secret = process.env.SECRET;
 
-const auth = async (req, res, next) => {
-	const authorizationHeader = req.header("Authorization");
-	console.log(authorizationHeader);
-	try {
-		await passport.authenticate(
-			"jwt",
-			{ session: false },
-			async (err, user) => {
-				if (!user || err) {
-					return res.status(401).json({
-						status: "error",
-						code: 401,
-						message: "Unauthorized",
-						data: "Unauthorized",
-					});
-				}
+const {
+	signUpUser,
+	loginUser,
+	logoutUser,
+	getCurrentUser,
+	auth,
+} = require("../controller/user");
 
-				const authHeader = req.headers.authorization;
-				const token = authHeader && authHeader.split(" ")[1];
+router.post("/signup", signUpUser);
 
-				const allUsers = await User.find();
-				const tokenExists = allUsers.some(
-					(user) => user.token === token
-				);
-				if (!tokenExists) {
-					return res.status(401).json({
-						status: "error",
-						code: 401,
-						message: "Token is not authorized",
-						data: "Token not authorized",
-					});
-				}
+router.post("/login", loginUser);
 
-				req.user = user;
-				next();
-			}
-		)(req, res, next);
-	} catch (error) {
-		res.status(500).json({
-			status: "error",
-			code: 500,
-			message: "An error occurred during authentication.",
-		});
-	}
-};
+router.post("/logout", auth, logoutUser);
 
-const schema = Joi.object({
-	email: Joi.string().email().required(),
-	password: Joi.string().required(),
-});
-
-router.post("/signup", async (req, res, next) => {
-	const { email, password } = req.body;
-	const user = await User.findOne({ email });
-	const validation = schema.validate({ email, password });
-	if (validation.error) {
-		return res.status(400).json({
-			message: `${validation.error.details[0].message}`,
-		});
-	}
-	if (user) {
-		return res.status(409).json({
-			message: "Email is already in use",
-		});
-	}
-	try {
-		const newUser = new User({ email });
-		newUser.setPassword(password);
-		await newUser.save();
-		res.status(201).json({
-			user: {
-				email: email,
-				subscription: "starter",
-			},
-		});
-	} catch (error) {
-		next(error);
-	}
-});
-
-router.post("/login", async (req, res, next) => {
-	const { email, password } = req.body;
-	const user = await User.findOne({ email });
-	const validation = schema.validate({ email, password });
-	if (validation.error) {
-		return res.status(400).json({
-			message: `${validation.error.details[0].message}`,
-		});
-	}
-	if (!user || !user.validPassword(password)) {
-		return res.status(400).json({
-			status: "error",
-			code: 400,
-			message: "Email or password is wrong",
-			data: "Bad request",
-		});
-	}
-
-	const payload = {
-		id: user.id,
-		email: user.email,
-	};
-
-	const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-	user.token = token;
-	await user.save();
-	res.status(200).json({
-		data: {
-			token,
-			user: {
-				email: email,
-				subscription: "starter",
-			},
-		},
-	});
-});
-
-const getUserbyId = async (id) => {
-	try {
-		return await User.findById(id);
-	} catch (e) {
-		console.log(e);
-	}
-};
-
-console.log(getUserbyId("64ff628c184d380db334d16b"));
-
-const usersList = async () => {
-	try {
-		const users = await User.find();
-		return users;
-	} catch (e) {
-		console.log(e);
-	}
-};
-console.log(usersList());
-
-router.get("/logout", auth, async (req, res, next) => {
-	try {
-		const { id } = req.user;
-		const user = await getUserbyId(id);
-
-		if (!user) {
-			return res.status(404).json(`Error! User not found!`);
-		}
-
-		user.token = null;
-		await user.save();
-
-		res.status(204).json();
-	} catch (error) {
-		res.status(500).json({
-			status: "error",
-			code: 500,
-			message: "An error occurred during logout.",
-		});
-	}
-});
-
-router.get("/current", auth, async (req, res, next) => {
-	const { userId } = req.user.id;
-	try {
-		const user = await getUserbyId(userId);
-		if (!user) {
-			return res.status(404).json(`Error! User not found!`);
-		}
-		const { email, subscription } = user;
-		return res.status(200).json({
-			status: "success",
-			code: 200,
-			data: { email, subscription },
-		});
-	} catch (err) {
-		res.status(500).json(
-			`An error occurred while getting the contact: ${err}`
-		);
-	}
-});
+router.get("/current", auth, getCurrentUser);
 
 module.exports = router;
