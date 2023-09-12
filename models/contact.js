@@ -30,3 +30,4 @@ contactSchema.post("findOneAndUpdate", handleMongooseError);
 const Contact = model("contacts", contactSchema);
 
 export default Contact;
+
