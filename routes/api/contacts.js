@@ -136,7 +136,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("./:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const { favorite } = req.body;
