@@ -11,7 +11,6 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  // Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
   const contacts = await listContacts();
   const result = contacts.find((item) => item.id === contactId);
   return result || null;
@@ -29,7 +28,6 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (data) => {
-  // Повертає об'єкт доданого контакту.
   const contacts = await listContacts();
   const newContact = {
     id: shortid.generate(),
