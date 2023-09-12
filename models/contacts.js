@@ -1,107 +1,67 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
-
-const contactsPath = path.join(__dirname, "contacts.json");
-
-const readContactsFile = async () => {
-  try {
-    const data = await fs.readFile(contactsPath);
-    return JSON.parse(data);
-  } catch (error) {
-    console.error("Error occured when trying to read file:".red, error);
-    throw error;
-  }
-};
-
-const writeContactsFile = async (contacts) => {
-  try {
-    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  } catch (error) {
-    console.error("Error occured when trying to update file:".red, error);
-    throw error;
-  }
-};
+const Contact = require("../service/schemas/schemaContacts");
 
 const listContacts = async () => {
   try {
-    const contacts = await readContactsFile();
-
-    return contacts;
+    return Contact.find();
   } catch (error) {
-    console.error("Error occured when trying to show contacts:".red, error);
+    console.error("Error occured when trying to show contacts:", error);
+    throw error;
   }
 };
 
 const getContactById = async (contactId) => {
   try {
-    const contact = await readContactsFile();
-    const searchedContact = contacts.find(
-      (contact) => contact.id === contactId
-    );
-
-    return searchedContact;
+    const contact = await Contact.findById(contactId);
+    return contact;
   } catch (error) {
-    console.error("Error occured when trying to get contact:".red, error);
+    console.error("Error occured when trying to get contact:", error);
+    throw error;
   }
 };
 
 const removeContact = async (contactId) => {
   try {
-    try {
-      const contacts = await readContactsFile();
-      const filteredContacts = contacts.filter(
-        (contact) => contact.id !== contactId
-      );
-
-      if (filteredContacts.length < contacts.length) {
-        await writeContactsFile(filteredContacts);
-      } else {
-        console.log(`Contact with ID ${contactId} not found`.yellow);
-      }
-    } catch (error) {
-      console.error("Error occured when removing contact:".red, error);
-    }
-  } catch (error) {}
+    const result = await Contact.findByIdAndRemove(contactId);
+    return result;
+  } catch (error) {
+    console.error("Error occured when removing contact:", error);
+    throw error;
+  }
 };
 
 const addContact = async (body) => {
   try {
-    const contacts = await readContactsFile();
-    const newContact = {
-      id: uuidv4(),
-      ...body,
-    };
-    contacts.push(newContact);
-    await writeContactsFile(contacts);
+    const newContact = await Contact.create(body);
     return newContact;
   } catch (error) {
-    console.error("Error occured when adding contact:".red, error);
+    console.error("Error occured when adding contact:", error);
+    throw error;
   }
 };
 
 const updateContact = async (contactId, body) => {
   try {
-    const contacts = await readContactsFile();
-    const contactToUpdateIndex = contacts.findIndex(
-      (contact) => contact.id === contactId
-    );
-
-    if (contactToUpdateIndex === -1) {
-      console.log(`Contact with ID ${contactId} not found`.red);
-      return null;
-    }
-
-    const updatedContact = {
-      ...contacts[contactToUpdateIndex],
-      ...body,
-    };
-
-    contacts[contactToUpdateIndex] = updatedContact;
-
-    await writeContactsFile(contacts);
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+      new: true,
+    });
+    return updatedContact;
   } catch (error) {
-    console.error("Error occurred when updating contact:".red, error);
+    console.error("Error occurred when updating contact:", error);
+    throw error;
+  }
+};
+
+const updateFavorite = async (contactId, favorite) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+    return updatedContact;
+  } catch (error) {
+    console.error("Error occured when updating contact:", error);
+    throw error;
   }
 };
 
@@ -111,4 +71,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateFavorite,
 };

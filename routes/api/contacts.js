@@ -8,12 +8,14 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateFavorite,
 } = require("../../models/contacts");
 
 const schema = Joi.object({
   name: Joi.string().alphanum().min(2).max(40).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().min(3).max(25).required(),
+  favorite: Joi.boolean(),
 });
 
 router.get("/", async (req, res, next) => {
@@ -127,6 +129,41 @@ router.put("/:contactId", async (req, res, next) => {
         status: "error",
         code: 404,
         message: "Not found",
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("./:contactId/favorite", async (req, res, next) => {
+  try {
+    const contactId = req.params.contactId;
+    const { favorite } = req.body;
+
+    if (favorite === undefined) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Missing field favorite",
+      });
+    }
+
+    const updatedContact = await updateFavorite(contactId, favorite);
+
+    if (updatedContact) {
+      res.json({
+        status: "succes",
+        code: 200,
+        updatedData: {
+          contact: updatedContact,
+        },
+      });
+    } else {
+      res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Contact not found",
       });
     }
   } catch (error) {
