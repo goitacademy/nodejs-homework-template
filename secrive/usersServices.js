@@ -3,6 +3,7 @@ const { HttpError } = require("../helpers/HttpError");
 const userSchemaDB = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 const registerUserService = async (userData) => {
   const res = await userSchemaDB.findOne({ email: userData.email });
@@ -15,6 +16,7 @@ const registerUserService = async (userData) => {
   const newUser = {
     email: userData.email,
     password: hash,
+    avatarURL: gravatar.url(userData.email),
   };
 
   const result = await userSchemaDB.create(newUser);
@@ -52,9 +54,14 @@ const subscriptionUserService = async (userId, subscription) => {
   );
 };
 
+const changeAvatarUserService = async (userId, filename) => {
+  return await userSchemaDB.findByIdAndUpdate(userId, { avatarURL: filename });
+};
+
 module.exports = {
   registerUserService,
   loginUserService,
   logoutUserService,
   subscriptionUserService,
+  changeAvatarUserService,
 };
