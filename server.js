@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const routerApi = require("./api");
+const contactRoutes = require("./routes/contact.routes");
+const authRoutes = require("./routes/auth.routes");
 
 require("dotenv").config();
 
@@ -14,7 +15,7 @@ app.use(cors());
 
 require("./config/config-passport");
 
-app.use("/api", routerApi);
+app.use("/api", contactRoutes, authRoutes);
 
 app.use((_, res, __) => {
   res.status(404).json({

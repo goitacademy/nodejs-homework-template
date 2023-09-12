@@ -1,4 +1,4 @@
-const Contact = require("./schemas/contact");
+const Contact = require("../models/contact.model");
 
 const getAllContacts = async (userId) => {
   return Contact.find({ owner: userId });
@@ -8,8 +8,8 @@ const getContactById = async (id) => {
   return Contact.findOne({ _id: id });
 };
 
-const createContact = ({ name, email, phone }) => {
-  return Contact.create({ name, email, phone });
+const createContact = ({ name, email, phone, owner }) => {
+  return Contact.create({ name, email, phone, owner });
 };
 
 const updateContact = (id, fields) => {
