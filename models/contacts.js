@@ -1,15 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
-const Joi = require("joi");
+const setupConnection = require("../utils/setupMongoConnect");
+setupConnection();
 
-const schema = Joi.object().keys({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string()
-    .regex(/^\d{3}-\d{3}-\d{4}$/)
-    .required(),
-});
+const {
+  addContactValidationSchema,
+} = require("../utils/validation/addContactValidationSchema.js");
 
 const contactsPath = path.join(process.cwd(), "models", "contacts.json");
 const delContactsPath = path.join(
@@ -20,7 +17,7 @@ const delContactsPath = path.join(
 
 const listContacts = async (req, res, next) => {
   const contactsAll = await readContacts(contactsPath);
-  return res.status(200).json(contactsAll);
+  return res.status(200).json({ status: "success", code: 200, contactsAll });
 };
 
 const getContactById = async (req, res, next) => {
@@ -52,7 +49,7 @@ const removeContact = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  const { error } = addContactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send({
       message: `Error in required field: ${error.details[0].path[0]}`,
@@ -66,7 +63,7 @@ const addContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  const { error } = schema.validate(req.body);
+  const { error } = addContactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send({
       message: `Error in required field: ${error.details[0].path[0]}`,
