@@ -11,7 +11,8 @@ const schema = require("../../utils/validation");
 
 const router = express.Router();
 
-const validateData = async (req, res, next) => {
+router.use(express.json());
+const validatedData = async (req, res, next) => {
   try {
     const body = await schema.validateAsync(req.body);
     req.validatedData = body;
@@ -23,9 +24,6 @@ const validateData = async (req, res, next) => {
     });
   }
 };
-
-router.use(express.json());
-
 router.get("/", async (_, res, next) => {
   try {
     const contacts = await listContacts();
@@ -71,15 +69,15 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", validateData, async (req, res, next) => {
+router.post("/", validatedData, async (req, res, next) => {
   try {
-    const contact = { id: uuidv4(), ...req.validatedData };
-    await addContact(contact);
+    const newContact = { id: uuidv4(), ...req.validatedData };
+    await addContact(newContact);
 
     res.status(201).json({
       status: 201,
       data: {
-        contact,
+        newContact,
       },
     });
   } catch (err) {
@@ -111,10 +109,10 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", validateData, async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await updateContact(contactId, req.validatedData);
+    const contact = await updateContact(contactId, req.validateData);
 
     if (contact) {
       res.json({

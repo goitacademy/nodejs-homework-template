@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+
 const customMessages = {
   name: {
     "string.pattern.base":
@@ -13,20 +14,20 @@ const customMessages = {
 
 const schema = Joi.object({
   name: Joi.string()
-    .pattern(/^[A-Za-z\s\-]+$/)
+    .pattern(/^[A-Za-z\s-]+$/)
     .min(3)
     .max(30)
     .trim()
-
     .messages(customMessages.name),
   email: Joi.string().email().trim(),
   phone: Joi.string()
-    .pattern(/^[\d\-]+$/)
+    .pattern(/^[\d-]+$/)
     .min(3)
     .max(16)
     .trim()
-
     .messages(customMessages.phone),
 });
 
 module.exports = schema;
+
+
