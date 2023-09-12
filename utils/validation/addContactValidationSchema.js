@@ -6,6 +6,7 @@ const addContactValidationSchema = Joi.object().keys({
   phone: Joi.string()
     .regex(/^\d{3}-\d{3}-\d{4}$/)
     .required(),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {

@@ -1,101 +1,83 @@
-const fs = require("fs/promises");
-const path = require("path");
-const crypto = require("crypto");
-const setupConnection = require("../utils/setupMongoConnect");
-setupConnection();
+const { getAll, getById, create, update, remove } = require("../service/index");
 
 const {
   addContactValidationSchema,
 } = require("../utils/validation/addContactValidationSchema.js");
 
-const contactsPath = path.join(process.cwd(), "models", "contacts.json");
-const delContactsPath = path.join(
-  process.cwd(),
-  "models",
-  "deleteContacts.json"
-);
-
 const listContacts = async (req, res, next) => {
-  const contactsAll = await readContacts(contactsPath);
-  return res.status(200).json({ status: "success", code: 200, contactsAll });
+  try {
+    const contactsAll = await getAll();
+
+    return res.status(200).json({ status: "success", code: 200, contactsAll });
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const getContactById = async (req, res, next) => {
-  const contactsAll = await readContacts(contactsPath);
-  const contact = contactsAll.find(
-    (contact) => contact.id === req.params.contactId
-  );
-  if (!contact) {
-    return res.status(404).json({ message: "Not found" });
+  const id = req.params.contactId;
+  console.log("id:", id);
+  try {
+    const contact = await getById(id);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    res.status(200).json(contact);
+  } catch (error) {
+    console.error(error.message);
   }
-  res.status(200).json(contact);
 };
 
 const removeContact = async (req, res, next) => {
-  const contactsAll = await readContacts(contactsPath);
-  const delContactsAll = await readContacts(delContactsPath);
-  const indexContact = contactsAll.findIndex(
-    (contact) => contact.id === req.params.contactId
-  );
-  if (indexContact === -1) {
-    return res.status(404).json({ message: "Not found" });
+  const id = req.params.contactId;
+  try {
+    const contact = await remove(id);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    return res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    console.error(error.message);
   }
-
-  const [del] = contactsAll.splice(indexContact, 1);
-  delContactsAll.unshift(del);
-  await reWriteCOntacts(delContactsPath, delContactsAll);
-  await reWriteCOntacts(contactsPath, contactsAll);
-  return res.status(200).json({ message: "contact deleted" });
 };
 
 const addContact = async (req, res, next) => {
+  console.log("req.body:", req.body);
   const { error } = addContactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send({
       message: `Error in required field: ${error.details[0].path[0]}`,
     });
   }
-  const contactsAll = await readContacts(contactsPath);
-  const newContact = { id: crypto.randomUUID(), ...req.body };
-  contactsAll.unshift(newContact);
-  await reWriteCOntacts(contactsPath, contactsAll);
-  return res.status(201).json(newContact);
+  try {
+    const newContact = await create(req.body);
+    return res.status(201).json(newContact);
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const updateContact = async (req, res, next) => {
+  const id = req.params.contactId;
   const { error } = addContactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send({
       message: `Error in required field: ${error.details[0].path[0]}`,
     });
   }
-  const contactsAll = await readContacts(contactsPath);
-  const delContactsAll = await readContacts(delContactsPath);
-  const indexContact = contactsAll.findIndex(
-    (contact) => contact.id === req.params.contactId
-  );
-  if (indexContact === -1) {
-    return res.status(400).json({ message: "Contact not found" });
+  try {
+    const contact = await update(id, req.body);
+    if (!contact) {
+      return res.status(400).json({ message: "Contact not found" });
+    }
+    if (!req.body) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    return res.status(404).json(contact);
+  } catch (error) {
+    console.error(error.message);
   }
-  if (!req.body) {
-    return res.status(400).json({ message: "missing fields" });
-  }
-
-  delContactsAll.unshift(contactsAll[indexContact]);
-  contactsAll[indexContact] = { ...contactsAll[indexContact], ...req.body };
-  await reWriteCOntacts(delContactsPath, delContactsAll);
-  await reWriteCOntacts(contactsPath, contactsAll);
-  return res.status(404).json(contactsAll[indexContact]);
 };
-
-async function readContacts(file) {
-  const data = await fs.readFile(file);
-  return JSON.parse(data);
-}
-
-async function reWriteCOntacts(file, data) {
-  await fs.writeFile(file, JSON.stringify(data, null, 2));
-}
 
 module.exports = {
   listContacts,
