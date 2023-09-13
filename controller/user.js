@@ -18,7 +18,7 @@ const auth = async (req, res, next) => {
 		req.token = authorization.split(" ")[1];
 		const userDetailsFromToken = jwt.verify(req.token, secret);
 		const user = await User.findById(userDetailsFromToken.id);
-		if (!user || err) {
+		if (!user || !user.token || err) {
 			return res.status(401).json({
 				status: "error",
 				code: 401,
