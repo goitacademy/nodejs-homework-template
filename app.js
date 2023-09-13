@@ -2,6 +2,9 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import contactsRouter from "./routes/api/contacts-router.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
