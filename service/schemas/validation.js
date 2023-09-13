@@ -25,7 +25,13 @@ const schemaUpdate = Joi.object({
         .trim()
 }).min(1);
 
+const schemaUpdateFavorite = Joi.object({
+    favorite: Joi.boolean()
+    .required()
+})
+
 module.exports = {
     schemaAdd,
     schemaUpdate,
+    schemaUpdateFavorite,
 };
