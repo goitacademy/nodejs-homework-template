@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const schema = new Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
@@ -8,21 +8,25 @@ const schema = new Schema(
     },
     email: {
       type: String,
-      required: true,
     },
     phone: {
       type: String,
-      required: true,
     },
     favorite: {
       type: Boolean,
       default: false,
     },
   },
-
   { versionKey: false, timestamps: true }
 );
-
-const Contact = model("contact", schema);
+contactSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
+contactSchema.post("save", (err, data, next) => {
+  err.status = 400;
+  next();
+});
+const Contact = model("contact", contactSchema);
 
 module.exports = Contact;
