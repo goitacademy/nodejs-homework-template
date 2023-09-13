@@ -3,6 +3,7 @@ const app = require("./app");
 const { Host } = process.env;
 
 const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
 
 mongoose
   .connect(Host)
