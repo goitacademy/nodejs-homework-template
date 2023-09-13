@@ -13,7 +13,7 @@ router.post("/logout", auth, usersController.logout);
 
 router.get("/current", auth, usersController.getCurrent);
 
-router.patch("/subscription", auth, usersController.setSubscription);
+router.patch("/subscriptions", auth, usersController.setSubscription);
 
 router.patch("/avatars", auth, upload.single("avatar"), usersController.updateAvatar);
 
