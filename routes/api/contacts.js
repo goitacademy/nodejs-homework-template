@@ -11,6 +11,8 @@ router.post("/", contact.add);
 
 router.put("/:contactId", contact.update);
 
+router.patch("/:contactId/favorite", contact.updateFavorite);
+
 router.delete("/:contactId", contact.remove);
 
 module.exports = router;

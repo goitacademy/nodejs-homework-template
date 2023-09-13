@@ -1,9 +1,10 @@
-const contacts = require("../models/contacts");
-const schema = require("../schemas/contacts");
+const Contact = require("../models/contact");
+
+const schema = require("../schemes/contacts");
 
 const list = async (req, res, next) => {
   try {
-    const list = await contacts.listContacts();
+    const list = await Contact.find();
 
     res.json(list);
   } catch (error) {
@@ -13,7 +14,7 @@ const list = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   try {
-    const contact = await contacts.getContactById(req.params.contactId);
+    const contact = await Contact.findById(req.params.contactId);
     if (!contact) {
       res.status(404).json({ message: "Not found" });
       return;
@@ -34,7 +35,7 @@ const add = async (req, res, next) => {
       return;
     }
 
-    const newContact = await contacts.addContact(req.body);
+    const newContact = await Contact.create(req.body);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
@@ -50,9 +51,10 @@ const update = async (req, res, next) => {
       return;
     }
 
-    const updatedContact = await contacts.updateContact(
+    const updatedContact = await Contact.findByIdAndUpdate(
       req.params.contactId,
-      req.body
+      req.body,
+      { new: true }
     );
 
     if (!updatedContact) {
@@ -66,9 +68,33 @@ const update = async (req, res, next) => {
   }
 };
 
+const updateFavorite = async (req, res, next) => {
+  try {
+    const { error } = schema.updateFavorite.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    const updatedContact = await Contact.findByIdAndUpdate(
+      req.params.contactId,
+      req.body,
+      { new: true }
+    );
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
+      return;
+    }
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const remove = async (req, res, next) => {
   try {
-    const status = await contacts.removeContact(req.params.contactId);
+    const status = await Contact.findOneAndRemove({
+      _id: req.params.contactId,
+    });
     if (!status) {
       res.status(404).json({ message: "Not found" });
       return;
@@ -84,5 +110,6 @@ module.exports = {
   getById,
   add,
   update,
+  updateFavorite,
   remove,
 };
