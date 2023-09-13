@@ -1,6 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const {DB_HOST} = require("./confidential")
+const {DB_HOST} = process.env;
 
 mongoose.connect(DB_HOST)
   .then(() => {
