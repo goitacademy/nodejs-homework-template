@@ -1,7 +1,5 @@
 const app = require("./app");
 
-require();
-
 const { Host } = process.env;
 
 const mongoose = require("mongoose");

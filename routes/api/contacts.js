@@ -14,6 +14,7 @@ const addSchema = Joi.object({
     tlds: { allow: ["com", "net"] },
   }),
   phone: Joi.string().required(),
+  favorite: Joi.bool,
 });
 
 // ------------------Get contacts------------------
