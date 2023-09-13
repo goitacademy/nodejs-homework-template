@@ -8,7 +8,7 @@ const get = async (req, res, next) => {
 			...query,
 			owner: user._id,
 		});
-		res.status(200).json({
+		return res.status(200).json({
 			data: {
 				contacts: results,
 			},
@@ -26,13 +26,13 @@ const getOne = async (req, res, next) => {
 		const results = await contactServices.getOne(contactId, user._id);
 
 		if (results) {
-			res.status(200).json({
+			return res.status(200).json({
 				data: {
 					contact: results,
 				},
 			});
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				message: "Not found",
 			});
 		}
@@ -59,13 +59,13 @@ const create = async (req, res, next) => {
 				...body,
 				owner: user._id,
 			});
-			res.status(201).json({
+			return res.status(201).json({
 				data: {
 					contact: results,
 				},
 			});
 		} else {
-			res.status(400).json({
+			return res.status(400).json({
 				message: "missing required field",
 			});
 		}
@@ -93,18 +93,18 @@ const update = async (req, res, next) => {
 		const results = await contactServices.update(contactId, user._id, body);
 		if (!error) {
 			if (results) {
-				res.status(200).json({
+				return res.status(200).json({
 					data: {
 						contact: results,
 					},
 				});
 			} else {
-				res.status(404).json({
+				return res.status(404).json({
 					message: "Not found",
 				});
 			}
 		} else {
-			res.status(400).json({
+			return res.status(400).json({
 				message: "missing fields",
 			});
 		}
@@ -132,18 +132,18 @@ const updateStatus = async (req, res, next) => {
 		);
 		if (!error) {
 			if (results) {
-				res.status(200).json({
+				return res.status(200).json({
 					data: {
 						contact: results,
 					},
 				});
 			} else {
-				res.status(404).json({
+				return res.status(404).json({
 					message: "Not found",
 				});
 			}
 		} else {
-			res.status(400).json({
+			return res.status(400).json({
 				message: "missing field favorite",
 			});
 		}
@@ -159,14 +159,14 @@ const remove = async (req, res, next) => {
 		const { contactId } = params;
 		const results = await contactServices.remove(contactId, user._id);
 		if (results) {
-			res.status(200).json({
+			return res.status(200).json({
 				data: {
 					contact: results,
 				},
 				message: "Contact removed from list",
 			});
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				message: "Not found",
 			});
 		}
