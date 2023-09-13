@@ -1,8 +1,10 @@
-// userController.js
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs/promises");
 
 const registerUser = async (req, res) => {
   try {
@@ -99,9 +101,33 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+const setUserAvatar = async (req, res) => {
+  try {
+    const { file } = req;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file provided" });
+    }
+    const image = await Jimp.read(file.path);
+    await image.cover(250, 250).write(file.path);
+
+    const newAvatarName = `${req.user.id}${path.extname(file.originalname)}`;
+    await fs.rename(file.path, `public/avatars/${newAvatarName}`);
+
+    req.user.avatarURL = `/avatars/${newAvatarName}`;
+    await req.user.save();
+
+    res.json({ avatarURL: req.user.avatarURL });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   getCurrentUser,
+  setUserAvatar,
 };
