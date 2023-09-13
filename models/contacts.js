@@ -2,6 +2,7 @@ const { getAll, getById, create, update, remove } = require("../service/index");
 
 const {
   addContactValidationSchema,
+  updateStatusFavorite,
 } = require("../utils/validation/addContactValidationSchema.js");
 
 const listContacts = async (req, res, next) => {
@@ -42,7 +43,6 @@ const removeContact = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  console.log("req.body:", req.body);
   const { error } = addContactValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send({
@@ -79,10 +79,33 @@ const updateContact = async (req, res, next) => {
   }
 };
 
+const updateStatusContact = async (req, res, next) => {
+  const id = req.params.contactId;
+  const { error } = updateStatusFavorite.validate(req.body);
+  if (error) {
+    return res.status(400).send({
+      message: `Error in required field: ${error.details[0].path[0]}`,
+    });
+  }
+  try {
+    const contact = await update(id, req.body);
+    if (!contact) {
+      return res.status(400).json({ message: "Contact not found" });
+    }
+    if (!req.body) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    return res.status(404).json(contact);
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

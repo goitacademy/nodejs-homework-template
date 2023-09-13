@@ -5,7 +5,7 @@ const getAll = async () => {
 };
 
 const getById = (id) => {
-  return Contact.findById({ _id: id });
+  return Contact.findById(id);
 };
 
 const create = ({ name, email, phone, favorite }) => {
@@ -26,4 +26,5 @@ module.exports = {
   create,
   update,
   remove,
+  //  updateStatus,
 };
