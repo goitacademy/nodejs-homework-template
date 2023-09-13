@@ -1,17 +1,9 @@
-const signin = (credentials) => {
+const User = require("../models/user.model");
 
-}
-
-const signout = () => {
-
-}
-
-const signup = (user) => {
-
-}
+const deleteToken = async (userId) => {
+	await User.findByIdAndUpdate(userId, { token: null }, { new: true });
+};
 
 module.exports = {
-    signin,
-    signout,
-    signup,
-}
+	deleteToken,
+};

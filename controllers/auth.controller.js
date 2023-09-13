@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
+const { deleteToken } = require("../services/auth.service");
 
 const schema = Joi.object({
 	email: Joi.string()
@@ -44,38 +45,13 @@ const login = async (req, res) => {
 	}
 };
 
-const logout = async(req, res) => {
- const { body } = req;
- const { token } = body;
- const { error } = schema.validate(body);
- const user = await User.findOne({ email });
+const logout = async (req, res) => {
+	const { _id } = req.user;
 
- if (error) {
-		return res.status(400).json({
-			status: "Bad Request",
-			message: error.message,
-		});
- } else if (!user || !user.validPassword(password)) {
-		return res.status(401).json({
-			status: "Unauthorized",
-			message: "Email or password is wrong",
-		});
- } else {
-		const payload = {
-			id: user.id,
-			username: user.username,
-		};
-
-		const token = jwt.sign(payload, process.env.SECRET, {
-			expiresIn: "1h",
-		});
-		return res.status(200).json({
-			status: "success",
-			data: {
-				token,
-			},
-		});
- }
+	await deleteToken(_id.toString());
+	return res.status(204).json({
+		status: "No Content",
+	});
 };
 
 const signup = async (req, res, next) => {
@@ -112,8 +88,14 @@ const signup = async (req, res, next) => {
 	}
 };
 
+const current = (req, res) => {
+	const { email, subscription } = req.user;
+	return res.json({ email, subscription});
+};
+
 module.exports = {
 	login,
 	logout,
 	signup,
+	current,
 };
