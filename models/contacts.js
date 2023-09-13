@@ -1,11 +1,11 @@
 const fs = require("fs/promises");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const path = require("path");
 
 // метод path.join збирає та нормалізує абсолютний шлях до файлу
-const contactsPath = path.join(__dirname, "models", "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
-// читає файл контактів, форматує його та повертає масив контактів 
+// читає файл контактів, форматує його та повертає масив контактів
 const listContacts = async () => {
   try {
     const contacts = await fs.readFile(contactsPath, "utf-8");
@@ -20,47 +20,46 @@ const getContactById = async (id) => {
   try {
     const contacts = await listContacts();
     const result = contacts.find((item) => item.id === id);
-    return result || null; 
+    return result || null;
   } catch (error) {
     console.log(`Error: ${error.message}`);
-    
   }
 };
 
 // отримуємо всі контакти, знаходимо необхідний по id. Якщо не знайдено такий індекс, то повертає null.
-//  Повертає об'єкт видаленого контакту(метод splice) 
+//  Повертає об'єкт видаленого контакту(метод splice)
 // Повністю перезаписує список контактів
 const removeContact = async (id) => {
-try {
- const contacts = await listContacts();
-    const index = contacts.findIndex(item => item.id === id);
+  try {
+    const contacts = await listContacts();
+    const index = contacts.findIndex((item) => item.id === id);
     if (index === -1) {
-        return null;
+      return null;
     }
     const [result] = contacts.splice(index, 1);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return result;
-
-} catch (error) {
-  console.log(`Error: ${error.message}`);
-}
+  } catch (error) {
+    console.log(`Error: ${error.message}`);
+  }
 };
 
 // отримує всі контакти, розпиляє їх, додає новий контакт. Повністю перезаписує масив контактів вже з новим контактом.
 //  Повертає об'єкт доданого контакту.
 const addContact = async (body) => {
   try {
-    // const { name, email, phone } = body;
-      const contacts = await listContacts();
+    const { name, email, phone } = body;
+    const contacts = await listContacts();
     const newContact = {
-        id: uuidv4(),
-        ...body,
-    }
+      id: uuidv4(),
+      name,
+      email,
+      phone,
+    };
     contacts.push(newContact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
     return newContact;
-
   } catch (error) {
     console.log(`Error: ${error.message}`);
   }
@@ -69,20 +68,18 @@ const addContact = async (body) => {
 // отримуємо всі контакти, знаходимо необхідний по id. Якщо не знайдено такий індекс, то повертає null.
 // Якщо знайдено, то перезаписуємо масив контакту та оновлюємо весь список контактів. Повертає об'єкт оновленого контакту
 const updateContact = async (id, body) => {
-try {
-      const contacts = await listContacts();
-    const index = contacts.findIndex(item => item.id === id);
+  try {
+    const contacts = await listContacts();
+    const index = contacts.findIndex((item) => item.id === id);
     if (index === -1) {
-        return null;
+      return null;
     }
     contacts[index] = { id, ...body };
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
-  
-} catch (error) {
-  console.log(`Error: ${error.message}`);
-}
-
+    return contacts[index];
+  } catch (error) {
+    console.log(`Error: ${error.message}`);
+  }
 };
 
 module.exports = {
@@ -92,5 +89,3 @@ module.exports = {
   addContact,
   updateContact,
 };
-
-
