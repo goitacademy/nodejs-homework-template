@@ -1,6 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
-// const Book = require("../../models/contact")
+const Contact = require("../../models/contact")
 
 const { HttpError } = require("../../helpers");
 
@@ -16,7 +16,7 @@ const addSchema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
