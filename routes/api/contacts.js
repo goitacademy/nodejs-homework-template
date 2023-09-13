@@ -6,19 +6,31 @@ const {
   addContact,
   updateContact,
 } = require('../../models/contacts');
-const {schemaAdd, schemaUpdate} = require('../../validation/validation');
+const { schemaAdd, schemaUpdate } = require('../../validation/validation');
 
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json({ message: contacts });
+  try {
+    const contacts = await listContacts();
+    res.status(200).json({ message: contacts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Unknown Error' });
+  }
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const response = await getContactById(contactId);
-  response ? res.status(200).json({ messagex: response }) : res.status(404).json({ message: 'Not found' });
+  try {
+    const { contactId } = req.params;
+    const response = await getContactById(contactId);
+    response
+      ? res.status(200).json({ message: response })
+      : res.status(404).json({ message: 'Not found' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Unknown Error' });
+  }
 });
 
 router.post('/', async (req, res, next) => {
@@ -26,30 +38,47 @@ router.post('/', async (req, res, next) => {
     const body = await schemaAdd.validateAsync(req.body);
     const response = await addContact(body);
     res.status(201).json({ message: response });
-  }
-  catch (err) {
-    res.status(400).json({ message: err.details[0].message })
-    console.log(err);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ message: err.details[0].message });
   }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const response = await removeContact(contactId);
-  response ? res.status(200).json({ message: response }) : res.status(404).json({ message: 'Not found' });
-});
-
-router.put('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const updatedData = await schemaUpdate.validateAsync(req.body);
-    const response = await updateContact(contactId, updatedData);
-    response ? res.status(200).send(response) : res.status(404).json({message: 'Not found'})
-  }
-  catch (err) {
-    res.status(400).json({ message: err.details[0].message });
-    console.log(err);
+    const response = await removeContact(contactId);
+    response
+      ? res.status(200).json({ message: response })
+      : res.status(404).json({ message: 'Not found' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Unknown Error' });
   }
 });
 
-module.exports = router
+router.put('/:contactId', (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error } = schemaUpdate.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+
+    const updatedData = req.body;
+    const response = updateContact(contactId, updatedData);
+
+    if (response) {
+      res.status(200).send(response);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Unknown Error' });
+  }
+});
+
+
+module.exports = router;
