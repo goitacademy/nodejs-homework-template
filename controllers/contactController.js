@@ -1,6 +1,14 @@
-const contactsAddSchema = require("../schemas/contacts-schemas");
-const HttpError = require("../helpers/HttpError");
-const {updateContactById, removeContact, addContact, listContacts, getContactById} = require("../models/contacts");
+const contactsAddSchema = require('../schemas/contacts-schemas');
+const HttpError = require('../helpers/HttpError');
+const {
+  updateContactById,
+  removeContact,
+  addContact,
+  listContacts,
+  getContactById,
+  updateStatusContact,
+} = require('../repositories/contacts');
+
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -10,6 +18,7 @@ const getAllContacts = async (req, res, next) => {
     next(error);
   }
 };
+
 const getContact = async (req, res, next) => {
   try {
     const {contactId} = req.params;
@@ -42,19 +51,19 @@ const updateContact = async (req, res, next) => {
 };
 
 const createContact = async (req, res, next) => {
-  console.log(req.body);
   try {
     const {error} = contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
-    const {name, email, phone} = req.body;
-    const result = await addContact(name, email, phone);
+    const {name, email, phone, favorite} = req.body;
+    const result = await addContact(name, email, phone, favorite);
     res.status(201).json(result);
   } catch (error) {
     next(error);
   }
 };
+
 const deleteContact = async (req, res, next) => {
   try {
     const {contactId} = req.params;
@@ -70,10 +79,27 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
+const updateContactFavorite = async (req, res, next) => {
+  const {contactId} = req.params;
+  const {favorite = null} = req.body || {};
+
+  if (favorite === null) {
+    return res.status(400).json({message: 'missing field favorite'});
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, favorite);
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllContacts,
   getContact,
   createContact,
   deleteContact,
-  updateContact
-}
+  updateContact,
+  updateContactFavorite,
+};
