@@ -48,7 +48,7 @@ const sampleUnsuccessfulLogin = async () => {
   try {
     const res = await request(app).post("/api/users/login").send({
       email: "test@gmail.com",
-      password: "test1234",
+      password: "test12345",
     });
 
     return res.body;
