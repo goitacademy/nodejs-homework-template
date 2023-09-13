@@ -1,11 +1,11 @@
-const ctrlWrap = require("../decorators/ctrl");
+const ctrlWrap = require('../decorators/ctrl');
 const {
   Contacts,
   contactAddSchema,
   contactUpdateSchema,
   contactUpdateStatusSchema,
-} = require("../schema/contacts");
-const httpError = require("../helpers/HttpErr");
+} = require('../schema/contacts');
+const httpError = require('../helpers/HttpErr');
 
 const getAllContacts = async (req, res) => {
   const contacts = await Contacts.find();
@@ -43,12 +43,12 @@ const removeContact = async (req, res) => {
     throw httpError(404);
   }
 
-  res.json({ message: "contact deleted" });
+  res.json({ message: 'contact deleted' });
 };
 
 const updateContact = async (req, res) => {
   if (!Object.keys(req.body).length) {
-    throw httpError(400, "missing fields");
+    throw httpError(400, 'missing fields');
   }
 
   const { error } = contactUpdateSchema.validate(req.body);
@@ -72,7 +72,7 @@ const updateContact = async (req, res) => {
 
 const updateStatusContact = async (req, res) => {
   if (!Object.keys(req.body).length) {
-    throw httpError(400, "missing field favorite");
+    throw httpError(400, 'missing field favorite');
   }
 
   const { error } = contactUpdateStatusSchema.validate(req.body);

@@ -1,9 +1,9 @@
-const express = require("express");
+const express = require('express');
 // const Joi = require("joi");
 
 const router = express.Router();
-const ctrl = require("../../controllers/contacts");
-const validID = require("../../middleware/validID");
+const ctrl = require('../../controllers/contacts');
+const validID = require('../../middleware/validID');
 // const {
 //   listContacts,
 //   getById,
@@ -24,12 +24,12 @@ const validID = require("../../middleware/validID");
 //   res.json(allContacts);
 // });
 console.log(validID);
-router.get("/", ctrl.getAllContacts);
-router.get("/:contactId", validID, ctrl.getContactById);
-router.post("/", ctrl.addContact);
-router.delete("/:contactId", validID, ctrl.removeContact);
-router.put("/:contactId", validID, ctrl.updateContact);
-router.patch("/:contactId/favorite", validID, ctrl.updateStatusContact);
+router.get('/', ctrl.getAllContacts);
+router.get('/:contactId', validID, ctrl.getContactById);
+router.post('/', ctrl.addContact);
+router.delete('/:contactId', validID, ctrl.removeContact);
+router.put('/:contactId', validID, ctrl.updateContact);
+router.patch('/:contactId/favorite', validID, ctrl.updateStatusContact);
 
 // router.get("/:id", async (req, res, next) => {
 //   const data = await getById(req.params.id);
