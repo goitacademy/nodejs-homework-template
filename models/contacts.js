@@ -1,9 +1,9 @@
 const fs = require("fs/promises");
-const { nanoid } = require('nanoid');
+const { v4: uuidv4 } = require('uuid');
 const path = require("path");
 
 // метод path.join збирає та нормалізує абсолютний шлях до файлу
-const contactsPath = path.join(__dirname, "db", "contacts.json");
+const contactsPath = path.join(__dirname, "models", "contacts.json");
 
 // читає файл контактів, форматує його та повертає масив контактів 
 const listContacts = async () => {
@@ -53,7 +53,7 @@ const addContact = async (body) => {
     // const { name, email, phone } = body;
       const contacts = await listContacts();
     const newContact = {
-        id: nanoid(),
+        id: uuidv4(),
         ...body,
     }
     contacts.push(newContact);
@@ -92,3 +92,5 @@ module.exports = {
   addContact,
   updateContact,
 };
+
+

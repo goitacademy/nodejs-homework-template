@@ -11,8 +11,6 @@ const router = express.Router();
 
 // CONTROLLERS
 
-// не працює
-
 // отримання всіх контактів
 router.get("/", async (req, res, next) => {
   const allContacts = await listContacts();
