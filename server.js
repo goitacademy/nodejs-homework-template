@@ -1,7 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-const DB_HOST =
-  "mongodb+srv://Levandosp:Worldoftank@cluster0.if2rhl0.mongodb.net/contacts_db?retryWrites=true&w=majority";
+const {DB_HOST} = require("./config")
 
 mongoose.connect(DB_HOST)
   .then(() => {
