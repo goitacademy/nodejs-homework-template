@@ -9,9 +9,9 @@ const SRV_DB = process.env.DB_HOST;
 
 const body = {
   username: "test",
-  email: "test@wp.pl",
+  email: "test@gmail.com",
   password: "$2a$10$GDvbb5G27UijVE0q.k4FuOgJM.w2Qcv96rqLt6ovfwa6q3GRD/qCq",
-  avatarURL: gravatar.url("test@wp.pl", { s: "250", r: "pg", d: "mp" }, true),
+  avatarURL: gravatar.url("test@gmail.com", { s: "250", r: "pg", d: "mp" }, true),
   pubId: nanoid(),
 };
 
@@ -34,7 +34,7 @@ const deleteUser = async email => {
 const sampleSuccessfulLogin = async () => {
   try {
     const res = await request(app).post("/api/users/login").send({
-      email: "test@wp.pl",
+      email: "test@gmail.com",
       password: "test1234",
     });
 
@@ -47,8 +47,8 @@ const sampleSuccessfulLogin = async () => {
 const sampleUnsuccessfulLogin = async () => {
   try {
     const res = await request(app).post("/api/users/login").send({
-      email: "test1@wp.pl",
-      password: "test12345",
+      email: "test@gmail.com",
+      password: "test1234",
     });
 
     return res.body;
@@ -60,7 +60,7 @@ const sampleUnsuccessfulLogin = async () => {
 const sampleValidationLoginError = async () => {
   try {
     const res = await request(app).post("/api/users/login").send({
-      email: "test@wp.p",
+      email: "test@gmail.com",
     });
 
     return res.body;
