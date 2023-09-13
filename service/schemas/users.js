@@ -4,12 +4,12 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   email: {
     type: String,
-    required: [true, "Email jest wymagany"],
+    required: [true, "Email is essential"],
     unique: true,
   },
   password: {
     type: String,
-    required: [true, "Hasło jest wymagane"],
+    required: [true, "Password is essential"],
   },
   subscription: {
     type: String,

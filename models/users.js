@@ -1,76 +1,77 @@
-const Contact = require("../service/schemas/contacts.js");
+const bcrypt = require("bcrypt");
+const User = require("../service/schemas/users.js");
 
-const listContacts = async (userId) => {
+const getAllUsers = async () => {
   try {
-    return await Contact.find({ owner: userId });
+    return await User.find();
   } catch (err) {
-    console.log("Error getting contact list: ", err);
+    console.log("Error getting user list: ", err);
     throw err;
   }
 };
 
-const getContactById = async (userId, contactId) => {
+const getUser = async (id) => {
   try {
-    return await Contact.findOne({ owner: userId, _id: contactId });
+    return await User.findById(id);
   } catch (err) {
-    console.log(`Error getting contact with id ${contactId}: `, err);
+    console.log("Error getting user list: ", err);
     throw err;
   }
 };
 
-const removeContact = async (contactId, userId) => {
+const addUser = async (body) => {
+  const { email, password } = body;
+  const users = await User.find();
+  const userExist = users.find((user) => user.email === email);
+  if (userExist) return 409;
   try {
-    return await Contact.findByIdAndRemove({ owner: userId, _id: contactId });
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const user = { ...body, password: hashedPassword };
+    await User.create(user);
+    return user;
   } catch (err) {
-    console.log(`Error removing contact with id ${contactId}: `, err);
+    console.log("Error adding new user: ", err);
     throw err;
   }
 };
 
-const addContact = async (body, userId) => {
+const loginUser = async (body) => {
+  const { email, password } = body;
+  const users = await User.find();
+  const user = users.find((user) => user.email === email);
+  if (!user) return false;
   try {
-    const contactData = {
-      ...body,
-      owner: userId,
-    };
-    return await Contact.create(contactData);
+    const isUser = await bcrypt.compare(password, user.password);
+    if (!isUser) return false;
+    return user;
   } catch (err) {
-    console.log("Error adding new contact: ", err);
+    console.log("Error adding new user: ", err);
     throw err;
   }
 };
 
-const updateContact = async (contactId, body, userId) => {
+const patchUser = async (subscription, userId) => {
+  const availableSubscriptions = User.schema.path("subscription").enumValues;
+  if (!subscription || !availableSubscriptions.includes(subscription)) {
+    return 400;
+  }
   try {
-    return await Contact.findByIdAndUpdate(
-      { owner: userId, _id: contactId },
-      body,
-      { new: true }
+    return await User.findByIdAndUpdate(
+      { _id: userId },
+      { $set: { subscription: subscription } },
+      { new: true, select: "email subscription" }
     );
   } catch (err) {
-    console.error("An error occurred while updating contact: ", err);
-    throw err;
-  }
-};
-
-const updateStatusContact = async (contactId, favorite, userId) => {
-  try {
-    return await Contact.findByIdAndUpdate(
-      { owner: userId, _id: contactId },
-      { $set: { favorite: favorite } },
-      { new: true }
-    );
-  } catch (err) {
-    console.error("An error occurred while updating contact: ", err);
+    console.error("An error occurred while updating user: ", err);
     throw err;
   }
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
+  getAllUsers,
+  getUser,
+  addUser,
+  loginUser,
+  patchUser,
 };
