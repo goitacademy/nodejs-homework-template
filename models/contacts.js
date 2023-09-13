@@ -43,13 +43,13 @@ async function addContact(data) {
   return newContact;
 }
 
-async function updateContact(contactId, body) {
+async function updateContact(id, body) {
   const contacts = await listContacts();
-  const index = contacts.findIndex((i) => i.id === contactId);
+  const index = contacts.findIndex((i) => i.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { id, ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 }
