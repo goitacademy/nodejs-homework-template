@@ -2,6 +2,7 @@ require("dotenv").config();
 const service = require("../services/user.service");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET;
+const gravatar = require("gravatar");
 
 const createUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -15,7 +16,11 @@ const createUser = async (req, res, next) => {
     });
   }
   try {
-    user = await service.createUser(email, password);
+    user = await service.createUser(
+      email,
+      password,
+      gravatar.url(email, { d: "mp" }, true)
+    );
 
     res.status(201).json({
       status: "success",

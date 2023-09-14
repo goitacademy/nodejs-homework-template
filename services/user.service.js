@@ -1,8 +1,9 @@
 const User = require("../models/user.model");
 
-const createUser = async (email, password) => {
+const createUser = async (email, password, avatarUrl) => {
   const newUser = new User({ email });
   newUser.setPassword(password);
+  newUser.avatarURL = avatarUrl;
   return newUser.save();
 };
 
@@ -30,10 +31,19 @@ const removeToken = (id) => {
   );
 };
 
+const updateAvatar = (id, fileName) => {
+  return User.findByIdAndUpdate(
+    { _id: id },
+    { $set: { avatarURL: fileName } },
+    { new: true }
+  );
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserById,
   saveToken,
   removeToken,
+  updateAvatar,
 };

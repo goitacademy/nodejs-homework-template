@@ -3,6 +3,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const contactRoutes = require("./routes/contact.routes");
 const authRoutes = require("./routes/auth.routes");
+const uploadRoutes = require("./routes/upload.routes");
+const fs = require("fs").promises;
+const path = require("path");
 
 require("dotenv").config();
 
@@ -15,13 +18,13 @@ app.use(cors());
 
 require("./config/config-passport");
 
-app.use("/api", contactRoutes, authRoutes);
+app.use("/api", contactRoutes, authRoutes, uploadRoutes);
 
 app.use((_, res, __) => {
   res.status(404).json({
     status: "error",
     code: 404,
-    message: "Use api on routes: /api/contacts, api/users",
+    message: "Use api on routes: /api/contacts, /api/users",
     data: "Not found",
   });
 });
@@ -36,6 +39,24 @@ app.use((err, _, res, __) => {
   });
 });
 
+// Folders for uploading avatars
+
+const uploadDir = path.join(process.cwd(), ".tmp");
+const storeAvatarDir = path.join(process.cwd(), "public", "avatars");
+
+const isAccessible = (path) => {
+  return fs
+    .access(path)
+    .then(() => true)
+    .catch(() => false);
+};
+
+const createFolderIfNotExist = async (folder) => {
+  if (!(await isAccessible(folder))) {
+    await fs.mkdir(folder);
+  }
+};
+
 const PORT = process.env.PORT || 3000;
 const uriDb = process.env.DB_HOST;
 
@@ -47,6 +68,8 @@ const connection = mongoose.connect(uriDb, {
 connection
   .then(() => {
     app.listen(PORT, function () {
+      createFolderIfNotExist(uploadDir);
+      createFolderIfNotExist(storeAvatarDir);
       console.log(
         `Database connection successful. Server running. Use Contacts API on port: ${PORT}`
       );
