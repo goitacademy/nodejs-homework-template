@@ -1,17 +1,27 @@
-const express = require("express");
+const express = require('express');
+const { auth } = require('../middleweres/jwtStrategy');
+
+const {
+  get,
+  getById,
+  postNew,
+  putEditCont,
+  patchFav,
+  deleteCont,
+} = require('../controlers/contacts');
+
 const router = express.Router();
-const contactsController = require("../controller/contacts.controller");
 
-router.get("/contacts", contactsController.get);
+router.get('/', auth, get);
 
-router.get("/contacts/:contactId", contactsController.getById);
+router.get('/:contactId', auth, getById);
 
-router.post("/contacts", contactsController.create);
+router.post('/', auth, postNew);
 
-router.put("/contacts/:contactId", contactsController.update);
+router.delete('/:contactId', auth, deleteCont);
 
-router.patch("/contacts/:contactId/favorite", contactsController.updateFavorite);
+router.put('/:contactId', auth, putEditCont);
 
-router.delete("/contacts/:contactId", contactsController.remove);
+router.patch('/:contactId/favorite', auth, patchFav);
 
 module.exports = router;

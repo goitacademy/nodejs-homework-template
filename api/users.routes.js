@@ -1,11 +1,15 @@
-const express = require("express");
+const express = require('express');
+const {signUp, logIn, logOut, current, updateAvatar} = require('../controlers/users')
+const {auth}= require('../middleweres/jwtStrategy');
+const { fileUpload } = require('../middleweres/fileUpload');
+
 const router = express.Router();
-const usersController = require("../controller/users.controller");
-const authMiddleware = require("../auth/auth");
 
-router.post("/user/signup", usersController.registerUser);
-router.post("/user/login", usersController.loginUser);
-router.get("/user/logout", authMiddleware, usersController.logoutUser);
-router.get("/user/current", authMiddleware, usersController.currentUser);
+router.post('/signup', signUp)
+router.post('/login', logIn);
+router.get('/logout', auth, logOut)
+router.get('/current', auth, current)
+router.patch('/avatars', auth, fileUpload.single('avatar'), updateAvatar)
 
-module.exports = router;
+
+module.exports = router
