@@ -2,7 +2,6 @@ import { Schema, model } from "mongoose";
 
 const user = new Schema(
   {
-    pubId: { type: String, required: true },
     username: {
       type: String,
       match: [/^[A-Za-z\s]+$/, "Username must only contain letters"],
@@ -45,12 +44,22 @@ const user = new Schema(
       type: String,
       enum: {
         values: ["starter", "pro", "business"],
-        message:"Subscription must be one of these values - [starter, pro, business]",
+        message:
+          "Subscription must be one of these values - [starter, pro, business]",
       },
       default: "starter",
     },
-      avatarURL: { type: String, required: true },
+    avatarURL: { type: String, required: true },
+    pubId: { type: String, required: true },
     token: {
+      type: String,
+      default: null,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
       type: String,
       default: null,
     },

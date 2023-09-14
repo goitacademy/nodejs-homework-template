@@ -11,7 +11,11 @@ router.post("/login", usersController.login);
 
 router.post("/logout", auth, usersController.logout);
 
+router.post("/verify", usersController.reverifyEmail);
+
 router.get("/current", auth, usersController.getCurrent);
+
+router.get("/verify/:verificationToken", usersController.verifyEmail);
 
 router.patch("/subscriptions", auth, usersController.setSubscription);
 

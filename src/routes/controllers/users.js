@@ -2,22 +2,30 @@ import jwt from "jsonwebtoken";
 import bCrypt from "bcryptjs";
 import gravatar from "gravatar";
 import Jimp from "jimp";
-import { nanoid } from "nanoid";
 import fs from "fs/promises";
 import path from "path";
+import { nanoid } from "nanoid";
 import service from "../../services/users.js";
-import PORT from "../../server.js";
-import { handleValidationError } from "../../utils/handleErrors.js";
+import sendMail from "../../utils/sendMail.js";
+import {
+  handleValidationError,
+  handleUserUnauthorizedError,
+  handleUserConflictError,
+  handleUserNotFoundError,
+  handleUpdateAvatarError,
+  handleEmailNotVerifiedError,
+  handleUserAlreadyBeenVerifiedError,
+} from "../../utils/handleErrors.js";
 import {
   userRegisterSchema,
   userLoginSchema,
   userLogoutSchema,
+  userReverifySchema,
   userSubSchema,
   userAvatarSchema,
-}
-  from "../../utils/validation.js";
-
+} from "../../utils/validation.js";
 import { storeAvatars } from "../../utils/manageUploadFolders.js";
+
 const register = async (req, res, next) => {
   try {
     const { body } = req;
@@ -30,34 +38,20 @@ const register = async (req, res, next) => {
     ]);
 
     if (isUserExists) {
-      return res.status(409).json({
-        status: 409,
-        statusText: "Conflict",
-        data: {
-          message: `${
-            isUserExists.username === username
-              ? "Username"
-              : isUserExists.email === email
-              ? "E-mail"
-              : null
-          } is already in use`,
-        },
-      });
+      return handleUserConflictError(res, isUserExists, username, email);
     }
 
     const user = await service.createUser(body);
     const avatarURL = gravatar.url(email, { s: "250", r: "pg", d: "mp" }, true);
 
-    user.set("avatarURL", avatarURL, String);
+    user.set("avatarURL", avatarURL);
+    user.set("pubId", nanoid());
+    user.set("verificationToken", nanoid());
+    user.set("password", await bCrypt.hash(password, await bCrypt.genSalt()));
 
-    user.set("pubId", nanoid(), String);
-
-    user.set(
-      "password",
-      await bCrypt.hash(password, await bCrypt.genSalt()),
-      String
-    );
     await user.save();
+    const verificationToken = user.get("verificationToken");
+    sendMail(email, verificationToken);
 
     res.status(201).json({
       status: 201,
@@ -66,7 +60,10 @@ const register = async (req, res, next) => {
         user: {
           email: user.email,
           subscription: user.subscription,
+          verify: user.verify,
         },
+        message:
+          "Verify your e-mail address. The message has been sent to your e-mail, if you do not see your message, please check SPAM or try again",
       },
     });
   } catch (err) {
@@ -84,18 +81,18 @@ const login = async (req, res, next) => {
       !existingUser ||
       !(await bCrypt.compare(password, existingUser.password))
     ) {
-      return res.status(401).json({
-        status: 401,
-        statusText: "Unauthorized",
-        data: { message: "Incorrect e-mail or password" },
-      });
+      return handleUserUnauthorizedError(res, "Incorrect e-mail or password");
+    }
+
+    if (!existingUser.verify) {
+      return handleEmailNotVerifiedError(res);
     }
 
     const payload = {
       id: existingUser._id,
     };
 
-    const token = jwt.sign(payload, process.env.SECRET_KEY, {
+    const token = jwt.sign(payload, process.env.AUTH_KEY, {
       expiresIn: "1h",
     });
 
@@ -128,6 +125,38 @@ const logout = async (req, res, next) => {
   }
 };
 
+const reverifyEmail = async (req, res, next) => {
+  try {
+    await userReverifySchema.validateAsync(req.body);
+    const { email } = req.body;
+    const user = await service.getUser({ email });
+
+    if (!user) {
+      return handleUserNotFoundError(res);
+    }
+
+    if (user.verify) {
+      return handleUserAlreadyBeenVerifiedError(res);
+    }
+
+    sendMail(email, user.verificationToken);
+
+    res.json({
+      status: 200,
+      statusText: "OK",
+      data: {
+        user: {
+          email,
+        },
+        message:
+          "The message has been sent to your e-mail, if you do not see your message, please check SPAM or try again. If you are still having trouble receiving the verification e-mail, you may need to check your antivirus settings, because it can blocking the outgoing e-mail traffic",
+      },
+    });
+  } catch (err) {
+    handleValidationError(err, res, next);
+  }
+};
+
 const getCurrent = async (req, res, next) => {
   try {
     const { _id } = req.user;
@@ -141,6 +170,38 @@ const getCurrent = async (req, res, next) => {
           email: user.email,
           subscription: user.subscription,
         },
+      },
+    });
+  } catch (err) {
+    console.error(err.message);
+    next(err);
+  }
+};
+
+const verifyEmail = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await service.updateUser(
+      { verificationToken },
+      {
+        verify: true,
+        verificationToken: null,
+      }
+    );
+
+    if (!user) {
+      return handleUserNotFoundError(res);
+    }
+
+    res.json({
+      status: 200,
+      statusText: "OK",
+      data: {
+        user: {
+          email: user.email,
+          verify: user.verify,
+        },
+        message: "Verification successful",
       },
     });
   } catch (err) {
@@ -192,11 +253,10 @@ const updateAvatar = async (req, res, next) => {
       await avatar.writeAsync(path.join(storeAvatars, avatarName));
       await fs.rm(tmpFile);
       const avatarURL = path.join(
-        `http://localhost:${PORT}`,
+        `http://localhost:${process.env.PORT}`,
         "avatars",
         avatarName
       );
-    
       await service.updateUser({ email }, { avatarURL });
 
       res.json({
@@ -211,11 +271,7 @@ const updateAvatar = async (req, res, next) => {
       });
     } catch (err) {
       await fs.rm(tmpFile);
-      res.status(400).json({
-        status: 400,
-        statusText: "Bad Request",
-        data: { message: err.message },
-      });
+      handleUpdateAvatarError(err, res);
     }
   } catch (err) {
     handleValidationError(err, res, next);
@@ -226,7 +282,9 @@ const usersController = {
   register,
   login,
   logout,
+  reverifyEmail,
   getCurrent,
+  verifyEmail,
   setSubscription,
   updateAvatar,
 };

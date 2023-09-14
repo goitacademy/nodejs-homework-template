@@ -8,7 +8,6 @@ import usersRouter from "./routes/api/users.js";
 import contactsRouter from "./routes/api/contacts.js";
 
 const app = express();
-
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(morgan(formatsLogger));
@@ -19,12 +18,12 @@ app.use(express.static(path.join(process.cwd(), "public")));
 app.use("/api/users", usersRouter);
 app.use("/api/contacts", contactsRouter);
 
-app.use((_, res) => {
+app.use((err, _, res, __) => {
   res.status(404).json({
     status: 404,
     statusText: "Not Found",
     data: {
-      message: "Error",
+      message: err.message,
     },
   });
 });

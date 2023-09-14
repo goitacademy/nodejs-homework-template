@@ -1,4 +1,5 @@
 import passport from "passport";
+import { handleUserUnauthorizedError } from "../../utils/handleErrors.js";
 
 const auth = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
@@ -7,11 +8,7 @@ const auth = (req, res, next) => {
       !user ||
       req.headers.authorization.split(" ").at(1) !== user.token
     ) {
-      return res.status(401).json({
-        status: 401,
-        statusText: "Unauthorized",
-        data: { message: "Not authorized" },
-      });
+      return handleUserUnauthorizedError(res, "Not authorized");
     }
 
     req.user = user;

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import app from "./app.js";
 import { initFolders } from "./utils/manageUploadFolders.js";
 
-const PORT = 2200;
+const PORT = process.env.PORT;
 const SRV_DB = process.env.DB_HOST;
 
 const connection = mongoose.connect(SRV_DB, {
@@ -21,5 +21,3 @@ connection
     console.log(`Server not running. Error message: ${err.message}`);
     process.exit(1);
   });
-
-export default PORT;

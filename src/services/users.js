@@ -21,6 +21,7 @@ const createUser = async body => {
     return new User(body);
   } catch (err) {
     console.error(err.message);
+    throw new Error(err);
   }
 };
 
@@ -35,11 +36,21 @@ const updateUser = async (query, body) => {
   }
 };
 
+const deleteUser = async query => {
+  try {
+    await User.findOneAndRemove(query).lean();
+  } catch (err) {
+    console.error(err.message);
+    throw new Error(err);
+  }
+};
+
 const service = {
   getUser,
   getUserWithOrOperator,
   createUser,
   updateUser,
+  deleteUser,
 };
 
 export default service;

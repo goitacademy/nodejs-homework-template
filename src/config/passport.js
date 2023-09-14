@@ -3,7 +3,7 @@ import passport from "passport";
 import User from "../services/models/users.js";
 
 const params = {
-  secretOrKey: process.env.SECRET_KEY,
+  secretOrKey: process.env.AUTH_KEY,
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 };
 

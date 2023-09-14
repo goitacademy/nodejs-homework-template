@@ -58,6 +58,14 @@ export const userLogoutSchema = Joi.object({}).unknown(false).messages({
   "object.unknown": "Body must be empty",
 });
 
+export const userReverifySchema = Joi.object().keys({
+  email: Joi.string().email().trim().required().messages({
+    "string.base": "E-mail must be a string",
+    "string.email": "Enter a valid e-mail address",
+    "any.required": "E-mail is required",
+  }),
+});
+
 export const userSubSchema = Joi.object().keys({
   subscription: Joi.string()
     .valid("starter", "pro", "business")
