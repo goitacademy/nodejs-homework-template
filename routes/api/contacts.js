@@ -1,80 +1,16 @@
 const express = require("express");
-
 const router = express.Router();
+const Controllers = require("../../controllers/Controllers");
+const isValidId = require("../../middlewares/isValidId");
 
-const { HttpError } = require("../../helpers");
+router.get("/", Controllers.GetAll);
 
-const {
-  addContactValid,
-  contactChangeSchema,
-} = require("../../utils/contactValidation");
-const contacts = require("../../models/contacts.js");
+router.get("/:id", isValidId, Controllers.GetById);
 
-router.get("/", async (req, res, next) => {
-  try {
-    const data = await contacts.listContacts();
-    res.status(200).json(data);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post("/", Controllers.AddContact);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const data = await contacts.getContactById(req.params.contactId);
-    if (!data) {
-      const error = new HttpError(404, "Contact not found");
-      throw error;
-    }
-    res.status(200).json(data);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:contactId", isValidId, Controllers.UpdateById);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addContactValid.validate(req.body);
-    if (error) {
-      const err = new HttpError(400, error.message);
-      throw err;
-    }
-    const data = await contacts.addContact(req.body);
-    res.status(201).json(data);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const data = await contacts.removeContact(req.params.contactId);
-    if (!data) {
-      const error = new HttpError(404, "Contact not found");
-      throw error;
-    }
-    res.json({ message: "contact deleted" });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = contactChangeSchema.validate(req.body);
-    if (error) {
-      const err = new HttpError(400, error.message);
-      throw err;
-    }
-    const data = await contacts.updateContact(req.params.contactId, req.body);
-    if (!data) {
-      const error = new HttpError(404, "Contact not found");
-      throw error;
-    }
-    res.status(200).json(data);
-  } catch (error) {
-    next(error);
-  }
-});
+router.patch("/:contactId/favorite", isValidId, Controllers.UpdateFavoriteById);
 
 module.exports = router;
