@@ -1,5 +1,5 @@
+const crypto = require;
 const User = require("../models/user.schema");
-require("dotenv").config();
 const service = require("../services/users.service");
 const { userValidator, userValidateSubscription } = require("../utils/joi/joi");
 const jwt = require("jsonwebtoken");
@@ -7,8 +7,28 @@ const gravatar = require("gravatar");
 const fs = require("fs").promises;
 const path = require("path");
 const Jimp = require("jimp");
+const nodemailer = require("nodemailer");
 
 const secret = process.env.JWT_SECRET;
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 2525,
+  auth: {
+    user: process.env.MAILTRAP_USER,
+    pass: process.env.MAILTRAP_PASSWORD,
+  },
+});
+
+async function sendVerificationEmail(user, verificationToken) {
+  const mailOptions = {
+    from: process.env.EMAIL_FROM,
+    to: user.email,
+    subject: "Verification Email",
+    text: `Click the following link to verify your email: ${process.env.BASE_URL}/users/verify/${verificationToken}`, // Treść wiadomości
+  };
+  await transporter.sendMail(mailOptions);
+}
 
 const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -35,6 +55,7 @@ const registerUser = async (req, res, next) => {
       },
     });
   }
+
   try {
     const avatarURL = gravatar.url(email, {
       s: "200",
@@ -42,8 +63,11 @@ const registerUser = async (req, res, next) => {
     });
 
     const newUser = new User({ email, password, avatarURL });
+    const verificationToken = crypto.randomBytes(16).toString("hex");
+    newUser.verificationToken = verificationToken;
     newUser.setPassword(password);
     await newUser.save();
+    await sendVerificationEmail(newUser, verificationToken);
     const response = {
       user: {
         email: newUser.email,
