@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const {handlerMongooseError} = require("../helpers")
 
 const contactSchema = new Schema({
   name: {
@@ -12,6 +13,7 @@ const contactSchema = new Schema({
   phone: {
     type: String,
     required: true,
+    match: /^[0-9]{10}$/,
   },
   favorite: {
     type: Boolean,
@@ -21,9 +23,6 @@ const contactSchema = new Schema({
 
 const Contact = model("contact", contactSchema);
 
-contactSchema.post("save", (error, data, next) => {
-    console.log(error);
-    next();
-})
+contactSchema.post("save", handlerMongooseError);
 
-module.export = Contact;
+module.exports = Contact;
