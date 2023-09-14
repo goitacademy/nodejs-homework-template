@@ -4,7 +4,7 @@ const User = require('./models/models/users')
 const dotenv = require('dotenv')
 
 dotenv.config()
-const secret = process.env.JWT_SECRET
+const secret = process.env.SECRET
 
 const ExtractJWT = passportJWT.ExtractJwt
 const JWTStrategy = passportJWT.Strategy
