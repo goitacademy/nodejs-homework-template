@@ -38,6 +38,7 @@ const addSchema = Joi.object({
   phone: Joi.string().required().messages({
     'string.empty': 'Phone field is required',
     'any.required': 'Phone field is required',
+  }),
   favorite: Joi.boolean(),
 });
 
