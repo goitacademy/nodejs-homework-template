@@ -1,75 +1,65 @@
-const Contact = require("../service/schemas/schemaContacts");
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+const handleMongooseError = require("../helpers/handleMongooseError");
 
-const listContacts = async () => {
-  try {
-    return Contact.find();
-  } catch (error) {
-    console.error("Error occured when trying to show contacts:", error);
-    throw error;
-  }
-};
+const nameRegex = "^[A-Z][a-z]+ [A-Z][a-z]+$";
+const phoneRegex = "^[0-9]{3}-[0-9]{3}-[0-9]{4}$";
 
-const getContactById = async (contactId) => {
-  try {
-    const contact = await Contact.findById(contactId);
-    return contact;
-  } catch (error) {
-    console.error("Error occured when trying to get contact:", error);
-    throw error;
-  }
-};
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+      minlength: [2, "Name must be at least 2 characters long"],
+      maxlength: [40, "Name can be up to 40 characters long"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const removeContact = async (contactId) => {
-  try {
-    const result = await Contact.findByIdAndRemove(contactId);
-    return result;
-  } catch (error) {
-    console.error("Error occured when removing contact:", error);
-    throw error;
-  }
-};
+contactSchema.post("save", handleMongooseError);
 
-const addContact = async (body) => {
-  try {
-    const newContact = await Contact.create(body);
-    return newContact;
-  } catch (error) {
-    console.error("Error occured when adding contact:", error);
-    throw error;
-  }
-};
+const addSchema = Joi.object({
+  name: Joi.string().pattern(new RegExp(nameRegex)).required().messages({
+    "any.required": `Missing required name field`,
+  }),
 
-const updateContact = async (contactId, body) => {
-  try {
-    const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
-      new: true,
-    });
-    return updatedContact;
-  } catch (error) {
-    console.error("Error occurred when updating contact:", error);
-    throw error;
-  }
-};
+  email: Joi.string().required().messages({
+    "any.required": `Missing required email field`,
+  }),
 
-const updateFavorite = async (contactId, favorite) => {
-  try {
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
-      { favorite },
-      { new: true }
-    );
-    return updatedContact;
-  } catch (error) {
-    console.error("Error occured when updating contact:", error);
-    throw error;
-  }
-};
+  phone: Joi.string().pattern(new RegExp(phoneRegex)).required().messages({
+    "any.required": `Missing required phone field`,
+  }),
+
+  favorite: Joi.boolean().optional(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": `Missing field favorite` }),
+});
+
+const Contact = model("contacts", contactSchema);
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateFavorite,
+  Contact,
+  addSchema,
+  updateFavoriteSchema,
 };
