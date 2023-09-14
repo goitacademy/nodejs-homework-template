@@ -6,15 +6,30 @@ const {
   logoutUserService,
   subscriptionUserService,
   changeAvatarUserService,
+  verifyUserService,
+  verifyBegineUserService,
 } = require("../secrive/usersServices");
+
+const crypto = require("node:crypto");
 
 const fs = require("node:fs/promises");
 const Jimp = require("jimp");
 const { HttpError } = require("../helpers/HttpError");
+const sendEmail = require("../helpers/sendEmail");
 
 const registrationUser = async (req, res, next) => {
+  const verificationToken = crypto.randomUUID();
+  req.body.verificationToken = verificationToken;
+
   try {
     const subscription = await registerUserService(req.body);
+
+    await sendEmail({
+      to: req.body.email,
+      subject: `Welcome to registration, ${req.body.email}`,
+      html: `<p> Please verify your email, click on link below</p></b><a href="http://localhost:3000/api/users/verify/${verificationToken}">Click</a>`,
+      text: `Please verify your email, click on link below\nhttp://localhost:3000/api/users/verify/${verificationToken}`,
+    });
 
     res.status(201).json({ user: { email: req.body.email, subscription } });
   } catch (err) {
@@ -101,6 +116,34 @@ const changeAvatarUser = async (req, res, next) => {
   }
 };
 
+const verifyUser = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  try {
+    await verifyUserService(verificationToken);
+    res.status(200).json({ message: "Verification successful" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const verifyBegineUser = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const verificationToken = await verifyBegineUserService(email);
+
+    await sendEmail({
+      to: email,
+      subject: `Welcome to registration, ${email}`,
+      html: `<p> Please verify your email, click on link below</p></b><a href="http://localhost:3000/api/users/verify/${verificationToken}">Click</a>`,
+      text: `Please verify your email, click on link below\nhttp://localhost:3000/api/users/verify/${verificationToken}`,
+    });
+
+    res.status(200).json({ message: "Verification email sent" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   registrationUser: conrollerWraper(registrationUser),
   loginUser: conrollerWraper(loginUser),
@@ -108,4 +151,6 @@ module.exports = {
   currentUser: conrollerWraper(currentUser),
   subscriptionUser: conrollerWraper(subscriptionUser),
   changeAvatarUser: conrollerWraper(changeAvatarUser),
+  verifyUser: conrollerWraper(verifyUser),
+  verifyBegineUser: conrollerWraper(verifyBegineUser),
 };

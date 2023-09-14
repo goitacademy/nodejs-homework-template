@@ -6,11 +6,14 @@ const {
   currentUser,
   subscriptionUser,
   changeAvatarUser,
+  verifyUser,
+  verifyBegineUser,
 } = require("../../controllers/users");
 const { validateBody } = require("../../middlewares/validation");
 const {
   registerSchema,
   subscriptionSchema,
+  verifyEmailSchema,
 } = require("../../utils/validation/userValidationSchemas");
 const { verefyToken } = require("../../middlewares/verefyToken");
 const uploadFile = require("../../middlewares/upload");
@@ -33,5 +36,7 @@ router.patch(
   uploadFile.single("avatar"),
   changeAvatarUser
 );
+router.get("/verify/:verificationToken", verifyUser);
+router.post("/verify", validateBody(verifyEmailSchema), verifyBegineUser);
 
 module.exports = router;

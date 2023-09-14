@@ -23,7 +23,7 @@ app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, _, res) => {
+app.use((err, _, res, next) => {
   res.status(err.status).json({ message: err.message });
 });
 

@@ -17,6 +17,7 @@ const registerUserService = async (userData) => {
     email: userData.email,
     password: hash,
     avatarURL: gravatar.url(userData.email),
+    verificationToken: userData.verificationToken,
   };
 
   const result = await userSchemaDB.create(newUser);
@@ -30,9 +31,15 @@ const loginUserService = async (userData) => {
   }
 
   const isSuccessPassword = bcrypt.compareSync(userData.password, res.password);
+
   if (!isSuccessPassword) {
     throw new HttpError(401, "Email or password is wrong");
   }
+
+  if (!res.verify) {
+    throw new HttpError(401, "Please verify your email");
+  }
+
   const token = jwt.sign(
     { id: res._id, email: res.email },
     process.env.SECRET_TOKEN,
@@ -58,10 +65,37 @@ const changeAvatarUserService = async (userId, filename) => {
   return await userSchemaDB.findByIdAndUpdate(userId, { avatarURL: filename });
 };
 
+const verifyUserService = async (verificationToken) => {
+  const user = await userSchemaDB.findOne({ verificationToken });
+
+  if (user === null) {
+    throw new HttpError(404, "User not found");
+  }
+  await userSchemaDB.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+};
+
+const verifyBegineUserService = async (email) => {
+  console.log(email);
+  const user = await userSchemaDB.findOne({ email });
+
+  if (user === null) {
+    throw new HttpError(404, "User not found");
+  }
+  if (user.verify) {
+    throw new HttpError(400, "Verification has already been passed");
+  }
+  return user.verificationToken;
+};
+
 module.exports = {
   registerUserService,
   loginUserService,
   logoutUserService,
   subscriptionUserService,
   changeAvatarUserService,
+  verifyUserService,
+  verifyBegineUserService,
 };
