@@ -8,10 +8,16 @@ import { HttpError } from "../../helpers/index.js";
 const router = express.Router();
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
 });
+
+// const contactAddSchema = Joi.object({
+//   name: Joi.string().required(),
+//   email: Joi.string().required(),
+//   phone: Joi.string().required(),
+// });
 
 router.get("/", async (req, res, next) => {
   try {

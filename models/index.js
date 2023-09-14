@@ -37,7 +37,20 @@ export const updateContactById = async (id, data) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, ...data };
+
+  if (data.name) {
+    contacts[index].name = data.name;
+  }
+
+  if (data.email) {
+    contacts[index].email = data.email;
+  }
+
+  if (data.phone) {
+    contacts[index].phone = data.phone;
+  }
+
+  // contacts[index] = { id, ...data };
   await updateContacts(contacts);
   return contacts[index];
 };
