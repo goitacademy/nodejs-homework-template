@@ -1,4 +1,5 @@
 const Contact = require("./schemas/contacts");
+const User = require("./schemas/user");
 
 const getAllContacts = async () => {
 	return Contact.find();
@@ -24,6 +25,14 @@ const updateStatusContact = (id, { favorite }) => {
 	return Contact.findByIdAndUpdate({ _id: id }, { $set: { favorite } });
 };
 
+const getUserbyId = async (id) => {
+	try {
+		return await User.findById(id);
+	} catch (e) {
+		console.log(e);
+	}
+};
+
 module.exports = {
 	getAllContacts,
 	getContactById,
@@ -31,4 +40,5 @@ module.exports = {
 	updateContact,
 	removeContact,
 	updateStatusContact,
+	getUserbyId,
 };
