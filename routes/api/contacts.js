@@ -38,7 +38,7 @@ router.get("/:contactId", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { email, name, phone } = req.query;
+    const { email, name, phone } = req.body;
 
     const { value, error } = createNewContactSchema.validate({
       name,
@@ -81,12 +81,12 @@ router.delete("/:contactId", async (req, res) => {
 
 router.put("/:contactId", async (req, res) => {
   try {
-    if (Object.keys(req.query).length === 0) {
+    if (Object.keys(req.body).length === 0) {
       res.status(400).json({ message: "missing fields" });
       return;
     }
 
-    const { value, error } = updateContactSchema.validate(req.query);
+    const { value, error } = updateContactSchema.validate(req.body);
 
     if (error) {
       res.status(400).json({ message: error.details[0].message });
