@@ -1,86 +1,91 @@
-const fs = require('fs/promises');
-const Joi = require('joi');
-const shortid = require('shortid');
+import path from "path";
+import { readFile, writeFile } from "fs/promises";
+import nanoid from "nanoid";
 
-const contactsPath = './models/contacts.json';
+const contactsPath = path.join("models", "contacts.json");
 
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, 'utf8');
-  return JSON.parse(data);
-};
-
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  return contacts.find((contact) => contact.id === contactId);
-};
-
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const updatedContacts = contacts.filter((contact) => contact.id !== contactId);
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
-};
-
-const addContact = async (body) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    id: Joi.string().required(),
-    phone: Joi.string().required(),
-  });
-
-  const { error } = schema.validate(body);
-
-  if (error) {
-    throw new Error(`Validation error: ${error.details.map((detail) => detail.message).join(', ')}`);
+export const listContacts = async () => {
+  try {
+    const data = await readFile(contactsPath);
+    const contacts = JSON.parse(data);
+    return contacts;
+  } catch (err) {
+    console.error("Error while reading contacts");
+    throw err;
   }
-
-  const newContact = {
-    id: shortid.generate(),
-    ...body,
-  };
-
-  const contacts = await listContacts();
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
-
-  return newContact;
 };
 
-const updateContact = async (contactId, body) => {
-  const schema = Joi.object({
-    name: Joi.string(),
-    email: Joi.string().email(),
-    phone: Joi.string(),
-  });
+export const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const contact = contacts.find((contact) => contact.id === contactId);
+    if (!contact) {
+      return false;
+    }
 
-  const { error } = schema.validate(body);
-
-  if (error) {
-    throw new Error(`Validation error: ${error.details.map((detail) => detail.message).join(', ')}`);
+    return contact;
+  } catch (err) {
+    console.error("Error while reading contacts by id");
+    throw err;
   }
-
-  const contacts = await listContacts();
-  const updatedContactIndex = contacts.findIndex((contact) => contact.id === contactId);
-
-  if (updatedContactIndex === -1) {
-    return null;
-  }
-
-  const updatedContact = {
-    ...contacts[updatedContactIndex],
-    ...body,
-  };
-
-  contacts[updatedContactIndex] = updatedContact;
-  await fs.writeFile(contactsPath, JSON.stringify(contacts));
-
-  return updatedContact;
 };
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+export const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const contactIndex = contacts.findIndex(
+      (contact) => contact.id == contactId
+    );
+    if (contactIndex === -1) {
+      return false;
+    }
+    contacts.splice(contactIndex, 1);
+    await writeFile(contactsPath, JSON.stringify(contacts));
+
+    return true;
+  } catch (err) {
+    console.error("Error while deleting contacts by id:", err);
+    throw err;
+  }
+};
+
+export const addContact = async (body) => {
+  try {
+    const contacts = await listContacts();
+    const { email, phone, name } = body;
+    const newContact = {
+      id: nanoid(),
+      name,
+      email,
+      phone,
+    };
+    contacts.push(newContact);
+    await writeFile(contactsPath, JSON.stringify(contacts));
+
+    return newContact;
+  } catch (err) {
+    console.error("Error while adding contacts");
+    throw err;
+  }
+};
+export const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const contactIndex = contacts.findIndex(
+      (contact) => contact.id == contactId
+    );
+
+    if (contactIndex === -1) {
+      return false;
+    }
+
+    const updatedContact = { ...contacts[contactIndex], ...body };
+    contacts[contactIndex] = updatedContact;
+
+    await writeFile(contactsPath, JSON.stringify(contacts));
+    return updatedContact;
+  } catch (err) {
+    console.error("Error while updating contacts:", err);
+    throw err;
+  }
 };
