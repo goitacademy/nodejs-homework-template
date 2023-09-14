@@ -1,17 +1,26 @@
 import express from "express";
-import moviesController from "../../controllers/contact-controller.js";
-import contactValidation from "../../middleware/validation/contact-validation.js";
+import contactsController from "../../controllers/contact-controller.js";
+import validates from "../../middleware/validation/contact-validation.js";
 
 const router = express.Router();
 
-router.get("/", moviesController.getAll);
+router.get("/", contactsController.getAll);
 
-router.get("/:contactId", moviesController.getById);
+router.get("/:contactId", contactsController.getById);
 
-router.post("/", contactValidation, moviesController.add);
+router.post("/", validates.contactAddValidate, contactsController.add);
 
-router.delete("/:contactId", moviesController.removeById);
+router.delete("/:contactId", contactsController.removeById);
 
-router.put("/:contactId", contactValidation, moviesController.updateById);
+router.put(
+  "/:contactId",
+  validates.contactUpdateValidate,
+  contactsController.updateById
+);
+router.put(
+  "/:contactId/favorite",
+  validates.favoriteUpdateValidate,
+  contactsController.updateStatusContact
+);
 
 export default router;
