@@ -1,14 +1,23 @@
 import jwt from "jsonwebtoken";
 import bCrypt from "bcryptjs";
+import gravatar from "gravatar";
+import Jimp from "jimp";
+import { nanoid } from "nanoid";
+import fs from "fs/promises";
+import path from "path";
 import service from "../../services/users.js";
+import PORT from "../../server.js";
 import { handleValidationError } from "../../utils/handleErrors.js";
 import {
   userRegisterSchema,
   userLoginSchema,
   userLogoutSchema,
   userSubSchema,
-} from "../../utils/validation.js";
+  userAvatarSchema,
+}
+  from "../../utils/validation.js";
 
+import { storeAvatars } from "../../utils/manageUploadFolders.js";
 const register = async (req, res, next) => {
   try {
     const { body } = req;
@@ -37,10 +46,15 @@ const register = async (req, res, next) => {
     }
 
     const user = await service.createUser(body);
-    await user.validate();
+    const avatarURL = gravatar.url(email, { s: "250", r: "pg", d: "mp" }, true);
+
+    user.set("avatarURL", avatarURL, String);
+
+    user.set("pubId", nanoid(), String);
+
     user.set(
       "password",
-      await bCrypt.hash(password, await bCrypt.genSalt(6)),
+      await bCrypt.hash(password, await bCrypt.genSalt()),
       String
     );
     await user.save();
@@ -157,12 +171,64 @@ const setSubscription = async (req, res, next) => {
   }
 };
 
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { pubId, email } = req.user;
+    const { originalname, path: tmpFile } = req.file;
+    await userAvatarSchema.validateAsync(originalname);
+
+    try {
+      const avatar = await Jimp.read(tmpFile);
+      const files = await fs.readdir(storeAvatars);
+
+      for (const file of files) {
+        if (file.startsWith(pubId)) {
+          await fs.rm(path.join(storeAvatars, file));
+        }
+      }
+
+      avatar.resize(250, 250);
+      const avatarName = `${pubId}_${originalname}`;
+      await avatar.writeAsync(path.join(storeAvatars, avatarName));
+      await fs.rm(tmpFile);
+      const avatarURL = path.join(
+        `http://localhost:${PORT}`,
+        "avatars",
+        avatarName
+      );
+    
+      await service.updateUser({ email }, { avatarURL });
+
+      res.json({
+        status: 200,
+        statusText: "OK",
+        data: {
+          user: {
+            email,
+            avatarURL,
+          },
+        },
+      });
+    } catch (err) {
+      await fs.rm(tmpFile);
+      res.status(400).json({
+        status: 400,
+        statusText: "Bad Request",
+        data: { message: err.message },
+      });
+    }
+  } catch (err) {
+    handleValidationError(err, res, next);
+  }
+};
+
 const usersController = {
   register,
   login,
   logout,
   getCurrent,
   setSubscription,
+  updateAvatar,
 };
 
 export default usersController;
