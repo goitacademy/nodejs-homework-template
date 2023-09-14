@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Joi = require('joi') // Importujemy Joi
 const User = require('../../models/models/users')
-const authMiddleware = require('../../middlewares/authMiddleware')
+const auth = require('../../auth')
+
 const router = express.Router()
 
 const schema = Joi.object({
@@ -49,7 +50,7 @@ router.post('/login', async (req, res, next) => {
     }
 })
 
-router.get('/current', authMiddleware, async (req, res, next) => {
+router.get('/current', auth, async (req, res, next) => {
     try {
         const user = req.user
         if (!user) {
@@ -67,7 +68,7 @@ router.get('/current', authMiddleware, async (req, res, next) => {
     }
 })
 
-router.get('/logout', authMiddleware, async (req, res, next) => {
+router.get('/logout', auth, async (req, res, next) => {
     try {
         const user = req.user
         if (!user) {
