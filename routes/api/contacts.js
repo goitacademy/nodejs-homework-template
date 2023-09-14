@@ -40,6 +40,17 @@ router.post("/", async (req, res) => {
   try {
     const { email, name, phone } = req.body;
 
+    if (!name) {
+      res.status(400).json({ message: `missing required name field` });
+      return;
+    } else if (!email) {
+      res.status(400).json({ message: `missing required email field` });
+      return;
+    } else if (!phone) {
+      res.status(400).json({ message: `missing required phone field` });
+      return;
+    }
+
     const { value, error } = createNewContactSchema.validate({
       name,
       email,
@@ -47,9 +58,9 @@ router.post("/", async (req, res) => {
     });
 
     if (error) {
-      const reqField = error.details[0].message.replace(/"/g, "").split(" ")[0];
+      const message = error.details[0].message.replace(/"/g, "");
 
-      res.status(400).json({ message: `missing required ${reqField} field` });
+      res.status(400).json({ message });
       return;
     }
 
