@@ -1,102 +1,108 @@
 const express = require("express");
-const dotenv = require("dotenv");
+const Joi = require("joi");
+
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-const usersRouter = express.Router();
+const User = require("../../service/schemas/users");
+const auth = require("../../config/passport/auth");
+const { getUser } = require("../../models/users");
 
-dotenv.config();
+const router = express.Router();
+
+require("dotenv").config();
 const secret = process.env.SECRET_WORD;
 
-const users = require("../../models/users");
-const auth = require("../../config/passport");
-
-usersRouter.get("/current", auth, async (req, res, next) => {
-  const { id: userId } = req.user;
-  try {
-    const user = await users.getUser(userId);
-    if (!user) {
-      return res.status(404).json({ message: "Error! User not found!" });
-    }
-    const { email, subscription } = user;
-    return res.status(200).json({
-      status: "success",
-      code: 200,
-      data: { email, subscription },
-    });
-  } catch (err) {
-    res.status(500).json(`An error occurred while getting the contact: ${err}`);
-  }
+const signupSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
 });
 
-usersRouter.post("/signup", async (req, res, next) => {
-  const { body } = req;
-
-  if (Object.keys(body).length === 0) {
-    return res
-      .status(400)
-      .json("Error! Missing fields! Empty request is not allowed");
-  }
-
+router.post("/signup", async (req, res) => {
   try {
-    const user = await users.addUser(body);
-    if (user === 409) {
+    const { error } = signupSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: "Validation error" });
+    }
+
+    const existingUser = await User.findOne({ email: req.body.email });
+    if (existingUser) {
       return res.status(409).json({ message: "Email in use" });
     }
-    const { email, subscription } = user;
-    return res.status(201).json({
-      status: "success",
-      code: 201,
-      user: { email, subscription },
+
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
+    const user = new User({
+      email: req.body.email,
+      password: hashedPassword,
+      subscription: "starter",
     });
-  } catch (err) {
-    res.status(500).json(`An error occurred while adding the user: ${err}`);
+
+    await user.save();
+
+    res.status(201).json({
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-usersRouter.post("/login", async (req, res, next) => {
-  const { body } = req;
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
 
-  if (Object.keys(body).length === 0) {
-    return res
-      .status(400)
-      .json("Error! Missing fields! Empty request is not allowed");
+router.post("/login", async (req, res) => {
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
 
+  const { email, password } = req.body;
+
   try {
-    const user = await users.loginUser(body);
+    const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json(`Error! Email or password is wrong!`);
+      return res.status(401).json({ message: "Email or password is wrong" });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Email or password is wrong" });
     }
 
     const payload = {
-      id: user.id,
-      username: user.email,
+      id: user._id,
+      email: user.email,
     };
 
-    const token = jwt.sign(payload, secret, { expiresIn: "2h" });
+    const token = jwt.sign(payload, secret, { expiresIn: "1h" });
 
-    user.token = token;
-    await user.save();
-
-    const { email, subscription } = user;
-
-    res.status(200).json({
-      status: "success",
-      code: 200,
-      token: token,
-      user: { email, subscription },
+    return res.status(200).json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
     });
-  } catch (err) {
-    res.status(500).json(`An error occurred while adding the user: ${err}`);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-usersRouter.post("/logout", auth, async (req, res, next) => {
+router.post("/logout", auth, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const user = await users.getUser(userId);
+    const user = await getUser(userId);
 
     if (!user) {
       return res.status(401).json({
@@ -109,7 +115,10 @@ usersRouter.post("/logout", auth, async (req, res, next) => {
     user.token = null;
     await user.save();
 
-    res.status(204).json();
+    res.status(200).json({
+      message: "Logout is done",
+    });
+    return;
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -119,30 +128,21 @@ usersRouter.post("/logout", auth, async (req, res, next) => {
   }
 });
 
-usersRouter.patch("/", auth, async (req, res, next) => {
-  const { id: userId } = req.user;
-  const { body } = req;
-  const { subscription } = body;
-
-  if (!("subscription" in body) || Object.keys(body).length === 0) {
-    return res.status(400).json("Error! Missing field subscription!");
-  }
-
+router.get("/current", auth, async (req, res) => {
   try {
-    const updatedStatus = await users.patchUser(subscription, userId);
-    if (updatedStatus === 400) {
-      return res.status(400).json("Error! Invalid subscription type!");
+    const currentUser = req.user;
+
+    if (!currentUser) {
+      return res.status(401).json({ message: "Not authorized" });
     }
-    return res.json({
-      status: "success",
-      code: 200,
-      data: { updatedStatus },
+
+    res.status(200).json({
+      email: currentUser.email,
+      subscription: currentUser.subscription,
     });
-  } catch (err) {
-    res
-      .status(500)
-      .json(`An error occurred while updating the contact: ${err}`);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-module.exports = usersRouter;
+module.exports = router;
