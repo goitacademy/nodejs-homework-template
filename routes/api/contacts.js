@@ -70,9 +70,9 @@ router.delete("/:contactId", async (req, res) => {
     const contactsById = await removeContact(req.params.contactId);
 
     if (contactsById) {
-      res.json({ satus: 200, message: "contact deleted" });
+      res.status(200).json({ message: "contact deleted" });
     } else {
-      res.json({ satus: 404, message: "Not found" });
+      res.status(404).json({ message: "Not found" });
     }
   } catch (e) {
     console.log(e.message);
