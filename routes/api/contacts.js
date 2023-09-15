@@ -6,7 +6,7 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require('../../models/contacts.json')
+} = require('../../models/contacts')
 
 // GET /api/contacts
 

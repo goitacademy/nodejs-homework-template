@@ -4,9 +4,8 @@ const fs = require('fs').promises;
 const path = require('path');
 
 // const contactsPath = path.join(__dirname, './db/contacts.json');
-const contactsPath = path.join(__dirname, 'models', 'contacts.json');
+const contactsPath = path.join(__dirname, 'contacts.json');
 
-console.log(__dirname)
 /**
  * Returns list all contacts
  * @returns {Promise<Array>} Array contacts.
@@ -56,7 +55,12 @@ const removeContact = async (contactId) => {
  */
 const addContact = async (body) => {
   const contacts = await listContacts();
+  // const { name, email, phone } = body;
+  // if (!name || !email || !phone) {
+  //   throw new Error('Missing required fields');
+  // }
   const newContact = { id: uuidv4(), ...body };
+
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
