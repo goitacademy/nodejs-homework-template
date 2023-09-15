@@ -1,88 +1,21 @@
 const express = require("express");
-const Joi = require("joi");
-const Contact = require("../../models/contact")
-
-const { HttpError } = require("../../helpers");
-
-const contacts = require("../../models/contacts");
-const { findByIdAndDelete } = require("../../models/contact");
 
 const router = express.Router();
 
-// const addSchema = Joi.object({
-//   name: Joi.string().min(3).max(30).required(),
-//   email: Joi.string().email().required(),
-//   phone: Joi.string().pattern(/^[0-9]{10}$/).required(),
-// });
+const ctrl = require("../../controllers/contacts")
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await Contact.find();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+const {validateBody} = require("../../middlewares");
 
-router.get("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await Contact.findById(id);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+const schemas = require("../../schemas/contacts")
 
-router.post("/", async (req, res, next) => {
-  try {
-    // const { error } = addSchema.validate(req.body);
-    // if (error) {
-    //   const missingField = error.details[0].context.label;
-    //   throw HttpError(400, `field ${missingField} is not valid`);
-    // }
-    const result = await Contact.create(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", ctrl.getAll)
 
-router.delete("/:id", async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndDelete(id);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.status(200).json({
-      message: "contact deleted",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:id", ctrl.getById);
 
-router.put("/:id", async (req, res, next) => {
-  try {
-    const bodyIsEmpty = !Object.keys(req.body).length;
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 
-    if(bodyIsEmpty){
-      throw HttpError(400, "missing fields");
-    }
+router.delete("/:id", validateBody(schemas.addSchema), ctrl.deleteById);
 
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, {new: true});
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.json(result)
-  } catch (error) {
-    next(error);
-  }
-});
+router.put("/:id", ctrl.updateById);
 
 module.exports = router;
