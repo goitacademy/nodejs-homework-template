@@ -24,14 +24,14 @@ const initializeApp = async () => {
   app.use("/contacts", contactsRouter);
 
   app.use(function (req, res, next) {
-    res.status(404).send("Nie znaleziono strony!");
+    res.status(404).send("Page not found!");
   });
 
-app.use(function (err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
-    res.status(err.status || 500).json({ error: 'Wystąpił błąd!' });
-});
+    res.status(err.status || 500).json({ error: "An error occurred!" });
+  });
 
   app.listen(port, () => {
     console.log("Server is listening on port", port);

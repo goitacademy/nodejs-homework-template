@@ -8,7 +8,7 @@ import {
   addContacts,
 } from "./contacts.dao.js";
 
-export const getAllContactsHandler = async (req, res, next) => {
+export const getAllContactsHandler = async (_, res, next) => {
   try {
     const contacts = await getAllContact();
     return res.json({ contacts });
@@ -35,7 +35,6 @@ export const getContactHandler = async (req, res) => {
 export const createContactsHandler = async (req, res) => {
   const contactsToCreate = Array.isArray(req.body) ? req.body : [req.body];
 
-  // Check if each contact has the required email
   for (const contact of contactsToCreate) {
     if (!contact.email) {
       return res
