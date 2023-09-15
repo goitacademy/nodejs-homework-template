@@ -47,7 +47,7 @@ const updateContact = async (req, res) => {
     throw HttpError(404, "Not found");
   }
 
-  res.status(201).json(response);
+  res.status(200).json(response);
 };
 
 module.exports = {
