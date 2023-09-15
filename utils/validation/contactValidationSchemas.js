@@ -1,5 +1,7 @@
 const Joi = require('joi');
 
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 const errorMessages = {
   'any.required': `{#key} is a required field`,
   'string.email': 'email field must be a valid email',
@@ -11,14 +13,14 @@ const errorMessages = {
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().pattern(emailRegexp).required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean().default(false),
 }).messages(errorMessages);
 
 const updateContactSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string().email(),
+  email: Joi.string().pattern(emailRegexp),
   phone: Joi.string(),
   favorite: Joi.boolean(),
 })
