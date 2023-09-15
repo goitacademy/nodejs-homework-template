@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const { handleMongooseError } = require('../helpers');
-const { regexpList } = require('../variables');
+const { regexpList, subscriptionList } = require('../variables');
 
 const userSchema = new Schema(
   {
@@ -18,8 +18,8 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
-      default: 'starter',
+      enum: subscriptionList,
+      default: subscriptionList[0],
     },
     token: {
       type: String,

@@ -6,7 +6,8 @@ const validateErrorMessageList = {
   'object.unknown': `{#key} field is not allowed`,
   'object.min': 'missing fields',
   'string.min': '{#key} must be at least {#limit} characters long',
-  'string.pattern.base': '{#key} field must be a valid {#key}',
+  'string.pattern.base': '{#key} must be valid',
+  'any.only': '{#key} must be one of {#valids}',
 };
 
 module.exports = validateErrorMessageList;
