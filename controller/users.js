@@ -1,106 +1,108 @@
-const Joi = require("joi");
-const userService = require("../services/users.service");
-
-const userSchema = Joi.object({
-	email: Joi.string().email().required(),
-	password: Joi.string().min(6).required(),
-});
-
-const registerUser = async (req, res, next) => {
+const {
+	addUser,
+	findUserByMail,
+	setJwtInDb,
+	deleteJwtInDb,
+	pathAvatarInDb,
+  } = require('../service/usersMongo');
+  const {
+	newUserJoiValidation,
+	logUserJoiValidation,
+  } = require('../service/usersJoi');
+  const {
+	passwordHashBcypt,
+	passwordCompareBcrypt,
+  } = require('../service/bcrypt');
+  const { createToken } = require('../service/jwtCreation');
+  
+  const { avatarUrl } = require('../service/gravatar');
+  const { jimpedAvatar } = require('../service/jimpAvatar');
+  const {
+	tmpFolder,
+	writeTmpFile,
+  } = require('../service/fileHandling');
+  const {nanoid} = require('nanoid')
+  
+  const signUp = async (req, res, next) => {
+	const { password, email } = req.body;
+	const avatar = avatarUrl(email);
+	console.log(avatarUrl(email));
 	try {
-		const user = await userService.getUserByEmial(req.body.email);
-		if (user) {
-			return res.status(409).json({
-				status: "fail",
-				code: 409,
-				message: "Email in use",
-			});
-		}
-
-		const validateRegister = userSchema.validate(req.body);
-		if (validateRegister.error) {
-			return res.status(400).json({
-				status: "fail",
-				message: "Invalid data",
-				error: validateRegister.error,
-			});
-		}
-
-		const newUser = await userService.register(req.body);
-		res.status(201).json({
-			status: "success",
-			code: 201,
-			data: {
-				newUser,
-			},
+	  await newUserJoiValidation(password, email);
+	  try {
+		const hashedPassword = await passwordHashBcypt(password);
+		const user = await addUser(hashedPassword, email, avatar);
+		return res.status(201).json({
+		  user: {
+			email: user.email,
+			subscription: user.subscription,
+		  },
 		});
-	} catch (error) {
-		next(error);
+	  } catch (err) {
+		return res.status(409).json({ message: 'Email in use by Mongo' });
+	  }
+	} catch (err) {
+	  return res.status(400).json({ message: err.message });
 	}
-};
-
-const loginUser = async (req, res, next) => {
+  };
+  
+  const logIn = async (req, res, next) => {
+	const { password, email } = req.body;
 	try {
-		const user = await userService.login(req.body);
-
-		const validateRegister = userSchema.validate(req.body);
-		if (validateRegister.error) {
-			return res.status(400).json({
-				status: "fail",
-				message: "Invalid data",
-				error: validateRegister.error,
-			});
-		}
-
-		if (user) {
-			res.json({
-				status: "success",
-				code: 200,
-				data: { user },
-			});
-		} else {
-			res.status(400).json({
-				status: "fail",
-				code: 400,
-				message: "Incorrect login or password",
-			});
-		}
-	} catch (error) {
-		next(error);
+	  await logUserJoiValidation(password, email);
+	} catch (err) {
+	  return res.status(400).json({ message: err.message });
 	}
-};
-
-const logoutUser = async (req, res, next) => {
 	try {
-		await userService.logout(req.user._doc._id);
-		res.json({
-			status: "success",
-			code: 200,
-			message: "User logged out",
+	  const user = await findUserByMail(email);
+	  const isPassCorrect = await passwordCompareBcrypt(password, user.password);
+	  if (user && isPassCorrect) {
+		const id = user._id.toString();
+		const payload = { id: user._id };
+		const token = createToken(payload);
+		const newToken = { token: token };
+		const setToken = await setJwtInDb(id, newToken);
+		return res.json({
+		  token: setToken.token,
+		  user: {
+			email: user.email,
+			subscription: user.subscription,
+		  },
 		});
-	} catch (error) {
-		next(error);
+	  } else {
+		throw new Error('Wrong password');
+	  }
+	} catch (err) {
+	  return res.status(401).json({ message: 'Email or password is wrong' });
 	}
-};
-
-const currentUser = async (req, res, next) => {
+  };
+  
+  const logOut = async (req, res, next) => {
+	const { _id } = req.user;
+	await deleteJwtInDb(_id.toString());
+	return res.status(204).end();
+  };
+  
+  const current = (req, res, next) => {
+	const { email, subscription } = req.user;
+	return res.json({ email: email, subscription: subscription });
+  };
+  
+  const updateAvatar = async (req, res, next) => {
+	const { _id } = req.user;
+	const { originalname } = req.file;
+	const finalFileName = `${nanoid()}_${originalname}`;
+	const tmp = tmpFolder(originalname);
 	try {
-		const currentUser = req.user;
-		res.status(200).json({
-			status: "success",
-			code: 200,
-			data: {
-				currentUser,
-			},
-		});
-	} catch (error) {
-		next(error);
+	  await jimpedAvatar(tmp, 'tmp/' + originalname);
+	  await writeTmpFile(originalname, finalFileName);
+	  const saveUrl = `${req.url}/${finalFileName}`;
+	  const dbUrl = await pathAvatarInDb(_id, { avatarUrl: saveUrl });
+	  return res.json({ avatarUrl: dbUrl.avatarUrl });
+	} catch (err) {
+	  console.log(err);
+  
+	  return res.status(401).json({ message: 'Not authorized' });
 	}
-};
-
-module.exports = {
-	registerUser,
-	loginUser,
-	logoutUser,
-	currentUser,
-};
+  };
+  module.exports = { signUp, logIn, logOut, current, updateAvatar };

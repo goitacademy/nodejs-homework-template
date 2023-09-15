@@ -1,4 +1,4 @@
-const Contact = require('../models/contact.schem');
+const Contact = require('../models/contacts.shem');
 
 const listContacts = async ownerId => {
   const contacts = await Contact.find(ownerId);

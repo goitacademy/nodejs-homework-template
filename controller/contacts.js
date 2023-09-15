@@ -3,7 +3,7 @@ const {
 	newContactJoiValidation,
 	editedContactJoiValidation,
 	favJoiValidation,
-  } = require('../service/contactsJoi');
+  } = require('../service/contacts.Joi');
   const {
 	listContacts,
 	getContactById,

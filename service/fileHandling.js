@@ -6,7 +6,7 @@ const fs = require('node:fs').promises;
 
 const tmpFolder = fileName => path.join(tmp, fileName);
 const finalFolder = fileName =>
-  path.join(process.cwd(), '/public/avatars', fileName);
+  path.join(process.cwd(), '/public/avatar', fileName);
 const deleteFileTmpFolder = async fileName =>
   await fs.unlink(tmpFolder(fileName));
 const writeTmpFile = async (readFileName, writeFileName) => {

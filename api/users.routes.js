@@ -1,5 +1,5 @@
 const express = require('express');
-const {signUp, logIn, logOut, current, updateAvatar} = require('../controlers/users')
+const {signUp, logIn, logOut, current, updateAvatar} = require('../controller/users')
 const {auth}= require('../middleweres/jwtStrategy');
 const { fileUpload } = require('../middleweres/fileUpload');
 

@@ -1,45 +1,29 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const logger = require("morgan");
-const cors = require("cors");
-require("dotenv").config();
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
 
-const contactsRouter = require("./api/contacts.routes");
-const usersRouter = require("./api/users.routes");
-const SRV_DB = process.env.DATABASE_URL;
+const contactsRouter = require('./api/contacts.routes');
+const usersRouter = require('./api/users.routes');
 
 const app = express();
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-mongoose
-	.connect(SRV_DB, {
-		dbName: "db-contacts",
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
-	.then(() => {
-		console.log("Database connection successful");
-	})
-	.catch((error) => {
-		console.log("Database error message:", error.message);
-		process.exit(1);
-	});
-
-require("./config/config.passport");
-app.use("/api", contactsRouter);
-app.use("/api", usersRouter);
+app.use('/api/contacts.routes', contactsRouter);
+app.use('/api/users.routes', usersRouter);
+app.use('/', express.static('public'))
 
 app.use((req, res) => {
-	res.status(404).json({ message: "Not found" });
+  res.status(404).json({ message: 'Not found' });
 });
 
 app.use((err, req, res, next) => {
-	res.status(500).json({ message: err.message });
+  res.status(500).json({ message: err.message });
 });
+
 
 module.exports = app;
