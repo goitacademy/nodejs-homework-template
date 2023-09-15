@@ -21,6 +21,12 @@ router.post('/signup', async (req, res, next) => {
     }
 
     const { email, password } = req.body
+
+    const existingUser = await User.findOne({ email })
+    if (existingUser) {
+        return res.status(400).json({ message: 'Email already exists' })
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10)
     const newUser = new User({ email, password: hashedPassword })
     await newUser.save()
@@ -37,7 +43,13 @@ router.post('/login', async (req, res, next) => {
 
     const { email, password } = req.body
     const user = await User.findOne({ email })
+
+    if (!user) {
+        return res.status(400).json({ message: 'Invalid email or password' })
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password)
+
     if (isPasswordValid) {
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1h',
@@ -47,9 +59,10 @@ router.post('/login', async (req, res, next) => {
             token,
             user: { email, subscription: 'starter' },
         })
+    } else {
+        return res.status(400).json({ message: 'Invalid email or password' })
     }
 })
-
 router.get('/current', auth, async (req, res, next) => {
     try {
         const user = req.user

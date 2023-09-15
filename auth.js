@@ -4,7 +4,7 @@ const User = require('./models/models/users')
 const dotenv = require('dotenv')
 
 dotenv.config()
-const secret = process.env.SECRET
+const secret = process.env.JWT_SECRET
 
 const ExtractJWT = passportJWT.ExtractJwt
 const JWTStrategy = passportJWT.Strategy
@@ -17,7 +17,7 @@ passport.use(
         },
         async (jwtPayload, done) => {
             try {
-                const user = await User.findById(jwtPayload.id).select(
+                const user = await User.findById(jwtPayload.userId).select(
                     '-password'
                 )
                 console.log(user)

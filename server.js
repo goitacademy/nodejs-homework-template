@@ -1,6 +1,7 @@
 const app = require('./app')
 const mongoose = require('mongoose')
 require('dotenv').config()
+console.log(process.env.JWT_SECRET)
 
 const uriDb = process.env.DB_HOST
 
