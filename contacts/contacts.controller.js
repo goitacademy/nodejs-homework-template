@@ -4,6 +4,7 @@ import {
   getAllContact,
   getContact,
   patchContact,
+  updateStatusContact,
 } from "./contacts.dao.js";
 
 export const getAllContactsHandler = async (_, res) => {
@@ -43,4 +44,21 @@ export const deleteContactHandler = async (req, res) => {
   const contactId = req.params.id;
   await deleteContact(contactId);
   return res.status(204).send();
+};
+
+export const updateFavoriteStatusHandler = async (req, res) => {
+  const contactId = req.params.contactId;
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, req.body);
+    if (!updatedContact) {
+      return res.status(404).send({ message: "Nie znaleziono kontaktu" });
+    }
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    if (error.message === "missing field favorite") {
+      return res.status(400).send({ message: "missing field favorite" });
+    }
+    return res.status(500).send({ message: "Wystąpił błąd serwera" });
+  }
 };

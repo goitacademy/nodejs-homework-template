@@ -14,5 +14,6 @@ contactsRouter.get("/:id", getContactHandler);
 contactsRouter.post("/", createContactHandler);
 contactsRouter.patch("/:id", updateContactHandler);
 contactsRouter.delete("/:id", deleteContactHandler);
+contactsRouter.patch("/:contactId/favorite", updateFavoriteStatusHandler);
 
 export { contactsRouter };

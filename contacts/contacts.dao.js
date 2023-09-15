@@ -21,8 +21,16 @@ export const patchContact = async (contactId, partialContact) => {
   return await Contact.findOneAndUpdate(contactId, partialContact, {
     new: true,
   });
-};``
+};
+``;
 
 export const deleteContact = async (contactId) => {
   return await Contact.findByIdAndDelete(contactId);
+};
+
+export const updateStatusContact = async (contactId, body) => {
+  if (!body.favorite) {
+    throw new Error("missing field favorite");
+  }
+  return await patchContact(contactId, { favorite: body.favorite });
 };
