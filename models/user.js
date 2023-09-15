@@ -34,6 +34,16 @@ const usersSchema = new Schema(
       required: [true, "upload avatar for user"],
     },
 
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      // required: [true, "Verify token is required"],
+      default:"",
+    },
+
   },
   { versionKey: false, timestamps: true }
 );
@@ -46,6 +56,13 @@ const signUpSchema = Joi.object({
   password: Joi.string().min(6).required(),
   
 });
+
+// схема валідації верифікації
+const verifySchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+})
+
+
 // схема валідації авторизації
 const logInSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
@@ -59,6 +76,9 @@ const schemas = {
   signUpSchema,
   logInSchema,
   updateSubscription,
+
+  verifySchema,
+
 };
 // створюємо модель
 const User = model("User", usersSchema);
