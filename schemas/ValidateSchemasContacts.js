@@ -9,6 +9,14 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      unique: true,
+      // validate: {
+      //   validator: async function (value) {
+      //     const count = await this.constructor.countDocuments({ email: value });
+      //     return count === 0;
+      //   },
+      //   message: "Email is already taken"
+      // }
     },
     phone: {
       type: String,
@@ -23,13 +31,12 @@ const contactSchema = new Schema(
 );
 
 const Contact = model("contacts", contactSchema);
-// console.log(Contact);
 
 const validateAddContactSchema = Joi.object({
   name: Joi.string().min(1).max(30).required(),
   email: Joi.string().email({ minDomainSegments: 2 }),
   phone: Joi.string()
-    .pattern(/^[0-9+()-]*$/)
+    .pattern(/^[0-9+() -]*$/)
     .required(),
   favorite: Joi.bool()
 });
