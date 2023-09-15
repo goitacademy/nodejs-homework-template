@@ -1,5 +1,6 @@
 const animalRepository = require('./contacts.json')
 const readJsonFiles = require('../untils/readJsonFiles')
+const writeJsonFile = require('../untils/writeJsonFile')
 const path = require('path')
 const { nanoid } = require('nanoid')
 const ERROR_TYPES = require('../constants/errorTypes')
@@ -27,7 +28,22 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {}
 
 const addContact = async (body) => {
-
+  const {name,email,phone} = body
+  if(!name || !email || !phone){
+    const error = createError(ERROR_TYPES.BAD_REQUEST,{
+      message: "missing required name field",
+      data:{}
+    })
+    throw error
+  }
+  const contact = {
+    id:nanoid(),
+    ...body
+  }
+  const contactsList = await listContacts()
+  contactsList.push(contact)
+  writeJsonFile(CONTACTS_PATH,contactsList)
+  return contact
 }
 
 const updateContact = async (contactId, body) => {}
