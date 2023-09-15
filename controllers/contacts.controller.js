@@ -3,8 +3,12 @@ const contactServices = require("../services/contacts.service");
 
 const get = async (req, res, next) => {
 	try {
-		const results = await contactServices.getAll();
-		res.status(200).json({
+		const { query, user } = req;
+		const results = await contactServices.getAll({
+			...query,
+			owner: user._id,
+		});
+		return res.status(200).json({
 			data: {
 				contacts: results,
 			},
@@ -17,17 +21,18 @@ const get = async (req, res, next) => {
 
 const getOne = async (req, res, next) => {
 	try {
-		const { contactId } = req.params;
-		const results = await contactServices.getOne(contactId);
+		const { user, params } = req;
+		const { contactId } = params;
+		const results = await contactServices.getOne(contactId, user._id);
 
 		if (results) {
-			res.status(200).json({
+			return res.status(200).json({
 				data: {
 					contact: results,
 				},
 			});
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				message: "Not found",
 			});
 		}
@@ -38,7 +43,7 @@ const getOne = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-	const { body } = req;
+	const { body, user } = req;
 	const schema = Joi.object({
 		name: Joi.string().min(3).max(35).required(),
 		email: Joi.string()
@@ -50,14 +55,17 @@ const create = async (req, res, next) => {
 		const { error } = schema.validate(body);
 
 		if (!error) {
-			const results = await contactServices.create(body);
-			res.status(201).json({
+			const results = await contactServices.create({
+				...body,
+				owner: user._id,
+			});
+			return res.status(201).json({
 				data: {
 					contact: results,
 				},
 			});
 		} else {
-			res.status(400).json({
+			return res.status(400).json({
 				message: "missing required field",
 			});
 		}
@@ -77,26 +85,26 @@ const update = async (req, res, next) => {
 		phone: Joi.string(),
 	}).or("name", "email", "phone");
 
-	const { body } = req;
+	const { body, user, params } = req;
 	const { error } = schema.validate(body);
-	const { contactId } = req.params;
+	const { contactId } = params;
 
 	try {
-		const results = await contactServices.update(contactId, body);
+		const results = await contactServices.update(contactId, user._id, body);
 		if (!error) {
 			if (results) {
-				res.status(200).json({
+				return res.status(200).json({
 					data: {
 						contact: results,
 					},
 				});
 			} else {
-				res.status(404).json({
+				return res.status(404).json({
 					message: "Not found",
 				});
 			}
 		} else {
-			res.status(400).json({
+			return res.status(400).json({
 				message: "missing fields",
 			});
 		}
@@ -111,27 +119,31 @@ const updateStatus = async (req, res, next) => {
 		favorite: Joi.boolean().required(),
 	});
 
-	const { body } = req;
+	const { body, params, user } = req;
 	const { error } = schema.validate(body);
-	const { contactId } = req.params;
-	const { favorite } = req.body;
+	const { contactId } = params;
+	const { favorite } = body;
 
 	try {
-		const results = await contactServices.updateStatus(contactId, favorite);
+		const results = await contactServices.updateStatus(
+			contactId,
+			user._id,
+			favorite
+		);
 		if (!error) {
 			if (results) {
-				res.status(200).json({
+				return res.status(200).json({
 					data: {
 						contact: results,
 					},
 				});
 			} else {
-				res.status(404).json({
+				return res.status(404).json({
 					message: "Not found",
 				});
 			}
 		} else {
-			res.status(400).json({
+			return res.status(400).json({
 				message: "missing field favorite",
 			});
 		}
@@ -143,17 +155,18 @@ const updateStatus = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
 	try {
-		const { contactId } = req.params;
-		const results = await contactServices.remove(contactId);
+		const { user, params } = req;
+		const { contactId } = params;
+		const results = await contactServices.remove(contactId, user._id);
 		if (results) {
-			res.status(200).json({
+			return res.status(200).json({
 				data: {
 					contact: results,
 				},
 				message: "Contact removed from list",
 			});
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				message: "Not found",
 			});
 		}
