@@ -5,6 +5,7 @@ import {
   getContact,
   patchContact,
   updateStatusContact,
+  addContacts,
 } from "./contacts.dao.js";
 
 export const getAllContactsHandler = async (req, res, next) => {
@@ -26,13 +27,27 @@ export const getContactHandler = async (req, res) => {
   res.json({ contact });
 };
 
-export const createContactHandler = async (req, res) => {
-  const contactToCreate = req.body;
-  if (!contactToCreate.email) {
-    return res.status(400).send({ error: "Email jest wymagany" });
+export const createContactsHandler = async (req, res) => {
+  const contactsToCreate = Array.isArray(req.body) ? req.body : [req.body];
+
+  // Sprawdzanie, czy każdy kontakt ma wymagany email
+  for (const contact of contactsToCreate) {
+    if (!contact.email) {
+      return res
+        .status(400)
+        .send({ error: "Email jest wymagany dla każdego kontaktu" });
+    }
   }
-  const createdContact = await addContact(contactToCreate);
-  return res.status(201).json({ contact: createdContact });
+
+  try {
+    const createdContacts = await addContacts(contactsToCreate); // Zakładam, że masz funkcję addContacts, która dodaje wiele kontaktów na raz
+    return res.status(201).json({ contacts: createdContacts });
+  } catch (error) {
+    console.error("Wystąpił błąd podczas dodawania kontaktów:", error);
+    return res
+      .status(500)
+      .send({ error: "Wystąpił błąd podczas dodawania kontaktów" });
+  }
 };
 
 export const updateContactHandler = async (req, res) => {
