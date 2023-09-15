@@ -29,7 +29,6 @@ const addSchema = Joi.object({
     .required(),
 
   phone: Joi.string().required(),
-  // favorite: Joi.boolean().required(),
 });
 
 const updateFavoriteSchema = Joi.object({
