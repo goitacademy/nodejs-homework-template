@@ -23,7 +23,7 @@ const upload = multer({
   storage: storage,
 });
 
-router.post(
+router.patch(
   "/users/avatars",
   auth,
   upload.single("avatar"),
