@@ -1,7 +1,6 @@
 const express = require("express");
 
-const createNewContactSchema = require("../../schemes/createNewContact/createNewContact");
-const updateContactSchema = require("../../schemes/updateContact/updateContact");
+const validateContactBodyScheme = require("../../schemes/validateContactBody/scheme");
 
 const router = express.Router();
 
@@ -39,26 +38,14 @@ router.get("/:contactId", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const { email, name, phone } = req.body;
-
-    if (!name) {
-      res.status(400).json({ message: `missing required name field` });
-      return;
-    } else if (!email) {
-      res.status(400).json({ message: `missing required email field` });
-      return;
-    } else if (!phone) {
-      res.status(400).json({ message: `missing required phone field` });
-      return;
-    }
-
-    const { value, error } = createNewContactSchema.validate({
+    const { value, error } = validateContactBodyScheme.validate({
       name,
       email,
       phone,
     });
 
     if (error) {
-      const message = error.details[0].message.replace(/"/g, "");
+      const message = error.details[0].message;
 
       res.status(400).json({ message });
       return;
@@ -93,22 +80,16 @@ router.delete("/:contactId", async (req, res) => {
 router.put("/:contactId", async (req, res) => {
   try {
     const { email, name, phone } = req.body;
-
-    if (!name) {
-      res.status(400).json({ message: `missing required name field` });
-      return;
-    } else if (!email) {
-      res.status(400).json({ message: `missing required email field` });
-      return;
-    } else if (!phone) {
-      res.status(400).json({ message: `missing required phone field` });
-      return;
-    }
-
-    const { value, error } = updateContactSchema.validate(req.body);
+    const { value, error } = validateContactBodyScheme.validate({
+      name,
+      email,
+      phone,
+    });
 
     if (error) {
-      res.status(400).json({ message: error.details[0].message });
+      const message = error.details[0].message;
+
+      res.status(400).json({ message });
       return;
     }
 
