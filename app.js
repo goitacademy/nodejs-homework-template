@@ -2,7 +2,8 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
+const authRoutes = require("./routes/api/auth");
+const usersRoutes = require("./routes/api/users");
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -28,6 +29,9 @@ mongoose
     console.error("Database connection error:", error);
     process.exit(1);
   });
+
+app.use("/api/auth", authRoutes);
+app.use("/api/users", usersRoutes);
 
 app.use("/api/contacts", contactsRouter);
 
