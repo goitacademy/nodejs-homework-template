@@ -1,22 +1,16 @@
-import { MongoClient, ServerApiVersion } from "mongodb";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
-``
-export const mongoClient = new MongoClient(
-  process.env.MONGODB_CONNECTION_STRING,
-  {
-    serverApi: {
-      version: ServerApiVersion.v1,
-      strict: true,
-      deprecationErrors: true,
-    },
-  }
-);
+
+const DB_HOST = process.env.MONGODB_CONNECTION_STRING; // Zakładam, że MONGODB_CONNECTION_STRING to prawidłowa nazwa zmiennej środowiskowej
 
 export const dbConnect = async () => {
   try {
-    await mongoClient.connect();
+    await mongoose.connect(DB_HOST, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("MongoDB connection established");
   } catch (err) {
     console.error("MongoDB connection failed", err);
@@ -25,6 +19,6 @@ export const dbConnect = async () => {
 };
 
 export const dbDisConnect = async () => {
-  await mongoClient.close();
+  await mongoose.connection.close();
   console.log("MongoDB connection closed");
 };

@@ -7,9 +7,14 @@ import {
   updateStatusContact,
 } from "./contacts.dao.js";
 
-export const getAllContactsHandler = async (_, res) => {
-  const contacts = await getAllContact();
-  return res.json({ contacts });
+export const getAllContactsHandler = async (req, res, next) => {
+  try {
+    const contacts = await getAllContact();
+    return res.json({ contacts });
+  } catch (error) {
+    console.error("An error occurred while retrieving contacts:", error);
+    next(error);
+  }
 };
 
 export const getContactHandler = async (req, res) => {
