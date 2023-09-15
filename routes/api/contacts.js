@@ -1,6 +1,7 @@
 import express from "express"
-import contacts from "../../models/contacts.js"
+
 import Joi from "joi";
+import { Contact } from "../../models/ContactsSchema.js";
 
 const router = express.Router()
 
@@ -25,10 +26,11 @@ const contactsUpdateSchema = Joi.object({
   phone: Joi.string().messages({
     "any.required": `missing required name field`,
   }),
+  favorite: Joi.boolean()
 });
 
 router.get('/', async (req, res, next) => {
-  const result = await contacts.listContacts()
+  const result = await Contact.find()
   res.json(result)
 })
 
@@ -36,7 +38,7 @@ router.get('/:contactId', async (req, res, next) => {
 
   try {
       const { contactId } = req.params;
-      const result = await contacts.getContactById(contactId);
+      const result = await Contact.findById(contactId);
       if (!result) {
         throw res.status(404).json("Not Found");
       }
@@ -53,7 +55,7 @@ router.post('/', async (req, res, next) => {
     if (error) {
      throw res.status(400).json("missing required name field");
     }
-    const result = await contacts.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -63,7 +65,7 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw res.status(404).json("Not Found");
     }
@@ -80,28 +82,34 @@ router.put("/:contactId", async (req, res, next) => {
     if (error) {
       throw new Error("Validation error");
     }
-    const existingContact = await contacts.getContactById(contactId);
+    const existingContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
     if (!existingContact) {
       throw new Error("Not Found");
     }
-
-    if (req.body.name !== undefined) {
-      existingContact.name = req.body.name;
-    }
-    if (req.body.email !== undefined) {
-      existingContact.email = req.body.email;
-    }
-    if (req.body.phone !== undefined) {
-      existingContact.phone = req.body.phone;
-    }
-
-    const updatedContact = await contacts.updateContactById(
-      contactId,
-      existingContact
-    );
-    res.json(updatedContact);
+    res.json(existingContact);
   } catch (error) {
     next(error);
   }
-});
+})
+
+ router.patch("/:contactId/favorite", async (req, res) => {
+   try {
+     const { contactId } = req.params;
+
+     const existingContact = await Contact.findByIdAndUpdate(
+       contactId,
+       req.body,
+       { new: true }
+     );
+     if (!existingContact) {
+       throw new Error("Not Found");
+     }
+     res.json(existingContact);
+   } catch (error) {
+     res.json(error);
+   }
+ });
+
+
+
 export default router
