@@ -1,8 +1,11 @@
 import express from "express";
 import contactControllers from "../../controllers/contacts-controller.js";
-import contactValidate from "../../middleware/validation/movie-validation.js";
+import authenticate from "../../middleware/validation/authenticate.js";
+import { contactValidate } from "../../middleware/validation/validation.js";
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", contactControllers.getAll);
 

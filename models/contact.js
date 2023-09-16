@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
-import { hookError } from "./hooks.js";
+import Joi from "joi";
+import { hookError, runValidateAtUpdate } from "./hooks.js";
 
 const contactSchema = new Schema(
   {
@@ -16,6 +17,10 @@ const contactSchema = new Schema(
       type: String,
       required: [true, "Phone is required"],
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
     favorite: {
       type: Boolean,
       default: false,
@@ -25,7 +30,27 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", hookError);
+// contactSchema.pre("findOneAndUpdate", runValidateAtUpdate);
+// contactSchema.post("findOneAndUpdate", hookError);
 
 const Contact = model("contact", contactSchema);
+
+export const contactAddSchema = Joi.object({
+  name: Joi.string()
+    .required()
+    .messages({ "any.required": `"name" mast be exist` }),
+  email: Joi.string()
+    .email()
+    .required()
+    .messages({ "any.required": `"email" mast be exist` }),
+  phone: Joi.string()
+    .required()
+    .pattern(
+      /^[(][0-9]{3}[)][\s][0-9]{3}-[0-9]{4}$/,
+      `"Phone number must be type: "(***) ***-****""`
+    )
+    .messages({ "any.required": `"phone" mast be exist` }),
+  favorite: Joi.boolean(),
+});
 
 export default Contact;
