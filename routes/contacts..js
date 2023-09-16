@@ -8,7 +8,7 @@ const {
   putEditCont,
   patchFav,
   deleteCont,
-} = require('../controller/contacts');
+} = require('../controlers/contact');
 
 const router = express.Router();
 
