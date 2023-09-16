@@ -1,6 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const authController = require("../../controller/auth.controller");
+const passport = require("passport");
 
-router.post('/signup', authController.signup);
-router.post('/login', authController.login);
+const auth = (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, (err, user) => {
+    if (!user || err) {
+      return res
+        .status(401)
+        .header("Content-Type", "application/json")
+        .json({
+          status: "unauthorized",
+          code: 401,
+          ResponseBody: {
+            message: "Not authorized",
+          },
+        });
+    }
+    req.user = user;
+    next();
+  })(req, res, next);
+};
+
+router.post("/signup", authController.signup);
+router.post("/login", authController.login);
+router.post("/logout", auth, authController.logout);
+router.post("/current", auth, authController.getCurrent);
+
+module.exports = router;
