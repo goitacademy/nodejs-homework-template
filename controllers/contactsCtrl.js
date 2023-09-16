@@ -1,7 +1,6 @@
 const HttpError = require("../helpers/HttpError");
+const isValidId = require("../helpers/isValidId");
 const { Contact } = require("../schemas/ValidateSchemasContacts");
-
-const mongoose = require("mongoose");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -18,9 +17,7 @@ const getAllContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
-      throw HttpError(404, "Not found");
-    }
+    isValidId(contactId);
     const searchedContact = await Contact.findById(contactId);
     if (!searchedContact) {
       throw HttpError(404, "Not found");
@@ -39,7 +36,6 @@ const addContact = async (req, res, next) => {
       throw HttpError(400, "Email is already taken");
     }
     const result = await Contact.create(req.body);
-    console.log(result);
     res.status(201).json(result);
     if (!result) {
       throw HttpError(404, "Not found");
@@ -52,9 +48,7 @@ const addContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    if (!mongoose.Types.ObjectId.isValid(contactId)) {
-      throw HttpError(404, "Not found");
-    }
+    isValidId(contactId);
     const result = await Contact.findByIdAndRemove(contactId);
     if (result) {
       res.status(200).json({ message: "contact deleted" });
@@ -66,24 +60,48 @@ const deleteContact = async (req, res, next) => {
   }
 };
 
-// const updateContact = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const result = await contacts.updateContact(contactId, req.body);
-//     if (result) {
-//       res.json(result);
-//     } else {
-//       throw HttpError(404, "Not found");
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const updateContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    isValidId(contactId);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      throw HttpError(404, "Not found");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    isValidId(contactId);
+    const { favorite } = req.body;
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      throw HttpError(404, "Not found");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAllContacts,
   getContactById,
   addContact,
   deleteContact,
-  // updateContact,
+  updateContact,
+  updateStatusContact,
 };

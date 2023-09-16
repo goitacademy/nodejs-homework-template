@@ -10,13 +10,6 @@ const contactSchema = new Schema(
     email: {
       type: String,
       unique: true,
-      // validate: {
-      //   validator: async function (value) {
-      //     const count = await this.constructor.countDocuments({ email: value });
-      //     return count === 0;
-      //   },
-      //   message: "Email is already taken"
-      // }
     },
     phone: {
       type: String,
@@ -45,6 +38,7 @@ const validateUpdateContactSchema = Joi.object({
   name: Joi.string().min(1).max(30),
   email: Joi.string().email({ minDomainSegments: 2 }),
   phone: Joi.string().pattern(/^[0-9+()-]*$/),
+  favorite: Joi.bool()
 });
 
 module.exports = {
