@@ -1,7 +1,8 @@
 import HttpError from "../utils/HttpErrors.js";
 import { controllerWrapper } from "../decorators/index.js";
-import Contact from "../models/Contact.js";
+import { Contact } from "../models/index.js";
 
+console.log(Contact);
 const getAllContacts = async (_, res) => {
   const result = await Contact.find({}, "-createdAt -updatedAt");
   console.log(result);
