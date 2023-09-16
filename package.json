@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "rest_api_application",
   "version": "0.0.0",
   "private": true,
   "scripts": {
