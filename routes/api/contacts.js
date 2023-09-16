@@ -8,16 +8,16 @@ import { HttpError } from "../../helpers/index.js";
 const router = express.Router();
 
 const contactAddSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
+const contactUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
 });
-
-// const contactAddSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().required(),
-//   phone: Joi.string().required(),
-// });
 
 router.get("/", async (req, res, next) => {
   try {
@@ -71,7 +71,7 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = contactAddSchema.validate(req.body);
+    const { error } = contactUpdateSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
