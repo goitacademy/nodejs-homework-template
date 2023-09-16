@@ -2,9 +2,14 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../services/schemas/user");
 const Joi = require("joi");
+const gravatar = require("gravatar");
+const path = require("path");
+const Jimp = require("jimp");
 require("dotenv").config();
 const { getUserbyId } = require("../services/index");
 const secret = process.env.SECRET;
+
+const uploadDir = path.join(process.cwd(), "public/avatars");
 
 const auth = async (req, res, next) => {
 	try {
@@ -56,10 +61,12 @@ const signUpUser = async (req, res, next) => {
 		const newUser = new User({ email });
 		newUser.setPassword(password);
 		await newUser.save();
+		const avatarURL = gravatar.url(email);
 		res.status(201).json({
 			user: {
 				email: email,
 				subscription: "starter",
+				avatarURL,
 			},
 		});
 	} catch (error) {
@@ -141,10 +148,38 @@ const getCurrentUser = async (req, res, next) => {
 	}
 };
 
+const updateAvatar = async (req, res, next) => {
+	if (!req.file) {
+		return res.status(400).json({
+			message: "No file uploaded",
+		});
+	}
+
+	const id = req.user._id;
+	const { path: tmpName, originalname } = req.file;
+
+	await Jimp.read(tmpName)
+		.then((avatar) => {
+			return avatar.resize(250, 250).quality(60).write(tmpName);
+		})
+		.catch((error) => {
+			throw error;
+		});
+
+	const fileName = `${id}_${originalname}`;
+	const uplodedFile = path.join(uploadDir, fileName);
+	await fs.rename(tmpName, uplodedFile);
+	const avatarUrl = path.join("avatars", fileName);
+	await User.findByIdAndUpdate(id, { avatarUrl });
+	res.status(200).json({
+		avatarUrl,
+	});
+};
 module.exports = {
 	signUpUser,
 	loginUser,
 	logoutUser,
 	getCurrentUser,
 	auth,
+	updateAvatar,
 };
