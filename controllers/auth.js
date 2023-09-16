@@ -1,23 +1,19 @@
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken')
 
-const jwt = require("jsonwebtoken");
-
-const gravatar = require("gravatar");
+const gravatar = require('gravatar') 
 const path = require("path");
-const fs = require("fs/promises");
-const Jimp = require("jimp");
-const { nanoid } = require("nanoid");
-
+const fs = require("fs/promises")
+const Jimp = require ("jimp")
 
 // імпортую модель
 const { User } = require("../models/user");
 // обробник помилок і обгортка для try&catch
+const { HttpError, ctrlWrapper } = require("../helpers");
 
-const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 
 // витягую секрет з .env
-const { SECRET_KEY, BASE_URL } = process.env;
-
+const { SECRET_KEY } = process.env;
 
 // шлях до аватарок
 const avatarDir = path.join(__dirname, "../", "public", "avatars");
@@ -97,9 +93,10 @@ const resendVerifyEmail = async (req, res) => {
     subject: "verify email",
     html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click for verify email</a>`,
     };
+
     
-    // відправляю емейл на підтвердження
-  await sendEmail(verifyEmail);
+}
+
 
   // відправляю відповідь, що користувач створений
    res.status(200).body({ email: email }).json({
@@ -108,74 +105,62 @@ const resendVerifyEmail = async (req, res) => {
 };
 
 
+    const payload = {id: user._id}
+    // створюю токен    
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+    // записую токен до об"єкту
+    await User.findByIdAndUpdate(user._id, { token })
+    // повертаю токен
 
-const login = async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  // переверію наявність у юзерів в базы даних такої пошти
-  if (!user) {
-    throw HttpError(401, "Email not verified");
-    }
-  // перевіряємо чи юзер верифікований  
-  if (!user.verify) {
-    throw HttpError(401, "Email or password invalid");
-  }
-  // переверію правильність захешованого пароля з введеним паролем
-  const passwordCompare = await bcrypt.compare(password, user.password);
-  if (!passwordCompare) {
-    throw HttpError(401, "Email or password invalid");
-  }
+    res.json({
+        token: token,
+    })
 
-  const payload = { id: user._id };
-  // створюю токен
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  // записую токен до об"єкту
-  await User.findByIdAndUpdate(user._id, { token });
-  // повертаю токен
-
-  res.json({
-    token: token,
-  });
-};
+}
 
 const getCurrent = async (req, res) => {
-  const { email, subscription } = req.user;
-  res.json({ email, subscription });
-};
+    const { email, subscription } = req.user;
+    res.json({email, subscription})
+}
 
 const logout = async (req, res) => {
-  const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
-  res.json({ message: "Logout success" });
-};
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" }) 
+    res.json({message: "Logout success"})
+}
+
 
 const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  // зменшую розмір аватарки
-  const image = await Jimp.read(tempUpload);
-  const newHeight = Jimp.AUTO;
-  await image.resize(250, newHeight).write(tempUpload);
-  // записуємо унікальне ім"я для авки
-  const fileName = `${_id}_${originalname}`;
+    
+    const { _id } = req.user; 
+    const { path: tempUpload, originalname } = req.file;
+    // зменшую розмір аватарки
+    const image = await Jimp.read(tempUpload);
+    const newHeight = Jimp.AUTO;
+    await image.resize(250, newHeight).write(tempUpload);
+    // записуємо унікальне ім"я для авки
+    const fileName = `${_id}_${originalname}` 
 
-  // cтворюємо папку для зберігання аватарок
-  const resultUpload = path.join(avatarDir, fileName);
-  // переміщуємо
-  await fs.rename(tempUpload, resultUpload);
-  // записуємо аватарУРЛ
-  const avatarUrl = path.join("avatars", fileName);
-  // оновлення аватарки
-  await User.findByIdAndUpdate(_id, { avatarUrl });
+    // cтворюємо папку для зберігання аватарок
+    const resultUpload = path.join(avatarDir, fileName);
+    // переміщуємо 
+    await fs.rename(tempUpload, resultUpload);
+    // записуємо аватарУРЛ
+    const avatarUrl = path.join("avatars", fileName);
+    // оновлення аватарки
+    await User.findByIdAndUpdate(_id, { avatarUrl });
+    
+    res.json(avatarUrl, )
+    
 
-  res.json(avatarUrl);
-};
+}
+
+
+
+
 
 module.exports = {
-    register: ctrlWrapper(register),
-    verifyEmail: ctrlWrapper(verifyEmail),
-    resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
-
+  register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
@@ -183,4 +168,3 @@ module.exports = {
   updateAvatar: ctrlWrapper(updateAvatar),
 
 };
-
