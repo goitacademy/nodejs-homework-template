@@ -1,5 +1,4 @@
 import Contact from "../models/Contact.js";
-// import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import {ctrlWrapper} from "../decorators/index.js";
 
 const getAllContacts = async (req, res) => {
