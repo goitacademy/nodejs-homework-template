@@ -2,19 +2,21 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 
-const { DB_HOST, PORT = 3000 } = process.env;
-
-mongoose.set("strictQuery", true);
+const PORT = process.env.PORT;
 
 mongoose
-  .connect(DB_HOST)
+  .connect(process.env.DB_HOST, {
+    dbName: "db-contacts",
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     console.log("Database connection successful");
-    app.listen(PORT, () => {
-      console.log("Server running. Use our API on port: 3000");
+    app.listen(PORT, async () => {
+      console.log(`App listens on port ${PORT}`);
     });
   })
-  .catch((error) => {
-    console.log(error.message);
+  .catch((err) => {
+    console.error(`Error while establishing connection: [${err}]`);
     process.exit(1);
   });
