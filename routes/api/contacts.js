@@ -79,6 +79,11 @@ router.delete("/:contactId", async (req, res) => {
 
 router.put("/:contactId", async (req, res) => {
   try {
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).json({ message: "missing fields" });
+      return;
+    }
+
     const { email, name, phone } = req.body;
     const { value, error } = validateContactBodyScheme.validate({
       name,
