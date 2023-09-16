@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bCrypt = require("bcryptjs");
+const gravatar = require("gravatar");
+const path = require("path");
 
 const { Schema } = mongoose;
 
@@ -23,6 +25,7 @@ const user = new Schema(
         type: String,
         default: null,
       },
+      avatarURL: String,
   },
   {
     versionKey: false,

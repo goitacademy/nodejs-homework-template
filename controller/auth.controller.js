@@ -1,5 +1,11 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+
+const path = require("path");
+const fs = require("fs/promises");
+
+const config = require("../config/config");
+
 require("dotenv").config();
 const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -18,6 +24,7 @@ const signup = async (req, res, next) => {
   }
   try {
     const newUser = new User({ email });
+    newUser.generateAvatar();
     newUser.setPassword(password);
     await newUser.save();
     res
@@ -101,7 +108,7 @@ const logout = async (req, res, next) => {
 };
 
 const getCurrent = async (req, res, next) => {
-  const { _id, email } = req.user;
+  const { _id, email, avatarURL } = req.user;
   try {
     const user = await User.findById(_id);
     if (!user) {
@@ -125,6 +132,7 @@ const getCurrent = async (req, res, next) => {
         ResponseBody: {
           email: email,
           subscription: "starter",
+          avatarURL: avatarURL,
         },
       });
   } catch (error) {
@@ -132,9 +140,21 @@ const getCurrent = async (req, res, next) => {
   }
 };
 
+const updateAvatars = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tmpUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(config.AVATARS_PATH, filename);
+  await fs.rename(tmpUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.status(200).json({ avatarURL });
+};
+
 module.exports = {
   signup,
   login,
   logout,
   getCurrent,
+  updateAvatars,
 };
