@@ -31,14 +31,14 @@ const validateAddContactSchema = Joi.object({
   phone: Joi.string()
     .pattern(/^[0-9+() -]*$/)
     .required(),
-  favorite: Joi.bool()
+  favorite: Joi.bool(),
 });
 
 const validateUpdateContactSchema = Joi.object({
   name: Joi.string().min(1).max(30),
   email: Joi.string().email({ minDomainSegments: 2 }),
   phone: Joi.string().pattern(/^[0-9+()-]*$/),
-  favorite: Joi.bool()
+  favorite: Joi.bool(),
 });
 
 module.exports = {

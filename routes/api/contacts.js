@@ -4,8 +4,9 @@ const router = express.Router();
 const ctrl = require("../../controllers/contactsCtrl");
 const schema = require("../../schemas/ValidateSchemasContacts");
 const ValidateBodyContact = require("../../middlewares/ValidateBodyAddContact");
+const paginationSchema = require("../../schemas/ValidatePagination");
 
-router.get("/", ctrl.getAllContacts);
+router.get("/", ValidateBodyContact(paginationSchema), ctrl.getAllContacts);
 
 router.get("/:contactId", ctrl.getContactById);
 
