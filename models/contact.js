@@ -15,6 +15,7 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
+      match: [regexpList.phone, 'Phone must be valid'],
     },
     favorite: {
       type: Boolean,
@@ -26,7 +27,7 @@ const contactSchema = new Schema(
       required: [true, 'Set owner for contact'],
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 
 contactSchema.post('save', handleMongooseError);

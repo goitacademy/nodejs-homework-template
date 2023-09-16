@@ -3,13 +3,22 @@ const { HttpError, controllerWrapper } = require('../helpers');
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner });
-  res.status(200).json(result);
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const total = await Contact.count();
+  const data = await Contact.find({ owner }, '-createdAt -updatedAt', {
+    skip,
+    limit,
+  }).populate('owner', 'email subscription');
+  res.status(200).json({ data, page: +page, limit: +limit, total });
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById(contactId).populate(
+    'owner',
+    'email subscription'
+  );
   if (!result) {
     throw new HttpError(404);
   }

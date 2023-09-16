@@ -4,14 +4,14 @@ const { validateErrorMessageList, regexpList } = require('../../variables');
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().pattern(regexpList.email).required(),
-  phone: Joi.string().required(),
+  phone: Joi.string().pattern(regexpList.phone).required(),
   favorite: Joi.boolean().default(false),
 }).messages(validateErrorMessageList);
 
 const updateContactSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().pattern(regexpList.email),
-  phone: Joi.string(),
+  phone: Joi.string().pattern(regexpList.phone),
   favorite: Joi.boolean(),
 })
   .min(1)
