@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+
 const jwt = require("jsonwebtoken");
 
 const gravatar = require("gravatar");
@@ -7,19 +8,23 @@ const fs = require("fs/promises");
 const Jimp = require("jimp");
 const { nanoid } = require("nanoid");
 
+
 // імпортую модель
 const { User } = require("../models/user");
 // обробник помилок і обгортка для try&catch
+
 const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 
 // витягую секрет з .env
 const { SECRET_KEY, BASE_URL } = process.env;
+
 
 // шлях до аватарок
 const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 // запит реєстрації
 const register = async (req, res) => {
+
   // з реквеста отримую емейл та пароль
   const { email, password } = req.body;
   // відправляю запит на mongoDB та перевіряю чи є така пошта
@@ -170,9 +175,12 @@ module.exports = {
     register: ctrlWrapper(register),
     verifyEmail: ctrlWrapper(verifyEmail),
     resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
 
   updateAvatar: ctrlWrapper(updateAvatar),
+
 };
+
