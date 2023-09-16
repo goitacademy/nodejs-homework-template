@@ -12,4 +12,13 @@ const router = express.Router();
 
 router.patch("/", authenticate, validateBody(schemas.updateSubscription), ctrl.updateSubscription)
 
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
+
+router.post(
+  "./verify",
+  validateBody(schemas.verifySchema),
+  ctrl.resendVerifyEmail
+);
+
+
 module.exports = router;

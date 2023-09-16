@@ -64,18 +64,21 @@ const verifyEmail = async (req, res) => {
     console.log("user", user);
   // перевіряю чи є такий токен
   if (!user) {
-    throw HttpError(401, "Email not found");
+    throw HttpError(404, "User not found");
     }
     // оновлюємо юзера та підтверджуємо верифікацію
     await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: "" });
     // відправляємо повідомлення що верифікація пройдена 
-    res.json({
-      message: "Email verify success",
-    });
+     res.status(200).json({
+       message: "Verification successful",
+     });
 }
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
+  if (!email) {
+    throw HttpError(400, "missing required field email")
+  }
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email not found");
@@ -94,8 +97,8 @@ const resendVerifyEmail = async (req, res) => {
   await sendEmail(verifyEmail);
 
   // відправляю відповідь, що користувач створений
-   res.status(200).json({
-     message: "Verification email sent"
+   res.status(200).body({ email: email }).json({
+     message: "Verification email sent",
    });
 };
 
