@@ -1,32 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-
-const contacts = [
-  { name: "Karol Kowalewicz", email: "karol@example.com", phone: "123-456-7890" },
-  { name: "Jane Johanson", email: "jane@example.com", phone: "987-654-3210" },
-];
-
-const formattedContacts = contacts.map((contact) => {
-  return {
-    name: contact.name,
-    email: contact.email,
-    phone: contact.phone,
-  };
-});
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models/contacts");
 
 router.get("/", async (req, res, next) => {
-  res.status(200).json({ contacts: formattedContacts });
+  try {
+    const contacts = await listContacts();
+    res.status(200).json({ contacts });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
-  const contact = contacts.find((contact) => contact.id === contactId);
-
-  if (contact) {
-    res.status(200).json({ message: "Find contact", contact });
-  } else {
-    res.status(404).json({ message: "A contact with this id does not exist" });
+  try {
+    const contact = await getContactById(contactId);
+    res.status(200).json({ contact });
+  } catch (error) {
+    res.status(404).json({ message: "Contact not found" });
   }
 });
 
@@ -39,64 +37,44 @@ const contactSchema = Joi.object({
 router.post("/", async (req, res, next) => {
   const { error } = contactSchema.validate(req.body);
   if (error) {
-    res.status(400).json({ message: error.details[0].message });
-  } else {
-    const { name, email, phone } = req.body;
-    const newContact = {
-      id: Date.now().toString(),
-      name,
-      email,
-      phone,
-    };
-    contacts.push(newContact);
-    formattedContacts.push(newContact);
-    res
-      .status(201)
-      .json({ message: "Add new contact", contact: newContact });
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  try {
+    const newContact = await addContact(req.body);
+    res.status(201).json({ message: "Added new contact", contact: newContact });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
-  const indexToRemove = contacts.findIndex(
-    (contact) => contact.id === contactId
-  );
-  if (indexToRemove !== -1) {
-    contacts.splice(indexToRemove, 1);
-    const indexToRemoveFormatted = formattedContacts.findIndex(
-      (contact) => contact.id === contactId
-    );
-    if (indexToRemoveFormatted !== -1) {
-      formattedContacts.splice(indexToRemoveFormatted, 1);
-    }
-    res.status(200).json({ message: `Delete contact: ${contactId}` });
-  } else {
-    res.status(404).json({ message: "Not found" });
+  try {
+    await removeContact(contactId);
+    res.status(200).json({ message: `Deleted contact: ${contactId}` });
+  } catch (error) {
+    res.status(404).json({ message: "Contact not found" });
   }
 });
 
 router.put("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
-  const updatedContact = contacts.find((contact) => contact.id === contactId);
+  const { name, email, phone } = req.body;
+  const updatedContact = { name, email, phone };
 
-  if (updatedContact) {
-    updatedContact.name = req.body.name;
-    updatedContact.email = req.body.email;
-    updatedContact.phone = req.body.phone;
-
-    const indexToUpdateFormatted = formattedContacts.findIndex(
-      (contact) => contact.id === contactId
-    );
-    if (indexToUpdateFormatted !== -1) {
-      formattedContacts[indexToUpdateFormatted] = updatedContact;
+  try {
+    const contact = await updateContact(contactId, updatedContact);
+    if (contact) {
+      res.status(200).json({
+        message: `Updated contact: ${contactId}`,
+        contact,
+      });
+    } else {
+      res.status(404).json({ message: "Contact not found" });
     }
-
-    res.status(200).json({
-      message: `Update contact: ${contactId}`,
-      contact: updatedContact,
-    });
-  } else {
-    res.status(404).json({ message: "Not found" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
