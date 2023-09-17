@@ -1,4 +1,4 @@
-const CtrlWrapper = (ctrl) => {
+const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
     try {
       await ctrl(req, res, next);
@@ -10,4 +10,4 @@ const CtrlWrapper = (ctrl) => {
   return func; // Повернення обгортки контролера
 };
 
-module.exports = CtrlWrapper; // Експорт функції CtrlWrapper для використання в інших файлів
+module.exports = ctrlWrapper; // Експорт функції CtrlWrapper для використання в інших файлів
