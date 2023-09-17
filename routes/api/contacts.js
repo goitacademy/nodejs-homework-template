@@ -6,6 +6,7 @@ const schemas = require("../../schemas/contacts");
 
 const router = express.Router();
 
+// Роути
 router.get("/", ctrl.listContacts);
 
 router.get("/:contactId", ctrl.getContactById);
