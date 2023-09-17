@@ -1,11 +1,20 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const Joi = require('joi') // Importujemy Joi
+const Joi = require('joi')
+const gravatar = require('gravatar') // Dodane dla obsługi Gravatara
 const User = require('../../models/models/users')
 const auth = require('../../auth')
-
+const multer = require('multer')
+const path = require('path')
+const Jimp = require('jimp')
+const fs = require('fs').promises
 const router = express.Router()
+
+const upload = multer({
+    dest: 'tmp',
+    limits: { fileSize: 2 * 1024 * 1024 }, // max 2 MB
+})
 
 const schema = Joi.object({
     email: Joi.string().email().required(),
@@ -22,15 +31,28 @@ router.post('/signup', async (req, res, next) => {
 
     const { email, password } = req.body
 
+    // Generowanie URL Gravatara
+    const avatarURL = gravatar.url(
+        email,
+        { s: '100', r: 'x', d: 'retro' },
+        true
+    )
+
     const existingUser = await User.findOne({ email })
     if (existingUser) {
         return res.status(400).json({ message: 'Email already exists' })
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
-    const newUser = new User({ email, password: hashedPassword })
+
+    // Zapisywanie użytkownika z awatarem
+    const newUser = new User({ email, password: hashedPassword, avatarURL })
+
     await newUser.save()
-    res.status(201).json({ user: { email, subscription: 'starter' } })
+
+    res.status(201).json({
+        user: { email, subscription: 'starter', avatarURL },
+    })
 })
 
 router.post('/login', async (req, res, next) => {
@@ -96,5 +118,42 @@ router.get('/logout', auth, async (req, res, next) => {
         next(error)
     }
 })
+router.patch(
+    '/avatars',
+    auth,
+    upload.single('avatar'),
+    async (req, res, next) => {
+        try {
+            const { file } = req
+            if (!file) {
+                return res.status(400).json({ message: 'No file provided' })
+            }
+
+            // Obróbka zdjęcia za pomocą Jimp
+            const img = await Jimp.read(file.path)
+            await img.resize(250, 250).writeAsync(file.path)
+
+            // Przeniesienie pliku do folderu `public/avatars` i nadanie unikalnej nazwy
+            const newName = `avatar_${req.user._id}${path.extname(
+                file.originalname
+            )}`
+            const newLocation = path.join(
+                __dirname,
+                '../../public/avatars',
+                newName
+            )
+
+            await fs.rename(file.path, newLocation)
+
+            // Aktualizacja URL awatara użytkownika w bazie danych
+            const avatarURL = `/avatars/${newName}`
+            await User.findByIdAndUpdate(req.user._id, { avatarURL })
+
+            res.status(200).json({ avatarURL })
+        } catch (error) {
+            next(error)
+        }
+    }
+)
 
 module.exports = router
