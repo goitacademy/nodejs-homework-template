@@ -1,33 +1,10 @@
 import express from "express"
 
-import Joi from "joi";
 import { Contact } from "../../models/ContactsSchema.js";
+import { contactsAddSchema } from "../../controllers/SchemaJoi.js";
 
 const router = express.Router()
 
-const contactsAddSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-  phone: Joi.string().required().messages({
-    "any.required": `missing required name field`,
-  }),
-});
-const contactsUpdateSchema = Joi.object({
-  name: Joi.string().messages({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().messages({
-    "any.required": `missing required name field`,
-  }),
-  phone: Joi.string().messages({
-    "any.required": `missing required name field`,
-  }),
-  favorite: Joi.boolean()
-});
 
 router.get('/', async (req, res, next) => {
   const result = await Contact.find()
