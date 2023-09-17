@@ -63,6 +63,7 @@ connection
     app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`);
       createFolderIsNotExist(config.AVATARS_PATH);
+      createFolderIsNotExist(config.TMP_DIR);
     });
   })
   .catch((err) => {

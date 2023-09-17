@@ -5,6 +5,7 @@ const path = require("path");
 const fs = require("fs/promises");
 
 const config = require("../config/config");
+const Jimp = require("jimp");
 
 require("dotenv").config();
 const signup = async (req, res, next) => {
@@ -146,6 +147,9 @@ const updateAvatars = async (req, res) => {
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(config.AVATARS_PATH, filename);
   await fs.rename(tmpUpload, resultUpload);
+  const avatar = await Jimp.read(resultUpload);
+  avatar.resize(250, 250);
+  avatar.write(resultUpload);
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
   res.status(200).json({ avatarURL });
