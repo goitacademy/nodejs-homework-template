@@ -41,14 +41,6 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const { name, email, phone } = body;
-  if (!name || !email || !phone) {
-    const error = createError(ERROR_TYPES.BAD_REQUEST, {
-      message: "missing required name field",
-      data: {},
-    });
-    throw error;
-  }
   const contact = {
     id: nanoid(),
     ...body,
@@ -60,13 +52,6 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  if (Object.keys(body).length === 0) {
-    const error = createError(ERROR_TYPES.BAD_REQUEST, {
-      message: "missing fields",
-      data: {},
-    });
-    throw error;
-  }
   const contactList = await listContacts();
   const { name, email, phone } = body;
   const changeContactIndex = contactList.findIndex((e) => e.id === contactId);
