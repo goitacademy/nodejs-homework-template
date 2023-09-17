@@ -7,17 +7,6 @@ const contactsPath = path.resolve("models", "contacts.json");
 const updateContacts = (contacts) =>
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-// const listContacts = async () => {
-//     const data = await fs.readFile(contactsPath);
-//     return JSON.parse(data);
-// };
-
-// const getContactById = async (contactId) => {};
-
-// const removeContact = async (contactId) => {};
-
-// const addContact = async (body) => {};
-
 export const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
