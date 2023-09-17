@@ -6,7 +6,7 @@ import {
   patchContact,
   updateStatusContact,
   addContacts,
-} from "./contacts.dao.js";
+} from "../daos/contacts.dao.js";
 
 export const getAllContactsHandler = async (_, res, next) => {
   try {

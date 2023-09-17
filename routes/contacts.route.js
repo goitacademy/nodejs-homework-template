@@ -6,7 +6,7 @@ import {
   updateContactHandler,
   deleteContactHandler,
   updateFavoriteStatusHandler,
-} from "./contacts.controller.js";
+} from "../controllers/contacts.controller.js";
 
 const contactsRouter = Router();
 
