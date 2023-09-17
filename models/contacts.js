@@ -27,7 +27,10 @@ const getContactById = async (contactId) => {
   const contacts = await listContacts();
   const contact = contacts.find((item) => item.id === contactId);
   if (!contact) {
-    throw new Error('Contact not found');
+    // throw new Error('Contact not found');
+    const error = new Error('Contact not found');
+    error.statusCode = 404;
+    throw error;
   }
   return contact;
 }
@@ -40,7 +43,7 @@ const getContactById = async (contactId) => {
  */
 const removeContact = async (contactId) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((c) => c.id === contactId);
+  const index = contacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
     throw new Error('Contact not found');
   }

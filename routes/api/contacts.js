@@ -7,8 +7,7 @@ const {
   removeContact,
   updateContact,
 } = require('../../models/contacts')
-const { postSchema } = require('../../schemas/contacts')
-const { putSchema } = require('../../schemas/contacts')
+const schemaValidate = require('../../schemas/contacts')
 
 
 // GET /api/contacts
@@ -17,8 +16,6 @@ router.get('/', async (req, res, next) => {
   try {
     const contacts = await listContacts();
     res.json(contacts);
-    //
-    // res.status(200).json(contacts);
   } catch (error) {
     next(error);
   }
@@ -40,9 +37,12 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = postSchema.validate(req.body);
+    const { error } = schemaValidate.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      const missingField = error.details[0].context.label;
+      return res.status(400).json({
+        message: `Missing required ${missingField} field`
+      });
     }
 
     const newContact = await addContact(req.body);
@@ -57,8 +57,15 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const removedContact = await removeContact(contactId);
-    res.json({ message: 'Contact deleted', contact: removedContact });
+
+    const contactById = await getContactById(contactId);
+    if (!contactById) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    await removeContact(contactId)
+    res.status(200);
+    res.json({ message: 'Contact deleted' });
   } catch (error) {
     next(error);
   }
@@ -68,11 +75,21 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    const { error } = putSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
     const { contactId } = req.params;
+    const { error } = schemaValidate.validate(req.body);
+
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        message: "Missing fields"
+      });
+    }
+    if (error) {
+      const missingField = error.details[0].context.label;
+      return res.status(400).json({
+        message: `Missing required ${missingField} field`
+      });
+    }
+
     const updatedContact = await updateContact(contactId, req.body);
     res.json(updatedContact);
   } catch (error) {
