@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const { handleMongooseError } = require("../helpers/handleMongooseError");
+
 const contactSchema = new Schema(
   {
     name: {
@@ -17,14 +19,34 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
+contactSchema.post("save", handleMongooseError);
+
+const emptyBody = Joi.object()
+  .min(1)
+  .messages({ "object.min": "Missing fields" });
+
+const emptyBodyFavorite = Joi.object()
+  .min(1)
+  .messages({ "object.min": "Missing field favorite" });
+
 const addShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required name field" }),
+  phone: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required phone field" }),
+  email: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required email field" }),
   favorite: Joi.boolean(),
 });
 
@@ -35,6 +57,8 @@ const updateFavoriteShema = Joi.object({
 const shemas = {
   addShema,
   updateFavoriteShema,
+  emptyBody,
+  emptyBodyFavorite,
 };
 
 const Contact = model("contact", contactSchema);
