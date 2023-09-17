@@ -1,18 +1,20 @@
 import express from "express";
 import {
-  get,
   list,
   login,
   signup,
   auth,
   logout,
   update,
+  updateUserAvatar,
 } from "../controller/users.js";
 import { get as getContacts } from "../controller/contacts.js";
+import multer from "multer";
+import { uploadImage } from "../config/config-multer.js";
+
+const avatarUpload = multer({ dest: "tmp/" });
 
 const usersRouter = express.Router();
-
-usersRouter.get("/test", get);
 
 usersRouter.post("/login", login);
 
@@ -25,5 +27,7 @@ usersRouter.get("/list", auth, list);
 usersRouter.get("/current", auth, getContacts);
 
 usersRouter.patch("/:userId/subscription", update);
+
+usersRouter.patch("/avatars", uploadImage, updateUserAvatar);
 
 export default usersRouter;

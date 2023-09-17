@@ -2,14 +2,19 @@ import {
   listUsers,
   getUserById,
   loginUser,
-  updateSubscription,
+  updateAvatar,
 } from "../models/users.js";
 import jwt from "jsonwebtoken";
 import passport from "passport";
 import User from "../service/schemas/users.js";
 import "dotenv/config";
+import gravatar from "gravatar";
+import Jimp from "jimp";
+import path from "path";
+import { uploadImage } from "../config/config-multer.js";
 
 const secret = process.env.JWT_SECRET;
+
 export const get = async (req, res, next) => {
   try {
     const contacts = await listUsers();
@@ -67,6 +72,7 @@ export const login = async (req, res) => {
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
   const user = await getUserById({ email });
+
   if (user) {
     return res.status(409).json({
       status: "error",
@@ -75,8 +81,11 @@ export const signup = async (req, res, next) => {
       data: "Conflict",
     });
   }
+
+  const avatarURL = gravatar.url(email, { s: "200" }, true);
+  console.log(avatarURL);
   try {
-    const newUser = new User({ username, email });
+    const newUser = new User({ username, email, avatarURL });
     newUser.setPassword(password);
     await newUser.save();
     res.status(201).json({
@@ -84,6 +93,7 @@ export const signup = async (req, res, next) => {
       code: 201,
       data: {
         message: "User created successfully",
+        avatarURL,
       },
     });
   } catch (err) {
@@ -172,6 +182,7 @@ export const auth = async (req, res, next) => {
     });
   }
 };
+
 export const update = async (req, res) => {
   const { id: userId } = req.user;
   const { body } = req;
@@ -195,5 +206,27 @@ export const update = async (req, res) => {
     res
       .status(500)
       .json(`An error occurred while updating the contact: ${err}`);
+  }
+};
+export const updateUserAvatar = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json("Error! Missing file!");
+    }
+
+    const { id: userId } = req.user;
+
+    const newAvatarPath = await updateAvatar(req.file.path, userId);
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      avatarURL: newAvatarPath,
+    });
+  } catch (error) {
+    console.error("An error occurred while updating avatar: ", error);
+    res
+      .status(500)
+      .json(`An error occurred while updating the avatar: ${error}`);
   }
 };

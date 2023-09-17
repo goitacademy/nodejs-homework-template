@@ -50,3 +50,28 @@ export const updateSubscription = async (subscription, userId) => {
     console.error("An error occurred while updating user: ", err);
   }
 };
+
+export const updateAvatar = async (filePath, userId) => {
+  try {
+    const localPath = `public/avatars/avatar-${userId}.jpg`;
+    const serverPath = `http://localhost:3000/${localPath.replace(
+      /^public\//,
+      ""
+    )}`;
+
+    const newAvatar = await Jimp.read(filePath);
+    await newAvatar.resize(250, 250).quality(60).writeAsync(localPath);
+
+    await User.findByIdAndUpdate(
+      { _id: userId },
+      { $set: { avatarURL: localPath } },
+      { new: true, select: "avatarURL" }
+    );
+
+    await fs.unlink(filePath);
+    return serverPath;
+  } catch (err) {
+    console.error("An error occurred while updating avatar: ", err);
+    throw err;
+  }
+};
