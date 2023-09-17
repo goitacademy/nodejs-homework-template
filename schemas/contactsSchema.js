@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 module.exports = { newContactSchema, existingContactsSchema };
 // const Joi = require("joi");
 
@@ -20,4 +21,4 @@ module.exports = { newContactSchema, existingContactsSchema };
 //   id: Joi.string().required(),
 // });
 
-module.exports = { newContactSchema, existingContactSchema };
+// module.exports = { newContactSchema, existingContactSchema };

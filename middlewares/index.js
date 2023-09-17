@@ -1,3 +1,3 @@
 const validateBody = require("./contactsValidation.js");
-
-module.exports = { validateBody };
+const isValidId = require("./isValidId.js");
+module.exports = { validateBody, isValidId };

@@ -1,15 +1,15 @@
-const contacts = require("../models/contactsModel");
+const { Contacts } = require("../models/contactsModel");
 
 const { cteateError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contacts.find({}, "name email phone favorite");
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  const result = await Contacts.findById(contactId);
 
   if (!result) {
     throw cteateError(404, "Not found");
@@ -19,7 +19,7 @@ const getContactById = async (req, res) => {
 
 const removeContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
+  const result = await Contacts.findByIdAndDelete(contactId);
   if (!result) {
     throw cteateError(404, "Not found");
   }
@@ -27,13 +27,18 @@ const removeContactById = async (req, res) => {
 };
 
 const updateContactById = async (req, res) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite } = req.body;
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, {
-    name,
-    email,
-    phone,
-  });
+  const result = await Contacts.findByIdAndUpdate(
+    contactId,
+    {
+      name,
+      email,
+      phone,
+      favorite,
+    },
+    { new: true }
+  );
   if (!result) {
     throw cteateError(404, "Not found");
   }
@@ -41,15 +46,25 @@ const updateContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const { name, email, phone } = req.body;
-  const result = await contacts.addContact({ name, email, phone });
+  const result = await Contacts.create(req.body);
   res.status(201).json(result);
 };
 
+const updateStatusContacts = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw cteateError(404, "Not found");
+  }
+  res.json(result);
+};
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   updateContactById: ctrlWrapper(updateContactById),
   removeContactById: ctrlWrapper(removeContactById),
+  updateStatusContact: ctrlWrapper(updateStatusContacts),
 };
