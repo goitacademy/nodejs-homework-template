@@ -1,6 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const uploadDir = path.join(process.cwd(), "public", "avatars");
+const uploadDir = path.join(process.cwd(), "tmp");
 
 const storage = multer.diskStorage({
 	destination: uploadDir,
