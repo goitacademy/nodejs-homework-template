@@ -16,3 +16,13 @@ mongoose
 		console.log(error.message);
 		process.exit(1);
 	});
+
+module.exports = {
+	connect: () => {
+		mongoose.Promise = Promise;
+		mongoose.connect(DB_URI);
+	},
+	disconnect: () => {
+		mongoose.connection.close();
+	},
+};
