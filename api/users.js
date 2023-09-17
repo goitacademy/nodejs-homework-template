@@ -9,10 +9,7 @@ import {
   updateUserAvatar,
 } from "../controller/users.js";
 import { get as getContacts } from "../controller/contacts.js";
-import multer from "multer";
 import { uploadImage } from "../config/config-multer.js";
-
-const avatarUpload = multer({ dest: "tmp/" });
 
 const usersRouter = express.Router();
 
