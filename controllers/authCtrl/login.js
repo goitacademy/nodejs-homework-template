@@ -22,21 +22,27 @@ const login = asyncHandler(async (req, res, next) => {
         throw HttpError(401, "Email or password is invalid")
     };
 
+    if (!user.verify) {
+        throw HttpError(401, "Email not verified");
+    };
+
     const isValidPassword = await bcrypt.compare(password, user.password);
+
     if (!isValidPassword) {
         throw HttpError(401, "Email or password is invalid")
     }
-    
+
     const payload = { id: user._id };
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
-    await User.findByIdAndUpdate(user._id,{token})
-   
+    await User.findByIdAndUpdate(user._id, { token })
+
     res.status(200).json({
         'token': token,
         user: {
             email: user.email,
-            subscription:user.subscription
-    }})
+            subscription: user.subscription
+        }
+    })
 
 });
 
