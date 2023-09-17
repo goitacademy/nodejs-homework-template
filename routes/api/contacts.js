@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require("../../models/contacts");
 const scheme = require("../../models/auth");
-const joi = require("joi");
 
 router.get('/', async (req, res, next) => {
   const contacts = await listContacts();
