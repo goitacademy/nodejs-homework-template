@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Contact = require("../../models/contacts");
+const authenticate = require("../../middlewares/auth");
 
 // Pobieranie wszystkich kontaktów
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
   try {
     const contacts = await Contact.find();
     res.status(200).json(contacts);
@@ -13,7 +14,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // Pobieranie kontaktu po ID
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
   try {
     const contact = await Contact.findById(contactId);

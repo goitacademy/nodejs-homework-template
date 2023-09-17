@@ -27,15 +27,11 @@ async function signup(req, res) {
     const newUser = new User({ email, password: hashedPassword });
     await newUser.save();
 
-    // Ustal zawartość payload
-    const payload = { userId: newUser._id };
-
-    // Wygeneruj token JWT
-    const token = jwt.sign(payload, jwtSecret, { expiresIn: "24h" });
+    // Usuń pole z tokenem z odpowiedzi
+    delete newUser.token;
 
     res.status(201).json({
       user: { email: newUser.email, subscription: newUser.subscription },
-      token,
     });
   } catch (error) {
     console.error("Błąd rejestracji", error);
@@ -64,7 +60,9 @@ async function login(req, res) {
     const payload = { userId: user._id };
 
     // Wygeneruj token JWT
-    const token = jwt.sign(payload, jwtSecret, { expiresIn: "24h" });
+    const token = jwt.sign({ userId: user._id }, jwtSecret, {
+      expiresIn: "5min",
+    });
 
     res.status(200).json({
       user: { email: user.email, subscription: user.subscription },
@@ -95,6 +93,10 @@ async function getCurrentUser(req, res) {
 // Wyloguj użytkownika
 async function logout(req, res) {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "User is not logged in" });
+    }
+
     // Wyzeruj token w obiekcie user, aby oznaczyć wylogowanie
     req.user.token = null;
     await req.user.save();
