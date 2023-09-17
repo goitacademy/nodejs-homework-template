@@ -49,7 +49,28 @@ const register = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  const result = await User.findByIdAndUpdate(_id, { token: "" });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(204).json({
+    messsage: "Logout successful",
+  });
+};
+
+const current = async (req, res) => {
+  const { email, subscription } = req.user;
+  res.status(200).json({
+    email,
+    subscription,
+  });
+};
+
 module.exports = {
   login,
   register,
+  logout,
+  current,
 };
