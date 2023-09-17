@@ -38,7 +38,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({ message:`missing required ${error.details[0].path[0]} field`});
     }
 
     const newContact = await addContact(req.body);
@@ -63,9 +63,14 @@ router.delete('/:id', async (req, res, next) => {
 
 router.put('/:id', async (req, res, next) => {
   try {
+    
+    if(Object.keys(req.body).length < 2){
+      return res.status(400).json({ message: `missing fields` });
+    }
+
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({ message:`missing required ${error.details[0].path[0]} field`});
     }
 
     const updatedContact = await updateContact(req.params.id, req.body);
