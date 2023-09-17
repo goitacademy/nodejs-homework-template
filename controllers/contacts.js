@@ -9,7 +9,7 @@ const { HttpError, controllerWrapper } = require('../helpers');
  * @throws {HttpError} 404 if a contact does not exist
  * @returns {Object} JSON response containing a list of contacts, pagination information, and total count
  */
-const listContacts = async (req, res) => {
+const listContacts = controllerWrapper(async (req, res) => {
   // Extract user's ID from the request
   const { _id: owner } = req.user;
 
@@ -50,7 +50,7 @@ const listContacts = async (req, res) => {
 
   // Respond with the data, pagination information, and total count
   res.status(200).json({ data, page: +page, limit: +limit, total });
-};
+});
 
 /**
  * Get a contact by its ID.
@@ -60,7 +60,7 @@ const listContacts = async (req, res) => {
  * @throws {HttpError} 404 if a contact does not exist
  * @returns {Object} JSON response containing the contact's details
  */
-const getContactById = async (req, res) => {
+const getContactById = controllerWrapper(async (req, res) => {
   const { contactId } = req.params;
 
   // Fetch the contact by its ID and populate owner details
@@ -76,7 +76,7 @@ const getContactById = async (req, res) => {
 
   // Respond with the contact data
   res.status(200).json(result);
-};
+});
 
 /**
  * Add a new contact.
@@ -85,7 +85,7 @@ const getContactById = async (req, res) => {
  * @param {Object} res - Express response object
  * @returns {Object} JSON response containing the newly added contact's details
  */
-const addContact = async (req, res) => {
+const addContact = controllerWrapper(async (req, res) => {
   const { _id: owner } = req.user;
 
   // Create a new contact with the owner's ID
@@ -93,7 +93,7 @@ const addContact = async (req, res) => {
 
   // Respond with the created contact
   res.status(201).json(result);
-};
+});
 
 /**
  * Update an existing contact.
@@ -103,7 +103,7 @@ const addContact = async (req, res) => {
  * @throws {HttpError} 404 if a contact does not exist
  * @returns {Object} JSON response containing the updated contact's details
  */
-const updateContact = async (req, res) => {
+const updateContact = controllerWrapper(async (req, res) => {
   const { contactId } = req.params;
 
   // Update the contact by its ID with the provided data
@@ -118,7 +118,7 @@ const updateContact = async (req, res) => {
 
   // Respond with the updated contact data
   res.status(200).json(result);
-};
+});
 
 /**
  * Update the status of a contact.
@@ -128,7 +128,7 @@ const updateContact = async (req, res) => {
  * @throws {HttpError} 404 if a contact does not exist
  * @returns {Object} JSON response containing the updated contact's details
  */
-const updateStatusContact = async (req, res) => {
+const updateStatusContact = controllerWrapper(async (req, res) => {
   const { contactId } = req.params;
 
   // Update the status of the contact by its ID with the provided data
@@ -143,7 +143,7 @@ const updateStatusContact = async (req, res) => {
 
   // Respond with the updated contact data
   res.status(200).json(result);
-};
+});
 
 /**
  * Remove a contact by its ID.
@@ -153,7 +153,7 @@ const updateStatusContact = async (req, res) => {
  * @throws {HttpError} 404 if a contact does not exist
  * @returns {Object} JSON response indicating successful contact deletion
  */
-const removeContact = async (req, res) => {
+const removeContact = controllerWrapper(async (req, res) => {
   const { contactId } = req.params;
 
   // Remove the contact by its ID
@@ -168,15 +168,15 @@ const removeContact = async (req, res) => {
   res.status(200).json({
     message: 'contact deleted',
   });
-};
+});
 
 module.exports = {
-  listContacts: controllerWrapper(listContacts),
-  getContactById: controllerWrapper(getContactById),
-  addContact: controllerWrapper(addContact),
-  updateContact: controllerWrapper(updateContact),
-  updateStatusContact: controllerWrapper(updateStatusContact),
-  removeContact: controllerWrapper(removeContact),
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  updateStatusContact,
+  removeContact,
 };
 
 // This JavaScript code defines a set of controller functions for managing contacts, including listing contacts, getting a contact by ID, adding, updating, updating the status, and removing a contact. These functions are wrapped in error handling logic, and they interact with the Contact model. In case of errors, appropriate HTTP status codes and error messages are returned in the responses.

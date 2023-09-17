@@ -10,7 +10,10 @@ class HttpError extends Error {
    * @param {number} status - HTTP status code for the error
    * @param {string} message - Optional error message
    */
-  constructor(status, message = httpErrorMessageList[status]) {
+  constructor(
+    status = 500,
+    message = httpErrorMessageList[status] || httpErrorMessageList.default
+  ) {
     super(message);
 
     // Set the HTTP status code and error name
