@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 
-const contacts = [];
+const contacts = [
+  { name: "Karol Kowalewicz", email: "karol@example.com", phone: "123-456-7890" },
+  { name: "Jane Johanson", email: "jane@example.com", phone: "987-654-3210" },
+];
 
 const formattedContacts = contacts.map((contact) => {
   return {
