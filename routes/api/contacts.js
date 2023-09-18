@@ -11,7 +11,6 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   const contacts = await listContacts();
-  // console.table(contacts);
 
   res.status(200).send({ contacts: contacts });
 });
@@ -28,15 +27,11 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  // console.log(req.params.contactId);
   await removeContact(req.params.contactId);
   res.status(200).send({ message: "sadas" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  // const updateData = req.params(req.body);
-  // console.log(req.params.contactId);
-
   updateContact(req.params.contactId, req.body);
 
   console.log(updateContact);
