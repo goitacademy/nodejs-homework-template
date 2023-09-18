@@ -1,22 +1,8 @@
 const express = require('express')
-const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts')
+const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/controller')
+const { contactSchemaPost, contactSchemaPut } = require('../../validate/validateContacts')
 
 const router = express.Router()
-
-const Joi = require('joi');
-
-
-const contactSchemaPost = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-  phone: Joi.string().required()
-})
-
-const contactSchemaPut = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-  phone: Joi.string()
-}).or("name","email","phone")
 
 
 
