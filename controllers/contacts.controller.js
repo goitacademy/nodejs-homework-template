@@ -1,4 +1,4 @@
-const contactsService = require('../aditionalServ/contacts.service');
+const contactsService = require('../servises/contacts.service');
 const { HttpError, controllerWrap } = require('../helpers');
 
 const getAll = async (req, res) => {
