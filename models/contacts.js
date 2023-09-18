@@ -1,4 +1,5 @@
 const fs = require('fs/promises')
+const { v4: uuidv4 } = require('uuid');
 const contactsPath = './models/contacts.json'
 
 const listContacts = async () => {
@@ -15,7 +16,6 @@ const getContactById = async (contactId) => {
   // Пошук контакту за id
   try {
     const contacts = await listContacts();
-    // const contact = contacts.find(contact => contact.id === Number.parseInt(contactId))
     const contact = contacts.find(({ id }) => id.toString() === contactId)
     return contact
   } catch (err) {
@@ -25,7 +25,19 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => { }
 
-const addContact = async (body) => { }
+const addContact = async (body) => {
+  const contscts = await listContacts()
+
+  const newContact = {
+    id: uuidv4(),
+    ...body,
+  }
+
+  contscts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(contscts))
+
+  return newContact
+}
 
 const updateContact = async (contactId, body) => { }
 

@@ -40,7 +40,24 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contacts = await contactsModel.addContact(req.body);
+    if (contacts) {
+      return res.status(201).json({
+        status: "success",
+        code: 201,
+        data: { contacts }
+      })
+    } else {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "missing required name field",
+      })
+    }
+  } catch (err) {
+    next(err)
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
