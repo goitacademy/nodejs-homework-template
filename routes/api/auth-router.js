@@ -1,18 +1,38 @@
 import express from "express";
 
-// import authController from "../../controllers/auth-controller.js";
-
-// import * as userSchemas from "../../models/User.js";
-
-// import { validateBody } from "../../decorators/index.js";
+import { validationUser } from "../../middleware/validation/index.js";
+import { controllerAuth } from "../../controllers/index.js";
+import { authenticate } from "../../middleware/index.js";
 
 const authRouter = express.Router();
 
-// const userSignupValidate = validateBody(userSchemas.userSignupSchema);
-// const userSigninValidate = validateBody(userSchemas.userSigninSchema);
+authRouter.post(
+  "/signup",
+  validationUser.userSignUPtValidate,
+  controllerAuth.signup
+);
 
-// authRouter.post("/signup", userSignupValidate, authController.signup);
+authRouter.post(
+  "/signin",
+  validationUser.userSignINValidate,
+  controllerAuth.signin
+);
 
-// authRouter.post("/signin", userSigninValidate, authController.signin);
+authRouter.get("/current", authenticate, controllerAuth.getCurrent);
+
+authRouter.post(
+  "/refresh",
+  validationUser.userRefreshValidate,
+  controllerAuth.refresh
+);
+
+authRouter.post("/signout", authenticate, controllerAuth.signout);
+
+authRouter.patch(
+  "/:userId/subscription",
+  validationUser.userSubscriptionValidate,
+  authenticate,
+  controllerAuth.updateSubscription
+);
 
 export default authRouter;

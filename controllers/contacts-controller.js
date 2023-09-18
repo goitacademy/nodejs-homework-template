@@ -1,11 +1,21 @@
 import HttpError from "../utils/HttpErrors.js";
 import { controllerWrapper } from "../decorators/index.js";
-import { Contact } from "../models/index.js";
+import Contact from "../models/Contact.js";
 
-console.log(Contact);
-const getAllContacts = async (_, res) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
-  console.log(result);
+const getAllContacts = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = null } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filter = { owner };
+
+  if (favorite) {
+    filter.favorite = favorite;
+  }
+  const result = await Contact.find(filter, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "name subscription");
   res.json(result);
 };
 
@@ -13,7 +23,7 @@ const getContactById = async (req, res) => {
   const { contactId } = req.params;
 
   const result = await Contact.findById(contactId);
-  console.log(result);
+
   if (!result) {
     throw HttpError(404);
   }
@@ -22,7 +32,8 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
