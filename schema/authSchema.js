@@ -1,4 +1,5 @@
 import Joi from "joi";
+import { emailRegexp } from "../models/User";
 
 const userSignupSchema = Joi.object({
     username: Joi.string().required(),

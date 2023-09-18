@@ -1,6 +1,8 @@
-import { HttpError } from "../helpers";
-import User from "../models/User";
-const {SECRET_KEY} = process.env
+import { ctrlWrapper } from "../decorators/index.js";
+import { HttpError } from "../helpers/index.js";
+import User from "../models/User.js";
+import jwt from "jsonwebtoken";
+const {SECRET_KEY} = process.env;
 
 
 const authenticate = async (req, res, next) =>
@@ -21,4 +23,4 @@ catch {
 }
 }
 
-export default authenticate
+export default ctrlWrapper(authenticate);

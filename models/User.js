@@ -3,7 +3,7 @@ import { handleMongooseError, runValidateAtUpdate } from "./hook.js";
 
 import Joi from "joi";
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+export const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 const  userSchema = new Schema({
     username:{
@@ -13,14 +13,14 @@ const  userSchema = new Schema({
         email: {
             type: String,
             unique: true,
-            required: true,
+            required: [true, 'Email is required'],
             match: emailRegexp,
 
           },
           password: {
             type: String,
             minlength:6,
-            required: true,
+            required:[true, 'Set password for user'],
     },
           accessToken: { type: String,},
           refreshToken: {type: String,}
