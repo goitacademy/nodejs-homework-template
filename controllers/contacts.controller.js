@@ -1,4 +1,4 @@
-const contactsService = require('../servises/contacts.service');
+const contactsService = require('../models/contacts');
 const { HttpError, controllerWrap } = require('../helpers');
 
 const getAll = async (req, res) => {
