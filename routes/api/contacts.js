@@ -86,11 +86,4 @@ router.put("/:contactId", async (req, res, next) => {
 });
 router.use(handlerError);
 
-// router.use((err, _, res, __) => {
-//   res.status(404).json({
-//     status: "404",
-//     message: err.message,
-//   });
-// });
-
 module.exports = router;
