@@ -1,4 +1,8 @@
-const { Contact, addSchema, updateFavoriteSchema } = require("../models/contacts");
+const { Contact } = require("../models/contacts");
+const {
+  addSchema,
+  updateFavoriteSchema,
+} = require("../utils/validation/contactValidationSchemas");
 
 const { HttpError } = require("../utils");
 
