@@ -5,6 +5,8 @@ dotenv.config();
 const { MONGO_DB_USER, MONGO_DB_PASSWORD, MONGO_DB_HOST, MONGO_DB_DATABASE } =
   process.env;
 
+const DB_HOST = `mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE}?retryWrites=true&w=majority`;
+
 if (!MONGO_DB_USER) {
   throw new Error("Please setup MONGO_DB_USER variable");
 }
@@ -26,4 +28,5 @@ module.exports = {
   MONGO_DB_PASSWORD,
   MONGO_DB_HOST,
   MONGO_DB_DATABASE,
+  DB_HOST,
 };
