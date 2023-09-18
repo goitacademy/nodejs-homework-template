@@ -2,18 +2,13 @@ const fs = require("fs").promises;
 const path = require("path");
 const { nanoid } = require("nanoid");
 
-const contactsPath = path.join(__dirname, "models", "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data);
-
-    if (contacts.length === 0) {
-      console.log("Lista kontaktów jest pusta.");
-    } else {
-      return contacts;
-    }
+    return contacts;
   } catch (error) {
     console.error(error.message);
   }
@@ -21,14 +16,9 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
-    const contact = contacts.find((c) => c.id === contactId) || null;
-    if (contact) {
-      console.log(`Kontakt o ID ${contactId}`);
-    } else {
-      console.log(`Nie znaleziono kontaktu o ID ${contactId}`);
-    }
+    const contacts = await listContacts();
+    const contact = contacts.find((c) => c.id === contactId);
+    return contact || null;
   } catch (error) {
     console.error(error.message);
   }
@@ -36,33 +26,29 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
   try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
-    const updatedContacts = contacts.filter(
-      (contact) => contact.id !== contactId
-    );
-
-    if (contacts.length === updatedContacts.length) {
-      console.log("Kontakt nie istnieje");
+    const contacts = await listContacts();
+    const contactIndex = contacts.findIndex((c) => c.id === contactId);
+    if (contactIndex === -1) {
+      return null;
     }
+    const [removedContact] = contacts.splice(contactIndex, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return removedContact;
   } catch (error) {
     console.error(error.message);
   }
 };
 
 const addContact = async (body) => {
-  const { name, email, phone } = body;
   try {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data);
+    const contacts = await listContacts();
     const newContact = {
       id: nanoid(),
-      name,
-      email,
-      phone,
+      ...body,
     };
     contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
   } catch (error) {
     console.error(error.message);
   }
@@ -70,22 +56,14 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const data = fs.readFile("contacts.json");
-    const contacts = JSON.parse(data);
+    const contacts = await listContacts();
     const contactIndex = contacts.findIndex((c) => c.id === contactId);
-
     if (contactIndex === -1) {
-      return {
-        statusCode: 404,
-        body: JSON.stringify({ message: "Not found" }),
-      };
+      return null;
     }
-    contacts[contactIndex] = { ...contacts[contactIndex], ...body };
-    await fs.writeFile("contacts.json", JSON.stringify(contacts, null, 2));
-    return {
-      statusCode: 200,
-      body: JSON.stringify(contacts[contactIndex]),
-    };
+    contacts[contactIndex] = { contactId, ...body };
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[contactIndex];
   } catch (error) {
     console.error(error.message);
   }
