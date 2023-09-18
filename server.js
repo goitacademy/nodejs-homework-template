@@ -1,16 +1,9 @@
 const mongoose = require("mongoose");
 const app = require("./app");
-const {
-  MONGO_DB_USER,
-  MONGO_DB_PASSWORD,
-  MONGO_DB_HOST,
-  MONGO_DB_DATABASE,
-} = require("./constants/env");
+const { DB_HOST } = require("./constants/env");
 
 mongoose
-  .connect(
-    `mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE}?retryWrites=true&w=majority`
-  )
+  .connect(DB_HOST)
   .then(() => {
     console.log("Database connection successful");
     app.listen(3030);
