@@ -1,15 +1,15 @@
-const messagesList = {
+const errorMessageList = {
   400: "Bad Request",
   401: "Unauthorized",
-  403: "Forbidden",
-  404: "Not Found",
-  409: "Conflict",
+  403: "Forbidden", 
+  404: "Not found",
+  409: "Conflict"
 };
 
-const HttpError = (status, message = messagesList[status]) => {
-  const error = new Error(message); // Створення нового об'єкта помилки з переданим повідомленням
-  error.status = status; // Присвоєння статусу помилки до властивості "status" об'єкта помилки
-  return error; // Повернення об'єкта помилки
+const HttpError = (status, message = errorMessageList[status]) => {
+  const error = new Error(message);
+  error.status = status;
+  return error;
 };
 
 module.exports = HttpError;
