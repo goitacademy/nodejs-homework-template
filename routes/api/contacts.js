@@ -1,25 +1,76 @@
-const express = require('express')
+import Joi from "joi";
+import { Router } from "express";
+import {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} from "../../models/contacts.js";
 
-const router = express.Router()
+const schema = Joi.object({
+  name: Joi.string().min(5).max(50).required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: true } })
+    .required(),
+  phone: Joi.string()
+    .pattern(/^(\(\d{3}\) \d{3}\-\d{4}|\d{3}\-\d{3}\-\d{4}|\d{9}|\d{10})$/)
+    .required(),
+});
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+export const contactsRouter = Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get("/", async (req, res, next) => {
+  const contacts = await listContacts();
+  return res.status(200).json({ contacts });
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get("/:contactId", async (req, res, next) => {
+  const requestedContact = await getContactById(req.params.contactId);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  if (!requestedContact) return res.status(404).send({ message: "Not found" });
+  return res.status(200).json({ requestedContact });
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.post("/", async (req, res, next) => {
+  const user = req.body;
 
-module.exports = router
+  try {
+    Joi.attempt(user, schema);
+    const newUser = await addContact(user);
+    return res.status(201).json({ newUser });
+  } catch (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+});
+
+contactsRouter.delete("/:contactId", async (req, res, next) => {
+  const contactToDeleteID = req.params.contactId;
+
+  if (!contactToDeleteID) {
+    return res.status(404).send({ message: "Not found" });
+  } else {
+    await removeContact(contactToDeleteID);
+    return res.status(200).json({ message: "Contact deleted" });
+  }
+});
+
+contactsRouter.put("/:contactId", async (req, res, next) => {
+  const updateSchema = Joi.object({
+    name: Joi.string().min(3).max(30),
+    email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: true } }),
+    phone: Joi.string().pattern(
+      /^(\(\d{3}\) \d{3}\-\d{4}|\d{3}\-\d{3}\-\d{4}|\d{9}|\d{10})$/
+    ),
+  });
+  try {
+    const id = req.params.contactId;
+    const body = req.body;
+
+    Joi.attempt(body, updateSchema);
+    const updatedContact = await updateContact(id, body);
+    return res.status(200).json(updatedContact);
+  } catch (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+});
