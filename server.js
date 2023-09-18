@@ -15,6 +15,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-// H4ohT3fgL7VHW8tn;
-// mongodb+srv://Oleg:H4ohT3fgL7VHW8tn@cluster0.xmdlemy.mongodb.net/?retryWrites=true&w=majority
