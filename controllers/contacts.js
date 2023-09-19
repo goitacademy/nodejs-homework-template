@@ -71,6 +71,7 @@ const deleteById = async (req, res) => {
 };
 
 module.exports = {
+  // exports
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),

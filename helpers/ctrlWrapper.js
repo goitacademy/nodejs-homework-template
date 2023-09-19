@@ -10,4 +10,6 @@ const ctrlWrapper = ctrl => {
   return func;
 };
 
+// exports
+
 module.exports = ctrlWrapper;
