@@ -12,7 +12,7 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw HttpError(409, "Email already in use");
+    throw HttpError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -21,6 +21,7 @@ const register = async (req, res) => {
 
   res.status(201).json({
     email: newUser.email,
+    subscription: newUser.subscription,
   });
 };
 
@@ -40,6 +41,7 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  console.log("SECRET_KEY", SECRET_KEY);
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
@@ -48,10 +50,11 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email } = req.user;
+  const { email, subscription } = req.user;
 
   res.json({
     email,
+    subscription,
   });
 };
 
