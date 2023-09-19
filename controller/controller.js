@@ -94,6 +94,6 @@ export const updateStatusContact = async (req, res, next) => {
     const contactWithNewStatus = await updateContact(id, body);
     return res.status(200).json(contactWithNewStatus);
   } catch (error) {
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send({ message: "missing field favorite" });
   }
 };
