@@ -5,14 +5,10 @@ import {
   updateAvatar,
 } from "../models/users.js";
 import jwt from "jsonwebtoken";
-import passport from "passport";
 import User from "../service/schemas/users.js";
 import "dotenv/config";
 import gravatar from "gravatar";
-import Jimp from "jimp";
-import path from "path";
-import { uploadImage } from "../config/config-multer.js";
-
+import fs from "fs/promises";
 const secret = process.env.JWT_SECRET;
 
 export const get = async (req, res, next) => {
@@ -71,7 +67,7 @@ export const login = async (req, res) => {
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
-  const user = await getUserById({ email });
+  const user = await User.findOne({ email });
 
   if (user) {
     return res.status(409).json({
@@ -83,7 +79,6 @@ export const signup = async (req, res, next) => {
   }
 
   const avatarURL = gravatar.url(email, { s: "200" }, true);
-  console.log(avatarURL);
   try {
     const newUser = new User({ username, email, avatarURL });
     newUser.setPassword(password);
@@ -143,37 +138,27 @@ export const logout = async (req, res) => {
 
 export const auth = async (req, res, next) => {
   try {
-    await passport.authenticate(
-      "jwt",
-      { session: false },
-      async (err, user) => {
-        if (!user || err) {
-          return res.status(401).json({
-            status: "error",
-            code: 401,
-            message: "Unauthorized",
-            data: "Unauthorized",
-          });
-        }
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Token is not authorized",
+      });
+    }
+    req.token = authHeader.split(" ")[1];
 
-        const authHeader = req.headers.authorization;
-        const token = authHeader?.split(" ")[1];
-
-        const allUsers = await listUsers();
-        const isTokenExists = allUsers.some((user) => user.token === token);
-        if (!isTokenExists) {
-          return res.status(401).json({
-            status: "error",
-            code: 401,
-            message: "Token is not authorized",
-            data: "Token not authorized",
-          });
-        }
-
-        req.user = user;
-        next();
-      }
-    )(req, res, next);
+    const userDetailsFromToken = jwt.verify(req.token, secret);
+    const user = await User.findById(userDetailsFromToken.id);
+    if (!user || !user.token || user.token !== req.token) {
+      return res.status(401).json({
+        status: "error",
+        code: 401,
+        message: "Token is not authorized",
+      });
+    }
+    req.user = user;
+    next();
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -216,8 +201,13 @@ export const updateUserAvatar = async (req, res) => {
 
     const { id: userId } = req.user;
 
-    const newAvatarPath = await updateAvatar(req.file.path, userId);
+    const newAvatarPath = await updateAvatar(
+      req.file.path,
+      userId,
+      req.file.originalname
+    );
 
+    await fs.unlink(`tmp/${req.file.originalname}`);
     return res.status(200).json({
       status: "success",
       code: 200,

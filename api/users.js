@@ -25,6 +25,6 @@ usersRouter.get("/current", auth, getContacts);
 
 usersRouter.patch("/:userId/subscription", update);
 
-usersRouter.patch("/avatars", uploadImage, updateUserAvatar);
+usersRouter.patch("/avatars", auth, uploadImage, updateUserAvatar);
 
 export default usersRouter;

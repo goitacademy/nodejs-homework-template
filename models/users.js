@@ -1,4 +1,6 @@
 import User from "../service/schemas/users.js";
+import Jimp from "jimp";
+import fs from "fs/promises";
 
 export const listUsers = async () => {
   try {
@@ -54,10 +56,7 @@ export const updateSubscription = async (subscription, userId) => {
 export const updateAvatar = async (filePath, userId) => {
   try {
     const localPath = `public/avatars/avatar-${userId}.jpg`;
-    const serverPath = `http://localhost:3000/${localPath.replace(
-      /^public\//,
-      ""
-    )}`;
+    const serverPath = localPath.replace("public/", "");
 
     const newAvatar = await Jimp.read(filePath);
     await newAvatar.resize(250, 250).quality(60).writeAsync(localPath);
@@ -68,7 +67,6 @@ export const updateAvatar = async (filePath, userId) => {
       { new: true, select: "avatarURL" }
     );
 
-    await fs.unlink(filePath);
     return serverPath;
   } catch (err) {
     console.error("An error occurred while updating avatar: ", err);
