@@ -3,7 +3,9 @@ const getContactIdCtrl = require("./getContactIdCtrl")
 const postContactCtrl = require("./postContactCtrl")
 const deleteContactCtrl = require("./deleteContactCtrl")
 const updateContactCtrl = require("./updateContactCtrl")
-const { ctrlWrapper } = require("../helpers/index")
+const updateFavoriteCtrl = require("./updateFavoriteCtrl")
+const { ctrlWrapper } = require("../helpers")
+
 
 module.exports = {
     getAllCtrl: ctrlWrapper(getAllCtrl),
@@ -11,4 +13,5 @@ module.exports = {
     postContactCtrl: ctrlWrapper(postContactCtrl),
     deleteContactCtrl: ctrlWrapper(deleteContactCtrl),
     updateContactCtrl: ctrlWrapper(updateContactCtrl),
+    updateFavoriteCtrl: ctrlWrapper(updateFavoriteCtrl),
 }

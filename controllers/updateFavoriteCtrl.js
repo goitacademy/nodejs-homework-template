@@ -1,9 +1,10 @@
 const Contact = require("../models/model_contact");
 const { HttpError } = require("../helpers");
 
-const updateContactCtrl = async (req, res) => {
+const updateFavoriteCtrl = async (req, res) => {
   const { contactId } = req.params;
-  const contactUpdate = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+  const { favorite } = req.body
+  const contactUpdate = await Contact.findByIdAndUpdate(contactId, {favorite}, {new: true});
   if (!contactUpdate) {
     throw HttpError(404, "Not found");
   }
@@ -16,4 +17,4 @@ const updateContactCtrl = async (req, res) => {
   });
 };
 
-module.exports = updateContactCtrl;
+module.exports = updateFavoriteCtrl;
