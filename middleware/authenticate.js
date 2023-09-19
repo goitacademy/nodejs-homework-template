@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-const User = require("../models/User.js");
+const { User } = require("../models/User.js");
 
 const { HttpError } = require("../helpers/index.js");
 
 const { ctrlWrapper } = require("../decorators/index.js");
 
 require('dotenv').config();
-
 const { JWT_SECRET } = process.env;
 
 const authenticate = async (req, res, next) => {
@@ -20,7 +19,7 @@ const authenticate = async (req, res, next) => {
     try {
         const { id } = jwt.verify(token, JWT_SECRET);
         const user = await User.findById(id);
-        if (!user || !user.token) {
+        if (!user) {
             throw HttpError(401);
         }
         req.user = user;

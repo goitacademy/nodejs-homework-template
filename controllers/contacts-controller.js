@@ -4,8 +4,11 @@ const { HttpError } = require('../helpers/index');
 
 const { ctrlWrapper } = require('../decorators/index');
 
-const getAll = async ({ res }) => {
-    const result = await Contact.find();
+const getAll = async (req, res) => {
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find({ owner: owner }, 'owner email', { skip, limit });
     res.json(result);
 };
 
@@ -19,8 +22,9 @@ const getById = async (req, res) => {
     res.json(result);
 }
 
-const add = async (req, res) => {
-    const newContact = new Contact(req.body);
+const add = async (req, res, user) => {
+    const { _id: owner } = req.user;
+    const newContact = new Contact({ ...req.body, owner });
     const result = await newContact.save()
     res.status(201).json(result);
 }
