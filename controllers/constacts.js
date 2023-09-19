@@ -1,23 +1,17 @@
-// const {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// } = require("../models/contacts");
-const Book = require("../models/contact");
-const { HttpError, ctrlWrapper } = require("..//utils/index");
+const Contact = require("../models/contact");
+const { HttpError, ctrlWrapper } = require("../utils/index");
 
-const { contactSchema } = require("../validators/validate");
+const { contactSchema, favoriteSchema } = require("../validators/validate");
 
 const getAll = async (req, res) => {
-  const contacts = await Book.find();
+  
+  const contacts = await Contact.find();
   res.status(200).json(contacts);
 };
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const contact = await Book.findOne({ _id: id });
+  const contact = await Contact.findOne({ _id: id });
   if (!contact) {
     throw HttpError(404, "Contact not found");
   }
@@ -31,13 +25,13 @@ const add = async (req, res) => {
     throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
   }
 
-  const newContact = await Book.create(req.body);
+  const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  const result = await Book.findByIdAndDelete(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -54,7 +48,7 @@ const updateById = async (req, res) => {
     throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
   }
   const { id } = req.params;
-  const updatedContact = await Book.findByIdAndUpdate(id, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body);
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
@@ -62,12 +56,12 @@ const updateById = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-  const { error } = contactSchema.validate(req.body);
+  const { error } = favoriteSchema.validate(req.body);
   if (error) {
     throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
   }
   const { id } = req.params;
-  const updatedContact = await Book.findByIdAndUpdate(id, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body);
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
