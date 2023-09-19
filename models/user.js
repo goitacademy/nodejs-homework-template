@@ -1,32 +1,11 @@
 const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+const Joi = require("@hapi/joi");
 
 const { handleMongooseError } = require("../helpers");
 
 const emailRegexp = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
-  //   {
-  //     name: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //     email: {
-  //       type: String,
-  //       match: emailRegexp,
-  //       unique: true,
-  //       required: true,
-  //     },
-  //     password: {
-  //       type: String,
-  //       minlength: 6,
-  //       required: true,
-  //     },
-  //     token: {
-  //       type: String,
-  //       default: "",
-  //     },
-  //   },
   {
     email: {
       type: String,
@@ -53,13 +32,27 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
+  email: Joi.string().pattern(emailRegexp).required().empty().messages({
+    "string.empty": `EMAIL cannot be an empty field`,
+    "any.required": `missing required EMAIL field`,
+  }),
+  password: Joi.string().min(6).required().empty().messages({
+    "string.empty": `PASSWORD cannot be an empty field`,
+    "string.min": `PASSWORD should have a minimum length of {#limit}`,
+    "any.required": `missing required PASSWORD field`,
+  }),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
+  email: Joi.string().pattern(emailRegexp).required().empty().messages({
+    "string.empty": `EMAIL cannot be an empty field`,
+    "any.required": `missing required EMAIL field`,
+  }),
+  password: Joi.string().required().empty().min(6).messages({
+    "string.empty": `PASSWORD cannot be an empty field`,
+    "string.min": `PASSWORD should have a minimum length of {#limit}`,
+    "any.required": `missing required PASSWORD field`,
+  }),
 });
 
 const schemas = {
