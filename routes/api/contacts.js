@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/constacts");
 
-const { isValidId, validateBody } = require("../../middlewares");
+const { isValidId, validateBody, validateBodyFavorite} = require("../../middlewares");
 const { contactSchema, favoriteSchema } = require("../../validators/validate");
 
 router.get("/", ctrl.getAll);
@@ -16,6 +16,6 @@ router.delete("/:id", isValidId, ctrl.deleteById);
 
 router.put("/:id", isValidId, validateBody(contactSchema), ctrl.updateById);
 
-router.patch("/:id/favorite", isValidId, validateBody(favoriteSchema), ctrl.updateFavorite);
+router.patch("/:id/favorite", isValidId, validateBodyFavorite(favoriteSchema), ctrl.updateFavorite);
 
 module.exports = router;
