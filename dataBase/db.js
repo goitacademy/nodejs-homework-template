@@ -1,27 +1,30 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import { ContactModel } from "../schemas/contactsSchema.js";
 
-dotenv.config();
+export const listContacts = async () => {
+  const data = await ContactModel.find();
+  return data;
+};
 
-const { MONGODB_URI } = process.env;
+export const getContactById = async (contactId) => {
+  const data = await ContactModel.findById(contactId);
+  return data;
+};
 
-export const dataBase = mongoose.connect(MONGODB_URI, {
-  dbName: "db-contacts",
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+export const addNewContact = async (body) => {
+  const newContact = await ContactModel.create(body);
+  return newContact;
+};
 
-mongoose.connection.on("connected", () => {
-  console.log("Database connection successful");
-});
+export const removeContact = async (contactId) => {
+  const result = await ContactModel.findByIdAndRemove({ _id: contactId });
+  return result;
+};
 
-mongoose.connection.on("error", (err) => {
-  console.log(`Mongoose connection error: ${err.message}`);
-  process.exit(1);
-});
-
-process.on("SIGINT", async () => {
-  await mongoose.connection.close();
-  console.log("Connection to Data Base is closed");
-  process.exit();
-});
+export const updateContact = async (contactId, body) => {
+  const updatedContact = await ContactModel.findByIdAndUpdate(
+    { _id: contactId },
+    { ...body },
+    { new: true }
+  );
+  return updatedContact;
+};

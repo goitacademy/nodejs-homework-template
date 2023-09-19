@@ -5,7 +5,7 @@ import {
   addNewContact,
   removeContact,
   updateContact,
-} from "../dataBase/dbQueries.js";
+} from "../dataBase/db.js";
 
 const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
