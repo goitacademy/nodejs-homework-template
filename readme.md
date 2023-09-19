@@ -1,3 +1,7 @@
+# GoIT Homework Node.js REST API
+
+ is a user-friendly repository designed to help learners grasp Node.js fundamentals through straightforward assignments and projects. With an emphasis on simplicity, this repository offers easy-to-follow code examples that illustrate the development of RESTful APIs using Node.js and MongoDB. Ideal for those new to the field, this resource provides a gentle introduction to building uncomplicated yet functional API systems with Node.js."
+
 ## GoIT Node.js Course Template Homework
 
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
