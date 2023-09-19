@@ -11,3 +11,16 @@ export const contactsAddSchema = Joi.object({
     "any.required": `missing required name field`,
   }),
 });
+
+export const contactsUpdateSchema = Joi.object({
+  name: Joi.string().messages({
+    "any.required": `missing required name field`,
+  }),
+  email: Joi.string().messages({
+    "any.required": `missing required name field`,
+  }),
+  phone: Joi.string().messages({
+    "any.required": `missing required name field`,
+  }),
+});
+export default contactsAddSchema
