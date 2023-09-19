@@ -2,13 +2,25 @@ import Contact from "../models/contact.js";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
-const updateStatusContact = (id, body) =>
-  Contact.findByIdAndUpdate(id, {
-    favorite: body,
-  });
-
 const getAll = async (req, res) => {
-  const contacts = await Contact.find();
+  const { page = 1, limit = 4, favorite = undefined } = req.query;
+  const { _id: owner } = req.user;
+  if (favorite !== undefined) {
+    const contacts = await Contact.find(
+      { owner, favorite },
+      "-createdAt -updateAt ",
+      {
+        skip: (page - 1) * limit,
+        limit: limit,
+      }
+    ).populate("owner", "email subscription");
+    res.json(contacts);
+    return;
+  }
+  const contacts = await Contact.find({ owner }, "-createdAt -updateAt ", {
+    skip: (page - 1) * limit,
+    limit: limit,
+  }).populate("owner", "email subscription");
   res.json(contacts);
 };
 
@@ -22,7 +34,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const addContact = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const addContact = await Contact.create({ ...req.body, owner });
   res.status(201).json(addContact);
 };
 
@@ -52,7 +65,7 @@ const favorite = async (req, res) => {
   if (body === undefined) {
     throw HttpError(400, "missing field favorite");
   }
-  await updateStatusContact(id, body);
+  await Contact.findByIdAndUpdate(id, { favorite: body });
   res.status(200).json({
     message: `favorite: ${body} `,
   });
