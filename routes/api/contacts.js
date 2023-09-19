@@ -5,13 +5,15 @@ const validateBody = require('../../decorators/validateBody.js');
 
 const contactSchemas = require('../../models/Contact');
 
-const isValidId = require('../../middleware/index');
+const { isValidId, authenticate } = require('../../middleware/index');
 
 const contactAddValidate = validateBody(contactSchemas.contactAddSchema);
 
 const contactUpdateFavoriteValidate = validateBody(contactSchemas.contactUpdateFavoriteSchema);
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get('/', contactsController.getAll);
 
