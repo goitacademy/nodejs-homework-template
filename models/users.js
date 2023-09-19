@@ -1,6 +1,5 @@
 import User from "../service/schemas/users.js";
 import Jimp from "jimp";
-import fs from "fs/promises";
 
 export const listUsers = async () => {
   try {

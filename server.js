@@ -1,16 +1,13 @@
 import { app } from "./app.js";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import "dotenv/config";
-
-// dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 const uriDb = process.env.DB_HOST;
 
 const connection = async () => {
   try {
-    const db = await mongoose.connect(uriDb, { dbName: "contacts" });
+    await mongoose.connect(uriDb, { dbName: "contacts" });
     console.log("DB connected");
 
     app.listen(3000, () => {
