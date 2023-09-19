@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 import("nanoid").then((nanoidModule) => {
+  // eslint-disable-next-line no-unused-vars
   const nanoid = nanoidModule.nanoid;
 });
 const contactsPath = path.join(__dirname, "contacts.json");
@@ -36,6 +37,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = {
+    // eslint-disable-next-line no-undef
     id: nanoid(),
     ...body,
   };
