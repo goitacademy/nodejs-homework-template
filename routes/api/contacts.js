@@ -6,13 +6,13 @@ const {
   removeContact,
   updateContact,
 } = require("../../utils/contactUtils");
-const Joi = require('joi');
+const Joi = require("joi");
 
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
-});
+}).unknown(false); // Agrega unknown(false) para que Joi no permita campos desconocidos en el objeto
 
 const router = express.Router();
 
@@ -46,7 +46,9 @@ router.post("/", async (req, res, next) => {
     const { error, value } = contactSchema.validate(req.body);
 
     if (error) {
-      return res.status(400).json({ message: "Todos los campos son obligatorios" });
+      return res
+        .status(400)
+        .json({ message: "Todos los campos son obligatorios" });
     }
 
     const { name, phone, email } = value; // Desestructurar después de la validación
@@ -63,7 +65,6 @@ router.post("/", async (req, res, next) => {
     res.status(500).json({ message: "error interno al servidor" });
   }
 });
-
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
@@ -82,8 +83,8 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const contactId = req.params.contactId; // No es necesario validar, es solo un valor
-    const updatedFields = contactSchema.validate(req.body);
+    const contactId = req.params.contactId;
+    const updatedFields = req.body;
 
     if (!updatedFields || Object.keys(updatedFields).length === 0) {
       return res.status(400).json({ message: "missing fields" });
@@ -101,6 +102,5 @@ router.put("/:contactId", async (req, res, next) => {
     res.status(500).json({ message: "Error interno del servidor" });
   }
 });
-
 
 module.exports = router;

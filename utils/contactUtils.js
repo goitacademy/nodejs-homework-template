@@ -55,23 +55,22 @@ const removeContact = (contactId) => {
 const updateContact = (contactId, updatedFields) => {
   try {
     const contacts = listContacts();
+
     const index = contacts.findIndex((item) => item.id === contactId);
 
     if (index !== -1) {
       const updatedContact = { ...contacts[index], ...updatedFields };
-
       contacts[index] = updatedContact;
-
       const updatedContactsJson = JSON.stringify(contacts, null, 2);
       fs.writeFileSync(contactsPath, updatedContactsJson);
 
-      return updatedContact; 
+      return updatedContact;
     } else {
-      return null; 
+      return null;
     }
   } catch (error) {
     console.error("Error al actualizar el contacto", error);
-    return null; 
+    return null;
   }
 };
 
