@@ -31,7 +31,14 @@ const updateContactSchema = Joi.object({
     "object.unknown": `{#key} field is not allowed`,
   });
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+  }),
+});
+
 module.exports = {
   addContactSchema,
   updateContactSchema,
+  updateFavoriteSchema,
 };
