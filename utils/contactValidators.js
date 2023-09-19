@@ -8,6 +8,4 @@ exports.createUserDataValidator = (data) =>
       email: Joi.string().min(2).required(),
       phone: Joi.string().min(2).required(),
     })
-    .validate(data);
-
-    
+    .validate(data);  
