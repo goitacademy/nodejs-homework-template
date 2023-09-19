@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const DB_HOST = process.env.MONGODB_CONNECTION_STRING; // Zakładam, że MONGODB_CONNECTION_STRING to prawidłowa nazwa zmiennej środowiskowej
+const DB_HOST = process.env.MONGODB_CONNECTION_STRING;
 
 export const dbConnect = async () => {
   try {

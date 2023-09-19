@@ -1,10 +1,15 @@
 import { Contact } from "../models/contacts.model.js";
 
-export const getAllContact = async () => {
+export const addContacts = async (input) => {
   try {
-    return await Contact.find({});
+    if (Array.isArray(input)) {
+      return await Contact.insertMany(input);
+    } else {
+      const newContact = new Contact(input);
+      return await newContact.save();
+    }
   } catch (error) {
-    console.error("Error while fetching contacts:", error);
+    console.error("Error while adding the contact(s):", error);
     throw error;
   }
 };
@@ -14,25 +19,6 @@ export const getContact = async (contactId) => {
     return await Contact.findById(contactId);
   } catch (error) {
     console.error("Error while fetching the contact:", error);
-    throw error;
-  }
-};
-
-export const addContact = async (contact) => {
-  try {
-    const newContact = new Contact(contact);
-    return await newContact.save();
-  } catch (error) {
-    console.error("Error while adding the contact:", error);
-    throw error;
-  }
-};
-
-export const addContacts = async (contacts) => {
-  try {
-    return await Contact.insertMany(contacts);
-  } catch (error) {
-    console.error("Error while adding multiple contacts:", error);
     throw error;
   }
 };
@@ -64,10 +50,7 @@ export const updateStatusContact = async (contactId, body) => {
   try {
     return await patchContact(contactId, { favorite: body.favorite });
   } catch (error) {
-    console.error(
-      "Error while updating the contact's status:",
-      error
-    );
+    console.error("Error while updating the contact's status:", error);
     throw error;
   }
 };
