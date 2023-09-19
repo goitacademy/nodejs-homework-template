@@ -1,8 +1,6 @@
 const Contact = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../utils/index");
 
-const { contactSchema, favoriteSchema } = require("../validators/validate");
-
 const getAll = async (req, res) => {
   
   const contacts = await Contact.find();
@@ -20,11 +18,6 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
-  }
-
   const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
@@ -43,12 +36,8 @@ const updateById = async (req, res) => {
     return res.status(400).json({ message: `missing fields` });
   }
 
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
-  }
   const { id } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(id, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
@@ -56,12 +45,9 @@ const updateById = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-  const { error } = favoriteSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
-  }
+
   const { id } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(id, req.body);
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
