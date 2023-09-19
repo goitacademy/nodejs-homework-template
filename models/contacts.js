@@ -13,7 +13,7 @@ const listContacts = catchAsync(async (req, res) => {
     const contacts = JSON.parse(await fs.readFile(contactsPath));
     res.status(200).json(contacts);
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
@@ -29,7 +29,7 @@ const getContactById = catchAsync(async (req, res, next) => {
       res.status(200).json(contact);
     }
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
@@ -47,7 +47,7 @@ const removeContact = catchAsync(async (req, res, next) => {
       res.status(200).json({ message: "contact deleted" });
     }
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
@@ -68,7 +68,7 @@ const addContact = catchAsync(async (req, res, next) => {
       res.status(201).json(newContact);
     }
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
@@ -95,7 +95,7 @@ const updateContact = catchAsync(async (req, res, next) => {
       }
     }
   } catch (err) {
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Error" });
   }
 });
 
