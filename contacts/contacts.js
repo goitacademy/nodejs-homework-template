@@ -43,43 +43,26 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const contact = await Contact.findByIdAndUpdate(contactId, {
-    $set: {
-      ...body,
+  const contact = await Contact.findByIdAndUpdate(
+    contactId,
+    {
+      $set: {
+        ...body,
+      },
     },
-  },
-  { returnOriginal: false },
-)
-  .where('deletedAt')
-  .equals(null);
+    { returnOriginal: false }
+  )
+    .where("deletedAt")
+    .equals(null);
 
-if (!contact) {
-  const error = createError(ERROR_TYPES.NOT_FOUND, {
-    message: `Animal with id ${contactId} not found`,
-    data: {},
-  });
-  throw error;
-}
-return contact
-  // const contactList = await listContacts();
-  // const { name, email, phone } = body;
-  // const changeContactIndex = contactList.findIndex((e) => e.id === contactId);
-  // const changeContact = contactList[changeContactIndex];
-  // if (changeContactIndex === -1) {
-  //   const error = createError(ERROR_TYPES.NOT_FOUND, {
-  //     message: `Not found`,
-  //     data: {},
-  //   });
-  //   throw error;
-  // }
-  // contactList[changeContactIndex] = {
-  //   ...changeContact,
-  //   name: name || changeContact.name,
-  //   email: email || changeContact.email,
-  //   phone: phone || changeContact.phone,
-  // };
-  // await writeJsonFile(CONTACTS_PATH, contactList);
-  return contact
+  if (!contact) {
+    const error = createError(ERROR_TYPES.NOT_FOUND, {
+      message: `Contact with id ${contactId} not found`,
+      data: {},
+    });
+    throw error;
+  }
+  return contact;
 };
 
 module.exports = {
