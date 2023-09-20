@@ -262,15 +262,7 @@ export const emailVerification = async (req, res) => {
 };
 export const reverification = async (req, res) => {
   const { email } = req.body;
-  // const emailSchema = Joi.string().email().required();
   try {
-    // const { error } = Joi.validate(email, emailSchema);
-    // if (error) {
-    //   return res.status(400).json({
-    //     message: "Invalid email format",
-    //   });
-    // }
-
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({
