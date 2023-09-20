@@ -5,22 +5,12 @@ const validateBody = schema => {
     const func = (req, res, next) =>{
         const {error} = schema.validate(req.body)
             if(error){
-                next(HttpError (400, `missing required ${error.details[0].path[0]} field`))
+                next(HttpError (400, `${error.details[0].message}`))
             }
             next()
     }
     return func
 }
 
-const validateBodyFavorite = schema => {
-    const func = (req, res, next) =>{
-        const {error} = schema.validate(req.body)
-            if(error){
-                next(HttpError (400, `missing field favorite`))
-            }
-            next()
-    }
-    return func
-}
 
-module.exports = {validateBody, validateBodyFavorite}
+module.exports = {validateBody}

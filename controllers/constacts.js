@@ -18,6 +18,9 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
+  if(!req.body){
+    throw HttpError(400, "missing fields");
+  }
   const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
@@ -32,8 +35,8 @@ const deleteById = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  if (Object.keys(req.body).length < 2) {
-    return res.status(400).json({ message: `missing fields` });
+  if(!req.body){
+    throw HttpError(400, "missing fields");
   }
 
   const { id } = req.params;
@@ -45,7 +48,9 @@ const updateById = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-
+  if(!req.body){
+    throw HttpError(400, "missing field favorite");
+  }
   const { id } = req.params;
   const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true});
   if (!updatedContact) {
