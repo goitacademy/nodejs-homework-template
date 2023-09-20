@@ -17,31 +17,31 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  const contactId = req.params.contactId;
+  const contactId = req.params.contactId
 
   try {
-    const contact = await contactsModel.getContactById(contactId);
+    const contact = await contactsModel.getContactById(contactId)
     if (contact) {
       return res.json({
         status: "success",
         code: 200,
         data: { contact },
-      });
+      })
     } else {
       return res.status(404).json({
         status: "error",
         code: 404,
         message: "Not found",
-      });
+      })
     }
   } catch (err) {
-    next(err);
+    next(err)
   }
-});
+})
 
 router.post('/', async (req, res, next) => {
   try {
-    const contacts = await contactsModel.addContact(req.body);
+    const contacts = await contactsModel.addContact(req.body)
     if (contacts) {
       return res.status(201).json({
         status: "success",
@@ -61,11 +61,51 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const contactId = req.params.contactId
+    const contact = await contactsModel.removeContact(contactId)
+
+    if (contact) {
+      return res.status(200).json({
+        status: "success",
+        code: 200,
+        data: { message: "contact deleted" }
+      })
+    } else {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Not found"
+      })
+    }
+  } catch (err) {
+    next(err)
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const contactId = req.params.contactId
+  const body = req.body
+
+  try {
+    const updateContact = await contactsModel.updateContact(contactId, body);
+
+    if (updateContact) {
+      return res.status(200).json({
+        status: "success",
+        code: 200,
+        data: updateContact,
+      })
+    } else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        message: 'Not found'
+      })
+    }
+  } catch (err) {
+    next(err)
+  }
 })
 
 module.exports = router
