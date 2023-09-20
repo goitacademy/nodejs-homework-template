@@ -7,16 +7,23 @@ const contacts = require("./contacts.json");
 
 let url = path.join(__dirname + "/contacts.json");
 
+// const listContacts = async () => {
+//   return contacts;
+// };
 
-const listContacts = async () => {
-  return contacts;
-};
+const filePath = path.join(__dirname, "contacts.json");
+const listContacts = async() => {
+    const data = await fs.readFile(filePath);
+    const contacts = JSON.parse(data);
+    return contacts;
+}
 
 const getContactById = async (contactId) => {
   let list = await listContacts();
   let result = list.find((element) => element.id === contactId);
   return result || null;
 };
+
 
 const removeContact = async (contactId) => {
   let list = await listContacts();
