@@ -1,23 +1,9 @@
-// Importujemy wymagane moduły i modele
+
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const mongoose = require("mongoose");
+ const mongoose = require("mongoose");
 
-mongoose
-  .connect(
-    "mongodb+srv://kowalewiczkarol:secGUZy3RZUGMwOv@cluster0.ivmgw57.mongodb.net/mydb",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
-  });
 
 const Contact = require("../../models/contact"); 
 
@@ -50,7 +36,6 @@ router.get("/:contactId", async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 router.post("/", async (req, res, next) => {
   const { error } = contactSchema.validate(req.body);
@@ -129,5 +114,8 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
+
 
 module.exports = router;
