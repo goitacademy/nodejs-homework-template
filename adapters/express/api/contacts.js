@@ -1,5 +1,5 @@
 const express = require("express");
-const contactService = require("../../../models/contacts");
+const contactService = require("../../../contacts/contacts");
 const router = express.Router();
 const createError = require("../../../untils/createError");
 const ERROR_TYPES = require("../contastants/errorTypes");

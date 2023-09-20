@@ -7,11 +7,11 @@ const {
 } = require("../constants/env");
 const setupConection  = async () => {
     try{
-    console.log('first')
-      let res = await  mongoose.connect(`mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE}`);
-      console.log(res)
+      let res = await  mongoose.connect(`mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE}?retryWrites=true&w=majority&appName=AtlasApp`);
+      console.log('Database connection successful')
 }catch(e){
     console.log(e)
+    process.exit(1)
 }
 }
 
