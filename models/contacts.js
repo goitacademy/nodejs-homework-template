@@ -8,12 +8,10 @@ const listContacts = async () => {
     return JSON.parse(data)
   } catch (err) {
     throw err
-    // Обробка помилок, якщо файл не може бути прочитаний або JSON не може бути розпарсений.
   }
 }
 
 const getContactById = async (contactId) => {
-  // Пошук контакту за id
   try {
     const contacts = await listContacts()
     const contact = contacts.find(({ id }) => id.toString() === contactId)
@@ -41,7 +39,6 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
-  //  Додавання котакту
   const contscts = await listContacts()
 
   const newContact = {
@@ -56,33 +53,6 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
-  // try {
-  //   const contacts = await listContacts()
-
-  //   const contactIndex = contacts.findIndex((contact) => contact.id === contactId)
-
-  //   if (contactIndex === -1) {
-  //     return null
-  //   }
-
-  //   if (body.name) {
-  //     contacts[contactIndex].name = body.name
-  //   }
-
-  //   if (body.email) {
-  //     contacts[contactIndex].email = body.email
-  //   }
-
-  //   if (body.phone) {
-  //     contacts[contactIndex].phone = body.phone
-  //   }
-
-  //   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
-
-  //   return contacts[contactIndex]
-  // } catch (err) {
-  //   throw err
-  // }
   try {
     const contacts = await listContacts()
     const contactIndex = contacts.findIndex((contact) => contact.id === contactId)
