@@ -25,7 +25,7 @@ const ContactSchema = new Schema(
 );
 
 // middleware, яка оброблює помилку при записі в БД нового контакту
-ContactSchema.post = ("save", handleMongooseError);
+ContactSchema.post("save", handleMongooseError);
 
 // перенесла схему запросів з contactsSchema
 const addSchema = Joi.object({
