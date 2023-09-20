@@ -1,18 +1,22 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
+
 const app = require("./app");
+const { DB_HOST, PORT = 5000 } = process.env;
 
-const port = 5000;
 
-const DB_HOST =
-  "mongodb+srv://InnaTer:PC5vc2t4yVhVikbG@cluster0.ra60b6t.mongodb.net/db-contacts?retryWrites=true&w=majority";
+mongoose.set('strictQuery', true);
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(port);
+    app.listen(PORT);
     console.log("Database connection successful");
   })
   .catch((error) => {
     console.log(error.message);
     process.exit(1);
   });
+
+
+  
