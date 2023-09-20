@@ -6,8 +6,11 @@ const getAllContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  const result = Contact.findById(contactId);
-  return result;
+  if (contactId.match(/^[0-9a-fA-F]{24}$/)) {
+    const result = await Contact.findById(contactId);
+    return result;
+  }
+  return null;
 };
 
 const removeContact = async (contactId) => {
@@ -29,7 +32,7 @@ const updateContact = async (contactId, body) => {
   if (!currentContact) {
     return null;
   }
-  const result = Contact.findByIdAndUpdate(contactId, body, {
+  const result = await Contact.findByIdAndUpdate(contactId, body, {
     new: true,
   });
   return result;
@@ -41,7 +44,7 @@ const updateStatusContact = async (contactId, body) => {
     return null;
   }
 
-  const result = Contact.findByIdAndUpdate(contactId, body, {
+  const result = await Contact.findByIdAndUpdate(contactId, body, {
     new: true,
   });
   return result;

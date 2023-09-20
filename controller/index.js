@@ -10,6 +10,7 @@ const {
 } = require("../service");
 
 const get = async (_, res, next) => {
+  console.log(4)
   try {
     const contacts = await getAllContacts();
     res.json(contacts);
@@ -33,14 +34,14 @@ const getOne = async (req, res, next) => {
 };
 
 const add = async (res, req, next) => {
-  const body = req.body;
+  try {
+    const body = req.req.body;
   const { error } = validateData.validateBody(body);
   if (error) {
     requestError(res, error);
   }
-  try {
     const contact = await addContact(body);
-    res.json(contact);
+    res.res.status(201).json(contact);
   } catch (e) {
     next();
   }
@@ -72,7 +73,8 @@ const update = async (req, res, next) => {
       requestError(res, error);
     }
 
-    const contact = updateContact(contactId, body);
+    const contact = await updateContact(contactId, body);
+
     if (!contact) {
       throw HttpError(404, "Not found");
     }
