@@ -2,8 +2,12 @@ const HttpError = require("../helpers/HttpError.js");
 const { ctrlWrapper } = require("../decorators/index.js");
 const Contact = require("../models/contacts.js");
 
-const getAll = async (_, res) => {
-  const result = await Contact.find();
+const getAll = async (req, res) => {
+  const { _id: owner } = req.user;
+  const result = await Contact.find(
+    { owner },
+    "-createdAt -updatedAt"
+  ).populate("owner", "_id email");
   res.json(result);
 };
 
@@ -17,7 +21,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

@@ -4,8 +4,11 @@ const controllers = require("../../controllers/contacts-controller.js");
 const {
   addContactValidate,
   favoriteUpdate,
+  isValidId,
+  validToken,
 } = require("../../middleware/validation/index.js");
-const { isValidId } = require("../../middleware/validation/index.js");
+
+router.use(validToken);
 
 router.get("/", controllers.getAll);
 router.get("/:contactId", isValidId, controllers.getById);
