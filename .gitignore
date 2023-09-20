@@ -1,5 +1,4 @@
 node_modules/
-config.js
 .env
 .idea
 .vscode
