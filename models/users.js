@@ -72,3 +72,12 @@ export const updateAvatar = async (filePath, userId) => {
     throw err;
   }
 };
+export const getUserByVerificationToken = async (verificationToken) => {
+  try {
+    const user = await User.findOne({ verificationToken });
+    return user;
+  } catch (err) {
+    console.error("Error finding user by verification token:", error);
+    throw new Error("Error finding user by verification token");
+  }
+};

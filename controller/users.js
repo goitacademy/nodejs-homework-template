@@ -3,12 +3,17 @@ import {
   getUserById,
   loginUser,
   updateAvatar,
+  getUserByVerificationToken,
 } from "../models/users.js";
 import jwt from "jsonwebtoken";
 import User from "../service/schemas/users.js";
 import "dotenv/config";
 import gravatar from "gravatar";
 import fs from "fs/promises";
+import { nanoid } from "nanoid";
+import { transporter, emailOptions } from "../config/config-nodemailer.js";
+import Joi from "joi";
+
 const secret = process.env.JWT_SECRET;
 
 export const get = async (req, res, next) => {
@@ -40,7 +45,8 @@ export const login = async (req, res) => {
 
     if (!user) {
       return res.status(400).json(`Error! Email or password is wrong!`);
-    }
+    } else if (!user.isVerified)
+      return res.status(400).json(`Error! Email is not verified!`);
 
     const payload = {
       id: user.id,
@@ -66,7 +72,7 @@ export const login = async (req, res) => {
 };
 
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
@@ -78,11 +84,28 @@ export const signup = async (req, res, next) => {
     });
   }
 
-  const avatarURL = gravatar.url(email, { s: "200" }, true);
   try {
-    const newUser = new User({ username, email, avatarURL });
+    const newUser = new User({ email });
     newUser.setPassword(password);
+
+    const url = gravatar.url(
+      email,
+      {
+        s: "250",
+      },
+      true
+    );
+
+    newUser.avatarURL = url;
+    newUser.verificationToken = nanoid();
+
     await newUser.save();
+    const link = `/users/verify/${newUser.verificationToken}`;
+    transporter
+      .sendMail(emailOptions(email, link))
+      .then((info) => console.log(info))
+      .catch((err) => console.log(err));
+    const avatarURL = url;
     res.status(201).json({
       status: "success",
       code: 201,
@@ -218,5 +241,62 @@ export const updateUserAvatar = async (req, res) => {
     res
       .status(500)
       .json(`An error occurred while updating the avatar: ${error}`);
+  }
+};
+export const emailVerification = async (req, res) => {
+  const { verificationToken } = req.params;
+  try {
+    const user = await getUserByVerificationToken(verificationToken);
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+    user.verificationToken = null;
+    user.isVerified = true;
+    await user.save();
+    return res.status(200).json({ message: "Verification successful" });
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const reverification = async (req, res) => {
+  const { email } = req.body;
+  // const emailSchema = Joi.string().email().required();
+  try {
+    // const { error } = Joi.validate(email, emailSchema);
+    // if (error) {
+    //   return res.status(400).json({
+    //     message: "Invalid email format",
+    //   });
+    // }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Verification has already been passed",
+      });
+    }
+
+    const link = `/users/verify/${user.verificationToken}`;
+
+    transporter
+      .sendMail(emailOptions(email, link))
+      .then((info) => console.log(info))
+      .catch((err) => console.log(err));
+
+    return res.status(200).json({
+      message: "Verification email sent",
+    });
+  } catch (error) {
+    console.error("Error resending verification email:", error);
+    return res.status(500).json({
+      message: "An error occurred while resending the verification email",
+    });
   }
 };

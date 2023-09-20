@@ -7,6 +7,8 @@ import {
   logout,
   update,
   updateUserAvatar,
+  emailVerification,
+  reverification,
 } from "../controller/users.js";
 import { get as getContacts } from "../controller/contacts.js";
 import { uploadImage } from "../config/config-multer.js";
@@ -26,5 +28,9 @@ usersRouter.get("/current", auth, getContacts);
 usersRouter.patch("/:userId/subscription", update);
 
 usersRouter.patch("/avatars", auth, uploadImage, updateUserAvatar);
+
+usersRouter.get("/verify/:verificationToken", emailVerification);
+
+usersRouter.post("/verify", reverification);
 
 export default usersRouter;
