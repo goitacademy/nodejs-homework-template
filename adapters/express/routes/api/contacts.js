@@ -1,11 +1,11 @@
 const express = require("express");
-const contactService = require("../../models/contacts");
+const contactService = require("../../../models/contacts");
 const router = express.Router();
-const createError = require("../../untils/createError");
-const ERROR_TYPES = require("../../constants/errorTypes");
-const uptadeContactsSchema = require('../../untils/updateContacatSchema')
-const handlerError = require("../../middlewears/handlerError");
-const schemaAddContact = require("../../untils/addContactSchema");
+const createError = require("../../../untils/createError");
+const ERROR_TYPES = require("../../express/contastants/errorTypes");
+const uptadeContactsSchema = require('../../../untils/updateContacatSchema')
+const handlerError = require("../../../middlewears/handlerError");
+const schemaAddContact = require("../../../untils/addContactSchema");
 router.get("/", async (req, res, next) => {
   try {
     const data = await contactService.listContacts();

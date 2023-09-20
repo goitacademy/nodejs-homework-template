@@ -1,9 +1,8 @@
-const animalRepository = require("./contacts.json");
 const readJsonFiles = require("../untils/readJsonFiles");
 const writeJsonFile = require("../untils/writeJsonFile");
 const path = require("path");
 const { nanoid } = require("nanoid");
-const ERROR_TYPES = require("../constants/errorTypes");
+const ERROR_TYPES = require("../adapters/express/contastants/errorTypes");
 const createError = require("../untils/createError");
 // const fs = require('fs/promises')
 const CONTACTS_PATH = path.join(__dirname, "./contacts.json");
