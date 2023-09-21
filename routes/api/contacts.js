@@ -6,7 +6,9 @@ const ctrl = require("../../controllers/constacts");
 const {
   isValidId,
   validateBody,
+
   authenticate,
+
 } = require("../../middlewares");
 const { contactSchema, favoriteSchema } = require("../../validators/validate");
 
@@ -14,7 +16,10 @@ router.get("/", authenticate, ctrl.getAll);
 
 router.get("/:id", authenticate, isValidId, ctrl.getById);
 
+
 router.post("/", authenticate, validateBody(contactSchema), ctrl.add);
+router.post("/", validateBody(contactSchema), ctrl.add);
+
 
 router.delete("/:id", authenticate, isValidId, ctrl.deleteById);
 
