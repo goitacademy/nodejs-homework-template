@@ -73,8 +73,11 @@ const loginSchema = Joi.object({
 const subscriptionSchema = Joi.object({
   subscription: Joi.string()
     .valid(...subscriptionList)
-    .required(),
-});
+    .required().messages({
+      "any.only": `the subscription field has an invalid value`, 
+      "any.required": `missing required subscription field`,
+    }),
+  });
 
 const schemas = {
   registerSchema,
@@ -88,14 +91,3 @@ module.exports = {
   User,
   schemas,
 };
-
-// {
-//     "name": "1",
-//     "email": "trifonowden123@gmail.com",
-//     "phone": "123123123"
-// }
-
-// {
-//     "email": "trifonowden1231@gmail.com",
-//     "password": "Trifonowden1231"
-// }

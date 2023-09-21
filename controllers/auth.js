@@ -18,8 +18,10 @@ const registr = async (req, res) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    email: newUser.email,
-    subscription: newUser.subscription,
+    user:{
+      email: newUser.email,
+      subscription: newUser.subscription,
+    } 
   });
 };
 
@@ -65,7 +67,8 @@ const getCurrent = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
-  res.json({ message: "No Content" });
+  res.status(204)
+  // .json({ message: "No Content" });
 };
 
 const subscription = async (req, res) => {
@@ -88,3 +91,8 @@ module.exports = {
 };
 
 // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MGJlZjM3YjY5M2IxNWU3MWZjN2ZjNyIsImlhdCI6MTY5NTI4MjIyMywiZXhwIjoxNjk1MzY1MDIzfQ.fLVtO4qaYCtixUYy6CkFViF-65ow6-NteCoezv0n-oI
+
+// {
+//   "email": "1232@mail.com",
+//   "password": "123123"
+// }
