@@ -6,7 +6,6 @@ const ctrl = require("../../controllers/constacts");
 const {
   isValidId,
   validateBody,
-  validateBodyFavorite,
 } = require("../../middlewares");
 const { contactSchema, favoriteSchema } = require("../../validators/validate");
 
@@ -23,7 +22,7 @@ router.put("/:id", isValidId, validateBody(contactSchema), ctrl.updateById);
 router.patch(
   "/:id/favorite",
   isValidId,
-  validateBodyFavorite(favoriteSchema),
+  validateBody(favoriteSchema),
   ctrl.updateFavorite
 );
 
