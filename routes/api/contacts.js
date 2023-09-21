@@ -7,24 +7,24 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require("../../models/contacts");
+} = require("../../models/contacts")
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   const contacts = await listContacts();
   res.json(contacts);
-})
+});
 
-router.get('/:contactId', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId); 
+  const contact = await getContactById(contactId);
   if (contact) {
-    res.json(contact); 
+    res.json(contact);
   } else {
-    res.status(404).json({ message: "Not found" }); 
-  } 
-})
+    res.status(404).json({ message: "Not found" });
+  }
+});
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const newContact = req.body;
   const contact = await addContact(newContact);
   if (contact) {
@@ -32,27 +32,27 @@ router.post('/', async (req, res, next) => {
   } else {
     res.status(400).json({ message: "missing required name field" });
   }
-})
+});
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId); 
+  const result = await removeContact(contactId);
   if (result) {
     res.status(200).json({ message: "Contact deleted" });
   } else {
-    res.status(404).json({ message: "Not found" }); 
+    res.status(404).json({ message: "Not found" });
   }
-})
+});
 
-router.put('/:contactId', async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   const { contactId } = req.params;
   const updatedContact = req.body;
-  const contact = await updateContact(contactId, updatedContact); 
+  const contact = await updateContact(contactId, updatedContact);
   if (contact) {
     res.json(contact);
   } else {
     res.status(404).json({ message: "missing fields" });
   }
-})
+});
 
-module.exports = router;
+module.exports = router
