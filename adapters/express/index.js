@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const createError = require("../../untils/createError");
 const handlerError = require("../../middlewears/handlerError");
 const contactService = require("../express/api/contacts");
 router.get("/", contactService.getContacts);

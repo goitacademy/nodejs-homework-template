@@ -1,10 +1,6 @@
-const express = require("express");
 const contactService = require("../../../contacts/contacts");
-const router = express.Router();
-const createError = require("../../../untils/createError");
- const handlerError = require("../../../middlewears/handlerError");
 
-const getContacts = async (req,res,next) =>{
+const getContacts = async (req, res, next) => {
   try {
     const results = await contactService.listContacts();
     res.json({
@@ -17,9 +13,9 @@ const getContacts = async (req,res,next) =>{
   } catch (error) {
     next(error);
   }
-}
+};
 
-const getContactId  =  async (req,res,next) =>{
+const getContactId = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await contactService.getContactById(contactId);
@@ -32,8 +28,8 @@ const getContactId  =  async (req,res,next) =>{
   } catch (error) {
     next(error);
   }
-}
-const postContact = async (req,res,next)=>{
+};
+const postContact = async (req, res, next) => {
   try {
     const { body } = req;
     const contact = await contactService.addContact(body);
@@ -45,8 +41,8 @@ const postContact = async (req,res,next)=>{
   } catch (error) {
     next(error);
   }
-}
-const deleteContact = async (req,res,next) => {
+};
+const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const deleteContact = await contactService.removeContact(contactId);
@@ -58,8 +54,8 @@ const deleteContact = async (req,res,next) => {
   } catch (error) {
     next(error);
   }
-}
-const putUpdateContact = async (req,res,next) => {
+};
+const putUpdateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { body } = req;
@@ -72,8 +68,8 @@ const putUpdateContact = async (req,res,next) => {
   } catch (error) {
     next(error);
   }
-}
-const patchUpdateFavorite = async (req,res,next) => {
+};
+const patchUpdateFavorite = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { body } = req;
@@ -89,5 +85,12 @@ const patchUpdateFavorite = async (req,res,next) => {
   } catch (error) {
     next(error);
   }
-}
-module.exports = {getContacts,getContactId,postContact,deleteContact,putUpdateContact,patchUpdateFavorite}
+};
+module.exports = {
+  getContacts,
+  getContactId,
+  postContact,
+  deleteContact,
+  putUpdateContact,
+  patchUpdateFavorite,
+};
