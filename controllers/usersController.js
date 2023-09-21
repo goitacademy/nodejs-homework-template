@@ -6,6 +6,7 @@ import {
   addNewUser,
   getUserByMail,
   updateToken,
+  updateAvatar,
 } from "../dataBase/db.js";
 import dotenv from "dotenv";
 import gravatar from "gravatar";
