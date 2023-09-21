@@ -58,5 +58,17 @@
     "name": "Alec Howard",
     "email": "Donec.elementum@scelerisquescelerisquedui.net",
     "phone": "(748) 206-2688"
+  },
+  {
+    "id": "4793970a-ab7f-42df-a648-ab1c7790c08c",
+    "name": "Max",
+    "email": "max@max.com",
+    "phone": "+380"
+  },
+  {
+    "id": "0ce33884-be75-42e8-ae8b-7f2ed855ea9b",
+    "name": "Max2",
+    "email": "max2@max.com",
+    "phone": "+380"
   }
 ]
