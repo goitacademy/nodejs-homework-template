@@ -1,7 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const contactsRouter = require("./express/api/contacts");
+const contactsRouter = require("./express/index");
 const port = 3000;
 const app = express();
 
