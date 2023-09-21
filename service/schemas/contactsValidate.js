@@ -9,7 +9,8 @@ const schemaValidate = Joi.object({
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         .required(),
-    phone: Joi.string().required() // Joi.number().min(1).strict(),
+    phone: Joi.string().required(),
+    favorite: Joi.boolean()
 });
 
 module.exports = schemaValidate;
