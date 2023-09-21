@@ -1,90 +1,84 @@
-const express = require('express')
+const express = require("express");
 const Joi = require("joi");
-const contacts=require('../../models/contacts')
+const contacts = require("../../models/contacts");
 
-const {HttpError}= require('../../helpers')
+const { HttpError } = require("../../helpers");
 
-const router = express.Router()
+const router = express.Router();
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
-  phone:Joi.number().required(),
-})
+  phone: Joi.number().required(),
+});
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts()
-    res.json(result)
-  }
-  catch (error) {
-   next(error)
-  }
-  })
-
-router.get('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result=await contacts.getContactById(contactId)
-    if (!result) {
-      throw HttpError(404, "Not found")
-    }
-    res.json(result)
-  }
-  catch (error) {
-next(error)
-  }
-
-})
-
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body)
-    if (error) {
-  throw HttpError(400, error.message)
-}
-    const result = await contacts.addContact(req.body)
-
-  res.status(201).json(result)
+    const result = await contacts.listContacts();
+    res.json(result);
   } catch (error) {
-    res.json({ message: "missing required name field" })
-    next(error)
+    return next(error);
   }
-})
+});
 
-router.delete('/:contactId', async (req, res, next) => {
+router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result=await contacts.removeContact(contactId)
+    const result = await contacts.getContactById(contactId);
     if (!result) {
-    throw HttpError(404, "Not found")
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, "missing required name field");
+    }
+    const result = await contacts.addContact(req.body);
+
+    res.status(201).json(result);
+  } catch (error) {
+    res.json({ message: "missing required name field" });
+    return next(error);
+  }
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId);
+    if (!result) {
+      throw HttpError(404, "Not found");
     }
     res.json({
-      message:"contact deleted"
-    })
+      message: "contact deleted",
+    });
   } catch (error) {
-    next(error)
-}
-})
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body)
+    const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message)
+      throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
-      const result = await contacts.updateContact(contactId, req.body)
-    res.json(result)
+    const result = await contacts.updateContact(contactId, req.body);
+    res.json(result);
   } catch (error) {
     res.json({
-      
-      message:"missing fields"
-    })
-    next(error)
+      message: "missing fields",
+    });
+    return next(error);
   }
-}
-)
+});
 
-module.exports = router
-
+module.exports = router;
