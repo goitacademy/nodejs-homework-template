@@ -10,7 +10,6 @@ const {
 } = require("../service");
 
 const get = async (_, res, next) => {
-  console.log(4)
   try {
     const contacts = await getAllContacts();
     res.json(contacts);
