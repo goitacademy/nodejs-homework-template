@@ -1,4 +1,5 @@
 import User from "../service/schemas/users.js";
+import Jimp from "jimp";
 
 export const listUsers = async () => {
   try {
@@ -48,5 +49,26 @@ export const updateSubscription = async (subscription, userId) => {
     );
   } catch (err) {
     console.error("An error occurred while updating user: ", err);
+  }
+};
+
+export const updateAvatar = async (filePath, userId) => {
+  try {
+    const localPath = `public/avatars/avatar-${userId}.jpg`;
+    const serverPath = localPath.replace("public/", "");
+
+    const newAvatar = await Jimp.read(filePath);
+    await newAvatar.resize(250, 250).quality(60).writeAsync(localPath);
+
+    await User.findByIdAndUpdate(
+      { _id: userId },
+      { $set: { avatarURL: localPath } },
+      { new: true, select: "avatarURL" }
+    );
+
+    return serverPath;
+  } catch (err) {
+    console.error("An error occurred while updating avatar: ", err);
+    throw err;
   }
 };

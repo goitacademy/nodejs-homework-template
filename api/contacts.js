@@ -11,16 +11,16 @@ import { auth } from "../controller/users.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", auth, get);
+contactsRouter.get("/", get);
 
-contactsRouter.get("/:id", auth, getById);
+contactsRouter.get("/:id", getById);
 
-contactsRouter.post("/", auth, add);
+contactsRouter.post("/", add);
 
-contactsRouter.put("/:id", auth, update);
+contactsRouter.put("/:id", update);
 
-contactsRouter.patch("/:id/favorite", auth, updateStatus);
+contactsRouter.patch("/:id/favorite", updateStatus);
 
-contactsRouter.delete("/:id", auth, remove);
+contactsRouter.delete("/:id", remove);
 
 export default contactsRouter;
