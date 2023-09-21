@@ -8,7 +8,6 @@ const { nanoid } = require('nanoid');
 const { User } = require('../models/user');
 
 const { HttpError, ctrlWrapper, sendEmail } = require('../helpers');
-const { log } = require('console');
 
 const { SECRET_KEY, BASE_URL } = process.env;
 
