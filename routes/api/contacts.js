@@ -6,8 +6,9 @@ const {
   addContact,
   removeContact,
   updateContact,
-} = require('../../models/contacts')
-const schemaValidate = require('../../schemas/contacts')
+  updateStatusContact
+} = require('../../controller/contacts')
+const schemaValidate = require('../../service/schemas/contactsValidate')
 
 
 // GET /api/contacts
@@ -94,6 +95,25 @@ router.put('/:contactId', async (req, res, next) => {
     res.json(updatedContact);
   } catch (error) {
     next(error);
+  }
+})
+
+// PATCH / api / contacts /: contactId / favorite
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const { favorite } = req.body;
+  const { contactId } = req.params;
+  if (favorite === undefined) {
+    return res.status(400).json({ message: 'Missing field favorite' });
+  }
+  try {
+    const updatedContact = await updateStatusContact(contactId, req.body);
+    if (updatedContact) {
+      return res.status(200).json(updatedContact);
+    } else {
+      return res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    next(error)
   }
 })
 
