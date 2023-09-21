@@ -12,5 +12,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-  // Wuz-u5d-dxy-rzb

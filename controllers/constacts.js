@@ -2,6 +2,7 @@ const Contact = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../utils");
 
 const getAll = async (req, res) => {
+
   const { _id: owner } = req.user;
   const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
@@ -15,6 +16,7 @@ const getAll = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "name email");
+
   res.status(200).json(contacts);
 };
 
@@ -24,7 +26,6 @@ const getById = async (req, res) => {
   if (!contact) {
     throw HttpError(404, "Contact not found");
   }
-
   res.status(200).json(contact);
 };
 
@@ -38,6 +39,7 @@ const deleteById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndDelete(id);
   if (!result) {
+    console.log(HttpError(404, "Not found"));
     throw HttpError(404, "Not found");
   }
   res.status(200).json({ message: "contact deleted" });
