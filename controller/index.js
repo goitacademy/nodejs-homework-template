@@ -35,10 +35,11 @@ const getOne = async (req, res, next) => {
 const add = async (res, req, next) => {
   try {
     const body = req.req.body;
-  const { error } = validateData.validateBody(body);
-  if (error) {
-    requestError(res, error);
-  }
+    const { error } = validateData.validateBody(body);
+    if (error) {
+      requestError(res, error);
+      return;
+    }
     const contact = await addContact(body);
     res.res.status(201).json(contact);
   } catch (e) {
@@ -92,6 +93,7 @@ const updateStatus = async (req, res, next) => {
 
     if (error) {
       requestError(res, error);
+      return;
     }
 
     const contact = await updateStatusContact(contactId, body);

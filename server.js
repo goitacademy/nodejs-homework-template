@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const app = require("./app");
 
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
 const PORT = process.env.PORT || 3000;
 const uriDb = process.env.DB_HOST;
 
-// mongoose.set("strictQuery", true);
+mongoose.set("strictQuery", true);
 
 mongoose
   .connect(uriDb)
