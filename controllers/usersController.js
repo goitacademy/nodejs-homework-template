@@ -8,6 +8,11 @@ import {
   updateToken,
 } from "../dataBase/db.js";
 import dotenv from "dotenv";
+import gravatar from "gravatar";
+import { join } from "path";
+import fs from "fs/promises";
+import Jimp from "jimp";
+import { STORE_AVATARS_DIRECTORY } from "../middlewares/multer.js";
 
 dotenv.config();
 
@@ -96,5 +101,44 @@ export const current = async (req, res, next) => {
     });
   } catch (error) {
     return res.status(500).send(error);
+  }
+};
+
+export const uploadAvatar = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ message: "No file provided" });
+    }
+
+    Jimp.read(file.path)
+      .then((picture) => {
+        return picture
+          .resize(250, 250)
+
+          .write(file.path);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    const avatarName = file.filename;
+
+    const avatarPath = join(STORE_AVATARS_DIRECTORY, avatarName);
+    await fs.rename(file.path, avatarPath);
+
+    const avatarURL = `/avatars/${avatarName}`;
+
+    await updateAvatar(user._id, avatarURL);
+
+    res.status(200).json({ avatarURL });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

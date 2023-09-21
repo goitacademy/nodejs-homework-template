@@ -49,3 +49,12 @@ export const updateToken = async (id, token) => {
   const updatedUser = await UserModel.updateOne({ _id: id }, { token });
   return updatedUser;
 };
+
+export const updateAvatar = async (userId, avatarURL) => {
+  const userWithNewAvatar = await UserModel.findByIdAndUpdate(
+    userId,
+    { avatarURL },
+    { new: true }
+  );
+  return userWithNewAvatar;
+};

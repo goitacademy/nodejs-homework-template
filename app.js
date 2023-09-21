@@ -4,11 +4,13 @@ import cors from "cors";
 import { contactsRouter } from "./routes/api/contacts.js";
 import { usersRouter } from "./routes/api/users.js";
 export const app = express();
-import { auth } from "./middlewares.js";
+import { auth } from "./middlewares/passport.js";
+import { STORE_AVATARS_DIRECTORY } from "./middlewares/multer.js";
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
+app.use(express.static(STORE_AVATARS_DIRECTORY));
 app.use(cors());
 app.use(express.json());
 
