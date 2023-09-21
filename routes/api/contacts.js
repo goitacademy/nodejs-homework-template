@@ -27,14 +27,18 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const newContact = req.body;
   const contact = await addContact(newContact);
-  res.status(201).json(contact);
+  if (contact) {
+    res.status(201).json(contact);
+  } else {
+    res.status(400).json({ message: "missing required name field" });
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId); 
   if (result) {
-    res.json({ message: "Contact deleted" });
+    res.status(200).json({ message: "Contact deleted" });
   } else {
     res.status(404).json({ message: "Not found" }); 
   }
@@ -47,8 +51,8 @@ router.put('/:contactId', async (req, res, next) => {
   if (contact) {
     res.json(contact);
   } else {
-    res.status(404).json({ message: "Not found" });
+    res.status(404).json({ message: "missing fields" });
   }
 })
 
-module.exports = router
+module.exports = router;
