@@ -45,8 +45,8 @@ export const getUserByMail = async (email) => {
   return foundUser;
 };
 
-export const updateToken = async (id, token) => {
-  const updatedUser = await UserModel.updateOne({ _id: id }, { token });
+export const updateToken = async (userId, token) => {
+  const updatedUser = await UserModel.updateOne({ _id: userId }, { token });
   return updatedUser;
 };
 

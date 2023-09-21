@@ -41,7 +41,11 @@ export const signUp = async (req, res, next) => {
 
   const hashedPassword = await bcrypt.hash(password, 6);
   try {
-    const newUser = await addNewUser({ email, password: hashedPassword });
+    const newUser = await addNewUser({
+      email,
+      password: hashedPassword,
+      avatarURL: gravatar.url(email),
+    });
     return res.status(201).json({ user: newUser });
   } catch (error) {
     return res.status(400).send(error);
@@ -58,11 +62,11 @@ export const login = async (req, res, next) => {
   }
 
   const user = await getUserByMail(email);
-  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!user) return res.status(401).send("Email or password is wrong");
 
-  if (!user || !isValidPassword) {
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword)
     return res.status(401).send("Email or password is wrong");
-  }
 
   const payload = { id: user._id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
