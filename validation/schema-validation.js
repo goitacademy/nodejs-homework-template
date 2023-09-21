@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 const contactSchema = Joi.object({
 	name: Joi.string().min(3).max(30).required().messages({

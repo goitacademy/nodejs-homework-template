@@ -18,6 +18,7 @@ const getContactById = async (req, res) => {
 
 const addContact = async (req, res) => {
   const result = await contacts.addContact(req.body);
+  console.log(result);
   res.status(201).json(result);
 }
 
@@ -28,7 +29,7 @@ const deleteContact = async (req, res) => {
 
   if (!result) throw ErrorStatus (404, 'Not found')
 
-  res.status(200).send().json({ message: "Contact removed" });
+  res.status(200).json({ message: "Contact deleted" });
 }
 
 const updateContact = async (req, res) => {
