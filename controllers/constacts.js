@@ -1,8 +1,7 @@
 const Contact = require("../models/contact");
-const { HttpError, ctrlWrapper } = require("../utils/index");
+const { HttpError, ctrlWrapper } = require("../utils");
 
 const getAll = async (req, res) => {
-  
   const contacts = await Contact.find();
   res.status(200).json(contacts);
 };
@@ -13,14 +12,10 @@ const getById = async (req, res) => {
   if (!contact) {
     throw HttpError(404, "Contact not found");
   }
-
   res.status(200).json(contact);
 };
 
 const add = async (req, res) => {
-  if(!req.body){
-    throw HttpError(400, "missing fields");
-  }
   const newContact = await Contact.create(req.body);
   res.status(201).json(newContact);
 };
@@ -29,18 +24,17 @@ const deleteById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndDelete(id);
   if (!result) {
+    console.log(HttpError(404, "Not found"));
     throw HttpError(404, "Not found");
   }
   res.status(200).json({ message: "contact deleted" });
 };
 
 const updateById = async (req, res) => {
-  if(!req.body){
-    throw HttpError(400, "missing fields");
-  }
-
   const { id } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
@@ -48,11 +42,10 @@ const updateById = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-  if(!req.body){
-    throw HttpError(400, "missing field favorite");
-  }
   const { id } = req.params;
-  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {new: true});
+  const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
   if (!updatedContact) {
     throw HttpError(404, "Not found");
   }
