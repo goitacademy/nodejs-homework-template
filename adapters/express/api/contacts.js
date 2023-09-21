@@ -2,15 +2,16 @@ const express = require("express");
 const contactService = require("../../../contacts/contacts");
 const router = express.Router();
 const createError = require("../../../untils/createError");
-const ERROR_TYPES = require("../contastants/errorTypes");
-const uptadeContactsSchema = require('../../../untils/updateContacatSchema')
 const handlerError = require("../../../middlewears/handlerError");
-const schemaAddContact = require("../../../untils/addContactSchema");
 router.get("/", async (req, res, next) => {
   try {
-    const data = await contactService.listContacts();
-    res.status(200).json({
-      data,
+    const results = await contactService.listContacts();
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        results,
+      },
     });
   } catch (error) {
     next(error);
@@ -23,6 +24,8 @@ router.get("/:contactId", async (req, res, next) => {
     const contact = await contactService.getContactById(contactId);
 
     res.status(200).json({
+      status: "success",
+      code: 200,
       data: contact,
     });
   } catch (error) {
@@ -33,16 +36,10 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { body } = req;
-    const { error, value } = schemaAddContact.validate(body);
-    if (error) {
-      const error = createError(ERROR_TYPES.BAD_REQUEST, {
-        message: "missing required name field",
-        data: {},
-      });
-      throw error;
-    }
-    const contact = await contactService.addContact(value);
+    const contact = await contactService.addContact(body);
     res.status(201).json({
+      status: "success",
+      code: 201,
       data: contact,
     });
   } catch (error) {
@@ -55,6 +52,8 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const deleteContact = await contactService.removeContact(contactId);
     res.status(200).json({
+      status: "success",
+      code: 200,
       message: deleteContact,
     });
   } catch (error) {
@@ -66,19 +65,28 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { body } = req;
-    const { error, value } = uptadeContactsSchema.validate(body);
-    if (error) {
-      const error = createError(ERROR_TYPES.BAD_REQUEST, {
-        message: "missing fields",
-        data: {},
-      });
-      throw error;
-    }
-    const updateContact = await contactService.updateContact(contactId, value);
-
-    res.status(200).json({
+    const updateContact = await contactService.updateContact(contactId, body);
+    res.status(201).json({
+      status: "success",
+      code: 201,
       data: updateContact,
-      message: "you pidor",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { body } = req;
+    const favoriteContact = await contactService.updateStatusContact(
+      contactId,
+      body
+    );
+    res.status(200).json({
+      status: "succes",
+      code: 201,
+      data: favoriteContact,
     });
   } catch (error) {
     next(error);

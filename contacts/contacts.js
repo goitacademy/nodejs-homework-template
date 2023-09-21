@@ -65,10 +65,32 @@ const updateContact = async (contactId, body) => {
   return contact;
 };
 
+const updateStatusContact = async (contactId, body) => {
+  if (Object.keys(body).length === 0 || !body.hasOwnProperty("favorite")) {
+    const error = createError(ERROR_TYPES.BAD_REQUEST, {
+      message: `missing field favorite`,
+      data: {},
+    });
+    throw error;
+  }
+  const { favorite } = body;
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    {
+      $set: {
+        favorite,
+      },
+    },
+    { returnOriginal: false }
+  );
+  return result;
+};
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
