@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Contacts = require("../../models/contacts");
 
+
+
 router.get("/", async (_req, res, next) => {
   try {
     const contacts = await Contacts.listContacts();
@@ -55,6 +57,8 @@ router.post("/", async (req, res, next) => {
     next(e);
   }
 });
+
+
 
 router.delete("/:contactId", async (req, res, next) => {
   try {

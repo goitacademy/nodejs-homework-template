@@ -1,19 +1,11 @@
 const fs = require("fs/promises");
 const path = require("path");
 const shortid = require("shortid");
-const Joi = require("joi");
+const { validateContact } = require("../shema");
+
 
 const contactsPath = path.join(__dirname, "./contacts.json");
 
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
-const validateContact = (contact) => {
-  return contactSchema.validate(contact);
-};
 
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath, "utf8");
