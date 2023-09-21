@@ -20,16 +20,14 @@ const contactSchema = Joi.object({
     "any.required": `missing required phone field`,
   }),
   favorite: Joi.boolean().messages({
-    "string.base": `favorite should be a type of 'boolean'`,
-    "string.empty": `favorite cannot be an empty field`,
+    "boolean.base": `favorite should be a type of 'boolean'`,
   }),
 });
 
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({
-    "string.base": `favorite should be a type of 'boolean'`,
-    "string.empty": `favorite cannot be an empty field`,
-    "any.required": `missing field favorite`,
+    "boolean.base": `favorite should be a type of 'boolean'`,
+    "any.required": `missing required favorite field`,
   }),
 });
 
