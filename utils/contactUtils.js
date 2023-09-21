@@ -79,5 +79,5 @@ module.exports = {
   getById,
   addContact,
   removeContact,
-  updateContact,
+  updateContact
 };
