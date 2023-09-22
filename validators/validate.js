@@ -17,6 +17,7 @@ const contactSchema = Joi.object({
   phone: Joi.string().pattern(phoneReg).required().messages({
     "string.base": `phone should be a type of 'text'`,
     "string.empty": `phone cannot be an empty field`,
+    "string.pattern.base": `phone not valid`,
     "any.required": `missing required phone field`,
   }),
   favorite: Joi.boolean().messages({
@@ -35,4 +36,3 @@ module.exports = {
   contactSchema,
   favoriteSchema,
 };
-

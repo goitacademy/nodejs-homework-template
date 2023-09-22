@@ -2,12 +2,15 @@ const { HttpError } = require("../utils/index");
 
 const validateBody = (schema) => {
   const func = (req, res, next) => {
-    
     if (Object.keys(req.body).length === 0) {
-      return req.route.methods.patch ? next(HttpError(400, "missing field favorite")) : next(HttpError(400, "missing fields"))  
+      return req.route.path === "/:id/favorite" && req.route.methods.patch
+        ? next(HttpError(400, "missing field favorite"))
+        : req.route.path === "/" && req.route.methods.patch
+        ? next(HttpError(400, "missing field subscription"))
+        : next(HttpError(400, "missing fields"));
     }
     const { error } = schema.validate(req.body);
-    console.log('error :>> ', error);
+
     if (error) {
       next(HttpError(400, `${error.details[0].message}`));
     }
@@ -16,21 +19,4 @@ const validateBody = (schema) => {
   return func;
 };
 
-
-const validateBodySubscription = (schema) => {
-  const func = (req, res, next) => {
-    
-    if (Object.keys(req.body).length === 0) {
-      return next(HttpError(400, "missing field subscription"))
-    }
-    const { error } = schema.validate(req.body);
-    console.log('error :>> ', error);
-    if (error) {
-      next(HttpError(400, `${error.details[0].message}`));
-    }
-    next();
-  };
-  return func;
-};
-
-module.exports = {validateBody, validateBodySubscription};
+module.exports = validateBody;
