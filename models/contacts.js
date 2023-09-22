@@ -1,7 +1,6 @@
 const fs = require('fs/promises')
 const { v4: uuidv4 } = require("uuid");
 
-// Service
 const contactsPath = "models/contacts.json"
 
 const listContacts = async () => {
@@ -24,18 +23,11 @@ const removeContact = async (contactId) => {
   const [result] = contacts.splice(index, 1);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
   return result
-  // const contacts = await listContacts();
-  // const newListContacts = contacts.filter(contact =>contact.id !== contactId );
-  // const contacList = await fs.writeFile(contactsPath, JSON.stringify(newListContacts), (err)=>{
-  //   if(err) console.err(err);
-  // }).then(() => `Contact with id ${contactId} was successfully removed.`)
-  // return contacList;
 }
 
 const addContact = async ({ name, email, phone }) => {
   const contacts = await listContacts();
   const newContact = {
-    // id: String(contacts.length + 1),
     id: uuidv4(),
     name,
     email,
@@ -44,12 +36,6 @@ const addContact = async ({ name, email, phone }) => {
   const contactList = JSON.stringify([...contacts, newContact], null, 2)
   await fs.writeFile(contactsPath, contactList)
   return newContact
-//   const addContact = {id: uuidv4(), ...body};
-//   contacts.push(addContact);
-//   const contacList = await fs.writeFile(contactsPath, JSON.stringify(contacts), (err)=>{
-//     if(err) console.err(err);
-//   }).then(() => `Contact was successfully created.`);
-//   return contacList;
 }
 
 const updateContact = async (contactId, { name, phone, email }) => {
@@ -73,15 +59,6 @@ const updateContact = async (contactId, { name, phone, email }) => {
   const [result] = contacts.splice(index, 1, contact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
   return result
-  // const contacts = await listContacts();
-  // const [contact] = contacts.filter(contact => contact.id === contactId);
-  // contact.name = body.name;
-  // contact.email = body.email;
-  // contact.phone = body.phone;
-  // const contacList = await fs.writeFile(contactsPath, JSON.stringify(contacts), (err)=>{
-  //   if(err) console.err(err);
-  // }).then(() => `Contact was successfully updated.`);
-  // return contacList;
 }
 
 module.exports = {

@@ -50,13 +50,6 @@ const {
         addContact
       },
     })
-  
-    // if(!name|| !email || !phone ){
-    //   res.status(400).json({message: "missing required name field"});
-    // }else{
-    //   const contacts = await add(req.body);
-    //   res.status(201).json(contacts);
-    // }
   }
   
   const removeContact = async (req, res, next) => {
@@ -70,13 +63,6 @@ const {
       code: 200,
       message: "contact deleted"
     })
-    // const id = req.params.contactId;
-    // const contacts = await remove(id);
-    // if(!contacts){
-    //   res.status(404).json({message: "Not found"});
-    // }else{
-    //   res.status(200).json(contacts)
-    // }
   }
   
   const updateContact =async (req, res, next) => {
@@ -101,9 +87,6 @@ const {
         updContact
       },
     })
-    // const id = req.params.contactId;
-    // const contacts = await update(id, req.body);
-    // res.json(contacts);
   }
   
   module.exports = {
