@@ -7,6 +7,7 @@ const {
   validateUserSchemaLogin,
 } = require("../../schemas/ValidateAuth");
 const ctrl = require("../../controllers/usersCtrl");
+const authenticate = require("../../middlewares/authenticate");
 
 router.post(
   "/register",
@@ -19,5 +20,9 @@ router.post(
   ValidateBodyContact(validateUserSchemaLogin),
   ctrl.loginUser
 );
+
+router.get("/current", authenticate, ctrl.getCurrent);
+
+router.post("/logout", authenticate, ctrl.logout)
 
 module.exports = router;

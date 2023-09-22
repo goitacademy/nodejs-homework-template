@@ -6,4 +6,5 @@ function isValidId(contactId) {
     throw HttpError(404);
   }
 }
+
 module.exports = isValidId;

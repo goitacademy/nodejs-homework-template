@@ -35,13 +35,13 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { email } = req.body;
-    const IfTakenEmail = await Contact.findOne({ email });
-    if (IfTakenEmail) {
-      throw HttpError(400, "Email is already taken");
-    }
-    const { _id: owner } = req.user;
-    const newContact = await addContactToDB(req.body, owner);
+    // const { email } = req.body;
+    // const IfTakenEmail = await Contact.findOne({ email });
+    // if (IfTakenEmail) {
+    //   throw HttpError(400, "Email is already taken");
+    // }
+    // const { _id: owner } = req.user;
+    const newContact = await addContactToDB(req);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);

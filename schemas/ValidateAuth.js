@@ -33,7 +33,7 @@ const validateUserSchemaRegister = Joi.object({
 
 const validateUserSchemaLogin = Joi.object({
   password: Joi.string().min(1).max(30).required(),
-    email: Joi.string().email({ minDomainSegments: 2 }).required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
   
 });
 
