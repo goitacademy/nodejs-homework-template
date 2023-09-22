@@ -42,8 +42,6 @@ const loginUser = async (req, res, next) => {
       expiresIn: "24h",
     });
 
-    console.log(user);
-
     res.json({ token, user: { email, subscription: user.subscription } });
   } catch (error) {
     next(error);

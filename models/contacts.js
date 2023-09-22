@@ -3,14 +3,14 @@ const { Contact } = require("../schemas/ValidateSchemasContacts");
 
 const ifIsResult = (result) => {
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
 };
 
-const getAll = async (page = 1, limit = 10) => {
+const getAll = async (page = 1, limit = 10, owner) => {
   const total = await Contact.count();
   const skip = (page - 1) * limit;
-  const contacts = await Contact.find().skip(skip).limit(+limit);
+  const contacts = await Contact.find({owner}).skip(skip).limit(+limit);
   ifIsResult(contacts);
   return { contacts, page: +page, limit: +limit, total };
 };
@@ -21,8 +21,9 @@ const getById = async (contactId) => {
   return searchedContact;
 };
 
-const addContactToDB = async (body) => {
-  const newContact = await Contact.create(body);
+const addContactToDB = async (body, owner) => {
+  const newContact = await Contact.create({ ...body, owner });
+  console.log(owner)
 ifIsResult(newContact);
   return newContact;
 };

@@ -3,7 +3,7 @@ const HttpError = require("./HttpError");
 
 function isValidId(contactId) {
   if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
 }
 module.exports = isValidId;

@@ -5,17 +5,38 @@ const ctrl = require("../../controllers/contactsCtrl");
 const schema = require("../../schemas/ValidateSchemasContacts");
 const ValidateBodyContact = require("../../middlewares/ValidateBodyAddContact");
 const paginationSchema = require("../../schemas/ValidatePagination");
+const authenticate = require("../../middlewares/authenticate");
 
-router.get("/", ValidateBodyContact(paginationSchema), ctrl.getAllContacts);
+router.get(
+  "/",
+  authenticate,
+  ValidateBodyContact(paginationSchema),
+  ctrl.getAllContacts
+);
 
-router.get("/:contactId", ctrl.getContactById);
+router.get("/:contactId", authenticate, ctrl.getContactById);
 
-router.post("/", ValidateBodyContact(schema.validateAddContactSchema), ctrl.addContact);
+router.post(
+  "/",
+  authenticate,
+  ValidateBodyContact(schema.validateAddContactSchema),
+  ctrl.addContact
+);
 
-router.delete("/:contactId", ctrl.deleteContact);
+router.delete("/:contactId", authenticate, ctrl.deleteContact);
 
-router.put("/:contactId", ValidateBodyContact(schema.validateUpdateContactSchema), ctrl.updateContact);
+router.put(
+  "/:contactId",
+  authenticate,
+  ValidateBodyContact(schema.validateUpdateContactSchema),
+  ctrl.updateContact
+);
 
-router.patch("/:contactId/favorite", ValidateBodyContact(schema.validateUpdateContactSchema), ctrl.updateStatusContact);
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  ValidateBodyContact(schema.validateUpdateContactSchema),
+  ctrl.updateStatusContact
+);
 
 module.exports = router;

@@ -12,8 +12,10 @@ const { Contact } = require("../schemas/ValidateSchemasContacts");
 
 const getAllContacts = async (req, res, next) => {
   try {
+    const { _id: owner } = req.user;
+    console.log(owner)
     const { page, limit } = req.query;
-    const contacts = await getAll(page, limit);
+    const contacts = await getAll(page, limit, owner);
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
@@ -38,7 +40,8 @@ const addContact = async (req, res, next) => {
     if (IfTakenEmail) {
       throw HttpError(400, "Email is already taken");
     }
-    const newContact = await addContactToDB(req.body);
+    const { _id: owner } = req.user;
+    const newContact = await addContactToDB(req.body, owner);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
