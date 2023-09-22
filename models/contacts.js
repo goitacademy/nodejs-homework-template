@@ -1,14 +1,80 @@
-// const fs = require('fs/promises')
+const Contact = require('./contactModel');
+const catchAsync = require('../utils/catchAsync');
 
-const listContacts = async () => {}
+const listContacts = catchAsync(async (req, res) => {
+  try {
+    const contacts = await Contact.find();
+    res.status(200).json(contacts);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-const getContactById = async (contactId) => {}
+const getContactById = catchAsync(async (req, res) => {
+  try {
+    const { contact } = req;
+    res.status(200).json(contact);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-const removeContact = async (contactId) => {}
+const removeContact = catchAsync(async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    await Contact.findByIdAndDelete(contactId);
+    res.status(200).json({ message: 'Contact deleted' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-const addContact = async (body) => {}
+const addContact = catchAsync(async (req, res) => {
+  try {
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-const updateContact = async (contactId, body) => {}
+const updateContact = catchAsync(async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const newContact = await Contact.findByIdAndUpdate(
+      contactId,
+      {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+      },
+      { new: true }
+    );
+    res.status(200).json(newContact);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+const updateStatusContact = catchAsync(async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+    const newContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!newContact) {
+      return res.status(400).json({ message: 'Missing field favorite' });
+    }
+
+    res.status(200).json(newContact);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = {
   listContacts,
@@ -16,4 +82,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+  updateStatusContact,
+};
