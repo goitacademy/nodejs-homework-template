@@ -11,6 +11,15 @@ const schemaValidate = Joi.object({
         .required(),
     phone: Joi.string().required(),
     favorite: Joi.boolean()
+        .valid(true, false)
+        .required()
 });
 
-module.exports = schemaValidate;
+const schemaValidateStatus = Joi.object({
+    favorite: Joi.boolean().required()
+});
+
+module.exports = {
+    schemaValidate,
+    schemaValidateStatus
+};
