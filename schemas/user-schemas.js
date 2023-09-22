@@ -19,9 +19,14 @@ export const userUpdateSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
+export const userUpdateAvatarSchema = Joi.object({
+  subscription: Joi.string(),
+});
+
 export default {
   userRefreshTokenSchema,
   userSignupSchema,
   userSigninSchema,
   userUpdateSubscriptionSchema,
+  userUpdateAvatarSchema,
 };
