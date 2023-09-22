@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import Joi from "joi";
-import User from "../models/users.model";
+import { User } from "../models/users.model.js";
 
 const userValidationSchema = Joi.object({
   email: Joi.string().email().required(),

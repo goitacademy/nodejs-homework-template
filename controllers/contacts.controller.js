@@ -1,6 +1,5 @@
 import {
   deleteContact,
-  getAllContact,
   getContact,
   patchContact,
   updateStatusContact,
@@ -9,7 +8,7 @@ import {
 
 export const getAllContactsHandler = async (_, res, next) => {
   try {
-    const contacts = await getAllContact();
+    const contacts = await getContact();
     return res.json({ contacts });
   } catch (error) {
     console.error("An error occurred while retrieving contacts:", error);

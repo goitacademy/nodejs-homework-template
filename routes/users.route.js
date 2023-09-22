@@ -10,9 +10,9 @@ import authMiddleware from "../middleware/authenticateToken.js";
 
 const userRouter = Router();
 
-userRouter.post("/users/signup", signUpHandler);
-userRouter.post("/users/login", loginHandler);
-userRouter.get("/users/logout", authMiddleware, logoutHandler);
-userRouter.get("/users/current", authMiddleware, currentHandler);
+userRouter.post("/signup", signUpHandler);
+userRouter.post("/login", loginHandler);
+userRouter.get("/logout", authMiddleware, logoutHandler);
+userRouter.get("/current", authMiddleware, currentHandler);
 
 export { userRouter };
