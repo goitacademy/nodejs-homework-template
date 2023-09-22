@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+
+const phoneRegex = /^[0-9+() -]*$/;
 const contactSchema = new Schema(
   {
     name: {
@@ -14,6 +16,7 @@ const contactSchema = new Schema(
     phone: {
       type: String,
       required: [true, "Set phone for contact"],
+      match: phoneRegex,
     },
     favorite: {
       type: Boolean,
@@ -28,16 +31,14 @@ const Contact = model("contacts", contactSchema);
 const validateAddContactSchema = Joi.object({
   name: Joi.string().min(1).max(30).required(),
   email: Joi.string().email({ minDomainSegments: 2 }),
-  phone: Joi.string()
-    .pattern(/^[0-9+() -]*$/)
-    .required(),
+  phone: Joi.string().pattern(phoneRegex).required(),
   favorite: Joi.bool(),
 });
 
 const validateUpdateContactSchema = Joi.object({
   name: Joi.string().min(1).max(30),
   email: Joi.string().email({ minDomainSegments: 2 }),
-  phone: Joi.string().pattern(/^[0-9+()-]*$/),
+  phone: Joi.string().pattern(phoneRegex),
   favorite: Joi.bool(),
 });
 

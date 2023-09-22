@@ -34,8 +34,8 @@ const getContactById = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const IfUniqueEmail = await Contact.findOne({ email });
-    if (IfUniqueEmail) {
+    const IfTakenEmail = await Contact.findOne({ email });
+    if (IfTakenEmail) {
       throw HttpError(400, "Email is already taken");
     }
     const newContact = await addContactToDB(req.body);
@@ -69,7 +69,7 @@ const updateContact = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
+    const  {contactId}  = req.params;
     isValidId(contactId);
     const { favorite } = req.body;
     const result = await updateStatusContactById(contactId, favorite);
