@@ -30,6 +30,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    avatarURL: {
+      type: String,
+      require: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -73,11 +77,12 @@ const loginSchema = Joi.object({
 const subscriptionSchema = Joi.object({
   subscription: Joi.string()
     .valid(...subscriptionList)
-    .required().messages({
-      "any.only": `the subscription field has an invalid value`, 
+    .required()
+    .messages({
+      "any.only": `the subscription field has an invalid value`,
       "any.required": `missing required subscription field`,
     }),
-  });
+});
 
 const schemas = {
   registerSchema,
