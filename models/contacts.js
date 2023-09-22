@@ -54,6 +54,7 @@ const updateContact = async (contactId, body) => {
       return contact;
     }
   });
+
   fs.writeFile(`${__dirname}/contacts.json`, JSON.stringify(result));
 };
 
