@@ -1,5 +1,4 @@
 /** @format */
-
 const { Contact } = require("../models/contact");
 
 const { controllerWrapper, HttpError } = require("../helpers");
@@ -44,8 +43,13 @@ const onUpdateContact = async (req, res) => {
   res.json(result);
 };
 
-const onUpdateFavorite = async (req, res) => {
+const updateStatusContact = async (req, res) => {
   const { id } = req.params;
+  const body = req.body;
+  const bodyIsEmpty = !Object.keys(body).length;
+  if (bodyIsEmpty) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, "Not found");
@@ -59,5 +63,5 @@ module.exports = {
   onAddNewContact: controllerWrapper(onAddNewContact),
   onDeleteContact: controllerWrapper(onDeleteContact),
   onUpdateContact: controllerWrapper(onUpdateContact),
-  onUpdateFavorite: controllerWrapper(onUpdateFavorite),
+  updateStatusContact: controllerWrapper(updateStatusContact),
 };
