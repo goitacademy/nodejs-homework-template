@@ -7,15 +7,22 @@ const ifIsResult = (result) => {
   }
 };
 
-const getAll = async (page = 1, limit = 20, owner) => {
-  const total = await Contact.count({owner});
-  const skip = (page - 1) * limit;
+const getAll = async ({page = 1, limit = 20, favorite }, owner) => {
+  const numberPage = parseInt(page, 10)
+  const numberLimit = parseInt(limit, 10)
+  if (!numberPage||!numberLimit) {
+    throw HttpError(400, "Value must be a number")
+  }
+  const total = await Contact.count({owner}).where("favorite").equals(favorite);
+  const skip = (numberPage - 1) * numberLimit;
   const contacts = await Contact.find({ owner })
+    .where("favorite")
+    .equals(favorite)
     .populate("owner", "email subscription")
     .skip(skip)
-    .limit(+limit);
+    .limit(numberLimit);
   ifIsResult(contacts);
-  return { contacts, page: +page, limit: +limit, total };
+  return { contacts, page: numberPage, limit: numberLimit, total };
 };
 
 const getById = async (contactId) => {

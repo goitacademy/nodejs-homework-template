@@ -1,4 +1,3 @@
-const HttpError = require("../helpers/HttpError");
 const isValidId = require("../helpers/isValidId");
 const {
   getAll,
@@ -8,14 +7,12 @@ const {
   deleteContactById,
   updateStatusContactById,
 } = require("../models/contacts");
-const { Contact } = require("../schemas/ValidateSchemasContacts");
 
 const getAllContacts = async (req, res, next) => {
   try {
     const { _id: owner } = req.user;
     console.log(owner)
-    const { page, limit } = req.query;
-    const contacts = await getAll(page, limit, owner);
+    const contacts = await getAll(req.query, owner);
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
@@ -35,12 +32,6 @@ const getContactById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    // const { email } = req.body;
-    // const IfTakenEmail = await Contact.findOne({ email });
-    // if (IfTakenEmail) {
-    //   throw HttpError(400, "Email is already taken");
-    // }
-    // const { _id: owner } = req.user;
     const newContact = await addContactToDB(req);
     res.status(201).json(newContact);
   } catch (error) {
