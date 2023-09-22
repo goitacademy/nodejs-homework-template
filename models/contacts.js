@@ -1,4 +1,4 @@
-const uuid = require('uuidv4');
+const { v4: uuidv4 } = require('uuid');
 const fs = require('fs/promises');
 const path = require('path');
 
@@ -34,7 +34,7 @@ const addContact = async (body) => {
   );
   if (!doesExist) {
     const newContact = {
-      id: uuid(),
+      id: uuidv4(),
       ...body
     };
     contacts.push(newContact);
@@ -50,7 +50,7 @@ const updateContact = async (contactId, body) => {
     return null;
   }
 
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { id: contactId, ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };

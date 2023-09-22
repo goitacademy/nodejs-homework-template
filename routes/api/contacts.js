@@ -10,11 +10,11 @@ const {listContacts,
 
 const HttpError = require('../../helpers')
 
-const addSchema = Joi.object().keys({
-  name: Joi.string().required,
-  email:Joi.string().required,
-  phone:Joi.string().required,
-})
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email:Joi.string().required(),
+  phone:Joi.string().required(),
+}).options({ abortEarly: false })
 
 router.get('/', async (req, res, next) => {
   const result = await listContacts();
