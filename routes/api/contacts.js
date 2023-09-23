@@ -7,7 +7,7 @@ import {
   deleteContact,
   changeContact,
   updateStatusContact,
-} from "../../controller/contactsController.js";
+} from "../../controllers/contactsController.js";
 
 export const contactsRouter = Router();
 

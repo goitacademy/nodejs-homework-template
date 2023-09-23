@@ -6,8 +6,14 @@ import {
   addNewUser,
   getUserByMail,
   updateToken,
+  updateAvatar,
 } from "../dataBase/db.js";
 import dotenv from "dotenv";
+import gravatar from "gravatar";
+import { join } from "path";
+import fs from "fs/promises";
+import Jimp from "jimp";
+import { STORE_AVATARS_DIRECTORY } from "../middlewares/multer.js";
 
 dotenv.config();
 
@@ -36,7 +42,11 @@ export const signUp = async (req, res, next) => {
 
   const hashedPassword = await bcrypt.hash(password, 6);
   try {
-    const newUser = await addNewUser({ email, password: hashedPassword });
+    const newUser = await addNewUser({
+      email,
+      password: hashedPassword,
+      avatarURL: gravatar.url(email),
+    });
     return res.status(201).json({ user: newUser });
   } catch (error) {
     return res.status(400).send(error);
@@ -53,11 +63,11 @@ export const login = async (req, res, next) => {
   }
 
   const user = await getUserByMail(email);
-  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!user) return res.status(401).send("Email or password is wrong");
 
-  if (!user || !isValidPassword) {
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword)
     return res.status(401).send("Email or password is wrong");
-  }
 
   const payload = { id: user._id };
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
@@ -96,5 +106,44 @@ export const current = async (req, res, next) => {
     });
   } catch (error) {
     return res.status(500).send(error);
+  }
+};
+
+export const uploadAvatar = async (req, res, next) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ message: "No file provided" });
+    }
+
+    Jimp.read(file.path)
+      .then((picture) => {
+        return picture
+          .resize(250, 250)
+
+          .write(file.path);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    const avatarName = file.filename;
+
+    const avatarPath = join(STORE_AVATARS_DIRECTORY, avatarName);
+    await fs.rename(file.path, avatarPath);
+
+    const avatarURL = `/avatars/${avatarName}`;
+
+    await updateAvatar(user._id, avatarURL);
+
+    res.status(200).json({ avatarURL });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

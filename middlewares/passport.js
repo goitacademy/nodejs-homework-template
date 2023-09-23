@@ -1,7 +1,7 @@
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import dotenv from "dotenv";
-import { UserModel } from "./schemas/usersSchema.js";
+import { UserModel } from "../schemas/usersSchema.js";
 
 dotenv.config();
 const { JWT_SECRET } = process.env;
