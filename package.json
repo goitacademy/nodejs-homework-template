@@ -2,7 +2,7 @@
   "name": "goit-nodejs-hw-02-06-rest-api",
   "version": "0.0.0",
   "private": true,
-  "type":"module",
+  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -10,6 +10,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "body-parser": "^1.20.2",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
