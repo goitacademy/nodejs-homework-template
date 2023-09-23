@@ -6,7 +6,7 @@ dotenv.config();
 const { DB_HOST } = process.env;
 
 mongoose
-  .connect("mongodb+srv://Julia:b8szHQtHs3CuijW4@cluster0.gmxyttk.mongodb.net/")
+  .connect(DB_HOST)
   .then(() =>
     app.listen(3000, () => console.log("Database connection successful"))
   )
