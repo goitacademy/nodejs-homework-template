@@ -14,8 +14,14 @@ const contactsAddSchema = Joi.object({
         "any.required": "Phone is required. Please provide an phone contact.",
         "string.pattern.base": "Invalid phone number format. Please provide a valid phone number.",
     }),
+    favorite: Joi.boolean(),
 });
+
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required()
+})
 
 module.exports = {
     contactsAddSchema,
+    contactUpdateFavoriteSchema,
 }
