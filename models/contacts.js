@@ -1,80 +1,68 @@
-const fs = require("fs").promises;
+const { model, Schema } = require("mongoose");
+const { handleMongooseEroor } = require("../helpers");
+const Joi = require("joi");
 
-const path = require("path");
-
-const ShortUniqueId = require("short-unique-id");
-
-const uid = new ShortUniqueId();
-
-const contactsPath = path.resolve("models", "contacts.json");
-
-const listContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
-
-  return JSON.parse(contacts);
-};
-
-const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const result = contacts.find((item) => item.id === id);
-
-  return result || null;
-};
-
-const removeContact = async (id) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === id);
-
-  if (index === -1) {
-    return null;
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+      minlength: 2,
+      maxlength: 30,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
   }
+);
 
-  const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+contactSchema.post("save", handleMongooseEroor);
 
-  return result;
-};
+const addSchema = Joi.object({
+  name: Joi.string().min(2).max(30).required().messages({
+    "any.required": `missing required name field`,
+    "string.empty": `"name" cannot be empty, min 2 max 30 letters`,
+    "string.base": `"name" must be string`,
+  }),
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net", "ua", "uk", "ca", "org"] },
+    })
+    .required()
+    .messages({
+      "any.required": `missing required email field`,
+      "string.empty": `"email" cannot be empty`,
+    }),
+  phone: Joi.string().min(5).max(15).required().messages({
+    "any.required": `missing required phone field`,
+    "string.empty": `"phone" cannot be empty, min 5 max 15 numbers.`,
+  }),
+  favorite: Joi.boolean(),
+});
 
-const addContact = async ({ name, email, phone }) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: uid.rnd(21),
-    name,
-    email,
-    phone,
-  };
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing required favorite field`,
+    "string.empty": `"favorite" cannot be empty`,
+  }),
+});
 
-  return newContact;
-};
+const Contact = model("contact", contactSchema);
 
-const updateContact = async (id, { name, email, phone }) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === id);
+const schemas = { addSchema, updateFavoriteSchema };
 
-  if (index === -1) {
-    return null;
-  }
-
-  const updateContact = {
-    id,
-    name,
-    email,
-    phone,
-  };
-
-  contacts.splice(index, 1, updateContact);
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-
-  return updateContact;
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+module.exports = { Contact, schemas };
