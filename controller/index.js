@@ -67,9 +67,8 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
     const { contactId } = req.params;
-
     try {
-        const result = await service.updateStatusContact(contactId, req.body)
+        const result = await service.updateStatusContact(contactId, req.body);
         if (result) {
             res.status(200).json(result)
         } else {

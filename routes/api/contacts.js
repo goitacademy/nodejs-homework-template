@@ -6,8 +6,10 @@ const validateRequestBody = require('../../middlewares/errorHandlerBody');
 const validateStatus = require('../../middlewares/errorHandlerStatus');
 
 
-// validate id and req.body
+// validate id
 router.all('/:contactId', validateContactId);
+router.all('/:contactId/favorite', validateContactId);
+
 
 // GET /api/contacts
 router.get('/', ctrlContact.get)
