@@ -14,14 +14,14 @@ const addSchema = joi.object({
   }),
 });
 
-const addUpdSchema = joi.object({
-  name: joi.string(),
-  email: joi.string(),
-  phone: joi.string(),
-});
+// const addUpdSchema = joi.object({
+//   name: joi.string(),
+//   email: joi.string(),
+//   phone: joi.string(),
+// });
 
 
 module.exports = {
   addSchema,
-  addUpdSchema,
+//   addUpdSchema,
 };
