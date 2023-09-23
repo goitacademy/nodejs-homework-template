@@ -2,9 +2,9 @@ const { Contact } = require('../../models');
 const { httpError, ctrlWrapper } = require('../../utils');
 
 const getContactById = async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
 
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById(id);
 
   if (!result) {
     throw httpError(404, 'Not found');
@@ -13,6 +13,4 @@ const getContactById = async (req, res) => {
   return res.json(result);
 };
 
-module.exports = {
-  getContactById: ctrlWrapper(getContactById),
-};
+module.exports = ctrlWrapper(getContactById);

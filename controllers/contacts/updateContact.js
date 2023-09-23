@@ -2,9 +2,9 @@ const { Contact } = require('../../models');
 const { httpError, ctrlWrapper } = require('../../utils');
 
 const updateContact = async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
     new: true,
   });
 
@@ -15,6 +15,4 @@ const updateContact = async (req, res) => {
   return res.json(result);
 };
 
-module.exports = {
-  updateContact: ctrlWrapper(updateContact),
-};
+module.exports = ctrlWrapper(updateContact);
