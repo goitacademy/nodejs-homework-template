@@ -58,3 +58,30 @@ export const updateAvatar = async (userId, avatarURL) => {
   );
   return userWithNewAvatar;
 };
+
+export const findEmailToken = async (verificationToken) => {
+  const userFoundByToken = UserModel.find(
+    { verificationToken },
+    { _id: 1, verify: 1 }
+  );
+  return userFoundByToken;
+};
+
+export const confirmEmail = async (id) => {
+  const foundUser = UserModel.findByIdAndUpdate(
+    id,
+    { verify: true },
+    { new: true }
+  );
+  return foundUser;
+};
+
+export const findByEmail = async (email) => {
+  const foundUser = UserModel.find(
+    { email },
+    { verify: 1, verificationToken: 1 }
+  );
+  return foundUser;
+};
+
+export const isUserInDB = async (email) => UserModel.exists({ email: email });
