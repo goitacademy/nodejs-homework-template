@@ -1,5 +1,5 @@
 const fs = require("fs/promises");
-// const { nanoid } = require("nanoid");
+const { nanoid } = require("nanoid");
 const path = require("path");
 
 const relativePath = "../data/contacts.json";
@@ -37,14 +37,16 @@ const addContact = async (body) => {
   const { name, email, phone } = body;
   const contacts = await listContacts();
   const newContact = {
-    id: Math.floor(Math.random() * 10000000000).toString(),
+    id: nanoid(),
     name: name,
     email: email,
     phone: phone,
   };
   const updatedList = [...contacts, newContact];
-  fs.writeFile(contactsPath, JSON.stringify(updatedList));
+  await fs.writeFile(contactsPath, JSON.stringify(updatedList));
   console.log("added new contact:", newContact);
+
+  return newContact;
 };
 
 const updateContact = async (contactId, body) => {
@@ -63,7 +65,7 @@ const updateContact = async (contactId, body) => {
       return el;
     }
   });
-  fs.writeFile(contactsPath, JSON.stringify(updatedContactList));
+  await fs.writeFile(contactsPath, JSON.stringify(updatedContactList));
   console.log("updated contact:", updatedContactList);
 };
 
