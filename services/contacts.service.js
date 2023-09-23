@@ -47,7 +47,25 @@ const addContact = async (body) => {
   console.log("added new contact:", newContact);
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const { name, email, phone } = body;
+  const contacts = await listContacts();
+  const updatedContactList = contacts.map((el) => {
+    if (el.id === contactId) {
+      const updatedContact = {
+        id: contactId,
+        name: name,
+        email: email,
+        phone: phone,
+      };
+      return updatedContact;
+    } else {
+      return el;
+    }
+  });
+  fs.writeFile(contactsPath, JSON.stringify(updatedContactList));
+  console.log("updated contact:", updatedContactList);
+};
 
 module.exports = {
   listContacts,
