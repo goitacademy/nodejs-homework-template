@@ -4,7 +4,6 @@ import Contact from "../models/Contact.js";
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-
   const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
 
@@ -34,7 +33,6 @@ const getContactById = async (req, res) => {
 
 const addContact = async (req, res) => {
   const { _id: owner } = req.user;
-
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
