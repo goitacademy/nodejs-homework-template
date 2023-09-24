@@ -1,10 +1,14 @@
 const userService = require("../../../services/users");
 const createError = require("../../../untils/createError");
 const ERROR_TYPES = require("../contastants/errorTypes");
+const bcrypt = require("bcrypt");
+const {JWT_SECRET} = require('../../../constants/env')
+const jwt = require('jsonwebtoken')
 const registerUser = async (req, res, next) => {
   try {
     const { body } = req;
     const { email } = body;
+    const passwordHash = await bcrypt.hash(body.password, 10);
     const checkEmail = await userService.findUser(email);
     if (Object.keys(checkEmail).length) {
       const error = createError(ERROR_TYPES.CONFLICT, {
@@ -12,7 +16,10 @@ const registerUser = async (req, res, next) => {
       });
       throw error;
     }
-    const user = await userService.registerUser(body);
+    const user = await userService.registerUser({
+      ...body,
+      password: passwordHash,
+    });
     res.status(200).json({
       message: "user created",
     });
@@ -21,25 +28,38 @@ const registerUser = async (req, res, next) => {
   }
 };
 const loginUser = async (req, res, next) => {
-  try{
-  const { body } = req;
-  const { password, email } = body;
-  const [user] = await userService.findUser(email);
-  if (!user || user.email !== email || user.password !== password) {
-    const error = createError(ERROR_TYPES.UNAUTHORIZED, {
-      message: `Email or password is wrong`,
+  try {
+    const { body } = req;
+    const { password, email } = body;
+    const [user] = await userService.findUser(email);
+    const hashedPassword = user.password;
+    const isValid = await bcrypt.compare(password, hashedPassword);
+    if (!user) {
+      const error = createError(ERROR_TYPES.NOT_FOUND, {
+        message: "User with given email not found",
+      });
+      throw error;
+    }
+    if (!isValid) {
+      const error = createError(ERROR_TYPES.UNAUTHORIZED, {
+        message: `Email or password is wrong`,
+      });
+      throw error;
+    }
+    const serializedUser  = user.toObject()
+    delete serializedUser.password
+    const token = jwt.sign( { sub: serializedUser._id, role: serializedUser.role },
+      JWT_SECRET,
+      { expiresIn: 3600 },)
+
+    res.status(200).json({
+      data: {
+        token,
+        user
+      },
     });
-    throw error;
-  }
-  res.status(200).json({
-      data:{
-      token: "exampletoken",
-      user: {
-        email: "example@example.com",
-        subscription: "starter"
-      }}
-  })}catch(e){
-    next(e)
+  } catch (e) {
+    next(e);
   }
 };
 
