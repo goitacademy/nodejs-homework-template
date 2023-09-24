@@ -7,9 +7,9 @@ const {
   deleteContact,
   putContact,
   patchContact,
-} = require("../../controllers/controllers");
+} = require("../../controllers");
 
-const isValidId = require("../../middlewares/isValidId");
+const { isValidId } = require("../../middlewares/index");
 
 const router = express.Router();
 

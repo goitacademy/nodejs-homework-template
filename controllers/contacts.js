@@ -1,6 +1,6 @@
 const Contact = require("../models/contact");
 const { HttpError } = require("../helpers/HttpError");
-const { addSchema, updateFavoriteSchema } = require("../schemas/schema");
+const { addSchema, updateFavoriteSchema } = require("../schemas/index");
 
 const getContacts = async (req, res, next) => {
   try {
