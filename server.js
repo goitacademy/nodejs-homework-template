@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 
 import app from "./app.js";
 
-const { DB_HOST, PORT } = process.env;
+const { DB_HOST, PORT, DB_HOST_TEST } = process.env;
 
 mongoose
-  .connect(DB_HOST)
+  .connect(DB_HOST_TEST)
   .then(() =>
     app.listen(PORT, () => {
       console.log("Database connection successful");
