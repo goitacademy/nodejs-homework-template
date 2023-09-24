@@ -1,6 +1,7 @@
 import User from "../models/user.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Jimp from "jimp";
 import fs from "fs/promises";
 import "dotenv/config.js";
 import { HttpError, cloudinary } from "../helpers/index.js";
@@ -15,15 +16,26 @@ const userReg = async (req, res) => {
     throw HttpError(409, `"Email in use"`);
   }
   const { path: oldPath, filename } = req.file;
-  const { url: avatarURL } = await cloudinary.uploader.upload(oldPath, {
-    folder: "avatarUser",
-  });
+  await Jimp.read(oldPath)
+    .then((image) => {
+      image.resize(256, 256);
+    })
+    .catch((err) => {
+      err.message;
+    });
+  const { url: avatarURL, public_id } = await cloudinary.uploader.upload(
+    oldPath,
+    {
+      folder: "avatarUser",
+    }
+  );
   await fs.unlink(oldPath);
   const hashPassword = await bcrypt.hash(password, 10);
   const user = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    public_id,
   });
   res.status(201).json({
     user,
@@ -56,14 +68,27 @@ const userLog = async (req, res) => {
 };
 
 const userChangeAvatar = async (req, res) => {
-  const { _id, avatarURL } = req.user;
+  const { _id, public_id: p_id } = req.user;
   const { path: filePath } = req.file;
-  await cloudinary.uploader.destroy(avatarURL);
-  const { url: newAvatarURL } = await cloudinary.uploader.upload(filePath, {
-    folder: "avatarUser",
-  });
+  await Jimp.read(filePath)
+    .then((image) => {
+      image.resize(256, 256);
+    })
+    .catch((err) => {
+      err.message;
+    });
+  const { url: newAvatarURL, public_id } = await cloudinary.uploader.upload(
+    filePath,
+    {
+      folder: "avatarUser",
+    }
+  );
   await fs.unlink(filePath);
-  await User.findByIdAndUpdate(_id, { avatarURL: newAvatarURL });
+  await cloudinary.uploader.destroy(p_id).then((result) => console.log(result));
+  await User.findByIdAndUpdate(_id, {
+    avatarURL: newAvatarURL,
+    public_id,
+  });
   res.status(200).json({ newAvatarURL });
 };
 
