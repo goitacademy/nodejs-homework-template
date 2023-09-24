@@ -1,26 +1,26 @@
-const addSchema = require("./validateSchema");
+const {
+  addSchema,
+  statusSchema,
+} = require("../service/schemas/contact");
 
-const validateBody = (error, res) => {
-  const missingField = error.details[0].context.label;
-  return res.status(400).json({
-    message: `missing required ${missingField} field`,
-  });
+const validateBody = (body) => {
+  return addSchema.validate(body);
 };
 
-const validateData = (body, req, res) => {
-  if (!body.name && !body.email && !body.phone) {
-    res.status(400).json({
-      message: "missing fields",
-    });
-    return;
+const validateUpdatedFields = (body, res) => {
+  const { name, email, phone, favorite } = body;
+  if (!name && !email && !phone && !favorite) {
+    return res.status(400).json({ message: "missing fields" });
   }
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    validateBody(error, res);
-  }
+  return addSchema.validate(body);
 };
+
+const validateStatusBody = (body) => {
+  return statusSchema.validate(body);
+}
 
 module.exports = {
   validateBody,
-  validateData,
+  validateUpdatedFields,
+  validateStatusBody,
 };
