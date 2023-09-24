@@ -1,9 +1,21 @@
 import express from "express";
 import Joi from "joi";
 import { HttpError } from "../../helpers/index.js";
-import { addContact, getContactById, listContacts } from "../../models/contacts.js";
+import {
+  addContact,
+  getContactById,
+  listContacts,
+  updateContact,
+  removeContact,
+} from "../../models/contacts.js";
 
 const router = express.Router();
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -28,7 +40,21 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const { body } = req;
+    const { error } = addSchema.validate(body);
+    if (error) throw HttpError(400, error.message);
     const result = await addContact(body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    const { body } = req;
+    const { error } = addSchema.validate(body);
+    if (error) throw HttpError(400, error.message);
+    const result = await updateContact(body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -37,10 +63,6 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   res.json({ message: `DELETE:contactId message` });
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: `PUT:contactId message` });
 });
 
 export default router;
