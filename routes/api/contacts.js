@@ -13,10 +13,14 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const result = await getContactById("0");
-  // console.log("req :>> ", req);
-  if (result === null) return res.status(404).json({ message: "Not found" });
-  res.json(result);
+  try {
+    const { contactId } = req.params;
+    const result = await getContactById(contactId);
+    if (result === null) return res.status(404).json({ message: "Not found" });
+    res.json(result);
+  } catch {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 router.post("/", async (req, res, next) => {
