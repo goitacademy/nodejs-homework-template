@@ -5,13 +5,14 @@ const path = require("path");
 const relativePath = "../data/contacts.json";
 const contactsPath = path.join(__dirname, relativePath);
 
-// console.log(__dirname);
-// console.log(contactsPath);
-
 const listContacts = async () => {
-  const jsondata = await fs.readFile(contactsPath);
-  const parsedData = JSON.parse(jsondata);
-  return parsedData;
+  try {
+    const jsondata = await fs.readFile(contactsPath);
+    const parsedData = JSON.parse(jsondata);
+    return parsedData;
+  } catch (error) {
+    console.error("Error. Could not read file", error.message);
+  }
 };
 
 const getContactById = async (contactId) => {
@@ -28,9 +29,13 @@ const removeContact = async (contactId) => {
   const removedContact = contacts.find((contact) => contact.id === contactId);
   const filteredList = contacts.filter((contact) => contact.id !== contactId);
   console.log("l2", filteredList.length);
-  await fs.writeFile(contactsPath, JSON.stringify(filteredList));
-  console.log("deleted contact:", removedContact);
-  return filteredList;
+  try {
+    await fs.writeFile(contactsPath, JSON.stringify(filteredList));
+    console.log("deleted contact:", removedContact);
+    return filteredList;
+  } catch (error) {
+    console.error("Error. Could not write file", error.message);
+  }
 };
 
 const addContact = async (body) => {
@@ -43,10 +48,13 @@ const addContact = async (body) => {
     phone: phone,
   };
   const updatedList = [...contacts, newContact];
-  await fs.writeFile(contactsPath, JSON.stringify(updatedList));
-  console.log("added new contact:", newContact);
-
-  return newContact;
+  try {
+    await fs.writeFile(contactsPath, JSON.stringify(updatedList));
+    console.log("added new contact:", newContact);
+    return newContact;
+  } catch (error) {
+    console.error("Error. Could not write file", error.message);
+  }
 };
 
 const updateContact = async (contactId, body) => {
@@ -65,8 +73,12 @@ const updateContact = async (contactId, body) => {
       return el;
     }
   });
-  await fs.writeFile(contactsPath, JSON.stringify(updatedContactList));
-  console.log("updated contact:", updatedContactList);
+  try {
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContactList));
+    console.log("updated contact:", updatedContactList);
+  } catch (error) {
+    console.error("Error. Could not write file", error.message);
+  }
 };
 
 module.exports = {

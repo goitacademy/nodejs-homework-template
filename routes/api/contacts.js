@@ -12,23 +12,35 @@ const { validateContact } = require("../../schema/contacts.schema");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
-  res.status(200).json({ status: "Success", code: 200, contacts });
+  try {
+    const contacts = await listContacts();
+    res.status(200).json({ status: "Success", code: 200, contacts });
+  } catch (error) {
+    console.error(error.messsage);
+    res
+      .status(404)
+      .json({ status: "Not found", code: 404, message: "No data found" });
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const contact = await getContactById(req.params.contactId);
-  if (!contact) {
-    res
-      .status(404)
-      .json({ status: "Not Found", code: 404, message: "Contact not found" });
-  } else {
-    res.status(200).json({
-      status: "Success",
-      code: 200,
-      message: `Contact with id: ${req.params.contactId} found`,
-      contact,
-    });
+  try {
+    const contact = await getContactById(req.params.contactId);
+    if (!contact) {
+      res
+        .status(404)
+        .json({ status: "Not Found", code: 404, message: "Contact not found" });
+    } else {
+      res.status(200).json({
+        status: "Success",
+        code: 200,
+        message: `Contact with id: ${req.params.contactId} found`,
+        contact,
+      });
+    }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ status: "Internal Server Error", code: 500 });
   }
 });
 
@@ -50,23 +62,29 @@ router.post("/", async (req, res, next) => {
         message: "Success! New contact added",
         newContact,
       });
+    } else {
+      res.status(500).json({ status: "Internal Server Error", code: 500 });
     }
   }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  const filteredList = await removeContact(req.params.contactId);
-  if (filteredList) {
-    res.status(204).json({
-      status: "No Content",
-      code: "204",
-      message: "Contact successfully deleted",
-      filteredList,
-    });
-  } else {
-    res
-      .status(404)
-      .json({ status: "Not found", code: 404, message: "Contact not found" });
+  try {
+    const filteredList = await removeContact(req.params.contactId);
+    if (filteredList) {
+      res.status(204).json({
+        status: "No Content",
+        code: "204",
+        message: "Contact successfully deleted",
+        filteredList,
+      });
+    } else {
+      res
+        .status(404)
+        .json({ status: "Not found", code: 404, message: "Contact not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ status: "Internal Server Error", code: 500 });
   }
 });
 
