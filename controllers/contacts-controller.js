@@ -38,15 +38,15 @@ const getById = async (req, res) => {
 const add = async (req, res) => {
   const { _id: owner } = req.user;
   const { path: oldPath, filename } = req.file;
-  const fileData = await cloudinary.uploader.upload(oldPath, {
-    folder: "avatars",
+  const { url: avatarURL } = await cloudinary.uploader.upload(oldPath, {
+    folder: "avatar",
   });
-  // console.log(fileData);
+  await fs.unlink(oldPath);
   // const newPath = path.join(path.resolve("public", "avatars"), filename);
   // await fs.rename(oldPath, newPath);
   // const avatarURL = path.join("avatars", filename);
-  // const addContact = await Contact.create({ ...req.body, owner, avatarURL });
-  res.status(201).json(fileData);
+  const addContact = await Contact.create({ ...req.body, owner, avatarURL });
+  res.status(201).json(addContact);
 };
 
 const deleteById = async (req, res) => {

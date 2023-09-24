@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
+import "dotenv/config.js";
 
 const { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KAY, CLOUDINARY_API_SECRET } =
   process.env;
