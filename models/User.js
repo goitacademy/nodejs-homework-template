@@ -37,5 +37,3 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 const User = model("user", userSchema);
 
 export default User;
-
-// ??????

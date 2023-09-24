@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import path from "path";
 import gravatar from "gravatar";
-// ???????
+
 import User from "../models/User.js";
 
 import { HttpErrors, imgOptimizator } from "../utils/index.js";
@@ -141,6 +141,7 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  console.log(req.params);
   const { userId } = req.params;
 
   if (!req.file) {
