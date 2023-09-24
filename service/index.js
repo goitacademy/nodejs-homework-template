@@ -1,4 +1,4 @@
-const Contact = require('./schemas/schemaMongoose');
+const Contact = require('./schemas/schemaContacts');
 
 const getAllContacts = async () => {
     return Contact.find()
