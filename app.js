@@ -10,14 +10,14 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 // app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  console.log("Наше промежуточное ПО");
+  next();
+});
+
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-
-// app.use((req, res, next) => {
-//   console.log("Наше промежуточное ПО");
-//   next();
-// });
 
 app.use("/api/contacts.js", contactsRouter);
 
