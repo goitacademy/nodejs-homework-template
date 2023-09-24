@@ -7,13 +7,13 @@ const getAll = async (req, res, next) => {
   res.json(result);
 };
 
-// const getById = async (req, res, next) => {
-//   const result = await contacts.getContactById(req.params.contactId);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json(result);
-// };
+const getById = async (req, res, next) => {
+  const result = await Contact.findById(req.params.contactId);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
 
 const add = async (req, res, next) => {
   const result = await Contact.create(req.body);
@@ -38,7 +38,7 @@ const add = async (req, res, next) => {
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
+  getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   // deleteById: ctrlWrapper(deleteById),
   // updateById: ctrlWrapper(updateById),
