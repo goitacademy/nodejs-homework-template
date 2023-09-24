@@ -1,68 +1,36 @@
-const fs = require('fs').promises;
-const { nanoid } = require('nanoid');
-const path = require('path');
-
-const contactsPath = path.join(__dirname, "contacts.json");
-const updateContactsList = (contacts) => fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2))
+const Contact = require('./schema/schema')
 
 const listContacts = async () => {
-  const result = await fs.readFile(contactsPath)
-
-  return JSON.parse(result);
+  return Contact.find();
 };
 
 const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const [result] = contacts.filter(contact => contact.id === id)
-
-  return result || null;
+  return Contact.findById(id);
 };
 
-const addContact = async ({name, email, phone}) => {
-  const contacts = await listContacts();
-
-  const newContact = {
-    id: nanoid(),
-    name,
-    email,
-    phone
-  };
-  contacts.push(newContact)
-
-  await updateContactsList(contacts);
-
-  return newContact
+const addContact = async (body) => {
+  return Contact.create(body);
 };
 
-const updateContact = async (id, { name, email, phone }) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(contact => contact.id === id)
-  if (index === -1) { return null }
+const updateContact = async (id, body) => {
+  return Contact.findByIdAndUpdate(id, body, { new: true });
+};
 
-  contacts[index] = { id, name, email, phone };
-  await updateContactsList(contacts);
-
-  return contacts[index];
+const updateStatusContact  = async (id, body) => {
+  return Contact.findByIdAndUpdate(id, body, { new: true });
 };
 
 const removeContact = async (id) => {
-    const contacts = await listContacts();
-    const index = contacts.findIndex(contact => contact.id === id)
-
-    if (index === -1) {return null}
-
-    const [result] = contacts.splice(index, 1);
-    await updateContactsList(contacts);
-
-    return result || null;
-}
+  return Contact.findByIdAndRemove(id)
+};
 
 const contactsAPI = {
   listContacts,
   getContactById,
-  removeContact,
-  updateContact,
   addContact,
+  updateContact,
+  updateStatusContact ,
+  removeContact,
 };
 
 module.exports = contactsAPI;

@@ -1,5 +1,5 @@
 const contactsAPI = require('../models/contacts');
-const { HttpErrors, ctrWrapper } = require('../helpers');
+const { HttpErrors, ctrlWrapper } = require('../helpers');
 
 const getAll = async (req, res, next) => {
         const contacts = await contactsAPI.listContacts()
@@ -7,7 +7,7 @@ const getAll = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-        const { contactId } = req.params;
+    const { contactId } = req.params;
         const contact = await contactsAPI.getContactById(contactId);
         if (!contact) {
             throw HttpErrors(404, 'Not Found')
@@ -29,6 +29,15 @@ const updateById = async (req, res, next) => {
         res.json(contact);
 };
 
+const updateStatusById = async (req, res, next) => {
+        const { contactId } = req.params;
+        const contact = await contactsAPI.updateStatusContact(contactId, req.body);
+        if (!contact) {
+            throw HttpErrors(404, 'Not found')
+        };
+        res.json(contact);
+};
+
 const deleteById = async (req, res, next) => {
         const { contactId } = req.params;
         const contact = await contactsAPI.removeContact(contactId);
@@ -39,9 +48,10 @@ const deleteById = async (req, res, next) => {
 };
 
 module.exports = {
-    getAll: ctrWrapper(getAll),
-    getById: ctrWrapper(getById),
-    add: ctrWrapper(add),
-    updateById: ctrWrapper(updateById),
-    deleteById: ctrWrapper(deleteById),
+    getAll: ctrlWrapper(getAll),
+    getById: ctrlWrapper(getById),
+    add: ctrlWrapper(add),
+    updateById: ctrlWrapper(updateById),
+    updateStatusById: ctrlWrapper(updateStatusById),
+    deleteById: ctrlWrapper(deleteById),
 }
