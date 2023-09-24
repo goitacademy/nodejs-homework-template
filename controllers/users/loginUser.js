@@ -8,10 +8,17 @@ const { SECRET_KEY } = process.env;
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
+  
+  if (!user) {
+    return res.status(401).json({ message: "Email or password is wrong" });
+  }
+
   const passwordCompare = await bcrypt.compare(password, user.password);
 
-  if (!user || !passwordCompare) {
-    throw HttpError(401, "Email or password is wrong");
+  
+  if (!passwordCompare) {
+    return res.status(401).json({ message: "Email or password is wrong" });
   }
 
   const payload = {
@@ -30,6 +37,8 @@ const loginUser = async (req, res) => {
     },
   });
 };
+
+module.exports = loginUser;
 
 
 module.exports = loginUser;
