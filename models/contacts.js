@@ -12,9 +12,9 @@ const listContacts = async () => {
   return usersList;
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const allContacts = await listContacts();
-  const result = allContacts.find((user) => user.id === contactId);
+  const result = allContacts.find((user) => user.id === id);
 
   return result || null;
 };
