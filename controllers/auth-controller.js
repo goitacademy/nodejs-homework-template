@@ -1,12 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import fs from "fs/promises";
-import path from "path";
-import gravatar from "gravatar";
 
 import User from "../models/User.js";
 
-import { HttpErrors, imgOptimizator } from "../utils/index.js";
+import { HttpErrors } from "../utils/index.js";
 
 import { controllerWrapper } from "../decorators/index.js";
 
@@ -19,31 +16,9 @@ const signup = async (req, res) => {
     throw HttpErrors(409, "Email already exist");
   }
 
-  let avatarURL = null;
-
-  if (req.file) {
-    const { path: oldPath, filename } = req.file;
-    const pathSaveAvatar = path.join("public", "avatars", filename);
-
-    await imgOptimizator(oldPath, pathSaveAvatar);
-
-    avatarURL = path.join("avatars", filename);
-
-    fs.unlink(oldPath);
-  } else {
-    const gravatarUrl = gravatar.url(email, {
-      s: "250",
-    });
-    avatarURL = gravatarUrl;
-  }
-
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({
-    ...req.body,
-    password: hashPassword,
-    avatarURL,
-  });
+  const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
     email: newUser.email,
@@ -52,7 +27,6 @@ const signup = async (req, res) => {
 };
 
 const signin = async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -116,7 +90,7 @@ const refresh = async (req, res) => {
     const payload = {
       id,
     };
-    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "4h" });
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
     const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
     await User.findByIdAndUpdate(id, { accessToken, refreshToken });
 
@@ -131,44 +105,12 @@ const refresh = async (req, res) => {
 
 const updateSubscription = async (req, res) => {
   const { userId } = req.params;
-
   const result = await User.findByIdAndUpdate(userId, req.body, {
     new: true,
   });
   if (!result) {
     throw HttpErrors(404);
   }
-  res.json(result);
-};
-
-const updateAvatar = async (req, res) => {
-  const { userId } = req.params;
-
-  if (!req.file) {
-    throw HttpErrors(404);
-  }
-
-  const { path: oldPath, filename } = req.file;
-
-  const pathSaveAvatar = path.join("public", "avatars", filename);
-
-  await imgOptimizator(oldPath, pathSaveAvatar);
-
-  const avatarURL = path.join("avatars", filename);
-
-  fs.unlink(oldPath);
-
-  const result = await User.findByIdAndUpdate(
-    userId,
-    { avatarURL },
-    {
-      new: true,
-    }
-  );
-  if (!result) {
-    throw HttpErrors(404);
-  }
-
   res.json(result);
 };
 
@@ -179,5 +121,4 @@ export default {
   getCurrent: controllerWrapper(getCurrent),
   signout: controllerWrapper(signout),
   updateSubscription: controllerWrapper(updateSubscription),
-  updateAvatar: controllerWrapper(updateAvatar),
 };

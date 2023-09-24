@@ -14,7 +14,6 @@ contactrouter.get("/:contactId", isValidId, controllerContact.getContactById);
 
 contactrouter.post(
   "/",
-
   validationContact.addContactValidate,
   controllerContact.addContact
 );
