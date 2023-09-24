@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const createError = require("../../../untils/createError");
 const handlerError = require("../../../middlewears/handlerError");
 const contactService = require("../api/contacts");
-router.get("/", contactService.getContacts);
+const auth = require('../../../middlewears/auth')
+router.get("/", auth, contactService.getContacts);
 
 router.get("/:contactId", contactService.getContactId);
 

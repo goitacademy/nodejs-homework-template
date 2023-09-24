@@ -2,8 +2,9 @@ const userService = require("../../../services/users");
 const createError = require("../../../untils/createError");
 const ERROR_TYPES = require("../contastants/errorTypes");
 const bcrypt = require("bcrypt");
-const {JWT_SECRET} = require('../../../constants/env')
-const jwt = require('jsonwebtoken')
+const passport = require("../../../auth/index");
+const { JWT_SECRET } = require("../../../constants/env");
+const jwt = require("jsonwebtoken");
 const registerUser = async (req, res, next) => {
   try {
     const { body } = req;
@@ -46,21 +47,51 @@ const loginUser = async (req, res, next) => {
       });
       throw error;
     }
-    const serializedUser  = user.toObject()
-    delete serializedUser.password
-    const token = jwt.sign( { sub: serializedUser._id, role: serializedUser.role },
+    const serializedUser = user.toObject();
+    delete serializedUser.password;
+    const token = jwt.sign(
+      { sub: serializedUser._id, role: serializedUser.role },
       JWT_SECRET,
-      { expiresIn: 3600 },)
+      { expiresIn: 3600 }
+    );
 
+    res.cookie("jwt", token, { secure: true });
     res.status(200).json({
       data: {
         token,
-        user
+        user,
       },
     });
   } catch (e) {
     next(e);
   }
 };
-
-module.exports = { registerUser, loginUser };
+const logout = async (req, res, next) => {
+  try{
+      res.clearCookie("jwt");
+      return res.status(204).json();
+ }catch(e){
+  next(e)
+ }
+};
+const currentUser = async (req, res, next) => {
+  try{
+    let user = req.user
+    if(!user){
+      const error = createError(ERROR_TYPES.UNAUTHORIZED, {
+        message: "Not authorized",
+      });
+      throw error;
+    }
+    const {email,subscription} = user[0]
+    console.log(user)
+    res.status(200).json({
+      data:{
+        email,
+        subscription}
+    });
+  }catch(e){
+    next(e)
+  }
+};
+module.exports = { registerUser, loginUser, logout, currentUser };

@@ -5,8 +5,12 @@ const registerUser = async (body) => {
   return user;
 };
 const findUser = async (email) => {
-  const user = await User.find({ email });
+  const user = await User.find({email});
   return user
 };
 
-module.exports = { registerUser, findUser };
+const findUserById = async (_id) => {
+  const user = await User.find({_id});
+  return user
+}
+module.exports = { registerUser, findUser,findUserById };

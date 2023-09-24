@@ -1,5 +1,6 @@
 const contactService = require("../../../services/contacts");
 
+
 const getContacts = async (req, res, next) => {
   try {
     const results = await contactService.listContacts();
