@@ -1,7 +1,8 @@
-import express from 'express';
-const router = express.Router();
+// import express from 'express';
+import { Router } from 'express';
+const router = Router();
+// const router = express.Router();
 
-console.log('router', router);
 router.get('/', async (req, res, next) => {
   console.log('req', req);
   res.send('<h2>Home</h2>');

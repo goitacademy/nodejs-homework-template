@@ -3,7 +3,7 @@
 // const cors = require('cors')
 import contactsRouter from './routes/api/contacts.js';
 import express from 'express';
-// import { logger } from 'morgan';
+import logger from 'morgan';
 // import { cors } from 'cors';
 // import contactsRouter from "('./routes/api/contacts')";
 
@@ -13,9 +13,9 @@ const app = express();
 // });
 // app.listen(3000, () => console.log('Server runin'));
 
-// const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-// app.use(logger(formatsLogger));
+app.use(logger(formatsLogger));
 // app.use(cors());
 // app.use(express.json());
 
