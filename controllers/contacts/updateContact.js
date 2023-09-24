@@ -2,13 +2,29 @@ const { Contact } = require("../../models/contact");
 
 const { HttpError } = require("../../helpers");
 
-const updateContact = async (req, res) => {
+const updateContact = async (req, res, next) => {
+  const { name, email, phone, favorite } = req.body;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
-  if (!result) {
-    throw HttpError(404, "Not found");
+
+  try {
+    const contact = await Contact.findByIdAndUpdate(
+      contactId,
+      { name, email, phone, favorite },
+      { new: true }
+    );
+
+    if (!contact) {
+      return next(HttpError(404, "Contact not found"));
+    }
+
+    if (contact.owner.toString() !== req.user.id) {
+      return next(HttpError(403, "Forbidden"));
+    }
+
+    res.json(contact);
+  } catch (error) {
+    next(error);
   }
-  res.json(result);
 };
 
 module.exports = updateContact;
