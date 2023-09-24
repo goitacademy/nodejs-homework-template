@@ -1,5 +1,5 @@
 import Jimp from "jimp";
-// ???????
+
 const imgOptimizator = async (pathImg, pathSave) => {
   Jimp.read(pathImg, async (err, avatar) => {
     if (err) {

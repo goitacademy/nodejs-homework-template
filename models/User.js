@@ -23,6 +23,7 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
+    avatarURL: { type: String },
   },
   { versionKey: false, timestamps: true }
 );
@@ -36,5 +37,3 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 const User = model("user", userSchema);
 
 export default User;
-
-// ??????
