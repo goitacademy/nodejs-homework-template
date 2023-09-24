@@ -2,7 +2,8 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 // import bodyParser from "body-parser";
-import * as contactsRouter from "./routes/api/contacts.js";
+// import * as contactsRouter from "./routes/api/contacts.js";
+import { router as contactsRouter } from "./routes/api/contacts.js";
 
 const app = express();
 

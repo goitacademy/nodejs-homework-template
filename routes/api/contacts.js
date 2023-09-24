@@ -1,6 +1,7 @@
+"use strict";
 import express from "express";
 
-const router = express.Router();
+export const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   res.json({ message: "This is main router /" });
@@ -22,4 +23,4 @@ router.put("/:contactId", async (req, res, next) => {
   res.json({ message: `PUT:contactId message` });
 });
 
-export default router;
+// export default router;
