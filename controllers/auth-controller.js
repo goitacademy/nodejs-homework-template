@@ -141,6 +141,7 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  console.log(req.params);
   const { userId } = req.params;
 
   if (!req.file) {
