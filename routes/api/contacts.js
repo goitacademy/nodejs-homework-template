@@ -1,9 +1,11 @@
 import express from "express";
+import { listContacts } from "../../models/contacts.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "This is main router /" });
+  const result = await listContacts();
+  res.json(result);
 });
 
 router.get("/:contactId", async (req, res, next) => {
