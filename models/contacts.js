@@ -7,10 +7,6 @@ const contacts = require("./contacts.json");
 
 let url = path.join(__dirname + "/contacts.json");
 
-// const listContacts = async () => {
-//   return contacts;
-// };
-
 const filePath = path.join(__dirname, "contacts.json");
 const listContacts = async() => {
     const data = await fs.readFile(filePath);
