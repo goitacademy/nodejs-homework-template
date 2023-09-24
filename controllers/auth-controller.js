@@ -1,6 +1,13 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+<<<<<<< HEAD
 
+=======
+import fs from "fs/promises";
+import path from "path";
+import gravatar from "gravatar";
+// ???????
+>>>>>>> hw05-avatars
 import User from "../models/User.js";
 
 import { HttpErrors } from "../utils/index.js";
