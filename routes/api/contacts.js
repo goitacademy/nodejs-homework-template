@@ -1,6 +1,6 @@
 const express = require('express')
-const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/controller')
-const { contactSchemaPost, contactSchemaPut } = require('../../validate/validateContacts')
+const { listContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact } = require('../../db/controller')
+const { contactSchemaPost, contactSchemaPut, contactSchemaPatch } = require('../../validate/validateContacts')
 
 const router = express.Router()
 
@@ -120,6 +120,34 @@ router.put('/:contactId', async (req, res, next) => {
   }
 })
 
+
+
+
+// ======PATCH_CONTACT=======
+router.patch('/:contactId/favorite', async (req,res,next)=>{
+  try {
+    const {error} = contactSchemaPatch.validate(req.body)
+    if (error) {
+      res.status(400).json({ result: {
+        status: "rejected",
+        code: 400,
+        message: "missing field favorite",
+      }})
+      throw error
+    }
+    const patchFavorite = await updateStatusContact(req.params.contactId, req.body)
+    res.json({result: {
+      status: "success",
+      code: 200,
+      data: patchFavorite
+    }})
+  } catch (error) {
+    next(error)
+  }
+})
+
+
+contactSchemaPatch
 
 
 module.exports = router
