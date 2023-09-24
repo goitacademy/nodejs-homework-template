@@ -8,12 +8,10 @@ const userRefreshValidate = validateBody(userSchema.userRefreshTokenSchema);
 const userSubscriptionValidate = validateBody(
   userSchema.userUpdateSubscriptionSchema
 );
-const userAvatarValidate = validateBody(userSchema.userUpdateAvatarSchema);
 
 export default {
   userSignUPtValidate,
   userSignINValidate,
   userRefreshValidate,
   userSubscriptionValidate,
-  userAvatarValidate,
 };
