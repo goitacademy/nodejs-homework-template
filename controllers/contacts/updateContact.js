@@ -8,7 +8,7 @@ const updateContact = async (req, res, next) => {
 
   try {
     const contact = await Contact.findByIdAndUpdate(
-      contactId,
+      { _id: contactId, owner: req.user.id },
       { name, email, phone, favorite },
       { new: true }
     );

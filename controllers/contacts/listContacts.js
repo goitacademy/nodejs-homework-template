@@ -1,9 +1,15 @@
-const { Contact } = require("../../models/contact.js");
+const { Contact } = require("../../models/contact");
+const { HttpError } = require("../../helpers");
 
-const listContacts = async (_, res) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
-  console.log(result);
-  res.json(result);
+const listContacts = async (req, res, next) => {
+  const { id: owner } = req.user;
+
+  try {
+    const contacts = await Contact.find({ owner }, "-createdAt -updatedAt");
+    res.json(contacts);
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = listContacts;

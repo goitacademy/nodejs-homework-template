@@ -1,10 +1,8 @@
-const Contact = require("../models/contact");
-const HttpError = require("../helpers/HttpError");
-
+const { HttpError } = require("../helpers");
 
 const addContact = async (req, res, next) => {
   const { name, email, phone, favorite } = req.body;
-  const owner = req.user.id; 
+  const { id: owner } = req.user;
 
   const contact = new Contact({ name, email, phone, favorite, owner });
 
