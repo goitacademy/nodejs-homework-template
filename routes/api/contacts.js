@@ -4,9 +4,9 @@ const router = Router();
 
 router.get('/', async (req, res, next) => {
   // res.send(contactServises.listContacts());
-  const a = await contactServises.listContacts();
-  console.log('a', a);
-  // res.json(contactServises.listContacts());
+  // const a = await contactServises.listContacts();
+  // console.log('a', a);
+  res.send(await contactServises.listContacts());
 });
 
 router.get('/:contactId', async (req, res, next) => {

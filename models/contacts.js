@@ -1,11 +1,10 @@
 import fs from 'fs/promises';
 import path from 'path';
-const contactPath = path.resolve('models', 'contacts.js');
+const contactPath = path.resolve('models', 'contacts.json');
 
 export const listContacts = async () => {
   const data = await fs.readFile(contactPath);
-  // console.log('list', data.toString());
-  // return JSON.parse(data);
+  return JSON.parse(data);
 };
 
 export const getContactById = async contactId => {};
