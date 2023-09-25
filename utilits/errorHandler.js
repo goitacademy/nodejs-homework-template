@@ -1,9 +1,8 @@
-const errorHandler = (condition, status, message) => {
-    if (condition) {
+const errorHandler = ( status, message) => {
+
       const error = new Error(message);
       error.status = status;
-      throw error;
-    }
+      return error;
   };
-  
+
   module.exports = errorHandler;
