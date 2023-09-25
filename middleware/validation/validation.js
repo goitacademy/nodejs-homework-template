@@ -4,5 +4,3 @@ import { validateBody } from "../../decorators/index.js";
 
 export const ausValidate = validateBody(userSingSchema);
 export const contactValidate = validateBody(contactAddSchema);
-
-// export default contactValidate;

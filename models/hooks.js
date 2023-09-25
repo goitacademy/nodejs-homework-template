@@ -8,4 +8,3 @@ export const runValidateAtUpdate = (next) => {
   this.options.runValidators = true;
   next();
 };
-// export default hookError;
