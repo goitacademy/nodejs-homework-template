@@ -7,8 +7,6 @@ const { SECRET_KEY } = process.env;
 const { User } = require("../models/user");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
-const { token } = require("morgan");
-// const { json } = require("express");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -73,9 +71,35 @@ const logout = async (req, res) => {
   })
 };
 
+
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+
+   try {
+    // Перевірка, чи передано коректне значення підписки
+     if (!["starter", "pro", "business"].includes(subscription)) {
+      
+      return res.status(400).json({ error: "Invalid subscription value" });
+    }
+
+    // Оновлення підписки користувача
+    const updatedUser = await User.findByIdAndUpdate(req.user.id, { subscription }, { new: true });
+
+    res.status(200).json({
+      email: updatedUser.email,
+      subscription: updatedUser.subscription,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };

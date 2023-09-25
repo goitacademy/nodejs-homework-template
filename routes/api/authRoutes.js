@@ -17,4 +17,7 @@ router.get('/current', authenticate, ctrl.getCurrent);
 // маршрут для розлогування
 router.post('/logout', authenticate, ctrl.logout);
 
+// PATCH: оновлення підписки користувача
+router.patch('/', authenticate, ctrl.updateSubscription);
+
 module.exports = router;

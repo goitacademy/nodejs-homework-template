@@ -5,10 +5,23 @@ const { Contact } = require("../models/contact");
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
 
+  // пагінація
   const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {skip, limit}).populate('owner', 'name email');
-  res.json(result);
+
+  const { favorite } = req.query; 
+  const filter = { owner };
+  // якщо в запиті є параметр favorite, фільтруємо обрані (favorite = true)
+   if (favorite === "true" || favorite === "false") {
+    filter.favorite = favorite === "true";
+  }
+ try {
+    const result = await Contact.find(filter, "-createdAt -updatedAt", { skip, limit }).populate('owner', 'name email');
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+
 };
 
 const getContactById = async (req, res) => {
@@ -65,6 +78,8 @@ const updateStatusContact = async (req, res) => {
 
   res.status(200).json(result);
 };
+
+
 
 module.exports = {
   listContacts: ctrlWrapper(listContacts),

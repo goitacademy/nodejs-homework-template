@@ -7,7 +7,7 @@ const {schemas} = require("../../models/contact");
 const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
 
-// GET: отримання всіх контактів
+// GET: отримання всіх контактів або фільтрація всіх контактів за полем "обраний"
 router.get('/', authenticate, ctrl.listContacts);
 
 
