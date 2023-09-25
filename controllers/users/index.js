@@ -3,7 +3,7 @@ const loginUser = require("./loginUser");
 const logoutUser = require("./logoutUser");
 const getCurrentUser = require("./getCurrentUser");
 const updateStatusUser = require("./updateStatusUser");
-const ctrlWrapper = require("../../helpers/ctrlWrapper");
+const ctrlWrapper = require("../../helperss/ctrlWrapper");
 
 module.exports = {
   registerUser: ctrlWrapper(registerUser),
