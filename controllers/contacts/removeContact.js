@@ -6,17 +6,12 @@ const removeContact = async (req, res) => {
   const userId = req.user._id;
 
   try {
-    const contact = await Contact.findById(id);
+ 
+    const deletedContact = await Contact.findOneAndRemove({ _id: id, owner: userId });
 
-    if (!contact) {
+    if (!deletedContact) {
       throw httpError(404, 'Not found');
     }
-
-    if (contact.owner.toString() !== userId.toString()) {
-      throw httpError(403, 'Access denied');
-    }
-
-    await Contact.findByIdAndRemove(id);
 
     res.json({
       message: 'Contact deleted',

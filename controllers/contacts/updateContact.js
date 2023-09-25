@@ -6,20 +6,16 @@ const updateContact = async (req, res) => {
   const userId = req.user._id;
 
   try {
-    
-    const contact = await Contact.findById(id);
 
-    if (!contact) {
+    const updatedContact = await Contact.findOneAndUpdate(
+      { _id: id, owner: userId },
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedContact) {
       throw httpError(404, 'Not found');
     }
-
-    if (contact.owner.toString() !== userId.toString()) {
-      throw httpError(403, 'Access denied');
-    }
-
-    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
 
     res.json(updatedContact);
   } catch (error) {
