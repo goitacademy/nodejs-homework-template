@@ -5,6 +5,7 @@ const fs = require("fs/promises");
 const moment = require("moment");
 
 const contactsRouter = require("./routes/api/contacts");
+// const { error } = require("console");
 
 const app = express();
 
