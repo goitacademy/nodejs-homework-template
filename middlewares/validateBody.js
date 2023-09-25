@@ -7,6 +7,8 @@ const validateBody = (schema) => {
         ? next(HttpError(400, "missing field favorite"))
         : req.route.path === "/" && req.route.methods.patch
         ? next(HttpError(400, "missing field subscription"))
+        : req.route.path === "/verify"
+        ? next(HttpError(400, "missing required field email"))
         : next(HttpError(400, "missing fields"));
     }
     const { error } = schema.validate(req.body);
