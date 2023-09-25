@@ -18,7 +18,7 @@ const sendMail = async ({to, subject, html}) => {
 
   const email = {
     to,
-    from: 'hw6',
+    from: 'trifonowden@meta.ua',
     subject,
     html,
   };
