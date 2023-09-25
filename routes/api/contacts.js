@@ -3,10 +3,8 @@ import * as contactServises from '../../models/contacts.js';
 const router = Router();
 
 router.get('/', async (req, res, next) => {
-  // res.send(contactServises.listContacts());
-  // const a = await contactServises.listContacts();
-  // console.log('a', a);
-  res.send(await contactServises.listContacts());
+  res.json(await contactServises.listContacts());
+  // res.send(await contactServises.listContacts());
 });
 
 router.get('/:contactId', async (req, res, next) => {
