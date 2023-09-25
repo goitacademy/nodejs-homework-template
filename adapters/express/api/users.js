@@ -84,7 +84,6 @@ const currentUser = async (req, res, next) => {
       throw error;
     }
     const {email,subscription} = user[0]
-    console.log(user)
     res.status(200).json({
       data:{
         email,
