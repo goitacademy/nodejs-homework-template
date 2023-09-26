@@ -2,11 +2,16 @@ const { ctrlWrapper } = require('../../utils');
 const { Contact } = require('../../models');
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user; 
 
-  res.status(201).json(result);
+  try {
+    const result = await Contact.create({ ...req.body, owner });
+
+    res.status(201).json(result);
+  } catch (error) {
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || 'Internal Server Error' });
+  }
 };
 
-module.exports = {
-  addContact: ctrlWrapper(addContact),
-};
+module.exports = ctrlWrapper(addContact);

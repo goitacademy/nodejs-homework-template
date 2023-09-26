@@ -2,19 +2,26 @@ const { Contact } = require('../../models');
 const { httpError, ctrlWrapper } = require('../../utils');
 
 const updateContact = async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
+  const userId = req.user._id;
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  try {
 
-  if (!result) {
-    throw httpError(404, 'Not found');
+    const updatedContact = await Contact.findOneAndUpdate(
+      { _id: id, owner: userId },
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      throw httpError(404, 'Not found');
+    }
+
+    res.json(updatedContact);
+  } catch (error) {
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || 'Internal Server Error' });
   }
-
-  return res.json(result);
 };
 
-module.exports = {
-  updateContact: ctrlWrapper(updateContact),
-};
+module.exports = ctrlWrapper(updateContact);

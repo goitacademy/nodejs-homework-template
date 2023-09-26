@@ -2,19 +2,24 @@ const { Contact } = require('../../models');
 const { httpError, ctrlWrapper } = require('../../utils');
 
 const removeContact = async (req, res) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
+  const userId = req.user._id;
 
-  const result = await Contact.findByIdAndRemove(contactId);
+  try {
+ 
+    const deletedContact = await Contact.findOneAndRemove({ _id: id, owner: userId });
 
-  if (!result) {
-    throw httpError(404, 'Not found');
+    if (!deletedContact) {
+      throw httpError(404, 'Not found');
+    }
+
+    res.json({
+      message: 'Contact deleted',
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(error.status || 500).json({ message: error.message || 'Internal Server Error' });
   }
-
-  res.json({
-    message: 'contact deleted',
-  });
 };
 
-module.exports = {
-  removeContact: ctrlWrapper(removeContact),
-};
+module.exports = ctrlWrapper(removeContact);
