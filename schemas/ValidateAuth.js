@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const subscriptionList = require("../constants/subscription");
 
 const userSchema = new Schema(
   {
@@ -14,11 +15,10 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionList,
       default: "starter",
     },
     token: String,
-
   },
   { versionKey: false, timestamps: true }
 );

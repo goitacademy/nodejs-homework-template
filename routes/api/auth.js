@@ -8,6 +8,7 @@ const {
 } = require("../../schemas/ValidateAuth");
 const ctrl = require("../../controllers/usersCtrl");
 const authenticate = require("../../middlewares/authenticate");
+const { validateUpdateSubscription } = require("../../schemas/ValidateSchemasContacts");
 
 router.post(
   "/register",
@@ -23,6 +24,13 @@ router.post(
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
-router.post("/logout", authenticate, ctrl.logout)
+router.post("/logout", authenticate, ctrl.logout);
+
+router.patch(
+  "/:userId",
+  authenticate,
+  ValidateBodyContact(validateUpdateSubscription),
+  ctrl.updateUserSubscription
+);
 
 module.exports = router;

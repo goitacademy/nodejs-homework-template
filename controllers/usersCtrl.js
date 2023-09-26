@@ -1,4 +1,9 @@
-const { registerUserInDB, loginUserInDB, logoutFromDB } = require("../models/users");
+const {
+  registerUserInDB,
+  loginUserInDB,
+  logoutFromDB,
+  updateUserSubscriptionInDB
+} = require("../models/users");
 
 const registerUser = async (req, res, next) => {
   try {
@@ -39,9 +44,21 @@ const logout = async (req, res, next) => {
   }
 };
 
+const updateUserSubscription = async (req, res, next) => {
+  try {
+    const { subscription } = req.body;
+    const {userId} = req.params;
+    const result = await updateUserSubscriptionInDB(req.user, userId, subscription);
+    res.status(200).json(result)
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   getCurrent,
   logout,
+  updateUserSubscription,
 };

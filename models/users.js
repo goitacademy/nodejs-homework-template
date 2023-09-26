@@ -45,12 +45,21 @@ const loginUserInDB = async (body) => {
 
 const logoutFromDB = async (user) => {
   const { _id } = user;
-    const result = await User.findByIdAndUpdate(_id, { token: "" });
-    return result
+  const result = await User.findByIdAndUpdate(_id, { token: "" });
+  return result;
+};
+
+const updateUserSubscriptionInDB = async ({_id}, userId, subscription) => {
+  if (_id.toString() !== userId) {
+    throw HttpError(403)
+  }
+  const result = await User.findByIdAndUpdate(_id, { subscription }, {new: true});
+  return result;
 };
 
 module.exports = {
   registerUserInDB,
   loginUserInDB,
   logoutFromDB,
+  updateUserSubscriptionInDB,
 };
