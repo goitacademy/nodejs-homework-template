@@ -2,11 +2,6 @@ const { HttpError } = require('../helpers');
 const { ContactModel } = require('../models');
 const { userSchema } = require('../schemas');
 const { ctrlWrapper } = require('../decorators');
-const {
-  findByIdAndUpdate,
-  findByIdAndDelete,
-  findByIdAndRemove,
-} = require('../models/contact-model');
 
 // Create - add
 // Read   - getAll
@@ -26,7 +21,7 @@ const getAll = async (_, res) => {
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactModel.findById(contactId);
+  const result = await ContactModel.findById(contactId).select('-_id');
 
   if (!result) {
     throw HttpError(404);
@@ -59,11 +54,10 @@ const updateById = async (req, res) => {
   }
 
   const { contactId } = req.params;
-  const result = await ContactModel.findByIdAndUpdate(
-    contactId,
-    { ...req.body },
-    { new: true, runValidators: true }
-  );
+  const result = await ContactModel.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+    runValidators: true,
+  });
   if (!result) {
     throw HttpError(404);
   }
