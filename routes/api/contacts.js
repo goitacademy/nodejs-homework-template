@@ -1,14 +1,15 @@
 const express = require('express');
-const { listContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact } = require('../../models/contacts');
+const { listContacts, getContactById, addContact, removeContact, updateContact, updateStatusContact } = require('../../controllers/contacts');
 const { checkContactById, checkCreateContactData, checkUpdateContactData } = require('../../middlewares/contactMiddlewares');
+const {auth} = require('../../middlewares/userMiddlewares')
 
 const router = express.Router()
 
-router.get('/', listContacts);
+router.get('/', auth, listContacts);
 
 router.get('/:contactId', checkContactById,  getContactById);
 
-router.post('/', checkCreateContactData, addContact);
+router.post('/', auth,  checkCreateContactData, addContact);
 
 router.delete('/:contactId', checkContactById, removeContact);
 

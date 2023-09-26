@@ -8,7 +8,6 @@ const { contactDataValidator } = require('../utils/contactValidators');
 exports.checkContactById = catchAsync(async (req, res, next) => {
   try {
     const { contactId } = req.params;
-
     const idIsValid = Types.ObjectId.isValid(contactId);
 
     if (!idIsValid) throw new AppError(400, 'Bad request..');
@@ -20,8 +19,8 @@ exports.checkContactById = catchAsync(async (req, res, next) => {
     req.contact = contact;
 
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -38,8 +37,8 @@ exports.checkCreateContactData = catchAsync(async (req, res, next) => {
     req.body = value;
 
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
 
@@ -56,7 +55,7 @@ exports.checkUpdateContactData = catchAsync(async (req, res, next) => {
     req.body = value;
 
     next();
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 });
