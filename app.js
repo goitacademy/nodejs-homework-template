@@ -3,6 +3,7 @@ const logger = require("morgan");
 const cors = require("cors");
 const fs = require("fs/promises");
 const moment = require("moment");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
