@@ -20,6 +20,11 @@ const ContactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -37,23 +42,23 @@ const addSchema = Joi.object({
   email: Joi.string()
     .email({
       minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
+      // tlds: { allow: ["com", "net"] },
     })
     .required(),
-    phone: Joi.string().required(),
+  phone: Joi.string().required(),
   favorite: Joi.boolean().required(),
 });
 
 const updateFavoriteSchema = Joi.object({
-    favorite: Joi.boolean().required()
-})
+  favorite: Joi.boolean().required(),
+});
 
 const schemas = {
-    addSchema,
-    updateFavoriteSchema,
-}
+  addSchema,
+  updateFavoriteSchema,
+};
 
 // створюємо модель - клас, який буде працювати з колекцією контактів
 const Contact = model("contact", ContactSchema);
 
-module.exports = {Contact, schemas};
+module.exports = { Contact, schemas };
