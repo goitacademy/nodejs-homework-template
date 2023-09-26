@@ -3,12 +3,11 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const diskPath = path.join(process.cwd(), "public/avatars/");
+    const diskPath = path.join(process.cwd(), "tmp");
     cb(null, diskPath);
   },
   filename: function (req, file, cb) {
     const timeStem = new Date().toISOString().replace(/:/g, '-');
-    console.log(file.originalname)
     cb(null, timeStem + "-" + file.originalname);
   },
 });

@@ -13,8 +13,9 @@ const findUserById = async (_id) => {
   const user = await User.find({_id});
   return user
 }
-const updateByUserAvatar = async (avatarURL) => {
-  const user = await User.updateOne({avatarURL})
+const updateByUserAvatar = async (_id,avatarURL) => {
+  const user = await User.findByIdAndUpdate(_id,{avatarURL})
   return user
 }
+
 module.exports = { registerUser, findUser,findUserById,updateByUserAvatar };
