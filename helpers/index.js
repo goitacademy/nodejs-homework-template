@@ -1,4 +1,4 @@
-const HttpError = require("./HttpError");
+const HttpError = require("./HttpError"); // Error
 const ctrlWrapper = require("./ctrlWrapper");
 const handleMongooseError = require("./handleMongooseError");
 

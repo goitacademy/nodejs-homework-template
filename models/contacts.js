@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require("mongoose"); // schema
 
 const contactSchema = new Schema(
   {
@@ -29,5 +29,4 @@ contactSchema.post("save", (err, data, next) => {
 });
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact; // export
-
+module.exports = Contact;

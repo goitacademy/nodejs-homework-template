@@ -5,7 +5,7 @@ const path = require("path");
 const fs = require("fs/promises");
 
 const { User } = require("../models/user");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers"); // Error
 
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
@@ -92,7 +92,6 @@ const updateAvatar = async (req, res) => {
   });
 };
 
-// export
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),

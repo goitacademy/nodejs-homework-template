@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require("mongoose"); //  schema
 const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
