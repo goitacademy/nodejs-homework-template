@@ -25,4 +25,4 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-module.exports = authenticate; // export
+module.exports = authenticate;

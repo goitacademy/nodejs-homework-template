@@ -51,7 +51,6 @@ const schemas = {
 const User = model("user", userSchema);
 
 module.exports = {
-  // export
   User,
   schemas,
 };

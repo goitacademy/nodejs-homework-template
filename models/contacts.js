@@ -29,5 +29,5 @@ contactSchema.post("save", (err, data, next) => {
 });
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact;
+module.exports = Contact; // export
 
