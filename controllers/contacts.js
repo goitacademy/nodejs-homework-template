@@ -1,7 +1,5 @@
-const Contact=require("../models/contact")
-const {
-  HttpError,
-  ctrlWrapper } = require("../helpers");
+const Contact = require("../models/contact");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const result = await Contact.find();
@@ -35,7 +33,9 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body,{new:true});
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -44,9 +44,11 @@ const updateById = async (req, res) => {
 
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body,{new:true});
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(400, "missing field favorite");
   }
   res.json(result);
 };
@@ -56,6 +58,6 @@ module.exports = {
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
-  updateStatusContact:ctrlWrapper(updateStatusContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
   deleteById: ctrlWrapper(deleteById),
 };
