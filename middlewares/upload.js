@@ -1,5 +1,5 @@
 const multer = require("multer");
-const path = require("path");
+const path = require("path"); // path
 
 const tempDir = path.join(__dirname, "../", "temp");
 
@@ -14,4 +14,4 @@ const upload = multer({
   storage: multerConfig,
 });
 
-module.exports = upload; //  upload
+module.exports = upload;
