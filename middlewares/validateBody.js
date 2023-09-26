@@ -9,7 +9,7 @@ const validateBody = (schema) => {
     next();
   };
 
-  return func;
+  return func; // func
 };
 
 module.exports = validateBody;

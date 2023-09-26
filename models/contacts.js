@@ -24,7 +24,7 @@ contactSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 contactSchema.post("save", (err, data, next) => {
-  err.status = 400;
+  err.status = 400; // error
   next();
 });
 const Contact = model("contact", contactSchema);
