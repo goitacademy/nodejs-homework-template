@@ -1,6 +1,5 @@
 const { HttpError } = require('../helpers');
 const { ContactModel } = require('../models');
-const { userSchema } = require('../schemas');
 const { ctrlWrapper } = require('../decorators');
 
 // Create - add
@@ -30,11 +29,6 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { error } = userSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.details[0].message);
-  }
-
   const { name, phone } = req.body;
   if (!name || !phone) {
     throw HttpError(400, 'Name and Phone are required');
@@ -48,11 +42,6 @@ const add = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { error } = userSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.details[0].message);
-  }
-
   const { contactId } = req.params;
   const result = await ContactModel.findByIdAndUpdate(contactId, req.body, {
     new: true,
