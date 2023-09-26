@@ -2,6 +2,7 @@ const userService = require("../../../services/users");
 const createError = require("../../../untils/createError");
 const ERROR_TYPES = require("../contastants/errorTypes");
 const bcrypt = require("bcrypt");
+const gravatar = require('gravatar')
 const passport = require("../../../auth/index");
 const { JWT_SECRET } = require("../../../constants/env");
 const jwt = require("jsonwebtoken");
@@ -9,6 +10,8 @@ const registerUser = async (req, res, next) => {
   try {
     const { body } = req;
     const { email } = body;
+    const avatar = gravatar.url(email,{},true)
+    console.log(avatar)
     const passwordHash = await bcrypt.hash(body.password, 10);
     const checkEmail = await userService.findUser(email);
     if (Object.keys(checkEmail).length) {
@@ -20,6 +23,7 @@ const registerUser = async (req, res, next) => {
     const user = await userService.registerUser({
       ...body,
       password: passwordHash,
+      avatarURL:avatar
     });
     res.status(200).json({
       message: "user created",
@@ -93,4 +97,17 @@ const currentUser = async (req, res, next) => {
     next(e)
   }
 };
-module.exports = { registerUser, loginUser, logout, currentUser };
+const updateAvatar = async (req,res,next) => {
+try{
+  const {avatar} = req.body
+  console.log(avatar)
+  const user = await userService.updateByUserAvatar(avatar)
+  console.log(user)
+  res.status(200).json({
+    data:user
+  });
+}catch(e){
+  next(e)
+}
+}
+module.exports = { registerUser, loginUser, logout, currentUser,updateAvatar };
