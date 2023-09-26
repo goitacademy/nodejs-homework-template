@@ -32,13 +32,13 @@ const loginUser = catchAsync(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ message: "Email or password is wrong" });
+      return res.status(401).json({ message: "User not found" });
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).json({ message: "Email or password is wrong" });
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     const payload = {
