@@ -40,7 +40,21 @@ const getContactById = async (id) => {
   }
 };
 
-// const removeContact = async (contactId) => {};
+const removeContact = async (id) => {
+  try {
+    const contactId = String(id);
+    const contacts = await listContacts();
+    const index = contacts.findIndex((item) => item.id === contactId);
+    if (index === -1) {
+      return null;
+    }
+    const [result] = contacts.splice(index, 1);
+    await writeContactsFile(contacts);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const addContact = async (body) => {
   try {
@@ -57,12 +71,22 @@ const addContact = async (body) => {
   }
 };
 
-// const updateContact = async (contactId, body) => {};
+const updateContact = async (id, body) => {
+  const contactId = String(id);
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id, ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
 
 module.exports = {
   listContacts,
   getContactById,
   addContact,
-  // removeContact,
-  // updateContact,
+  updateContact,
+  removeContact,
 };
