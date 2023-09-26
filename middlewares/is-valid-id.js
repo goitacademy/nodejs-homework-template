@@ -9,4 +9,4 @@ const isValidId = (req, res, next) => {
   next();
 };
 
-export default isValidId;
+module.exports = isValidId;
