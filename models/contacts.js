@@ -7,15 +7,21 @@ export const listContacts = async () => {
   return JSON.parse(data);
 };
 
-export const getContactById = async contactId => {
-  const id = contactId.substring(1);
-  const allContacts = await listContacts(contactId);
-  const resp = allContacts.find(el => el.id === contactId);
-
-  return resp || null;
+export const removeContact = async contactId => {
+  const allContact = await listContacts();
+  const elIdx = allContact.findIndex(el => el.id === contactId);
+  const result = allContact[elIdx];
+  const newArr = allContact.filter((el, idx) => idx !== elIdx);
+  await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
+  return result || null;
 };
 
-export const removeContact = async contactId => {};
+export const getContactById = async contactId => {
+  const id = contactId.substring(1);
+  const allContacts = await listContacts();
+  const resp = allContacts.find(el => el.id === contactId);
+  return resp || null;
+};
 
 export const addContact = async body => {};
 

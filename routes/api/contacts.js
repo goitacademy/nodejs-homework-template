@@ -9,15 +9,15 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   const id = req.url.substring(1);
-
   res.json(await contactServises.getContactById(id));
 });
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' });
+router.delete('/:contactId', async (req, res, next) => {
+  const id = req.url.substring(1);
+  res.json(await contactServises.removeContact(id));
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   res.json({ message: 'template message' });
 });
 
