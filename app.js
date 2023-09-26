@@ -4,20 +4,15 @@
 import contactsRouter from './routes/api/contacts.js';
 import express from 'express';
 import logger from 'morgan';
-// import { cors } from 'cors';
-// import contactsRouter from "('./routes/api/contacts')";
+import cors from 'cors';
 
 const app = express();
-// app.get('/', (req, res) => {
-//   res.send('<h2>Home page</h2>');
-// });
-// app.listen(3000, () => console.log('Server runin'));
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
-// app.use(cors());
-// app.use(express.json());
+app.use(cors());
+app.use(express.json());
 
 app.use('/api/contacts', contactsRouter);
 
