@@ -1,5 +1,5 @@
 const express = require('express');
-
+const { contactSchema } = require("../../models/contact");
 const {
   listContacts,
   addContact,
@@ -8,9 +8,7 @@ const {
   updateContact,
 } = require("../../controllers/contacts");
 
-const { contactSchema } = require("../../models/contact");
-
-const router = express.Router()
+const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   try {
@@ -18,8 +16,8 @@ router.get('/', async (req, res, next) => {
     res.json(result);
   } catch (error) {
     next(error);
-  };
-})
+  }
+});
 
 router.get('/:contactId', async (req, res, next) => {
   try {
@@ -39,7 +37,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: 'Missing required name field' });
+      return res.status(400).json({ message: 'Invalid request body' });
     }
     const result = await addContact(req.body);
     return res.status(201).json(result);
@@ -55,7 +53,7 @@ router.delete('/:contactId', async (req, res, next) => {
     if (!result) {
       return res.status(404).json({ message: 'Contact not found' });
     }
-    return res.json({ message: "Contact delated" });
+    return res.json({ message: 'Contact deleted' });
   } catch (error) {
     next(error);
   }
@@ -65,7 +63,7 @@ router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: 'Missing required name field' });
+      return res.status(400).json({ message: 'Invalid request body' });
     }
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
@@ -76,6 +74,6 @@ router.put('/:contactId', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-})
+});
 
 module.exports = router;
