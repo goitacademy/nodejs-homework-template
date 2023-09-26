@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { nanoid } from 'nanoid';
 import path from 'path';
 const contactPath = path.resolve('models', 'contacts.json');
 
@@ -17,13 +18,25 @@ export const removeContact = async contactId => {
 };
 
 export const getContactById = async contactId => {
-  const id = contactId.substring(1);
   const allContacts = await listContacts();
   const resp = allContacts.find(el => el.id === contactId);
   return resp || null;
 };
 
-export const addContact = async body => {};
+export const addContact = async ({ name, email, phone }) => {
+  const createContact = {
+    id: nanoid(),
+    name,
+    email,
+    phone,
+  };
+  const allContacts = await listContacts();
+  const newArr = [createContact, ...allContacts];
+  console.log('createContact', createContact);
+  console.log('newArr', newArr);
+  await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
+  return createContact;
+};
 
 export const updateContact = async (contactId, body) => {};
 
