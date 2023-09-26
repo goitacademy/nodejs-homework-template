@@ -32,8 +32,6 @@ export const addContact = async ({ name, email, phone }) => {
   };
   const allContacts = await listContacts();
   const newArr = [createContact, ...allContacts];
-  console.log('createContact', createContact);
-  console.log('newArr', newArr);
   await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
   return createContact;
 };

@@ -40,7 +40,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   // try {
-  console.log('first', req.body);
+
   res.json(await contactServises.addContact(req.body));
   // } catch (error) {
   //   res.status(500).json({ message: 'Server error' });
