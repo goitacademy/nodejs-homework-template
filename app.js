@@ -4,9 +4,10 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 const { connectDb } = require('./config');
+const { HttpError } = require('./helpers');
 
 connectDb();
-const contactsRouter = require('./routes/api/contacts');
+const { contactsRoutes } = require('./routes');
 
 const app = express();
 
@@ -16,15 +17,15 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/contacts', contactsRouter);
+app.use('/api/contacts', contactsRoutes);
 
 app.use((_, res) => {
-  res.status(404).json({ message: 'Not found' });
+  throw HttpError(404);
 });
 
 app.use((err, req, res, next) => {
   const { status = 500, message = 'Server error' } = err;
-  res.status(status).json({ message });
+  res.status(status).json({ code: status, message });
 });
 
 module.exports = app;
