@@ -1,5 +1,7 @@
 import Contact from "../models/contact.js";
-import { HttpError } from "../helpers/index.js";
+import fs from "fs/promises";
+import path from "path";
+import { HttpError, cloudinary } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
@@ -35,7 +37,12 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const { _id: owner } = req.user;
-  const addContact = await Contact.create({ ...req.body, owner });
+  const { path: oldPath, filename } = req.file;
+  const { url: avatarURL } = await cloudinary.uploader.upload(oldPath, {
+    folder: "avatar",
+  });
+  await fs.unlink(oldPath);
+  const addContact = await Contact.create({ ...req.body, owner, avatarURL });
   res.status(201).json(addContact);
 };
 

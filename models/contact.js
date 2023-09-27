@@ -21,6 +21,9 @@ const contactSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    avatarURL: {
+      type: String,
+    },
     favorite: {
       type: Boolean,
       default: false,
