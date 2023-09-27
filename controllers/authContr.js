@@ -72,28 +72,45 @@ const logout = async (req, res) => {
 };
 
 
+// const updateSubscription = async (req, res) => {
+//   const { subscription } = req.body;
+
+//    try {
+//     // Перевірка, чи передано коректне значення підписки
+//      if (!["starter", "pro", "business"].includes(subscription)) {
+      
+//       return res.status(400).json({ error: "Invalid subscription value" });
+//     }
+
+//     // Оновлення підписки користувача
+//     const updatedUser = await User.findByIdAndUpdate(req.user.id, { subscription }, { new: true });
+
+//     res.status(200).json({
+//       email: updatedUser.email,
+//       subscription: updatedUser.subscription,
+//     });
+//   } catch (error) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
+
+// або без використання try/catch
+
 const updateSubscription = async (req, res) => {
   const { subscription } = req.body;
-
-   try {
-    // Перевірка, чи передано коректне значення підписки
-     if (!["starter", "pro", "business"].includes(subscription)) {
-      
-      return res.status(400).json({ error: "Invalid subscription value" });
-    }
-
-    // Оновлення підписки користувача
+  if (["starter", "pro", "business"].includes(subscription)) {
     const updatedUser = await User.findByIdAndUpdate(req.user.id, { subscription }, { new: true });
-
     res.status(200).json({
       email: updatedUser.email,
       subscription: updatedUser.subscription,
     });
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+
+}else {
+    throw HttpError(401, 'Invalid subscription value');
   }
 };
-
 
 
 module.exports = {
