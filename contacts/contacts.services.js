@@ -83,29 +83,6 @@ const updateContact = async ({ id, name, email, phone }) => {
   }
 };
 
-// const updateContact = async ({ contactId, name, email, phone }) => {
-//     try {
-//       const contacts = await listContacts();
-//       const index = contacts.findIndex((item) => item.id === contactId);
-//       console.log("SERVICES Index:", index);
-//       console.log("CONTACT ID", contactId);
-
-//       if (index === -1) {
-//         throw new Error(`Contact with id=${contactId} not found`);
-//       }
-
-//       const updatedContact = { ...contacts[index], name, email, phone };
-//       contacts[index] = updatedContact;
-
-//       await fs.writeFile(contactsPath, JSON.stringify(contacts));
-//       console.log("SERVICES Updated Contact:", updatedContact);
-
-//       return updatedContact;
-//     } catch (error) {
-//       console.log("SERVICES Update Error:", error.message);
-//     }
-// };
-
 module.exports = {
   listContacts,
   getContactById,
@@ -113,10 +90,3 @@ module.exports = {
   addContact,
   updateContact,
 };
-
-// const fs = require("node:fs/promises");
-// const path = require("path");
-// const getNanoid = async () => {
-//   const module = await import("nanoid");
-//   return module.nanoid;
-// };
