@@ -1,8 +1,13 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require('gravatar');
 require("dotenv").config();
+const path = require('path');
+const fs = require('fs/promises');
 
 const { SECRET_KEY } = process.env;
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
+
 
 const { User } = require("../models/user");
 
@@ -16,8 +21,9 @@ const register = async (req, res) => {
     throw HttpError(409, "Email is already in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
   res.status(201).json({
     user: {
@@ -26,6 +32,7 @@ const register = async (req, res) => {
     },
   });
 };
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -54,6 +61,7 @@ const login = async (req, res) => {
   });
 };
 
+
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
   res.status(200).json({
@@ -61,6 +69,7 @@ const getCurrent = async (req, res) => {
     subscription,
   })
 };
+
 
 const logout = async (req, res) => {
   const { _id } = req.user;
@@ -113,10 +122,28 @@ const updateSubscription = async (req, res) => {
 };
 
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tmpUpload, originalName } = req.file;
+  console.log(req.file);
+  console.log(avatarsDir);
+  const resultUpload = path.join(avatarsDir, originalName);
+
+  await fs.rename(tmpUpload, resultUpload);
+  const avatarURL = path.join('avatars', originalName);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(200).json({
+    avatarURL,
+  })
+
+}
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
