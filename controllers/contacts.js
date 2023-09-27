@@ -3,10 +3,16 @@ import { HttpError } from "../helpers/HttpError.js";
 import Joi from "joi";
 import { ctrlWrapper } from "../helpers/ctrlWrapeer.js";
 
-const control = Joi.object({
+const controlPost = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+});
+
+const controlPut = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
 });
 
 const getAll = async (req, res) => {
@@ -25,7 +31,7 @@ const getById = async (req, res) => {
 };
 
 const postAddContact = async (req, res) => {
-  const { error } = control.validate(req.body);
+  const { error } = controlPost.validate(req.body);
   if (error) {
     throw HttpError(400, error.message);
   }
@@ -45,6 +51,11 @@ const putUpdateById = async (req, res) => {
   if (!req.body) {
     throw HttpError(400, "missing fields");
   }
+  const { error } = controlPut.validate(req.body);
+  if (error) {
+    throw HttpError(400, error.message);
+  }
+
   const { id } = req.params;
   const result = await contacts.updateContact(id, req.body);
   if (!result) {
