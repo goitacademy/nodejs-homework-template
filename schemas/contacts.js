@@ -12,7 +12,7 @@ const addSchema = Joi.object({
   phone: Joi.string()
     .min(8)
     .required()
-    .pattern(/[\d\s()-]+/)
+    .pattern(/^[0-9\s\-()]+$/)
     .message({
       "string.pattern.base": "Invalid phone",
     }),
