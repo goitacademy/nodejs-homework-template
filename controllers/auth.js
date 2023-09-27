@@ -5,8 +5,6 @@ const { ctrWrapper, HttpError } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 
-console.log(SECRET_KEY);
-
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });

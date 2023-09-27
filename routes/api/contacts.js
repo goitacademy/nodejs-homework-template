@@ -5,6 +5,7 @@ const {
   validateBodyCreate,
   isValidId,
   validateBodyUpdate,
+  authenticate,
 } = require("../../middlewares");
 const {
   addSchemaCreate,
@@ -12,17 +13,24 @@ const {
   updateFavoriteSchema,
 } = require("../../models/contact");
 
-router.get("/", ctrl.listContacts);
-router.post("/", validateBodyCreate(addSchemaCreate), ctrl.addContact);
-router.get("/:contactId", isValidId, ctrl.getContactsById);
+router.get("/", authenticate, ctrl.listContacts);
+router.post(
+  "/",
+  authenticate,
+  validateBodyCreate(addSchemaCreate),
+  ctrl.addContact
+);
+router.get("/:contactId", authenticate, isValidId, ctrl.getContactsById);
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBodyUpdate(addSchemaUpdate),
   ctrl.updateById
 );
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   validateBodyUpdate(updateFavoriteSchema),
   ctrl.updateStatusContact
