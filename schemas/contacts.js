@@ -11,7 +11,7 @@ const addSchema = Joi.object({
     "any.required": "Missing required phone field",
   }),
   favorite: Joi.boolean().messages({
-    "any.required": "Missing required favorite field",
+    "any.required": "Missing field favorite",
   }),
 });
 
