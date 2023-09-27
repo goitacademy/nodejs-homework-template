@@ -2,13 +2,18 @@ const userService = require("../../../services/users");
 const createError = require("../../../untils/createError");
 const ERROR_TYPES = require("../contastants/errorTypes");
 const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 const passport = require("../../../auth/index");
 const { JWT_SECRET } = require("../../../constants/env");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs/promises");
+const avatarDir = path.join(__dirname, "../../../", "public", "avatars");
 const registerUser = async (req, res, next) => {
   try {
     const { body } = req;
     const { email } = body;
+    const avatar = gravatar.url(email, {}, true);
     const passwordHash = await bcrypt.hash(body.password, 10);
     const checkEmail = await userService.findUser(email);
     if (Object.keys(checkEmail).length) {
@@ -20,6 +25,7 @@ const registerUser = async (req, res, next) => {
     const user = await userService.registerUser({
       ...body,
       password: passwordHash,
+      avatarURL: avatar,
     });
     res.status(200).json({
       message: "user created",
@@ -47,7 +53,7 @@ const loginUser = async (req, res, next) => {
       });
       throw error;
     }
-    const serializedUser = user.toObject();
+    const serializedUser = user;
     delete serializedUser.password;
     const token = jwt.sign(
       { sub: serializedUser._id, role: serializedUser.role },
@@ -67,31 +73,47 @@ const loginUser = async (req, res, next) => {
   }
 };
 const logout = async (req, res, next) => {
-  try{
-      res.clearCookie("jwt");
-      return res.status(204).json();
- }catch(e){
-  next(e)
- }
+  try {
+    res.clearCookie("jwt");
+    return res.status(204).json();
+  } catch (e) {
+    next(e);
+  }
 };
 const currentUser = async (req, res, next) => {
-  try{
-    let user = req.user
-    if(!user){
+  try {
+    let user = req.user;
+    if (!user) {
       const error = createError(ERROR_TYPES.UNAUTHORIZED, {
         message: "Not authorized",
       });
       throw error;
     }
-    const {email,subscription} = user[0]
-    console.log(user)
+    const { email, subscription } = user[0];
     res.status(200).json({
-      data:{
+      data: {
         email,
-        subscription}
+        subscription,
+      },
     });
-  }catch(e){
-    next(e)
+  } catch (e) {
+    next(e);
   }
 };
-module.exports = { registerUser, loginUser, logout, currentUser };
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { _id } = req.user[0];
+
+    const { path: teamUpload, originalname } = req.file;
+    const resultUpload = path.join(avatarDir, originalname);
+    await fs.rename(teamUpload, resultUpload);
+    const avatarUrl = path.join("avatars", originalname);
+    const user = await userService.updateByUserAvatar(_id, avatarUrl);
+    res.status(200).json({
+      data: avatarUrl,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
+module.exports = { registerUser, loginUser, logout, currentUser, updateAvatar };
