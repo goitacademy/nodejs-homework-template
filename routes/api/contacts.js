@@ -45,26 +45,26 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const validatedContact = validateContact(req.body);
+  try {
+    const validatedContact = validateContact(req.body);
 
-  if (validatedContact.error) {
-    res.status(400).json({
-      status: "Bad request",
-      code: 400,
-      message: "Missing required field",
-    });
-  } else {
-    const newContact = await addContact(req.body);
-    if (newContact) {
+    if (validatedContact.error) {
+      res.status(400).json({
+        status: "Bad request",
+        code: 400,
+        message: "Missing required field",
+      });
+    } else {
+      const newContact = await addContact(req.body);
       res.status(201).json({
         status: "Created",
         code: 201,
         message: "Success! New contact added",
         newContact,
       });
-    } else {
-      res.status(500).json({ status: "Internal Server Error", code: 500 });
     }
+  } catch {
+    res.status(500).json({ status: "Internal Server Error", code: 500 });
   }
 });
 
@@ -89,18 +89,18 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
+  try {
+    const { contactId } = req.params;
 
-  const validatedContact = validateContact(req.body);
+    const validatedContact = validateContact(req.body);
 
-  if (validatedContact.error) {
-    res.status(400).json({
-      status: "Bad request",
-      code: 400,
-      message: "Data validation: missing fields",
-    });
-  } else {
-    try {
+    if (validatedContact.error) {
+      res.status(400).json({
+        status: "Bad request",
+        code: 400,
+        message: "Data validation: missing fields",
+      });
+    } else {
       const updatedList = await updateContact(contactId, req.body);
       res.status(200).json({
         status: "OK",
@@ -108,12 +108,10 @@ router.put("/:contactId", async (req, res, next) => {
         message: "Contact updated",
         updatedList,
       });
-    } catch (error) {
-      console.error(error.message);
-      res
-        .status(404)
-        .json({ status: "Not found", code: 404, message: "Not found" });
     }
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ status: "Internal Server Error", code: 500 });
   }
 });
 
