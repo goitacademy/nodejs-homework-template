@@ -132,24 +132,41 @@ export const uploadAvatarHandler = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send("Wewnętrzny błąd serwera");
+    res.status(500).send("Internal server error");
   }
 };
 
 export const updateAvatarHandler = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Plik jest wymagany" });
+  const token = req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Not authorized" });
   }
 
   try {
-    const filePath = path.join(__dirname, "../tmp/", req.file.filename);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "File is required" });
+    }
+
+    const filePath = path.join(__dirname, "../tmp/", req.file.filename);
     const image = await jimp.read(filePath);
     await image.resize(250, 250).writeAsync(filePath);
 
-    res.status(200).json({ avatarURL: `/avatars/${req.file.filename}` });
+    const newAvatarURL = `/avatars/${req.file.filename}`;
+    await User.findByIdAndUpdate(user._id, { avatarURL: newAvatarURL });
+
+    res.status(200).json({ avatarURL: newAvatarURL });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Wewnętrzny błąd serwera" });
+
+    res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -9,10 +9,9 @@ import { userRouter } from "./routes/users.route.js";
 
 dotenv.config();
 
-
-
 const port = process.env.PORT || 3000;
 const app = express();
+
 
 const initializeApp = async () => {
   await dbConnect();
@@ -31,7 +30,6 @@ const initializeApp = async () => {
   app.listen(port, () => {
     console.log("Server is listening on port", port);
   });
-
 
   app.use(function (_, res) {
     res.status(404).send("Page not found!");
