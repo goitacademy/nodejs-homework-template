@@ -3,45 +3,75 @@ const { Contact } = require("../schemas/ValidateSchemasContacts");
 
 const ifIsResult = (result) => {
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404);
   }
 };
 
-const getAll = async (page = 1, limit = 10) => {
-  const total = await Contact.count();
-  const skip = (page - 1) * limit;
-  const contacts = await Contact.find().skip(skip).limit(+limit);
-  ifIsResult(contacts);
-  return { contacts, page: +page, limit: +limit, total };
+const createdQueryObject = (contactId, owner) => {
+  return { _id: contactId, owner };
 };
 
-const getById = async (contactId) => {
-  const searchedContact = await Contact.findById(contactId);
+const getAll = async ({ page = 1, limit = 20, ...other }, owner) => {
+  const numberPage = parseInt(page, 10);
+  const numberLimit = parseInt(limit, 10);
+  if (!numberPage || !numberLimit) {
+    throw HttpError(400, "Value must be a number");
+  }
+  const filters = { owner };
+  if (other.favorite !== undefined) {
+    filters.favorite = other.favorite;
+  }
+
+  const total = await Contact.count(filters);
+  const skip = (numberPage - 1) * numberLimit;
+  const contacts = await Contact.find(filters)
+    .populate("owner", "email subscription")
+    .skip(skip)
+    .limit(numberLimit);
+  return { contacts, page: numberPage, limit: numberLimit, total };
+};
+
+const getById = async (contactId, owner) => {
+  const contact = createdQueryObject(contactId, owner);
+  const searchedContact = await Contact.findOne(contact);
   ifIsResult(searchedContact);
+  return searchedContact;
 };
 
-const addContactToDB = async (body) => {
-  const newContact = await Contact.create(body);
-ifIsResult(newContact);
+const addContactToDB = async (req) => {
+  const { email } = req.body;
+  const IfTakenEmail = await Contact.findOne({ email });
+  if (IfTakenEmail) {
+    throw HttpError(400, "Email is already taken");
+  }
+  const { _id: owner } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner });
+  ifIsResult(newContact);
   return newContact;
 };
 
-const updateContactById = async (contactId, body) => {
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+const updateContactById = async (contactId, body, owner) => {
+  const contact = createdQueryObject(contactId, owner);
+  const updatedContact = await Contact.findOneAndUpdate(contact, body, {
     new: true,
   });
- ifIsResult(updatedContact);
+  ifIsResult(updatedContact);
+  if (updatedContact.owner.toString() !== contact.owner.toString()) {
+    throw HttpError(404, "Contact not found");
+  }
   return updatedContact;
 };
 
-const deleteContactById = async (contactId) => {
-  const result = await Contact.findByIdAndRemove(contactId);
-ifIsResult(result)
+const deleteContactById = async (contactId, owner) => {
+  const contact = createdQueryObject(contactId, owner);
+  const result = await Contact.findOneAndRemove(contact);
+  ifIsResult(result);
 };
 
-const updateStatusContactById = async (contactId, favorite) => {
-  const updatedContact = await Contact.findByIdAndUpdate(
-    contactId,
+const updateStatusContactById = async (contactId, favorite, owner) => {
+  const contact = createdQueryObject(contactId, owner);
+  const updatedContact = await Contact.findOneAndUpdate(
+    contact,
     { favorite },
     { new: true }
   );
