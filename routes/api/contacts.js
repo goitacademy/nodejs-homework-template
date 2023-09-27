@@ -1,6 +1,12 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
+const Joi = require("joi");
 
+const addSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().required(),
+    phone: Joi.string().required(),
+});
 
 const {
   listContacts,
@@ -8,13 +14,10 @@ const {
   removeContact,
   addContact,
   updateContact,
-  updateContact,
-} = require("./../../models/contacts");
-
-
+} = require("./../../models/contacts.js");
 
 router.get('/', async (req, res, next) => {
-   try {
+  try {
     const contacts = await listContacts();
     res.status(200).json({
       method: req.method,
@@ -28,8 +31,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-
-router.get("/:contactId", async (req, res, next) => {
+router.get('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const contact = await getContactById(contactId);
@@ -37,15 +39,15 @@ router.get("/:contactId", async (req, res, next) => {
       return res.status(404).json({
         method: req.method,
         endpoint: req.originalUrl,
-        status: "error",
-        message: "Not found",
+        status: 'error',
+        message: 'Contact not found',
       });
     }
     res.status(200).json({
       method: req.method,
       endpoint: req.originalUrl,
-      status: "success",
-      message: "Contact fetched successfully",
+      status: 'success',
+      message: 'Contact fetched successfully',
       data: contact,
     });
   } catch (error) {
@@ -54,22 +56,22 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body;
   try {
+    const { error, value } = addSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         method: req.method,
         endpoint: req.originalUrl,
-        status: "error",
-        message: "missing required name - field",
+        status: 'error',
+        message: error.details[0].message,
       });
     }
-    const newContact = await addContact(name, email, phone);
+    const newContact = await addContact(value);
     res.status(201).json({
       method: req.method,
       endpoint: req.originalUrl,
-      status: "success",
-      message: "Contact added successfully",
+      status: 'success',
+      message: 'Contact added successfully',
       data: newContact,
     });
   } catch (error) {
@@ -78,59 +80,60 @@ router.post('/', async (req, res, next) => {
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-   try {
-     const contactId = req.params.contactId;
-     const removedContact = await removeContact(contactId);
-     if (!removedContact) {
-       return res.status(404).json({
-         method: req.method,
-         endpoint: req.originalUrl,
-         status: "error",
-         message: "Not found",
-       });
-     }
-     res.status(200).json({
-       method: req.method,
-       endpoint: req.originalUrl,
-       status: "success",
-       message: "Contact removed successfully",
-       data: removedContact,
-     });
-   } catch (error) {
-     next(error);
-   }
-})
-
-router.put('/:contactId', async (req, res, next) => {
-    try {
-      const contactId = req.params.contactId;
-      if (error) {
-        return res.status(400).json({
-          method: req.method,
-          endpoint: req.originalUrl,
-          status: "error",
-          message: "Missing fields",
-        });
-      }
-      const updatedContact = await updateContact(contactId, value);
-      if (!updatedContact) {
-        return res.status(404).json({
-          method: req.method,
-          endpoint: req.originalUrl,
-          status: "error",
-          message: "Contact not found",
-        });
-      }
-      res.status(200).json({
+  try {
+    const contactId = req.params.contactId;
+    const removedContact = await removeContact(contactId);
+    if (!removedContact) {
+      return res.status(404).json({
         method: req.method,
         endpoint: req.originalUrl,
-        status: "success",
-        message: "Contact updated successfully",
-        data: updatedContact,
+        status: 'error',
+        message: 'Contact not found',
       });
-    } catch (error) {
-      next(error);
     }
-})
+    res.status(200).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contact removed successfully',
+      data: removedContact,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router;
+router.put('/:contactId', async (req, res, next) => {
+  try {
+    const contactId = req.params.contactId;
+    const { error, value } = addSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        status: 'error',
+        message: error.details[0].message,
+      });
+    }
+    const updatedContact = await updateContact(contactId, value);
+    if (!updatedContact) {
+      return res.status(404).json({
+        method: req.method,
+        endpoint: req.originalUrl,
+        status: 'error',
+        message: 'Contact not found',
+      });
+    }
+    res.status(200).json({
+      method: req.method,
+      endpoint: req.originalUrl,
+      status: 'success',
+      message: 'Contact updated successfully',
+      data: updatedContact,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router
