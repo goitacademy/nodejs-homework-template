@@ -2,15 +2,15 @@ const express = require("express");
 
 const ctrl = require("../../controllers/contacts");
 
-const { validateBody } = require("../../middleware");
+const { validateBody, isValidId } = require("../../middleware");
 
-const schemas = require("../../schemas");
+const { schemas } = require("../../models/contact");
 
 const router = express.Router();
 
 router.get("/", ctrl.getAll);
 
-router.get("/:contactId", ctrl.getById);
+router.get("/:contactId", isValidId, ctrl.getById);
 
 router.post(
   "/",
@@ -18,12 +18,20 @@ router.post(
   ctrl.add
 );
 
-router.delete("/:contactId", ctrl.removeById);
+router.delete("/:contactId", isValidId, ctrl.removeById);
 
 router.put(
   "/:contactId",
+  isValidId,
   validateBody(schemas.addSchema, "Missing fields"),
   ctrl.updateById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema, "Missing field favorite"),
+  ctrl.updateFavoriteById
 );
 
 module.exports = router;
