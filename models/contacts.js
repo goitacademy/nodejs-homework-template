@@ -40,11 +40,11 @@ const getById = async (contactId, owner) => {
 
 const addContactToDB = async (req) => {
   const { email } = req.body;
-  const IfTakenEmail = await Contact.findOne({ email });
-  if (IfTakenEmail) {
-    throw HttpError(400, "Email is already taken");
+  const owner = req.user._id;
+  const IfEmailTaken = await Contact.findOne({ email, owner });
+  if (IfEmailTaken) {
+    throw HttpError(400, "You have a contact with this email");
   }
-  const { _id: owner } = req.user;
   const newContact = await Contact.create({ ...req.body, owner });
   ifIsResult(newContact);
   return newContact;

@@ -11,11 +11,7 @@ const ifIsResult = (result) => {
 };
 
 const registerUserInDB = async (body) => {
-  const { email, password } = body;
-  const IfTakenEmail = await User.findOne({ email });
-  if (IfTakenEmail) {
-    throw HttpError(409, "Email is already taken");
-  }
+  const { password } = body;
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     ...body,

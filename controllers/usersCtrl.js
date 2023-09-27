@@ -1,8 +1,9 @@
+const HttpError = require("../helpers/HttpError");
 const {
   registerUserInDB,
   loginUserInDB,
   logoutFromDB,
-  updateUserSubscriptionInDB
+  updateUserSubscriptionInDB,
 } = require("../models/users");
 
 const registerUser = async (req, res, next) => {
@@ -12,6 +13,9 @@ const registerUser = async (req, res, next) => {
       user: { email: newUser.email, subscription: newUser.subscription },
     });
   } catch (error) {
+    if (error.code === 11000 && error.keyPattern.email) {
+      next(HttpError(409, "Email is already taken"));
+    }
     next(error);
   }
 };
@@ -36,24 +40,28 @@ const getCurrent = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-   await logoutFromDB(req.user)
+    await logoutFromDB(req.user);
     res.status(204).json();
-    next()
+    next();
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
 const updateUserSubscription = async (req, res, next) => {
   try {
     const { subscription } = req.body;
-    const {userId} = req.params;
-    const result = await updateUserSubscriptionInDB(req.user, userId, subscription);
-    res.status(200).json(result)
+    const { userId } = req.params;
+    const result = await updateUserSubscriptionInDB(
+      req.user,
+      userId,
+      subscription
+    );
+    res.status(200).json(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 
 module.exports = {
   registerUser,
