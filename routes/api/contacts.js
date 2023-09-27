@@ -2,16 +2,59 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
- const mongoose = require("mongoose");
+const mongoose = require("mongoose");
+const passport = require("passport");
+const passportJWT = require("passport-jwt");
 
+const Contact = require("../../models/contact");
+const User = require("../../models/user");
 
-const Contact = require("../../models/contact"); 
 
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
 });
+
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
+
+// Add passport JWT strategy
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: "your-secret-key",
+    },
+    async (jwtPayload, done) => {
+      try {
+        const user = await User.findById(jwtPayload.userId);
+        if (!user) {
+          return done(null, false);
+        }
+        return done(null, user);
+      } catch (error) {
+        return done(error, false);
+      }
+    }
+  )
+);
+
+// Middleware for authentication
+const authenticate = passport.authenticate("jwt", { session: false });
+
+router.get("/", authenticate, async (req, res, next) => {
+  // This route is now protected by authentication
+  try {
+    const contacts = await Contact.find({ owner: req.user._id });
+    res.status(200).json({ contacts });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// old code of hw03
+
 
 router.get("/", async (req, res, next) => {
   try {
@@ -114,8 +157,6 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-
 
 
 module.exports = router;
