@@ -9,6 +9,8 @@ import { userRouter } from "./routes/users.route.js";
 
 dotenv.config();
 
+
+
 const port = process.env.PORT || 3000;
 const app = express();
 
@@ -21,9 +23,15 @@ const initializeApp = async () => {
   app.use(cors());
   app.use(express.json());
   app.use(cookieParser());
+  app.use(express.static("public"));
 
   app.use("/contacts", contactsRouter);
   app.use("/users", userRouter);
+
+  app.listen(port, () => {
+    console.log("Server is listening on port", port);
+  });
+
 
   app.use(function (_, res) {
     res.status(404).send("Page not found!");
@@ -33,10 +41,6 @@ const initializeApp = async () => {
     res.locals.message = err.message;
     res.locals.error = req.app.get("env") === "development" ? err : {};
     res.status(err.status || 500).json({ error: "An error occurred!" });
-  });
-
-  app.listen(port, () => {
-    console.log("Server is listening on port", port);
   });
 };
 

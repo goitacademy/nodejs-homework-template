@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import Joi from "joi";
+import gravatar from "gravatar";
+import jimp from "jimp";
+import path from "path";
 import { User } from "../models/users.model.js";
 
 const userValidationSchema = Joi.object({
@@ -22,9 +25,15 @@ export const signUpHandler = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
+    const avatarURL = gravatar.url(
+      req.body.email,
+      { s: "100", r: "x", d: "retro" },
+      true
+    );
     const user = new User({
       email: req.body.email,
       password: hashedPassword,
+      avatarURL,
     });
     await user.save();
 
@@ -32,6 +41,7 @@ export const signUpHandler = async (req, res) => {
       user: {
         email: user.email,
         subscription: user.subscription || "starter",
+        avatarURL: user.avatarURL,
       },
     });
   } catch (err) {
@@ -107,5 +117,39 @@ export const currentHandler = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const uploadAvatarHandler = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Plik jest wymagany" });
+    }
+
+    res.json({
+      message: "Avatar uploaded.",
+      file: req.file,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Wewnętrzny błąd serwera");
+  }
+};
+
+export const updateAvatarHandler = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "Plik jest wymagany" });
+  }
+
+  try {
+    const filePath = path.join(__dirname, "../tmp/", req.file.filename);
+
+    const image = await jimp.read(filePath);
+    await image.resize(250, 250).writeAsync(filePath);
+
+    res.status(200).json({ avatarURL: `/avatars/${req.file.filename}` });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Wewnętrzny błąd serwera" });
   }
 };

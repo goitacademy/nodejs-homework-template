@@ -4,6 +4,8 @@ import {
   loginHandler,
   logoutHandler,
   currentHandler,
+  uploadAvatarHandler,
+  updateAvatarHandler,
 } from "../controllers/users.controller.js";
 
 import authMiddleware from "../middleware/authenticateToken.js";
@@ -14,5 +16,12 @@ userRouter.post("/signup", signUpHandler);
 userRouter.post("/login", loginHandler);
 userRouter.get("/logout", authMiddleware, logoutHandler);
 userRouter.get("/current", authMiddleware, currentHandler);
+userRouter.post("/upload-avatar", uploadAvatarHandler);
+userRouter.patch(
+  "/avatars",
+  authMiddleware,
+  upload.single("avatar"),
+  updateAvatarHandler
+);
 
 export { userRouter };
