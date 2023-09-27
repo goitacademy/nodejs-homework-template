@@ -43,9 +43,10 @@ const removeContactHandler = async (req, res) => {
   try {
     const contact = await removeContact(req.params.contactId);
     if (!contact) {
-      return res.status(404).json({ message: "Not found" });
+      return res.status(200).json({ message: "contact deleted" });
+    } else {
+      res.status(404).json({ message: "Not found" });
     }
-    return res.json({ message: "contact deleted" });
   } catch (error) {
     console.error(error);
   }

@@ -35,6 +35,7 @@ const removeContact = async (contactId) => {
     await Contact.findByIdAndDelete(contactId);
   } catch (error) {
     console.error(error.message);
+    return false;
   }
 };
 
