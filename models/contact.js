@@ -2,10 +2,14 @@ const Joi = require("joi");
 const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../helpers");
 
+const nameRegExp = "^[A-Za-zА-Яа-я]+( [A-Za-zА-Яа-я]+)?$";
+const phoneRegExp = "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$";
+
 const contactSchema = new Schema(
   {
     name: {
       type: String,
+      match: RegExp(nameRegExp),
       required: true,
     },
     email: {
@@ -14,6 +18,7 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
+      match: RegExp(phoneRegExp),
       required: true,
     },
     favorite: {
@@ -30,15 +35,11 @@ const Contact = model("contact", contactSchema);
 
 // Joi schema for POST
 const addSchema = Joi.object({
-  name: Joi.string()
-    .pattern(new RegExp("^[A-Za-zА-Яа-я]+( [A-Za-zА-Яа-я]+)?$"))
-    .required(),
+  name: Joi.string().pattern(RegExp(nameRegExp)).required(),
   email: Joi.string()
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
     .required(),
-  phone: Joi.string()
-    .pattern(new RegExp("^[0-9]{3}-[0-9]{2}-[0-9]{2}$"))
-    .required(),
+  phone: Joi.string().pattern(RegExp(phoneRegExp)).required(),
   favorite: Joi.boolean(),
 }).with("name", ["email", "phone"]);
 
