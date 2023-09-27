@@ -54,7 +54,7 @@ const updateById = async (req, res) => {
 };
 
 // Patch
-const updateFavorite = async (req, res) => {
+const updateStatusContact = async (req, res) => {
   const { id } = req.params;
 
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
@@ -72,5 +72,5 @@ module.exports = {
   add: ctrlWrapper(add),
   deleteById: ctrlWrapper(deleteById),
   updateById: ctrlWrapper(updateById),
-  updateFavorite: ctrlWrapper(updateFavorite),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };

@@ -9,7 +9,7 @@ mongoose.set("strictQuery", true);
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log("Database connection successful");
 
     app.listen(PORT, () => {
       console.log("Server running. Use our API on port: 3000");
@@ -17,4 +17,5 @@ mongoose
   })
   .catch((err) => {
     console.log(err.message);
+    process.exit(1);
   });

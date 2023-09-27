@@ -21,7 +21,7 @@ router.patch(
   "/:id/favorite",
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
-  ctrl.updateFavorite
+  ctrl.updateStatusContact
 );
 
 module.exports = router;
