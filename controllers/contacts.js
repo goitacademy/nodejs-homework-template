@@ -2,15 +2,31 @@ const { Contact } = require('../models/contact');
 
 const { HttpError, ctrlWrapper } = require('../helpers');
 
-const getAll = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
-  const skip = (page - 1) * limit;
-  const allContacts = await Contact.find({ owner }, '-__v', { skip, limit }).populate(
-    'owner',
-    'email subscription'
-  );
-  res.status(200).json(allContacts);
+const getAll = async (req, res, next) => {
+  try {
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 20 } = req.query;
+    const skip = (page - 1) * limit;
+
+    let contacts;
+
+    if (req.query) {
+      const filterKeys = Object.keys(req.query);
+      const filterValues = Object.values(req.query);
+      contacts = await Contact.find({ owner, [filterKeys[0]]: filterValues[0] }, '-__v', {
+        skip,
+        limit,
+      }).populate('owner', 'email subscription');
+    } else {
+      contacts = await Contact.find({ owner }, '-__v', { skip, limit }).populate(
+        'owner',
+        'email subscription'
+      );
+    }
+    res.status(200).json(contacts);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getContact = async (req, res) => {
@@ -26,7 +42,7 @@ const getContact = async (req, res) => {
 const createContact = async (req, res) => {
   const { _id: owner } = req.user;
   const newContact = await Contact.create({ ...req.body, owner });
-  console.log(owner);
+
   res.status(201).json(newContact);
 };
 
@@ -37,7 +53,7 @@ const deleteContact = async (req, res) => {
     throw HttpError(404, 'Not found');
   }
 
-  res.status(200).json('Contact deleted');
+  res.status(200).json({ message: 'Contact deleted' });
 };
 
 const renewContact = async (req, res) => {
@@ -66,17 +82,6 @@ const updateStatusContact = async (req, res) => {
   res.status(200).json(updatedContact);
 };
 
-const getFavoriteContacts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
-  const skip = (page - 1) * limit;
-  const favoriteContacts = await Contact.find({ owner, favorite: true }, '-__v', {
-    skip,
-    limit,
-  }).populate('owner', 'email subscription');
-  res.status(200).json(favoriteContacts);
-};
-
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getContact: ctrlWrapper(getContact),
@@ -84,5 +89,4 @@ module.exports = {
   deleteContact: ctrlWrapper(deleteContact),
   renewContact: ctrlWrapper(renewContact),
   updateStatusContact: ctrlWrapper(updateStatusContact),
-  getFavoriteContacts: ctrlWrapper(getFavoriteContacts),
 };
