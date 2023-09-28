@@ -1,9 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-require("dotenv").config();
-
-const { PORT } = process.env;
+// require("dotenv").config();
+// const { PORT } = process.env;
 
 const contactsRouter = require("./routes/api/contacts-router");
 
@@ -26,6 +25,6 @@ app.use((err, req, res) => {
   res.status(500).json({ message: err.message });
 });
 
-app.listen(PORT, () => console.log(`Server running at 3000 port`));
+app.listen(3000, () => console.log(`Server running at 3000 port`));
 
 module.exports = app;

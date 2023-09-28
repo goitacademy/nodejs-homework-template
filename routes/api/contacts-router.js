@@ -2,6 +2,7 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const crypto = require("node:crypto");
 const express = require("express");
+const contactsService = require("../../models/index");
 
 const FILE_PATH = path.join(__dirname, "/.........");
 
@@ -9,7 +10,7 @@ const contactsRouter = express.Router();
 
 contactsRouter.get("/", async (req, res, next) => {
   try {
-    const contacts = await fs.readFile(" ");
+    const contacts = await contactsService.listContacts();
     res.json(contacts);
   } catch (e) {
     res.status(400).json({ error: e.message });
