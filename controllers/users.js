@@ -79,7 +79,7 @@ const updateSubscription = async (req, res) => {
 
   const result = await User.findByIdAndUpdate(
     _id,
-    { ...req.body, $set: { subscription: req.body.subscription } },
+    { $set: { subscription: req.body.subscription } },
     { new: true }
   );
   if (!result) {
