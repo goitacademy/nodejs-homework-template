@@ -18,5 +18,8 @@ export const deleteById = async (req, res, next) => {
 export const add = async (req, res, next) => {
   res.json(await contactServises.addContact(req, res, next));
 };
+export const put = async (req, res, next) => {
+  res.json(await contactServises.updateContact(req, res, next));
+};
 
-export default { getAll, getById, deleteById, add };
+export default { getAll, getById, deleteById, add, put };

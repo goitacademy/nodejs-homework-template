@@ -2,9 +2,14 @@ import fs from 'fs/promises';
 import { nanoid } from 'nanoid';
 import path from 'path';
 import { HttpError } from '../helpers/index.js';
+import Joi from 'joi';
 
 const contactPath = path.resolve('models', 'contacts.json');
-
+const contactAddShcema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 export const listContacts = async (req, res, next) => {
   try {
     const data = await fs.readFile(contactPath);
@@ -51,6 +56,11 @@ export const getContactById = async (req, res, next) => {
 export const addContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
+    if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
+    const { error } = contactAddShcema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const createContact = {
       id: nanoid(),
       name,
@@ -60,15 +70,41 @@ export const addContact = async (req, res, next) => {
     const allContacts = await listContacts();
     const newArr = [createContact, ...allContacts];
     await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
-    return createContact;
+    res.status(201).json(createContact);
   } catch (error) {
     next(error);
   }
 };
 
-export const updateContact = async (contactId, body) => {
-  const allContacts = await listContacts();
-  const item = allContacts.find(el => el.id === contactId);
+export const updateContact = async (req, res, next) => {
+  const { name, email, phone } = req.body;
+
+  try {
+    const { contactId } = req.params;
+    if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
+    const { error } = contactAddShcema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const createContact = {
+      name,
+      email,
+      phone,
+    };
+
+    const allContacts = await listContacts();
+    const newArr = allContacts.map(el => {
+      if (el.id === contactId) {
+        return (el = createContact);
+      }
+      return el;
+    });
+
+    await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
+    res.status(201).json(createContact);
+  } catch (error) {
+    next(error);
+  }
 };
 
 // module.exports = {

@@ -4,7 +4,7 @@ import * as contactServises from '../../models/contacts.js';
 import controllersContact from '../../controlers/controllersContacts.js';
 import { ctrlWrapper } from '../../helpers/ctrlWrapper.js';
 
-const { getAll, getById, deleteById, add } = controllersContact;
+const { getAll, getById, deleteById, add, put } = controllersContact;
 const router = Router();
 
 router.get('/', ctrlWrapper(getAll));
@@ -15,8 +15,6 @@ router.delete('/:contactId', ctrlWrapper(deleteById));
 
 router.post('/', ctrlWrapper(add));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json(await contactServises.updateContact(id, reg.body));
-});
+router.put('/:contactId', ctrlWrapper(put));
 
 export default router;
