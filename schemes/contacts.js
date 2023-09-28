@@ -2,6 +2,7 @@ const Joi = require("joi");
 
 const addContactSchema = Joi.object({
   name: Joi.string()
+    .min(2)
     .pattern(/^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/)
     .required()
     .messages({ "string.pattern.base": "invalid characters in the name" }),
@@ -12,12 +13,8 @@ const addContactSchema = Joi.object({
     )
     .required()
     .messages({ "string.pattern.base": "invalid phone number" }),
-}).messages({
-  "any.required": `{#key} is a required field`,
-  "string.email": "email field must be a valid email",
-  "string.base": `{#key} field must be a string`,
-  "object.unknown": `{#key} field is not allowed`,
-});
+  favorite: Joi.boolean(),
+}).messages({ "any.required": "missing required {#label} field" });
 
 const updateContactSchema = Joi.object({
   name: Joi.string(),
