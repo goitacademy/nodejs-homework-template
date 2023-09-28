@@ -25,7 +25,7 @@ const removeContact = async (contactId) => {
   const index = allContacts.findIndex((contact) => contact.id === contactId);
 
   if (index === -1) {
-    console.log("Контакт не знайдено");
+    console.log("Contact not found");
     return null;
   }
 
@@ -56,7 +56,7 @@ const updateContact = async (contactId, body) => {
   const index = allContacts.findIndex((contact) => contact.id === contactId);
 
   if (index === -1) {
-    console.log("Контакт не знайдено");
+    console.log("Contact not found");
     return null;
   }
 

@@ -1,8 +1,8 @@
-const HttpError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
-
-  return error;
-};
+class HttpError {
+  constructor(status, message) {
+    this.status = status;
+    this.message = message;
+  }
+}
 
 module.exports = { HttpError };
