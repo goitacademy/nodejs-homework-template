@@ -7,7 +7,6 @@ const {
   deleteContact,
   renewContact,
   updateStatusContact,
-  getFavoriteContacts,
 } = require('../../controllers/contacts');
 
 const router = express.Router();
@@ -16,12 +15,7 @@ const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
 const { addSchema, addSchemaRequired, updateStatusContactSchema } = require('../../models/contact');
 
-router.get('/', authenticate, (req, res) => {
-  if (req.query.favorite === 'true') {
-    return getFavoriteContacts(req, res);
-  }
-  return getAll(req, res);
-});
+router.get('/', authenticate, getAll);
 
 router.get('/:contactId', authenticate, isValidId, getContact);
 
