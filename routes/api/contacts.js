@@ -10,10 +10,10 @@ router.get('/', ctrl.getAll)
 
 router.get('/:contactId', ctrl.getById)
 
-router.post('/', validateBody(schema, "missing required name field"), ctrl.add)
+router.post('/', validateBody(schema), ctrl.add)
 
 router.delete('/:contactId', ctrl.deleteById)
 
-router.put('/:contactId',validateBody(schema, "missing fields"), ctrl.updateById)
+router.put('/:contactId', validateBody(schema), ctrl.updateById)
 
 module.exports = router
