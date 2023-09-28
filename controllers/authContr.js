@@ -124,13 +124,15 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tmpUpload, originalName } = req.file;
+  const { path: tmpUpload, originalname } = req.file;
   console.log(req.file);
   console.log(avatarsDir);
-  const resultUpload = path.join(avatarsDir, originalName);
+
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
 
   await fs.rename(tmpUpload, resultUpload);
-  const avatarURL = path.join('avatars', originalName);
+  const avatarURL = path.join('avatars', filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(200).json({

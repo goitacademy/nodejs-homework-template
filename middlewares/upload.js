@@ -7,7 +7,9 @@ const tmpDir = path.join(__dirname, '../', 'tmp');
 // створюємо об'єкт налаштувань
 const multerConfig = multer.diskStorage({
     destination: tmpDir,
-
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+}
 });
 
 // створюємо мідлвар для збереження файлів
