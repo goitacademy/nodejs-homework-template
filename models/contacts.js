@@ -1,16 +1,19 @@
-import { error } from 'console';
 import fs from 'fs/promises';
 import { nanoid } from 'nanoid';
 import path from 'path';
+import { HttpError } from '../helpers/index.js';
+
 const contactPath = path.resolve('models', 'contacts.json');
 
 export const listContacts = async (req, res, next) => {
-  console.log('req', req);
   try {
     const data = await fs.readFile(contactPath);
+    if (!data) {
+      throw HttpError(404, "message: 'Not found'");
+    }
     return JSON.parse(data);
   } catch (error) {
-    res.status(500).json({ message: 'Error server' });
+    next(error);
   }
 };
 
@@ -18,39 +21,35 @@ export const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const allContact = await listContacts();
-
     const elIdx = allContact.findIndex(el => el.id === contactId);
     const result = allContact[elIdx];
-
     if (!result) {
-      // console.log('res', res);
-      res
-        .status(404)
-        .json({ message: `Movie whith id ${contactId}  not found` });
-      throw error;
+      throw HttpError(404, `message: Movie whith id ${contactId}  not found `);
     }
     const newArr = allContact.filter((el, idx) => idx !== elIdx);
     await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
     return result;
   } catch (error) {
-    console.log('error!!!', '!!!!');
-    console.log('error', error);
-    // error.stattus(404);
-    // res.status(404).json({ message: 'Movie whith id  not found' });
-    // res
+    next(error);
   }
 };
 
 export const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
-  const allContacts = await listContacts();
-  const resp = allContacts.find(el => el.id === contactId);
-  if (!resp) {
-    res.status(404).json({ message: 'Movie whith id  not found' });
+  try {
+    const { contactId } = req.params;
+    const allContacts = await listContacts();
+    const resp = allContacts.find(el => el.id === contactId);
+    if (!resp) {
+      throw HttpError(404, `message: Movie whith id ${contactId}  not found `);
+    }
+    return resp;
+  } catch (error) {
+    next(error);
   }
 };
 
-export const addContact = async ({ name, email, phone }) => {
+export const addContact = async (req, res, next) => {
+  const { name, email, phone } = req.body;
   try {
     const createContact = {
       id: nanoid(),
@@ -60,11 +59,10 @@ export const addContact = async ({ name, email, phone }) => {
     };
     const allContacts = await listContacts();
     const newArr = [createContact, ...allContacts];
-    console.log('newArr', newArr);
     await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
     return createContact;
   } catch (error) {
-    throw error;
+    next(error);
   }
 };
 
