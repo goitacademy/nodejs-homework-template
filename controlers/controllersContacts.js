@@ -10,8 +10,9 @@ const getAll = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-  const id = req.url.substring(1);
-  const result = res.json(await contactServises.getContactById(id));
+  const { contactId } = req.params;
+
+  const result = res.json(await contactServises.getContactById(contactId));
   if (!result) {
     return res.status(404).json({ message: 'Not found' });
   }
@@ -19,8 +20,8 @@ const getById = async (req, res, next) => {
 };
 
 export const deleteById = async (req, res, next) => {
-  const id = req.url.substring(1);
-  res.json(await contactServises.removeContact(id));
+  const { contactId } = req.params;
+  res.json(await contactServises.removeContact(req, res, next));
 };
 
 export const add = async (req, res, next) => {
