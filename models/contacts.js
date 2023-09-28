@@ -4,15 +4,13 @@ import { nanoid } from 'nanoid';
 import path from 'path';
 const contactPath = path.resolve('models', 'contacts.json');
 
-export const listContacts = async (req, res) => {
+export const listContacts = async (req, res, next) => {
+  console.log('req', req);
   try {
     const data = await fs.readFile(contactPath);
     return JSON.parse(data);
   } catch (error) {
-    console.log('error', error);
     res.status(500).json({ message: 'Error server' });
-    // console.log('error', error.message);
-    // throw error;
   }
 };
 
@@ -43,13 +41,12 @@ export const removeContact = async (req, res, next) => {
   }
 };
 
-export const getContactById = async contactId => {
-  try {
-    const allContacts = await listContacts();
-    const resp = allContacts.find(el => el.id === contactId);
-    return resp || null;
-  } catch (error) {
-    throw error;
+export const getContactById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const allContacts = await listContacts();
+  const resp = allContacts.find(el => el.id === contactId);
+  if (!resp) {
+    res.status(404).json({ message: 'Movie whith id  not found' });
   }
 };
 

@@ -1,18 +1,17 @@
 import * as contactServises from '../models/contacts.js';
 
 const getAll = async (req, res, next) => {
-  const result = res.json(await contactServises.listContacts());
+  const result = res.json(await contactServises.listContacts(req, res, next));
   if (!result) {
     return res.status(404).json({ message: 'Not found' });
   }
-
   return result;
 };
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const result = res.json(await contactServises.getContactById(contactId));
+  const result = res.json(await contactServises.getContactById(req, res, next));
   if (!result) {
     return res.status(404).json({ message: 'Not found' });
   }
