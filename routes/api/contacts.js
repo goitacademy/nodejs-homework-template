@@ -10,24 +10,14 @@ const {
   updateContact,
 } = require("../../controllers/contactControllers");
 
-router.get("/", async (req, res, next) => {
-  await listContacts(req, res, next);
-});
+router.get("/", listContacts);
 
-router.get("/:contactId", async (req, res, next) => {
-  await getContactById(req, res, next);
-});
+router.get("/:contactId", getContactById);
 
-router.post("/", async (req, res, next) => {
-  await addContact(req, res, next);
-});
+router.post("/", addContact);
 
-router.delete("/:contactId", async (req, res, next) => {
-  await removeContact(req, res, next);
-});
+router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  await updateContact(req, res, next);
-});
+router.put("/:contactId", updateContact);
 
 module.exports = router;
