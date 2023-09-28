@@ -4,79 +4,58 @@ const contacts = require("../models/contacts");
 
 const { HttpError } = require("../helpers/HttpError");
 
-const listContacts = async (req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
+const { ctrlWrapeer } = require("../utils/decorators/ctrlWrapper");
 
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
+const listContacts = async (req, res, next) => {
+  const result = await contacts.listContacts();
+
+  res.status(200).json(result);
 };
 
 const getContactById = async (req, res, next) => {
-  try {
-    const result = await contacts.getContactById(req.params.contactId);
-    if (!result) {
-      throw new HttpError(404, "Not Found");
-    }
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
+  const result = await contacts.getContactById(req.params.contactId);
+  if (!result) {
+    throw new HttpError(404, "Not Found");
   }
+  res.status(200).json(result);
 };
 
 const addContact = async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.query);
+  const { error } = addSchema.validate(req.query);
 
-    if (error) {
-      throw new HttpError(400, error.message);
-    }
-
-    const result = await contacts.addContact(req.query);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
+  if (error) {
+    throw new HttpError(400, error.message);
   }
+
+  const result = await contacts.addContact(req.query);
+  res.status(201).json(result);
 };
 
 const removeContact = async (req, res, next) => {
-  try {
-    const result = await contacts.removeContact(req.params.contactId);
+  const result = await contacts.removeContact(req.params.contactId);
 
-    if (!result) {
-      throw new HttpError(404, "Not Found");
-    }
-
-    res.status(200).json({ message: "contact deleted" });
-  } catch (error) {
-    next(error);
+  if (!result) {
+    throw new HttpError(404, "Not Found");
   }
+
+  res.status(200).json({ message: "contact deleted" });
 };
 
 const updateContact = async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.query);
+  const { error } = addSchema.validate(req.query);
 
-    if (error) {
-      throw new HttpError(400, error.message);
-    }
-
-    const result = await contacts.updateContact(
-      req.params.contactId,
-      req.query
-    );
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
+  if (error) {
+    throw new HttpError(400, error.message);
   }
+
+  const result = await contacts.updateContact(req.params.contactId, req.query);
+  res.status(200).json(result);
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
+  listContacts: ctrlWrapeer(listContacts),
+  getContactById: ctrlWrapeer(getContactById),
+  addContact: ctrlWrapeer(addContact),
+  removeContact: ctrlWrapeer(removeContact),
+  updateContact: ctrlWrapeer(updateContact),
 };
