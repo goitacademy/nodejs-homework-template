@@ -4,7 +4,12 @@ import Joi from "joi";
 import gravatar from "gravatar";
 import jimp from "jimp";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import { User } from "../models/users.model.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const userValidationSchema = Joi.object({
   email: Joi.string().email().required(),

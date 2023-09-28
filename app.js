@@ -6,15 +6,27 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { contactsRouter } from "./routes/contacts.route.js";
 import { userRouter } from "./routes/users.route.js";
+import fs from "fs";
 
 dotenv.config();
 
 const port = process.env.PORT || 3000;
 const app = express();
 
+const tmpFolder = "tmp";
+
+const checkOrCreateTmpFolder = () => {
+  if (!fs.existsSync(tmpFolder)) {
+    fs.mkdirSync(tmpFolder);
+    console.log(`Created ${tmpFolder} folder.`);
+  } else {
+    console.log(`${tmpFolder} folder already exists.`);
+  }
+};
 
 const initializeApp = async () => {
   await dbConnect();
+  checkOrCreateTmpFolder();
 
   const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
