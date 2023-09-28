@@ -4,6 +4,7 @@ const gravatar = require('gravatar');
 require("dotenv").config();
 const path = require('path');
 const fs = require('fs/promises');
+const Jimp = require('jimp');
 
 const { SECRET_KEY } = process.env;
 const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
@@ -125,8 +126,11 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
-  console.log(req.file);
-  console.log(avatarsDir);
+   const img = await Jimp.read(tmpUpload);
+  await img
+    .autocrop()
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+    .writeAsync(tmpUpload);
 
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
