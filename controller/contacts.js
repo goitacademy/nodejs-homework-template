@@ -1,4 +1,4 @@
-const service = require('../service/index');
+const service = require('../service/contacts');
 
 const get = async (req, res, next) => {
     try {
@@ -30,7 +30,7 @@ const remove = async (req, res, next) => {
     try {
         const result = await service.removeContact(contactId);
         if (result) {
-            res.status(200).json({ "message": "contact deleted" })
+            res.status(200).json({ "message": "Contact deleted" })
         } else {
             res.status(404).json({ "message": `Not found contact id: ${contactId}` })
         }

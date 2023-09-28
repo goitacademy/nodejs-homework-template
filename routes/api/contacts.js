@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const ctrlContact = require('../../controller/index')
+const ctrlContact = require('../../controller/contacts')
+// middlewares
 const validateContactId = require('../../middlewares/errorHandlerID');
 const validateRequestBody = require('../../middlewares/errorHandlerBody');
 const validateStatus = require('../../middlewares/errorHandlerStatus');

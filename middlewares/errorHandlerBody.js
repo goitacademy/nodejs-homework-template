@@ -1,5 +1,4 @@
-const { schemaValidate } = require('../service/schemas/contactsValidate');
-
+const { schemaValidate } = require('../service/schemes/contactsValidate');
 
 const validateRequestBody = (req, res, next) => {
     const { error } = schemaValidate.validate(req.body);

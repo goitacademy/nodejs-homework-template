@@ -1,4 +1,4 @@
-const { schemaValidateStatus } = require('../service/schemas/contactsValidate');
+const { schemaValidateStatus } = require('../service/schemes/contactsValidate');
 
 const validateStatus = (req, res, next) => {
     const { favorite } = req.body;
