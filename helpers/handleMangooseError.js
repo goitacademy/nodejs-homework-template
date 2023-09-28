@@ -1,4 +1,4 @@
-const handleMangooseError = (error, data, next) => {
+const handleMangooseError = (error, _, next) => {
   error.status = 400;
   next();
 };

@@ -1,6 +1,7 @@
-const HttpError = (status, message) => {
-  const error = new Error(message);
+const HttpError = (status, obj) => {
+  const error = new Error();
   error.status = status;
+  error.error = { ...obj };
   return error;
 };
 
