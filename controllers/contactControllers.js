@@ -7,8 +7,8 @@ const { HttpError } = require("../helpers/HttpError");
 const listContacts = async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
-    res.json(result);
-    res.status(200);
+
+    res.status(200).res.json(result);
   } catch (error) {
     next(error);
   }
