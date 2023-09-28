@@ -5,10 +5,9 @@ const registerUser = async (body) => {
   return user;
 };
 const findUser = async (email) => {
-  const user = await User.find({email});
+  const user = await User.find(email);
   return user
 };
-
 const findUserById = async (_id) => {
   const user = await User.find({_id});
   return user
@@ -17,5 +16,8 @@ const updateByUserAvatar = async (_id,avatarURL) => {
   const user = await User.findByIdAndUpdate(_id,{avatarURL})
   return user
 }
-
-module.exports = { registerUser, findUser,findUserById,updateByUserAvatar };
+const updateVarify = async (_id,obg) => {
+  const user = await User.findByIdAndUpdate(_id,obg)
+  return user
+}
+module.exports = { registerUser, findUser,findUserById,updateByUserAvatar,updateVarify };

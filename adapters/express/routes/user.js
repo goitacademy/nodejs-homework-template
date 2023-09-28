@@ -11,6 +11,8 @@ router.post("/users/login",[validateUser],userService.loginUser)
 router.post("/users/logout",auth,userService.logout)
 router.get("/users/current",auth,userService.currentUser)
 router.patch("/users/avatar",upload.single('avatar'),auth,userService.updateAvatar)
+router.get('/users/verify/:verificationToken',userService.verificationUser)
+router.post('/users/verify',userService.verificationRepet)
 router.use(handlerError);
 
 module.exports = router;
