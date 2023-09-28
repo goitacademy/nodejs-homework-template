@@ -30,6 +30,14 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -50,6 +58,13 @@ export const userSingSchema = Joi.object({
     .required()
     .messages({ "any.required": `"password" mast be exist` }),
   subscription: Joi.string(),
+});
+
+export const userVerifySchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailPattern)
+    .required()
+    .messages({ message: "missing required field email" }),
 });
 
 export default User;
