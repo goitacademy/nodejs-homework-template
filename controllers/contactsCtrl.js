@@ -41,19 +41,10 @@ const addContact = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const result = await Contact.create(body);
-    console.log(result);
     return res.status(201).json(result);
   } catch (error) {
     next(error);
   }
-  // const doesExist = Contact.exists({
-  //   $or: [{ email: body.email }, { phone: body.phone }],
-  // });
-  // if (doesExist === null) {
-  //   const newContact = Contact.create(body);
-  //   return newContact;
-  // }
-  // return "Contact already exists";
 };
 
 const updateContact = async (req, res, next) => {
@@ -79,7 +70,7 @@ const updateStatusContact = async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
   try {
-    if (!body) {
+    if (!body?.favorite) {
       throw HttpError(400, "missing field favorite");
     }
     const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {

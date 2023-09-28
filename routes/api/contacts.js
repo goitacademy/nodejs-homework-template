@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const isValidId = require("../../middlewares/isValidId");
+const { isValidId, doesContactExist } = require("../../middlewares");
 
 const {
   listContacts,
@@ -17,7 +17,7 @@ router.get("/", listContacts);
 
 router.get("/:contactId", isValidId, getContactById);
 
-router.post("/", addContact);
+router.post("/", doesContactExist, addContact);
 
 router.delete("/:contactId", isValidId, removeContact);
 
