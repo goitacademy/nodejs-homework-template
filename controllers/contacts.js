@@ -1,14 +1,14 @@
+const path = require("path");
 const fs = require("fs").promises;
-const path = require('path');
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const readContactsFile = async () => {
   try {
-    const data = await fs.readFile(contactsPath, 'utf8');
+    const data = await fs.readFile(contactsPath, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    if (error.code === 'ENOENT') {
+    if (error.code === "ENOENT") {
       // Plik nie istnieje, zwróć pustą tablicę
       return [];
     }
@@ -42,7 +42,8 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   const contacts = await listContacts();
-  const contactId = contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
+  const contactId =
+    contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1;
   const newContact = { id: contactId, ...body };
   contacts.push(newContact);
   await writeContactsFile(contacts);
