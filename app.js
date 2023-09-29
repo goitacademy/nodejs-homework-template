@@ -9,6 +9,7 @@ const contactsRouter = require("./routes/api/contacts");
 const usersRouter = require("./routes/api/users");
 
 const app = express();
+app.use("/public", express.static("public"));
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
