@@ -77,7 +77,7 @@ const patchUpdateById = async (req, res) => {
   }
   const { error } = controlPatch.validate(req.body);
   if (error) {
-    throw HttpError(400, error.message);
+    throw HttpError(400, "missing field favorite");
   }
 
   const { id } = req.params;
