@@ -1,25 +1,101 @@
-const express = require('express')
+import express from "express";
+import Joi from "joi";
 
-const router = express.Router()
+import * as contactsService from "../../models/contacts.js";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { HttpError } from "../../helpers/index.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactAddSchema = Joi.object({
+  name: Joi.string().required().message({
+    "any.required": `"name" required field`,
+  }),
+  email: Joi.string().required().message({
+    "any.required": `"email" required field`,
+  }),
+  phone: Joi.string().required().message({
+    "any.required": `"phone" required field`,
+  }),
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const result = await contactsService.getAllMovies();
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactsService.getMovieById(contactId);
+    if (!result) {
+      throw HttpError(404, `Movie with ${contactId} not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+router.post("/", async (req, res, next) => {
+  try {
+    if (!Object.keys(req.body).length) {
+      throw HttpError(400, "All fields empty");
+    }
+
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await contactsService.addMovie(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactsService.deleteMovieById(contactId);
+    if (!result) {
+      throw HttpError(404, `Movie with ${contactId} not found`);
+    }
+
+    res.json({
+      message: "Delete success",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:contactId", async (req, res, next) => {
+  try {
+    if (!Object.keys(req.body).length) {
+      throw HttpError(400, "All fields empty");
+    }
+
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+
+    const { contactId } = req.params;
+
+    const result = await contactsService.updateMovieById(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, `Movie with ${contactId} not found`);
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default router;
