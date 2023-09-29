@@ -8,7 +8,7 @@ const doesContactExist = async (req, res, next) => {
   });
   console.log(doesExist);
   if (doesExist) {
-    next(HttpError(400, "Contact already exists"));
+    next(HttpError(409, "Contact already exists"));
     return;
   }
   next();
