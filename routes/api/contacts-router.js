@@ -9,9 +9,9 @@ router.get("/", contactsControllers.getAll);
 
 router.get("/:contactId", contactsControllers.getById);
 
-router.post("/", contactsControllers.add);
+router.post("/", validateBody(addSchema), contactsControllers.add);
 
-router.put("/:contactId", contactsControllers.updateById);
+router.put("/:contactId", validateBody(updateSchema), contactsControllers.updateById);
 
 router.delete("/:contactId", contactsControllers.deleteById);
 
