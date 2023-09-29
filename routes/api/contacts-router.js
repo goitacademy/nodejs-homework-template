@@ -1,5 +1,6 @@
 import express from "express";
 import contactsControllers from "../../controllers/contacts-controller.js";
+import { validateBody } from "../../decorators/index.js";
 
 const router = express.Router();
 
