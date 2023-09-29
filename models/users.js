@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 const HttpError = require("../helpers/HttpError");
 const { User } = require("../schemas/ValidateAuth");
 const { SECRET_KEY } = require("../constants/env");
@@ -11,11 +12,19 @@ const ifIsResult = (result) => {
 };
 
 const registerUserInDB = async (body) => {
-  const { password } = body;
+  // const { path: tempUpload, originalname } = file;
+  // const avatarDir = path.join(__dirname, "../", "public", "avatars");
+  // const resultUpload = path.join(avatarDir, originalname);
+  // await fs.rename(tempUpload, resultUpload);
+  // const avatarURL = path.join("avatars", originalname);
+
+  const { password, email } = body;
+  const avatarUrl = gravatar.url(email)
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     ...body,
     password: hashedPassword,
+    avatarUrl,
   });
   ifIsResult(newUser);
   return newUser;
@@ -45,11 +54,15 @@ const logoutFromDB = async (user) => {
   return result;
 };
 
-const updateUserSubscriptionInDB = async ({_id}, userId, subscription) => {
+const updateUserSubscriptionInDB = async ({ _id }, userId, subscription) => {
   if (_id.toString() !== userId) {
-    throw HttpError(403)
+    throw HttpError(403);
   }
-  const result = await User.findByIdAndUpdate(_id, { subscription }, {new: true});
+  const result = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
   return result;
 };
 

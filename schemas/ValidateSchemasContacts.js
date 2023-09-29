@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const subscriptionList = require("../constants/subscription");
 
 const phoneRegex = /^[0-9+() -]*$/;
 const contactSchema = new Schema(
@@ -46,15 +45,10 @@ const validateUpdateContactSchema = Joi.object({
   favorite: Joi.bool(),
 });
 
-const validateUpdateSubscription = Joi.object({
-  subscription: Joi.string()
-    .valid(...subscriptionList)
-    .required(),
-});
+
 
 module.exports = {
   Contact,
   validateAddContactSchema,
   validateUpdateContactSchema,
-  validateUpdateSubscription,
 };
