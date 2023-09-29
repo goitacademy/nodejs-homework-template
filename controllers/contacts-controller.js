@@ -48,10 +48,8 @@ const add = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-
     const { body } = req;
-    console.log("body :>> ", body);
+    const { contactId } = req.params;
 
     const { error } = updateSchema.validate(body);
     if (error) throw HttpError(400, error.message);
