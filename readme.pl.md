@@ -28,10 +28,3 @@ Uważnie czytaj komentarze mentora. Popraw uwagi i zrób commit na gałęzi z za
 - `npm lint:fixnpm run lint` &mdash; uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
 - `npm lint:fix` &mdash; to samo co powyższe, ale również automatycznie poprawia proste błędy.
 
-
-GET:    http://localhost:3000/api/contacts/
-GET:    http://localhost:3000/api/contacts/{id}             { "favorite": true }
-POST:   http://localhost:3000/api/contacts/                 { "name": "mongo mongusek", "email": "piąty@contact.com", "phone": "555-555-555" }
-PUT:    http://localhost:3000/api/contacts/{id}             { "name": "mongosek mongo", "email": "piąty@contact.com", "phone": "777-888-777" }
-PUSCH:  http://localhost:3000/api/contacts/{id}/favorite    { "favorite": false/or/true }
-DELETE: http://localhost:3000/api/contacts/{id}

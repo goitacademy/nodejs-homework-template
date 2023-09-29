@@ -1,26 +1,21 @@
+require("dotenv").config();
+
 const app = require("./app");
-const authRoutes = require("./routes/api/auth");
+
+const PORT = process.env.PORT || 3001;
+const DATABASE_URI = process.env.DATABASE_URI;
 const mongoose = require("mongoose");
 
-app.use("/api/auth", authRoutes);
-
 mongoose
-  .connect(
-    "mongodb+srv://kowalewiczkarol:secGUZy3RZUGMwOv@cluster0.ivmgw57.mongodb.net/mydb",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(DATABASE_URI, { dbName: "mydb" })
   .then(() => {
-    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log("Database connection successful");
+      console.log("Server running. Use our API on port: 3000");
+    });
   })
-  .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
+  .catch((err) => {
+    console.error(`Database connection error: ${err.message}`);
+    process.exit(1);
   });
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Serwer działa na porcie ${PORT}`);
-});
