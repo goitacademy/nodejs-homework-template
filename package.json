@@ -16,6 +16,7 @@
     "joi": "^17.10.2",
     "mongoose": "^7.5.3",
     "morgan": "1.10.0",
+    "schema": "^0.2.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
