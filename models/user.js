@@ -15,12 +15,12 @@ const userSchema = new Schema(
       type: String,
       match: emailRegExp,
       unique: true,
-      required: true,
+      required: [true, "Email is required"],
     },
     password: {
       type: String,
       minlength: 8,
-      required: true,
+      required: [true, "Set password for user"],
     },
     subscription: {
       type: String,
@@ -49,9 +49,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(8).required(),
 });
 
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  updateSubscriptionSchema,
 };
 
 const User = model("user", userSchema);

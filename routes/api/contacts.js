@@ -5,7 +5,7 @@ const { contacts: ctrl } = require("../../controllers");
 
 const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
-const { schemas } = require("../../models/contact");
+const { contactSchemas } = require("../../models");
 
 router.get("/", authenticate, ctrl.getAll);
 
@@ -15,7 +15,7 @@ router.post(
   "/",
   authenticate,
   authenticate,
-  validateBody(schemas.addSchema),
+  validateBody(contactSchemas.addSchema),
   ctrl.add
 );
 
@@ -25,7 +25,7 @@ router.put(
   "/:id",
   authenticate,
   isValidId,
-  validateBody(schemas.addSchema),
+  validateBody(contactSchemas.addSchema),
   ctrl.updateById
 );
 
@@ -33,7 +33,7 @@ router.patch(
   "/:id/favorite",
   authenticate,
   isValidId,
-  validateBody(schemas.updateFavoriteSchema),
+  validateBody(contactSchemas.updateFavoriteSchema),
   ctrl.updateStatusContact
 );
 
