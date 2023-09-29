@@ -1,14 +1,7 @@
 import express from "express";
 import Joi from "joi";
 import { HttpError } from "../../helpers/index.js";
-// import {
-//   addContact,
-//   getContactById,
-//   listContacts,
-//   updateContact,
-//   removeContact,
-// } from "../../models/contacts.js";
-import * as contactsService from "../../models/contacts.js";
+import { contactsService } from "../../models/index.js";
 
 const router = express.Router();
 
