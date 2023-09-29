@@ -6,6 +6,10 @@ const { schemas } = require("../../models/user");
 
 const router = express.Router();
 
+// Sign Up
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
+
+// Sign In
+router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
 module.exports = router;
