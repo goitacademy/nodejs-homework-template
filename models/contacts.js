@@ -10,6 +10,12 @@ const contactAddShcema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
+const contactUpdateShcema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  id: Joi.string().required(),
+});
 export const listContacts = async (req, res, next) => {
   try {
     const data = await fs.readFile(contactPath);
@@ -77,12 +83,13 @@ export const addContact = async (req, res, next) => {
 };
 
 export const updateContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, id } = req.body;
 
   try {
     const { contactId } = req.params;
-    // if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
-    // const { error } = contactAddShcema.validate(req.body);
+    if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
+    const a = contactUpdateShcema.validate(req.body);
+    console.log('a', a);
     // if (error) {
     //   throw HttpError(400, error.message);
     // }
@@ -90,8 +97,9 @@ export const updateContact = async (req, res, next) => {
       name,
       email,
       phone,
+      id,
     };
-    console.log('name', contactId);
+
     const allContacts = await listContacts();
     const newArr = allContacts.map(el => {
       if (el.id === contactId) {
