@@ -81,17 +81,17 @@ export const updateContact = async (req, res, next) => {
 
   try {
     const { contactId } = req.params;
-    if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
-    const { error } = contactAddShcema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
+    // if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
+    // const { error } = contactAddShcema.validate(req.body);
+    // if (error) {
+    //   throw HttpError(400, error.message);
+    // }
     const createContact = {
       name,
       email,
       phone,
     };
-
+    console.log('name', contactId);
     const allContacts = await listContacts();
     const newArr = allContacts.map(el => {
       if (el.id === contactId) {
@@ -99,7 +99,6 @@ export const updateContact = async (req, res, next) => {
       }
       return el;
     });
-
     await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
     res.status(201).json(createContact);
   } catch (error) {
