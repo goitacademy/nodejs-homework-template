@@ -13,8 +13,8 @@ const contactValidate = joi.object({
     phone: joi.string().required(),
 });
 
-const contactFavorite = Joi.object({
-    favorite: Joi.boolean().required(),
+const contactFavorite = joi.object({
+    favorite: joi.boolean().required(),
   });
 
 
