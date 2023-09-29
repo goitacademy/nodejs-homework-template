@@ -1,28 +1,29 @@
 const Contact = require("../models/userModel");
 
-const errorHandler = require("../utilits/errorHandler");
+const httpError = require("../utilits/httpError");
 const ctrlWrapper = require("../utilits/ctrlWraper");
 
 const getList = async (req, res) => {
   const contactsList = await Contact.find();
-  res.status(200).json({ contactsList });
+
+  return res.status(200).json({ contactsList });
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findById(contactId);
 
-  errorHandler(404, "Not found");
-  res.status(200).json(result);
-
   if (!result) {
-    throw errorHandler(404, "Contact is not found");
+    throw httpError(404, "Contact is not found");
   }
+
+  return res.status(200).json(result);
 };
 
 const postContact = async (req, res) => {
   const result = await Contact.create(req.body);
-  res.status(201).json(result);
+
+  return res.status(201).json(result);
 };
 
 const deleteContact = async (req, res) => {
@@ -30,10 +31,10 @@ const deleteContact = async (req, res) => {
   const result = await Contact.findByIdAndDelete(contactId);
 
   if (!result) {
-    throw errorHandler(404, "Not found");
+    throw httpError(404, "Not found");
   }
 
-  res.status(200).json({ message: "Contact deleted" });
+  return res.status(200).json({ message: "Contact deleted" });
 };
 
 const update = async (req, res) => {
@@ -43,14 +44,12 @@ const update = async (req, res) => {
     { new: true }
   );
 
-  res.status(200).json(result);
-
   if (!result) {
-    throw errorHandler(404, "Not found");
+    throw httpError(404, "Not found");
   }
+
+  return res.status(200).json(result);
 };
-
-
 
 module.exports = {
   getList: ctrlWrapper(getList),
