@@ -1,9 +1,9 @@
 const app = require('./app')
 const mongoose = require('mongoose')
 
-
-// mm15ulNAnlgUY4f8\
-const DB_HOST = 'mongodb+srv://Nikita:mm15ulNAnlgUY4f8@cluster0.7u0vxxh.mongodb.net/db-contacts?retryWrites=true&w=majority&appName=AtlasApp'
+console.log(process.env);
+const {DB_HOST} = process.env
+  console.log(DB_HOST);
 
 mongoose.connect(DB_HOST)
   .then(() =>
