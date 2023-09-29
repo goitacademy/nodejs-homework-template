@@ -2,7 +2,7 @@ import express from "express";
 
 import * as contactsService from "../../models/contacts/index.js";
 
-import { HttpError } from "../..//helpers/index.js";
+import { HttpError } from "../../helpers/index.js";
 
 const contactsRouter = express.Router();
 
