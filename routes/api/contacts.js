@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const ctrlContact = require("../../controller");
+const authMiddleware = require("../../middleware/auth");
 
-router.get("/", ctrlContact.get);
+
+router.get("/", authMiddleware.authenticate, ctrlContact.getContacts);
 
 router.get("/:contactId", ctrlContact.getById);
 

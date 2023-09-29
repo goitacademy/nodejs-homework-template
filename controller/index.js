@@ -1,13 +1,27 @@
 const service = require("../service");
 
-const get = async (req, res, next) => {
+// const get = async (req, res, next) => {
+//   try {
+//     const contactsList = await service.getAllContacts();
+//     res.status(200).json({ message: "Success", data: contactsList });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+const getContacts = async (req, res, next) => {
   try {
-    const contactsList = await service.getAllContacts();
+       if (!req.user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+    const contactsList = await service.getContactsForUser(req.user._id);
     res.status(200).json({ message: "Success", data: contactsList });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
@@ -98,7 +112,8 @@ const favorite = async (req, res, next) => {
 };
 
 module.exports = {
-  get,
+  // get,
+  getContacts,
   getById,
   remove,
   create,
