@@ -1,4 +1,5 @@
-const Contact = require('../shemas/contacts')
+const Contact = require('../schemas/contacts')
+const handleError = require('../helpers/handleError')
 
 const listContacts = async () => {
   return await handleError(async () => {

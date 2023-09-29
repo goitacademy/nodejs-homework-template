@@ -14,7 +14,7 @@ const contactSchema = new Schema(
             unique: true,
         },
         phone: {
-            type: Number,
+            type: String,
             required: [true, 'This fill is required, please fill it'],
             unique: true,
         },
