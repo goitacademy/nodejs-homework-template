@@ -1,44 +1,49 @@
-const contactsService = require("../models/contacts");
-const { HttpError, controllerWrap } = require("../helpers");
-
-const getAll = async (req, res) => {
-  const result = await contactsService.listContacts();
-  res.json(result);
-};
-
-const getOne = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsService.getContactById(id);
-
-  if (!result) throw HttpError(404, "Not found");
-  res.json(result);
-};
+const contactsService = require('../services/contactsService');
+const { HttpError, controllerWrap } = require('../helpers');
 
 const create = async (req, res) => {
-  const result = await contactsService.createContact(req.body);
+  const result = await contactsService.create(req.body);
   res.status(201).json(result);
+};
+
+const findAll = async (req, res) => {
+  const data = await contactsService.findAll();
+  res.json(data);
+};
+
+const findOne = async (req, res) => {
+  const { id } = req.params;
+  const result = await contactsService.findOne(id);
+  if (!result) throw HttpError(404, 'Not found');
+  res.json(result);
 };
 
 const update = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.updateContact(id, req.body);
+  const result = await contactsService.update(id, req.body);
+  if (!result) throw HttpError(404, 'Not found');
+  res.json(result);
+};
 
-  if (!result) throw HttpError(404, "Not found");
+const updateFavorite = async (req, res) => {
+  const { id } = req.params;
+  const result = await contactsService.updateFavorite(id, req.body);
+  if (!result) throw HttpError(404, 'Not found');
   res.json(result);
 };
 
 const remove = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.removeContact(id);
-
-  if (!result) throw HttpError(404, "Not found");
-  res.json({ result, message: "Delete success" });
+  const result = await contactsService.remove(id);
+  if (!result) throw HttpError(404, 'Not found');
+  res.json({ message: 'Contact deleted' });
 };
 
 module.exports = {
-  getAll: controllerWrap(getAll),
-  getOne: controllerWrap(getOne),
   create: controllerWrap(create),
+  findAll: controllerWrap(findAll),
+  findOne: controllerWrap(findOne),
   update: controllerWrap(update),
+  updateFavorite: controllerWrap(updateFavorite),
   remove: controllerWrap(remove),
 };
