@@ -4,6 +4,8 @@ import Joi from "joi";
 import gravatar from "gravatar";
 import jimp from "jimp";
 import path from "path";
+import nodemailer from "nodemailer";
+import { v4 as uuidv4 } from "uuid";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import { User } from "../models/users.model.js";
@@ -15,6 +17,35 @@ const userValidationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 });
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.example.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "your-email@example.com",
+    pass: "your-password",
+  },
+});
+
+const sendVerificationEmail = async (user) => {
+  const verificationToken = user.verificationToken;
+  const email = user.email;
+
+  const mailOptions = {
+    from: "your-email@example.com",
+    to: email,
+    subject: "Email Confirmation",
+    text: `Click the link below to verify your email address:\n\nhttp://localhost:3001/users/verify/${verificationToken}`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+    } else {
+      console.log("Email sent:", info.response);
+    }
+  });
+};
 
 export const signUpHandler = async (req, res) => {
   try {
@@ -35,12 +66,18 @@ export const signUpHandler = async (req, res) => {
       { s: "100", r: "x", d: "retro" },
       true
     );
+
+    const verificationToken = uuidv4();
+
     const user = new User({
       email: req.body.email,
       password: hashedPassword,
       avatarURL,
+      verificationToken,
     });
     await user.save();
+
+    await sendVerificationEmail(user);
 
     res.status(201).json({
       user: {
@@ -173,5 +210,63 @@ export const updateAvatarHandler = async (req, res) => {
     console.error(error);
 
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const verificationHandler = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  try {
+    const user = await User.findOne({ verificationToken });
+
+    if (!user) {
+      return res.status(404).json({ message: " User not found" });
+    }
+
+    user.verificationToken = null;
+    user.verify = true;
+
+    await user.save();
+
+    return res.status(200).json({ message: "Verification successful" });
+  } catch (error) {
+    console.error("A server error occurred:", error);
+    return res.status(500).send({ message: "Server error" });
+  }
+};
+
+export const validateResendEmailRequest = (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string().email().required(),
+  });
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: "missing required field email" });
+  }
+
+  next()
+};
+
+export const resendVerificationEmailHandler = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.verify) {
+      return res
+        .status(400)
+        .json({ message: "Verification has already been passed" });
+    }
+
+    return res.status(200).json({ message: "Verification email sent" });
+  } catch (error) {
+    console.error("A server error occurred:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };

@@ -87,9 +87,6 @@ export const updateFavoriteStatusHandler = async (req, res) => {
     }
     res.status(200).json(updatedContact);
   } catch (error) {
-    if (error.message === "missing field favorite") {
-      return res.status(400).send({ message: "missing field favorite" });
-    }
     console.error("A server error occurred:", error);
     return res.status(500).send({ message: "Server error" });
   }
