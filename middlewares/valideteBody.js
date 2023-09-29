@@ -16,17 +16,17 @@ const validateBody = (schema) => {
       let message;
       switch (nameField) {
         case "name":
-          message = "Invalid name field format. The name should only contain letters, spaces, hyphens, and apostrophes, and should not exceed 25 characters"
+          message = "The name should only contain letters, spaces, hyphens, and apostrophes, and should not exceed 25 characters."
           break
         case "email":
-          message = "Invalid email format. Please enter a valid email address"
+          message = "Please enter a valid email address."
           break
         case "phone":
-          message = "Invalid phone field format. The phone number should be in the format (XXX) XXX-XXXX"
+          message = "The phone number should be in the format (XXX) XXX-XXXX."
           break
         
       }
-      return next(HttpError(400,  `${message}` ))
+      return next(HttpError(400,  `Invalid ${nameField} field format. ${message}` ))
     }
       next()
     }
