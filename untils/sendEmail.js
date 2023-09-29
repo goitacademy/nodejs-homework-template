@@ -1,9 +1,9 @@
 const sgMail = require('@sendgrid/mail');
-const {SENDGRID_TOKEN} = require('../constants/env')
+const {SENDGRID_TOKEN,SEND_FROM_EMAIL} = require('../constants/env')
 sgMail.setApiKey(SENDGRID_TOKEN);
 
 const sendEmail = async (data) => {
-    const email = {...data,from:'mykolavladi2@gmail.com'}
+    const email = {...data,from:SEND_FROM_EMAIL}
     console.log(email)
    await sgMail.send(email)
    return true
