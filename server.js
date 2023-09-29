@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const conection = require("./db/connection");
+const routerApi = require('./api');
 
 require("dotenv").config();
 
@@ -8,11 +9,9 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+require("./config/config-passport");
 
-const routerApi = require('./api');
-app.use("/api/contacts", routerApi);
-
-
+app.use("/api", routerApi);
 
 app.use((_, res) => {
     res.status(404).json({
@@ -46,3 +45,4 @@ conection
     console.log(`Server is not running.
     Error message: ${err.message}`)
 })
+

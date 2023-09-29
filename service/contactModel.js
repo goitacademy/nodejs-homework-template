@@ -1,15 +1,15 @@
-const Contact = require("./schema/contact");
+const Contact = require("./schema/contacts");
 
-const getAllContacts = async () => {
-  return Contact.find();
+const getAllContacts = async ({owner}) => {
+  return Contact.find({owner});
 };
 
 const getContactById = (id) => {
   return Contact.findOne({ _id: id });
 };
 
-const createContact = ({name, email, phone, favorite}) =>{
-  return Contact.create({name, email, phone, favorite})
+const createContact = ({name, email, phone, favorite, owner}) =>{
+  return Contact.create({name, email, phone, favorite, owner})
 };
 
 const updateContact = (id, fields) =>{
