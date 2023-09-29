@@ -1,6 +1,13 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const dotenv = require("dotenv");
+
+dotenv.config();
+
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+
+const { connectDatabase } = require("./startup/datebase");
+connectDatabase();
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -22,4 +29,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
 
-module.exports = app
+module.exports = app;
