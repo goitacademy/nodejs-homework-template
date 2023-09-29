@@ -1,5 +1,4 @@
 const express = require("express");
-const { v4: uuidv4 } = require("uuid");
 const { body, validationResult } = require("express-validator");
 
 const {
@@ -34,8 +33,12 @@ router.get("/:contactId", async (req, res, next) => {
     const contact = await getContactById(id);
     res.json(contact);
   } catch (error) {
-    console.error("Error en la ruta /:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: "Invalid contact ID" });
+    }
+    res
+      .status(500)
+      .json({ error: `Error en el servidor de tipo: ${error.name}` });
   }
 });
 
@@ -45,9 +48,7 @@ router.post("/", validateBody, async (req, res, next) => {
     return res.status(400).json({ errores: result.array() });
   }
   try {
-    const { name, email, phone } = req.body;
-    const newContact = { id: uuidv4(21), name, email, phone };
-    const contact = await addContact(newContact);
+    const contact = await addContact(req.body);
     res.status(201).json(contact);
   } catch (error) {
     console.error("Error en la ruta /:", error);
@@ -58,31 +59,31 @@ router.post("/", validateBody, async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const id = req.params.contactId;
-    const contact = (await removeContact(id))
-      ? { message: "Contact deleted" }
-      : { message: "Contact no exist" };
+    const contact = await removeContact(id);
     res.json(contact);
   } catch (error) {
-    console.error("Error en la ruta /:", error);
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: "Invalid contact ID" });
+    }
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
 
-router.put("/:contactId",validateBody, async (req, res, next) => {
+router.put("/:contactId", validateBody, async (req, res, next) => {
   const id = req.params.contactId;
   const result = validationResult(req);
   if (!result.isEmpty()) {
     return res.status(400).json({ errores: result.array() });
   }
-    try {
-      const contact = (await updateContact(id, req.body))
-        ? { message: "Contact updated" }
-        : { message: "Contact no exist" };
-      res.status(201).json(contact);
-    } catch (error) {
-      console.error("Error en la ruta /:", error);
-      res.status(500).json({ error: "Error en el servidor" });
+  try {
+    const contact = await updateContact(id, req.body);
+    res.status(201).json(contact);
+  } catch (error) {
+    if (error.name === "CastError") {
+      return res.status(400).json({ message: "Invalid contact ID" });
     }
+    res.status(500).json({ error: "Error en el servidor" });
+  }
 });
 
 module.exports = router;

@@ -1,0 +1,23 @@
+
+
+# POST http://localhost:3000/api/contacts/ HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "Dairo Manosalva",
+#     "email": "damanosalvag@gmail.com",
+#     "phone": "3197522992"
+#   }
+
+DELETE  http://localhost:3000/api/contacts/65163d875ad13863b33d32a7 HTTP/1.1
+
+# PUT http://localhost:3000/api/contacts/65163d875ad13863b33d32a7 HTTP/1.1
+# content-type: application/json
+
+# {
+#     "name": "Dairo Manosalva Gutierrez",
+#     "email": "damanosalvag@gmail.com",
+#     "phone": "319-7522992"
+#   }
+
+# GET http://localhost:3000/api/contacts/6516258ed511f09944c743d2 HTTP/1.1
