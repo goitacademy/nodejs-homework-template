@@ -4,7 +4,6 @@ const { createError } = require(`${basedir}/helpers`);
 
 const updateStatusContact = async (req, res, next) => {
   try {
-
     const { error } = schemas.updateFavorite.validate(req.body);
 
     if (error) {
@@ -21,7 +20,6 @@ const updateStatusContact = async (req, res, next) => {
     }
 
     res.json(result);
-
   } catch (error) {
     next(error);
   }

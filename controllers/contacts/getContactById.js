@@ -4,7 +4,6 @@ const { createError } = require(`${basedir}/helpers`);
 
 const getContactById = async (req, res, next) => {
   try {
-    
     const { contactId } = req.params;
     const result = await Contact.findById(contactId);
 
@@ -13,7 +12,6 @@ const getContactById = async (req, res, next) => {
     }
 
     res.json(result);
-    
   } catch (error) {
     next(error);
   }
