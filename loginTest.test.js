@@ -49,8 +49,5 @@ describe('Функція входу користувача', () => {
       token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTEyNTE1ZTkwYzI2NTRkZDA5YWI1MTMiLCJpYXQiOjE2OTU3NTgzMzEsImV4cCI6MTY5NTc2MTkzMX0.P60sETZ_SZFpvzIlnreLxVsXgz4vvl3RPk6IRfV81U8',
       user
     }})
-   // expect(res.cookie).toHaveBeenCalledWith()
     });
-
-  // Додайте більше тестових випадків для різних сценаріїв (невірні облікові дані, обробка помилок і т. д.)
 });
