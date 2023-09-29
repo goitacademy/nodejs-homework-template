@@ -21,8 +21,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((err, req, res) => {
-  res.status(500).json({ message: err.message });
+app.use((err, req, res, next) => {
+  const { status = 500, message = "Server Error" } = err;
+  res.status(status).json({ message });
 });
 
 app.listen(3000, () => console.log(`Server running at 3000 port`));

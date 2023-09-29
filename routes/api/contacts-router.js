@@ -1,10 +1,6 @@
-const fs = require("node:fs/promises");
-const path = require("node:path");
-const crypto = require("node:crypto");
 const express = require("express");
 const contactsService = require("../../models/index");
-
-const FILE_PATH = path.join(__dirname, "/.........");
+const { HttpError } = require("../../helpers/HttpErrors");
 
 const contactsRouter = express.Router();
 
@@ -12,31 +8,30 @@ contactsRouter.get("/", async (req, res, next) => {
   try {
     const contacts = await contactsService.listContacts();
     res.json(contacts);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
+  } catch (error) {
+    next(error);
   }
 });
 
-contactsRouter.get("/:id", async (req, res) => {
+contactsRouter.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-    const contact = contacts.find((contact) => String(contact.id) === id);
+    const contact = await contactsService.getContactById(id);
+
+    if (!contact) {
+      throw HttpError(404, `Contact with ${id} is not found`);
+    }
     res.status(200).json(contact);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
+  } catch (error) {
+    next(error);
   }
 });
 
 contactsRouter.post("/", async (req, res) => {
   try {
     const { body } = req;
-    const contact = { id: crypto.randomUUID(), ...body };
-    const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-    contacts.push(contact);
-
-    await fs.writeFile(FILE_PATH, JSON.stringify(contacts));
-    res.status(201).json(contact);
+    const newContact = await contactsService.addContact(body);
+    res.status(201).json(newContact);
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
@@ -45,12 +40,9 @@ contactsRouter.post("/", async (req, res) => {
 contactsRouter.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const contacts = JSON.parse(await fs.readFile(FILE_PATH));
-    const filteredContacts = contacts.filter(
-      (contact) => String(contact.id) !== id
-    );
-    await fs.writeFile(FILE_PATH, JSON.stringify(filteredContacts));
-    res.status(204).json();
+    const deletedContact = await contactsService.removeContact(id);
+
+    res.status(204).json(deletedContact);
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
@@ -59,6 +51,9 @@ contactsRouter.delete("/:id", async (req, res) => {
 contactsRouter.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    const { body } = req;
+    const updatedContacts = await contactsService.updateContact(id, body);
+    res.status(200).json(updatedContacts);
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
