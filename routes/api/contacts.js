@@ -16,13 +16,6 @@ router.post(
   ctrl.addContact
 );
 
-// router.post(
-//   "/",
-//   authenticate,
-//   validateBody(schemas.addSchema),
-//   ctrl.addContact
-// );
-
 router.delete("/:id", authenticate, isValidId, ctrl.removeContact);
 
 router.put(
