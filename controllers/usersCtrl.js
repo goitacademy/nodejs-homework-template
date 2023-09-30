@@ -1,11 +1,10 @@
-const path = require("path");
-const fs = require("fs/promises");
 const HttpError = require("../helpers/HttpError");
 const {
   registerUserInDB,
   loginUserInDB,
   logoutFromDB,
   updateUserSubscriptionInDB,
+  uploadUserAvatarInDB,
 } = require("../models/users");
 
 const registerUser = async (req, res, next) => {
@@ -51,15 +50,11 @@ const logout = async (req, res, next) => {
 };
 
 const updateUserSubscription = async (req, res, next) => {
-  console.log("it is patch favorite")
+  console.log("it is patch favorite");
   try {
-    const { subscription } = req.body;
-    const { userId } = req.params;
-    const result = await updateUserSubscriptionInDB(
-      req.user,
-      userId,
-      subscription
-    );
+    // const { subscription } = req.body;
+    // const { userId } = req.params;
+    const result = await updateUserSubscriptionInDB(req);
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -67,14 +62,12 @@ const updateUserSubscription = async (req, res, next) => {
 };
 
 const uploadUserAvatar = async (req, res, next) => {
-  const {_id} = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const avatarDir = path.join(__dirname, "../", "public", "avatars");
-  const filename = `${_id}_${originalname}`
-  const resultUpload = path.join(avatarDir, filename);
-  await fs.rename(tempUpload, resultUpload);
-  const avatarUrl = path.join("avatars", originalname);
-  res.status(200).json({avatarUrl})
+  try {
+    const avatarUrl = await uploadUserAvatarInDB(req);
+    res.status(200).json({ avatarUrl });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = {
