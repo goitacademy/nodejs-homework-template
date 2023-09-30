@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const path = require("path");
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
-// const Jimp = require("jimp");
 
 const { User } = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
