@@ -9,7 +9,7 @@ const schema = Joi.object({
     .min(3)
     .pattern(/^[\p{L} ,.'-]+$/u),
 
-  phone: Joi.string().pattern(new RegExp("^\\d\\.$")),
+  phone: Joi.string().pattern(new RegExp("^[+\\d\\s-]+$")),
 
   email: Joi.string().email({
     minDomainSegments: 2,
