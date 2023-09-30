@@ -1,4 +1,4 @@
-const Contact = require("../models/userModel");
+const Contact = require("../models/contactModel");
 
 const httpError = require("../utilits/httpError");
 const ctrlWrapper = require("../utilits/ctrlWraper");
