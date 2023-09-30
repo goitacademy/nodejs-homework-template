@@ -1,5 +1,12 @@
-const app = require('./app')
+const setupMongoConnection = require('./untils/mobogDbConection');
+const createDirIfNotExists = require('./untils/createDirIfNotExists')
+const path = require('path')
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const UPLOAD_TMP = path.join(process.cwd(),'tmp');
+
+
+(async () => {
+  await setupMongoConnection();
+  await createDirIfNotExists(UPLOAD_TMP)
+  require('./adapters');
+})();
