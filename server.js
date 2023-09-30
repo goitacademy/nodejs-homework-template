@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-const dbURI = "mongodb+srv://FilipKuta:B6lnGBtWKnDDf1Uz@goit.kv1ixgm.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
+const dbURI = "mongodb+srv://FilipKuta:iuYm1a1CzgSYDLNU@goit.kv1ixgm.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
 const PORT = process.env.PORT || 3000;
 
 mongoose.set("strictQuery", false);
