@@ -22,7 +22,9 @@ const add = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
+  console.log("req:", req.body);
   const { contactId } = req.params;
+  console.log("contactId:", contactId);
 
   const result = await contactsService.updateContact(contactId, req.body);
   if (!result) {
