@@ -18,7 +18,8 @@
     "mongodb": "^6.1.0",
     "mongoose": "^7.5.3",
     "morgan": "1.10.0",
-    "nanoid": "^5.0.1"
+    "nanoid": "^5.0.1",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "eslint": "7.19.0",

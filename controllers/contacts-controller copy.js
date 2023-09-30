@@ -1,34 +1,34 @@
 import { HttpError } from "../helpers/index.js";
-import { ContactDB } from "../models/index.js";
+import { contactsService } from "../models/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
-  const result = await ContactDB.find();
+  const result = await contactsService.listContacts();
   res.json(result);
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findById(contactId);
+  const result = await contactsService.getContactById(contactId);
   if (!result) throw HttpError(404, "Not found");
   res.json(result);
 };
 
 const add = async (req, res) => {
-  const result = await ContactDB.create(req.body);
+  const result = await contactsService.addContact(req.body);
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findByIdAndUpdate(contactId, req.body, { new: true });
+  const result = await contactsService.updateContact(contactId, req.body);
   if (!result) throw HttpError(404, "Not found");
   res.status(200).json(result);
 };
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findByIdAndDelete(contactId);
+  const result = await contactsService.removeContact(contactId);
   if (!result) throw HttpError(404, "Not found");
   // res.json(result);
   res.status(200).json({ message: "contact deleted" });
