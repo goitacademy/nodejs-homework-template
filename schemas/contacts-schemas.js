@@ -4,14 +4,19 @@ export const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 });
 
 export const updateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string(),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 }).or("name", "email", "phone", "favorite");
 
-// export default { addSchema, updateSchema };
+export const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "boolean.base": "field favorite must be false or true",
+    "any.required": "missing field favorite",
+  }),
+});

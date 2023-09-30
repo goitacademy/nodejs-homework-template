@@ -34,10 +34,18 @@ const deleteById = async (req, res) => {
   res.status(200).json({ message: "contact deleted" });
 };
 
+// const updateFavorite = async (req, res) => {
+//   const { contactId } = req.params;
+//   const result = await ContactDB.findByIdAndUpdate(contactId, req.body, { new: true });
+//   if (!result) throw HttpError(404, "Not found");
+//   res.status(200).json(result);
+// };
+
 export default {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   deleteById: ctrlWrapper(deleteById),
+  // updateFavorite: ctrlWrapper(updateFavorite),
 };
