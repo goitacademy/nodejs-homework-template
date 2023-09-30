@@ -3,6 +3,7 @@ const isValidId = require("./isValidId");
 const authenticate = require("./authenticate");
 const upload = require("./upload");
 const resizeAvatar = require("./resizeAvatar");
+const isSingleFileExist = require("./isSingleFileExist");
 
 module.exports = {
   validateBody,
@@ -10,4 +11,5 @@ module.exports = {
   authenticate,
   upload,
   resizeAvatar,
+  isSingleFileExist,
 };
