@@ -1,5 +1,5 @@
 const Contact = require("../models/contact");
-const { ctrlWrapper } = require("../helpers/ctrlWrapper");
+const { ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const result = await Contact.find();
@@ -8,7 +8,7 @@ const getAll = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.getContactById(id);
+  const result = await Contact.getContactById(id);
   if (!result) {
     throw new Error(404 && "Not found");
   }
@@ -16,13 +16,13 @@ const getContactById = async (req, res) => {
 };
 
 const postContact = async (req, res) => {
-  const result = await contacts.addContact(req.body);
+  const result = await Contact.addContact(req.body);
   res.status(201).json(result);
 };
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.removeContact(id);
+  const result = await Contact.removeContact(id);
   if (!result) {
     throw new Error(404 && "Not found");
   }
@@ -31,7 +31,7 @@ const deleteContact = async (req, res) => {
 
 const putContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.updateContactById(id, req.body);
+  const result = await Contact.updateContactById(id, req.body);
   if (!result) {
     throw new Error(404 && "Not found");
   }
