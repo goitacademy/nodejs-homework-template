@@ -4,7 +4,7 @@ const { User } = require(`${basedir}/models/user`);
 const { createError } = require(`${basedir}/helpers`);
 const { SECRET_KEY } = process.env;
 
-const auth = async (req, res, next) => {
+const users = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
@@ -27,4 +27,4 @@ const auth = async (req, res, next) => {
   }
 };
 
-module.exports = auth;
+module.exports = users;
