@@ -1,5 +1,5 @@
-const Contacts = require("../models/contact");
-const { ctrlWrapper } = require("../helpers");
+const Contact = require("../models/contact");
+const { ctrlWrapper } = require("../helpers/ctrlWrapper");
 
 const getAll = async (req, res) => {
   const result = await Contact.find();
