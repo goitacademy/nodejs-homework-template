@@ -146,7 +146,7 @@ const remove = async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const result = removeContact(id)
+        const result = await removeContact(id)
         if (result) {
             res.json({
                 status: 'success',
