@@ -17,7 +17,7 @@ export const getContactById = async id => {
     return result || null;
 }
 
-export const addMovie = async({name, email, phone}) => {
+export const addContact = async({name, email, phone}) => {
     const contacts = await getAllContacts();
     const newContact = {
         id: nanoid(),
