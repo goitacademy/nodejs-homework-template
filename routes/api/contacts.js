@@ -8,11 +8,12 @@ const validateContact = (data) => {
   const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
 
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30).required(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-      .required(),
-    phone: Joi.string().pattern(phonePattern).required(),
+    name: Joi.string().min(3).max(30),
+    email: Joi.string().email({
+      minDomainSegments: 2,
+      tlds: { allow: ["com", "net"] },
+    }),
+    phone: Joi.string().pattern(phonePattern),
   });
   return schema.validate(data);
 };
@@ -51,15 +52,16 @@ router.post("/", async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
 
+    if (!name || !email || !phone) {
+      throw HttpError(400, "missing required name field");
+    }
+
     const { error } = validateContact({ name, email, phone });
 
     if (error) {
       throw HttpError(400, error.details[0].message);
     }
 
-    if (!name || !email || !phone) {
-      throw HttpError(400, "missing required name field");
-    }
     if (name && email && phone) {
       const result = await contacts.addContact({ name, email, phone });
       res.json({
