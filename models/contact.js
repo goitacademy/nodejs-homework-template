@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -25,6 +26,7 @@ const contacts = Schema(
 
 const Contact = mongoose.model("contact", contacts);
 
+
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
@@ -32,6 +34,8 @@ const contactSchema = Joi.object({
 });
 
 module.exports = {
+
   Contact,
+
   contactSchema,
 };
