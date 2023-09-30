@@ -94,7 +94,7 @@ const login = async (req, res, next) => {
       return res.status(401).json({ message: "Wrong password" });
     }
 
-    const secret = process.env.SECRET;
+    const secret = process.env.SECRET_KEY;
     const payload = {
       id: user._id,
       email: user.email,
@@ -102,6 +102,7 @@ const login = async (req, res, next) => {
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+    res.status(200).json({ message: "Logowanie udane", token });
     return res.status(200).json({
       token,
       user: {
