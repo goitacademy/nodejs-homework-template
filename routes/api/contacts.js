@@ -21,7 +21,7 @@ const contactAddSchema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contactsService.getAllMovies();
+    const result = await contactsService.listContacts();
     res.json(result);
   } catch (error) {
     next(error);
@@ -31,9 +31,9 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsService.getMovieById(contactId);
+    const result = await contactsService.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, `Movie with ${contactId} not found`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
     res.json(result);
   } catch (error) {
@@ -51,7 +51,7 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contactsService.addMovie(req.body);
+    const result = await contactsService.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -61,9 +61,9 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsService.deleteMovieById(contactId);
+    const result = await contactsService.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, `Movie with ${contactId} not found`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.json({
@@ -87,7 +87,7 @@ router.put("/:contactId", async (req, res, next) => {
 
     const { contactId } = req.params;
 
-    const result = await contactsService.updateMovieById(contactId, req.body);
+    const result = await contactsService.updateContact(contactId, req.body);
     if (!result) {
       throw HttpError(404, `Movie with ${contactId} not found`);
     }
