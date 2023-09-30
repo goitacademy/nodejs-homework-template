@@ -1,6 +1,6 @@
 const path = require("path");
-const fs = require("fs");
-// const jimp = require("jimp");
+const fs = require("fs").promises;
+const Jimp = require("jimp");
 
 const { User } = require("../../models");
 
@@ -14,18 +14,22 @@ const updateAvatar = async (req, res) => {
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, filename);
 
-  // Resize avatar
-  // const img = await jimp.read(tempUpload);
-  // await img.resize(250, 250).writeAsync(tempUpload);
+  try {
+    const avatar = await Jimp.read(tempUpload);
+    avatar.resize(250, 250).write(resultUpload);
 
-  fs.renameSync(tempUpload, resultUpload);
+    const avatarURL = path.join("avatars", filename);
 
-  const avatarURL = path.join("avatars", filename);
+    // Update avatar URL in DB
+    await User.findByIdAndUpdate(_id, { avatarURL });
 
-  // Update avatar URL in DB
-  await User.findByIdAndUpdate(_id, { avatarURL });
-
-  res.status(200).json({ avatarURL });
+    res.status(200).json({ avatarURL });
+  } catch (err) {
+    console.log(err);
+    throw err;
+  } finally {
+    fs.unlink(tempUpload);
+  }
 };
 
 module.exports = updateAvatar;
