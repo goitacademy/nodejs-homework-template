@@ -1,21 +1,21 @@
-import express from "express";
-import Joi from "joi";
+const express = require("express");
+const Joi = require("joi");
 
-import * as contactsService from "../../models/contacts.js";
+const contactsService = require("../../models/contacts.js");
 
-import { HttpError } from "../../helpers/index.js";
+const HttpError = require("../../helpers/HttpError.js");
 
 const router = express.Router();
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().required().message({
-    "any.required": `"name" required field`,
+  name: Joi.string().required().messages({
+    "any.required": `"name" is a required field`,
   }),
-  email: Joi.string().required().message({
-    "any.required": `"email" required field`,
+  email: Joi.string().required().messages({
+    "any.required": `"email" is a required field`,
   }),
-  phone: Joi.string().required().message({
-    "any.required": `"phone" required field`,
+  phone: Joi.string().required().messages({
+    "any.required": `"phone" is a required field`,
   }),
 });
 
@@ -41,6 +41,22 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
+router.delete("/:contactId", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactsService.removeContact(contactId);
+    if (!result) {
+      throw HttpError(404, `Contact with ${contactId} not found`);
+    }
+
+    res.json({
+      message: "contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   try {
     if (!Object.keys(req.body).length) {
@@ -58,26 +74,10 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contactsService.removeContact(contactId);
-    if (!result) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
-    }
-
-    res.json({
-      message: "Delete success",
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.put("/:contactId", async (req, res, next) => {
   try {
     if (!Object.keys(req.body).length) {
-      throw HttpError(400, "All fields empty");
+      throw HttpError(400, "missing fields");
     }
 
     const { error } = contactAddSchema.validate(req.body);
@@ -89,7 +89,7 @@ router.put("/:contactId", async (req, res, next) => {
 
     const result = await contactsService.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, `Movie with ${contactId} not found`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.json(result);
@@ -98,4 +98,4 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-export default router;
+module.exports = router;

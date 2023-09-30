@@ -2,7 +2,6 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -15,7 +14,8 @@
     "express": "4.17.1",
     "joi": "^17.10.2",
     "morgan": "1.10.0",
-    "nanoid": "^5.0.1"
+    "nanoid": "^5.0.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",

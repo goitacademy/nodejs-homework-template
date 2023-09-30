@@ -1,1 +1,2 @@
-export { default as HttpError } from "./HttpError.js";
+const HttpError = require("./HttpError.js");
+module.exports = HttpError;

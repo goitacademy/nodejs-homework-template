@@ -1,6 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
-import { nanoid } from "nanoid";
+const fs = require("fs/promises");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.resolve("models", "contacts.json");
 
@@ -20,7 +20,7 @@ const getContactById = async (contactId) => {
 
 const addContact = async ({ name, email, phone }) => {
   const contacts = await listContacts();
-  const newContact = { id: nanoid(), name, email, phone };
+  const newContact = { id: uuidv4(), name, email, phone };
   contacts.push(newContact);
   await updateContacts(contacts);
   return newContact;
@@ -48,7 +48,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
   return contacts[index];
 };
 
-export default {
+module.exports = {
   listContacts,
   getContactById,
   removeContact,
