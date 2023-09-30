@@ -6,7 +6,6 @@ import {
   contactValidateValues,
 } from "../../middlewares/index.js";
 
-const contacktAddValidate = validateBody(contAddSchema);
 const contactsRouter = express.Router();
 
 // працює
