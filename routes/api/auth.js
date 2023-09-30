@@ -4,7 +4,8 @@ const {
   validateBody,
   authenticate,
   upload,
-  // resizeAvatar,
+  resizeAvatar,
+  isSingleFileExist,
 } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
@@ -24,8 +25,9 @@ router.get("/current", authenticate, ctrl.getCurrent);
 router.patch(
   "/avatars",
   authenticate,
-  //  resizeAvatar,
   upload.single("avatar"),
+  isSingleFileExist,
+  resizeAvatar,
   ctrl.updateAvatar
 );
 
