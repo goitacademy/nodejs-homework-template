@@ -1,15 +1,11 @@
 const mongoose = require('mongoose');
 const express = require('express');
-// const logger = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 const router = require('./api/index');
 
 const app = express()
 
-// const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
-
-// app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 app.use('/api', router)
@@ -38,4 +34,5 @@ connection
 })
 .catch((err) =>
 console.log(`Server not running. Error message: ${err.message}`),
+process.exit(1)
 );

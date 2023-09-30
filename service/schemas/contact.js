@@ -9,16 +9,16 @@ const contact = new Schema (
         },
         email: {
           type: String,
+          unique: true,
         },
         phone: {
           type: String,
-        },
+        }, 
         favorite: {
           type: Boolean,
           default: false,
         },
-      }
-);
+      }, { timestamps: true, versionKey: false });
 
 const Contact = mongoose.model("contact", contact);
 
