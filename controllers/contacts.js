@@ -1,59 +1,70 @@
-const contactsModel = require("../models/contacts.json");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContact,
+} = require("../models/contacts");
+const validation = require("../helpers/validation");
 
-const listContacts = async (req, res, next) => {
+exports.listContacts = async (req, res, next) => {
   try {
-    const contacts = await contactsModel.listContacts();
+    const contacts = await listContacts();
     res.json(contacts);
   } catch (error) {
     next(error);
   }
 };
 
-const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
+exports.getContactById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const contact = await contactsModel.getContactById(contactId);
+    const contact = await getContactById(id);
     res.json(contact);
   } catch (error) {
     next(error);
   }
 };
 
-const addContact = async (req, res, next) => {
+exports.addContact = async (req, res, next) => {
   const { body } = req;
   try {
-    const newContact = await contactsModel.addContact(body);
+    const { error } = validation.contactSchema.validate(body);
+    if (error) {
+      res.status(400).json({ message: error.details[0].message });
+      return;
+    }
+
+    const newContact = await addContact(body);
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
 };
 
-const updateContact = async (req, res, next) => {
-  const { contactId } = req.params;
+exports.updateContact = async (req, res, next) => {
+  const { id } = req.params;
   const { body } = req;
   try {
-    const updatedContact = await contactsModel.updateContact(contactId, body);
+    const { error } = validation.updateContactSchema.validate(body);
+    if (error) {
+      res.status(400).json({ message: error.details[0].message });
+      return;
+    }
+
+    const updatedContact = await updateContact(id, body);
     res.json(updatedContact);
   } catch (error) {
     next(error);
   }
 };
 
-const removeContact = async (req, res, next) => {
-  const { contactId } = req.params;
+exports.removeContact = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    await contactsModel.removeContact(contactId);
+    await removeContact(id);
     res.json({ message: "Contact deleted" });
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  removeContact,
 };
