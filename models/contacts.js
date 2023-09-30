@@ -4,6 +4,7 @@ const handleError = require('../helpers/handleError')
 const listContacts = async () => {
   return await handleError(async () => {
     const data = await Contact.find({})
+
     return data
   })
 }
@@ -11,7 +12,7 @@ const listContacts = async () => {
 const getContactById = async contactId => {
   return handleError(async () => {
     const contacts = await Contact.findOne({ _id: contactId })
-    // const contact = contacts.find(({ id }) => id.toString() === contactId)
+
     return contacts
   })
 }
@@ -21,7 +22,7 @@ const removeContact = async (contactId) => {
     const contacts = await Contact.findByIdAndRemove({
       _id: contactId,
     })
-    // const indexToRemove = contacts.findIndex((contact) => contact.id.toString() === contactId)
+
     return contacts
   })
 }
@@ -29,6 +30,7 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
   return handleError(async () => {
     const contacts = await Contact.create(body)
+
     return contacts
   })
 }
@@ -40,6 +42,7 @@ const updateContact = async (contactId, body) => {
       { ...body },
       { new: true }
     )
+
     return contact
   })
 }
