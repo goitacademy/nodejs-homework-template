@@ -5,12 +5,13 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-const { DB_HOST, PORT = 3000 } = process.env;
+const dbURI = "mongodb+srv://FilipKuta:B6lnGBtWKnDDf1Uz@goit.kv1ixgm.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
+const PORT = process.env.PORT || 3000;
 
 mongoose.set("strictQuery", false);
 
 mongoose
-  .connect(DB_HOST)
+  .connect(dbURI)
   .then(() => {
     console.log("Connected to MongoDB");
     app.listen(PORT, () => {
@@ -18,6 +19,6 @@ mongoose
     });
   })
   .catch((error) => {
-    console.log("Error connecting to MongoDB:", error.message);
+    console.error("Error connecting to MongoDB:", error.message);
     process.exit(1);
   });
