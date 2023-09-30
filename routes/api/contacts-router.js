@@ -21,14 +21,14 @@ contactsRouter.post(
   contactsControllers.add
 );
 
-contactsRouter.delete("/:id", contactsControllers.updateById);
+contactsRouter.delete("/:id", contactsControllers.deleteById);
 
 contactsRouter.put(
   "/:id",
   isEmptyBody,
   contactValidateRequired,
   contactValidateValues,
-  contactsController.updateById
+  contactsControllers.updateById
 );
 
 export default contactsRouter;
