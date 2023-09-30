@@ -4,7 +4,6 @@ sgMail.setApiKey(SENDGRID_TOKEN);
 
 const sendEmail = async (data) => {
     const email = {...data,from:SEND_FROM_EMAIL}
-    console.log(email)
    await sgMail.send(email)
    return true
 }
