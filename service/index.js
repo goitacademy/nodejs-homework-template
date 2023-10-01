@@ -26,12 +26,19 @@ const updateStatusContact = (id, fields) => {
 };
 const findUserByEmail = async (email) => await User.findOne({ email });
 
-const createUser = async ({ email, password, avatarUrl }) => {
-  const newUser = new User({ email, password, avatarUrl });
-  newUser.setPassword(password);
-  await newUser.save();
-  return newUser;
+const createUser = ({ email, password, avatarURL, verificationToken }) => {
+  return User.create({ email, password, avatarURL, verificationToken });
 };
+
+const verifyUser = ({ verificationToken }) => {
+  return User.findOneAndUpdate(
+    { verificationToken },
+    { $set: { verificationToken: null, verify: true } }
+  );
+};
+
+const findUserByToken = async (verificationToken) =>
+  await User.findOne({ verificationToken });
 
 module.exports = {
   getAllContacts,
@@ -42,4 +49,6 @@ module.exports = {
   updateStatusContact,
   findUserByEmail,
   createUser,
+  verifyUser,
+  findUserByToken,
 };

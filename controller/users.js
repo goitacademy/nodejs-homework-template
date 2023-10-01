@@ -4,145 +4,204 @@ const jwt = require("jsonwebtoken");
 const passport = require("passport");
 const gravatar = require("gravatar");
 const multer = require("multer");
-const fs = require("fs").promises;
 const path = require("path");
-const { createUser, findUserByEmail } = require("../service");
-const User = require("../service/schemas/users");
+const fs = require("fs").promises;
+const sgMail = require("@sendgrid/mail");
+const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
+const secret = process.env.SECRET;
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const {
+  findUserByEmail,
+  findUserByToken,
+  createUser,
+  verifyUser,
+} = require("../service");
 const uploadDir = path.join(process.cwd(), "tmp");
 const createPublic = path.join(process.cwd(), "public");
 const storeImage = path.join(createPublic, "avatars");
-const Jimp = require("jimp");
 
-const signupSchema = Joi.object({
+const signUpSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().min(8).required(),
+  password: Joi.string().min(6).alphanum().required(),
 });
 
-const loginSchema = Joi.object({
+const logInSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
 });
 
-const auth = async (req, res, next) => {
+const recheckUserSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
+const sendVerificationEmail = async (email, verificationToken) => {
+  const tokenUrl = `http://localhost:3000/api/users/verify/${verificationToken}`;
+
+  const msg = {
+    to: email,
+    from: "szymon_o@mac.com",
+    subject: "Please verify your email address",
+    text: `Click the following link to verify your email: ${tokenUrl}`,
+  };
   try {
-    passport.authenticate("jwt", { session: false }, (err, user) => {
-      if (!user || err) {
-        return res.status(401).json({ message: "Not authorized" });
-      }
-      req.user = user;
-      next();
-    })(req, res, next);
+    await sgMail.send(msg);
+    console.log("Email sent");
   } catch (error) {
-    console.error("Authorization error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error(error);
   }
 };
 
 const signup = async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const { error } = signupSchema.validate({ email, password });
+  const { email, password } = req.body;
 
-    if (error) {
-      return res.status(400).json({ message: "Validation error" });
+  try {
+    const userValidationResult = signUpSchema.validate({
+      email,
+      password,
+    });
+
+    if (userValidationResult.error) {
+      return res
+        .status(400)
+        .json({ message: userValidationResult.error.message });
     }
 
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
-      return res.status(409).json({ message: "Email in use" });
+      return res.status(409).json({ message: "Email is already in use" });
     }
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    const avatarUrlPath = gravatar.url(email);
+    const url = gravatar.url(email, { s: "200" });
+    const verificationToken = nanoid();
 
     const newUser = await createUser({
       email,
       password: hashedPassword,
-      subscription: "starter",
-      avatarUrl: avatarUrlPath,
+      avatarURL: url,
+      verificationToken,
     });
 
+    await sendVerificationEmail(email, verificationToken);
+
     return res.status(201).json({
+      message: "User created",
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
       },
     });
   } catch (error) {
-    console.error("Registration error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error(error);
   }
 };
 
 const login = async (req, res, next) => {
   try {
-    const { body } = req;
-    const { email, password } = body;
-    const { error } = loginSchema.validate({ email, password });
+    const { email, password } = req.body;
+    const existingUser = await findUserByEmail(email);
+    const userValidationResult = logInSchema.validate({
+      email,
+      password,
+    });
 
-    if (error) {
-      return res.status(400).json({ message: "Validation error" });
-    }
-    const user = await findUserByEmail(email);
-    if (!user) {
-      return res.status(401).json({ message: "Wrong email" });
-    }
-
-    const authMatch = bcrypt.compare(password, user.password);
-    if (!authMatch) {
-      return res.status(401).json({ message: "Wrong password" });
+    if (userValidationResult.error) {
+      return res
+        .status(400)
+        .json({ message: userValidationResult.error.message });
     }
 
-    const secret = process.env.SECRET_KEY;
+    if (!existingUser.validPassword(password)) {
+      return res.status(401).json({ message: "Email or password is wrong" });
+    }
+
+    if (!existingUser.verify) {
+      return res.status(401).json({ message: "Email is not verified" });
+    }
+
+    if (!existingUser.verify) {
+      return res.status(401).json({ message: "Email is not verified" });
+    }
+
     const payload = {
-      id: user._id,
-      email: user.email,
-      subscription: user.subscription,
+      id: existingUser._id,
+      email: existingUser.email,
+      subscription: existingUser.subscription,
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-    res.status(200).json({ message: "Logowanie udane", token });
+    existingUser.token = token;
+    await existingUser.save();
+
     return res.status(200).json({
       token,
       user: {
-        email: user.email,
-        subscription: user.subscription,
+        email: existingUser.email,
+        subscription: existingUser.subscription,
       },
     });
   } catch (error) {
-    console.error("Login error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error(error);
   }
+};
+
+const auth = (req, res, next) => {
+  passport.authenticate("jwt", { session: false }, (err, user) => {
+    if (!user || err) {
+      return res.status(401).json({
+        message: "Not authorized",
+        error: err,
+      });
+    }
+
+    req.user = user;
+    next();
+  })(req, res, next);
 };
 
 const logout = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    if (!userId) {
-      return res.status(401).json({ message: "Not authorized" });
+    const { id } = req.user;
+    const { user } = req;
+
+    if (!id) {
+      return res.status(401).json({
+        message: "Not authorized",
+      });
     }
 
-    await User.findByIdAndUpdate(userId, { token: null });
+    user.token = null;
+    await user.save();
 
     return res.status(204).send();
   } catch (error) {
-    console.error("Logout error:", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error(error);
   }
 };
 
-const current = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (err || !user) {
+const current = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
       return res.status(401).json({ message: "Not authorized" });
     }
 
+    const { email, subscription } = user;
+
     return res.status(200).json({
-      email: user.email,
-      subscription: user.subscription,
+      user: {
+        email,
+        subscription,
+      },
     });
-  })(req, res, next);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const storage = multer.diskStorage({
@@ -157,34 +216,83 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+});
 
 const avatars = async (req, res, next) => {
   const { path: temporaryName, originalname } = req.file;
   const fileName = path.join(uploadDir, originalname);
-
+  const { token, email } = req.user;
   const { user } = req;
-  const { email } = user;
-  const token = req.headers.authorization;
-  const nickname = email.split("@")[0];
-  const nicknameAvatarPath = `${storeImage}/${nickname}.jpg`;
+  const username = email.split("@")[0];
+  const newAvatarPath = `${storeImage}/${username}.jpg`;
 
   try {
-    if (!token)
-      return res.status(401).json({ message: "Token - Not authorized" });
+    if (!token) {
+      return res.status(401).json({
+        message: "Not authorized",
+      });
+    }
 
     await fs.rename(temporaryName, fileName);
-    const avatarPic = await Jimp.read(fileName);
-    avatarPic.resize(250, 250).write(nicknameAvatarPath);
-    user.avatarURL = nicknameAvatarPath;
+    const avatar = await Jimp.read(fileName);
+    avatar.resize(250, 250).write(newAvatarPath);
+    user.avatarURL = newAvatarPath;
     await user.save();
-    await fs.unlink(fileName);
     const { avatarURL } = user;
 
     return res.status(200).json({ avatarURL });
   } catch (error) {
-    await fs.unlink(temporaryName);
-    return res.status(401).json({ message: "Error  - not authorized" });
+    await fs.unlink(fileName);
+    console.error(error);
+  }
+};
+
+const verify = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+
+    const exisitingUser = await findUserByToken(verificationToken);
+    if (!exisitingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await verifyUser({ verificationToken: verificationToken });
+
+    return res.status(200).json({ message: "Verification successful" });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const recheckUser = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const userValidationResult = recheckUserSchema.validate({
+      email,
+    });
+
+    if (userValidationResult.error) {
+      return res
+        .status(400)
+        .json({ message: userValidationResult.error.message });
+    }
+
+    const existingUser = await findUserByEmail(email);
+    const { verificationToken, verify } = existingUser;
+
+    if (existingUser && verify === true) {
+      return res
+        .status(400)
+        .json({ message: "Verification has already been passed" });
+    }
+
+    await sendVerificationEmail(email, verificationToken);
+
+    return res.status(200).json({ message: "Verification email sent" });
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -199,4 +307,6 @@ module.exports = {
   uploadDir,
   storeImage,
   createPublic,
+  verify,
+  recheckUser,
 };

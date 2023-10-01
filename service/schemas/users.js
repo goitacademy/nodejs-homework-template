@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const bCrypt = require("bcryptjs");
-
-const Schema = mongoose.Schema;
+const { Schema } = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const user = new Schema({
   password: {
@@ -26,14 +25,21 @@ const user = new Schema({
     type: String,
     default: null,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+  },
 });
 
 user.methods.setPassword = function (password) {
-  this.password = bCrypt.hashSync(password, bCrypt.genSaltSync(6));
+  this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(6));
 };
 
 user.methods.validPassword = function (password) {
-  return bCrypt.compareSync(password, this.password);
+  return bcrypt.compareSync(password, this.password);
 };
 
 const User = mongoose.model("user", user);
