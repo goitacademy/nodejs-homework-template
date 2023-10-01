@@ -32,13 +32,12 @@ const getById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   try {
-    const result = await addContact(req.data);
+    const result = await addContact(req.body);
 
     if (!result) {
       res.status(400).json({
         message: "contact with this phone number is exists",
       });
-      return;
     }
 
     res.status(201).json(result);
@@ -66,7 +65,7 @@ const remove = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await updateContact(contactId, req.data);
+    const result = await updateContact(contactId, req.body);
 
     if (!result) {
       next();
