@@ -15,8 +15,8 @@ router.get('/', async (req, res, next) => {
   try {
     const listContacts = await listContacts();
     res.status(200).json(listContacts);
-  } catch {
-    
+  } catch (error) {
+    next(error);
   }
 })
 
@@ -25,14 +25,13 @@ router.get('/:contactId', async (req, res, next) => {
     const contact = await getContactById(req);
     res.status(200).json(contact);
   } catch {
-    // надо прописать обработку ошибок
     res.status(404).json({ message: "Not found" });
+    next(error);
   }
 })
 
 router.post('/', async (req, res, next) => {
   try {
-    // Validate the request body against the schema
     const { error } = contactSchema.validate(req.body);
 
     if (error) {
@@ -54,9 +53,8 @@ router.delete('/:contactId', async (req, res, next) => {
       return res.status(404).json({ message: "Not found" });
     }
     res.status(200).json({ message: "Contact deleted" });
-  } catch {
-    // надо прописать обработку ошибок
-    
+  } catch (error) {
+    next(error);
   }
 })
 
@@ -64,7 +62,6 @@ router.put('/:contactId', async (req, res, next) => {
   try {
     const { id, body } = req;
 
-    // Validate the request body against the schema
     const { error } = contactSchema.validate(body);
 
     if (error) {

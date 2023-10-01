@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 const fs = require("fs").promises;
 const path = require("path");
 
@@ -18,16 +19,12 @@ const getContactById = async (contactId) => {
   return contacts.find(contact => contact.id === contactId) || null;
 }
 
-function generateId() {
-  return Math.floor(Math.random() * 1000000);
-}
-
 const addContact = async (body) => {
   
   const { name, email, phone } = body;
   
   const newCont = {
-    id: generateId(),
+    id: nanoid(),
     name: name,
     email: email,
     phone: phone,
