@@ -55,43 +55,32 @@ const createContact = async (req, res) => {
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
   const { _id: currentUser } = req.user;
-  let oneContact = await Contact.findById(contactId);
 
-  if (!oneContact) {
-    throw HttpError(404, 'Not found');
+  const deletedContact = await Contact.findOneAndDelete({ _id: contactId, owner: currentUser });
+
+  if (!deletedContact) {
+    throw HttpError(404, 'Contact not found or access denied');
   }
-
-  const { owner } = oneContact;
-
-  if (!owner || owner.toString() !== currentUser.toString()) {
-    res.status(403).json({ message: 'Access is denied' });
-  } else {
-    oneContact = await Contact.findByIdAndDelete(contactId);
-    res.status(200).json({ message: 'Contact deleted' });
-  }
+  res.status(200).json({ message: 'Contact deleted' });
 };
 
 const renewContact = async (req, res) => {
   if (Object.keys(req.body).length === 0) {
     throw HttpError(400, 'Missing fields');
   }
-
   const { contactId } = req.params;
   const { _id: currentUser } = req.user;
-  let oneContact = await Contact.findById(contactId);
 
-  if (!oneContact) {
-    throw HttpError(404, 'Not found');
+  const renewedContact = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: currentUser },
+    req.body,
+    { new: true }
+  );
+
+  if (!renewedContact) {
+    throw HttpError(404, 'Contact not found or access denied');
   }
-
-  const { owner } = oneContact;
-
-  if (!owner || owner.toString() !== currentUser.toString()) {
-    res.status(403).json({ message: 'Access is denied' });
-  } else {
-    oneContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
-    res.status(200).json(oneContact);
-  }
+  res.status(200).json(renewedContact);
 };
 
 const updateStatusContact = async (req, res) => {
@@ -102,20 +91,16 @@ const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const { _id: currentUser } = req.user;
 
-  let oneContact = await Contact.findById(contactId);
+  const renewedContact = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: currentUser },
+    req.body,
+    { new: true }
+  );
 
-  if (!oneContact) {
-    throw HttpError(404, 'Not found');
+  if (!renewedContact) {
+    throw HttpError(404, 'Contact not found or access denied');
   }
-
-  const { owner } = oneContact;
-
-  if (!owner || owner.toString() !== currentUser.toString()) {
-    res.status(403).json({ message: 'Access is denied' });
-  } else {
-    oneContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
-    res.status(200).json(oneContact);
-  }
+  res.status(200).json(renewedContact);
 };
 
 module.exports = {
