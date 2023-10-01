@@ -1,8 +1,8 @@
 const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
-const authMiddleware = require('../../middleware/authMiddleware');
-const contact = require('../../models/contactModel')
+const authMiddleware = require("../../middleware/authMiddleware");
+const contact = require("../../models/contactModel");
 
 const {
   listContacts,
@@ -91,7 +91,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-router.get('/contacts', authMiddleware, async (req, res) => {
+router.get("/contacts", authMiddleware, async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
@@ -101,7 +101,9 @@ router.get('/contacts', authMiddleware, async (req, res) => {
 
     const results = {};
 
-    if (endIndex < (await contact.countDocuments().exec())) {
+    const countDocuments = await contact.countDocuments().exec();
+
+    if (endIndex < countDocuments) {
       results.next = {
         page: page + 1,
         limit: limit,
@@ -115,25 +117,22 @@ router.get('/contacts', authMiddleware, async (req, res) => {
       };
     }
 
-    results.results = await contact.find()
-      .limit(limit)
-      .skip(startIndex)
-      .exec();
+    results.results = await contact.find().limit(limit).skip(startIndex).exec();
 
     res.status(200).json(results);
   } catch (error) {
-    console.error('Error in /contacts:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error in /contacts:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get('/contacts', authMiddleware, async (req, res) => {
+router.get("/contacts", authMiddleware, async (req, res) => {
   try {
     const favorite = req.query.favorite;
 
     let filteredContacts;
 
-    if (favorite === 'true') {
+    if (favorite === "true") {
       filteredContacts = await contact.find({ favorite: true }).exec();
     } else {
       filteredContacts = await contact.find().exec();
@@ -141,10 +140,9 @@ router.get('/contacts', authMiddleware, async (req, res) => {
 
     res.status(200).json(filteredContacts);
   } catch (error) {
-    console.error('Error in /contacts:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error in /contacts:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
-
 
 module.exports = router;
