@@ -1,19 +1,68 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises');
+const path = require('path');
+const {nanoid} = require('nanoid');
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, '../models/contacts.json');
 
-const getContactById = async (contactId) => {}
+const getAll = async () => {
+    try{
+        const data = await fs.readFile(contactsPath, 'utf-8');
+        const allContacts = JSON.parse(data);
+        return allContacts;
+    } catch (error){
+        console.log(error.message)
+    };
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (id) => {
+    try{
+        const contact = await getAll();
+        const contactById = contact.find(item => item.id === id);
+        return contactById || null;
+    } catch (error){
+        console.log(error.message);
+    };
+};
+  
+const addContact = async (contact) => {
+    const contacts = await getAll();
+    const newContact = {
+        id: nanoid(),
+        ...contact,
+    }
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
 
-const addContact = async (body) => {}
+};
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (id, data) => {
+    const contacts = await getAll();
+    const index = contacts.findIndex(item => item.id === id);
+    if(index === -1){
+        return null;
+    }
+    contacts[index] = {id, ...data};
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[index];
+};
+
+const removeContact = async (id) => {
+    const contacts = await getAll();
+    const index = contacts.findIndex(item => item.id === id);
+    if(index === -1){
+        return null;
+    }
+    const [result] = contacts.splice(index, 1);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return result;
+};
+
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+    getAll,
+    getContactById,
+    addContact,
+    updateContact,
+    removeContact,
+};
