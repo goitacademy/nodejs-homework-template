@@ -2,14 +2,19 @@ const { Contact } = require("../schemas/contacts");
 const { RequestError } = require("../helpers");
 
 const removeById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndRemove(contactId);
-  if (!result) {
-    throw RequestError(404, "Not found");
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndRemove(contactId);
+    if (!result) {
+      throw RequestError(404, "Not found");
+    }
+    res.json({
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-  res.json({
-    message: "contact deleted",
-  });
 };
 
 module.exports = removeById;
