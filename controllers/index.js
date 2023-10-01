@@ -1,3 +1,3 @@
-const { ctrl } = require("./contacts");
+const ctrlContacts = require("./contacts");
 
-module.exports = { ctrl };
+module.exports = { ctrlContacts };

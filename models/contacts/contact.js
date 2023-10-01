@@ -1,7 +1,7 @@
 const { model, Schema } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMangooseError } = require("../helpers");
+const { handleMangooseError } = require("../../helpers");
 
 const contactSchema = new Schema(
   {
@@ -11,9 +11,11 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
+      required: [true, "Set email for contact"],
     },
     phone: {
       type: String,
+      required: [true, "Set phone for contact"],
     },
     favorite: {
       type: Boolean,
