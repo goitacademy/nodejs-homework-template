@@ -47,10 +47,23 @@ const updateContact = async (contactId, body) => {
   })
 }
 
+const updateStatusContact  = async (contactId, body) => {
+  return await handleError(async () => {
+    const contact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { ...body },
+      { new: true }
+    )
+
+    return contact
+  })
+}
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 }

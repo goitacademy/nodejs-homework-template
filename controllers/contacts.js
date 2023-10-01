@@ -158,10 +158,46 @@ const updateContact = async (req, res, next) => {
     }
 }
 
+
+const updateStatusContact = async (req, res, next) => {
+    const validContact = bodySchema.validate(req.body)
+
+    if (validContact.error || !req.body.favorite) {
+        return res.status(400).json({
+            status: validContact.error.details,
+            message: "missing field favorite",
+        })
+    }
+
+    const contactId = req.params.contactId
+    const body = req.body
+
+    try {
+        const updateStatusContact = await contactsModel.updateStatusContact(contactId, body)
+
+        if (updateStatusContact) {
+            return res.status(200).json({
+                status: "success",
+                code: 200,
+                data: updateStatusContact,
+            })
+        } else {
+            return res.status(404).json({
+                status: 'error',
+                code: 404,
+                message: 'Not found'
+            })
+        }
+    } catch (err) {
+        next(err)
+    }
+}
+
 module.exports = {
     listContacts,
     getContactById,
     addContact,
     removeContact,
     updateContact,
+    updateStatusContact,
 }
