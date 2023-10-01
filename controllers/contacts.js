@@ -20,6 +20,10 @@ exports.getContactById = async (req, res, next) => {
   const { id } = req.params;
   try {
     const contact = await getContactById(id);
+    if (!contact) {
+      res.status(404).json({ message: "Not found" });
+      return;
+    }
     res.json(contact);
   } catch (error) {
     next(error);
@@ -28,6 +32,12 @@ exports.getContactById = async (req, res, next) => {
 
 exports.addContact = async (req, res, next) => {
   const { body } = req;
+
+  if (!body.name) {
+    res.status(400).json({ message: "missing required name field" });
+    return;
+  }
+
   try {
     const { error } = validation.contactSchema.validate(body);
     if (error) {
@@ -45,14 +55,20 @@ exports.addContact = async (req, res, next) => {
 exports.updateContact = async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
+
+  if (!body || Object.keys(body).length === 0) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
+
   try {
-    const { error } = validation.updateContactSchema.validate(body);
-    if (error) {
-      res.status(400).json({ message: error.details[0].message });
+    const updatedContact = await updateContact(id, body);
+
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
       return;
     }
 
-    const updatedContact = await updateContact(id, body);
     res.json(updatedContact);
   } catch (error) {
     next(error);
@@ -62,6 +78,12 @@ exports.updateContact = async (req, res, next) => {
 exports.removeContact = async (req, res, next) => {
   const { id } = req.params;
   try {
+    const contact = await getContactById(id);
+    if (!contact) {
+      res.status(404).json({ message: "Not found" });
+      return;
+    }
+
     await removeContact(id);
     res.json({ message: "Contact deleted" });
   } catch (error) {
