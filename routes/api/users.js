@@ -102,4 +102,59 @@ router.get('/protected-route', authMiddleware, (req, res) => {
   res.json({ message: 'This is a protected route', user: req.user });
   });
 
+router.get('/logout', authMiddleware, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+        if(!user) {
+            return res.statur(401).json({ message: 'Not authorized' });
+        }
+        user.token = null;
+        await user.save();
+        res.status(204).send();
+    } catch (error) {
+        console.error("Error in /users/logout:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+router.get('/current', authMiddleware, async (req, res) => {
+    try {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(401).json({ message: 'Not authorized' });
+      }
+  
+      const { email, subscription } = user;
+      res.status(200).json({ email, subscription });
+    } catch (error) {
+      console.error("Error in /users/current:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  router.patch('/users', authMiddleware, async (req, res) => {
+    try {
+      const { subscription } = req.body;
+  
+      const allowedSubscriptions = ['starter', 'pro', 'business'];
+  
+      if (!allowedSubscriptions.includes(subscription)) {
+        return res
+          .status(400)
+          .json({ message: 'Invalid subscription value' });
+      }
+  
+      req.user.subscription = subscription;
+      await req.user.save();
+  
+      res.status(200).json({ message: 'Subscription updated successfully' });
+    } catch (error) {
+      console.error('Error in /users:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });  
+
 module.exports = router;
