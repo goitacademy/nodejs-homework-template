@@ -1,7 +1,7 @@
 const express = require('express');
 const Joi = require('joi');
 const contacts = require('../../models/contacts');
-const { HttpError } = require('../../helpers');
+const {HttpError} = require('../../helpers');
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
-      throw new HttpError(404, 'Not found');
+      throw HttpError(404, 'Not found');
     }
     res.json(result);
   } catch (error) {
@@ -37,7 +37,8 @@ router.post('/', async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw new HttpError(400, error.message);
+      // throw HttpError(400, error.message);
+      throw HttpError(400, "missing required name field");
     }
     const result = await contacts.addContact(req.body.name, req.body.email, req.body.phone);
     res.status(201).json(result);
@@ -51,9 +52,9 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
     if (!result) {
-      throw new HttpError(404, 'Not found');
+      throw HttpError(404, 'Not found');
     }
-    res.json({ message: 'Contact deleted' });
+    res.json({ message: 'contact deleted' });
   } catch (error) {
     next(error);
   }
@@ -61,19 +62,26 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
+    if (!req.body) {
+      throw HttpError(400, 'missing fields');
+    }
+
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw new HttpError(400, error.message);
+      throw HttpError(400, 'missing required name field');
     }
+
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-      throw new HttpError(404, 'Not found');
+      throw HttpError(404, 'Not found');
     }
+
     res.json(result);
   } catch (error) {
     next(error);
   }
 });
+
 
 module.exports = router;

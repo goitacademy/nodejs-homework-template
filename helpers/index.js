@@ -1,5 +1,6 @@
-const HttpErorr = require("./HttpErorr")
+const HttpError = require("./HttpErorr"); // Corrected import statement
+
 
 module.exports = {
-    HttpErorr,
+    HttpError,
 }
