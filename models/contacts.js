@@ -10,12 +10,7 @@ const contactAddShcema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
-const contactUpdateShcema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  id: Joi.string().required(),
-});
+
 export const listContacts = async (req, res, next) => {
   try {
     const data = await fs.readFile(contactPath);
@@ -83,32 +78,32 @@ export const addContact = async (req, res, next) => {
 };
 
 export const updateContact = async (req, res, next) => {
-  const { name, email, phone, id } = req.body;
+  const { name, email, phone } = req.body;
+  const { contactId } = req.params;
+  const allContacts = await listContacts();
+  const idxEl = allContacts.findIndex(el => el.id === contactId);
 
   try {
-    const { contactId } = req.params;
+    if (idxEl === -1) throw HttpError(404, 'Item Not Found');
     if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
-    const a = contactUpdateShcema.validate(req.body);
-    console.log('a', a);
-    // if (error) {
-    //   throw HttpError(400, error.message);
-    // }
-    const createContact = {
-      name,
-      email,
-      phone,
-      id,
-    };
+    const { error } = contactAddShcema.validate(req.body);
 
-    const allContacts = await listContacts();
+    if (error) throw HttpError(400, error.message);
     const newArr = allContacts.map(el => {
       if (el.id === contactId) {
-        return (el = createContact);
+        console.log('contactId', '!!!!!!!!!!!!');
+        return (el = {
+          name,
+          email,
+          phone,
+          id: contactId,
+        });
       }
       return el;
     });
-    await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
-    res.status(201).json(createContact);
+    console.log('newArr', newArr);
+    // await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
+    // res.status(201).json(createContact);
   } catch (error) {
     next(error);
   }
