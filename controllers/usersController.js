@@ -40,7 +40,7 @@ const emailValidationSchema = Joi.string()
 
 const message = (to, token) => {
   return {
-    to: "test@example.com",
+    to,
     from: "kursnode12345@gmail.com",
     subject: "Your newsletter",
     text: `/users/verify/${token}`,
