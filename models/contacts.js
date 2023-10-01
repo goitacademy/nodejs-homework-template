@@ -1,15 +1,9 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
-const Joi = require("joi");
+const { contactSchema } = require("../helpers/validation");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
-
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
 
 const readContacts = async () => {
   try {
@@ -32,9 +26,6 @@ exports.listContacts = async () => {
 exports.getContactById = async (contactId) => {
   const contacts = await readContacts();
   const contact = contacts.find((c) => c.id === contactId);
-  if (!contact) {
-    throw new Error("Contact not found");
-  }
   return contact;
 };
 
@@ -66,7 +57,7 @@ exports.addContact = async (body) => {
   return newContact;
 };
 
-exports.updateContact = async (contactId, body) => {
+exports.updateContact = async (contactId, updatedData) => {
   const contacts = await readContacts();
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
 
@@ -76,7 +67,7 @@ exports.updateContact = async (contactId, body) => {
 
   const updatedContact = {
     ...contacts[contactIndex],
-    ...body,
+    ...updatedData,
   };
 
   contacts[contactIndex] = updatedContact;

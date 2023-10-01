@@ -8,40 +8,16 @@ const {
   removeContact,
 } = require("../../controllers/contacts");
 const {
-  contactSchema,
-  updateContactSchema,
-} = require("../../helpers/validation");
+  validateContactBody,
+  validateUpdateContactBody,
+} = require("../../middlewares/validateBody");
 
 router.get("/", listContacts);
 router.get("/:id", getContactById);
 
-router.post(
-  "/",
-  (req, res, next) => {
-    const { body } = req;
-    const { error } = contactSchema.validate(body);
-    if (error) {
-      res.status(400).json({ message: error.details[0].message });
-    } else {
-      next();
-    }
-  },
-  addContact
-);
+router.post("/", validateContactBody, addContact);
 
-router.put(
-  "/:id",
-  (req, res, next) => {
-    const { body } = req;
-    const { error } = updateContactSchema.validate(body);
-    if (error) {
-      res.status(400).json({ message: error.details[0].message });
-    } else {
-      next();
-    }
-  },
-  updateContact
-);
+router.put("/:id", validateUpdateContactBody, updateContact);
 
 router.delete("/:id", removeContact);
 
