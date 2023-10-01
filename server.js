@@ -1,4 +1,3 @@
-
 const app = require("./app");
 const db = require("./schemas/db");
 
