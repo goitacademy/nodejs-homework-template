@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator");
+const Joi = require("joi");
 
 const {
   listContacts,
@@ -7,17 +7,41 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contacts.js");
 
 const router = express.Router();
 
-const validateBody = [
-  body("name").notEmpty(),
-  body("email").isEmail(),
-  body("phone").notEmpty(),
-];
+const schema = Joi.object({
+  name: Joi.string().min(3).max(30).required(),
+  email: Joi.string().email().required(),
+  phone: Joi.number().integer().min(1000000000).max(9999999999).required(),
+  favorite: Joi.boolean(),
+});
+const schemaStatus = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+const validateBody = async (req, res, next) => {
+  try {
+    await schema.validateAsync(req.body);
+    next();
+  } catch (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+};
+const validateFavoriteField = async (req, res, next) => {
+  try {
+    await schemaStatus.validateAsync({ favorite: req.body.favorite });
+    next();
+  } catch (error) {
+    return res.status(400).json({
+      error: error.details[0].message,
+      message: "missing field favorite",
+    });
+  }
+};
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     const contacts = await listContacts();
     res.json(contacts);
@@ -27,7 +51,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", async (req, res) => {
   try {
     const id = req.params.contactId;
     const contact = await getContactById(id);
@@ -42,11 +66,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", validateBody, async (req, res, next) => {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    return res.status(400).json({ errores: result.array() });
-  }
+router.post("/", validateBody, async (req, res) => {
   try {
     const contact = await addContact(req.body);
     res.status(201).json(contact);
@@ -56,7 +76,7 @@ router.post("/", validateBody, async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", async (req, res) => {
   try {
     const id = req.params.contactId;
     const contact = await removeContact(id);
@@ -69,12 +89,8 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", validateBody, async (req, res, next) => {
+router.put("/:contactId", validateBody, async (req, res) => {
   const id = req.params.contactId;
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    return res.status(400).json({ errores: result.array() });
-  }
   try {
     const contact = await updateContact(id, req.body);
     res.status(201).json(contact);
@@ -85,5 +101,20 @@ router.put("/:contactId", validateBody, async (req, res, next) => {
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
-
+router.patch(
+  "/:contactId/favorite",
+  validateFavoriteField,
+  async (req, res) => {
+    const id = req.params.contactId;
+    try {
+      const contact = await updateStatusContact(id, req.body);
+      res.status(201).json(contact);
+    } catch (error) {
+      if (error.name === "CastError") {
+        return res.status(400).json({ message: "Invalid contact ID" });
+      }
+      res.status(500).json({ error: "Error en el servidor" });
+    }
+  }
+);
 module.exports = router;

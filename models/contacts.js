@@ -30,10 +30,28 @@ const removeContact = async (contactId) => {
 };
 
 const updateContact = async (contactId, dataUpdate) => {
-  const updatedContact = await Contact.findOneAndUpdate({ _id: contactId }, dataUpdate, {
-      new: true, })
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: contactId },
+    dataUpdate,
+    {
+      new: true,
+    }
+  );
   const response = updatedContact
     ? { updatedContact, message: "Contact updated" }
+    : { message: "Contact, no found" };
+  return response;
+};
+const updateStatusContact = async (contactId, body) => {
+  const updatedStatus = await Contact.findOneAndUpdate(
+    { _id: contactId },
+    body,
+    {
+      new: true,
+    }
+  );
+  const response = updatedStatus
+    ? { updatedStatus, message: "Favorite contact" }
     : { message: "Contact, no found" };
   return response;
 };
@@ -44,4 +62,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
