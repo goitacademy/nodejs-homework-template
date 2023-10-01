@@ -1,23 +1,24 @@
-const {Schema,model}=require("mongoose");
-const handleMongooseError=require("../helpers/handleMongooseError");
+const { Schema, model } = require("mongoose");
+const handleMongooseError = require("../helpers/handleMongooseError");
 const Joi = require("joi");
 
 const nameRegExp = "^[A-Za-zА-Яа-я]+( [A-Za-zА-Яа-я]+)?$";
 const phoneRegExp = "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$";
 
-const contactSchema=new Schema({
+const contactSchema = new Schema(
+  {
     name: {
       type: String,
-      required: [true, 'Set name for contact'],
+      required: [true, "Set name for contact"],
       match: RegExp(nameRegExp),
     },
     email: {
       type: String,
-      required:true,
+      required: true,
     },
     phone: {
       type: String,
-      required:true,
+      required: true,
       match: RegExp(phoneRegExp),
     },
     favorite: {
@@ -25,14 +26,14 @@ const contactSchema=new Schema({
       default: false,
     },
   },
-    { versionKey: false, timestamps: true },
-  );
+  { versionKey: false, timestamps: true }
+);
 
-  contactSchema.post("save",handleMongooseError);
+contactSchema.post("save", handleMongooseError);
 
-  const Contact = model("contact",contactSchema);
+const Contact = model("contact", contactSchema);
 
-  // Joi schema for POST
+// Joi schema for POST
 const addSchema = Joi.object({
   name: Joi.string().pattern(RegExp(nameRegExp)).required(),
   email: Joi.string()
