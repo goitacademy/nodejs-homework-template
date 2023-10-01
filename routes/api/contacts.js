@@ -32,10 +32,14 @@ router.delete('/:contactId', contactsController.removeContact)
 
 /**
  * @ PUT /api/contacts/:id
- * Якщо з body всі добре, викликає функцію updateContact(contactId, body)
+ * Якщо з body все добре, викликає функцію updateContact(contactId, body)
  */
 router.put('/:contactId', contactsController.updateContact)
 
+/**
+ * @ PATCH /api / contacts /:id/ favorite
+ * Якщо з body все добре, викликає функцію updateStatusContact (contactId, body)
+ */
 router.patch('/:contactId/favorite', contactsController.updateStatusContact)
 
 module.exports = router

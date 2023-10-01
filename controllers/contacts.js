@@ -158,7 +158,13 @@ const updateContact = async (req, res, next) => {
     }
 }
 
-
+/**
+ * PATCH /api / contacts /:id/ favorite
+ * Отримує body в json-форматі c оновленням поля favorite
+ * @returns якщо body немає, повертає json з ключем {"message": "missing field favorite"} і статусом 400
+ * @returns за результатом роботи функції повертає оновлений об'єкт контакту і статусом 200.
+ * @returns в іншому випадку, повертає json з ключем "message": "Not found" і статусом 404
+ */
 const updateStatusContact = async (req, res, next) => {
     const validContact = bodySchema.validate(req.body)
 
