@@ -1,6 +1,12 @@
 const express = require("express");
 
-const { validateBody, authenticate } = require("../../middlewares");
+const {
+  validateBody,
+  authenticate,
+  upload,
+  resizeAvatar,
+  isSingleFileExist,
+} = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
@@ -15,5 +21,14 @@ router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 router.post("/logout", authenticate, ctrl.logout);
 
 router.get("/current", authenticate, ctrl.getCurrent);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  isSingleFileExist,
+  resizeAvatar,
+  ctrl.updateAvatar
+);
 
 module.exports = router;
