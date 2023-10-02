@@ -17,7 +17,13 @@ app.use(
     optionsSuccessStatus: 204,
   })
 )
+
 app.use(express.json())
+
+// app.use((req, res, next) => {
+//   console.log(req)
+//   next()
+// })
 
 app.use('/api/contacts', contactsRouter)
 
