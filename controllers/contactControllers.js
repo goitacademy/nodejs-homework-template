@@ -1,19 +1,17 @@
-const addSchema = require("../utils/validation/contactValidationSchemas");
+const { Contact, schemas } = require("../models/contact");
 
-const contacts = require("../models/contacts");
-
-const { HttpError } = require("../helpers/HttpError");
+const { HttpError } = require("../utils/helpers/HttpError");
 
 const { ctrlWrapeer } = require("../utils/decorators/ctrlWrapper");
 
 const listContacts = async (req, res, next) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
 
   res.status(200).json(result);
 };
 
 const getContactById = async (req, res, next) => {
-  const result = await contacts.getContactById(req.params.contactId);
+  const result = await Contact.findById(req.params.contactId);
   if (!result) {
     throw new HttpError(404, "Not Found");
   }
@@ -21,18 +19,18 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error } = addSchema.validate(req.query);
+  const { error } = schemas.addSchema.validate(req.query);
 
   if (error) {
     throw new HttpError(400, error.message);
   }
 
-  const result = await contacts.addContact(req.query);
+  const result = await Contact.create(req.query);
   res.status(201).json(result);
 };
 
 const removeContact = async (req, res, next) => {
-  const result = await contacts.removeContact(req.params.contactId);
+  const result = await Contact.findByIdAndRemove(req.params.contactId);
 
   if (!result) {
     throw new HttpError(404, "Not Found");
@@ -42,13 +40,32 @@ const removeContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  const { error } = addSchema.validate(req.query);
+  const { error } = schemas.addSchema.validate(req.query);
 
   if (error) {
     throw new HttpError(400, error.message);
   }
 
-  const result = await contacts.updateContact(req.params.contactId, req.query);
+  const result = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.query,
+    { new: true }
+  );
+  res.status(200).json(result);
+};
+
+const updateFavorite = async (req, res, next) => {
+  const { error } = schemas.updateFavoriteSchema.validate(req.body);
+  console.log(req.body);
+  if (error) {
+    throw new HttpError(400, error.message);
+  }
+
+  const result = await Contact.findByIdAndUpdate(
+    req.params.contactId,
+    req.body,
+    { new: true }
+  );
   res.status(200).json(result);
 };
 
@@ -58,4 +75,5 @@ module.exports = {
   addContact: ctrlWrapeer(addContact),
   removeContact: ctrlWrapeer(removeContact),
   updateContact: ctrlWrapeer(updateContact),
+  updateFavorite: ctrlWrapeer(updateFavorite),
 };
