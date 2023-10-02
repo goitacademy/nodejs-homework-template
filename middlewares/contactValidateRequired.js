@@ -1,4 +1,4 @@
-import { contactSchemeRequired } from "../schemas/contackts-schemes.js";
+import { contactSchemeRequired } from "../schemas/contacts.schema.js";
 import { validateBody } from "../decorators/index.js";
 
 const contactValidateRequired = validateBody(contactSchemeRequired);

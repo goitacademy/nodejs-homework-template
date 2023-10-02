@@ -1,5 +1,5 @@
 import express from "express";
-import contactsControllers from "../../controllers/contacts-controllers.js";
+import contactsControllers from "../../controllers/contacts.controller.js";
 import {
   isEmptyBody,
   contactValidateRequired,
@@ -8,9 +8,8 @@ import {
 
 const contactsRouter = express.Router();
 
-// працює
 contactsRouter.get("/", contactsControllers.getAll);
-// працює
+
 contactsRouter.get("/:id", contactsControllers.getById);
 
 contactsRouter.post(
