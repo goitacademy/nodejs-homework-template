@@ -11,16 +11,20 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "express": "^4.18.2",
+    "joi": "^17.8.3",
+    "morgan": "1.10.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/uuid": "^9.0.1",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^2.0.20"
   }
 }
