@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const ctrl = require('../../controllers/auth');
-const { validateBody, isEmptyBody, authenticate } = require('../../middlewares');
+const { validateBody, isEmptyBody, authenticate, upload, isEmptyFieldAvatar } = require('../../middlewares');
 const schemas = require('../../schemas/user');
 
 router.post('/register', isEmptyBody, validateBody(schemas.registerSchema), ctrl.register);
@@ -9,6 +9,8 @@ router.post('/register', isEmptyBody, validateBody(schemas.registerSchema), ctrl
 router.post('/login', isEmptyBody, validateBody(schemas.loginSchema), ctrl.login);
 
 router.patch('/', authenticate, validateBody(schemas.subscriptionSchema), ctrl.updateSubscription);
+
+router.patch('/avatars', authenticate, upload.single("avatar"), isEmptyFieldAvatar, ctrl.updateAvatar)
 
 router.get('/current', authenticate, ctrl.getCurrent);
 
