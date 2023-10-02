@@ -50,8 +50,7 @@ export const updateContact = async (contactId, { name, email, phone }) => {
     return null;
   }
 
-  // contacts[index] = { contactId, name, email, phone };
-  contacts[index] = { ...contacts[index], name, email, phone };
+  contacts[index] = { id: contactId, name, email, phone };
 
   await updateContactsFile(contacts);
   return contacts[index];
