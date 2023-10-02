@@ -3,8 +3,15 @@ const { Contact } = require("../models/contacts");
 const { HttpError } = require("../helpers");
 const { ctrlWrapper } = require("../helpers");
 
-const listContacts = async (_, res) => {
-  const result = await Contact.find();
+const listContacts = async (req, res) => {
+  const { id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = null } = req.query;
+  const skip = (page - 1) * limit;
+  const favoriteQueryObj = favorite ? { favorite: JSON.parse(favorite) } : {};
+  const result = await Contact.find({ owner, ...favoriteQueryObj }, "", {
+    skip,
+    limit,
+  });
   res.json(result);
 };
 
@@ -25,7 +32,8 @@ const removeContact = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 

@@ -14,7 +14,6 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      minlength: 6,
       match: emailPattern,
       required: true,
     },
@@ -28,6 +27,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false }
 );
@@ -36,20 +39,17 @@ contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().min(6).required().pattern(emailPattern).message({
-    "string.pattern.base": "Invalid email",
-  }),
-  phone: Joi.string().min(8).required().pattern(phonePattern).message({
-    "string.pattern.base": "Invalid phone",
-  }),
+  email: Joi.string().min(6).required().pattern(emailPattern),
+  phone: Joi.string().min(8).required().pattern(phonePattern),
   favorite: Joi.boolean(),
 }).messages({
   "any.required": "missing required {{#label}} field",
+  "string.pattern.base": "{#label} in not valid",
 });
 
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({
-    "any.required": `{{#label}} is a required field`,
+    "any.required": `{#label} is a required field`,
   }),
 });
 
