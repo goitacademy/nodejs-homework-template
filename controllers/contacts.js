@@ -34,7 +34,18 @@ exports.addContact = async (req, res, next) => {
   const { body } = req;
 
   if (!body.name) {
-    res.status(400).json({ message: "missing required name field" });
+    res.status(400).json({
+      message: 'missing required "name" field',
+    });
+
+    return;
+  }
+
+  if (!body.phone) {
+    res.status(400).json({
+      message: 'missing required "phone" field',
+    });
+
     return;
   }
 

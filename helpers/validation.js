@@ -6,9 +6,10 @@ const contactSchema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   phone: Joi.string()
-    .pattern(/^[0-9]{3}-[0-9]{3}-[0-9]{4}$|^[0-9]{10}$/)
-    .required(),
+    .pattern(/^[0-9-+() ]+$/)
+    .optional(),
 });
+
 
 module.exports = {
   contactSchema,
