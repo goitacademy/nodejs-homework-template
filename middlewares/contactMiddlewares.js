@@ -3,59 +3,56 @@ const { Types } = require('mongoose');
 const Contact = require('../models/contactModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { contactDataValidator } = require('../utils/contactValidators');
+const { contactDataValidator} = require('../utils/contactValidators');
+
 
 exports.checkContactById = catchAsync(async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const idIsValid = Types.ObjectId.isValid(contactId);
 
-    if (!idIsValid) throw new AppError(400, 'Bad request..');
+  const { contactId } = req.params;
 
-    const contact = await Contact.findById(contactId);
+  const idIsValid = Types.ObjectId.isValid(contactId);
 
-    if (!contact) throw new AppError(404, 'Not found');
+  if (!idIsValid) return next(new AppError(400, 'Bad request..'));
 
-    req.contact = contact;
+  const contact = await Contact.findById(contactId);
 
-    next();
-  } catch (error) {
-    next(error);
-  }
+  if (!contact) return next(new AppError(404, 'Not found'));
+
+  req.contact = contact;
+
+  next();
 });
+
+
 
 exports.checkCreateContactData = catchAsync(async (req, res, next) => {
-  try {
-    const { error, value } = contactDataValidator(req.body);
 
-    if (error) throw new AppError(400, 'Invalid user data..');
+  const { error, value } = contactDataValidator(req.body);
 
-    const contactExists = await Contact.exists({ email: value.email });
+  if (error) return next(new AppError(400, 'Invalid user data..'));
 
-    if (contactExists) throw new AppError(400, 'User with this email already exists..');
+  const contactExists = await Contact.exists({ email: value.email });
 
-    req.body = value;
+  if (contactExists) return next(new AppError(400, 'User with this email already exists..'));
 
-    next();
-  } catch (error) {
-    next(error);
-  }
+  req.body = value;
+
+  next();
 });
 
+
+
 exports.checkUpdateContactData = catchAsync(async (req, res, next) => {
-  try {
-    const { error, value } = contactDataValidator(req.body);
 
-    if (error) throw new AppError(400, 'Invalid user data..');
+  const { error, value } = contactDataValidator(req.body);
 
-    const contactExists = await Contact.findOne({ email: value.email });
+  if (error) return next(new AppError(400, 'Invalid user data..'));
+  
+  const contactExists = await Contact.findOne({ email: value.email });
 
-    if (contactExists) throw new AppError(400, 'User with this email already exists..');
+  if (contactExists) return next(new AppError(400, 'User with this email already exists..'));
 
-    req.body = value;
+  req.body = value;
 
-    next();
-  } catch (error) {
-    next(error);
-  }
+  next();
 });
