@@ -82,37 +82,30 @@ export const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const allContacts = await listContacts();
   const idxEl = allContacts.findIndex(el => el.id === contactId);
+  const { error } = contactAddShcema.validate(req.body);
 
   try {
-    if (idxEl === -1) throw HttpError(404, 'Item Not Found');
-    if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
-    const { error } = contactAddShcema.validate(req.body);
-
-    if (error) throw HttpError(400, error.message);
-    const newArr = allContacts.map(el => {
-      if (el.id === contactId) {
-        console.log('contactId', '!!!!!!!!!!!!');
-        return (el = {
-          name,
-          email,
-          phone,
-          id: contactId,
-        });
-      }
-      return el;
-    });
-    console.log('newArr', newArr);
-    // await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
-    // res.status(201).json(createContact);
+    if (!Object.keys(req.body).length) {
+      throw HttpError(400, 'All fields empty');
+    } else if (error) {
+      console.log('second', second);
+      throw HttpError(400, error.message);
+    } else {
+      const newArr = allContacts.map(el => {
+        if (el.id === contactId) {
+          return (el = {
+            name,
+            email,
+            phone,
+            id: contactId,
+          });
+        }
+        return el;
+      });
+      await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
+      res.json(newArr[idxEl]);
+    }
   } catch (error) {
     next(error);
   }
 };
-
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// };

@@ -1,6 +1,4 @@
 import { Router } from 'express';
-import * as contactServises from '../../models/contacts.js';
-// import * as controllersContact from '../../controlers/controllersContacts.js';
 import controllersContact from '../../controlers/controllersContacts.js';
 import { ctrlWrapper } from '../../helpers/ctrlWrapper.js';
 
