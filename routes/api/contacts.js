@@ -27,9 +27,7 @@ router.get("/", async (req, res, next) => {
     const result = await contactsService.listContacts();
     res.json(result);
   } catch (error) {
-    res.status(500).json({
-      message: "Server Error",
-    });
+    next(error);
   }
 });
 
