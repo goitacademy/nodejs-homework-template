@@ -1,26 +1,27 @@
 const express = require('express')
 const router = express.Router()
-const contactsController = require('../../controllers/contacts')
+// const contactsController = require('../../controllers/contacts')
+const { listContacts, getContactById, addContact } = require('../../controllers/contacts')
 
 /**
  * @ GET /api/contacts
  * нічого не отримує 
  * викликає функцію listContacts для роботи з json-файлом contacts.json 
  */
-router.get('/', contactsController.listContacts)
+router.get('/', listContacts)
 
 /**
  * @ GET /api/contacts/:id
  * Не отримує body
  * викликає функцію getById для роботи з json-файлом contacts.json
  */
-router.get('/:contactId', contactsController.getContactById)
+router.get('/:contactId', getContactById)
 
 /**
  * @ POST /api/contacts
  * Викликає функцію addContact(body) для збереження контакту в файлі contacts.json
  */
-router.post('/', contactsController.addContact)
+router.post('/', addContact)
 
 /**
  * @ DELETE /api/contacts/:id

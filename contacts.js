@@ -1,92 +1,92 @@
-const contactsModel = require('../models/contacts')
-const { bodySchema } = require('../routes/api/valid-contact')
+const contactsModel = require('./models/contacts')
+const { bodySchema } = require('./routes/api/valid-contact')
 
-/**
- * GET /api/contacts
- * @returns повертає масив всіх контактів в json-форматі зі статусом 200
- */
-const listContacts = async (req, res, next) => {
-    try {
-        const contacts = await contactsModel.listContacts()
-        return res.json({
-            status: "success",
-            code: 200,
-            data: { contacts },
-        })
-    } catch (err) {
-        next(err)
-    }
-}
+// /**
+//  * GET /api/contacts
+//  * @returns повертає масив всіх контактів в json-форматі зі статусом 200
+//  */
+// const listContacts = async (req, res, next) => {
+//     try {
+//         const contacts = await contactsModel.listContacts()
+//         return res.json({
+//             status: "success",
+//             code: 200,
+//             data: { contacts },
+//         })
+//     } catch (err) {
+//         next(err)
+//     }
+// }
 
-/**
- * GET /api/contacts/:id
- * Отримує параметр id
- * @returns якщо такий id є, повертає об'єкт контакту в json-форматі зі статусом 200
- * @returns якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404
- */
-const getContactById = async (req, res, next) => {
-    const contactId = req.params.contactId
+// /**
+//  * GET /api/contacts/:id
+//  * Отримує параметр id
+//  * @returns якщо такий id є, повертає об'єкт контакту в json-форматі зі статусом 200
+//  * @returns якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404
+//  */
+// const getContactById = async (req, res, next) => {
+//     const contactId = req.params.contactId
 
-    try {
-        const contact = await contactsModel.getContactById(contactId)
+//     try {
+//         const contact = await contactsModel.getContactById(contactId)
 
-        if (contact) {
-            return res.json({
-                status: "success",
-                code: 200,
-                data: { contact },
-            })
-        } else {
-            return res.status(404).json({
-                status: "error",
-                code: 404,
-                message: "Not found",
-            })
-        }
-    } catch (err) {
-        next(err)
-    }
-}
+//         if (contact) {
+//             return res.json({
+//                 status: "success",
+//                 code: 200,
+//                 data: { contact },
+//             })
+//         } else {
+//             return res.status(404).json({
+//                 status: "error",
+//                 code: 404,
+//                 message: "Not found",
+//             })
+//         }
+//     } catch (err) {
+//         next(err)
+//     }
+// }
 
 
-/**
- * POST /api/contacts
- * Отримує body в форматі {name, email, phone}
- * @returns якщо в body немає якихось полів, повертає json з ключем {"message": "missing required name field"} і статусом 400
- * @returns якщо з body все добре, додає унікальний ідентифікатор в об'єкт контакту
- * @returns за результатом роботи функції повертає об'єкт з доданим id {id, name, email, phone} і статусом 201
- */
-const addContact = async (req, res, next) => {
-    try {
-        const validContact = bodySchema.validate(req.body)
+// /**
+//  * POST /api/contacts
+//  * Отримує body в форматі {name, email, phone}
+//  * @returns якщо в body немає якихось полів, повертає json з ключем {"message": "missing required name field"} і статусом 400
+//  * @returns якщо з body все добре, додає унікальний ідентифікатор в об'єкт контакту
+//  * @returns за результатом роботи функції повертає об'єкт з доданим id {id, name, email, phone} і статусом 201
+//  */
+// const addContact = async (req, res, next) => {
+//     try {
+//         const validContact = bodySchema.validate(req.body)
 
-        if (validContact.error) {
-            return res.status(400).json({
-                status: 'error',
-                code: 400,
-                message: validContact.error.details[0].message,
-            })
-        }
+//         if (validContact.error) {
+//             return res.status(400).json({
+//                 status: 'error',
+//                 code: 400,
+//                 message: validContact.error.details[0].message,
+//             })
+//         }
 
-        const contacts = await contactsModel.addContact(req.body)
+//         const contacts = await contactsModel.addContact(req.body)
 
-        if (contacts) {
-            return res.status(201).json({
-                status: "success",
-                code: 201,
-                data: { contacts }
-            })
-        } else {
-            return res.status(400).json({
-                status: "error",
-                code: 400,
-                message: "missing required name field",
-            })
-        }
-    } catch (err) {
-        next(err)
-    }
-}
+//         if (contacts) {
+//             return res.status(201).json({
+//                 status: "success",
+//                 code: 201,
+//                 data: { contacts }
+//             })
+//         } else {
+//             return res.status(400).json({
+//                 status: "error",
+//                 code: 400,
+//                 message: "missing required name field",
+//             })
+//         }
+//     } catch (err) {
+//         next(err)
+//     }
+// }
 
 /**
  * DELETE /api/contacts/:id
