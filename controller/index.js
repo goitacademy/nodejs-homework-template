@@ -20,7 +20,7 @@ const contactFavorite = joi.object({
 
 const get = async (req, res, next) => {
     try {
-        const results = await getAllContacts()
+        const results = await getAllContacts();
         res.json({
             status: 'success',
             code: 200,
