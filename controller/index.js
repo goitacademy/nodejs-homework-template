@@ -19,14 +19,6 @@ const editSchema = Joi.object({
 
 const editFavoriteSchema = Joi.object({ favorite: Joi.boolean().required() });
 
-const get = async (req, res, next) => {
-  try {
-    const contactsList = await service.getAllContacts();
-    res.status(200).json({ message: "Success", data: contactsList });
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 const getContacts = async (req, res, next) => {
   try {
@@ -40,6 +32,8 @@ const getContacts = async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
@@ -141,7 +135,6 @@ const favorite = async (req, res, next) => {
 };
 
 module.exports = {
-  get,
   getContacts,
   getById,
   remove,
