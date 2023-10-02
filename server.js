@@ -15,3 +15,10 @@ const db = require("./db");
     process.exit(1);
   }
 })();
+
+
+process.on("SIGINT", async () => {
+  await db.disconnect();
+  console.log("Database connection closed");
+  process.exit();
+});
