@@ -1,7 +1,7 @@
 const handleError = require('../helpers/handleError')
-const handleReqErr = require('../helpers/handleReqError')
+const handleReqError = require('../helpers/handleReqError')
 
 module.exports = {
     handleError,
-    handleReqErr,
+    handleReqError,
 }

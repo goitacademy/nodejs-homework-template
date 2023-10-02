@@ -1,4 +1,4 @@
-const handleReqErr = (handler) => async (req, res, next) => {
+const handleReqError = (handler) => async (req, res, next) => {
     try {
         await handler(req, res, next)
     } catch (err) {
@@ -6,4 +6,4 @@ const handleReqErr = (handler) => async (req, res, next) => {
     }
 }
 
-module.exports = handleReqErr
+module.exports = handleReqError

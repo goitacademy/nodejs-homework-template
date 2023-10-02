@@ -1,5 +1,5 @@
 const contactsModel = require('../../models/contacts')
-const { handleReqErr } = require('../../helpers')
+const { handleReqError } = require('../../helpers')
 
 /**
  * GET /api/contacts
@@ -14,4 +14,4 @@ const listContacts = async (req, res, next) => {
     })
 }
 
-module.exports = { listContacts: handleReqErr(listContacts) }
+module.exports = handleReqError(listContacts);

@@ -1,7 +1,14 @@
 const express = require('express')
 const router = express.Router()
 // const contactsController = require('../../controllers/contacts')
-const { listContacts, getContactById, addContact } = require('../../controllers/contacts')
+const {
+    listContacts,
+    getContactById,
+    addContact,
+    removeContact,
+    updateContact,
+    updateStatusContact,
+} = require('../../controllers/contacts')
 
 /**
  * @ GET /api/contacts
@@ -28,18 +35,18 @@ router.post('/', addContact)
  * Не отримує body
  * Викликає функцію removeContact для роботи з json-файлом contacts.json
  */
-router.delete('/:contactId', contactsController.removeContact)
+router.delete('/:contactId', removeContact)
 
 /**
  * @ PUT /api/contacts/:id
  * Якщо з body все добре, викликає функцію updateContact(contactId, body)
  */
-router.put('/:contactId', contactsController.updateContact)
+router.put('/:contactId', updateContact)
 
 /**
  * @ PATCH /api / contacts /:id/ favorite
  * Якщо з body все добре, викликає функцію updateStatusContact (contactId, body)
  */
-router.patch('/:contactId/favorite', contactsController.updateStatusContact)
+router.patch('/:contactId/favorite', updateStatusContact)
 
 module.exports = router

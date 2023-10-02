@@ -1,5 +1,6 @@
 const contactsModel = require('../../models/contacts')
-const handleReqErr = require('../../helpers')
+const { handleReqError } = require('../../helpers')
+const { bodySchema } = require('../../routes/api/valid-contact')
 
 /**
  * POST /api/contacts
@@ -9,35 +10,31 @@ const handleReqErr = require('../../helpers')
  * @returns за результатом роботи функції повертає об'єкт з доданим id {id, name, email, phone} і статусом 201
  */
 const addContact = async (req, res, next) => {
-    try {
-        const validContact = bodySchema.validate(req.body)
+    const validContact = bodySchema.validate(req.body)
 
-        if (validContact.error) {
-            return res.status(400).json({
-                status: 'error',
-                code: 400,
-                message: validContact.error.details[0].message,
-            })
-        }
+    if (validContact.error) {
+        return res.status(400).json({
+            status: 'error',
+            code: 400,
+            message: validContact.error.details[0].message,
+        })
+    }
 
-        const contacts = await contactsModel.addContact(req.body)
+    const contacts = await contactsModel.addContact(req.body)
 
-        if (contacts) {
-            return res.status(201).json({
-                status: "success",
-                code: 201,
-                data: { contacts }
-            })
-        } else {
-            return res.status(400).json({
-                status: "error",
-                code: 400,
-                message: "missing required name field",
-            })
-        }
-    } catch (err) {
-        next(err)
+    if (contacts) {
+        return res.status(201).json({
+            status: "success",
+            code: 201,
+            data: { contacts }
+        })
+    } else {
+        return res.status(400).json({
+            status: "error",
+            code: 400,
+            message: "missing required name field",
+        })
     }
 }
 
-module.exports = { addContact: handleReqErr(addContact) }
+module.exports = handleReqError(addContact)
