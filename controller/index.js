@@ -113,7 +113,7 @@ const update = async (req, res, next) => {
 
 const updateStatus = async (req, res, next) => {
     const { id } = req.params;
-    const { value, error } = contactValidate.validate(req.body);
+    const { value, error } = contactFavorite.validate(req.body);
     const { favorite } = value;
     if (error) {
         res.status(400).json({ message: 'missing field favorite'})
