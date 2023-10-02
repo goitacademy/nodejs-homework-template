@@ -1,5 +1,5 @@
-const HttpError = require('../helpers');
-const ctrlWrapper = require('../decorators');
+const { HttpError } = require('../helpers');
+const { ctrlWrapper } = require('../decorators');
 const contactsService = require('../models/contacts');
 
 
