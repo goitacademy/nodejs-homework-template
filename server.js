@@ -19,7 +19,6 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 3000
-console.log(PORT)
 const uriDb = process.env.DB_HOST
 
 const connection = mongoose.connect(uriDb, {
