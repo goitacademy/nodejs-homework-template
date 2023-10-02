@@ -34,10 +34,13 @@ const removeContact = async (contactId) => {
 
 const addContact = async ({ name, email, phone }) => {
   const allContacts = await listContacts();
-  const newContact = { id: crypto.randomUUID(), name, email };
+  const newContact = { id: crypto.randomUUID(), name, email, phone };
 
   const existingContact = allContacts.find(
-    (contact) => contact.name === name && contact.email === email
+    (contact) =>
+      contact.name === name &&
+      contact.email === email &&
+      contact.phone === phone
   );
 
   if (existingContact) {
