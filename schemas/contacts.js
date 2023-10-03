@@ -1,9 +1,15 @@
 const Joi = require('joi');
 
 const addSchema = Joi.object({
-    name: Joi.string().min(3).required(),
+    name: Joi.string().required(),
     email: Joi.string().required(),
-    phone: Joi.string().min(6).required(),
+    phone: Joi.string().required(),
 });
 
-module.exports = { addSchema };
+const updateSchema = Joi.object({
+    name: Joi.string(),
+    email: Joi.string(),
+    phone: Joi.string(),
+});
+
+module.exports = { addSchema, updateSchema };
