@@ -4,7 +4,9 @@ import { idNotFound, validateBody } from "../../decorators/index.js";
 import contactService from "../../models/contacts.js";
 import contactSchema from "../../schemas/contact-schema.js";
 
-const isIdExists = idNotFound(await contactService.listContacts());
+const isIdExists = contactService
+  .listContacts()
+  .then((data) => idNotFound(data));
 const isValidate = validateBody(contactSchema);
 
 const contactsRouter = express.Router();
