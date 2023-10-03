@@ -1,14 +1,83 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises');
+const path = require('path');
+const Joi = require('joi');
 
-const listContacts = async () => {}
+const contactsFilePath = path.join(__dirname, 'contacts.json');
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  const data = await fs.readFile(contactsFilePath, 'utf-8');
+  return JSON.parse(data);
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const contacts = await listContacts();
+  const contact = contacts.find((contact) => contact.id === contactId);
 
-const addContact = async (body) => {}
+  if (!contact) {
+    throw new Error('Contact not found');
+  } else {
+    return contact;
+  }
+};
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const updatedContacts = contacts.filter(
+    (contact) => contact.id !== contactId
+  );
+
+  await fs.writeFile(contactsFilePath, JSON.stringify(updatedContacts));
+};
+
+const validateContact = (contact) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+  });
+
+  return schema.validate(contact);
+};
+
+const addContact = async (name, email, phone) => {
+  const contacts = await listContacts();
+  const newContact = {
+    id: String(Date.now()),
+    name,
+    email,
+    phone,
+  };
+
+  const { error } = validateContact(newContact);
+
+  if (error) {
+    throw new Error(`Validation error: ${error.details[0].message}`);
+  }
+
+  contacts.push(newContact);
+  await fs.writeFile(contactsFilePath, JSON.stringify(contacts));
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+
+  if (index === -1) {
+    throw new Error('Contact not found');
+  }
+
+  const updatedContact = { ...contacts[index], ...body };
+  const { error } = validateContact(updatedContact);
+
+  if (error) {
+    throw new Error(`Validation error: ${error.details[0].message}`);
+  }
+
+  contacts[index] = updatedContact;
+  await fs.writeFile(contactsFilePath, JSON.stringify(contacts));
+  return updatedContact;
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +85,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
