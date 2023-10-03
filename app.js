@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
@@ -23,10 +24,6 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
-});
-
-app.listen(3000, () => {
-  console.log('Server running. Use our API on port: 3000');
 });
 
 module.exports = app;
