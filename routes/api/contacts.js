@@ -4,15 +4,26 @@ import HttpError from '../../helpers/HttpError.js'
 import Joi from 'joi'
 
 const contactAddSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `name required field`
+ name: Joi.string()
+        .alphanum().messages({"string.alphanum": "name must only contain alpha-numeric characters"})
+        .min(3)
+        .max(30)
+        .required().messages({
+    "any.required": `missing required name field`
   }),
-  email: Joi.string().required().messages({
-    "any.required": `email required field`
+  email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).messages({'string.email': 'email must be a valid email'})
+        .required().messages({
+    "any.required": `missing required email field`
   }),
-  phone: Joi.string().required().messages({
-    "any.required": `phone required field`
-  }),
+  
+  phone: Joi.number().messages({ "number.base": `phone must be a number` })
+  .integer()  
+  .min(0)
+  .max(1000000000000000).messages({ "number.unsafe": 'phone must be a correct number' })
+  .required().messages({
+    "any.required": `missing required phone field`
+  })
 })
 
 const router = express.Router()
@@ -51,6 +62,7 @@ router.post('/', async (req, res, next) => {
       const result = await contactService.addContact(req.body)
       res.status(201).json(result)
     } else {
+        console.log(validateContact.error)
          res.status(400).json({
           message: validateContact.error.message
          })
@@ -66,12 +78,12 @@ try {
   const result = await contactService.removeContact(contactId)
   if (!result) {
     res.status(404).json({
-      message: `Movie with this id not found`
+      message: `not found`
     })
   }
 
   res.json({
-    message: "Delete succes"
+    message: "contact deleted"
   })
 
 } catch (error) {
@@ -94,7 +106,7 @@ router.put('/:contactId', async (req, res, next) => {
       }
     } else {
          res.status(400).json({
-          message: "missing fields"
+          message: validateContact.error.message
          })
     }
 } catch (error) {
