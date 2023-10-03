@@ -21,7 +21,7 @@ router.post("/logout", authenticate, ctrl.logout);
 router.get("/current", authenticate, ctrl.current);
 
 router.patch(
-  "/users",
+  "/",
   authenticate,
   validateBody(updateSubSchema),
   ctrl.updateSubscription
