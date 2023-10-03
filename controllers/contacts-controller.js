@@ -1,5 +1,5 @@
 const contactsOperations = require("../models/contacts.js");
-const HttpError = require("../routes/api/helpers/HttpError.js");
+const HttpError = require("../helpers/HttpError.js");
 
 const { controllerWrapper } = require("../decorators/index.js");
 
