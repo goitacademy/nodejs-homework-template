@@ -1,7 +1,7 @@
-import * as contactsService from "../../models/index.js";
-import { HttpError } from "../../helpers/index.js";
 import * as contactsService from "../models/index.js";
-import {contactAddSchema} from "../../utils/validation/contactValidationSchemas.js";
+import { HttpError } from "../helpers/index.js";
+
+import {contactAddSchema} from "../utils/validation/contactValidationSchemas.js";
 
 const getAll = async (req, res, next) => {
   try {
