@@ -6,7 +6,6 @@ const catchAsync = require('../utils/catchAsync');
 const { userDataValidator } = require('../utils/userValidators');
 const User = require('../models/userModel')
 
-
 const tmpDir = path.join(__dirname, "../", "tmp");
 
 const multerConfig = multer.diskStorage({
@@ -19,7 +18,6 @@ const multerConfig = multer.diskStorage({
   limits: {
     fileSize: 2048
   }
-
 })
 
 exports.upload = multer({
@@ -27,46 +25,43 @@ exports.upload = multer({
 });
 
 exports.checkCreateUserData = catchAsync(async (req, res, next) => {
+  try {
+    const { error, value } = userDataValidator(req.body);
 
-  const { error, value } = userDataValidator(req.body);
+    if (error) throw new AppError(400, 'Bad Request');
 
-  if (error) return next(new AppError(400, 'Bad Request'));  
+    req.body = value;
 
-  req.body = value;
-
-  next();
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
-
-exports.auth = async (req, res, next) => {
-
-  const { authorization = "" } = req.headers;
-  const [bearer, token] = authorization.split(" ");
-
-  
-
+exports.auth = catchAsync(async (req, res, next) => {
   try {
+    const { authorization = "" } = req.headers;
+    const [bearer, token] = authorization.split(" ");
+
     if (bearer !== "Bearer") {
-      return next(new AppError(401, 'Not authorized'));
+      throw new AppError(401, 'Not authorized');
     }
 
     const { id } = jwt.verify(token, process.env.SECRET_KEY);
-  
+
     const user = await User.findById(id);
 
     if (!user || !user.token) {
-    return next(new AppError(401, 'Not authorized'));
-  }
+      throw new AppError(401, 'Not authorized');
+    }
 
-  req.user = user;
+    req.user = user;
 
-  next();
-    
-  } catch(error) {
+    next();
+  } catch (error) {
     if (error.message === "invalid signature") {
-    error.status = 401;
+      error.status = 401;
     }
     next(error);
   }
-  
-};
+});
