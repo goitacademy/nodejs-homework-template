@@ -48,7 +48,8 @@ const getContact = async (req, res) => {
 const createContact = async (req, res) => {
   const { _id: owner } = req.user;
   const newContact = await Contact.create({ ...req.body, owner });
-
+  console.log(req.body);
+  console.log(req.file);
   res.status(201).json(newContact);
 };
 
