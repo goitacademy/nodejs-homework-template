@@ -4,9 +4,10 @@ module.exports = {
     es2021: true,
     node: true,
   },
-  extends: ['standard', 'prettier'],
+  plugins: ["jest"],
+  extends: ["standard", "prettier", "plugin:jest/recommended"],
   parserOptions: {
     ecmaVersion: 12,
   },
   rules: {},
-}
+};
