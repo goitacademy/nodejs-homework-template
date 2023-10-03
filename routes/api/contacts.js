@@ -1,34 +1,27 @@
 import express from "express";
-import contactsService from "../../models/contacts.js";
+import contactController from "../../controllers/contacts.js";
+import { idNotFound, validateBody } from "../../decorators/index.js";
+import contactService from "../../models/contacts.js";
+import contactSchema from "../../schemas/contact-schema.js";
+
+const isIdExists = idNotFound(await contactService.listContacts());
+const isValidate = validateBody(contactSchema);
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", async (req, res, next) => {
-  const result = await contactsService.listContacts();
-  res.json(result);
-});
+contactsRouter.get("/", contactController.getAll);
 
-contactsRouter.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contactsService.getContactById(contactId);
-  res.json(result);
-});
+contactsRouter.get("/:contactId", isIdExists, contactController.getById);
 
-contactsRouter.post("/", async (req, res, next) => {
-  const result = await contactsService.addContact(req.body);
-  res.status(201).json(result);
-});
+contactsRouter.post("/", isValidate, contactController.add);
 
-contactsRouter.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contactsService.removeContact(contactId);
-  res.json(result);
-});
+contactsRouter.delete("/:contactId", isIdExists, contactController.deleteById);
 
-contactsRouter.put("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contactsService.updateContact(contactId, req.body);
-  res.json(result);
-});
+contactsRouter.put(
+  "/:contactId",
+  isIdExists,
+  isValidate,
+  contactController.updateById
+);
 
 export default contactsRouter;

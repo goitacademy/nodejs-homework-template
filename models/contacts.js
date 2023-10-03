@@ -7,12 +7,8 @@ const updateContactList = (contacts) =>
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
 const listContacts = async () => {
-  try {
-    const buffer = await fs.readFile(contactsPath);
-    return JSON.parse(buffer);
-  } catch (error) {
-    console.log(error.message);
-  }
+  const buffer = await fs.readFile(contactsPath);
+  return JSON.parse(buffer);
 };
 
 const getContactById = async (contactId) => {
