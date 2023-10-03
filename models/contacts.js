@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const { v4: uuidv4 } = require("uuid");
-const { contactSchema } = require("../helpers/validation");
+const { contactSchema } = require("../middlewares/validation");
 
 const contactsPath = path.join(__dirname, "./contacts.json");
 
