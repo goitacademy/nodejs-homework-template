@@ -1,4 +1,4 @@
-const { contactSchema, updateContactSchema } = require("../helpers/validation");
+const { contactSchema, updateContactSchema } = require("./validation");
 
 const validateBody = (schema) => {
   return (req, res, next) => {
