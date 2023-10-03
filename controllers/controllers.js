@@ -22,21 +22,21 @@ const add = async (req, res) => {
 }
 
 const updateById = async (req, res) => {
-    const { id } = req.params;
+    const { contactId } = req.params;
 
-    const result = await contacts.updateContact(id, req.body);
+    const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-        throw HttpError(404, `Contact with ${id} not found`);
+        throw HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.json(result);
 }
 
 const deleteById = async (req, res) => {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId);
     if (!result) {
-        throw HttpError(404, `Contact with ${id} not found`);
+        throw HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.json({

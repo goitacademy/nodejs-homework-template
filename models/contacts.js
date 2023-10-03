@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const contactsPath = path.resolve('models','contacts.json');
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
+  const data = await fs.readFile(contactsPath, 'utf-8');
   return JSON.parse(data);
 }
 
@@ -21,7 +21,7 @@ const removeContact = async (contactId) => {
   return getContactById(contactId);
 }
 
-const addContact = async (body) => {
+const addContact = async ({name, email, phone}) => {
   const contacts = await listContacts();
   const newContact = { id: uuidv4(), name, email, phone };
   contacts.push(newContact);
@@ -31,13 +31,14 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
-  const indexContact = contacts.findIndex(item => (item.id = contactId));
-  if (indexContact === -1)
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) {
     return null;
-  contacts[indexContact] = { id: contactId, ...body };
+  }
+  contacts[index] = { ...contacts[index], ...body };
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[indexContact];
-}
+  return contacts[index];
+};
 
 module.exports = {
   listContacts,
