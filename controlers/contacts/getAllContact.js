@@ -1,5 +1,5 @@
-import { Contact } from '../schemas/contacts.js';
-import { ctrlWrapper } from "../helpers/ctrlWraper.js";
+import { Contact } from '../../schemas/contacts.js';
+import { ctrlWrapper } from "../../helpers/ctrlWraper.js";
 
 export const getAll = async (req, res, next) => {
     const results = await Contact.find()

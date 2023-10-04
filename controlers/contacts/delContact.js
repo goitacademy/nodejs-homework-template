@@ -1,6 +1,6 @@
-import { Contact } from '../schemas/contacts.js';
-import { HttpError } from "../helpers/HttpErrors.js";
-import { ctrlWrapper } from "../helpers/ctrlWraper.js";
+import { Contact } from '../../schemas/contacts.js';
+import { HttpError } from "../../helpers/HttpErrors.js";
+import { ctrlWrapper } from "../../helpers/ctrlWraper.js";
 
 export const del = async (req, res, next) => {
   const { id } = req.params

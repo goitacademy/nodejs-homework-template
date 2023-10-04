@@ -39,8 +39,3 @@ export const schemas = {
   addSchema,
   updateFavoriteSchema,
 }
-
-// export default {
-//   Contact,
-//   schemas
-// };
