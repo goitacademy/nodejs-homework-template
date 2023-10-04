@@ -3,8 +3,13 @@ import { HttpError } from '../helpers/index.js';
 import * as contactServises from '../models/contacts.js';
 const contactAddShcema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  phone: Joi.string()
+    .length(10)
+    .pattern(/^[0-9]+$/)
+    .required(),
 });
 const getAll = async (req, res, next) => {
   try {
