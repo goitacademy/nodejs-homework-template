@@ -1,5 +1,8 @@
 import express from "express";
-import { ausValidate } from "../../middleware/validation/validation.js";
+import {
+  ausValidate,
+  ausVerify,
+} from "../../middleware/validation/validation.js";
 import authenticate from "../../middleware/validation/authenticate.js";
 import ausController from "../../controllers/user-controller.js";
 import { upload } from "../../middleware/validation/upload.js";
@@ -12,6 +15,10 @@ authRouter.post(
   ausValidate,
   ausController.userReg
 );
+
+authRouter.get("/verify/:verificationToken", ausController.getVerification);
+
+authRouter.post("/verify", ausVerify, ausController.repeatVerify);
 
 authRouter.post("/login", ausValidate, ausController.userLog);
 
