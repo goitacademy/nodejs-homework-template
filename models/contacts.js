@@ -1,14 +1,70 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
+const crypto = require("crypto");
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, "contacts.json");
+console.log(contactsPath);
 
-const getContactById = async (contactId) => {}
+const readContacts = async () => {
+  const result = await fs.readFile(contactsPath);
+  return JSON.parse(result);
+};
 
-const removeContact = async (contactId) => {}
+const writeContacts = async (data) => {
+  await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
+};
 
-const addContact = async (body) => {}
+const listContacts = async () => {
+  return await readContacts();
+};
 
-const updateContact = async (contactId, body) => {}
+const getContactById = async (contactId) => {
+  const contacts = await readContacts();
+  const contact = contacts.find((contact) => contact.id === contactId);
+  if (!contact) {
+    throw new Error("Not found");
+  }
+  return contact;
+};
+
+const removeContact = async (contactId) => {
+  const contacts = await readContacts();
+  const contactIndex = contacts.findIndex(
+    (contact) => contact.id === contactId
+  );
+  if (contactIndex === -1) {
+    throw new Error("Not found");
+  }
+  const [deletedContact] = contacts.splice(contactIndex, 1);
+  await writeContacts(contacts);
+  return deletedContact;
+};
+
+const addContact = async ({ name, email, phone }) => {
+  const newContact = {
+    id: crypto.randomUUID(),
+    name,
+    email,
+    phone,
+  };
+  const contacts = await readContacts();
+  contacts.push(newContact);
+  await writeContacts(contacts);
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const contacts = await readContacts();
+  const contactIndex = contacts.findIndex(
+    (contact) => contact.id === contactId
+  );
+  if (contactIndex === -1) {
+    throw new Error("Not found");
+  }
+  contacts.splice(contactIndex, 1, { ...contacts[contactIndex], ...body });
+  await writeContacts(contacts);
+  return contacts[contactIndex];
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +72,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
