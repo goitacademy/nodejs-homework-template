@@ -33,17 +33,17 @@ exports.addContact = async (req, res, next) => {
   const { body } = req;
 
   if (!body.name) {
-    res.status(400).json({ message: 'missing required "name" field' });
+    res.status(400).json({ message: "missing required name field" });
     return;
   }
 
   if (!body.email) {
-    res.status(400).json({ message: 'missing required "email" field' });
+    res.status(400).json({ message: "missing required email field" });
     return;
   }
 
   if (!body.phone) {
-    res.status(400).json({ message: 'missing required "phone" field' });
+    res.status(400).json({ message: "missing required phone field" });
     return;
   }
 
@@ -59,12 +59,19 @@ exports.updateContact = async (req, res, next) => {
   const { id } = req.params;
   const { body } = req;
 
+  if (!body || Object.keys(body).length === 0) {
+    res.status(400).json({
+      message: "missing fields",
+    });
+    return;
+  }
+
   const requiredFields = ["name", "email", "phone"];
   const missingFields = requiredFields.filter((field) => !(field in body));
 
   if (missingFields.length > 0) {
     res.status(400).json({
-      message: `Missing required fields: ${missingFields.join(", ")}`,
+      message: `missing required ${missingFields.join(", ")} field`,
     });
     return;
   }

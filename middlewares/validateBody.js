@@ -7,7 +7,7 @@ const validateBody = (schema) => {
 
       const { error } = schema.validate(body);
       if (error) {
-        res.status(400).json({ message: "missing required name field" });
+        res.status(400).json({ message: error.details[0].message });
       } else {
         next();
       }
@@ -16,6 +16,7 @@ const validateBody = (schema) => {
     }
   };
 };
+
 
 module.exports = {
   validateContactBody: validateBody(contactSchema),
