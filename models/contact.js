@@ -46,8 +46,4 @@ module.exports = {
   Contact,
   shemas,
 };
-// module.exports = {
-//   Contact,
-//   addSchema,
-//   updateFavoriteSchema,
-// };
+
