@@ -2,8 +2,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
-require('dotenv').config();
+// require('dotenv').config();
 const { SECRET_KEY } = process.env;
+// console.log(process.env);
 
 const register = async (req, res) => {
   const { email, password } = req.body;
