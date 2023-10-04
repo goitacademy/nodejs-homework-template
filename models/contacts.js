@@ -54,7 +54,7 @@
 //   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 //   return contacts[index];
 // };
-=======
+
 import { promises as fs } from 'fs';
 import { join } from "path";
 import { nanoid } from "nanoid";
