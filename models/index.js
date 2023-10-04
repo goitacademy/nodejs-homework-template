@@ -2,7 +2,9 @@ const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("node:crypto");
 
-const FILE_PATH = path.resolve(__dirname, "contacts.json");
+const FILE_PATH = path.join(__dirname, "contacts.json");
+
+console.log("test test test");
 
 const updatedContactsList = (allContacts) =>
   fs.writeFile(FILE_PATH, JSON.stringify(allContacts, null, 2));
@@ -25,7 +27,7 @@ const removeContact = async (contactId) => {
   const indexToRemove = allContacts.findIndex((item) => item.id === contactId);
 
   if (indexToRemove === -1) {
-    return null;
+    throw new Error(`Contact with id ${contactId} not found`);
   }
   const removedContact = allContacts.splice(indexToRemove, 1)[0];
   await updatedContactsList(allContacts);
@@ -33,6 +35,7 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async ({ name, email, phone }) => {
+  console.log(`Adding contact: ${name}, ${email}, ${phone}`);
   const allContacts = await listContacts();
   const newContact = { id: crypto.randomUUID(), name, email, phone };
 
@@ -45,7 +48,7 @@ const addContact = async ({ name, email, phone }) => {
 
   if (existingContact) {
     console.log("Contact already exists.");
-    return null;
+    return { error: "Contact already exists" };
   }
 
   allContacts.push(newContact);

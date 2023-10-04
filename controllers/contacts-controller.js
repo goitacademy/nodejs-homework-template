@@ -32,12 +32,8 @@ const getById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
+  console.log("Inside add function", req.body);
   try {
-    if (!Object.keys(req.body).length) {
-      throw HttpError(400, "All fields are empty");
-    }
-
-    console.log(req.body);
     const { name, email, phone } = req.body;
     const { error } = contactAddSchema.validate({ name, email, phone });
     if (error) {
