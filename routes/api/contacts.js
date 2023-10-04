@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const contactsController = require("../../controllers/contacts-controller.js");
+const contactsController = require("../../controllers/contacts.js");
 const isEmptyBody = require("../../middlewares/index.js");
 const { validateBody } = require("../../decorators/index.js");
-const contactSchema = require("../../schemas/contact-schema.js");
+const contactSchema = require("../../schemas/contact.js");
 
 const contactValidate = validateBody(contactSchema);
 
