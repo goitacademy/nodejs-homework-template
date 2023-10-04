@@ -9,16 +9,13 @@ export const listContacts = async () => {
   const data = await fs.readFile(contactPath);
   return JSON.parse(data);
 };
-export const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
+export const getContactById = async contactId => {
   const allContacts = await listContacts();
   const resp = allContacts.find(el => el.id === contactId);
 
   return resp;
 };
-export const removeContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  console.log('contactId', contactId);
+export const removeContact = async contactId => {
   const allContact = await listContacts();
   const elIdx = allContact.findIndex(el => el.id === contactId);
   const newArr = allContact.filter((el, idx) => idx !== elIdx);
@@ -27,8 +24,7 @@ export const removeContact = async (req, res, next) => {
   return result;
 };
 
-export const addContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
+export const addContact = async (name, email, phone) => {
   const createContact = {
     id: nanoid(),
     name,
@@ -42,12 +38,9 @@ export const addContact = async (req, res, next) => {
   return createContact;
 };
 
-export const updateContact = async (req, res, next) => {
-  const { contactId } = req.params;
+export const updateContact = async (contactId, name, email, phone) => {
   const allContacts = await listContacts();
   const idxEl = allContacts.findIndex(el => el.id === contactId);
-  const { name, email, phone } = req.body;
-
   const newArr = allContacts.map(el => {
     if (el.id === contactId) {
       return (el = {
