@@ -18,9 +18,14 @@ const subscriptionSchema = Joi.object({
     subscription: Joi.string().valid(...subscriptionList).required().messages({'any.required': 'missing required "subscription" field'})
 });
 
+const verifyEmailSchema = Joi.object({
+    email: Joi.string().trim().pattern(emailRegexp).required().messages({ 'any.required': 'missing required field email', 'string.pattern.base': '{#label} format must be: example@example.com' }),
+})
+
 
 module.exports = {
     registerSchema,
     loginSchema,
     subscriptionSchema,
+    verifyEmailSchema,
 };

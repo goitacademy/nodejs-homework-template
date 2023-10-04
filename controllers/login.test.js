@@ -41,6 +41,7 @@ describe('Login controller test', () => {
         password: 'test1234',
         subscription: 'starter',
         token: '',
+        verify: true,
     }
 
     test(`should should return status code 401, email is't in the DB`, async () => {
@@ -60,7 +61,7 @@ describe('Login controller test', () => {
     });
 
     test(`should should return status code 401, password is't correct`, async () => {
-        User.findOne = jest.fn().mockResolvedValue({ password: uncorrectedPassword });
+        User.findOne = jest.fn().mockResolvedValue({ password: uncorrectedPassword, verify: true });
 
         bcrypt.compare = jest.fn().mockResolvedValue(false);
 
