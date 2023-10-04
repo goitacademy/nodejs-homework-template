@@ -50,7 +50,6 @@ export const add = async (req, res, next) => {
     if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
     const { error } = contactAddShcema.validate(req.body);
     if (error) {
-      console.log('error', error.details[0].path);
       throw HttpError(
         404,
         (error.message = `missing required ${error.details[0].path} field`)
@@ -63,17 +62,18 @@ export const add = async (req, res, next) => {
 };
 
 export const put = async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const { contactId } = req.params;
-  const allContacts = await contactServises.listContacts();
-
-  const idxEl = allContacts.findIndex(el => el.id === contactId);
+  const result = await contactServises.updateContact(req, res, next);
   const { error } = contactAddShcema.validate(req.body);
   try {
-    if (error) {
-      throw HttpError(400, error.message);
+    if (!Object.keys(req.body).length) {
+      throw HttpError(400, 'All fields empty');
+    } else if (error) {
+      throw HttpError(
+        404,
+        (error.message = `missing required ${error.details[0].path} field`)
+      );
     }
-    res.json(await contactServises.updateContact(req, res, next));
+    res.json(result);
   } catch (error) {
     next(error);
   }

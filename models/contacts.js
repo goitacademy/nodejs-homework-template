@@ -47,30 +47,18 @@ export const updateContact = async (req, res, next) => {
   const allContacts = await listContacts();
   const idxEl = allContacts.findIndex(el => el.id === contactId);
   const { name, email, phone } = req.body;
-  const { error } = contactAddShcema.validate(req.body);
 
-  try {
-    if (!Object.keys(req.body).length) {
-      throw HttpError(400, 'All fields empty');
-    } else if (error) {
-      console.log('second', second);
-      throw HttpError(400, error.message);
-    } else {
-      const newArr = allContacts.map(el => {
-        if (el.id === contactId) {
-          return (el = {
-            name,
-            email,
-            phone,
-            id: contactId,
-          });
-        }
-        return el;
+  const newArr = allContacts.map(el => {
+    if (el.id === contactId) {
+      return (el = {
+        name,
+        email,
+        phone,
+        id: contactId,
       });
-      await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
-      res.json(newArr[idxEl]);
     }
-  } catch (error) {
-    next(error);
-  }
+    return el;
+  });
+  await fs.writeFile(contactPath, JSON.stringify(newArr, null, 2));
+  return newArr[idxEl];
 };
