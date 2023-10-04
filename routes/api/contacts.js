@@ -5,11 +5,14 @@ const {HttpError} = require('../../helpers');
 
 const router = express.Router();
 
+const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/
+
 const addSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().regex(phonePattern).required(),
 });
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -70,13 +73,13 @@ router.delete('/:contactId', async (req, res, next) => {
 
 router.put('/:contactId', async (req, res, next) => {
   try {
-    if (!req.body) {
-      throw HttpError(400, 'missing fields');
+    if (Object.keys(req.body).length === 0) {
+      throw HttpError(400, 'Missing request body');
     }
 
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, `missing required ${error.details[0].path[0]} field`);
+      throw HttpError(400, `Missing required ${error.details[0].path[0]} field`);
     }
 
     const { contactId } = req.params;
@@ -90,7 +93,6 @@ router.put('/:contactId', async (req, res, next) => {
     next(error);
   }
 });
-
 
 
 module.exports = router;
