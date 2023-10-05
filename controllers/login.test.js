@@ -60,6 +60,21 @@ describe('Login controller test', () => {
         });
     });
 
+    test(`should should return status code 401, user is't verifier`, async () => {
+        User.findOne = jest.fn().mockResolvedValue({ ...mockUser, verify: false });
+
+        await expect(login(req, res)).rejects.toThrow(
+            res.status(401).json({
+                message: 'Email not verified',
+            })
+        );
+        expect(User.findOne).toHaveBeenCalledWith({ email: req.body.email });
+        expect(res.status).toHaveBeenCalledWith(401);
+        expect(res.json).toHaveBeenCalledWith({
+            message: 'Email not verified'
+        });
+    });
+
     test(`should should return status code 401, password is't correct`, async () => {
         User.findOne = jest.fn().mockResolvedValue({ password: uncorrectedPassword, verify: true });
 
@@ -96,8 +111,6 @@ describe('Login controller test', () => {
         expect(User.findByIdAndUpdate).toHaveBeenCalledWith(mockUser._id, {
             token: mockToken,
         });
-        // console.log(res.json.mock.calls[0][0]);
-        // console.log(typeof res.json.mock.calls[0][0]);
         expect(res.status).toHaveBeenCalledWith(200);
         expect(typeof res.json.mock.calls[0][0].user.email).toBe('string')
         expect(typeof res.json.mock.calls[0][0].user.subscription).toBe('string')

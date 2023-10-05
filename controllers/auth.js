@@ -29,13 +29,13 @@ const register = async (req, res) => {
 
     const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL: avatarDefault, verificationToken });
 
-    const msg = {
+    const emailVerify = {
         to: newUser.email,
         subject: "Verify email",
         html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click verify email</a>`
     };
 
-    await sendEmail(msg);
+    await sendEmail(emailVerify);
     
     res.status(201).json({
         user: {
@@ -72,13 +72,13 @@ const resendVerifyEmail = async (req, res) => {
         throw HttpErrors(400, 'Verification has already been passed')
     };
 
-    const msg = {
+    const emailVerify = {
         to: user.email,
         subject: "Verify email",
         html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click verify email</a>`
     };
 
-    await sendEmail(msg);
+    await sendEmail(emailVerify);
     
     res.json({
         message: "Verification email sent"
