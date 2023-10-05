@@ -1,4 +1,9 @@
-const { Contact, schemas } = require("../models/contact");
+const { Contact } = require("../models/contact");
+
+const {
+  addSchema,
+  updateFavoriteSchema,
+} = require("../utils/validation/contactValidationSchemas");
 
 const { HttpError } = require("../utils/helpers/HttpError");
 
@@ -19,7 +24,7 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error } = schemas.addSchema.validate(req.query);
+  const { error } = addSchema.validate(req.query);
 
   if (error) {
     throw new HttpError(400, error.message);
@@ -40,7 +45,7 @@ const removeContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  const { error } = schemas.addSchema.validate(req.query);
+  const { error } = addSchema.validate(req.query);
 
   if (error) {
     throw new HttpError(400, error.message);
@@ -55,8 +60,8 @@ const updateContact = async (req, res, next) => {
 };
 
 const updateFavorite = async (req, res, next) => {
-  const { error } = schemas.updateFavoriteSchema.validate(req.body);
-  console.log(req.body);
+  const { error } = updateFavoriteSchema.validate(req.body);
+
   if (error) {
     throw new HttpError(400, error.message);
   }
