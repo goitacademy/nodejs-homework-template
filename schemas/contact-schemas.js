@@ -1,10 +1,19 @@
 const Joi = require('joi');
 
-const contactAddSchema = Joi.object({
-    name: Joi.string().required().error(new Error('missing required name field')),
-    email: Joi.string().email({ tlds: { allow: false } }).required().error(new Error('missing required email field')),
-    phone: Joi.string().required().error(new Error('missing required phone field')),
+const errorMessages = {
+    "string.base": "Field {#label} must be a string.",
+    "string.empty": "Field {#label} cannot be empty.",
+    "string.email": "Field {#label} must be a valid email address.",
+    "string.pattern.base": "Field {#label} must be in the format (XXX) XXX-XXXX.",
+    "any.required": "Missing required {#label} field.",
+}
 
-});
+const contactAddSchema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email({ tlds: { allow: false } }).required(),
+    phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
+})
+    .unknown(false)
+    .messages(errorMessages);
 
 module.exports = contactAddSchema;
