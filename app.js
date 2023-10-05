@@ -1,13 +1,20 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
+const bcryptjs=require("bcryptjs");
 
-const contactsRouter = require("./routes/api/contacts");
-const dotenv = require("dotenv");
-
-dotenv.config();
+const  authRouter  = require("./routes/api/auth");
+const contactsRouter  = require("./routes/api/contacts");
 
 const app = express();
+
+const createHashPassword=async(password)=>{
+  const result=await bcryptjs.hash(password,10);
+  console.log(result);
+  const compareResult1=await bcryptjs.compare(password,result);
+};
+createHashPassword("123456")
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -15,6 +22,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
@@ -22,7 +30,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
 });
 
 module.exports = app;
