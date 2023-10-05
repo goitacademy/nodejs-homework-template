@@ -1,25 +1,77 @@
-const express = require('express')
+// contacts.js
+const express = require('express');
+const router = express.Router();
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require('../../models/contacts'); 
 
-const router = express.Router()
-
+// GET /api/contacts
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  try {
+    const contacts = await listContacts();
+    res.json(contacts);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// GET /api/contacts/:id
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const contact = await getContactById(Number(id));
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
 
+// POST /api/contacts
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const { name, email, phone } = req.body;
+  if (!name || !email || !phone) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+  try {
+    const newContact = await addContact({ name, email, phone });
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// DELETE /api/contacts/:id
+router.delete('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    await removeContact(Number(id));
+    res.json({ message: 'Contact deleted' });
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// PUT /api/contacts/:id
+router.put('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const { name, email, phone } = req.body;
+  if (!name || !email || !phone) {
+    return res.status(400).json({ message: 'Missing fields' });
+  }
+  try {
+    const updatedContact = await updateContact(Number(id), {
+      name,
+      email,
+      phone,
+    });
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+module.exports = router;
