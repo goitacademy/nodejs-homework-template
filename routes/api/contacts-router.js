@@ -1,30 +1,34 @@
 import express from "express";
-
-import contactsController from "../../controllers/contacts-controller.js";
-
-import contactSchema from "../../schema/contact-schema.js"
-
-import {validateBody} from "../../decorators/index.js";
-
-import {isValidId} from "../../middlewara/index.js";
+import {
+  getAll,
+  getById,
+  add,
+  deleteById,
+  updateById,
+  updateStatusContact,
+} from "../../controllers/contacts/index.js";
+import { validateBody } from "../../decorators/index.js";
+import contactSchema from "../../schemas/contact-schema.js";
+import {isValidId, authenticate } from "../../middlewara/index.js";
 
 const contactAddValidate = validateBody(contactSchema.contactAddSchema);
 
 const contactUpdateFavoriteValidate = validateBody(contactSchema.contactUpdateFavoriteSchema);
+const contactRouter = express.Router();
 
-const contactRouter = express.Router()
+contactRouter.use(authenticate);
 
-contactRouter.get('/', contactsController.getAll);
+contactRouter.get("/", getAll);
 
-contactRouter.get('/:id', isValidId, contactsController.getById);
+contactRouter.get("/:id", isValidId, getById);
 
-contactRouter.post('/', contactAddValidate, contactsController.add);
+contactRouter.post('/', contactAddValidate, add);
 
-contactRouter.put('/:id', isValidId, contactAddValidate, contactsController.updateById);
+contactRouter.put('/:id', isValidId, contactAddValidate, updateById);
 
-contactRouter.patch('/:id/favorite', isValidId, contactUpdateFavoriteValidate, contactsController.updateStatusContact);
+contactRouter.patch('/:id/favorite', isValidId, contactUpdateFavoriteValidate, updateStatusContact);
  
-contactRouter.delete('/:id', contactsController.deleteById);
+contactRouter.delete('/:id', deleteById);
 
 
 export default contactRouter;
