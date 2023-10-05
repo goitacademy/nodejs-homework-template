@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const addContactValidationSchema = Joi.object({
+const validationSchema = Joi.object({
   name: Joi.string()
     .min(2)
     .max(30)
@@ -14,13 +14,14 @@ const addContactValidationSchema = Joi.object({
       tlds: { allow: ["com", "net", "org", "ua"] },
     })
     .required(),
-  phone: Joi.string()
-    .min(8)
-    .max(30)
-    .regex(/^\+[0-9]{1,3}[0-9]{6,14}$/)
-    .required(),
+  phone: Joi.string().min(8).max(30).required(),
 });
 
-const schemaJoiValidate = (data) => addContactValidationSchema.validate(data);
+const validationFavorite = Joi.object({
+  favorite: Joi.boolean().default(false).required(),
+});
 
-module.exports = schemaJoiValidate;
+module.exports = {
+  validationSchema,
+  validationFavorite,
+};
