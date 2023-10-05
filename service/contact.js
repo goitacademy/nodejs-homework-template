@@ -13,12 +13,15 @@ const getAllContacts = async ({ owner, page, limit, favorite }) => {
       .skip(startIndex)
       .limit(limit)
       .exec();
-    const totalContacts = await Contact.countDocuments(query);
+
+    const filteredContacts = contacts.filter((contacts) => contacts.owner);
+
+    const totalContacts = filteredContacts.length;
 
     const totalPages = Math.ceil(totalContacts / limit);
 
     return {
-      contacts,
+      contacts: filteredContacts,
       currentPage: page,
       totalPages,
       totalContacts,

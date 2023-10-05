@@ -91,6 +91,7 @@ router.get("/users/list", auth, (req, res, next) => {
     },
   });
 });
+
 router.get("/users/logout", validateToken, (req, res) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
@@ -105,11 +106,11 @@ router.get("/users/logout", validateToken, (req, res) => {
     data: "success",
   });
 });
+
 router.get("/users/current", auth, async (req, res, next) => {
   const { email } = req.user;
 
   try {
-    // Retrieve the user's subscription from the database
     const user = await User.findOne({ email });
 
     res.status(200).json({
