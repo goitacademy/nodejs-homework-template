@@ -1,18 +1,16 @@
+import mongoose from "mongoose";
+
 import app from "./app.js";
-import mongoose from 'mongoose';
 
+const {DB_HOST, PORT = 3000} = process.env;
 
-const DB_HOST = process.env.DB_HOST;
-
-// mongoose.set('strictQuery', true);
-
-mongoose.connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
-      console.log('Server is running on port 3000');
-    });
+    app.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`)
+    })
   })
   .catch(error => {
-    console.error('Database connection error:', error.message);
+    console.log(error.message);
     process.exit(1);
-  });
+  })
