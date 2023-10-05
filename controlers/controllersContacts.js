@@ -7,10 +7,10 @@ const contactAddShcema = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
     .required(),
   phone: Joi.string()
-    .length(10)
-    .pattern(/^[0-9]+$/)
+    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
     .required(),
 });
+
 const getAll = async (req, res, next) => {
   try {
     const result = await contactServises.listContacts();
@@ -29,7 +29,7 @@ const getById = async (req, res, next) => {
   try {
     const result = await contactServises.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, "message: 'Not found'");
+      throw HttpError(404, ' Not found');
     }
     res.json(result);
   } catch (error) {
@@ -43,7 +43,7 @@ export const deleteById = async (req, res, next) => {
     const result = await contactServises.removeContact(contactId);
     console.log('result', result);
     if (!result) {
-      throw HttpError(404, `message: Not found `);
+      throw HttpError(404, `Not found `);
     }
     res.json(result);
   } catch (error) {
