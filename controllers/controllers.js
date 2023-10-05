@@ -1,97 +1,62 @@
-/* eslint-disable no-unused-vars */
-const {
-  listContacts,
-  getById,
-  addContact,
-  updateContact,
-  removeContact,
-} = require("../services/services");
+const { serviceContact } = require("../services/services");
+const { ControllerWrapper } = require("../utils/ControllerWrapper");
+const { HttpError } = require("../middlewares/httpError");
 
-const contactValidationSchemas = require("../utils/validation/contactValidationSchemas");
-
-const getAllContactsController = async (req, res, next) => {
-  try {
-    const contactsJson = await listContacts();
-
-    res.status(200).json(contactsJson);
-  } catch (error) {
-    next(error);
-  }
+const getAllContactsController = async (_, res, next) => {
+  const data = await serviceContact.listContacts();
+  res.json(data);
 };
 
 const getContactByIdController = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const dataContacts = await getById(id);
+  const { id } = req.params;
+  const dataContacts = await serviceContact.getById(id);
 
-    if (dataContacts) {
-      res.status(200).json(dataContacts);
-    }
-    res.status(404).json({ message: "Not found" });
-  } catch (error) {
-    next(error);
-  }
+  if (!dataContacts) throw HttpError(404, "Not found");
+
+  res.json(dataContacts);
 };
 
 const createContactController = async (req, res, next) => {
-  try {
-    const { body } = req;
-    const { error } = await contactValidationSchemas(body);
+  const dataContacts = await serviceContact.addContact(req.body);
 
-    if (error)
-      res.status(400).json({
-        message: `Missing required ${error.details[0].message} field`,
-      });
-
-    const dataContacts = await addContact(body);
-
-    res.status(201).json(dataContacts);
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json(dataContacts);
 };
 
 const updateContactController = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { body } = req;
-    const { error } = await contactValidationSchemas(body);
+  const { id } = req.params;
+  const dataContacts = await serviceContact.updateContact(id, req.body);
 
-    const dataContact = await listContacts();
-    const findIndexContact = dataContact.findIndex(
-      (contact) => contact.id === id
-    );
-
-    if (findIndexContact === -1)
-      return res.status(404).json({ Message: "Bad id, please correct." });
-
-    if (error) return res.status(400).json({ message: "Missing fields" });
-
-    const dataContacts = await updateContact(id, body);
-
-    res.status(200).json(dataContacts);
-  } catch (error) {
-    next(error);
-  }
+  res.status(200).json(dataContacts);
 };
 
 const deleteContactController = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const dataContacts = await removeContact(id);
-    if (dataContacts) {
-      res.status(200).json({ message: "Contact deleted" });
-    }
-    res.status(404).json({ Message: "Not found" });
-  } catch (error) {
-    next(error);
+  const { id } = req.params;
+  const dataContacts = await serviceContact.removeContact(id);
+
+  if (!dataContacts) {
+    res.status(404).json({ message: "Not found" });
   }
+  res.status(200).json({ message: "Contact deleted" });
+};
+
+const updateContactStatus = async (req, res, next) => {
+  const { id } = req.params;
+  const dataContacts = await serviceContact.updateStatusContact(id, req.body);
+
+  if (!dataContacts) res.status(404).json({ message: "Not found" });
+
+  res.status(200).json(dataContacts);
+};
+
+const crtlContacts = {
+  getAllContactsController: ControllerWrapper(getAllContactsController),
+  getContactByIdController: ControllerWrapper(getContactByIdController),
+  createContactController: ControllerWrapper(createContactController),
+  updateContactController: ControllerWrapper(updateContactController),
+  deleteContactController: ControllerWrapper(deleteContactController),
+  updateContactStatus: ControllerWrapper(updateContactStatus),
 };
 
 module.exports = {
-  getAllContactsController,
-  getContactByIdController,
-  createContactController,
-  updateContactController,
-  deleteContactController,
+  crtlContacts,
 };
