@@ -47,7 +47,11 @@ router.post('/', async (req, res, next) => {
         name_error = error.details[0].path[0];
       }
 
-      throw HttpError(400, `missing required ${name_error} field`);
+      if (name_error === 'phone') {
+        throw HttpError(400, `Not a pthone field  format. Format:(000)000-0000`);
+      } else {
+        throw HttpError(400, `missing required ${name_error} field`);
+      }
     }
 
     const result = await contacts.addContact(req.body.name, req.body.email, req.body.phone);
@@ -74,7 +78,7 @@ router.delete('/:contactId', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      throw HttpError(400, 'Missing request body');
+      throw HttpError(400, 'missing fields');
     }
 
     const { error } = addSchema.validate(req.body);
