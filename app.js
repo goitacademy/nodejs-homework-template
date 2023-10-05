@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const globalError = require("./middlewares/globalError");
+const { globalError } = require("./middlewares/globalError");
 
 require("dotenv").config();
 
