@@ -1,4 +1,9 @@
 const express = require("express");
+const isEmptyBody = require("../../middlewares/isEmptyBody");
+const validateBody = require("../../decorators/validateBody");
+const contactAddSchema = require("../../schemes/movie-schemes");
+
+const contactAddValidate = validateBody(contactAddSchema);
 
 const contactsController = require("../../controllers/contacts-controller");
 
@@ -8,10 +13,20 @@ contactsRouter.get("/", contactsController.getAll);
 
 contactsRouter.get("/:id", contactsController.deleteById);
 
-contactsRouter.post("/", contactsController.add);
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  contactAddValidate,
+  contactsController.add
+);
 
 contactsRouter.delete("/:id", contactsController.deleteById);
 
-contactsRouter.put("/:id", contactsController.updateById);
+contactsRouter.put(
+  "/:id",
+  isEmptyBody,
+  contactAddValidate,
+  contactsController.updateById
+);
 
 module.exports = contactsRouter;
