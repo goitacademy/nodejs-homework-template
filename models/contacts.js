@@ -1,14 +1,85 @@
-// const fs = require('fs/promises')
+const mongoose = require('mongoose');
 
-const listContacts = async () => {}
+// Схема моделі для колекції contacts
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const getContactById = async (contactId) => {}
+// Створення моделі на основі схеми
+const Contact = mongoose.model('Contact', contactSchema);
 
-const removeContact = async (contactId) => {}
+// Отримання списку контактів
+const listContacts = async () => {
+  try {
+    return await Contact.find({});
+  } catch (error) {
+    throw error;
+  }
+};
 
-const addContact = async (body) => {}
+// Отримання контакту за ID
+const getContactById = async (contactId) => {
+  try {
+    return await Contact.findById(contactId);
+  } catch (error) {
+    throw error;
+  }
+};
 
-const updateContact = async (contactId, body) => {}
+// Видалення контакту за ID
+const removeContact = async (contactId) => {
+  try {
+    return await Contact.findByIdAndRemove(contactId);
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Додавання нового контакту
+const addContact = async (body) => {
+  try {
+    return await Contact.create(body);
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Оновлення контакту за ID
+const updateContact = async (contactId, body) => {
+  try {
+    return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Оновлення статусу контакту за ID
+const updateStatusContact = async (contactId, favorite) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    return updatedContact;
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +87,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+  updateStatusContact, // Додайте цю функцію до експорту
+};
