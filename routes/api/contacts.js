@@ -5,9 +5,15 @@ const Joi = require("joi");
 const { HttpError } = require("../../helpers");
 
 const addSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
+const updateSchema = Joi.object({
+  name: Joi.string().optional(),
+  email: Joi.string().optional(),
+  phone: Joi.string().optional(),
 });
 
 router.get("/", async (req, res, next) => {
@@ -47,7 +53,7 @@ router.post("/", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = updateSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -56,7 +62,7 @@ router.put("/:contactId", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found!");
     }
-    res.json(result);
+    res.json(result)
   } catch (error) {
     next(error);
   }
