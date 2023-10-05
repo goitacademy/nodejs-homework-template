@@ -1,4 +1,5 @@
 const express = require("express");
+const isValidId = require("../../middlewares/isValidId");
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ const {
 
 router.get("/", listContacts);
 
-router.get("/:contactId", getContactById);
+router.get("/:contactId", isValidId, getContactById);
 
 router.post("/", addContact);
 

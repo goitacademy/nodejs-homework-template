@@ -1,3 +1,5 @@
+// const HttpError = require("../helpers/HttpError");
+
 const ctrlWrapeer = (ctrl) => {
   const func = async (req, res, next) => {
     try {
