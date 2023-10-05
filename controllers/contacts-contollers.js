@@ -4,10 +4,6 @@ import httpError from "../helpers/httpError.js"
 import {ctrlWrapper} from "../decorators/index.js";
 
 
-
-
-
-
 const getAll = async (req, res, next) => {
     const result = await contactsService.listContacts();
     res.json(result)
