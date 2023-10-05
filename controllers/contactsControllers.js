@@ -5,19 +5,8 @@ const {
   addContact,
   updateContact,
 } = require("../models/contacts");
-const Joi = require("joi");
 
-const contactAddSchema = Joi.object({
-  name: Joi.string().required().message({
-    "any.required": `missing required name field`,
-  }),
-  email: Joi.string().required().message({
-    "any.required": `missing required email field`,
-  }),
-  phone: Joi.string().required().message({
-    "any.required": `missing required phone field`,
-  }),
-});
+const { HttpError } = require("../helpers/HttpError");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -29,12 +18,10 @@ const getAllContacts = async (req, res, next) => {
 };
 
 const getContact = async (req, res, next) => {
-  const { id } = req.params;
   try {
+    const { id } = req.params;
     if (!id) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
+      throw HttpError(404, "Not found");
     }
     const contact = await getContactById(id);
     res.json(contact);
@@ -47,9 +34,7 @@ const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!id) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
+      throw HttpError(404, "Not found");
     }
     if (id) {
       await removeContact(id);
@@ -62,15 +47,12 @@ const deleteContact = async (req, res, next) => {
 
 const createContact = async (req, res, next) => {
   try {
-    const { error: validationError } = contactAddSchema.validate(req.body);
-    if (validationError) {
-      const error = new Error(validationError.message);
-      error.status = 400;
-      throw error;
-    } else {
-      const newContact = await addContact(req.body);
-      res.status(201).json(newContact);
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      throw HttpError(400, "Missing required name field");
     }
+    const newContact = await addContact(req.body);
+    res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
@@ -81,9 +63,7 @@ const updateContactBody = async (req, res, next) => {
     const { id } = req.params;
     const { body } = req;
     if (!body) {
-      const error = new Error("missing fields");
-      error.status = 400;
-      throw error;
+      throw HttpError(400, "Missing fields");
     }
     const updatedContact = await updateContact(id, body);
     if (updatedContact) {
