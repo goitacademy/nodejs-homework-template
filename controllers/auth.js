@@ -17,7 +17,7 @@ const register = async (req, res) => {
     res.status(201).json({
         email: newUser.email,
         password: newUser.password,
-    });
+    })
 };
 
 const login = async (req, res) => {
