@@ -28,7 +28,7 @@ const listContacts = async () => {
 	return result || null;
   }
 
-  // Возвращает объект добавленного контакта. 
+  // Певертає новий контакт
 	const addContact = async (data) => {
 		const contacts = await listContacts();
 		const newContact = {
@@ -53,12 +53,13 @@ const listContacts = async () => {
 		return result;
 		}
 
-// const updateContact = async (contactId, body) => {}
+// Оновлення записів
 
-	const updateContact = async (contactId, data) => {
+	const updateContact = async (id, data) => {
+		const contactId = String(id);
 		const contacts = await listContacts();
 		const index = contacts.findIndex(item => item.id === contactId);
-		if(index === -1) {
+		if (index === -1) {
 			return null;
 		}
 		contacts[index] = {contactId, ...data};
