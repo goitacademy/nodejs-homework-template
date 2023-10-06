@@ -2,6 +2,10 @@ const express = require("express");
 const fs = require("fs").promises;
 const path = require("path");
 
+const {joiValidation, joiValidationRequired} = require(path.join(__dirname, "../../utils/joiValidation"));
+
+const requestError = require(path.join(__dirname, '../../utils/requestError.js'));
+
 const MODELS_PATH = path.join(__dirname, "../../models/contacts.js");
 const {listContacts, getContactById, addContact, removeContact, updateContact} = require(MODELS_PATH);
 
@@ -10,13 +14,18 @@ const router = express.Router();
 router.get("/", async (req, res, next) => {
   try {
     const data = await listContacts();
+    if (!data) {
+      const error = requestError();
+      throw error;
+    }
+
     res.json({
       status: "ok",
       code: 200,
       data,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    next(error);
   }
 });
 
@@ -26,10 +35,8 @@ router.get("/:contactId", async (req, res, next) => {
     const contact = await getContactById(contactId);
 
     if (!contact) {
-      res.status(404).json({
-        status: 404,
-        message: "Not Found",
-      });
+      const error = requestError(404);
+      throw error;
     }
 
     res.json({
@@ -38,18 +45,20 @@ router.get("/:contactId", async (req, res, next) => {
       data: contact,
     });
   } catch (error) {
-    res.status(500).json({ "status": "Error", "message": error });
+    next(error);
   }
 });
 
 router.post("/", async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
-   
-    if (!name || !email || !phone) {
-      res.status(400).json({ message: "missing required field" });
-      return 1;
+    const validationError  = joiValidationRequired({name, email, phone});
+    
+    if (validationError) {
+      const err = requestError(400, validationError.message);
+      throw err; 
     }
+
     const newContact = await addContact(req.body);
     res.json({
       status: "created",
@@ -57,7 +66,7 @@ router.post("/", async (req, res, next) => {
       data: newContact,
     });
   } catch (error) {
-    res.status(500).json({ "status": "Error", "message": error });
+    next(error);
   }
 });
 
@@ -67,15 +76,12 @@ router.delete("/:contactId", async (req, res, next) => {
     const contact = await getContactById(contactId);
 
     if (!contact) {
-      res.status(404).json({
-        status: 404,
-        message: "Not Found",
-      });
+      const error = requestError(404);
+      throw error;
     }
 
     const isRemoved = await removeContact(contactId);
 
-    console.log(isRemoved === true);
     if(isRemoved) {
       res.json({
         "status":"success",
@@ -85,7 +91,7 @@ router.delete("/:contactId", async (req, res, next) => {
     }
     
   } catch (error) {
-    res.status(500).json({ "status": "Error", "message": error });
+    next(error);
   }
 });
 
@@ -95,18 +101,22 @@ router.put("/:contactId", async (req, res, next) => {
     const contact = await getContactById(contactId);
 
     if (!contact) {
-      res.status(404).json({
-        status: 404,
-        message: "Not Found",
-      });
-      return 1;
+      const error = requestError(404);
+      throw error;
     }
 
     const {name, email, phone} = req.body;
-
+      
     if (!name & !email & !phone) {
-      res.status(400).json({ message: "missing field" });
-      return 1;
+      const error = requestError(400, "missing field" )
+      throw error;
+    }
+
+    const validationError = joiValidation({name, email, phone});
+
+    if (validationError) {
+      const error = requestError(400, validationError.message);
+      throw error;
     }
     
     const result = await updateContact(contactId, req.body);
@@ -118,7 +128,7 @@ router.put("/:contactId", async (req, res, next) => {
     });
 
   } catch (error) {
-    res.status(500).json({ "status": "Error", "message": error });
+    next(error);
   }
 });
 

@@ -19,7 +19,12 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  let {status = 500, message = "Server Error"} = err;
+    if (message.includes('ENOENT')) {
+      message = "Server Error";
+    }
+
+    res.status(status).json({message});
 })
 
 module.exports = app
