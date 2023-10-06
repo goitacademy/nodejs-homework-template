@@ -1,4 +1,4 @@
-const Contact = require('../schemas/contacts')
+const Contact = require('./schemas/contacts')
 const handleError = require('../helpers/handleError')
 
 /**
