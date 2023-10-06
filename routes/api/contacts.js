@@ -2,24 +2,29 @@ import express from "express";
 
 import contactController from "../../controllers/contacts.js";
 
-import { isEmptyBody } from "../../middlewares/indeх.js";
+import { isEmptyBody, isValidId } from "../../middlewares/indeх.js";
 
 import { validateBody } from "../../decorators/index.js";
 
-import { contactAddSchema } from "../../schemas/contacts.js";
+import { contactAddSchema, contactUpdateFavoriteSchema } from "../../models/contact.js";
 
-const contactAddValidate = validateBody(contactAddSchema)
+const contactAddValidate = validateBody(contactAddSchema);
+
+const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 const contactsRouter = express.Router();
 
 contactsRouter.get('/', contactController.getAll);
 
-// contactsRouter.get('/:contactId', contactController.getById);
+contactsRouter.get('/:contactId', isValidId , contactController.getById);
 
-contactsRouter.post('/', isEmptyBody, contactController.add);
+contactsRouter.post('/', isEmptyBody, contactAddValidate, contactController.add);
 
-// contactsRouter.delete('/:contactId', contactController.deleteById);
+contactsRouter.delete('/:contactId', isValidId, contactController.deleteById);
 
-// contactsRouter.put('/:contactId', isEmptyBody, contactAddValidate, contactController.updateById);
+contactsRouter.put('/:contactId', isValidId, isEmptyBody, contactAddValidate, contactController.updateById);
+
+contactsRouter.patch('/:contactId/favorite', isValidId, isEmptyBody, contactUpdateFavoriteValidate, contactController.updateById);
+
 
 export default contactsRouter;
