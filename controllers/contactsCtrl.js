@@ -35,7 +35,6 @@ const removeContact = async (req, res, next) => {
 const addContact = async (req, res, next) => {
   const { body } = req;
   try {
-    console.log(body);
     const { error } = joiSchema.validate(body);
     if (error) {
       throw HttpError(400, error.message);
