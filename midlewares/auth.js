@@ -1,6 +1,6 @@
 import { verify } from "jsonwebtoken";
 import User from "../schemas/user.js";
-import { HttpError } from "./HttpErrors.js"
+import { HttpError } from "../helpers/HttpErrors.js"
 
 import dotenv from 'dotenv';
 dotenv.config();
