@@ -12,7 +12,6 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// Підключення до бази даних MongoDB за допомогою Mongoose
 mongoose.connect('mongodb+srv://ilapalatov:VtohiXVfdZZOWgYq@ilya.17ziwf8.mongodb.net/db-contacts', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
