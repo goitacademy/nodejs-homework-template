@@ -5,8 +5,6 @@ It uses MongoDB as the database for storing contact information. The API follows
 
 > This repository assumes the usage of Postman, a popular API development and testing tool, for interacting with the REST API.
 
-## Homework 6 - Emails
-
 ### Endpoints
 
 #### 1. GET /api/contacts

@@ -7,11 +7,6 @@ const contactSchema = new Schema(
       type: String,
       required: [true, "Set name for contact"],
     },
-    email: {
-      type: String,
-      required: true,
-      match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-    },
     phone: {
       type: String,
       required: true,

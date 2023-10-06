@@ -16,17 +16,20 @@ const HttpError = require("../helpers/HttpError");
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
+const sendEmail = require("../helpers/sendEmail");
 
 jest.mock("../models/user.js");
 jest.mock("bcrypt");
 jest.mock("jsonwebtoken");
 jest.mock("gravatar");
+jest.mock("../helpers/sendEmail");
 
 describe("User Auth Controller", () => {
   let server = null;
   beforeAll(async () => {
     server = app.listen(3030);
     await mongoose.connect(TEST_DB_HOST);
+    jest.clearAllMocks();
   });
   afterAll(async () => {
     server.close();
@@ -40,105 +43,167 @@ describe("User Auth Controller", () => {
   });
 
   describe("Login Controller", () => {
-    it("should return status code 200 and a token when valid credentials are provided and login is successful", async () => {
-      const req = { body: { email: "test@example.com", password: "password" } };
-      const res = { json: jest.fn() };
+    it("should log in a user with correct credentials and return status code 200 with a token", async () => {
+      const req = {
+        body: { email: "johndoe@example.com", password: "password" },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
       const next = jest.fn();
-      const mockedUser = { _id: "user_id", password: "hashed_password" };
 
-      // User.findOne.mockResolvedValueOnce(mockedUser);
-      jest.spyOn(User, "findOne").mockResolvedValue(mockedUser);
-      // User.findOne.mockResolvedValue(mockedUser);
-      // find !== finOne !!!
+      jest.spyOn(User, "findOne").mockResolvedValue({
+        name: "John Doe",
+        email: "johndoe@example.com",
+        password: "hashedPassword",
+        subscription: "starter",
+        avatarURL: "avatarURL",
+        verificationToken: "token",
+        verify: true,
+      });
 
-      // bcrypt.compare.mockResolvedValueOnce(true);
-      jest.spyOn(bcrypt, "compare").mockResolvedValue(true);
-
-      jest.spyOn(jwt, "sign").mockReturnValue("mocked_token");
-      // jwt.sign.mockReturnValueOnce("mocked_token");
-
-      jest.spyOn(User, "findByIdAndUpdate").mockResolvedValue(mockedUser);
+      bcrypt.compare.mockResolvedValue(true);
+      gravatar.url.mockReturnValue("avatarURL");
+      jwt.sign.mockReturnValueOnce("token");
 
       await login(req, res, next);
 
-      expect(res.json).toHaveBeenCalledWith({ token: "mocked_token" });
-      expect(res.json).toHaveBeenCalledTimes(1);
+      expect(User.findOne).toHaveBeenCalledWith({
+        email: "johndoe@example.com",
+      });
+      expect(bcrypt.compare).toHaveBeenCalledWith("password", "hashedPassword");
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        token: expect.any(String),
+        user: {
+          name: "John Doe",
+          email: "johndoe@example.com",
+          subscription: "starter",
+          avatarURL: "avatarURL",
+        },
+      });
       expect(next).not.toHaveBeenCalled();
     });
 
-    it("should throw an error with code 401 when invalid credentials are provided", async () => {
-      const req = { body: { email: "test@example.com", password: "password" } };
-      const res = {};
-      const next = jest.fn();
-      const mockedUser = null;
-
-      // User.findOne.mockResolvedValueOnce(mockedUser); // user not found
-      jest.spyOn(User, "find").mockResolvedValue(mockedUser);
-
+    it("should return a 401 status if email or password is incorrect", async () => {
+      // User.findOne.mockResolvedValue(null);
+      jest.spyOn(User, "findOne").mockResolvedValue(null);
       jest.spyOn(bcrypt, "compare").mockResolvedValue(false);
       // bcrypt.compare.mockReturnValueOnce(false);
+
+      const req = {
+        body: {
+          email: "test@example.com",
+          password: "password",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      const next = jest.fn();
 
       try {
         await login(req, res, next);
       } catch (error) {
         expect(error).toBeInstanceOf(HttpError);
         expect(error.statusCode).toBe(401);
+        // expect(res.status).toHaveBeenCalledWith(401);
         expect(error.message).toBe("Email or password is incorrect");
+        /* expect(res.json).toHaveBeenCalledWith({
+          message: "Email or password is incorrect",
+        });
+        expect(res.json).toHaveBeenCalledWith({
+          error: "Email or password is incorrect",
+        }); */
       }
     });
   });
 
   describe("Register Controller", () => {
-    it("should create a new user and return status code 201 with user data when register is successful", async () => {
+    it("should register a new user and return status code 201 with user data", async () => {
+      bcrypt.hash.mockResolvedValue("hashedPassword");
+      gravatar.url.mockReturnValue("avatarURL");
+      User.findOne.mockResolvedValue(null);
+      User.create.mockResolvedValue({
+        name: "John Doe",
+        email: "johndoe@example.com",
+        subscription: "free",
+        avatarURL: "avatarURL",
+        verificationToken: expect.any(String),
+      });
+
+      // jest.spyOn(User, "findOne").mockResolvedValue(null);
+      // jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed_password");
+      // jest.spyOn(gravatar, "url").mockReturnValue("avatar_url");
+      // jest.spyOn(User, "create").mockResolvedValue({name: "John Doe",
+      // email: "johndoe@example.com",
+      // subscription: "free",
+      // avatarURL: "avatarURL",
+      // verificationToken: expect.any(String)});
+
       const req = {
         body: {
           name: "John Doe",
-          email: "test@example.com",
+          email: "johndoe@example.com",
           password: "password",
         },
       };
-      const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
-      const mockedUser = {
-        name: "John Doe",
-        email: "test@example.com",
-        avatarURL: "avatar_url",
-        password: "password",
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
       };
+      const next = jest.fn();
 
-      jest.spyOn(User, "findOne").mockResolvedValue(null);
-      jest.spyOn(bcrypt, "hash").mockResolvedValue("hashed_password");
-      jest.spyOn(gravatar, "url").mockReturnValue("avatar_url");
-      jest.spyOn(User, "create").mockResolvedValue(mockedUser);
+      await register(req, res, next);
 
-      await register(req, res);
-
-      expect(User.findOne).toHaveBeenCalledWith({ email: "test@example.com" });
+      expect(User.findOne).toHaveBeenCalledWith({
+        email: "johndoe@example.com",
+      });
       expect(bcrypt.hash).toHaveBeenCalledWith("password", 10);
-      expect(gravatar.url).toHaveBeenCalledWith("test@example.com", {
+      expect(User.create).toHaveBeenCalledWith({
+        name: "John Doe",
+        email: "johndoe@example.com",
+        password: "hashedPassword",
+        avatarURL: "avatarURL",
+        verificationToken: expect.any(String),
+      });
+      expect(gravatar.url).toHaveBeenCalledWith("johndoe@example.com", {
         s: 250,
         d: "mp",
         r: "pg",
       });
-      expect(User.create).toHaveBeenCalledWith({
-        name: "John Doe",
-        email: "test@example.com",
-        password: "hashed_password",
-        avatarURL: "avatar_url",
-      });
+      expect(sendEmail).toHaveBeenCalled();
+
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({
         name: "John Doe",
-        email: "test@example.com",
-        avatarURL: "avatar_url",
+        email: "johndoe@example.com",
+        subscription: "free",
+        avatarURL: "avatarURL",
+        verificationToken: expect.any(String),
       });
+
+      expect(next).not.toHaveBeenCalled();
     });
 
-    it("should throw an error with code 409 when email is already in use", async () => {
-      const req = { body: { email: "test@example.com", password: "password" } };
-      const res = {};
+    it("should return a 409 status if the email is already in use", async () => {
+      User.findOne.mockResolvedValue({
+        email: "johndoe@example.com",
+      });
+      const req = {
+        body: {
+          name: "John Doe",
+          email: "johndoe@example.com",
+          password: "password",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
       const next = jest.fn();
-
-      jest.spyOn(User, "findOne").mockResolvedValue({ email: req.body.email });
 
       try {
         await register(req, res, next);
@@ -146,7 +211,17 @@ describe("User Auth Controller", () => {
         expect(error).toBeInstanceOf(HttpError);
         expect(error.status).toBe(409);
         expect(error.message).toBe("Email already in use");
+        // expect(next).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalledWith(error);
+        expect(res.status).toHaveBeenCalledWith(409);
+        expect(res.json).toHaveBeenCalledWith({
+          error: "Email already in use",
+        });
       }
+
+      expect(User.findOne).toHaveBeenCalledWith({
+        email: "johndoe@example.com",
+      });
     });
   });
 

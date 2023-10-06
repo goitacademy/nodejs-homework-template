@@ -52,6 +52,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (!user) {
     throw new HttpError(401, "Email or password is incorrect");
   }
@@ -69,7 +70,7 @@ const login = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({
+  res.status(200).json({
     token,
     user: {
       name: user.name,
@@ -80,7 +81,7 @@ const login = async (req, res) => {
   });
 };
 
-const verifyEmail = async (req, res, next) => {
+const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
   if (!user) {
@@ -98,7 +99,7 @@ const verifyEmail = async (req, res, next) => {
   res.json({ message: "Verification successful" });
 };
 
-const resentVerifyEmail = async (req, res, next) => {
+const resentVerifyEmail = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });

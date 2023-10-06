@@ -71,7 +71,7 @@ describe("Contact Controllers", () => {
     it("should add a new contact", async () => {
       const req = {
         user: { _id: "user_id" },
-        body: { name: "John Doe", email: "john@example.com" },
+        body: { name: "John Doe" },
       };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
       const next = jest.fn();
