@@ -1,26 +1,17 @@
 import express from "express";
-import contactsControllers from "../../controllers/contacts-controller.js";
-import { addSchema, updateFavoriteSchema, updateSchema } from "../../models/index.js";
+import authCtrl from "../../controllers/auth-controller.js";
+import { authSchema } from "../../models/index.js";
 import { validateBody } from "../../decorators/index.js";
-import { isValidId } from "../../middlewares/index.js";
+import { authenticate } from "../../middlewares/index.js";
 
 const router = express.Router();
 
-router.get("/", contactsControllers.getAll);
+router.post("/register", validateBody(authSchema), authCtrl.register);
 
-router.get("/:contactId", isValidId, contactsControllers.getById);
+router.post("/login", validateBody(authSchema), authCtrl.login);
 
-router.post("/", validateBody(addSchema), contactsControllers.add);
+router.get("/current", authenticate, authCtrl.getCurrent);
 
-router.put("/:contactId", validateBody(updateSchema), isValidId, contactsControllers.updateById);
-
-router.delete("/:contactId", isValidId, contactsControllers.deleteById);
-
-router.patch(
-  "/:contactId/favorite",
-  validateBody(updateFavoriteSchema),
-  isValidId,
-  contactsControllers.updateById
-);
+router.post("/logout", authenticate, authCtrl.logout);
 
 export default router;

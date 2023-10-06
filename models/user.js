@@ -1,36 +1,27 @@
 import { Schema, model } from "mongoose";
-// import { handleMongooseError } from "../helpers/index.js";
-// import Joi from "joi";
+import { handleMongooseError } from "../helpers/index.js";
+import Joi from "joi";
 
-// export const addSchema = Joi.object({
-//   name: Joi.string().required(),
-//   email: Joi.string().email().required(),
-//   phone: Joi.string().required(),
-//   favorite: Joi.boolean(),
-// });
+const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-// export const updateSchema = Joi.object({
-//   name: Joi.string(),
-//   email: Joi.string().email(),
-//   phone: Joi.string(),
-//   favorite: Joi.boolean(),
-// }).or("name", "email", "phone", "favorite");
-
-// export const updateFavoriteSchema = Joi.object({
-//   favorite: Joi.boolean().required().messages({
-//     "boolean.base": "field favorite must be false or true",
-//     "any.required": "missing field favorite",
-//   }),
-// });
+export const authSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    "string.pattern.base": "Ошибка от Joi или другой библиотеки валидации",
+    // "any.required": "missing field email",
+  }),
+  password: Joi.string().min(6).required(),
+});
 
 const userSchema = new Schema(
   {
     password: {
       type: String,
+      minLength: 6,
       required: [true, "Password is required"],
     },
     email: {
       type: String,
+      match: emailRegExp,
       required: [true, "Email is required"],
       unique: true,
     },
@@ -47,7 +38,7 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-// userSchema.post("save", handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
 const User = model("user", userSchema);
 
