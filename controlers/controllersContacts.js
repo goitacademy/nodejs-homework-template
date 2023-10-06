@@ -63,6 +63,9 @@ export const add = async (req, res, next) => {
         (error.message = `missing required ${error.details[0].path} field`)
       );
     }
+    if (!createContact) {
+      throw HttpError(404, `Not found`);
+    }
     res.status(201).json(createContact);
   } catch (error) {
     next(error);
@@ -88,6 +91,10 @@ export const put = async (req, res, next) => {
         (error.message = `missing required ${error.details[0].path} field`)
       );
     }
+    if (!result) {
+      throw HttpError(404, `Not found`);
+    }
+
     res.json(result);
   } catch (error) {
     next(error);
