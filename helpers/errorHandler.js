@@ -5,8 +5,9 @@ const messageDefault = {
   409: "Conflict",
 };
 
+// функція прокидання помилки для блоку try
 function errorHandler(status, message) {
-  const error = new Error();
+  const error = new Error(); //створення нової помилки
   error.status = status;
   error.message = message || messageDefault[status];
   throw error;
