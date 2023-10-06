@@ -29,7 +29,7 @@ const getById = async (req, res, next) => {
   try {
     const result = await contactServises.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, ' Not found');
+      throw HttpError(404, 'Not found');
     }
     res.json(result);
   } catch (error) {
@@ -55,7 +55,7 @@ export const add = async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
     const createContact = await contactServises.addContact(name, email, phone);
-    if (!Object.keys(req.body).length) throw HttpError(400, 'All fields empty');
+    if (!Object.keys(req.body).length) throw HttpError(400, 'missing fields');
     const { error } = contactAddShcema.validate(req.body);
     if (error) {
       throw HttpError(
@@ -81,7 +81,7 @@ export const put = async (req, res, next) => {
   const { error } = contactAddShcema.validate(req.body);
   try {
     if (!Object.keys(req.body).length) {
-      throw HttpError(400, 'All fields empty');
+      throw HttpError(400, 'missing fields');
     } else if (error) {
       throw HttpError(
         404,
