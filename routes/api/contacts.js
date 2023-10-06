@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('../../models/contacts');
 
-// Отримання списку контактів
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await Contact.listContacts();
@@ -12,7 +11,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Отримання контакту за ID
 router.get('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
@@ -28,7 +26,6 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-// Додавання нового контакту
 router.post('/', async (req, res, next) => {
   try {
     const newContact = await Contact.addContact(req.body);
@@ -38,7 +35,6 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// Видалення контакту за ID
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
@@ -54,7 +50,6 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-// Оновлення контакту за ID
 router.put('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
@@ -70,7 +65,6 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-// Оновлення статусу контакту за ID
 router.patch('/:contactId/favorite', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Схема моделі для колекції contacts
 const contactSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -18,10 +17,8 @@ const contactSchema = new mongoose.Schema({
   },
 });
 
-// Створення моделі на основі схеми
 const Contact = mongoose.model('Contact', contactSchema);
 
-// Отримання списку контактів
 const listContacts = async () => {
   try {
     return await Contact.find({});
@@ -30,7 +27,6 @@ const listContacts = async () => {
   }
 };
 
-// Отримання контакту за ID
 const getContactById = async (contactId) => {
   try {
     return await Contact.findById(contactId);
@@ -39,7 +35,6 @@ const getContactById = async (contactId) => {
   }
 };
 
-// Видалення контакту за ID
 const removeContact = async (contactId) => {
   try {
     return await Contact.findByIdAndRemove(contactId);
@@ -48,7 +43,6 @@ const removeContact = async (contactId) => {
   }
 };
 
-// Додавання нового контакту
 const addContact = async (body) => {
   try {
     return await Contact.create(body);
@@ -57,7 +51,6 @@ const addContact = async (body) => {
   }
 };
 
-// Оновлення контакту за ID
 const updateContact = async (contactId, body) => {
   try {
     return await Contact.findByIdAndUpdate(contactId, body, { new: true });
@@ -66,7 +59,6 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-// Оновлення статусу контакту за ID
 const updateStatusContact = async (contactId, favorite) => {
   try {
     const updatedContact = await Contact.findByIdAndUpdate(
@@ -87,5 +79,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact, // Додайте цю функцію до експорту
+  updateStatusContact,
 };
