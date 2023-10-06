@@ -6,7 +6,7 @@ Dodaj mentora jako collaboratora.
 
 Dla każdego zadania domowego utwórz nową gałąź (branch).
 
-- hw02
+- hw02 ( HECHO ✅)
 - hw03
 - hw04
 - hw05
