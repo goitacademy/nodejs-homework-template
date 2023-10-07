@@ -2,6 +2,8 @@ import jwt from "jsonwebtoken";
 import { UserDB } from "../models/index.js";
 import { HttpError } from "../helpers/index.js";
 
+// const { SECRET_KEY } = process.env;
+
 const authenticate = async (req, res, next) => {
   const { SECRET_KEY } = process.env;
   const { authorization = "" } = req.headers;
