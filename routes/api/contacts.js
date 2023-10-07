@@ -1,18 +1,19 @@
 import { Router } from 'express';
 import controllersContact from '../../controlers/controllersContacts.js';
-import { ctrlWrapper } from '../../helpers/index.js';
-
-const { getAll, getById, deleteById, add, put } = controllersContact;
+import { ctrlWrapper, validateBody } from '../../helpers/index.js';
+import { contactAddShcema } from '../../models/contact.js';
+import { isBodyEmpty, isValidId } from '../../middlewares/index.js';
+const { add, getAll, getById, put } = controllersContact;
 const router = Router();
-
+const joiValidate = validateBody(contactAddShcema);
 router.get('/', ctrlWrapper(getAll));
 
-router.get('/:contactId', ctrlWrapper(getById));
+router.get('/:contactId', isValidId, ctrlWrapper(getById));
 
-router.delete('/:contactId', ctrlWrapper(deleteById));
+// router.delete('/:contactId',isValidId, ctrlWrapper(deleteById));
 
-router.post('/', ctrlWrapper(add));
+router.post('/', isBodyEmpty, joiValidate, ctrlWrapper(add));
 
-router.put('/:contactId', ctrlWrapper(put));
-
+router.put('/:contactId', joiValidate, isValidId, ctrlWrapper(put));
+// , deleteById
 export default router;
