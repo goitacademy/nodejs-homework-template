@@ -5,7 +5,6 @@ const handleNotFound = (err, req, res, next) => {
     next(err);
   }
 };
-
 const handleBadRequest = (err, req, res, next) => {
   if (err.status === 400) {
     res.status(400).json({ message: err.message });
@@ -13,9 +12,7 @@ const handleBadRequest = (err, req, res, next) => {
     next(err);
   }
 };
-
 const handleInternalServerError = (err, req, res, next) => {
   res.status(500).json({ message: err.message });
 };
-
 export { handleNotFound, handleBadRequest, handleInternalServerError };
