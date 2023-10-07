@@ -12,8 +12,7 @@ const app = express();
 const createHashPassword=async(password)=>{
   const result=await bcryptjs.hash(password,10);
   console.log(result);
-  const compareResult1=await bcryptjs.compare(password,result);
-};
+   };
 createHashPassword("123456")
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
