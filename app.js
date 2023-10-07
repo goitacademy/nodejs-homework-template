@@ -30,7 +30,7 @@ const loadContacts = () => {
     const data = fs.readFileSync(contactsFilePath, "utf8");
     return JSON.parse(data);
   } catch (error) {
-    console.error("Ошибка при чтении файла контактов:", error);
+    console.error("Помилка при читанні файла контактів:", error);
     return [];
   }
 };
