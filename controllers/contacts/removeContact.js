@@ -4,7 +4,7 @@ const { handleReqError } = require('../../helpers')
 /**
  * DELETE /api/contacts/:id
  * Отримує параметр id
- * @returns якщо такий id є, повертає json формату {"message": "contact deleted"} і статусом 200
+ * @returns якщо такий id є, повертає json формату {"message": "contact deleted"} або {"message": "user deleted"} і статусом 200
  * @returns якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404
  */
 const removeContact = async (req, res, next) => {
