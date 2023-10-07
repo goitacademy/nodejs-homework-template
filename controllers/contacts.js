@@ -44,10 +44,11 @@ const updateById = async (req, res) => {
         res.status(200).json(result); 
 }
 
-const updateStatusContact = async (req, res) => {
-  const { id } = req.params;
 
-  const result = await Contact.findByIdAndUpdate(id, req.body);
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -56,11 +57,21 @@ const updateStatusContact = async (req, res) => {
   res.status(200).json(result);
 };
 
+const updateStatusContactById = async (req, res, next) => {
+    if (req.body.favorite === undefined) {
+        res.status(400).json({
+            message: 'missing field favorite'
+        });
+        return;
+    }
+    next();
+}
+
 export default {
     getAll: ctrlWrapper(getAll),
     getById: ctrlWrapper(getById),
     add: ctrlWrapper(add),    
     deleteById: ctrlWrapper(deleteById),
     updateById: ctrlWrapper(updateById),
-    updateStatusContact: ctrlWrapper(updateStatusContact)
+    updateStatusContact: [updateStatusContactById, ctrlWrapper(updateStatusContact)] 
 }
