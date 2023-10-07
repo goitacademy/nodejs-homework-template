@@ -25,7 +25,7 @@ const getContactById = async contactId => {
 /**
  *
  * @param {object} body
- * @returns newContact
+ * @returns new added Contact
  */
 const addContact = async ({ name, email, phone }) => {
   const newContact = {
@@ -56,7 +56,26 @@ const removeContact = async contactId => {
   return result;
 };
 
-const updateContact = async (contactId, body) => {};
+/**
+ * Update contact info
+ * @param {string} contactId
+ * @param {object} body
+ * @returns updated contact
+ */
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(item => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  for (const key in contacts[index]) {
+    if (Object.hasOwn(body, key)) {
+      contacts[index][key] = body[key];
+    }
+  }
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
+};
 
 module.exports = {
   listContacts,
