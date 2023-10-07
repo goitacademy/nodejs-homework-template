@@ -1,25 +1,59 @@
-const express = require('express')
+const express = require("express");
+const { schemas } = require("../../models/contact");
 
-const router = express.Router()
+const { HttpError } = require("../../helpers/index");
+const { isValidId, validateBody } = require("../../middleware/index");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateStatusContact,
+} = require("../../controllers/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const data = await listContacts();
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", isValidId, async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const data = await getContactById(contactId.slice(1));
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+    if (!data) {
+      throw HttpError(404, "Not found");
+    }
+    res.status(200).json({ status: "success", data });
+  } catch (err) {
+    next(err);
+  }
+});
 
-module.exports = router
+router.post("/", validateBody(schemas.addSchema), addContact);
+
+router.delete("/:contactId", isValidId, async (req, res, next) => {
+  try {
+    const data = await removeContact(req.params.contactId.slice(1));
+
+    res.status(200).json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  updateStatusContact
+);
+
+module.exports = router;

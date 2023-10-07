@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const app = require("./app");
-
-const DB_HOST =
-  "mongodb+srv://DonKanElion:uSLjnJQGrnxNplk9@cluster0.tio2ex9.mongodb.net/db-contacts";
+const { DB_HOST } = process.env;
 
 mongoose.set("strictQuery", true);
 
@@ -18,10 +16,3 @@ mongoose
     console.log("Database connect error 🙁", error.message);
     process.exit(1);
   });
-
-// DonKanElion
-// uSLjnJQGrnxNplk9
-
-// mongodb+srv://DonKanElion:uSLjnJQGrnxNplk9@cluster0.tio2ex9.mongodb.net/
-
-// mongodb+srv://DonKanElion:uSLjnJQGrnxNplk9@cluster0.tio2ex9.mongodb.net/
