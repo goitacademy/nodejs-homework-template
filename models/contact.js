@@ -39,3 +39,6 @@ export const contactAddShcema = Joi.object({
     .required(),
   favorite: Joi.string(),
 });
+export const updateFavoriteShema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
