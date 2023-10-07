@@ -5,8 +5,14 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusFavoriteContact,
 } = require("../models/contacts");
-const { catchAsyns, AppError, dataValidator } = require("../utilitie");
+const {
+  catchAsyns,
+  AppError,
+  dataValidator,
+  statusValidator,
+} = require("../utilitie");
 
 const getAllContacts = async (req, res) => {
   const result = await listContacts();
@@ -44,6 +50,7 @@ const addNewContact = async (req, res) => {
   }
 
   const result = await addContact(req.body);
+
   res.status(201).json({
     status: "success",
     code: 201,
@@ -59,10 +66,14 @@ const deleteContact = async (req, res) => {
   if (!result) {
     throw AppError(404, "Not found");
   }
-  res.status(200).json({ message: "Contact deleted" });
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    message: `Contact with id ${id} deleted`,
+  });
 };
 
-const updContact = async (req, res, next) => {
+const updContact = async (req, res) => {
   const { error } = dataValidator(req.body);
   if (error) {
     error.status = 400;
@@ -76,7 +87,30 @@ const updContact = async (req, res, next) => {
   }
   res.status(200).json({
     status: "success",
-    code: 201,
+    code: 200,
+    data: {
+      result,
+    },
+  });
+};
+
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+
+  const { error } = statusValidator(req.body);
+  if (error) {
+    error.status = 400;
+    error.message = "Missing field favorite";
+    throw error;
+  }
+
+  const result = await updateStatusFavoriteContact(id, req.body);
+  if (!result) {
+    throw AppError(404, "Not found");
+  }
+  res.status(200).json({
+    status: "success",
+    code: 200,
     data: {
       result,
     },
@@ -89,4 +123,5 @@ module.exports = {
   addNewContact: catchAsyns(addNewContact),
   updContact: catchAsyns(updContact),
   deleteContact: catchAsyns(deleteContact),
+  updateStatusContact: catchAsyns(updateStatusContact),
 };
