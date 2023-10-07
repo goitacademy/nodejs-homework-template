@@ -61,7 +61,7 @@ const login = async (req, res) => {
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
 
-  res.json({
+  res.status(200).json({
     email,
     subscription,
   });
@@ -74,9 +74,25 @@ const logout = async (req, res) => {
   res.status(204).send();
 };
 
+const subscriptionChange = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+
+  const result = await UserDB.findByIdAndUpdate(_id, { subscription });
+  if (!result) throw HttpError(404, "Not found");
+
+  const { email, subscription: subscriptionResult } = result;
+
+  res.status(200).json({
+    email,
+    subscription: subscriptionResult,
+  });
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
+  subscriptionChange: ctrlWrapper(subscriptionChange),
 };

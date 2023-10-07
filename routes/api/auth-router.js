@@ -1,11 +1,13 @@
 import express from "express";
 import "dotenv/config";
 import authCtrl from "../../controllers/auth-controller.js";
-import { authSchema } from "../../models/index.js";
+import { authSchema, subscriptionSchema } from "../../models/index.js";
 import { validateBody } from "../../decorators/index.js";
 import { authenticate } from "../../middlewares/index.js";
 
 const router = express.Router();
+
+router.patch("/", authenticate, validateBody(subscriptionSchema), authCtrl.subscriptionChange);
 
 router.post("/register", validateBody(authSchema), authCtrl.register);
 
