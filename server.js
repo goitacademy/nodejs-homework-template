@@ -20,6 +20,8 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 3000
 const uriDb = process.env.DB_HOST
+const jwtSecret = process.env.JWT_SECRET
+const jwtLifetime = process.env.JWT_LIFETIME
 
 const connection = mongoose.connect(uriDb, {
   useNewUrlParser: true,
@@ -36,3 +38,8 @@ connection
 console.log(`Server not running. Error message: ${err.message}`),
 // process.exit(1)
 );
+
+module.exports = {
+  jwtSecret,
+  jwtLifetime
+}
