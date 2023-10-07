@@ -11,7 +11,8 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const contact = await Contact.findById({ id });
+  console.log("Contact ID:", id);
+  const contact = await Contact.findById(id);
 
   if (!contact) {
     throw HttpError(404, `Contact with ${id} is not found`);
@@ -48,10 +49,26 @@ const updateById = async (req, res) => {
   res.status(200).json(updatedContacts);
 };
 
+const updateFavoriteStatus = async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
+
+  const updatedContact = await Contact.findByIdAndUpdate(
+    id,
+    { favorite },
+    { new: true } // Вернуть обновленный объект
+  );
+  if (!updatedContact) {
+    throw HttpError(404, `Contact with ${id} is not found`);
+  }
+  res.status(200).json(updatedContact);
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   deleteById: ctrlWrapper(deleteById),
   updateById: ctrlWrapper(updateById),
+  updateFavoriteStatus: ctrlWrapper(updateFavoriteStatus),
 };

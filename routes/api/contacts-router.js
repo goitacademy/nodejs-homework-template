@@ -40,6 +40,6 @@ contactsRouter.patch(
   isValidId,
   isEmptyBody,
   contactUpdateFavoriteValidate,
-  contactsController.updateById
+  contactsController.updateFavoriteStatus
 );
 module.exports = contactsRouter;
