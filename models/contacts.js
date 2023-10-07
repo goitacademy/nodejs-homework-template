@@ -1,4 +1,5 @@
 const Contact = require('./schemas/contacts')
+const User = require('./schemas/users')
 const handleError = require('../helpers/handleError')
 
 /**
@@ -26,19 +27,38 @@ const getContactById = async contactId => {
   })
 }
 
-/**
+/** (на всякий случай)
  * Видаляє контакт за вказаним id
  * @param {string} contactId  
  * @returns {Promise<Object|null>} - Видалений контакт або null, якщо не знайдено
  */
+// const removeContact = async (contactId) => {
+//   return handleError(async () => {
+//     const contacts = await Contact.findByIdAndRemove({
+//       _id: contactId,
+//     })
+
+//     return contacts
+//   })
+// }
+
+/**
+ * Видаляє контакт або user за вказаним id
+ * @param {*} contactId 
+ * @returns {Promise<Object|null>} - Видалений контакт або null, якщо не знайдено
+ */
 const removeContact = async (contactId) => {
   return handleError(async () => {
-    const contacts = await Contact.findByIdAndRemove({
+    const deletedContact = await Contact.findByIdAndRemove({
       _id: contactId,
-    })
+    });
 
-    return contacts
-  })
+    const deletedUser = await User.findByIdAndRemove({
+      _id: contactId,
+    });
+
+    return { contact: deletedContact, user: deletedUser };
+  });
 }
 
 /**
