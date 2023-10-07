@@ -1,4 +1,5 @@
 import express from "express";
+import "dotenv/config";
 import authCtrl from "../../controllers/auth-controller.js";
 import { authSchema } from "../../models/index.js";
 import { validateBody } from "../../decorators/index.js";

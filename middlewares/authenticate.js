@@ -1,11 +1,12 @@
 import jwt from "jsonwebtoken";
+// import "dotenv/config";
 import { UserDB } from "../models/index.js";
 import { HttpError } from "../helpers/index.js";
 
-// const { SECRET_KEY } = process.env;
+const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
-  const { SECRET_KEY } = process.env;
+  // const { SECRET_KEY } = process.env;
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer") {

@@ -3,7 +3,20 @@ import { ContactDB } from "../models/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
-  const result = await ContactDB.find();
+  // const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = [true, false] } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await ContactDB.find({ favorite }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  });
+  // const result = await ContactDB.find({ owner }, "-createdAt -updatedAt", { skip, limit }).populate(
+  //   "owner",
+  //   "name email"
+  // );
+  // const result = await ContactDB.find();
+  //
+  console.log("Response length :>> ", Object.keys(result).length);
   res.json(result);
 };
 
