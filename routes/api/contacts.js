@@ -1,25 +1,25 @@
-const express = require('express')
+import { Router } from 'express';
+import controllersContact from '../../controlers/controllersContacts.js';
+import { ctrlWrapper, validateBody } from '../../helpers/index.js';
+import { contactAddShcema, updateFavoriteShema } from '../../models/Contact.js';
+import {
+  isBodyEmpty,
+  isValidId,
+  validateFavotite,
+} from '../../middlewares/index.js';
+const { add, getAll, getById, put, deleteById } = controllersContact;
+const router = Router();
+const joiValidate = validateBody(contactAddShcema);
+const joiUpdate = validateFavotite(updateFavoriteShema);
+router.get('/', ctrlWrapper(getAll));
 
-const router = express.Router()
+router.get('/:contactId', isValidId, ctrlWrapper(getById));
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', isValidId, ctrlWrapper(deleteById));
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', isBodyEmpty, joiValidate, ctrlWrapper(add));
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', joiValidate, isValidId, ctrlWrapper(put));
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+router.patch('/:contactId/favorite', joiUpdate, isValidId, ctrlWrapper(put));
+export default router;
