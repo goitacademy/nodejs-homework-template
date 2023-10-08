@@ -1,13 +1,14 @@
 import express from "express";
-import {
-  getContactById,
-  listContacts,
-  removeContact,
-  addContact,
-  updateContacts,
-} from "../../models/contacts.js";
+// import {
+//   getContactById,
+//   listContacts,
+//   removeContact,
+//   addContact,
+//   updateContacts,
+// } from "../../models/contacts.js";
 import HttpError from "../../heplers/index.js";
 import Joi from "joi";
+import Contact from "../../models/contactModel.js";
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ const ContactSchema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -31,12 +32,12 @@ router.get("/", async (req, res, next) => {
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    const contact = await Contact.findById(contactId);
     if (!contact) {
       throw HttpError(404, `Not found`);
     }
     res.json(contact);
-  } catch {
+  } catch (error) {
     next(error);
   }
 });
@@ -50,9 +51,9 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
-  } catch {
+  } catch (error) {
     next(error);
   }
 });
@@ -60,7 +61,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       throw HttpError(404, `Contact with ${contactId} not found`);
     }
@@ -85,9 +86,11 @@ router.put("/:contactId", async (req, res, next) => {
 
     const { contactId } = req.params;
 
-    const result = await updateContacts(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
-      throw HttpError(404, `Movie with ${contactId} not found`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.json(result);

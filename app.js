@@ -1,3 +1,5 @@
+import "./db.js";
+
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
@@ -11,7 +13,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/contacts", router);
+app.use("/api", router);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
