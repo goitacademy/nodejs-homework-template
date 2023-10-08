@@ -2,7 +2,7 @@
 // const { nanoid } = require("nanoid");
 
 
-const Contact = require("../models/contact.model.js");
+const Contact = require("../models/contact.js");
 const {ctrlWrapper ,HttpError} = require("../helpers");
 
 const listContacts = async (req, res, next) => {
