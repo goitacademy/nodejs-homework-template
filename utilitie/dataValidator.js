@@ -10,4 +10,12 @@ const dataValidator = (contact) =>
     })
     .validate(contact);
 
-module.exports = dataValidator;
+const statusValidator = (body) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      favorite: Joi.boolean().required(),
+    })
+    .validate(body);
+
+module.exports = { dataValidator, statusValidator };
