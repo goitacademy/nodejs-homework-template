@@ -1,14 +1,14 @@
-const User = require("../models/authModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
 const path = require("path");
 const fs = require("fs/promises");
-// const { v4: uuidv4 } = require("uuid");
 
+const User = require("../models/authModel");
 const { ctrlWrapper, httpError } = require("../utilits");
 
+require("dotenv").config();
 const { SECRET_KEY } = process.env;
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -17,14 +17,13 @@ const register = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw httpError(409, "Email in use");
+    throw httpError(409, "User is already exist");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
-  // const verificationToken = uuidv4();
   const newUser = await User.create({
-    ...req.body,
+    email,
     password: hashPassword,
     avatarURL,
   });
@@ -33,6 +32,7 @@ const register = async (req, res) => {
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL,
     },
   });
 };
@@ -42,13 +42,13 @@ const login = async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    throw httpError(401, "Email or password is wrong");
+    throw httpError(401, "Wrong credentials");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
-    throw httpError(401, "Email or password is wrong");
+    throw httpError(401, "Wrong credentials");
   }
 
   const payload = {
@@ -94,19 +94,16 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
+
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
 
-  Jimp.read(tempUpload)
-    .then((image) => {
-      image.resize(250, 250).quality(90).write(resultUpload);
-    })
-    .catch((err) => {
-      throw httpError(400, err);
-    });
+  await Jimp.read(tempUpload)
+    .then((avatar) => avatar.resize(250, 250))
+    .then((avatar) => avatar.write(tempUpload));
 
-  fs.unlink(tempUpload);
+  await fs.rename(tempUpload, resultUpload);
 
   const avatarURL = path.join("avatars", filename);
 
