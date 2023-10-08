@@ -9,7 +9,7 @@ const contactsRouter = express.Router();
 const contactAddSchema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
-    phone: Joi.string().required(),
+    phone: Joi.string().required()
 })
 
 contactsRouter.get("/", async (req, res, next) => {
