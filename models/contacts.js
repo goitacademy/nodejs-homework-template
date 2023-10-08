@@ -38,19 +38,23 @@ const addContact = async ({name, email, phone}) => {
 
 const updateContact = async (contactId, body) => {
   const data = await listContacts(); 
-  const [contact] = data.filter((item) => item.id === contactId);
-  const refreshedDB = data.filter((item) => item.id !== contactId);
-  for(const key in contact) {
-    if(body[key]) {
-      contact[key] = body[key];
-      console.log(`Contac key = ${contact[key]}`);
+  const index = data.findIndex(item => item.id === contactId);
+  
+  const refreshedDB = data.map(item => {
+    if (item.id !== contactId){
+      return item;
     }
-  }
-
-  refreshedDB.push(contact);
+    for( const key in item) {
+      if(body[key]) {
+        item[key] = body[key];
+      }
+    }
+    return item;
+  })
+  
   await fs.writeFile(DB_PATH, JSON.stringify(refreshedDB, "", 2));
    
-  return contact;
+  return refreshedDB[index];
 }
 
 module.exports = {

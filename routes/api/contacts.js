@@ -99,7 +99,7 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
-
+    
     if (!contact) {
       const error = requestError(404);
       throw error;
@@ -120,7 +120,7 @@ router.put("/:contactId", async (req, res, next) => {
     }
     
     const result = await updateContact(contactId, req.body);
-      console.log(result);
+      
     res.json({
       "status": "success",
       "code": 200, 
