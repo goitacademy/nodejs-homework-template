@@ -1,10 +1,15 @@
-// const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
+// const { nanoid } = require('nanoid');
 
-const listContacts = async () => {};
+const contactPath = path.resolve("models", "contacts.json");
 
-const getContactById = async (contactId) => {
-  console.log("hello");
+const listContacts = async () => {
+  const data = await fs.readFile(contactPath);
+  return JSON.parse(data);
 };
+
+const getContactById = async (contactId) => {};
 
 const removeContact = async (contactId) => {};
 
