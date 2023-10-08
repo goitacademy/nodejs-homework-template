@@ -1,3 +1,4 @@
+const setupMongoConnection = require('./utils/setupMongoConnection');
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
@@ -5,7 +6,14 @@ const cors = require('cors')
 const contactsRouter = require('./express/routes/api/contacts')
 const errorHandler = require('./express/middlewares/errorHandler')
 
+setupMongoConnection()
+
 const app = express()
+
+// (async () => {
+//   await setupMongoConnection();
+//   express()
+// })();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 

@@ -1,6 +1,4 @@
-const ERROR_TYPES = require('../constants/errors');
 const contactsRepository = require('../models/contacts');
-const createError = require('../utils/createError');
 
 
 
@@ -24,30 +22,21 @@ const addContact = async (body) => {
     return contact;
 };
 
-
-const checkRequiredFields = (body, fields) => {
-  for (const field of fields) {
-    if (!body[field]) {
-      const error = createError(ERROR_TYPES.BAD_REQUEST, {
-        message: `missing required ${field} field`,
-      });
-      throw error;
-    }
-  }
-};
-
-
 const updateContact = async (contactId, body) => {
   const updatedContact = contactsRepository.updateContact(contactId, body)
   return updatedContact;
 }
 
+const updateStatusContact = async (contactId, body) => {
+  const updatedContact = contactsRepository.updateStatusContact(contactId, body)
+  return updatedContact;
+}
 
 module.exports = {
     listContacts,
     getContactById,
     removeContact,
     addContact,
-    checkRequiredFields,
     updateContact,
+    updateStatusContact
 }

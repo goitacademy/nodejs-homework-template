@@ -1,126 +1,100 @@
-// const fs = require('fs/promises')
-const { nanoid } = require("nanoid");
-const path = require('path');
-const writeJSONToFile = require("../utils/writeJSONToFile");
-const readJSONFromFile = require("../utils/readJSONFromFile");
 const createError = require('../utils/createError');
 const ERROR_TYPES = require('../constants/errors');
-
-
-const MODELS_PATH = path.join(__dirname, 'contacts.json');
-console.log(MODELS_PATH)
-
+const ContactModel = require("./contactShema");
+const validateObjectId = require('../express/middlewares/validateByMongoose');
 
 
 const listContacts = async () => {
-  const contacts = await readJSONFromFile(MODELS_PATH);
-    return contacts;
-}
+  const contacts = await ContactModel.find();
+  return contacts;
+};
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const contact = contacts.find(contact => contact.id === contactId);
-  
+
+  validateObjectId(contactId);
+
+  const contact = await ContactModel.findById(contactId);
   if (!contact) {
     const error = createError(ERROR_TYPES.NOT_FOUND, {
       message: "Not found",
     });
     throw error;
   }
-
   return contact;
 };
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const contactToRemove = contacts.find(contact => contact.id === contactId);
 
+  validateObjectId(contactId);
+
+  const contactToRemove = await ContactModel.findByIdAndRemove(contactId);
+  
   if (!contactToRemove) {
     const error = createError(ERROR_TYPES.NOT_FOUND, {
       message: "Not found",
     });
     throw error;
   }
-
-  const newContacts = contacts.filter(contact => contact.id !== contactId);
-  await writeJSONToFile(MODELS_PATH, newContacts);
-  return newContacts
-
-}
+  
+  const newContacts = await ContactModel.find();
+  return newContacts;
+};
 
 const addContact = async (body) => {
-  const { name, email, phone } = body;
-
-  if (!name || !email || !phone) {
-    const error = createError(ERROR_TYPES.BAD_REQUEST, {
-      message: "missing required field",
-    })
-    throw error
-  }
-
-  const contact = {
-    ...body,
-    id: nanoid(),
-  };
-
-  const models = await readJSONFromFile(MODELS_PATH)
-  models.push(contact);
-  await writeJSONToFile(MODELS_PATH, models)
+  const contact = new ContactModel(body);
+  await contact.save();
   return contact;
 };
 
 
-const checkRequiredFields = (body, fields) => {
-  for (const field of fields) {
-    if (!body[field]) {
-      const error = createError(ERROR_TYPES.BAD_REQUEST, {
-        message: `missing required ${field} field`,
-      });
-      throw error;
-    }
-  }
-};
-
-
 const updateContact = async (contactId, body) => {
-  const content = await readJSONFromFile(MODELS_PATH);
-  const contact = content.find(contact => contact.id === contactId);
-  
-  if (!contact) {
+
+  validateObjectId(contactId);
+
+  const updatedContact = await ContactModel.findByIdAndUpdate(contactId, {
+    $set: {
+      ...body,
+    }
+  }, { returnOriginal: false },
+  );
+  if (!updatedContact) {
     const error = createError(ERROR_TYPES.NOT_FOUND, {
       message: "Not found",
     });
     throw error;
-  }
+  };
+  return updatedContact;
+};
 
-   const { name, email, phone } = body;
+const updateStatusContact = async (contactId, body) => {
 
-  if (!name && !email && !phone) {
+  validateObjectId(contactId);
+  
+  if (!body || body.favorite === undefined) {
     const error = createError(ERROR_TYPES.BAD_REQUEST, {
-      message: "missing fields",
+      message: "missing field favorite",
     });
     throw error;
-  }
+  };
+  const updatedContact = await ContactModel.findByIdAndUpdate(
+    contactId,
+    {
+      $set: {
+        favorite: body.favorite,
+      },
+    },
+    { new: true }
+  );
 
-  
-
-   const requiredFields = ['name', 'email', 'phone'];
-  checkRequiredFields(body, requiredFields);
-
-  const updatedContact = {
-    ...contact,
-    ...body,
+  if (!updatedContact) {
+    const error = createError(ERROR_TYPES.NOT_FOUND, {
+      message: "Not found",
+    });
+    throw error;
   };
 
-  const idx = content.indexOf(
-    content.find(contact => contact.id === contactId),
-  );
-  content[idx] = updatedContact;
-  await writeJSONToFile(MODELS_PATH, content);
-
-
   return updatedContact;
-}
+};
 
 
 module.exports = {
@@ -129,4 +103,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact
 }

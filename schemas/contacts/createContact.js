@@ -16,7 +16,9 @@ const createContactBodySchema = Joi.object({
         .length(10)
         .pattern(/^0\d{9}$/)
         .required()
-        .messages({"any.required": `missing required phone field`}),
+        .messages({ "any.required": `missing required phone field` }),
+    
+    favorite: Joi.boolean(),
 }).strict(true)
 
 

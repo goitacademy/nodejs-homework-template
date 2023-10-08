@@ -1,9 +1,10 @@
-// const contactsRepository = require('../../../models/contacts')
+
 const contactsService = require('../../../services/contacts')
 const express = require('express');
 const validateBody = require('../../middlewares/validateBody');
 const createContactBodySchema = require('../../../schemas/contacts/createContact');
 const updateContactBodySchema = require('../../../schemas/contacts/updateContact');
+const updateFieldFavorite = require('../../../schemas/contacts/updateFieldFavorite');
 
 const router = express.Router()
 
@@ -54,5 +55,18 @@ router.put('/:contactId', validateBody(updateContactBodySchema), async (req, res
             next(err);
         }
 })
+
+router.patch('/:contactId/favorite', validateBody(updateFieldFavorite), async (req, res, next) => {
+  const { contactId } = req.params;
+  const { body } = req;
+  try {
+    const contact = await contactsService.updateStatusContact(contactId, body);
+  res.status(200).json(contact)
+  }catch (err) {
+            next(err);
+        }
+});
+
+
 
 module.exports = router

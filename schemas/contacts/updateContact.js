@@ -11,6 +11,8 @@ const updateContactBodySchema = Joi.object({
     phone: Joi.string()
         .length(10)
         .pattern(/^0\d{9}$/),
+    
+    favorite: Joi.boolean(),
 });
 
 
