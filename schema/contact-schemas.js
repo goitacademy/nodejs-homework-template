@@ -12,4 +12,10 @@ const contactAddSchema = Joi.object({
   }),
 });
 
-module.exports = contactAddSchema;
+const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+  }),
+});
+
+module.exports = { contactAddSchema, contactUpdateFavoriteSchema };
