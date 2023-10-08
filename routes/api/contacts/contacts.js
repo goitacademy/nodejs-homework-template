@@ -2,26 +2,42 @@ const express = require("express");
 
 const { ctrlContacts } = require("../../../controllers");
 
-const { validateBody, isValidId } = require("../../../middleware");
+const {
+  validateBody,
+  isValidId,
+  authenticate,
+} = require("../../../middleware");
 
 const { schemas } = require("../../../models");
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", ctrlContacts.getAll);
+contactsRouter.get("/", authenticate, ctrlContacts.getAll);
 
-contactsRouter.get("/:contactId", isValidId, ctrlContacts.getById);
+contactsRouter.get(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  ctrlContacts.getById
+);
 
 contactsRouter.post(
   "/",
+  authenticate,
   validateBody(schemas.addSchema, "Missing required name field"),
   ctrlContacts.add
 );
 
-contactsRouter.delete("/:contactId", isValidId, ctrlContacts.removeById);
+contactsRouter.delete(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  ctrlContacts.removeById
+);
 
 contactsRouter.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBody(schemas.addSchema, "Missing fields"),
   ctrlContacts.updateById
@@ -29,6 +45,7 @@ contactsRouter.put(
 
 contactsRouter.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   validateBody(schemas.updateFavoriteSchema, "Missing field favorite"),
   ctrlContacts.updateFavoriteById

@@ -27,7 +27,10 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: String,
+    token: {
+      type: String,
+      default: "",
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -47,6 +50,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(8).required(),
 });
 
-const userJoiSchemas = { registerSchema, loginSchema };
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().required(),
+});
+
+const userJoiSchemas = {
+  registerSchema,
+  loginSchema,
+  updateSubscriptionSchema,
+};
 
 module.exports = { User, userJoiSchemas };
