@@ -1,4 +1,4 @@
-const { Contact } = require("../models/Contact");
+const { Contact } = require("../models/contact-model/Contact");
 
 async function updateStatusContact(contactId, favorite) {
   try {

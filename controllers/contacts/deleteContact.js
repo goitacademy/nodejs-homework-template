@@ -1,8 +1,11 @@
-const { Contact } = require("../../models/Contact");
+const { Contact } = require("../../models/contact-model/Contact");
 
 const deleteContact = async (req, res, next) => {
   try {
-    const contact = await Contact.findByIdAndRemove(req.params.contactId);
+      const contact = await Contact.findByIdAndRemove({
+        _id: req.params.contactId,
+        owner: req.user.id,
+      });
     if (contact) {
       res.json({ message: "contact deleted" });
     } else {

@@ -1,6 +1,8 @@
-const { Contact } = require("../../models/Contact");
+const { Contact } = require("../../models/contact-model/Contact");
 
-const { validateContact } = require("../../models/contactsValidator");
+const {
+  validateContact,
+} = require("../../models/contact-model/contactsValidator");
 
 const updateContact = async (req, res, next) => {
   try {
@@ -10,7 +12,7 @@ const updateContact = async (req, res, next) => {
     }
 
     const updatedContact = await Contact.findByIdAndUpdate(
-      req.params.contactId,
+      { _id: req.params.contactId, owner: req.user.id },
       req.body,
       { new: true }
     );
