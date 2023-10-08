@@ -1,4 +1,4 @@
-import { contactSchemeValues } from "../schemas/contacts.schema.js";
+import { contactSchemeValues } from "../models/Contact.js";
 import { validateBody } from "../decorators/index.js";
 
 const contactValidateValues = validateBody(contactSchemeValues);

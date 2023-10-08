@@ -2,8 +2,10 @@ import mongoose from "mongoose";
 
 import app from "./app.js";
 
-const DB_HOST =
-  "mongodb+srv://AloBordo:LjLmy5vQnyVWqXGI@cluster0.4ywplyx.mongodb.net/db-contacts?retryWrites=true&w=majority";
+// const DB_HOST =
+//   "mongodb+srv://AloBordo:LjLmy5vQnyVWqXGI@cluster0.4ywplyx.mongodb.net/db-contacts?retryWrites=true&w=majority";
+
+const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose
   .connect(DB_HOST)

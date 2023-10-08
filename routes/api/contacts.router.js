@@ -4,26 +4,28 @@ import {
   isEmptyBody,
   contactValidateRequired,
   contactValidateValues,
+  isValidId,
 } from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsControllers.getAll);
 
-// contactsRouter.get("/:id", contactsControllers.getById);
+contactsRouter.get("/:id", isValidId, contactsControllers.getById);
 
-// contactsRouter.post(
-//   "/",
-//   isEmptyBody,
-//   contactValidateRequired,
-//   contactValidateValues,
-//   contactsControllers.add
-// );
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  contactValidateRequired,
+  contactValidateValues,
+  contactsControllers.add
+);
 
-// contactsRouter.delete("/:id", contactsControllers.deleteById);
+// contactsRouter.delete("/:id", isValidId, contactsControllers.deleteById);
 
 // contactsRouter.put(
 //   "/:id",
+//   isValidId,
 //   isEmptyBody,
 //   contactValidateRequired,
 //   contactValidateValues,
