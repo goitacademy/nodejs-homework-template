@@ -48,7 +48,7 @@ router.post('/', async (req, res, next) => {
       }
 
       if (name_error === 'phone') {
-        throw HttpError(400, `Not a pthone field  format. Format:(000)000-0000`);
+        throw HttpError(400, `Not a pthone field  format. Format:(000) 000-0000`);
       } else {
         throw HttpError(400, `missing required ${name_error} field`);
       }
