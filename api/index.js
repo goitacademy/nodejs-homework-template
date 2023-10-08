@@ -3,7 +3,8 @@ const router = express.Router();
 const loginCtrl = require("../controller/login");
 const signupCtrl = require("../controller/signup");
 const meCtrl = require("../controller/me");
-const auth = require("../middleware/auth");
+const { auth, upload, ctlWrapper } = require('../middleware')
+const updateAvatarCtrl = require('../controller/updateAvatar');
 const {
   createContact,
   getAllContacts,
@@ -17,6 +18,7 @@ const invalidatedTokens = new Set();
 const validToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
+
   if (invalidatedTokens.has(token)) {
     return res.status(401).json({
       status: "Error",
@@ -28,13 +30,17 @@ const validToken = (req, res, next) => {
   next();
 };
 
-router.post("/signup", signupCtrl);
+router.post("/users/signup", signupCtrl);
 
-router.post("/login", loginCtrl);
+router.post("/users/login", loginCtrl);
 
-router.get("/me", validToken, auth, meCtrl);
+router.get("/users/current", validToken, auth, meCtrl);
 
-router.post("/logout", validToken, auth, (req, res, next) => {
+router.patch("/users/avatars",validToken, auth, upload.single("avatar"), ctlWrapper(updateAvatarCtrl) );
+
+
+
+router.post("/users/logout", validToken, auth, (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -51,6 +57,7 @@ router.post("/logout", validToken, auth, (req, res, next) => {
 router.post("/contacts", validToken, auth, async (req, res, next) => {
   const { name, email, phone, favorite } = req.body;
   const owner = req.user._id;
+
 
   try {
     const result = await createContact({ name, email, phone, favorite, owner });

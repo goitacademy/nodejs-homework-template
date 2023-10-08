@@ -3,10 +3,12 @@ const passport = require('passport');
 const User = require("../service/schema/user");
 const {getUserByEmail} = require("../service/user");
 require('dotenv').config();
-const secret = process.env.SECRET;
+const {Conflict} = require('http-errors');
+const gravatar = require('gravatar');
+// const secret = process.env.SECRET;
 
 const signupCtrl = async (req, res, next) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, subscription, token } = req.body;
     const user = await getUserByEmail(email);
   
     if (user) {
@@ -14,11 +16,12 @@ const signupCtrl = async (req, res, next) => {
         status: "Error",
         code: 409,
         message: "Email is already in use",
-        data: "Confilct",
+        data: "Conflict",
       });
     }
     try {
-      const newUser = new User({ username, email });
+      const avatarURL = gravatar.url(email);
+      const newUser = new User({ username, email, subscription, token, avatarURL });
       newUser.setPassword(password);
       await newUser.save();
       res.status(201).json({
