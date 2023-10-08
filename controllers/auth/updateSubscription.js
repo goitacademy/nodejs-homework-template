@@ -16,13 +16,14 @@ const updateSubscription = async (req, res) => {
         subscription,
       },
     });
-
-    throw HttpError(400, {
-      status: "error",
-      code: 400,
-      message: "Bad request",
-    });
+    return;
   }
+
+  throw HttpError(400, {
+    status: "error",
+    code: 400,
+    message: "Bad request",
+  });
 };
 
 module.exports = { updateSubscription: ctrlWrapper(updateSubscription) };
