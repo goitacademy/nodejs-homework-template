@@ -2,48 +2,51 @@ const { serviceContact } = require("../services/services");
 const { ControllerWrapper } = require("../utils/ControllerWrapper");
 const { HttpError } = require("../middlewares/httpError");
 
-const getAllContactsController = async (_, res, next) => {
+const getAllContactsController = async (_, res) => {
   const data = await serviceContact.listContacts();
   res.json(data);
 };
 
-const getContactByIdController = async (req, res, next) => {
+const getContactByIdController = async (req, res) => {
   const { id } = req.params;
   const dataContacts = await serviceContact.getById(id);
 
-  if (!dataContacts) throw HttpError(404, "Not found");
+  if (!dataContacts) throw HttpError(404);
 
   res.json(dataContacts);
 };
 
-const createContactController = async (req, res, next) => {
+const createContactController = async (req, res) => {
   const dataContacts = await serviceContact.addContact(req.body);
+
+  if (!dataContacts) throw HttpError(400, `Missing required ${req.body} field`);
 
   res.status(201).json(dataContacts);
 };
 
-const updateContactController = async (req, res, next) => {
+const updateContactController = async (req, res) => {
   const { id } = req.params;
   const dataContacts = await serviceContact.updateContact(id, req.body);
+
+  if (!dataContacts) throw HttpError(404);
 
   res.status(200).json(dataContacts);
 };
 
-const deleteContactController = async (req, res, next) => {
+const deleteContactController = async (req, res) => {
   const { id } = req.params;
   const dataContacts = await serviceContact.removeContact(id);
 
-  if (!dataContacts) {
-    res.status(404).json({ message: "Not found" });
-  }
+  if (!dataContacts) throw HttpError(404);
+
   res.status(200).json({ message: "Contact deleted" });
 };
 
-const updateContactStatus = async (req, res, next) => {
+const updateContactStatus = async (req, res) => {
   const { id } = req.params;
   const dataContacts = await serviceContact.updateStatusContact(id, req.body);
 
-  if (!dataContacts) res.status(404).json({ message: "Not found" });
+  if (!dataContacts) throw HttpError(404);
 
   res.status(200).json(dataContacts);
 };
