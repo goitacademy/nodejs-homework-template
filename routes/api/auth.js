@@ -9,6 +9,7 @@ const {
 
 const {
   registerSchema,
+  emailSchema,
   loginSchema,
   updateSubscriptionSchema,
 } = require('../../schemas/');
@@ -16,6 +17,8 @@ const {
 const {
   users: {
     register,
+    verifyEmail,
+    resendVerifyEmail,
     login,
     getCurrent,
     logout,
@@ -27,6 +30,10 @@ const {
 const router = express.Router();
 
 router.post('/register', validateBody(registerSchema), register);
+
+router.post('/verify', validateBody(emailSchema), resendVerifyEmail);
+
+router.get('/verify/:verificationToken', verifyEmail);
 
 router.post('/login', validateBody(loginSchema), login);
 
