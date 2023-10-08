@@ -1,6 +1,6 @@
-const handleUserRouter = (error, res) => {
-    if (error) {
-        return res.status(400).json({ err: error.details.map(err => err.message) })
+const handleUserRouter = (res, validDataUser, error) => {
+    if (validDataUser.error) {
+        return res.status(400).json({ err: validDataUser.details.map(err => err.message) })
     }
 }
 

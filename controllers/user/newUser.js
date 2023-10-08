@@ -1,5 +1,6 @@
 const { userSchema } = require('../../routes/api/validation-user')
-const { handleUserRouter, handleConflict } = require('../../helpers')
+const { handleUserRouter } = require('../../helpers')
+const { createUser } = require('../../models/users')
 
 /**
  * Виконує валідацію 
@@ -11,13 +12,13 @@ const { handleUserRouter, handleConflict } = require('../../helpers')
  * @param {*} next 
  */
 const postUser = async (req, res, next) => {
-    const { error } = userSchema.validate(req.body)
+    const validDataUser = userSchema.validate(req.body)
 
-    handleUserRouter(error, res)
+    handleUserRouter(res, validDataUser)
 
     const { email, password } = req.body
 
-    handleConflict(req, res, email, password)
+    createUser(req, res, email, password)
 }
 
 module.exports = postUser
