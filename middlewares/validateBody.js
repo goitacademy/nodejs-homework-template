@@ -1,12 +1,14 @@
-const { HttpError } = require("../middlewares/httpError");
+const { HttpError } = require("./httpError");
 
 const validateBody = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(res.body);
+  return (req, _, next) => {
+    const { error } = schema.validate(req.body);
 
     if (error) {
-      return next(new HttpError(422, error));
+      const missingField = error.details[0].context.key;
+      return next(HttpError(400, `Missing required ${missingField} field`));
     }
+
     next();
   };
 };
