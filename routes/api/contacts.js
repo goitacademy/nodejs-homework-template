@@ -21,6 +21,7 @@ const schema = Joi.object({
 const schemaStatus = Joi.object({
   favorite: Joi.boolean().required(),
 });
+
 const validateBody = async (req, res, next) => {
   try {
     await schema.validateAsync(req.body);
@@ -40,6 +41,7 @@ const validateFavoriteField = async (req, res, next) => {
     });
   }
 };
+
 
 router.get("/", async (req, res) => {
   try {
@@ -117,4 +119,6 @@ router.patch(
     }
   }
 );
+
+
 module.exports = router;
