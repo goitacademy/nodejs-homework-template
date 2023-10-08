@@ -15,6 +15,16 @@ const addShema = Joi.object({
 
   favorite: Joi.boolean().optional(),
 });  
+const addShemaPut = Joi.object({
+  name: Joi.string(),
+
+  email: Joi.string(),
+
+  phone: Joi.string(),
+
+  favorite: Joi.boolean().optional(),
+});  
 module.exports = {
   addShema,
+  addShemaPut
 };
