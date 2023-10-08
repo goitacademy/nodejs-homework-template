@@ -15,8 +15,5 @@ mongoose.connect(DB_HOST)
 })
 .catch(error => {
   console.log(error.message);
-process.exit(1)});
-
-// app.listen(3000, () => {
-//   console.log("Database connection successful")
-// })
+  process.exit(1);
+});
