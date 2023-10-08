@@ -1,1 +1,2 @@
-export { default as HttpError } from "./HttpError.js";
+export * from "./HttpError.js";
+export * from "./handleMongooseError.js";
