@@ -5,8 +5,7 @@ const {
   addContact,
   updateContact,
 } = require("../models/contacts");
-
-const { HttpError } = require("../helpers/HttpError");
+const HttpError = require("../helpers/HttpError");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -21,7 +20,7 @@ const getContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!id) {
-      throw HttpError(404, "Not found");
+      throw new HttpError(404, "Not found");
     }
     const contact = await getContactById(id);
     res.json(contact);
@@ -34,7 +33,7 @@ const deleteContact = async (req, res, next) => {
   try {
     const { id } = req.params;
     if (!id) {
-      throw HttpError(404, "Not found");
+      throw new HttpError(404, "Not found");
     }
     if (id) {
       await removeContact(id);
@@ -49,7 +48,7 @@ const createContact = async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
     if (!name || !email || !phone) {
-      throw HttpError(400, "Missing required name field");
+      throw new HttpError(400, "Missing required name field");
     }
     const newContact = await addContact(req.body);
     res.status(201).json(newContact);
@@ -63,7 +62,7 @@ const updateContactBody = async (req, res, next) => {
     const { id } = req.params;
     const { body } = req;
     if (!body) {
-      throw HttpError(400, "Missing fields");
+      throw new HttpError(400, "Missing fields");
     }
     const updatedContact = await updateContact(id, body);
     if (updatedContact) {

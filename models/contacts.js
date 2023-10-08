@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const crypto = require("crypto");
+const HttpError = require("../helpers/HttpError");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 console.log(contactsPath);
@@ -22,7 +23,7 @@ const getContactById = async (contactId) => {
   const contacts = await readContacts();
   const contact = contacts.find((contact) => contact.id === contactId);
   if (!contact) {
-    throw new Error("Not found");
+    throw new HttpError(404, "Contact not found");
   }
   return contact;
 };
@@ -33,7 +34,7 @@ const removeContact = async (contactId) => {
     (contact) => contact.id === contactId
   );
   if (contactIndex === -1) {
-    throw new Error("Not found");
+    throw new HttpError(404, "Contact not found");
   }
   const [deletedContact] = contacts.splice(contactIndex, 1);
   await writeContacts(contacts);
@@ -59,7 +60,7 @@ const updateContact = async (contactId, body) => {
     (contact) => contact.id === contactId
   );
   if (contactIndex === -1) {
-    throw new Error("Not found");
+    throw new HttpError(404, "Contact not found");
   }
   contacts.splice(contactIndex, 1, { ...contacts[contactIndex], ...body });
   await writeContacts(contacts);
