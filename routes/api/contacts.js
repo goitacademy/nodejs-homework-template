@@ -29,14 +29,24 @@ const contactFavoriteSchema = Joi.object({
 });
 
 router.get('/', async (req, res, next) => {
-	const contacts = await listContacts();
-	res.json({ contacts });
+	try {
+		const contacts = await listContacts();
+		res.json({ contacts });
+	} catch (err) {
+		res.status(500).json({ error: err });
+	}
 });
 
 router.get('/:contactId', async (req, res, next) => {
-	const contact = await getContactById(req.params.contactId);
+	let contact;
+	try {
+		contact = await getContactById(req.params.contactId);
+	} catch (err) {
+		res.status(500).json({ error: err });
+		return;
+	}
 
-	if (contact == null) {
+	if (!contact) {
 		res.status(404).json({ message: 'Not found' });
 		return;
 	}
@@ -57,21 +67,40 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
 	const contactId = req.params.contactId;
 
-	const contact = await getContactById(contactId);
-	if (contact == null) {
+	let contact;
+	try {
+		contact = await getContactById(contactId);
+	} catch (err) {
+		res.status(500).json({ error: err });
+		return;
+	}
+
+	if (!contact) {
 		res.status(404).json({ message: 'Not found' });
 		return;
 	}
 
-	await removeContact(contactId);
+	try {
+		await removeContact(contactId);
+	} catch (err) {
+		res.status(500).json({ error: err });
+		return;
+	}
 	res.status(200).json({ message: 'contact deleted' });
 });
 
 router.put('/:contactId', async (req, res, next) => {
 	const contactId = req.params.contactId;
+	let contact;
 
-	const contact = await getContactById(contactId);
-	if (contact == null) {
+	try {
+		contact = await getContactById(contactId);
+	} catch (err) {
+		res.status(500).json({ error: err });
+		return;
+	}
+
+	if (!contact) {
 		res.status(404).json({ message: 'Not found' });
 		return;
 	}
@@ -87,10 +116,16 @@ router.put('/:contactId', async (req, res, next) => {
 
 router.patch('/:contactId/favorite', async (req, res, next) => {
 	const contactId = req.params.contactId;
+	let contact;
 
-	const contact = await getContactById(contactId);
-	console.log(contact);
-	if (contact == null) {
+	try {
+		contact = await getContactById(contactId);
+	} catch (err) {
+		res.status(500).json({ error: err });
+		return;
+	}
+
+	if (!contact) {
 		res.status(404).json({ message: 'Not found' });
 		return;
 	}
