@@ -7,7 +7,10 @@ const { validId } = require("../middlewares/isValidId");
 
 const { validateBody } = require("../middlewares/validateBody");
 
-const { IsEmptyBody } = require("../middlewares//isEmptyBody");
+const {
+  IsEmptyBody,
+  IsEmptyBodyFavorite,
+} = require("../middlewares//isEmptyBody");
 
 const {
   validationSchema,
@@ -34,7 +37,7 @@ router
   .route("/contacts/:id/favorite")
   .patch(
     validId,
-    IsEmptyBody,
+    IsEmptyBodyFavorite,
     validateBody(validationFavorite),
     crtlContacts.updateContactStatus
   );

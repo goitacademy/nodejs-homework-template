@@ -15,6 +15,7 @@ const validationSchema = Joi.object({
     })
     .required(),
   phone: Joi.string().min(8).max(30).required(),
+  favorite: Joi.boolean().default(false),
 });
 
 const validationFavorite = Joi.object({
