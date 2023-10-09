@@ -67,7 +67,6 @@ const addContact = (name, email, phone) => {
 
 const updateContact = (contactId, name, email, phone, errorMessage) => {
   const contact = contacts.find((contact) => contact.id === contactId);
-  console.log('contact', contactId);
 
   if (!contact) {
     console.log(errorMessage);

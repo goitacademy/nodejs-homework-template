@@ -60,8 +60,6 @@ router.delete('/:contactId', (req, res, next) => {
 router.put('/:contactId', (req, res, next) => {
   const contactId = req.params.contactId;
   const { name, email, phone } = req.body;
-console.log('req.body', req.body);
-
 
   if (!name || !email || !phone) {
     return res.status(400).json({
