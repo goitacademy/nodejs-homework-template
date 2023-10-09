@@ -11,7 +11,7 @@ router.get('/:contactId', (req, res, next) => {
   const contactId = req.params.contactId;
 
   const foundContact = functionContacts.getContactById(
-    Number(contactId),
+    contactId,
     `Contact not found!`
   );
 
@@ -42,18 +42,11 @@ router.delete('/:contactId', (req, res, next) => {
   const contactId = req.params.contactId;
 
   const newContacts = functionContacts.removeContact(
-    Number(contactId),
+    contactId,
     `Contact not found!`
   );
+
   if (!newContacts) {
-    return res.status(400).json({
-      message: `Contact not found!`,
-    });
-  }
-
-  const contactsList = functionContacts.listContacts();
-
-  if (newContacts.length === contactsList.length) {
     return res.status(400).json({
       message: `Contact not found!`,
     });
@@ -67,6 +60,8 @@ router.delete('/:contactId', (req, res, next) => {
 router.put('/:contactId', (req, res, next) => {
   const contactId = req.params.contactId;
   const { name, email, phone } = req.body;
+console.log('req.body', req.body);
+
 
   if (!name || !email || !phone) {
     return res.status(400).json({
@@ -75,7 +70,7 @@ router.put('/:contactId', (req, res, next) => {
   }
 
   const updateContacts = functionContacts.updateContact(
-    Number(contactId),
+    contactId,
     name,
     email,
     phone,
