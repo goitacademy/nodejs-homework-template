@@ -90,7 +90,7 @@ router.put('/:contactId', async (req, res, next) => {
 
     const { error } = contactAddSchema.validate(req.body);
     if (error) {
-       return res.status(400).json({ messege : "missing fields"})
+        return res.status(400).json({message: error.message})
     }
     const { contactId } = req.params;
     
