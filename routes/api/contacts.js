@@ -1,8 +1,8 @@
-import { contactsAddSchema } from "../../schemas/contactSchemas";
-import { validateBody } from "./../../decorators/validateBody.js";
-import contactControllers from "../../controllers/contact.controlers";
+import { contactsAddSchema } from "../../schemas/contactSchemas.js";
+import validateBody from "../../decorators/validateBody.js";
+import contactControllers from "../../controllers/contact.controlers.js";
 import { isEmptyBody } from "../../middleware/index.js";
-const express = require("express");
+import express from "express";
 
 const contactAddValidate = validateBody(contactsAddSchema);
 
