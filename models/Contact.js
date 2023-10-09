@@ -23,7 +23,7 @@ const contactSchema = new Schema({
 
 contactSchema.post("save", handleSaveError);
 
-contactSchema.pre("findOneAndUpdate")
+// contactSchema.pre("findOneAndUpdate")
 
 const Contact = model("contact", contactSchema)
 
@@ -45,4 +45,9 @@ const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required()
 })
 
-module.exports = { Contact, addSchema, updateSchema, updateFavoriteSchema }
+module.exports = {
+  Contact,
+  addSchema,
+  updateSchema,
+  updateFavoriteSchema
+}

@@ -21,6 +21,6 @@ router.post('/', contactAddValidate, isEmptyBody, controllers.add)
 
 router.put('/:contactId', isValidId, contactUpdateValidate, isEmptyBody, controllers.updateById)
 
-router.patch('/:contactId/favorite',isValidId, contactUpdateValidateFavorite, isEmptyBody, controllers.updateById)
+router.patch('/:contactId/favorite',isValidId, contactUpdateValidateFavorite, isEmptyBody, controllers.updateFavorite)
 
 module.exports = router
