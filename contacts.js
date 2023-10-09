@@ -55,11 +55,26 @@ app.put("/contacts/:id", (req, res) => {
 
 app.delete("/contacts/:id", (req, res) => {
   const contactId = req.params.id;
-  const index = contacts.findIndex((c) => c.id === contactId);
-  if (index === -1) {
-    return res.status(404).json({ error: "Контакт не знайдений" });
-  }
-  contacts.splice(index, 1);
-  res.status(204).send();
+
+  fs.readJson(contactsFilePath)
+    .then((data) => {
+      const index = data.findIndex((c) => c.id === contactId);
+      if (index === -1) {
+        return res.status(404).json({ error: "Контакт не знайдений" });
+      }
+      data.splice(index, 1);
+      fs.writeJson(contactsFilePath, data)
+        .then(() => {
+          res.status(204).send();
+        })
+        .catch((error) => {
+          console.error("Помилка при читанні файлу контактів:", error);
+          res.status(500).json({ error: "Помилка на сервері" });
+        });
+    })
+    .catch((error) => {
+      console.error("Помилка при читанні файлу контактів:", error);
+      res.status(500).json({ error: "Помилка на сервері" });
+    });
 });
 module.exports = router;
