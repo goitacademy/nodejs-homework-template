@@ -4,7 +4,7 @@ import contactController from "../../controllers/contacts.js";
 
 import { isEmptyBody, isValidId } from "../../middlewares/indeх.js";
 
-import { validateBody } from "../../decorators/index.js";
+import { validateBody } from "../../middlewares/indeх.js";
 
 import { contactAddSchema, contactUpdateFavoriteSchema } from "../../models/contact.js";
 

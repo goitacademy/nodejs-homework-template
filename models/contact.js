@@ -2,9 +2,7 @@ import Joi from "joi";
 import { Schema, model } from "mongoose";
 import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 
-
 const phoneRegExp = /^\(\d{3}\) \d{3}-\d{4}$/;
-
 
 const contactSchema = new Schema({
     name: {
@@ -29,9 +27,6 @@ const contactSchema = new Schema({
 )
 
 contactSchema.post("save", handleSaveError);
-
-const Contact = model("contact", contactSchema);
-
 
 contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 
@@ -61,6 +56,7 @@ export const contactAddSchema = Joi.object({
   favorite: Joi.boolean()
 }).with("name", ["email", "phone"]);
 
+const Contact = model("contact", contactSchema);
 
 export const contactUpdateFavoriteSchema = Joi.object({
    favorite: Joi.boolean().optional().allow(null), 
