@@ -1,7 +1,7 @@
 const postUser = require('../../controllers/user/newUser')
-const getUserById = require('../../controllers/user/getUserById')
+const getUserByEmail = require('./getUserByEmail')
 
 module.exports = {
     postUser,
-    getUserById
+    getUserByEmail
 }

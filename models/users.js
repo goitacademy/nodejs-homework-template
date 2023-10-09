@@ -9,7 +9,7 @@ const User = require('../models/schemas/users')
  * @param {*} password Пароль користувача для зберігання в базі даних.
  * @returns {Object} Об'єкт відповіді зі статусом та повідомленням: 
  * - Якщо в body є поле email з існуючим, повертає json з ключем {"message": "Email in use"} і статусом 409 Conflict.
- * - якщо в body немає поля email з існуючим, повертає об'єкт з ключами {password, email, subscription, _id} і статусом 201
+ * - якщо в body немає поля email з існуючим, повертає об'єкт з ключами {password, email} і статусом 201
  */
 const createUser = async (req, res, email, password) => {
     const existingUser = await User.findOne({ email })
@@ -21,16 +21,19 @@ const createUser = async (req, res, email, password) => {
     handleConflict(req, res, email, password)
 }
 
-// const getUserByEmail = async (email, res) => {
-//     const users = await User.findOne({ email })
+/**
+ * Отримує користувача за email.
+ * @param {*} email користувача
+ * @returns {Promise<Object|null>} - Об'єкт користувача з властивостями email, subscription та token.
+ * Якщо користувача не знайдено, повертає помилку 401 з повідомленням "message": "Email or password is wrong"
+ */
+const getUserByEmail = async (email) => {
+    return await User.findOne({ email });
+}
 
-//     return users
+module.exports = {
+    createUser,
+    getUserByEmail
+}
 
-// }
-
-// module.exports = {
-//     createUser,
-//     getUserByEmail
-// }
-
-module.exports = createUser
+// module.exports = createUser
