@@ -73,5 +73,25 @@ router.put('/:id', async (req, res, next) => {
     next(error);
   }
 });
+// PATCH /api/contacts/:contactId/favorite
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  try {
+    if (typeof favorite !== 'boolean') {
+      return res.status(400).json({ message: 'Missing field "favorite"' });
+    }
+
+    const updatedContact = await updateContact(contactId, { favorite });
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;

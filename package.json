@@ -14,6 +14,8 @@
     "cross-env": "7.0.3",
     "express": "^4.17.1",
     "joi": "^17.11.0",
+    "mongodb": "^6.1.0",
+    "mongoose": "^7.6.0",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
