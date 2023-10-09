@@ -23,8 +23,6 @@ const contactSchema = new Schema({
 
 contactSchema.post("save", handleSaveError);
 
-// contactSchema.pre("findOneAndUpdate")
-
 const Contact = model("contact", contactSchema)
 
 const addSchema = Joi.object({
