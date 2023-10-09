@@ -21,6 +21,9 @@ app.get("/contacts", (req, res) => {
 
 app.post("/contacts", (req, res) => {
   const newContact = req.body;
+  if (!newContact.name || !newContact.email) {
+    return res.status(400).json({ error: "Невірний формат даних контакта" });
+  }
   contacts.push(newContact);
   res.status(201).json(newContact);
 });
@@ -41,6 +44,11 @@ app.put("/contacts/:id", (req, res) => {
   if (index === -1) {
     return res.status(404).json({ error: "Контакт не знайдений" });
   }
+
+  if (!updatedContact.name || !updatedContact.email) {
+    return res.status(400).json({ error: "Невірний формат даних контакта" });
+  }
+
   contacts[index] = updatedContact;
   res.json(updatedContact);
 });
