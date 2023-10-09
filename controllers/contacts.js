@@ -1,6 +1,3 @@
-// const addShema = require("../schemas/contacts");
-// const { nanoid } = require("nanoid");
-
 
 const Contact = require("../models/contact.js");
 const {ctrlWrapper ,HttpError} = require("../helpers");
