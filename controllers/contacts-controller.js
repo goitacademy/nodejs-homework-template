@@ -3,43 +3,54 @@ import { ContactDB } from "../models/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
-  const result = await ContactDB.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, ...query } = req.query;
+  console.log("query :>> ", query);
+  const skip = (page - 1) * limit;
+
+  const result = await ContactDB.find({ ...query, owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "email subscription");
+
+  // console.log("Response length :>> ", Object.keys(result).length);
   res.json(result);
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findById(contactId);
+  const { _id: owner } = req.user;
+  const result = await ContactDB.findOne({ _id: contactId, owner });
+  // const result = await ContactDB.findById(contactId);
   if (!result) throw HttpError(404, "Not found");
   res.json(result);
 };
 
 const add = async (req, res) => {
-  const result = await ContactDB.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await ContactDB.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findByIdAndUpdate(contactId, req.body, { new: true });
+  const { _id: owner } = req.user;
+  const result = await ContactDB.findOneAndUpdate({ _id: contactId, owner }, req.body);
+  // const result = await ContactDB.findByIdAndUpdate(contactId, req.body);
+  // const result = await ContactDB.findByIdAndUpdate(contactId, req.body, { new: true });
   if (!result) throw HttpError(404, "Not found");
   res.status(200).json(result);
 };
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findByIdAndDelete(contactId);
+  const { _id: owner } = req.user;
+  const result = await ContactDB.findOneAndDelete({ _id: contactId, owner });
+  // const result = await ContactDB.findByIdAndDelete(contactId);
   if (!result) throw HttpError(404, "Not found");
-  // res.json(result);
+  // res.status(200).json(result);
   res.status(200).json({ message: "contact deleted" });
 };
-
-// const updateFavorite = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await ContactDB.findByIdAndUpdate(contactId, req.body, { new: true });
-//   if (!result) throw HttpError(404, "Not found");
-//   res.status(200).json(result);
-// };
 
 export default {
   getAll: ctrlWrapper(getAll),
@@ -47,5 +58,4 @@ export default {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   deleteById: ctrlWrapper(deleteById),
-  // updateFavorite: ctrlWrapper(updateFavorite),
 };
