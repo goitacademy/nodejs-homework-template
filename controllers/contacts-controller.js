@@ -44,7 +44,9 @@ const updateById = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await ContactDB.findByIdAndDelete(contactId);
+  const { _id: owner } = req.user;
+  const result = await ContactDB.findOneAndDelete({ _id: contactId, owner });
+  // const result = await ContactDB.findByIdAndDelete(contactId);
   if (!result) throw HttpError(404, "Not found");
   // res.status(200).json(result);
   res.status(200).json({ message: "contact deleted" });
