@@ -44,5 +44,5 @@ const login = async (req, res) => {
 }
     module.exports = {
         register: ctrlWrapper(register),
-        logi:ctrlWrapper(login),
+        login:ctrlWrapper(login),
 }
