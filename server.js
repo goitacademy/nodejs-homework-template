@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 import app from "./app.js";
-const uri =
-  "mongodb+srv://Dima:Sinz2955800439@cluster0.sklzyye.mongodb.net/my-contacts?retryWrites=true&w=majority";
 
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 };
 
+const { DB_HOST, PORT = 3000 } = process.env;
+
 mongoose
-  .connect(uri, options)
+  .connect(DB_HOST, options)
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Server running. Use our API on port: 3000");
     });
   })

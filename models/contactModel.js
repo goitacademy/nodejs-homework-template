@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Joi from "joi";
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -15,6 +16,14 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+});
+
+export const ContactSchema = Joi.object({
+  name: Joi.string().required().messages({
+    "any.required": `"name" required field`,
+  }),
+  phone: Joi.number().required(),
+  email: Joi.string().required(),
 });
 
 const Contact = mongoose.model("Contact", contactSchema);
