@@ -1,59 +1,58 @@
-const fs = require('fs/promises')
+const fs = require("fs/promises");
+const path = require("path");
 const crypto = require('crypto');
-const path = require('path')
-const {HttpError} = require("../utils/HttpError")
 
-const dbPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.resolve("models", "contacts.json");
+
+const updateContacts = async (newContacts) => {
+  await fs.writeFile(contactsPath, JSON.stringify(newContacts, null, 2));
+};
 
 const listContacts = async () => {
-  const contacts = await fs.readFile(dbPath);
-  return JSON.parse(contacts)
-}
+  const data = await fs.readFile(contactsPath, "utf-8");
+  return JSON.parse(data);
+};
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
-  if (!contact) {
-    throw new HttpError(404, 'Contact not found');
-  }
-  return contact
-}
+  const allContacts = await listContacts();
+  const result = allContacts.find((item) => item.id === contactId);
+  return result || null;
+};
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
-    throw new HttpError(404, "Contact not found");
+    return null;
   }
-  contacts.splice(index, 1);
-  await fs.writeFile(dbPath, JSON.stringify(contacts, null, 2));
-  return contactId;
-}
+  const [result] = allContacts.splice(index, 1);
+  await updateContacts(allContacts);
+  return result;
+};
 
 const addContact = async (body) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: crypto.randomUUID(),
-    ...body
-  };
-  contacts.push(newContact);
-  await fs.writeFile(dbPath, JSON.stringify(contacts, null, 2));
-  return newContact;
-}
+  const allContacts = await listContacts();
+  const { name, email, phone } = body;
+  const result = { id: crypto.randomUUID(), name, email, phone };
+  allContacts.push(result);
+  await updateContacts(allContacts);
+  return result;
+};
 
 const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
-    throw new HttpError(404, "Contact not found");
+    return null;
   }
-  contacts[index] = {
-    id: contacts[index].id,
-    ...body,
-  };
-  await fs.writeFile(dbPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
-}
+
+  const result = { ...allContacts[index], ...body };
+  allContacts[index] = result;
+  await updateContacts(allContacts);
+  return result;
+};
+
+
 
 module.exports = {
   listContacts,
@@ -61,4 +60,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
