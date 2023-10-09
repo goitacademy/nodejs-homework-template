@@ -5,6 +5,7 @@ const validateBody = require('../../middlewares/validateBody');
 const createContactBodySchema = require('../../../schemas/contacts/createContact');
 const updateContactBodySchema = require('../../../schemas/contacts/updateContact');
 const updateFieldFavorite = require('../../../schemas/contacts/updateFieldFavorite');
+const validateObjectId = require('../../middlewares/validateByMongoose');
 
 const router = express.Router()
 
@@ -14,7 +15,7 @@ router.get('/', async (req, res, next) => {
   res.status(200).json(contacts);
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:contactId', validateObjectId, async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const contact = await contactsService.getContactById(contactId);
@@ -33,7 +34,7 @@ router.post('/', validateBody(createContactBodySchema), async (req, res, next) =
         }
 })
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:contactId', validateObjectId, async (req, res, next) => {
   const { contactId } = req.params;
   try {
    await contactsService.removeContact(contactId);
@@ -45,7 +46,7 @@ router.delete('/:contactId', async (req, res, next) => {
         }
 })
 
-router.put('/:contactId', validateBody(updateContactBodySchema), async (req, res, next) => {
+router.put('/:contactId', validateObjectId, validateBody(updateContactBodySchema), async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
   try {
@@ -56,7 +57,7 @@ router.put('/:contactId', validateBody(updateContactBodySchema), async (req, res
         }
 })
 
-router.patch('/:contactId/favorite', validateBody(updateFieldFavorite), async (req, res, next) => {
+router.patch('/:contactId/favorite', validateObjectId, validateBody(updateFieldFavorite), async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
   try {

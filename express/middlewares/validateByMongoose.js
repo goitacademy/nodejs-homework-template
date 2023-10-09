@@ -3,13 +3,16 @@ const createError = require("../../utils/createError");
 const ERROR_TYPES = require("../../constants/errors");
 
 
-  const validateObjectId = (id) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) {
+const validateObjectId = (req, res, next) => {
+  const { contactId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(contactId)) {
     const error = createError(ERROR_TYPES.BAD_REQUEST, {
       message: "Not found",
     });
-    throw error;
+    return next(error);
   }
-}; 
+  next();
+};
   
 module.exports = validateObjectId;
+

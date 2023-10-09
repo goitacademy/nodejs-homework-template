@@ -1,7 +1,6 @@
 const createError = require('../utils/createError');
 const ERROR_TYPES = require('../constants/errors');
 const ContactModel = require("./contactShema");
-const validateObjectId = require('../express/middlewares/validateByMongoose');
 
 
 const listContacts = async () => {
@@ -10,8 +9,6 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-
-  validateObjectId(contactId);
 
   const contact = await ContactModel.findById(contactId);
   if (!contact) {
@@ -24,8 +21,6 @@ const getContactById = async (contactId) => {
 };
 
 const removeContact = async (contactId) => {
-
-  validateObjectId(contactId);
 
   const contactToRemove = await ContactModel.findByIdAndRemove(contactId);
   
@@ -47,15 +42,35 @@ const addContact = async (body) => {
 };
 
 
-const updateContact = async (contactId, body) => {
 
-  validateObjectId(contactId);
+
+const updateContact = async (contactId, body) => {
+  const { name, email, phone} = body;
+  if (!name && !email && !phone) {
+    const error = createError(ERROR_TYPES.BAD_REQUEST, {
+      message: "Missing body",
+    });
+    throw error;
+  }
+
+
+  if (!name || !email || !phone) {
+  const missingFields = [];
+  if (!name) missingFields.push('name');
+  if (!email) missingFields.push('email');
+  if (!phone) missingFields.push('phone');
+  
+  const error = createError(ERROR_TYPES.BAD_REQUEST, {
+    message: `Missing required ${missingFields.join(', ')} field`,
+  });
+  throw error;
+}
 
   const updatedContact = await ContactModel.findByIdAndUpdate(contactId, {
     $set: {
       ...body,
     }
-  }, { returnOriginal: false },
+  }, { new: true },
   );
   if (!updatedContact) {
     const error = createError(ERROR_TYPES.NOT_FOUND, {
@@ -68,14 +83,6 @@ const updateContact = async (contactId, body) => {
 
 const updateStatusContact = async (contactId, body) => {
 
-  validateObjectId(contactId);
-  
-  if (!body || body.favorite === undefined) {
-    const error = createError(ERROR_TYPES.BAD_REQUEST, {
-      message: "missing field favorite",
-    });
-    throw error;
-  };
   const updatedContact = await ContactModel.findByIdAndUpdate(
     contactId,
     {

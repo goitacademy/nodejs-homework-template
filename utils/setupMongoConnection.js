@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-const { MONGO_DB_USER, MONGO_DB_PASSWORD, MONGO_DB_HOST, MONGO_DB_DATABASE } = require('../constants/env');
+require('dotenv').config()
 
+const {LINK} = process.env
 const setupMongoConnection = async () => {
     try {
-        await mongoose.connect(
-            `mongodb+srv://${MONGO_DB_USER}:${MONGO_DB_PASSWORD}@${MONGO_DB_HOST}/${MONGO_DB_DATABASE}?retryWrites=true&w=majority`,
-        );
 
+        await mongoose.connect(LINK);
         console.log('Database connection successful');
     } catch (err) {
         console.error('Error connecting to the database:', err);
