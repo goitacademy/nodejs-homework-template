@@ -6,7 +6,7 @@ const { error } = require("./schema");
 const PORT = 5000;
 
 mongoose
-  .connect(process.env.DB_HOST)
+  .connect(DB_HOST)
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}`);

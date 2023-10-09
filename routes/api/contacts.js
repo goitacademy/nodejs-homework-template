@@ -23,7 +23,7 @@ const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 router.get("/", getContactsList);
 
-router.get("/:id", isValidId, contactAddValidate, getContactById);
+router.get("/:id", isValidId, getContactById);
 
 router.post("/", isEmptyBody, contactAddValidate, addNewContact);
 
