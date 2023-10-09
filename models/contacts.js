@@ -1,14 +1,38 @@
-// const fs = require('fs/promises')
+const contacts = require('../contacts.json');
+const generateId = require('../helpers/generateId');
 
-const listContacts = async () => {}
+const listContacts = () => {
+  return contacts;
+};
 
-const getContactById = async (contactId) => {}
+const getContactById = (contactId) => {
+  const contact = contacts.find((contact) => contact.id === contactId);
+  return contact || null;
+};
 
-const removeContact = async (contactId) => {}
+const removeContact = (contactId) => {
+  const index = contacts.findIndex((contact) => contact.id === contactId);
+  if (index !== -1) {
+    contacts.splice(index, 1);
+    return true;
+  }
+  return false;
+};
 
-const addContact = async (body) => {}
+const addContact = (body) => {
+  const newContact = { id: generateId(), ...body };
+  contacts.push(newContact);
+  return newContact;
+};
 
-const updateContact = async (contactId, body) => {}
+const updateContact = (contactId, body) => {
+  const contactIndex = contacts.findIndex((contact) => contact.id === contactId);
+  if (contactIndex !== -1) {
+    contacts[contactIndex] = { ...contacts[contactIndex], ...body };
+    return contacts[contactIndex];
+  }
+  return null;
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +40,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
