@@ -41,7 +41,7 @@ router.patch(
   "/:id/favorite",
   isValidId,
   isEmptyBody,
-  contactAddValidate,
+  contactUpdateFavoriteValidate,
   updateStatusContact
 );
 
