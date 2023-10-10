@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const { User } = require("../models/user.js");
+const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const { SECRET_KEY } = process.env;
 
@@ -17,18 +17,6 @@ const authenticate = async (req, res, next) => {
     console.log("ID from token: ", id, "\nToken: ", token);
 
     const user = await User.findById(id);
-
-    // const user = {
-    //   token:
-    //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1MTY3ZDExNDlhNWFkNDZmMGYyZjMyOSIsImlhdCI6MTY5NjA2MTE1MCwiZXhwIjoxNjk2MTQzOTUwfQ.hrYmWSpiqsgZNKTrqiFNivtBaDHY6a7zqlFExdCMWW8",
-    //   user: {
-    //     email: "BodyMensky@emaill.com",
-    //     subscription: "starter",
-    //   },
-    // };
-
-    // console.log('test User: ', await User);
-    // Cannot read properties of undefined (reading 'findById')
 
     console.log("USER bio: ", user);
 

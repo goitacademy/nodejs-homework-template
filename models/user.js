@@ -1,9 +1,10 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../middleware");
+const handleMongooseError = require("../middleware/handleMongooseError");
 
 const emailRegexp =
+  // eslint-disable-next-line no-useless-escape
   /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 const userSchema = new Schema(
