@@ -29,6 +29,7 @@ const signupCtrl = async (req, res, next) => {
         code: 201,
         data: {
           message: "Registration Successful",
+          avatarUrl: avatarURL, 
         },
       });
     } catch (error) {

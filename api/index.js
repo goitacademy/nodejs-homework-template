@@ -3,7 +3,7 @@ const router = express.Router();
 const loginCtrl = require("../controller/login");
 const signupCtrl = require("../controller/signup");
 const meCtrl = require("../controller/me");
-const { auth, upload, ctlWrapper } = require('../middleware')
+const { auth, upload, ctlWrapper } = require('../middleware');
 const updateAvatarCtrl = require('../controller/updateAvatar');
 const {
   createContact,
@@ -36,7 +36,7 @@ router.post("/users/login", loginCtrl);
 
 router.get("/users/current", validToken, auth, meCtrl);
 
-router.patch("/users/avatars",validToken, auth, upload.single("avatar"), ctlWrapper(updateAvatarCtrl) );
+router.patch("/users/avatars",validToken, auth, upload.single("avatar"), ctlWrapper(updateAvatarCtrl));
 
 
 
