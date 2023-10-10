@@ -15,7 +15,7 @@ export const contactsAddSchema = Joi.object({
     "any.required": "missing required 'email' field",
   }),
   phone: Joi.string()
-
+    .pattern(new RegExp(/^\(\d{3}\) \d{3}-\d{4}$/))
     .required()
     .messages({
       "any.required": "missing required 'phone' field",
@@ -23,4 +23,3 @@ export const contactsAddSchema = Joi.object({
         "Phone number must be must be in the format (XXX) XXX-XXXX",
     }),
 });
-
