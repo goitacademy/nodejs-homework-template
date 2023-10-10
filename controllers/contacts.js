@@ -1,17 +1,17 @@
-const contacts = require("../models/contacts");
+const Contact = require('../models/contacts')
 const { HttpError } = require("../helpers")
 
 const {ctrlWrapper} = require("../helpers")
 
 
 const getAll = async (req, res, next) => {
-        const contactList = await contacts.listContacts();
+        const contactList = await Contact.find();
         res.json(contactList);
 };
 
 const getByID = async (req, res, next) => {
         const { contactId } = req.params;
-        const contact = await contacts.getContactById(contactId);
+        const contact = await Contact.findById(contactId)
         if (!contact) {
             throw HttpError(404, 'Not Found');
         }
@@ -19,13 +19,13 @@ const getByID = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
-        const newContact = await contacts.addContact(req.body);
+        const newContact = await Contact.create(req.body);
         res.status(201).json(newContact);
 };
 
 const deleteContact = async (req, res, next) => {
         const { contactId } = req.params;
-        const result = await contacts.removeContact(contactId);
+        const result = await Contact.findByIdAndDelete(contactId);
 
         if (!result) {
             throw HttpError(404, "Not found")
@@ -36,7 +36,18 @@ const deleteContact = async (req, res, next) => {
 const putContact = async (req, res) => {
         const { contactId } = req.params;
         const { body } = req;
-        const updatedContact = await contacts.updateContact(contactId, body);
+        const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {new:true});
+        if (updatedContact) {
+            res.json(updatedContact);
+        } else {
+            res.status(404).json({ message: 'Not found' });
+        }
+};
+
+const updateFavorite = async (req, res) => {
+        const { contactId } = req.params;
+        const { body } = req;
+        const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {new:true});
         if (updatedContact) {
             res.json(updatedContact);
         } else {
@@ -45,10 +56,12 @@ const putContact = async (req, res) => {
 };
 
 
+
 module.exports = {
     getAll: ctrlWrapper(getAll),
     getByID: ctrlWrapper(getByID),
     postContact: ctrlWrapper(postContact),
     deleteContact: ctrlWrapper(deleteContact),
     putContact: ctrlWrapper(putContact),
+    updateFavorite: ctrlWrapper(updateFavorite),
 }
