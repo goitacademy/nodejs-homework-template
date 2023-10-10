@@ -3,23 +3,24 @@ const router = express.Router();
 
 const ctrl = require("../../controllers/contacts")
 
-const { validateBody } = require("../../meddlewares")
-const {addSchema} = require("../../schemas/contacts")
+const { validateBody, isValidId } = require("../../meddlewares")
+const {addSchema, updateFavoriteSchema} = require("../../schemas/contacts")
 
 // Отримати список всіх контактів
 router.get('/', ctrl.getAll);
 
 // Отримати контакт за його id
-router.get('/:contactId', ctrl.getByID);
-
+router.get('/:contactId', isValidId, ctrl.getByID);
 
 // Додати новий контакт
-router.post('/', validateBody(addSchema),ctrl.postContact);
+router.post('/', ctrl.postContact);
 
 // Видалити контакт за його id
-router.delete('/:contactId', ctrl.deleteContact);
+router.delete('/:contactId',isValidId, ctrl.deleteContact);
 
 // Оновити контакт за його id
-router.put('/:contactId', validateBody(addSchema), ctrl.putContact);
+router.put('/:contactId',isValidId, validateBody(addSchema), ctrl.putContact);
 
+//Оновлення поля favorite
+router.patch('/:contactId/favorite',isValidId, validateBody(updateFavoriteSchema), ctrl.updateFavorite);
 module.exports = router;
