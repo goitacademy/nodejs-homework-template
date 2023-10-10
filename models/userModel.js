@@ -23,6 +23,9 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: { type: String, default: "" },
+    avatarURL: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );

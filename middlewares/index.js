@@ -1,9 +1,11 @@
-const doesContactExist = require("../middlewares/contactExists");
-const isValidId = require("../middlewares/isValidId");
-const authenticate = require("../middlewares/authenticate");
+const doesContactExist = require("./contactExists");
+const isValidId = require("./isValidId");
+const authenticate = require("./authenticate");
+const upload = require("./upload");
 
 module.exports = {
   doesContactExist,
   isValidId,
   authenticate,
+  upload,
 };
