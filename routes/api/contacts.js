@@ -1,25 +1,26 @@
-const express = require('express')
+const express = require('express');
+const router = express.Router();
 
-const router = express.Router()
+const ctrl = require("../../controllers/contacts")
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { validateBody, isValidId } = require("../../meddlewares")
+const {addSchema, updateFavoriteSchema} = require("../../schemas/contacts")
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Отримати список всіх контактів
+router.get('/', ctrl.getAll);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Отримати контакт за його id
+router.get('/:contactId', isValidId, ctrl.getByID);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Додати новий контакт
+router.post('/', ctrl.postContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Видалити контакт за його id
+router.delete('/:contactId',isValidId, ctrl.deleteContact);
 
-module.exports = router
+// Оновити контакт за його id
+router.put('/:contactId',isValidId, validateBody(addSchema), ctrl.putContact);
+
+//Оновлення поля favorite
+router.patch('/:contactId/favorite',isValidId, validateBody(updateFavoriteSchema), ctrl.updateFavorite);
+module.exports = router;

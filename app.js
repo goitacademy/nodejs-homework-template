@@ -1,12 +1,22 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-
+const fs = require('fs/promises')
+require('dotenv').config();
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+
+const moment = require('moment')
+
+app.use((req, res, next) => {
+    const { method, url } = req;
+    const date = moment().format("DD-MM-YYYY_hh:mm:ss")
+    fs.appendFile("./public/server.log", `\n${method} ${url} ${date}`);
+    next()
+})
 
 app.use(logger(formatsLogger))
 app.use(cors())
@@ -19,7 +29,8 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message })
 })
 
 module.exports = app
