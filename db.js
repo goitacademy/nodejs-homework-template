@@ -6,6 +6,7 @@ const cluster = "ClusterTI";
 const authSource = "admin"; // або інша база, яку ви використовуєте для автентифікації
 const authMechanism = "DEFAULT"; // або інше значення, залежно від налаштувань вашого кластера
 
+
 const uri =
   `mongodb+srv://${username}:${password}@${cluster}/?authSource=${authSource}&authMechanism=${authMechanism}`;
 const client = new MongoClient(uri);
