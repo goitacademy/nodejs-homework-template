@@ -3,7 +3,7 @@ const router = express.Router();
 const { validateBody } = require("../../middlewares");
 const ctrl = require("../../controllers/contacts.js");
 const { addSchema, updateFavoriteSchema } = require("../../models/contact"); // Правильний імпорт
-const { isValidId } = require("../../middlewares/isValidId");
+const { isValidId } = require("../../middlewares/isValidID");
 const authenticate = require("../../middlewares/authenticate");
 
 router.get("/", authenticate, ctrl.getAll);
