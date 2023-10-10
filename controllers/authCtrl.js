@@ -1,5 +1,9 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 require("dotenv").config();
 
@@ -7,6 +11,7 @@ const { User, schemas } = require("../models/userModel");
 const { HttpError } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -17,8 +22,21 @@ const register = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const avatar = gravatar.url(email);
+    const avatarURL = await Jimp.read(avatar)
+      .then((avatar) => {
+        return avatar.resize(250, 250);
+      })
+      .catch((error) => {
+        next(error);
+      });
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({
+      ...req.body,
+      password: hashPassword,
+      avatarURL,
+    });
+
     return res.status(201).json({
       email: newUser.email,
       password: hashPassword,
@@ -90,10 +108,42 @@ const updateSubscription = async (req, res, next) => {
   }
 };
 
+const updateAvatar = async (req, res, next) => {
+  console.log(req.file);
+  const { _id } = req.user;
+  try {
+    if (!req.file.mimetype.startsWith("image/")) {
+      throw HttpError(400, "Please, upload images only!!");
+    }
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarsDir, filename);
+
+    Jimp.read(tempUpload)
+      .then((avatar) => {
+        avatar.resize(250, 250).quality(90).writeAsync(resultUpload);
+        // fs.rename(tempUpload, resultUpload);
+      })
+      .catch((error) => {
+        throw HttpError(400, error);
+      });
+
+    fs.unlink(tempUpload);
+
+    const avatarURL = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({ avatarURL });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   getCurrent,
   logout,
   updateSubscription,
+  updateAvatar,
 };
