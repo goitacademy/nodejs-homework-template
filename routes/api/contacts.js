@@ -1,25 +1,29 @@
-const express = require('express')
+import express from "express";
+import contactController from "../../controllers/contacts.js";
+import { idNotFound, validateBody } from "../../decorators/index.js";
+import contactService from "../../models/contacts.js";
+import contactSchema from "../../schemas/contact-schema.js";
 
-const router = express.Router()
+const isIdExists = contactService
+  .listContacts()
+  .then((data) => idNotFound(data));
+const isValidate = validateBody(contactSchema);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsRouter = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get("/", contactController.getAll);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get("/:contactId", isIdExists, contactController.getById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.post("/", isValidate, contactController.add);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.delete("/:contactId", isIdExists, contactController.deleteById);
 
-module.exports = router
+contactsRouter.put(
+  "/:contactId",
+  isIdExists,
+  isValidate,
+  contactController.updateById
+);
+
+export default contactsRouter;
