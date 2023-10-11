@@ -12,6 +12,8 @@ const errorMessageList = {
 const httpError = (status, message = errorMessageList[status] ) => {
     const err = new Error(message);
     err.status = status;
+    console.log(status);
+    console.log(err);
     return err;
 };
 module.exports = httpError;
