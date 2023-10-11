@@ -11,12 +11,15 @@ const userSchema = new Schema(
   {
     password: {
       type: String,
+      minLength: 6,
       required: [true, "Set password for user"],
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      match: emailRegexp,
       unique: true,
+      required: [true, "Email is required"],
+
     },
     subscription: {
       type: String,
@@ -28,29 +31,6 @@ const userSchema = new Schema(
       default: "",
     },
   }
-
-  // Богдан Лямзин
-  // {
-  //   name: {
-  //     type: String,
-  //     required: true,
-  //   },
-  //   email: {
-  //     type: String,
-  //     match: emailRegexp,
-  //     unique: true,
-  //     required: true,
-  //   },
-  //   password: {
-  //     type: String,
-  //     minLength: 6,
-  //     required: true,
-  //   },
-  //   token: {
-  //     type: String,
-  //     default: "",
-  //   },
-  // },
   // { versionKey: false, timestamps: true }
 );
 

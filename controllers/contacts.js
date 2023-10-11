@@ -36,7 +36,6 @@ const addContact = async (req, res, next) => {
 
   const isContactExist = await Contact.findOne({ email });
 
-  console.log(isContactExist);
   if (isContactExist) {
     return res.status(200).json({ message: "Email is already taken" });
   }

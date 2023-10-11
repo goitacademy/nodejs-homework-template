@@ -15,7 +15,6 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  console.log("hashPass: ", hashPassword);
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
@@ -29,8 +28,6 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-
-  // console.log("ID: ", user);
 
   if (!user) {
     throw HttpError(401, "Email or password invalid");
@@ -47,7 +44,6 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  console.log(token);
 
   await User.findByIdAndUpdate(user._id, { token });
 
