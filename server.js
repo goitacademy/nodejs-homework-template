@@ -2,6 +2,7 @@ const app = require("./app");
 const mongoose = require("mongoose");
 
 // mongoose.set('strictQuery', true);
+// mongoose.set('strictQuery', false);//Artem
 
 const {DB_HOST, PORT = 3000} = process.env
 
