@@ -20,4 +20,4 @@ const register = async (req, res) => {
 
 module.exports = register;
 
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTRlZTMxNWY5ODVhOWMzMmQzNzg0YyIsImlhdCI6MTY3NTk0NzU3OSwiZXhwIjoxNjc2MDMzOTc5fQ.goSnd0Y8aK24V6cp2wiy_pZymVKLtarebmFLtDi67bI;
+
