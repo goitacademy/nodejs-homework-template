@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate");
 
 const Joi = require("joi");
 
@@ -20,9 +21,20 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    user_id: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
+
+contactSchema.plugin(mongoosePaginate);
 
 contactSchema.post("save", handleMongooseErrors);
 const addSchema = Joi.object({
