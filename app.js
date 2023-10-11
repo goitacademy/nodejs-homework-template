@@ -15,6 +15,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 // multer
 const tempDir = path.resolve("temp");
@@ -34,7 +35,9 @@ app.patch("/users/avatars", upload.single("avatarURL"), async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
   const resultUpload = path.resolve(avatarsDir, originalname);
   await fs.rename(tempUpload, resultUpload);
-  res.status(401).json({ message: `File have saved in ${resultUpload}` });
+  const avatarURL = path.join("public", "avatars", originalname);
+  console.log("pathUser :>> ", avatarURL); // del
+  res.status(201).json({ message: `File have saved in ${avatarURL}` });
 });
 
 app.use("/users", authRouter);
