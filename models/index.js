@@ -18,20 +18,8 @@ const getContactById = async (contactId) => {
   return result || null;
 };
 
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [result] = contacts.splice(index, 1);
-  await updateContacts(contacts);
-  return result;
-};
-
 const addContact = async (body) => {
   const { name, email, phone } = body;
-  console.log("name", body);
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
@@ -44,16 +32,26 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContactById = async (contactId, body) => {
-  const { name, email, phone } = body;
+const updateContactById = async (contactId, { name, email, phone }) => {
   const contacts = await listContacts();
-  const index = contacts.findIndex((item) => (item.id = contactId));
+  const index = contacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
     return null;
   }
   contacts[index] = { id: contactId, name, email, phone };
   await updateContacts(contacts);
   return contacts[index];
+};
+
+const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = contacts.splice(index, 1);
+  await updateContacts(contacts);
+  return result;
 };
 
 module.exports = {
