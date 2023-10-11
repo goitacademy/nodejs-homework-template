@@ -1,28 +1,30 @@
 import express from "express";
 import contactController from "../../controllers/contacts.js";
-import { idNotFound, validateBody } from "../../decorators/index.js";
-import contactService from "../../models/contacts.js";
-import contactSchema from "../../schemas/contact-schema.js";
+import { validateBody } from "../../decorators/index.js";
+import {
+  contactAddSchema,
+  contactFavoriteSchema,
+} from "../../models/contact_model.js";
 
-const isIdExists = contactService
-  .listContacts()
-  .then((data) => idNotFound(data));
-const isValidate = validateBody(contactSchema);
+const isValidate = validateBody(contactAddSchema);
+
+const isFavoriteValidate = validateBody(contactFavoriteSchema);
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactController.getAll);
 
-contactsRouter.get("/:contactId", isIdExists, contactController.getById);
+contactsRouter.get("/:contactId", contactController.getById);
 
 contactsRouter.post("/", isValidate, contactController.add);
 
-contactsRouter.delete("/:contactId", isIdExists, contactController.deleteById);
+contactsRouter.delete("/:contactId", contactController.deleteById);
 
-contactsRouter.put(
-  "/:contactId",
-  isIdExists,
-  isValidate,
+contactsRouter.put("/:contactId", isValidate, contactController.updateById);
+
+contactsRouter.patch(
+  "/:contactId/favorite",
+  isFavoriteValidate,
   contactController.updateById
 );
 
