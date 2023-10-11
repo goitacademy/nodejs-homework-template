@@ -1,5 +1,7 @@
 const contacts = require("../models/contacts");
+
 const HttpError = require("../helpers/HttpError");
+console.log(HttpError);
 
 const ctrlWrapper = require("../decorators /ctrl.Wrapper");
 
@@ -14,18 +16,30 @@ const getContactById = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await contacts.getContactById(contactId);
   if (!result) {
-    throw HttpError(400, `Not found`);
+    throw HttpError(404, `Not found`);
   }
   res.json(result);
 };
 
 const addContact = async (req, res, next) => {
-  const result = await contacts.addContact(
-    req.body.name,
-    req.body.email,
-    req.body.phone
-  );
-  res.status(201).json(result);
+  const { name, email, phone } = req.body;
+  if (!name || !email || !phone) {
+    return res.status(400).json({
+      message: "Missing required name field",
+    });
+  }
+
+  try {
+    const newContact = await contacts.addContact(name, email, phone);
+    res.status(201).json({
+      id: newContact.id,
+      name: newContact.name,
+      email: newContact.email,
+      phone: newContact.phone,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const removeContact = async (req, res, next) => {

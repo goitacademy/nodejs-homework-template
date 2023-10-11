@@ -54,30 +54,21 @@ const addContact = async (name, email, phone) => {
 };
 
 const updateContact = async (contactId, body) => {
-  try {
-    const allContacts = await listContacts();
-    const index = allContacts.findIndex((contact) => contact.id === contactId);
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((contact) => contact.id === contactId);
 
-    if (index === -1) {
-      console.log("Contact not found");
-      return null;
-    }
-
-    if (!body.name || !body.email || !body.phone) {
-      return { message: "Missing fields" };
-    }
-
-    allContacts[index].name = body.name;
-    allContacts[index].email = body.email;
-    allContacts[index].phone = body.phone;
-
-    await updateContactInfo(allContacts);
-
-    return allContacts[index];
-  } catch (error) {
-    console.error("Error updating contact", error);
-    throw error;
+  if (index === -1) {
+    console.log("Contact not found");
+    return null;
   }
+
+  allContacts[index].name = body.name;
+  allContacts[index].email = body.email;
+  allContacts[index].phone = body.phone;
+
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+
+  return allContacts[index];
 };
 
 module.exports = {

@@ -6,9 +6,9 @@ const isEmptyBody = require("../../middlewares/isEmptyBody");
 
 const validateBody = require("../../decorators /validateBody");
 
-const addSchema = require("../../schemas/contacts");
+const contactAddSchema = require("../../schemas/contacts");
 
-const contactAddValidate = validateBody(addSchema);
+const contactAddValidate = validateBody(contactAddSchema);
 
 const {
   listContacts,
