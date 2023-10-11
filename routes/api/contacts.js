@@ -1,5 +1,6 @@
 // contacts.js
 const express = require('express');
+const authMiddleware = require('../../middleware/auth');
 const router = express.Router();
 const {
   listContacts,
@@ -31,13 +32,16 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // POST /api/contacts
-router.post('/', async (req, res, next) => {
+router.post('/', authMiddleware, async (req, res, next) => {
   const { name, email, phone } = req.body;
+  const owner = req.user._id; // Отримайте ID користувача з автентифікації
+
   if (!name || !email || !phone) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
+
   try {
-    const newContact = await addContact({ name, email, phone });
+    const newContact = await addContact({ name, email, phone, owner });
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
