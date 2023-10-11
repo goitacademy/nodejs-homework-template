@@ -1,5 +1,5 @@
 const fs = require("fs/promises");
-const Joi = require("joi"); // Добавляем Joi для валидации
+const Joi = require("joi");
 
 const contactsPath = "./contacts.json";
 
@@ -63,7 +63,6 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-// Схемы валидации с помощью Joi
 const createContactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
@@ -82,6 +81,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  createContactSchema, // Экспортируем схемы валидации
+  createContactSchema,
   updateContactSchema,
 };
