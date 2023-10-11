@@ -6,7 +6,7 @@ const {joiValidation, joiValidationRequired} = require(path.join(__dirname, "../
 
 const requestError = require(path.join(__dirname, '../../utils/requestError.js'));
 
-const MODELS_PATH = path.join(__dirname, "../../models/contacts.js");
+const MODELS_PATH = path.join(__dirname, "../../controllers/contacts.js");
 const {listContacts, getContactById, addContact, removeContact, updateContact} = require(MODELS_PATH);
 
 const router = express.Router();
