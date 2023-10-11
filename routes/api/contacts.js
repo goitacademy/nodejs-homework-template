@@ -1,13 +1,33 @@
 const express = require("express");
-const cntr = require("../../controllers/index");
 const router = express.Router();
-const isValidId = require("../../middlevares/isValidID");
+const { validateBody } = require("../../middlewares");
+const ctrl = require("../../controllers/contacts.js");
+const { addSchema, updateFavoriteSchema } = require("../../models/contact"); // Правильний імпорт
+const { isValidId } = require("../../middlewares/isValidID");
+const authenticate = require("../../middlewares/authenticate");
 
-router.get("/", cntr.getAll);
-router.get("/:contactId", isValidId, cntr.getById);
-router.post("/", cntr.addContact);
-router.put("/:contactId", isValidId, cntr.changeContact);
-router.patch("/:contactId", isValidId, cntr.changeFavorite);
-router.delete("/:contactId", isValidId, cntr.deleteContact);
+router.get("/", authenticate, ctrl.getAll);
+
+router.get(
+  "/:id",
+  authenticate,
+  validateBody(addSchema),
+  isValidId,
+  ctrl.getByContactId
+);
+
+router.delete("/:id", authenticate, isValidId, ctrl.deleteByContactId);
+
+router.post("/", authenticate, ctrl.add);
+
+router.put(
+  "/:id",
+  authenticate,
+  isValidId,
+  validateBody(addSchema),
+  ctrl.updateByContactId
+);
+
+router.patch("/:id/favorite", authenticate, validateBody(updateFavoriteSchema));
 
 module.exports = router;
