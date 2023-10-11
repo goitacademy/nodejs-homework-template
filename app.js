@@ -1,10 +1,8 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-import multer from "multer";
-import path, { join } from "path";
-import fs from "fs/promises";
 import "dotenv/config";
+
 import contactsRouter from "./routes/api/contacts-router.js";
 import authRouter from "./routes/api/auth-router.js";
 
@@ -17,28 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-// multer
-const tempDir = path.resolve("temp");
-const avatarsDir = path.resolve("public", "avatars");
-const multerConfig = multer.diskStorage({
-  destination: tempDir,
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-export const upload = multer({ storage: multerConfig });
-
 app.use("/api/contacts", contactsRouter);
-
-app.patch("/users/avatars", upload.single("avatarURL"), async (req, res) => {
-  console.log("req.file :>> ", req.file); // del
-  const { path: tempUpload, originalname } = req.file;
-  const resultUpload = path.resolve(avatarsDir, originalname);
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("public", "avatars", originalname);
-  console.log("pathUser :>> ", avatarURL); // del
-  res.status(201).json({ message: `File have saved in ${avatarURL}` });
-});
 
 app.use("/users", authRouter);
 

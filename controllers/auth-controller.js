@@ -1,5 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import fs from "fs/promises";
+import path from "path";
 // import "dotenv/config";
 
 import { HttpError } from "../helpers/index.js";
@@ -7,6 +10,7 @@ import { UserDB } from "../models/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const { JWT_SECRET } = process.env;
+const avatarsDir = path.resolve("public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -17,8 +21,9 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await UserDB.create({ ...req.body, password: hashPassword });
+  const newUser = await UserDB.create({ ...req.body, password: hashPassword, avatarURL });
 
   res.status(201).json({
     user: {
@@ -89,10 +94,20 @@ const subscriptionChange = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { path: tempUpload, originalname } = req.file;
+  const resultUpload = path.resolve(avatarsDir, originalname);
+  await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join("avatars", originalname);
+    console.log("pathUser :>> ", avatarURL); // del
+    res.status(201).json({ message: `File have saved in ${avatarURL}` });
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   getCurrent: ctrlWrapper(getCurrent),
   subscriptionChange: ctrlWrapper(subscriptionChange),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
