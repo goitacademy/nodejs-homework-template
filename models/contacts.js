@@ -6,9 +6,13 @@ const colors = require("colors");
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  const contacts = JSON.parse(data);
-  return contacts;
+  try {
+    const data = await fs.readFile(contactsPath);
+    const contacts = JSON.parse(data);
+    return contacts;
+  } catch (err) {
+    return "error";
+  }
 };
 
 const getContactById = async (contactId) => {

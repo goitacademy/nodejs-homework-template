@@ -10,32 +10,55 @@ const {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
+  try {
+    const contacts = await listContacts();
 
-  res.status(200).send({ contacts: contacts });
+    res.status(200).send({ contacts: contacts });
+  } catch (err) {
+    return "error";
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const getContact = await getContactById(req.params.contactId);
-  res.status(200).send({ message: getContact });
+  try {
+    const getContact = await getContactById(req.params.contactId);
+    res.status(200).send({ message: getContact });
+  } catch (err) {
+    return "error";
+  }
 });
 
 router.post("/", async (req, res) => {
-  const newContact = { contact: req.body };
-  addContact(newContact);
-  res.status(201).send({ message: "ok " });
+  try {
+    const newContact = { contact: req.body };
+    addContact(newContact);
+    res.status(201).send({ message: "ok " });
+
+    const getContact = await getContactById(req.params.contactId);
+    res.status(200).send({ message: getContact });
+  } catch (err) {
+    return "error";
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  await removeContact(req.params.contactId);
-  res.status(200).send({ message: "sadas" });
+  try {
+    await removeContact(req.params.contactId);
+    res.status(200).send({ message: "sadas" });
+  } catch (err) {
+    return "error";
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  updateContact(req.params.contactId, req.body);
+  try {
+    updateContact(req.params.contactId, req.body);
 
-  console.log(updateContact);
-  res.status(203).send({ message: "sadas" });
+    console.log(updateContact);
+    res.status(203).send({ message: "sadas" });
+  } catch (err) {
+    return "error";
+  }
 });
 
 module.exports = router;
