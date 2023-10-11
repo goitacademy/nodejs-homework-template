@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import gravatar from "gravatar";
+import Jimp from "jimp";
 import fs from "fs/promises";
 import path from "path";
 // import "dotenv/config";
@@ -96,12 +97,22 @@ const subscriptionChange = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const resultUpload = path.resolve(avatarsDir, originalname);
-  await fs.rename(tempUpload, resultUpload);
 
-  const avatarURL = path.join("avatars", originalname);
-  const result = await UserDB.findByIdAndUpdate(_id, { avatarURL });
+  const { path: tempUpload, originalname, destination } = req.file;
+  const fileName = `${_id}_${originalname}`;
+  const resultUpload = path.resolve(avatarsDir, fileName);
+
+  const jimpWrite = path.join(destination, fileName);
+  console.log("jimpWrite :>> ", jimpWrite);
+  await Jimp.read(tempUpload, (err, img) => {
+    if (err) throw err;
+    img.resize(250, 250).write(resultUpload);
+  });
+
+  // await fs.rename(tempUpload, resultUpload);
+
+  const avatarURL = path.join("avatars", fileName);
+  await UserDB.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(200).json({ avatarURL });
 };
