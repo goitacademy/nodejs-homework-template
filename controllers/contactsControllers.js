@@ -3,7 +3,7 @@ const contacts = require("../models/contacts");
 const HttpError = require("../helpers/HttpError");
 console.log(HttpError);
 
-const ctrlWrapper = require("../decorators /ctrl.Wrapper");
+const ctrlWrapper = require("../decorators/ctrl.Wrapper");
 
 const contactAddSchema = require("../schemas/contacts");
 

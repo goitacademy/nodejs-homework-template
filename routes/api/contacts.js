@@ -4,7 +4,7 @@ const router = express.Router();
 
 const isEmptyBody = require("../../middlewares/isEmptyBody");
 
-const validateBody = require("../../decorators /validateBody");
+const validateBody = require("../../decorators/validateBody");
 
 const contactAddSchema = require("../../schemas/contacts");
 
