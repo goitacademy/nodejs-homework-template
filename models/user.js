@@ -39,6 +39,7 @@ const userSchema = new Schema(
       required: [true, "Subscription is required"],
       default: "starter",
     },
+    avatarURL: String,
     token: {
       type: String,
       default: null,
