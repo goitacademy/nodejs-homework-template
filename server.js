@@ -3,6 +3,7 @@ const app = require('./app')
 //  hw3------
 const mongoose = require('mongoose');
 const DB_HOST = "mongodb+srv://Kseniya:Mo25101981@cluster0.jihsow2.mongodb.net/db-contacts?retryWrites=true&w=majority";
+                 
 
 // mongoose.set("strictQuery", trye);
 
