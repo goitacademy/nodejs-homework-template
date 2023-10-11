@@ -3,10 +3,17 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {  
   const {_id: owner} = req.user;  
-  const {page = 1, limit = 10} = req.query;
+  const {page = 1, limit = 20} = req.query;   
   const skip = (page-1)*limit;
-  const result = await Contact.find({owner}, "", {skip, limit}).populate("owner", "name email");
-  // const result = await Contact.find({owner}, "-createdAt -updatedAt", {skip, limit}).populate("owner", "name email");  
+  const favorite = req.query.favorite
+  const filter = {owner};
+
+  if(favorite !== undefined){
+    filter.favorite = favorite;
+  }
+
+  const result = await Contact.find(filter, "", {skip, limit, filter}).populate("owner", "name email");
+  // const result = await Contact.find(filter, "-createdAt -updatedAt", {skip, limit}).populate("owner", "name email");  
   res.json(result);
 };
 
