@@ -28,12 +28,7 @@ const post = async (req, res) => {
 const updateById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contactService.updateContactById(contactId, req.body);
-  console.log(
-    "🚀 ~ file: contacts-controller.js:31 ~ updateById ~ result:",
-    result
-  );
   if (!result) {
-    res.status(400);
     throw HttpError(404, `The contact with ${contactId} is not found.`);
   }
   res.json(result);
