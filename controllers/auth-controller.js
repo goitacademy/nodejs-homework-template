@@ -95,12 +95,15 @@ const subscriptionChange = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const resultUpload = path.resolve(avatarsDir, originalname);
   await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join("avatars", originalname);
-    console.log("pathUser :>> ", avatarURL); // del
-    res.status(201).json({ message: `File have saved in ${avatarURL}` });
+
+  const avatarURL = path.join("avatars", originalname);
+  const result = await UserDB.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(200).json({ avatarURL });
 };
 
 export default {
