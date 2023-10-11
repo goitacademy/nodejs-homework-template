@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
   // Додайте інші поля контакту
-  email: String, 
-  password: String, 
+   name: String, 
+   phone: String, 
+   email: String, 
 
   owner: {
     type: mongoose.Schema.Types.ObjectId,
