@@ -33,8 +33,10 @@ router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
     const result = await contactService.getById(id);
     if (!result) {
+      res.status(404);
       throw HttpError(404, `Not found with id: ${id}`);
     }
+
     res.json(result);
   } catch (error) {
     next(error);
@@ -49,6 +51,7 @@ router.post("/", async (req, res, next) => {
 
     const { error } = contactSchema.validate(req.body);
     if (error) {
+      res.status(400);
       throw HttpError(400, error.message);
     }
     const result = await contactService.addContact(req.body);
@@ -72,6 +75,7 @@ router.put("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactService.updateContactById(contactId, req.body);
     if (!result) {
+      res.status(400);
       throw HttpError(404, `The contact with ${contactId} is not found.`);
     }
     res.json(result);
@@ -85,7 +89,8 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactService.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, `The contact with ${contactId} is not found.`);
+      res.status(404);
+      throw HttpError(404, `The contact with id ${contactId} is not found.`);
     }
 
     res.json({
