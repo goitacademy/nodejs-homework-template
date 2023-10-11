@@ -4,16 +4,19 @@ const mongoose = require('mongoose');
 
 const contactSchema = new mongoose.Schema({
   // Додайте інші поля контакту
+  name: String, 
+  phone: String, 
+
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'User', // Посилання на колекцію користувачів
   },
 });
 
-// Оголошена змінна Contact
 const Contact = mongoose.model('Contact', contactSchema);
 
 module.exports = Contact;
+
 
 
 
