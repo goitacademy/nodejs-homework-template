@@ -9,13 +9,13 @@ const router = express.Router();
 const contactSchema = Joi.object({
   id: Joi.any(),
   name: Joi.string().required().messages({
-    "any.required": `"title" is a required field`,
+    "any.required": `missing required field "title"`,
   }),
   email: Joi.string().required().messages({
-    "any.required": `"email" is a required field`,
+    "any.required": `missing required field "email"`,
   }),
   phone: Joi.number().required().messages({
-    "any.required": `"phone" is a required field`,
+    "any.required": `missing required field "phone"`,
   }),
 });
 
@@ -31,9 +31,9 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contactService.getContactById(id);
+    const result = await contactService.getById(id);
     if (!result) {
-      throw HttpError(404, `The contact with ${id} is not found.`);
+      throw HttpError(404, `Not found with id: ${id}`);
     }
     res.json(result);
   } catch (error) {
