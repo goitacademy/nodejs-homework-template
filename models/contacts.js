@@ -4,12 +4,12 @@ import { nanoid } from "nanoid";
 
 const contactPath = path.resolve("models", "contacts.json");
 
-export const updateContacts = async (contacts) => {
-  return await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
-};
-
 export const listContacts = async () => {
   return JSON.parse(await fs.readFile(contactPath));
+};
+
+export const updateContacts = async (contacts) => {
+  return await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
 };
 
 export const getContactById = async (contactId) => {
@@ -24,9 +24,9 @@ export const removeContact = async (contactId) => {
   if (index === -1) {
     return null;
   }
-  const [res] = contacts.splice(index, 1);
+  const [result] = contacts.splice(index, 1);
   await updateContacts(contacts);
-  return res;
+  return result;
 };
 
 export const addContact = async (body) => {
