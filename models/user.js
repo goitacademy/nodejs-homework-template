@@ -10,46 +10,55 @@ const userSchema = new Schema({
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
-    default: "starter",
+    default: "starter"
   },
-  password: {
-    type: String,
-    minlength: 6,
-    required: [true, "Set password for user"],
-  },
-  email: {
-    type: String,
-    match: emailValid,
-    required: [true, "Email is required"],
-    unique: true,
-  },
-  token: {
-    type: String,
-    default: "",
-  },
+    password: {
+        type: String,
+        minlength:6,
+        required: [true, 'Set password for user'],
+      },
+      email: {
+        type: String,
+        match:emailValid,
+        required: [true, 'Email is required'],
+        unique: true,
+      },
+      token:{
+        type:String,
+        default:""
+      },
+      avatarURL:{
+        type:String,
+        required:true,
+      }
+  
+
+
 });
 
-userSchema.post("save", HandleMongooseError);
+userSchema.post("save", HandleMongooseError) ;
 
 const registerShema = Joi.object({
-  subscription: Joi.string().required(),
-  email: Joi.string().pattern(emailValid).required(),
-  password: Joi.string().min(6).required(),
-});
+  subscription:Joi.string().required(),
+    email:Joi.string().pattern(emailValid).required(),
+    password:Joi.string().min(6).required(),
+})
 
 const loginShema = Joi.object({
-  email: Joi.string().pattern(emailValid).required(),
-  password: Joi.string().min(6).required(),
-});
+    
+    email:Joi.string().pattern(emailValid).required(),
+    password:Joi.string().min(6).required(),
+})
 
 const schemas = {
-  registerShema,
-  loginShema,
-};
+    registerShema,
+    loginShema,
+}
 
 const User = model("user", userSchema);
 
 module.exports = {
-  User,
-  schemas,
-};
+    User,
+    schemas,
+
+}
