@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { validateBody } = require("../../middlewares");
 const ctrl = require("../../controllers/contacts.js");
-const { addSchema, updateFavoriteSchema } = require("../../models/contact"); // Правильний імпорт
+const { addSchema } = require("../../models/contact"); // Правильний імпорт
 const { isValidId } = require("../../middlewares/isValidID");
 const authenticate = require("../../middlewares/authenticate");
 
@@ -28,6 +28,6 @@ router.put(
   ctrl.updateByContactId
 );
 
-router.patch("/:id/favorite", authenticate, validateBody(updateFavoriteSchema));
+router.patch("/:id/favorite", authenticate);
 
 module.exports = router;
