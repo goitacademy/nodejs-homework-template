@@ -1,10 +1,3 @@
-// const {
-//   listContactsService,
-//   getByIdService,
-//   addContactService,
-//   // updateContactService,
-//   // removeContactService,
-// } = require("../services/contactServices");
 const { Contact } = require("../db/contacts-schema");
 const { HttpError } = require("../helpers/HttpError");
 
@@ -17,7 +10,6 @@ const getOneContact = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    // const contact = await Contact.findOne({ _id: id }); лучше не для поиска по id
     const contact = await Contact.findById(id);
     res.json(contact);
   } catch (error) {
