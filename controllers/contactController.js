@@ -4,13 +4,13 @@ import HttpError from "../helpers/HttpError.js";
 import Contact from "../models/Contact.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({});
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.getContactById(id);
+  const result = await Contact.findById(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -27,7 +27,16 @@ const addContactController = async (req, res) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const result = await contactsService.updateContact(id, body);
+  const result = await Contact.findByIdAndUpdate(id, req.body);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
+const updateFavorite = async (req, res) => {
+  const { id } = req.params;
+  const { body } = req;
+  const result = await Contact.findByIdAndUpdate(id, body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -36,7 +45,7 @@ const updateContact = async (req, res) => {
 
 const removeContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contactsService.removeContact(id);
+  const result = await Contact.findByIdAndRemove(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -50,5 +59,6 @@ export default {
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContactController),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
   removeContact: ctrlWrapper(removeContact),
 };
