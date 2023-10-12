@@ -3,9 +3,7 @@ import app from "./app.js"
 import "dotenv/config"
 
 const { DB_HOST } = process.env;
-// A4ccbeXSwJYEyZW8
 
-// const DB_HOST = "mongodb+srv://swefart:A4ccbeXSwJYEyZW8@cluster0.y0bzndm.mongodb.net/db-contacts?retryWrites=true&w=majority"
 
 mongoose.connect(DB_HOST).then(() => {
   app.listen(3000, () => {
