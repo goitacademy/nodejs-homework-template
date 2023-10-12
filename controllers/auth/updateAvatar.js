@@ -1,12 +1,12 @@
 const { User } = require("../../models");
-const { ctrlWrapper } = require("../../helpers");
+const { ctrlWrapper, HttpError } = require("../../helpers");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
 
 const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
@@ -19,9 +19,7 @@ const updateAvatar = async (req, res) => {
       console.log("first");
       return image.resize(Jimp.AUTO, 250).write(resultUpload);
     })
-    .catch((err) => {
-      // Handle an exception.
-    });
+    .catch(next(HttpError(500, { message: "Server error" })));
 
   const avatarURL = path.join("avatars", filename);
 

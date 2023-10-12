@@ -7,6 +7,7 @@ const validateBody = (shema, message) => {
     if (error) {
       next(HttpError(400, { message }));
     }
+
     next();
   };
 
