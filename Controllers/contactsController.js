@@ -5,7 +5,6 @@ const {
   updateContact,
   removeContact,
 } = require("../models/contacts");
-const Joi = require("joi");
 
 const createContactSchema = require("../path-to-createContactSchema");
 const updateContactSchema = require("../path-to-updateContactSchema");
