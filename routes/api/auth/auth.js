@@ -2,7 +2,7 @@ const express = require("express");
 
 const { ctrlAuth } = require("../../../controllers");
 
-const { validateBody, authenticate } = require("../../../middleware");
+const { validateBody, authenticate, upload } = require("../../../middleware");
 
 const { userJoiSchemas } = require("../../../models");
 
@@ -29,6 +29,13 @@ authRouter.patch(
   authenticate,
   validateBody(userJoiSchemas.updateSubscriptionSchema),
   ctrlAuth.updateSubscription
+);
+
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  ctrlAuth.updateAvatar
 );
 
 module.exports = authRouter;
