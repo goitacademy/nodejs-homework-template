@@ -1,25 +1,25 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const isEmptyBody = require("../../middlewares")
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsController = require("../../controllers/contacts-controller")
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const decorators = require("../../decorators")
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactAddSchema = require("../../schemas/contact-schemas")
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactAddValidate = decorators.validateBody(contactAddSchema);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-module.exports = router
+router.get("/", contactsController.getAll);
+
+router.get("/:contactId", contactsController.getById);
+
+router.post("/", isEmptyBody, contactAddValidate, contactsController.add);
+
+router.delete("/:contactId",  contactsController.deleteById);
+
+router.put("/:contactId", isEmptyBody, contactAddValidate, contactsController.updateById);
+
+module.exports = router;
