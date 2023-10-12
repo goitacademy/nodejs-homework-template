@@ -17,7 +17,7 @@ router.post("/", isEmptyBody, contactAddValidate, contactControllers.add);
 router.delete("/:contactId", contactControllers.removeById);
 
 router.put(
-  "/:contactId",
+  "/:id",
   isEmptyBody,
   contactAddValidate,
   contactControllers.updateById
