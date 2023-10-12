@@ -1,10 +1,13 @@
 const app = require('./app')
 
 //  hw3------
+// IlsjX23NFfPSDFuu
 const mongoose = require('mongoose');
-const DB_HOST = "mongodb+srv://Kseniya:Mo25101981@cluster0.jihsow2.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const DB_HOST = 'mongodb+srv://Oksanka:IlsjX23NFfPSDFuu@cluster0.xedr9b8.mongodb.net/contacts-reader?retryWrites=true&w=majority';
 
 // mongoose.set("strictQuery", true);
+// contacts-reader
+
 
 mongoose.connect(DB_HOST)
 .then(() => {
