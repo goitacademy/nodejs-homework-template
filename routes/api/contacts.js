@@ -2,29 +2,39 @@ const express = require("express");
 const contactsControllers = require("../../controllers/contacts-controllers.js");
 const isEmptyBody = require("../../middlewares/isEmptyBody.js");
 const validateBody = require("../../decorators/validateBody.js");
-const validateUpdateBody = require("../../decorators/validateUpdateBody.js");
-const schemaValidate = require("../../schemas/contact-schema.js");
+const {
+  contactAddSchema,
+  contactUpdateFavoriteSchema,
+} = require("../../models/Contact.js");
+const isValidId = require("../../middlewares/isValidId.js");
 
-const contactAddValidate = validateBody(schemaValidate.contactAddSchema);
-const contactUpdateValidate = validateUpdateBody(
-  schemaValidate.contactUpdateSchema
-);
+const contactAddValidate = validateBody(contactAddSchema);
+const contactUpdateValidate = validateBody(contactUpdateFavoriteSchema);
 
 const router = express.Router();
 
 router.get("/", contactsControllers.getAll);
 
-router.get("/:contactId", contactsControllers.getById);
+router.get("/:contactId", isValidId, contactsControllers.getById);
 
-router.delete("/:contactId", contactsControllers.deleteById);
+router.delete("/:contactId", isValidId, contactsControllers.deleteById);
 
 router.post("/", isEmptyBody, contactAddValidate, contactsControllers.add);
 
 router.put(
   "/:contactId",
+  isValidId,
+  isEmptyBody,
+  contactAddValidate,
+  contactsControllers.updateById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
   isEmptyBody,
   contactUpdateValidate,
-  contactsControllers.updateById
+  contactsControllers.updateStatusContact
 );
 
 module.exports = router;
