@@ -112,7 +112,7 @@ router.put("/:contactId", async (req, res, next) => {
     if (!body) {
       throw HttpError(400, "missing required name field");
     }
-    const check =  await Contact.findById(contactId);
+    const check = await Contact.findById(contactId);
     if (!check) {
       throw HttpError(404, "Not Found!");
     }
