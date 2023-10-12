@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const loginCtrl = require("../controller/login");
 const signupCtrl = require("../controller/signup");
+const verifyUser = require('../controller/verifyUser');
 const meCtrl = require("../controller/me");
 const { auth, upload, ctlWrapper } = require('../middleware');
 const updateAvatarCtrl = require('../controller/updateAvatar');
@@ -34,11 +35,11 @@ router.post("/users/signup", signupCtrl);
 
 router.post("/users/login", loginCtrl);
 
+router.post("/users/verify", verifyUser);
+
 router.get("/users/current", validToken, auth, meCtrl);
 
 router.patch("/users/avatars",validToken, auth, upload.single("avatar"), ctlWrapper(updateAvatarCtrl));
-
-
 
 router.post("/users/logout", validToken, auth, (req, res, next) => {
   const authHeader = req.headers.authorization;

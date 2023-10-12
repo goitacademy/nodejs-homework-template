@@ -1,11 +1,14 @@
-const jwt = require('jsonwebtoken');
-const passport = require('passport'); 
+// const jwt = require('jsonwebtoken');
+// const passport = require('passport'); 
 const User = require("../service/schema/user");
 const {getUserByEmail} = require("../service/user");
 require('dotenv').config();
-const {Conflict} = require('http-errors');
+// const {Conflict} = require('http-errors');
 const gravatar = require('gravatar');
 // const secret = process.env.SECRET;
+const emailService = require('../service/emailService');
+const { nanoid } = require('nanoid');
+
 
 const signupCtrl = async (req, res, next) => {
     const { username, email, password, subscription, token } = req.body;
@@ -20,11 +23,16 @@ const signupCtrl = async (req, res, next) => {
       });
     }
     try {
+      const verificationToken = nanoid();
+
       const avatarURL = gravatar.url(email);
-      const newUser = new User({ username, email, subscription, token, avatarURL });
+      const newUser = new User({ username, email, subscription, token, avatarURL, verificationToken });
       newUser.setPassword(password);
+      newUser.verify = false;
       await newUser.save();
-      res.status(201).json({
+
+      emailService.sendMail(verificationToken, email);
+      res.status(200).json({
         status: "Success",
         code: 201,
         data: {
