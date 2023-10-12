@@ -23,20 +23,41 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  const contacts = await getAll();
-  const result = contacts.find((item) => item.id === contactId);
-  return result || null;
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((contact) => contact.id === contactId);
+
+  if (index === -1) {
+    return null;
+  }
+
+  return allContacts[index];
 };
 
+// const removeContact = async (contactId) => {
+//   const contacts = await getAll();
+//   const index = contacts.findIndex((item) => item.id === contactId);
+//   if (index >= 0) {
+//     const [deletedContact] = contacts.splice(index, 1);
+//     await updateContactInfo(contacts);
+//     return deletedContact;
+//   }
+//   return null;
+// };
+
 const removeContact = async (contactId) => {
-  const contacts = await getAll();
-  const index = contacts.findIndex((item) => item.id === contactId);
-  if (index >= 0) {
-    const [deletedContact] = contacts.splice(index, 1);
-    await updateContactInfo(contacts);
-    return deletedContact;
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((contact) => contact.id === contactId);
+
+  if (index === -1) {
+    console.log("Contact not found");
+    return null;
   }
-  return null;
+
+  const removeContact = allContacts.splice(index, 1);
+
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+
+  return removeContact;
 };
 
 const addContact = async (name, email, phone) => {

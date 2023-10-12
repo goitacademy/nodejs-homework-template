@@ -6,11 +6,16 @@ const messageList = {
   409: "Conflict",
 };
 
-const HttpError = (status, message = messageList[status]) => {
-  const error = new Error(message);
-  console.log(error);
-  error.status = status;
-  return error;
-};
+// const HttpError = (status, message = messageList[status]) => {
+//   const error = new Error(message);
+//   error.status = status;
+//   return error;
+// };
 
-module.exports = HttpError;
+class HttpError {
+  constructor(status, message = messageList[status]) {
+    this.status = status;
+    this.message = message;
+  }
+}
+module.exports = { HttpError };
