@@ -8,6 +8,10 @@ const {
 
 const createContactSchema = require("../path-to-createContactSchema");
 const updateContactSchema = require("../path-to-updateContactSchema");
+const {
+  createContactSchema,
+  updateContactSchema,
+} = require("../contactSchemas");
 
 const getContacts = async (req, res, next) => {
   try {
