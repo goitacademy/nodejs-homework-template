@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import { handleSaveError } from "./hooks.js";
+import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 
 const emailRegExp = /^.+@.+\..+$/;
 

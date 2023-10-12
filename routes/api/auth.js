@@ -3,9 +3,12 @@ import authController from "../../controllers/auth.js";
 import { validateBody, authenticate } from "../../middlewares/index.js";
 import { isEmptyBody } from "../../middlewares/index.js";
 import { registerSchema, loginSchema, updateSubscriptionSchema } from "../../models/user.js";
-// import userSchemas from "../../models/user.js";
+import userSchemas from "../../models/user.js";
 
 const registerValidate = validateBody(registerSchema);
+const loginValidate = validateBody(loginSchema);
+
+
 
 const authRouter = express.Router();
 
@@ -13,7 +16,7 @@ const authRouter = express.Router();
 authRouter.post("/register", isEmptyBody, registerValidate, authController.register);
 
 // Sign In
-authRouter.post("/login", validateBody(userSchemas.schemas.loginSchema), authController.login);
+authRouter.post("/login", isEmptyBody, loginValidate, authController.login);
 
 // Get current user
 authRouter.get("/current", authenticate, authController.getCurrent);
@@ -26,7 +29,7 @@ authRouter.patch(
   "/subscription",
   authenticate,
   validateBody(userSchemas.schemas.updateSubscriptionSchema),
-  ctrl.updateSubscription
+  authController.updateSubscription
 );
 
 export default authRouter;

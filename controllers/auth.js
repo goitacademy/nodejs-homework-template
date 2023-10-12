@@ -1,10 +1,11 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import User from '../models/user.js';
 
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
-const { SECRET_KEY } = process.env;
+const { JWT_SECRET } = process.env;
 
 
 const register = async (req, res) => {
@@ -19,9 +20,7 @@ const register = async (req, res) => {
 
   const newUser = await User.User.create({ ...req.body, password: hashPassword });
 
-  res.status(201).json({
-    email: newUser.email,    
-  });
+  res.status(201).json({ user: { email: newUser.email, subscription: newUser.subscription }  });
 };
 
 
@@ -31,20 +30,20 @@ const login = async (req, res) => {
   const user = await User.User.findOne({ email });
 
   if (!user) {
-    throw HttpError(401, "Invalid email or password");
+    throw HttpError(401, "Email or password is wrong");
   }
 
-  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
 
-  if (!isPasswordCorrect) {
-    throw HttpError(401, "Invalid email or password");
+  if (!passwordCompare) {
+    throw HttpError(401, "Email or password is wrong");
   }
 
   const payload = {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
   await User.User.findByIdAndUpdate(user._id, { token });
 
