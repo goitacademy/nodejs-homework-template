@@ -9,25 +9,26 @@ const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
-
-  const user = await User.findOne({ email });
-
+   const user = await User.User.findOne({ email });
+ 
   if (user) {
     throw HttpError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.User.create({ ...req.body, password: hashPassword });
 
-  res.status(201).json({ email: newUser.email, name: newUser.name });
+  res.status(201).json({
+    email: newUser.email,    
+  });
 };
 
 
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.User.findOne({ email });
 
   if (!user) {
     throw HttpError(401, "Invalid email or password");
@@ -45,7 +46,7 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
-  await User.findByIdAndUpdate(user._id, { token });
+  await User.User.findByIdAndUpdate(user._id, { token });
 
   res.status(200).json({
     token,

@@ -6,20 +6,16 @@ const emailRegExp = /^.+@.+\..+$/;
 
 const userSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      match: emailRegExp,
-      unique: true,
-      required: [true, "Email is required"],
-    },
     password: {
       type: String,
       minlength: 8,
       required: [true, "Set password for user"],
+    },
+    email: {
+      type: String,
+      match: emailRegExp,      
+      required: [true, "Email is required"],
+      unique: true,
     },
     subscription: {
       type: String,
@@ -30,25 +26,29 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
-  },
-  { versionKey: false },
-  { timestamps: true }
+  }, { versionKey: false },{ timestamps: true }
 );
 
 userSchema.post("save", handleSaveError);
 
-const registerSchema = Joi.object({
-  name: Joi.string().required(),
+userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+
+userSchema.post("findOneAndUpdate", handleSaveError);
+
+
+
+export const registerSchema = Joi.object({ 
+  email: Joi.string().pattern(emailRegExp).required(),
+  password: Joi.string().min(8).required(),
+  subscription: Joi.string(),
+});
+
+export const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegExp).required(),
   password: Joi.string().min(8).required(),
 });
 
-const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegExp).required(),
-  password: Joi.string().min(8).required(),
-});
-
-const updateSubscriptionSchema = Joi.object({
+export const updateSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
@@ -63,6 +63,6 @@ const User = model("user", userSchema);
 
 export default {
    User,
-   schemas,
+   schemas
 
 };

@@ -1,32 +1,32 @@
 import express from "express";
-import ctrl from "../../controllers/auth.js";
+import authController from "../../controllers/auth.js";
 import { validateBody, authenticate } from "../../middlewares/index.js";
-import userSchemas from "../../models/user.js";
+import { isEmptyBody } from "../../middlewares/index.js";
+import { registerSchema, loginSchema, updateSubscriptionSchema } from "../../models/user.js";
+// import userSchemas from "../../models/user.js";
 
-const router = express.Router();
+const registerValidate = validateBody(registerSchema);
+
+const authRouter = express.Router();
 
 // Sign Up
-router.post(
-  "/register",
-  validateBody(userSchemas.registerSchema),
-  ctrl.register
-);
+authRouter.post("/register", isEmptyBody, registerValidate, authController.register);
 
 // Sign In
-router.post("/login", validateBody(userSchemas.loginSchema), ctrl.login);
+authRouter.post("/login", validateBody(userSchemas.schemas.loginSchema), authController.login);
 
 // Get current user
-router.get("/current", authenticate, ctrl.getCurrent);
+authRouter.get("/current", authenticate, authController.getCurrent);
 
 // Logout
-router.post("/logout", authenticate, ctrl.logout);
+authRouter.post("/logout", authenticate, authController.logout);
 
 // Update subscription
-router.patch(
+authRouter.patch(
   "/subscription",
   authenticate,
-  validateBody(userSchemas.updateSubscriptionSchema),
+  validateBody(userSchemas.schemas.updateSubscriptionSchema),
   ctrl.updateSubscription
 );
 
-export default router;
+export default authRouter;

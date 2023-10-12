@@ -2,9 +2,9 @@ import express from "express";
 
 import contactController from "../../controllers/contacts.js";
 
-import { isEmptyBody, isValidId } from "../../middlewares/indeх.js";
+import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 
-import { validateBody } from "../../middlewares/indeх.js";
+import { validateBody } from "../../middlewares/index.js";
 
 import { contactAddSchema, contactUpdateFavoriteSchema } from "../../models/contact.js";
 
