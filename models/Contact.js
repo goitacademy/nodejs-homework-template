@@ -1,4 +1,25 @@
+import { Schema, model } from "mongoose";
+import { handleServerError } from "./hooks.js";
 import Joi from "joi";
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { veresionKey: false, timestamps: true }
+);
 
 export const contactsAddSchema = Joi.object({
   name: Joi.string()
@@ -20,3 +41,9 @@ export const contactsAddSchema = Joi.object({
       "Phone number must be must be in the format (XXX) XXX-XXXX",
   }),
 });
+
+contactSchema.post("save", handleServerError);
+
+const Contact = model("contact", contactSchema);
+
+export default Contact;

@@ -2,7 +2,7 @@ import express from "express";
 import contactController from "../../controllers/contactController.js";
 import { isEmptyBody } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
-import { contactsAddSchema } from "./../../schemas/contacts-schemas.js";
+import { contactsAddSchema } from "../../models/Contact.js";
 
 const contactAddValidate = validateBody(contactsAddSchema);
 
@@ -15,7 +15,7 @@ contactsRouter.get("/:id", contactController.getContactById);
 contactsRouter.post(
   "/",
   isEmptyBody,
-  contactAddValidate,
+
   contactController.addContact
 );
 

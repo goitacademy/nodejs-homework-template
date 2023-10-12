@@ -1,7 +1,7 @@
 import * as contactsService from "../models/contacts.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
-import Contact from "../models/db.js";
+import Contact from "../models/Contact.js";
 
 const getAllContacts = async (req, res) => {
   const result = await Contact.find();
@@ -19,7 +19,8 @@ const getContactById = async (req, res) => {
 
 const addContactController = async (req, res) => {
   const { body } = req;
-  const result = await contactsService.addContact(body);
+  // const result = await contactsService.addContact(body);
+  const result = await Contact.create(body);
   res.status(201).json(result);
 };
 
