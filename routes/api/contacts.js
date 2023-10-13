@@ -131,7 +131,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-// Додайте маршрут PATCH /api/contacts/:contactId/favorite
+// маршрут PATCH /api/contacts/:contactId/favorite
 router.patch("/:contactId/favorite", async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
