@@ -13,6 +13,7 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().regex(phonePattern).required(),
+  favorit: Joi.boolean().optional()
 });
 
 
@@ -25,18 +26,18 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// router.get('/:contactId', async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const result = await contacts.getContactById(contactId);
-//     if (!result) {
-//       throw HttpError(404, 'Not found');
-//     }
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.get('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findById(contactId);
+    if (!result) {
+      throw HttpError(404, 'Not found');
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 
 router.post('/', async (req, res, next) => {
@@ -65,41 +66,41 @@ router.post('/', async (req, res, next) => {
 });
 
 
-// router.delete('/:contactId', async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const result = await contacts.removeContact(contactId);
-//     if (!result) {
-//       throw HttpError(404, 'Not found');
-//     }
-//     res.json({ message: 'contact deleted' });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+router.delete('/:contactId', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndRemove(contactId);
+    if (!result) {
+      throw HttpError(404, 'Not found');
+    }
+    res.json({ message: 'contact deleted' });
+  } catch (error) {
+    next(error);
+  }
+});
 
-// router.put('/:contactId', async (req, res, next) => {
-//   try {
-//     if (Object.keys(req.body).length === 0) {
-//       throw HttpError(400, 'missing fields');
-//     }
+router.put('/:contactId', async (req, res, next) => {
+  try {
+    if (Object.keys(req.body).length === 0) {
+      throw HttpError(400, 'missing fields');
+    }
 
-//     const { error } = addSchema.validate(req.body);
-//     if (error) {
-//       throw HttpError(400, `Missing required ${error.details[0].path[0]} field`);
-//     }
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, `Missing required ${error.details[0].path[0]} field`);
+    }
 
-//     const { contactId } = req.params;
-//     const result = await contacts.updateContact(contactId, req.body);
-//     if (!result) {
-//       throw HttpError(404, 'Not found');
-//     }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+    if (!result) {
+      throw HttpError(404, 'Not found');
+    }
 
-//     res.json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// });
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 
 module.exports = router;
