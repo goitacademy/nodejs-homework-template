@@ -4,12 +4,18 @@ const add = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const update = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-}).or('name', 'email', 'phone');
+  favorite: Joi.boolean(),
+}).or('name', 'email', 'phone', 'favorite');
 
-module.exports = { add, update };
+const updateFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = { add, update, updateFavorite };
