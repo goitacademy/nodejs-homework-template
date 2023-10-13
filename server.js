@@ -9,7 +9,7 @@ const app = require('./app')
 // bR5ojK7bFN88iDUW
 const mongoose = require("mongoose");
 
-const DB_HOST = "mongodb+srv://Oksana:bR5ojK7bFN88iDUW@cluster0.oglybn2.mongodb.net/contacts-reader?retryWrites=true&w=majority";
+const {DB_HOST} = require('./config');
 
 mongoose.set('strictQuery', true);
 
@@ -23,7 +23,7 @@ mongoose.connect(DB_HOST)
 .catch(error => {
   console.log(error.message)
   process.exit(1);
-});
+})
 
 
 
