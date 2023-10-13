@@ -17,15 +17,14 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/contacts", contactsRouter);
 
-//  Error handling
-app.use((req, res, next) => {
-  res.status(404).json({ message: "Not found" });
-  next();
-});
-
 app.use((err, req, res, next) => {
+  console.error(err);
   const { status = 500, message = "Server Error" } = err;
   res.status(status).json({ message });
 });
 
+app.use((req, res, next) => {
+  res.status(404).json({ message: "Not found" });
+  next();
+});
 module.exports = app;

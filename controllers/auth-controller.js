@@ -7,6 +7,8 @@ const { User } = require("../models/User");
 
 const ctrlWrapper = require("../decorators/ctrlWrapper");
 
+const { JWT_SECRET } = process.env;
+
 const signup = async (req, res) => {
   const { email, password } = req.body;
 
@@ -35,7 +37,12 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  const token = "sdfff.33344.4434";
+  const payload = {
+    id: user._id,
+  };
+
+  console.log("JWT_SECRET:", process.env.JWT_SECRET);
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   res.json({ token });
 };
 
