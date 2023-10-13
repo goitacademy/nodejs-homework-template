@@ -1,6 +1,6 @@
 const contactsModel = require('../../models/contacts')
 const { handleReqError } = require('../../helpers')
-const { bodySchema } = require('../../routes/api/validation')
+const { bodySchema } = require('../../models/validation/valid-contacts')
 
 /**
  * POST /api/contacts

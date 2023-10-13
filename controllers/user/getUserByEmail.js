@@ -11,7 +11,7 @@ const userModels = require('../../models/users')
  * Якщо користувача не знайдено або пароль невірний, повертає помилку 401 з відповідним повідомленням.
  */
 const getUserByEmail = async (req, res, next) => {
-    const { email, password } = req.body
+    const { email, password } = req.user /* req.user */
 
     const validDataUser = userSchema.validate({ email, password })
     handleUserRouter(res, validDataUser)

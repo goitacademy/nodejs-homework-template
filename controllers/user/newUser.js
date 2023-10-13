@@ -1,4 +1,4 @@
-const { userSchema } = require('../../routes/api/validation-user')
+const { userSchema } = require('../../models/validation/valid-user')
 const { handleUserRouter } = require('../../helpers')
 const { createUser } = require('../../models/users')
 

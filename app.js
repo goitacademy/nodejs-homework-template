@@ -1,9 +1,10 @@
 const express = require("express")
 const logger = require("morgan")
 const cors = require("cors")
+// const passport = require('passport')
 
 const contactsRouter = require("./routes/api/contacts")
-const userRouter = require('./routes/api/users')
+const authRouter = require('./routes/api/auth')
 
 const app = express()
 
@@ -21,14 +22,15 @@ app.use(
 
 app.use(express.json())
 
+// app.use(passport.initialize())
+
 // app.use((req, res, next) => {
 //   console.log(req)
 //   next()
 // })
 
 app.use('/api/contacts', contactsRouter)
-app.use('/users/register', userRouter)
-app.use('/users/login', userRouter)
+app.use('/api/auth', authRouter)
 
 
 app.use((req, res) => {
