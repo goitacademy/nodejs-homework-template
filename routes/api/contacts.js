@@ -16,7 +16,12 @@ contactsRouter.get("/", contactController.getAllContacts);
 
 contactsRouter.get("/:id", isValidId, contactController.getContactById);
 
-contactsRouter.post("/", isEmptyBody, contactController.addContact);
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  contactAddValidate,
+  contactController.addContact
+);
 
 contactsRouter.delete("/:id", isValidId, contactController.removeContact);
 
@@ -30,7 +35,6 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,
-  isEmptyBody,
   contactUpdateFavorite,
   contactController.updateFavorite
 );

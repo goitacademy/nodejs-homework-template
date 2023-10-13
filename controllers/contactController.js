@@ -1,10 +1,9 @@
-import * as contactsService from "../models/contacts.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import Contact from "../models/Contact.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find({});
+  const result = await Contact.find();
   res.json(result);
 };
 
@@ -26,7 +25,7 @@ const addContactController = async (req, res) => {
 const updateContact = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const result = await Contact.findByIdAndUpdate(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -35,7 +34,7 @@ const updateContact = async (req, res) => {
 const updateFavorite = async (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const result = await Contact.findByIdAndUpdate(id, body);
+  const result = await Contact.findByIdAndUpdate(id, body, { new: true });
   if (!result) {
     throw HttpError(404, "Not found");
   }
