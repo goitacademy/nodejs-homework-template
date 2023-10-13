@@ -13,7 +13,7 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().regex(phonePattern).required(),
-  favorit: Joi.boolean().optional()
+  favorite: Joi.boolean().optional()
 });
 
 
@@ -102,5 +102,43 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+
+    // Перевірка наявності поля "favorite" в запиті
+    if (favorite === undefined) {
+      return res.status(400).json({ message: 'Missing field "favorite"' });
+    }
+
+    // Виклик функції updateStatusContact для оновлення статусу у базі
+    const updatedContact = await updateStatusContact(contactId, { favorite });
+
+    // Перевірка наявності оновленого контакту
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Функція для оновлення статусу контакту
+async function updateStatusContact(contactId, updateFields) {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { $set: updateFields },
+      { new: true }
+    );
+
+    return updatedContact;
+  } catch (error) {
+    throw new HttpError(500, 'Internal Server Error');
+  }
+}
 
 module.exports = router;
