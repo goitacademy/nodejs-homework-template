@@ -1,7 +1,7 @@
 import express from "express";
-import contactsService from "../../models/contacts.js";
-import Joi from 'joi'
-import HttpError from "../../helpers/HttpError.js";
+import Joi from 'joi';
+import Contacts from "../../models/contacts.js";
+import { isValidObjectId } from "mongoose";
 
 
 const router = express.Router();
@@ -21,10 +21,14 @@ const contactAddSchema = Joi.object({
       "missing required 'phone' field"
   }),
 })
+const contactFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+})
+
 
 router.get('/', async (req, res, next) => {
   try {
-const contactList = await contactsService.listContacts();
+const contactList = await Contacts.find();
    res.json(contactList)
   } catch (error) {
     next(error)
@@ -35,8 +39,11 @@ const contactList = await contactsService.listContacts();
 router.get('/:contactId', async (req, res, next) => {
 
   try {
- const { contactId } = req.params;
-  const oneContact = await contactsService.getContactById(contactId);
+    const { contactId } = req.params;
+    if (!isValidObjectId(contactId)) {
+      return res.status(404).json({ messege: `${contactId} not valid id` })
+    }
+  const oneContact = await Contacts.findById(contactId);
     if (!oneContact) {
      return res.status(404).json({ messege : "Not found"})
   }
@@ -45,7 +52,6 @@ router.get('/:contactId', async (req, res, next) => {
   } catch(error) {
    next(error)
   }
- 
 })
 
 router.post('/', async (req, res, next) => {
@@ -59,7 +65,7 @@ router.post('/', async (req, res, next) => {
         return res.status(400).json({message: error.message})
     }
   
-    const newContact = await contactsService.addContact(req.body);
+    const newContact = await Contacts.create(req.body);
     res.status(201).json(newContact)
   } catch (error) {
     next(error)
@@ -69,7 +75,10 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const resalt = await contactsService.removeContact(contactId);
+     if (!isValidObjectId(contactId)) {
+      return res.status(404).json({ messege: `${contactId} not valid id` })
+    }
+    const resalt = await Contacts.findByIdAndDelete(contactId);
     if (!resalt) {
       return res.status(404).json({ messege : "Not found"})
     }
@@ -93,8 +102,11 @@ router.put('/:contactId', async (req, res, next) => {
         return res.status(400).json({message: error.message})
     }
     const { contactId } = req.params;
+     if (!isValidObjectId(contactId)) {
+      return res.status(404).json({ messege: `${contactId} not valid id` });
+    }
     
-    const resalt = await contactsService.updateContact(contactId, req.body);
+    const resalt = await Contacts.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!resalt) {
       return res.status(404).json({ messege : "Not found"})
     }
@@ -103,5 +115,31 @@ router.put('/:contactId', async (req, res, next) => {
     next(error)
   }
 })
+
+router.patch('/:contactId/favorite', async (req, res, next) => { 
+  try {
+      if (!Object.keys(req.body).length) {
+       return res.status(400).json({ messege : "missing field favorite"})
+    }
+      const { error } = contactFavoriteSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({message: error.message})
+    }
+
+    const { contactId } = req.params;
+    if (!isValidObjectId(contactId)) {
+      return res.status(404).json({ messege: `${contactId} not valid id` });
+    }
+    const result = await Contacts.findByIdAndUpdate(contactId, req.body);
+    if (!result) {
+      return res.status(404).json({ messege : " Not found "})
+    }
+
+    res.json(result);
+} catch (error) {
+    next(error)
+  }
+})
+
 
 export default router;
