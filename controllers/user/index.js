@@ -1,7 +1,9 @@
-const postUser = require('../../controllers/user/newUser')
-const getUserByEmail = require('./getUserByEmail')
+const register = require('./registr')
+const login = require('./login')
+const logout = require('./logout')
 
 module.exports = {
-    postUser,
-    getUserByEmail
+    register,
+    login,
+    logout
 }

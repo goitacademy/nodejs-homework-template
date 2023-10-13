@@ -1,4 +1,3 @@
-const { handleConflict } = require('../helpers')
 const User = require('../models/schemas/users')
 
 /**
@@ -17,8 +16,6 @@ const createUser = async (req, res, email, password) => {
     if (existingUser) {
         return res.status(409).json({ message: 'Email in use' })
     }
-
-    handleConflict(req, res, email, password)
 }
 
 /**
@@ -31,9 +28,14 @@ const getUserByEmail = async (email) => {
     return await User.findOne({ email });
 }
 
+// const updateToken = async (_id, token) => {
+//     return await User.findByIdAndUpdate(_id, { token });
+// };
+
 module.exports = {
     createUser,
-    getUserByEmail
+    getUserByEmail,
+    // updateToken
 }
 
 // module.exports = createUser

@@ -1,61 +1,51 @@
-const passport = require('passport')
-require('../config/passport')
-// const JwtStrategy = require('passport-jwt').Strategy
-// const ExtractJwt = require('passport-jwt').ExtractJwt
-// const { JWT_SECRET } = process.env
-// const User = require('../models/schemas/users')
+const passport = require('passport');
+const jwt = require('jsonwebtoken');
+require('../config/passport');
+const secretKey = process.env.JWT_SECRET;
+const User = require('../models/users');
+const { handleReqError } = require('../helpers')
 
-const midllwareToken = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user) => {
-        let token = null
-        if (req.get('Authorization')) {
-            token = req.get('Authorization').split('')[1]
-        }
-        if (!user || err || token !== user.token) {
+const middlewareToken = async (req, res, next) => {
+    passport.authenticate('jwt', { session: false }, async (err, user) => {
+        if (err || !user) {
             return res.status(401).json({
                 status: 'error',
                 code: 401,
                 message: 'Not authorized'
-            })
+            });
         }
 
-        req.user = user
-        return next()
-    })(req, res, next)
-}
+        const token = req.header('Authorization');
+        if (!token) {
+            return res.status(401).json({
+                status: 'error',
+                code: 401,
+                message: 'Not authorized'
+            });
+        }
 
-module.exports = midllwareToken
+        try {
+            const { _id } = jwt.verify(token.replace('Bearer ', ''), secretKey);
+            const foundUser = await User.getUserByEmail(_id);
 
-// const params = {
-//     secretOrKey: JWT_SECRET,
-//     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-// }
+            if (!foundUser || token !== foundUser.token) {
+                return res.status(401).json({
+                    status: 'error',
+                    code: 401,
+                    message: 'Not authorized'
+                });
+            }
 
-// passport.use(new JwtStrategy(params, async (payload, done) => {
-//     try {
-//         const user = await User.findById(payload.id)
+            req.user = user;
+            next();
+        } catch (err) {
+            return res.status(401).json({
+                status: 'error',
+                code: 401,
+                message: 'Not authorized'
+            });
+        }
+    })(req, res, next);
+};
 
-//         if (!user) {
-//             return done(null, false)
-//         } else {
-//             return done(null, user);
-//         }
-
-//     } catch (err) {
-//         return done(err, false)
-//     }
-// }))
-
-// const middlewareToken = async (req, res, next) => {
-//     passport.authenticate('jwt', { session: false }, (err, user) => {
-//         if (err || !user) {
-//             return res.status(401).json({ message: 'Not authorized' })
-//         }
-
-//         req.user = user
-//         next()
-//     })(req, res, next)
-//     console.log(passport.authenticate)
-// }
-
-// module.exports = middlewareToken
+module.exports = handleReqError(middlewareToken)

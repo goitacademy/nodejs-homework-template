@@ -1,19 +1,29 @@
 const express = require('express')
 const router = express.Router()
 const middlewareToken = require('../../middleware/middlewareToken')
-const { getUserByEmail } = require('../../controllers/user')
-const { postUser } = require('../../controllers/user')
-
-
-router.post('/registration', postUser)
+const ctrl = require('../../controllers/user')
 
 
 /**
- * @ GET /users/login
- * Отримує body {_id, password, email, subscription, token}
- * Викликає функцію getUserByEmail
+ * @ POST /users/registration
+ * Отримує body {_id, password, email, subscription}
+ * Викликає функцію register
  */
-router.post('/login', middlewareToken, getUserByEmail)
+router.post('/registration', ctrl.register)
+
+/**
+ * @ POST /users/login
+ * Отримує body {_id, password, email, subscription, token}
+ * Викликає функцію login
+ */
+router.post('/login', /* middlewareToken, */ ctrl.login) 
+
+/**
+ * @ POST /users/logout
+ * Отримує body {_id, password, email, subscription, token}
+ * Викликає функцію logout
+ */
+router.post('/logout', middlewareToken, ctrl.logout)
 
 
 module.exports = router
