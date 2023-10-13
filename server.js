@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// const app = require('./app');
+const app = require("./app.js");
 
 //  U1XmmpMOEwO9HXnj
 
@@ -10,8 +10,10 @@ mongoose.set('strictQuery', true);
 
 mongoose.connect(DB_HOST)
 .then(() => 
-// app.listen(3000)
-console.log('Alles good')
+  {
+  app.listen(3000)
+}
+// console.log('Alles good')
 )
 .catch(error => {
   console.log(error.message);
