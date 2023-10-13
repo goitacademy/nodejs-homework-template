@@ -16,6 +16,7 @@
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
     "gravatar": "^1.8.2",
+    "handlebars": "^4.7.8",
     "jimp": "^0.22.10",
     "joi": "^17.10.2",
     "jsonwebtoken": "^9.0.2",
@@ -24,6 +25,7 @@
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "^5.0.1",
+    "nodemailer": "^6.9.6",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
