@@ -1,5 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
+const auth  = require("../../config/auth.js");
 
 const {
   listContacts,
@@ -9,6 +10,8 @@ const {
   updateContact,
   updateStatusContact,
 } = require("../../models/contacts.js");
+
+const {filterContacts} = require('../../models/filters.js')
 
 const router = express.Router();
 
@@ -42,18 +45,18 @@ const validateFavoriteField = async (req, res, next) => {
   }
 };
 
-
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const contacts = await listContacts();
-    res.json(contacts);
+    const segmentedContacts = filterContacts (contacts, req.query)
+    res.json(segmentedContacts);
   } catch (error) {
     console.error("Error en la ruta /:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
 
-router.get("/:contactId", async (req, res) => {
+router.get("/:contactId", auth, async (req, res) => {
   try {
     const id = req.params.contactId;
     const contact = await getContactById(id);
@@ -68,7 +71,7 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
-router.post("/", validateBody, async (req, res) => {
+router.post("/", auth, validateBody, async (req, res) => {
   try {
     const contact = await addContact(req.body);
     res.status(201).json(contact);
@@ -78,7 +81,7 @@ router.post("/", validateBody, async (req, res) => {
   }
 });
 
-router.delete("/:contactId", async (req, res) => {
+router.delete("/:contactId", auth, async (req, res) => {
   try {
     const id = req.params.contactId;
     const contact = await removeContact(id);
@@ -91,7 +94,7 @@ router.delete("/:contactId", async (req, res) => {
   }
 });
 
-router.put("/:contactId", validateBody, async (req, res) => {
+router.put("/:contactId", auth, validateBody, async (req, res) => {
   const id = req.params.contactId;
   try {
     const contact = await updateContact(id, req.body);
@@ -105,6 +108,7 @@ router.put("/:contactId", validateBody, async (req, res) => {
 });
 router.patch(
   "/:contactId/favorite",
+  auth,
   validateFavoriteField,
   async (req, res) => {
     const id = req.params.contactId;
@@ -119,6 +123,5 @@ router.patch(
     }
   }
 );
-
 
 module.exports = router;

@@ -1,21 +1,25 @@
-const passport = require('passport');
-const passportJWT = require('passport-jwt');
-const User = require('../schemas/users');
-require('dotenv').config();
+const passport = require("passport");
+const passportJWT = require("passport-jwt");
+const mongoose = require("mongoose");
+const Users = require("../schemas/users");
+require("dotenv").config();
 const secret = process.env.SECRET;
 
 const ExtractJWT = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
 const params = {
-    secretOrKey: secret,
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken()
-}
+  secretOrKey: secret,
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+};
 
-passport.use(new Strategy(params, (payload, done) => { 
-    User.findOne({ email: payload.email }, (err, user) => {
-        if (err) return done(err, false);
-        if (user) return done(null, user);
-        else return done(null, false);
-    })
-
-}))
+passport.use(
+  "jwt",
+  new Strategy(params, async (payload, done) => {
+    const objectId = new mongoose.Types.ObjectId(payload.id);
+    const findUser = await Users.findOne({ _id: objectId });
+    if (!findUser) {
+      return done(null, false);
+    }
+    return done(null, findUser);
+  })
+);
