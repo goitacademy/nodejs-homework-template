@@ -8,6 +8,7 @@ const validateBody = require("../../decorators/validateBody");
 const { userSignupSchema, userSigninSchema } = require("../../models/User");
 
 const userSignupValidate = validateBody(userSignupSchema);
+const userSigninValidate = validateBody(userSigninSchema);
 
 const authRouter = express.Router();
 
@@ -16,6 +17,13 @@ authRouter.post(
   isEmptyBody,
   userSignupValidate,
   authController.signup
+);
+
+authRouter.post(
+  "/signin",
+  isEmptyBody,
+  userSigninValidate,
+  authController.signin
 );
 
 module.exports = authRouter;

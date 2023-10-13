@@ -37,13 +37,13 @@ userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 userSchema.post("findOneAndUpdate", handleSaveError);
 
 const userSignupSchema = Joi.object({
-  password: Joi.string().required(),
   email: Joi.string().email().required(),
+  password: Joi.string().required(),
 });
 
 const userSigninSchema = Joi.object({
-  password: Joi.string().required(),
   email: Joi.string().email().required(),
+  password: Joi.string().required(),
 });
 
 const User = model("user", userSchema);
