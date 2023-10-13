@@ -7,6 +7,7 @@ const authRouter = require("./routes/api/auth-router");
 const contactsRouter = require("./routes/api/contacts-router");
 
 // dotenv.config();
+// add comments
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
