@@ -26,6 +26,13 @@ const registerSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business"),
 });
 
+const verifySchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .error(new Error("missing required field email")),
+});
+
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required().messages({
     "string.pattern.base": "Please enter a valid email! e.g. mail@mail.com",
@@ -52,4 +59,5 @@ module.exports = {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  verifySchema,
 };
