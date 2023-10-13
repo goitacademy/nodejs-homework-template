@@ -8,10 +8,16 @@ const {
   logout,
   updateSubscription,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers/authCtrl");
 const { upload, authenticate } = require("../../middlewares");
 
 router.post("/register", register);
+
+router.get("/verify/:verificationToken", verifyEmail);
+
+router.post("/verify", resendVerifyEmail);
 
 router.post("/login", login);
 
