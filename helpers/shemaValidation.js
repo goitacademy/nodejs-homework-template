@@ -11,6 +11,11 @@ const schema = Joi.object({
     })
     .required(),
   phone: Joi.string().max(14).required(),
+  favorite: Joi.bool().default(false),
 });
 
-module.exports = schema;
+const schemaFavorite = Joi.object({
+  favorite: Joi.bool().required(),
+});
+
+module.exports = { schema, schemaFavorite };
