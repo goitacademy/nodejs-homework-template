@@ -9,7 +9,7 @@ const app = require('./app')
 // bR5ojK7bFN88iDUW
 const mongoose = require("mongoose");
 
-const {DB_HOST} = require('./config');
+const {DB_HOST} = require('./config.js');
 
 mongoose.set('strictQuery', true);
 
