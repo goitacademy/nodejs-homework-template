@@ -64,7 +64,7 @@ const getCurrent = async (req, res) => {
 const logout = async (req, res) => {
   const { _id } = req.user;
 
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.User.findByIdAndUpdate(_id, { token: "" });
 
   res.status(204).json();
 };
@@ -73,7 +73,7 @@ const logout = async (req, res) => {
 const updateSubscription = async (req, res) => {
   const { _id } = req.user;
 
-  const user = await User.findOneAndUpdate(
+  const user = await User.User.findOneAndUpdate(
     { _id },
     { subscription: req.body.subscription },
     { new: true }
@@ -89,6 +89,6 @@ export default {
    register: ctrlWrapper(register),
    login: ctrlWrapper(login),   
    getCurrent: ctrlWrapper(getCurrent),   
-   logout: ctrlWrapper(),
+   logout: ctrlWrapper(logout),
    updateSubscription: ctrlWrapper(updateSubscription),
 }

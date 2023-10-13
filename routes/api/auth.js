@@ -1,12 +1,13 @@
 import express from "express";
 import authController from "../../controllers/auth.js";
-import { validateBody, authenticate } from "../../middlewares/index.js";
-import { isEmptyBody } from "../../middlewares/index.js";
+import { validateBody, authenticate, isEmptyBody } from "../../middlewares/index.js";
 import { registerSchema, loginSchema, updateSubscriptionSchema } from "../../models/user.js";
 import userSchemas from "../../models/user.js";
 
 const registerValidate = validateBody(registerSchema);
 const loginValidate = validateBody(loginSchema);
+const updateSubscriptionValidate = validateBody(updateSubscriptionSchema);
+
 
 
 
@@ -25,11 +26,6 @@ authRouter.get("/current", authenticate, authController.getCurrent);
 authRouter.post("/logout", authenticate, authController.logout);
 
 // Update subscription
-authRouter.patch(
-  "/subscription",
-  authenticate,
-  validateBody(userSchemas.schemas.updateSubscriptionSchema),
-  authController.updateSubscription
-);
+authRouter.patch( "/subscription", authenticate, updateSubscriptionValidate, authController.updateSubscription);
 
 export default authRouter;
