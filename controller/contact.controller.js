@@ -8,9 +8,15 @@ const {
 const { ErrorHandling } = require("../helper/errorReq");
 
 const getAll = async (req, res) => {
-  const result = await listContacts();
-  if (!result) throw ErrorHandling(404, "Not Found");
-  res.json(result);
+  const { user } = req;
+  const { favorite } = req.query;
+
+  try {
+    const contacts = await listContacts(user._id, { favorite });
+    res.json(contacts);
+  } catch (error) {
+    res.status(500).json({ error: "Помилка сервера" });
+  }
 };
 
 const getById = async (req, res) => {
@@ -21,7 +27,9 @@ const getById = async (req, res) => {
 };
 
 const addNewContact = async (req, res) => {
-  const result = await addContact(req.body);
+  const { user } = req;
+  console.log(user);
+  const result = await addContact(req.body, user._id);
   if (!result) throw ErrorHandling(400, "missing required name field");
   res.status(201).json(result);
 };
