@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -12,7 +13,24 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+mongoose.connect(
+  "mongodb+srv://Speere:GENIUS1995speere)@cluster0.qpqr78x.mongodb.net/",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  }
+);
+
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "Connection error:"));
+db.once("open", () => {
+  console.log("Database connection successful");
+});
+
+app.use("/routes/api/contacts.js", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
