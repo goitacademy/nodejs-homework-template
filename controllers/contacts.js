@@ -18,10 +18,10 @@ const listContacts = async (req, res, next) => {
 // 	  res.json(result);
 // 	};
 
-// const addContact = async(req, res) => {
-// 	  const result = await contacts.addContact(req.body);
-// 	  res.status(201).json(result);
-//   };
+const addContact = async(req, res) => {
+	  const result = await Contact.create(req.body);
+	  res.status(201).json(result);
+  };
 
 //   const updateContact = async(req, res) => {
 // 	  const {id} = req.params;
@@ -47,6 +47,6 @@ const listContacts = async (req, res, next) => {
 		listContacts: ctrlWrapper(listContacts),
 		// getContactById: ctrlWrapper(getContactById),
 		// removeContact: ctrlWrapper(removeContact),
-		// addContact: ctrlWrapper(addContact),
+		addContact: ctrlWrapper(addContact),
 		// updateContact: ctrlWrapper(updateContact),
 	  }
