@@ -1,6 +1,8 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-require('dotenv').config();
+// const fs = require("fs/promises")
+// const multer = require("multer");
+require("dotenv").config();
 const PORT = 3000;
 
 const connection = mongoose.connect(process.env.DATABASE_URL, {
@@ -8,16 +10,22 @@ const connection = mongoose.connect(process.env.DATABASE_URL, {
 	useUnifiedTopology: true,
 });
 
+// const createFolderIsNotExist = async (folder) => {
+// 	if (!(await isAccessible(folder))) {
+// 		await fs.mkdir(folder);
+// 	}
+// };
 
-connection.then(() => {
-	console.log("Database connection successful");
-	app.listen(PORT, () => {
-		console.log(`Server running. Use our API on port: ${PORT}`);
+connection
+	.then(() => {
+		console.log("Database connection successful");
+		app.listen(PORT, () => {
+			// createFolderIsNotExist(uploadDir);
+			// createFolderIsNotExist(storeImage);
+			console.log(`Server running. Use our API on port: ${PORT}`);
+		});
+	})
+	.catch((err) => {
+		console.error(`Connection Error : ${err}`);
+		process.exit(1);
 	});
-})
-		.catch((err) => {
-			console.error(`Connection Error : ${err}`);
-			process.exit(1);
-})
-
-
