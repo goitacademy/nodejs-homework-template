@@ -2,7 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config(); // Завантажуємо змінні середовища з .env
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
