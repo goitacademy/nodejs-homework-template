@@ -9,6 +9,7 @@ const { userSignupSchema, userSigninSchema } = require("../../models/User");
 
 const userSignupValidate = validateBody(userSignupSchema);
 const userSigninValidate = validateBody(userSigninSchema);
+const authenticate = require("../../middlewares/authenticate");
 
 const authRouter = express.Router();
 
@@ -26,4 +27,7 @@ authRouter.post(
   authController.signin
 );
 
+authRouter.get("/current", authenticate, authController.getCurrent);
+
+authRouter.post("/signout", authenticate, authController.signout);
 module.exports = authRouter;

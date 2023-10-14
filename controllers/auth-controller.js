@@ -43,10 +43,30 @@ const signin = async (req, res) => {
 
   console.log("JWT_SECRET:", process.env.JWT_SECRET);
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+
+  await User.findByIdAndUpdate(user._id, { token });
+
   res.json({ token });
+};
+
+const getCurrent = async (req, res) => {
+  const { email } = req.user;
+  res.json({
+    email,
+  });
+};
+
+const signout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.json({
+    message: "Sign out success",
+  });
 };
 
 module.exports = {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
+  getCurrent: ctrlWrapper(getCurrent),
+  signout: ctrlWrapper(signout),
 };

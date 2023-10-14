@@ -5,7 +5,9 @@ const {
   contactAddSchema,
   contactUpdateFavoriteSchema,
 } = require("../../models/Contact");
+
 const { isValidId } = require("../../middlewares/isValidId");
+const authenticate = require("../../middlewares/authenticate");
 
 const contactAddValidate = validateBody(contactAddSchema);
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
@@ -13,6 +15,8 @@ const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 const contactsController = require("../../controllers/contacts-controller");
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll);
 
