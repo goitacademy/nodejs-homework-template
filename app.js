@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
+require("dotenv").config(); // Завантажуємо змінні середовища з .env
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -13,15 +14,12 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(
-  "mongodb+srv://Speere:GENIUS1995speere)@cluster0.qpqr78x.mongodb.net/",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  }
-);
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
 const db = mongoose.connection;
 
@@ -30,7 +28,7 @@ db.once("open", () => {
   console.log("Database connection successful");
 });
 
-app.use("/routes/api/contacts.js", contactsRouter);
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
