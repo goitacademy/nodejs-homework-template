@@ -6,4 +6,8 @@ const contactsSchemas = Joi.object({
   phone: Joi.string().regex(/^[0-9+\-() ]+$/).required()
 });
 
-module.exports = contactsSchemas;
+const updateStatusSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = {contactsSchemas, updateStatusSchema};
