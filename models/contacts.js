@@ -24,7 +24,7 @@ function generateId() {
 
 const addContact = async (body) => {
   
-  const { name, email, phone, favorite=false } = body;
+  const { name, email, phone, favorite } = body;
   
   const newCont = {
     id: generateId(),
