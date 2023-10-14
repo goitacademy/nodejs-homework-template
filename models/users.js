@@ -10,12 +10,9 @@ const User = require('../models/schemas/users')
  * - Якщо в body є поле email з існуючим, повертає json з ключем {"message": "Email in use"} і статусом 409 Conflict.
  * - якщо в body немає поля email з існуючим, повертає об'єкт з ключами {password, email} і статусом 201
  */
-const createUser = async (req, res, email, password) => {
-    const existingUser = await User.findOne({ email })
-
-    if (existingUser) {
-        return res.status(409).json({ message: 'Email in use' })
-    }
+const createUser = async ({ name, email, password, subscription }) => {
+    const user = await User({ name, email, password, subscription })
+    return await user.save()
 }
 
 /**
@@ -28,14 +25,19 @@ const getUserByEmail = async (email) => {
     return await User.findOne({ email });
 }
 
-// const updateToken = async (_id, token) => {
-//     return await User.findByIdAndUpdate(_id, { token });
-// };
+const findById = async id => {
+    return await User.findOne({ _id: id });
+};
+
+const updateToken = async (_id, token) => {
+    return await User.updateOne(_id, { token });
+};
 
 module.exports = {
     createUser,
     getUserByEmail,
-    // updateToken
+    findById,
+    updateToken
 }
 
 // module.exports = createUser

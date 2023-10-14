@@ -1,4 +1,4 @@
-const { handleReqError } = require('../../helpers')
+// const { handleReqError } = require('../../helpers')
 const User = require('../../models/users')
 const jwt = require('jsonwebtoken')
 require('../../config/passport')
@@ -11,18 +11,25 @@ const logout = async (req, res, next) => {
         return res.status(401).json({ message: 'Not authorized' })
     }
 
-    const decoded = jwt.verify(token.replace('Bearer ', ''), secretKey)
-    req.user = decoded
+    try {
+        const { _id } = jwt.verify(token.replace('Bearer ', ''), secretKey)
+        const user = await User.findById(_id)
 
-    const user = await User.getUserByEmail(req.user._id)
-    if (!user) {
-        return res.status(401).json({ message: 'Not authorized' })
+        if (!user) {
+            return res.status(401).json({ message: 'Not authorized' })
+        }
+
+        user.token = []
+        await user.save()
+
+        res.status(204).send()
+    } catch (err) {
+        return res.status(401).json({
+            status: 'error',
+            code: 401,
+            message: 'Not authorized'
+        })
     }
-    // Видалення токену користувача з бази даних або сервера
-    // 204 No Content
-    user.tokens = user.tokens.filter(token => token.token !== req.token)
-    await user.save()
-    res.status(204).send()
 }
 
-module.exports = handleReqError(logout)
+module.exports = logout

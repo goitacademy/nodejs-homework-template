@@ -13,7 +13,7 @@ const params = {
 passport.use(
     new Strategy(params, async (payload, done) => {
         try {
-            const user = await User.getUserByEmail(payload.id);
+            const user = await User.getUserByEmail(payload._id);
             if (!user) {
                 return done(new Error("User not found"), false);
             }
@@ -24,16 +24,5 @@ passport.use(
         } catch (err) {
             return done(err, false);
         }
-
-        // try {
-        //     const user = await User.getUserByEmail(payload.id)
-        //     if (!user) {
-        //         return done(null, false)
-        //     } else {
-        //         return done(null, user);
-        //     }
-        // } catch (err) {
-        //     return done(err, false)
-        // }
     })
 )

@@ -3,9 +3,8 @@ const jwt = require('jsonwebtoken');
 require('../config/passport');
 const secretKey = process.env.JWT_SECRET;
 const User = require('../models/users');
-const { handleReqError } = require('../helpers')
 
-const middlewareToken = async (req, res, next) => {
+const middlewareToken = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, async (err, user) => {
         if (err || !user) {
             return res.status(401).json({
@@ -15,8 +14,10 @@ const middlewareToken = async (req, res, next) => {
             });
         }
 
-        const token = req.header('Authorization');
-        if (!token) {
+        const { authorization } = req.headers;
+        const [bearer, token] = authorization.split(' ');
+
+        if (bearer !== 'Bearer') {
             return res.status(401).json({
                 status: 'error',
                 code: 401,
@@ -48,4 +49,4 @@ const middlewareToken = async (req, res, next) => {
     })(req, res, next);
 };
 
-module.exports = handleReqError(middlewareToken)
+module.exports = middlewareToken;
