@@ -1,7 +1,7 @@
 const { required } = require('joi');
 const { isValidObjectId } = require('mongoose');
 
-const { HttpError } = required('../helpers');
+const { HttpError } = require('../helpers');
 
 const isValidId = (req, res, next) => {
 	const { id } = req.params;
