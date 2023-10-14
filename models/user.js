@@ -10,30 +10,31 @@ const userSchema = new Schema({
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
-    default: "starter"
+    default: "starter",
   },
-    password: {
-        type: String,
-        minlength:6,
-        required: [true, 'Set password for user'],
-      },
-      email: {
-        type: String,
-        match:emailValid,
-        required: [true, 'Email is required'],
-        unique: true,
-      },
-      token:{
-        type:String,
-        default:""
-      },
-      avatarURL:{
-        type:String,
-        required:true,
-      }
-  
-
-
+  password: {
+    type: String,
+    minlength: 6,
+    required: [true, "Set password for user"],
+  },
+  email: {
+    type: String,
+    match: emailValid,
+    required: [true, "Email is required"],
+    unique: true,
+  },
+  token: {
+    type: String,
+    default: "",
+  },
+  avatarURL: {
+    type: String,
+    required: true,
+  },
+  verificationCode: {
+    type: String,
+    default: "",
+  },
 });
 
 userSchema.post("save", HandleMongooseError) ;
@@ -44,6 +45,11 @@ const registerShema = Joi.object({
     password:Joi.string().min(6).required(),
 })
 
+const emailShema = Joi.object({
+  email: Joi.string().pattern(emailValid).required(),
+});
+
+
 const loginShema = Joi.object({
     
     email:Joi.string().pattern(emailValid).required(),
@@ -51,9 +57,10 @@ const loginShema = Joi.object({
 })
 
 const schemas = {
-    registerShema,
-    loginShema,
-}
+  registerShema,
+  loginShema,
+  emailShema,
+};
 
 const User = model("user", userSchema);
 
