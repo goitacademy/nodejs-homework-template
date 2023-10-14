@@ -1,5 +1,6 @@
 // contacts.js
 const express = require('express');
+const authMiddleware = require('../../middleware/auth');
 const router = express.Router();
 const {
   listContacts,
@@ -31,13 +32,16 @@ router.get('/:id', async (req, res, next) => {
 });
 
 // POST /api/contacts
-router.post('/', async (req, res, next) => {
+router.post('/', authMiddleware, async (req, res, next) => {
   const { name, email, phone } = req.body;
+  const owner = req.user._id; // Отримайте ID користувача з автентифікації
+
   if (!name || !email || !phone) {
     return res.status(400).json({ message: 'Missing required fields' });
   }
+
   try {
-    const newContact = await addContact({ name, email, phone });
+    const newContact = await addContact({ name, email, phone, owner });
     res.status(201).json(newContact);
   } catch (error) {
     next(error);
@@ -45,10 +49,12 @@ router.post('/', async (req, res, next) => {
 });
 
 // DELETE /api/contacts/:id
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authMiddleware, async (req, res, next) => {
   const { id } = req.params;
+  const owner = req.user._id;
+
   try {
-    await removeContact(Number(id));
+    await removeContact(Number(id), owner);
     res.json({ message: 'Contact deleted' });
   } catch (error) {
     next(error);
@@ -56,18 +62,26 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 // PUT /api/contacts/:id
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', authMiddleware, async (req, res, next) => {
   const { id } = req.params;
   const { name, email, phone } = req.body;
+  const owner = req.user._id;
+
   if (!name || !email || !phone) {
     return res.status(400).json({ message: 'Missing fields' });
   }
+
   try {
     const updatedContact = await updateContact(Number(id), {
       name,
       email,
       phone,
+      owner, // Додайте власника до оновленого контакту
     });
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
     res.json(updatedContact);
   } catch (error) {
     next(error);

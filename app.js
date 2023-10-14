@@ -4,12 +4,14 @@ const morgan = require('morgan');
 const cors = require('cors');
 const contactsRouter = require('./routes/api/contacts');  
 
+require('dotenv').config();
+
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 const mongoose = require('mongoose');
 
-const MONGODB_URI = 'mongodb://localhost/db-contacts'; //  URI з MongoDB Atlas
+const MONGODB_URI = 'mongodb://127.0.0.1:27017/db-contacts'; //  URI з MongoDB Atlas
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
