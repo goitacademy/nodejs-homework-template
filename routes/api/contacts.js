@@ -2,7 +2,7 @@ const express = require("express");
 const contacts = require("../../controllers/contacts.js");
 
 const validateBody = require('../../helpers/validateBody.js');
-const contactsSchema = require('../../helpers/contact-schema.js');
+const contactsSchema = require('../../schemas/contact-schema.js');
 
 const contactAddValidate = validateBody(contactsSchema);
 
