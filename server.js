@@ -1,12 +1,12 @@
+require('dotenv').config();
+
 const mongoose = require('mongoose');
 
 const app = require("./app.js");
 
 //  U1XmmpMOEwO9HXnj
 
-const DB_HOST = "mongodb+srv://Oksana:U1XmmpMOEwO9HXnj@cluster0.oglybn2.mongodb.net/contactsreader?retryWrites=true&w=majority";
-
-mongoose.set('strictQuery', true);
+const DB_HOST = "mongodb+srv://Oksana:U1XmmpMOEwO9HXnj@cluster0.oglybn2.mongodb.net/Cluster0?retryWrites=true&w=majority";
 
 mongoose.connect(DB_HOST)
 .then(() => 

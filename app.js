@@ -26,6 +26,4 @@ app.use((err, req, res, next) => {
     message,  })
 });
 
-// app.listen(3000);
-
-module.exports = app;
+module.exports = app

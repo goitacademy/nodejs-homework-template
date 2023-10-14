@@ -5,13 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "start:dev": "nodemon server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start:dev": "nodemon server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "joi": "^17.11.0",
     "moment": "^2.29.4",
@@ -29,5 +28,7 @@
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "^3.0.1"
   },
-  "engines": { "node": ">=14.20.1" }
+  "engines": {
+    "node": ">=14.20.1"
+  }
 }
