@@ -1,7 +1,8 @@
 import express from "express";
-import { updateFavoruteById } from "../../moviesControllers/controlers.js";
+import contactContollers from "../../controllers/controlers.js";
+
 import { ContactSchema } from "../../models/contactModel.js";
-import contactContollers from "../../moviesControllers/controlers.js";
+// import contactContollers from "../../controllers/controlers.js";
 
 import validateBody from "../../decorators/validateBody.js";
 import isValidId from "../../middlewares/IsValidId.js";
@@ -14,7 +15,7 @@ router.get("/", contactContollers.getAll);
 
 router.get("/:contactId", isValidId, contactContollers.getById);
 
-router.post("/", isValidId, contactValidateBody, contactContollers.add);
+router.post("/", isValidId, contactValidateBody, contactContollers.addContact);
 
 router.delete(
   "/:contactId",

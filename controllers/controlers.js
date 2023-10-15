@@ -1,7 +1,6 @@
 import HttpError from "../heplers/index.js";
 
 import Contact from "../models/contactModel.js";
-import mongoose from "mongoose";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 const getALl = async (req, res, next) => {
@@ -61,7 +60,7 @@ const updateById = async (req, res, next) => {
   }
 };
 
-export const updateFavoruteById = async (req, res, next) => {
+const updateFavoruteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { favorite } = req.body;
@@ -81,10 +80,11 @@ export const updateFavoruteById = async (req, res, next) => {
     next(error);
   }
 };
+
 export default {
   getAll: ctrlWrapper(getALl),
   getById: ctrlWrapper(getById),
-  add: ctrlWrapper(addContact),
+  addContact: ctrlWrapper(addContact),
   updateById: ctrlWrapper(updateById),
   updateFavorite: ctrlWrapper(updateFavoruteById),
   deleteById: ctrlWrapper(deleteContact),
