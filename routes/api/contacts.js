@@ -1,8 +1,9 @@
 const express = require("express");
 const Joi = require("joi");
-const contacts = require("../../models/contacts");
-const { HttpError } = require("../../helpers");
 const router = express.Router();
+const { HttpError } = require("../../helpers/idex");
+
+const { Contact } = require("../../db/mongoDB");
 
 const validateContact = (data) => {
   const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
@@ -18,9 +19,10 @@ const validateContact = (data) => {
   return schema.validate(data);
 };
 
+// GET /api/contacts
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
     res.json({
       status: "success",
       code: 200,
@@ -31,10 +33,11 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+// GET /api/contacts/:contactId
 router.get("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const result = await Contact.findById(contactId);
     if (!result) {
       throw HttpError(404, "Not Found!");
     }
@@ -48,6 +51,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
+// POST /api/contacts
 router.post("/", async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
@@ -63,7 +67,7 @@ router.post("/", async (req, res, next) => {
     }
 
     if (name && email && phone) {
-      const result = await contacts.addContact({ name, email, phone });
+      const result = await Contact.create({ name, email, phone });
       res.json({
         status: "success",
         code: 201,
@@ -75,10 +79,11 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+// DELETE /api/contacts/:contactId
 router.delete("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await Contact.findByIdAndRemove(contactId);
     if (!result) {
       throw HttpError(404, "Not Found!");
     }
@@ -92,11 +97,12 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
+// PUT /api/contacts/:contactId
 router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const body = req.body;
-
+    const { name, email, phone } = body;
     const { error } = validateContact(body);
 
     if (error) {
@@ -106,11 +112,44 @@ router.put("/:contactId", async (req, res, next) => {
     if (!body) {
       throw HttpError(400, "missing required name field");
     }
-    const check = await contacts.getContactById(contactId);
+    const check = await Contact.findById(contactId);
     if (!check) {
       throw HttpError(404, "Not Found!");
     }
-    const result = await contacts.updateContact(contactId, body);
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      { name, email, phone },
+      { new: true }
+    );
+    res.json({
+      status: "contact updated",
+      code: 200,
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// маршрут PATCH /api/contacts/:contactId/favorite
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "Missing field favorite" });
+  }
+
+  try {
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!result) {
+      throw HttpError(404, "Not Found!");
+    }
     res.json({
       status: "contact updated",
       code: 200,
