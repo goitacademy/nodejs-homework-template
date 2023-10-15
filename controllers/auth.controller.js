@@ -3,8 +3,9 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const gravatar = require("gravatar");
 const { deleteToken } = require("../services/auth.service");
-const multer = require("multer");
 const path = require("path");
+const jimp = require("jimp");
+const sharp = require("sharp");
 
 const schema = Joi.object({
 	email: Joi.string()
@@ -97,16 +98,21 @@ const current = (req, res) => {
 	return res.json({ email, subscription, avatarURL });
 };
 
-const avatarChanger =  async (req, res, next) => {
-	const { avatarURL } = req.user;
-	// const upload = multer({
-	// 	dest: path.join(__dirname, "tmp"),
-	// 	limits: {
-	// 		fieldSize: 1048576,
-	// 	},
-	// });
+const avatarChanger = async (req, res, next) => {
+	const { avatarURL, email } = req.user;
+	console.log(req.file);
 	try {
-		// upload.single('avatarURL')
+		// const avatarImage = await jimp.read(req.file.path);
+		// const resizedAvatar = avatarImage.resize(250, 250);
+
+		// await resizedAvatar.writeAsync(req.file.path);
+
+		await sharp(req.file.path)
+			.resize(250, 250)
+			.toFile(
+				path.join(process.cwd(), "tmp", `${email} ${req.file.originalname}`)
+			);
+
 		return res.status(200).json({
 			status: "OK",
 			data: {
