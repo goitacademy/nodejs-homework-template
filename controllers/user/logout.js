@@ -1,10 +1,16 @@
-// const { handleReqError } = require('../../helpers')
+const { handleReqError } = require('../../helpers')
 const User = require('../../models/users')
 const jwt = require('jsonwebtoken')
 require('../../config/passport')
 const secretKey = process.env.JWT_SECRET
 
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns {Object} - Відповідь зі статусом 204, якщо вихід успішний, або помилку 401, якщо користувач не авторизований або сталася помилка.
+ */
 const logout = async (req, res, next) => {
     
     const token = req.header('Authorization')
@@ -33,4 +39,4 @@ const logout = async (req, res, next) => {
     }
 }
 
-module.exports = logout
+module.exports = handleReqError(logout)

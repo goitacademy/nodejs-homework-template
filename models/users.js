@@ -25,10 +25,21 @@ const getUserByEmail = async (email) => {
     return await User.findOne({ email });
 }
 
+/**
+ * Знаходить користувача за id
+ * @param {*} id - Ідентифікатор користувача
+ * @returns {Promise} - Об'єкт користувача або null, якщо користувача не знайдено.
+ */
 const findById = async id => {
     return await User.findOne({ _id: id });
 };
 
+/**
+ * Оновлює токен доступу користувача
+ * @param {*} _id 
+ * @param {*} token - новий токен доступу
+ * @returns {Promise} - Об'єкт з результатом оновлення або помилкою, якщо оновлення не вдалося.
+ */
 const updateToken = async (_id, token) => {
     return await User.updateOne(_id, { token });
 };
