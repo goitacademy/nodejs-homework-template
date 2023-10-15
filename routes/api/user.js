@@ -4,6 +4,11 @@ const User = require('../../models/user'); // Змінена шляху до м�
 const authMiddleware = require('../../middleware/auth'); // Змінена шляху до middleware/auth.js
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
+const multer = require('multer');
+const jimp = require('jimp');
+const path = require('path');
+
 
 // Реєстрація
 router.post('/register', async (req, res) => {
@@ -13,9 +18,10 @@ router.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(409).json({ message: 'Email in use' });
     }
-    const user = new User({ email, password });
+    const avatarURL = gravatar.url(email, { s: '250', d: 'retro' }); // Генерувати URL аватарки
+    const user = new User({ email, password, avatarURL });
     await user.save();
-    return res.status(201).json({ user: { email: user.email, subscription: user.subscription } });
+    return res.status(201).json({ user: { email: user.email, subscription: user.subscription, avatarURL } });
   } catch (error) {
     console.error('Registration error:', error);
     return res.status(400).json({ message: 'Validation error' });
@@ -54,8 +60,31 @@ router.post('/logout', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/current', authMiddleware, (req, res) => {
-  res.status(200).json({ email: req.user.email, subscription: req.user.subscription });
+
+ // Налаштування Multer для завантаження файлів
+const storage = multer.memoryStorage(); // Збереження в пам'яті
+const upload = multer({ storage });
+
+// Маршрут для оновлення аватарки
+router.patch('/avatars', authMiddleware, upload.single('avatar'), async (req, res) => {
+  const user = req.user;
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const image = await jimp.read(req.file.buffer);
+    await image.cover(250, 250).writeAsync(path.join(__dirname, '../../public/avatars', `${user._id}.jpg`));
+
+    const avatarURL = `/avatars/${user._id}.jpg`;
+    user.avatarURL = avatarURL;
+    await user.save();
+
+    return res.status(200).json({ avatarURL });
+  } catch (error) {
+    console.error('Avatar upload error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
 module.exports = router;
