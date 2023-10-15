@@ -1,27 +1,21 @@
 const { Schema, model } = require("mongoose");
 
-const userSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "First name has to be present."],
-      index: true,
-    },
-    email: {
-      type: String,
-      unique: true,
-    },
-    phone: {
-      type: String,
-    },
-
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
+const userSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
   },
-  { timestamps: true, versionKey: false }
-);
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const User = model("contacts", userSchema);
 

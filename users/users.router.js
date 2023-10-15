@@ -17,7 +17,7 @@ usersRouter.put(
   usersController.replaceUserHandler
 );
 usersRouter.delete("/:id", usersController.deleteUserHandler);
-usersRouter.patch("/:id/active", usersController.updateUserStatus);
+usersRouter.patch("/:id/favorite", usersController.updateUserStatus);
 
 module.exports = {
   usersRouter,

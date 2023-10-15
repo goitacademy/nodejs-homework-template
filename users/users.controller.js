@@ -40,9 +40,11 @@ const deleteUserHandler = async (req, res) => {
 };
 
 const updateUserStatus = async (req, res) => {
-  const { active } = req.body;
-  const updatedUser = await updateUser(req.params.id, { active });
+  const { favorite } = req.body;
 
+  const updatedUser = await updateUser(req.params.id, { favorite });
+  // console.log(req);
+  console.log(res.params);
   return res.status(200).send(updatedUser);
 };
 
