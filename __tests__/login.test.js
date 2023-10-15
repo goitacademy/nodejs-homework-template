@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 // works only in HW 5, without verification part in login logic. It doesn't work in HW 6 due to the verificationToken.
+
 const request = require("supertest");
 const mongoose = require("mongoose");
 
