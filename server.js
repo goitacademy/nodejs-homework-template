@@ -9,19 +9,10 @@ const connection = mongoose.connect(process.env.DATABASE_URL, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 });
-
-// const createFolderIsNotExist = async (folder) => {
-// 	if (!(await isAccessible(folder))) {
-// 		await fs.mkdir(folder);
-// 	}
-// };
-
 connection
 	.then(() => {
 		console.log("Database connection successful");
 		app.listen(PORT, () => {
-			// createFolderIsNotExist(uploadDir);
-			// createFolderIsNotExist(storeImage);
 			console.log(`Server running. Use our API on port: ${PORT}`);
 		});
 	})

@@ -4,7 +4,7 @@ const Joi = require("joi");
 const gravatar = require("gravatar");
 const { deleteToken } = require("../services/auth.service");
 const path = require("path");
-const jimp = require("jimp");
+const fs = require("fs/promises");
 const sharp = require("sharp");
 
 const schema = Joi.object({
@@ -99,19 +99,20 @@ const current = (req, res) => {
 };
 
 const avatarChanger = async (req, res, next) => {
-	const { avatarURL, email } = req.user;
-	console.log(req.file);
+	let { avatarURL, email } = req.user;
 	try {
-		// const avatarImage = await jimp.read(req.file.path);
-		// const resizedAvatar = avatarImage.resize(250, 250);
-
-		// await resizedAvatar.writeAsync(req.file.path);
-
+		const filename = `${email}_${Date.now()}_${req.file.originalname}`;
+		const temporaryFile = path.join(process.cwd(), "tmp");
 		await sharp(req.file.path)
 			.resize(250, 250)
-			.toFile(
-				path.join(process.cwd(), "tmp", `${email} ${req.file.originalname}`)
-			);
+			.toFile(path.join(temporaryFile, filename));
+
+		await fs.rename(
+			path.join(temporaryFile, filename),
+			path.join(process.cwd(), "public/avatars", filename)
+		);
+
+		avatarURL = `http://localhost:3000/avatars/${filename}`;
 
 		return res.status(200).json({
 			status: "OK",

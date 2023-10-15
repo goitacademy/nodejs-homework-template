@@ -4,6 +4,6 @@ const uploadController = require("../controllers/upload.controller");
 const { uploadFile } = uploadController;
 const upload = require("../middlewares/upload");
 
-router.post("/", upload('file'), uploadFile);
+router.post("/", upload("file"), uploadFile);
 
 module.exports = router;
