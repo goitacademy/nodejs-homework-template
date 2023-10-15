@@ -3,12 +3,15 @@ const handleMongooseError = require("../../helpers/handleMongooseError");
 const Schema = mongoose.Schema;
 
 const contactSchema = new Schema({
-    name: {
+    id: {
         type: String,
-        required: [true, "Set name for contact"]
+        unique: true
+    },
+    name: {
+        type: String
     },
     phone: {
-        type: String,
+        type: String
     },
     email: {
         type: String
@@ -17,6 +20,14 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false
     }
+});
+
+contactSchema.pre("save", function (next) {
+  if (!this.name) {
+    next(new Error("Name is required"));
+  } else {
+    next();
+  }
 });
 
 contactSchema.post("save", handleMongooseError);

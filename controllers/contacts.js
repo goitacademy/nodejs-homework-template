@@ -1,17 +1,16 @@
-const Contact = require("../service/schemas/schemas.js").Contact;
+const Contact = require("../service/schemas/schemas.js");
 const httpError = require("../helpers/httpError");
 const Wrapper = require("../helpers/Wrapper");
+const { v4: uuidv4 } = require("uuid");
 
 const listContacts = async (_, res) => {
-  console.log('1');
   const result = await Contact.find();
-  console.log(Contact);
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.getContactById(id);
+  const result = await Contact.find({id: id});
   if (!result) {
     throw httpError(404, "Not found");
   }
@@ -19,28 +18,52 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.addContact(req.body);
-  res.status(201).json(result); 
-}
+    const { name, phone, email, favorite } = req.body;
+
+    const newContact = new Contact({
+      id: uuidv4(),
+      name,
+      phone,
+      email,
+      favorite
+    });
+
+    const result = await newContact.save();
+
+    res.status(201).json(result);
+};
 
 const removeContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.removeContact(id);
+  const result = await Contact.findOneAndRemove({ id: id });
+
   if (!result) {
-    throw httpError(404, "Not found");
-  }
-  res.json({
-    message: "contact deleted",
-  }); 
-}
+    throw httpError(404, "Contact not found");
+  } else if (result) {
+    res.status(200).json({ message: "Contact deleted" });
+    } else{
+      throw httpError(500, "Error deleting contact");
+    }
+};
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.updateContact(id, req.body);
-  if (!result) {
+  const result = await Contact.updateOne({id: id}, {$set: {...req.body}});
+  const updatedContact = await Contact.find({id: id});
+  if (result.matchedCount === 0) {
     throw httpError(404, "Not found");
   }
-  res.json(result);
+  res.json(updatedContact);
+}
+
+const updateFavorite = async(req, res) => {
+  const { id } = req.params;
+  const result = await Contact.updateOne({id: id}, {$set: req.body});
+  const updatedContact = await Contact.find({id: id});
+  if (result.matchedCount === 0){
+    throw httpError(404, "Not found");
+  }
+  res.json(updatedContact);
 }
 
 module.exports = {
@@ -49,4 +72,5 @@ module.exports = {
   removeContact: Wrapper(removeContact),
   addContact: Wrapper(addContact),
   updateContact: Wrapper(updateContact),
+  updateFavorite: Wrapper(updateFavorite)
 };
