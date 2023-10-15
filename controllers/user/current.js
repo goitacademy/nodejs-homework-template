@@ -13,7 +13,7 @@ const current = async (req, res, next) => {
             status: 'error',
             code: 401,
             message: 'Not authorized'
-        });
+        })
     }
 
     const { _id } = req.user

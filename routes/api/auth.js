@@ -19,6 +19,7 @@ router.post('/registration', ctrl.register)
 router.post('/login', /* middlewareToken, */ ctrl.login)
 
 router.use(middlewareToken)
+
 /**
  * @ POST /users/logout
  * Отримує body {_id, password, email, subscription, token}

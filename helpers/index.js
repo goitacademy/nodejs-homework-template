@@ -9,5 +9,5 @@ module.exports = {
     handleReqError,
     handleUserRouter,
     handleConflict,
-    createTokenUser
+    createTokenUser,
 }
