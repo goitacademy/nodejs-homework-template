@@ -1,4 +1,3 @@
-const { required } = require('joi');
 const { isValidObjectId } = require('mongoose');
 
 const { HttpError } = require('../helpers');
