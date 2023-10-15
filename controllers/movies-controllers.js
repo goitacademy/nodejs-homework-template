@@ -1,60 +1,33 @@
 import * as movieService from '../models/movies/movies.js'
 import {HttpError} from '../helpers/index.js'
-import { movieAddSchema, movieUpdateSchema } from "../schemas/movie-schemas.js";
+import {ctrlWrapper} from '../decorators/index.js'
+
 
 const getAll = async(req, res) => {
-try {
   const result = await movieService.getAllMovies()
   res.json(result)
-} catch (error) {
-  res.status(500).json({message: error.message})
-}}
-const getById = async(req, res, next) => {
-  try {
+}
+const getById = async(req, res) => {
     const {id} = req.params
     const result = await movieService.getMovieById(id)
     if(!result) {
       throw HttpError(404, `Movie with id=${id} not found`)
-      // return res.status(404).json({
-      //   message: `Movie with id=${id} not found`
-      // })
     }
     res.json(result)
-  } catch (error) {
-    next(error)
-  // res.status(500).json({message: error.message})
-  }
 }
-const add = async(req, res, next) => {
-  try {
-    const {error} = movieAddSchema.validate(req.body)
-    if(error) {
-      throw HttpError(400, error.massege)
-    }
+const add = async(req, res) => {
     const result = await movieService.addMovie(req.body)
     res.status(201).json(result)
-  } catch (error) {
-    next(error)
-  }
 }
-const updateById = async(req, res, next) => {
-  try {
-    const {error} = movieUpdateSchema.validate(req.body)
-    if(error) {
-      throw HttpError(400, error.massege)
-    }
+const updateById = async(req, res) => {
     const {id} = req.params
     const result = await movieService.updateMovieById(id, req.body)
     if (!result) {
       throw HttpError(404, `Movie with id=${id} not found`)
     }
     res.json(result)
-  } catch (error) {
-    next(error)
-  }
 }
-const deleteById = async(req, res, next) => {
-  try {
+const deleteById = async(req, res) => {
     const {id} = req.params
     const result = await movieService.deleteById(id)
     if (!result) {
@@ -63,16 +36,13 @@ const deleteById = async(req, res, next) => {
     res.json({
       message: 'Delete success'
     })
-  } catch (error) {
-    next(error)
-  }
 }
 
 
 export default {
-  getAll,
-  getById,
-  add,
-  updateById,
-  deleteById
+  getAll: ctrlWrapper(getAll),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
+  updateById: ctrlWrapper(updateById),
+  deleteById: ctrlWrapper(deleteById),
 }
