@@ -1,25 +1,25 @@
 const express = require("express");
-const logger = require("morgan");
 const cors = require("cors");
-
-const contactsRouter = require("./routes/api/contacts");
+const { usersRouter } = require("./users/users.router");
 
 const app = express();
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
-app.use(logger(formatsLogger));
-app.use(cors());
+// parse application/json
 app.use(express.json());
+// cors
+app.use(cors());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", usersRouter);
 
 app.use((_, res) => {
-  res.status(404).json({ message: "Not found" });
+  return res.status(404).send({ message: "Use api on routes: /api/contacts" });
 });
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+app.use((err, _, res, __) => {
+  console.log(err.stack);
+  return res.status(500).send({ message: err.message });
 });
 
-module.exports = app;
+module.exports = {
+  app,
+};
