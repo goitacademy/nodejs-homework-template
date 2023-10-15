@@ -5,6 +5,8 @@ const ctrl = require("../../controllers/contacts");
 const validate = require("../../middlewares/validate");
 const schema = require("../../schema/contacts");
 
+
+
 router.get("/", ctrl.listContacts);
 
 router.post("/", validate(schema), ctrl.addContact);
