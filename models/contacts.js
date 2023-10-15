@@ -24,13 +24,14 @@ function generateId() {
 
 const addContact = async (body) => {
   
-  const { name, email, phone } = body;
+  const { name, email, phone, favorite } = body;
   
   const newCont = {
     id: generateId(),
     name: name,
     email: email,
     phone: phone,
+    favorite: favorite,
   };
   
   const contacts = await listContacts();
