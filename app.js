@@ -1,25 +1,29 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require("./routes/api/contacts");
 
-const app = express()
+const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+// middleware для вівода в консоль логов
+app.use(logger(formatsLogger));
+//
+app.use(cors());
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+app.use(express.json()); //для того чтобы реквест боди можно было считать, переведя в джейсон
 
-app.use('/api/contacts', contactsRouter)
+// Если маршрут начинается с "/api/contacts", то ищи марштуры в контактРоутер (обробник)
+app.use("/api/contacts", contactsRouter);
 
+// Если маршрут не найдет, то применяется єта мидлваре с 404 ошибкой
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found" });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
-
-module.exports = app
+  res.status(500).json({ message: err.message });
+});
+// просто експортируем, но запускаем сервер в server.js
+module.exports = app;

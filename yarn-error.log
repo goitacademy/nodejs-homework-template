@@ -1,0 +1,61 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\OlgaL\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add uuid
+
+PATH: 
+  C:\Python311\Scripts\;C:\Python311\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files\Common Files\Microsoft Shared\Microsoft Online Services;C:\Program Files (x86)\Common Files\Microsoft Shared\Microsoft Online Services;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\Program Files\PuTTY\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\ProgramData\chocolatey\bin;C:\Program Files\Novell\iPrint;C:\cygwin64\bin;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Micro Focus\Dimensions 14.6\CM\prog;C:\Program Files (x86)\Micro Focus\Dimensions 14.6\CM\prog64\;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\Users\OlgaL\AppData\Local\Microsoft\WindowsApps;C:\Users\OlgaL\AppData\Local\Programs\Microsoft VS Code\bin;C:\ProgramData\OlgaL\GitHubDesktop\bin;C:\Users\OlgaL\AppData\Local\GitHubDesktop\bin;C:\Users\OlgaL\.dotnet\tools;C:\Users\OlgaL\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.17.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/latest-version/-/latest-version-5.1.0.tgz: Request failed "500 Internal Server Error"
+      at ResponseError.ExtendableBuiltin (C:\Users\OlgaL\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:696:66)
+      at new ResponseError (C:\Users\OlgaL\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:802:124)
+      at Request.<anonymous> (C:\Users\OlgaL\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66215:16)
+      at Request.emit (node:events:514:28)
+      at module.exports.Request.onRequestResponse (C:\Users\OlgaL\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141767:10)
+      at ClientRequest.emit (node:events:514:28)
+      at HTTPParser.parserOnIncomingClient (node:_http_client:700:27)
+      at HTTPParser.parserOnHeadersComplete (node:_http_common:119:17)
+      at TLSSocket.socketOnData (node:_http_client:541:22)
+      at TLSSocket.emit (node:events:514:28)
+
+npm manifest: 
+  {
+    "name": "template",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+      "start": "cross-env NODE_ENV=production node ./server.js",
+      "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+      "lint": "eslint **/*.js",
+      "lint:fix": "eslint --fix **/*.js"
+    },
+    "dependencies": {
+      "cors": "2.8.5",
+      "cross-env": "7.0.3",
+      "express": "4.17.1",
+      "morgan": "1.10.0"
+    },
+    "devDependencies": {
+      "eslint": "7.19.0",
+      "eslint-config-prettier": "^8.3.0",
+      "eslint-config-standard": "16.0.3",
+      "eslint-plugin-import": "2.25.3",
+      "eslint-plugin-node": "^11.1.0",
+      "eslint-plugin-promise": "5.2.0",
+      "nodemon": "2.0.15"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

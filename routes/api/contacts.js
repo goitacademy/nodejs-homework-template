@@ -2,8 +2,15 @@ const express = require("express");
 
 const router = express.Router();
 
+// импотрируем функции работі с контактами
+const contactsOperations = require("../../models/contacts");
+// const contactsOBJ = require("../../models/contacts.json");
+
+// Тут другий агрумент називається контроллер
 router.get("/", async (req, res, next) => {
-  res.json({ message: "template" });
+  const contactList = await contactsOperations.listContacts();
+  res.json(contactList);
+  // res.statusCode();
 });
 
 router.get("/:contactId", async (req, res, next) => {
