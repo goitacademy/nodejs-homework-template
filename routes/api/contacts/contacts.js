@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const ctrl = require("../../controllers/contacts");
-const { validateBody, isValidId } = require("../../middlewares");
-const { addSchema, updateSchema } = require("../../models/contact");
+const ctrl = require("../../../controllers");
+const { validateBody, isValidId } = require("../../../middlewares");
+const { addSchema, updateSchema } = require("../../../models");
 
 router.get("/", ctrl.getAll);
 
