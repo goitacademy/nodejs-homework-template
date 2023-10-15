@@ -1,5 +1,5 @@
 const userSchema = require('../../models/schemas/users')
-const { handleUserRouter, handleReqError } = require('../../helpers')
+const { handleUserRouter, handleReqError, HttpError } = require('../../helpers')
 const User = require('../../models/users')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -25,11 +25,7 @@ const login = async (req, res, next) => {
     handleUserRouter(res, validDataUser)
 
     if (!user || !passwordMatch) {
-        return res.status(401).json({
-            status: "error",
-            code: 401,
-            message: 'Email or password is wrong'
-        })
+        next(HttpError(401, "Not authorized"))
 
     }
 

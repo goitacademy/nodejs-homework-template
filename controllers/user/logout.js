@@ -1,4 +1,4 @@
-const { handleReqError } = require('../../helpers')
+const { handleReqError, HttpError } = require('../../helpers')
 const User = require('../../models/users')
 const jwt = require('jsonwebtoken')
 require('../../config/passport')
@@ -12,30 +12,25 @@ const secretKey = process.env.JWT_SECRET
  * @returns {Object} - Відповідь зі статусом 204, якщо вихід успішний, або помилку 401, якщо користувач не авторизований або сталася помилка.
  */
 const logout = async (req, res, next) => {
-    
-    const token = req.header('Authorization')
-    
-    if (!token) {
-        return res.status(401).json({ message: 'Not authorized' })
-    }
 
+    const token = req.header('Authorization')
+
+    if (!token) {
+        next(HttpError(401, "Not authorized"))
+    }
     try {
         const { _id } = jwt.verify(token.replace('Bearer ', ''), secretKey)
         const user = await User.findById(_id)
-        
+
         if (!user) {
-            return res.status(401).json({ message: 'Not authorized' })
+            next(HttpError(401, "Not authorized"))
         }
 
         user.token = ""
         await user.save()
         res.status(204).send()
     } catch (err) {
-        return res.status(401).json({
-            status: 'error',
-            code: 401,
-            message: 'Not authorized'
-        })
+        next(HttpError(401, "Not authorized"))
     }
 }
 

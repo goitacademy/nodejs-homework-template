@@ -1,4 +1,5 @@
 const User = require('../../models/users')
+const {HttpError} = require('../../helpers')
 
 /**
  * 
@@ -9,11 +10,7 @@ const User = require('../../models/users')
  */
 const current = async (req, res, next) => {
     if (!req.user) {
-        return res.status(401).json({
-            status: 'error',
-            code: 401,
-            message: 'Not authorized'
-        })
+        next(HttpError(401, "Not authorized"))
     }
 
     const { _id } = req.user
