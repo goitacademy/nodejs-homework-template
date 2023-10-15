@@ -1,5 +1,5 @@
 const handleError = require('./handleError')
-const handleReqError = require('./middlewareReqError')
+const handleReqError = require('./handleReqError')
 const handleUserRouter = require('./handleUserRouter')
 const handleConflict = require('./handleConflict')
 const createTokenUser = require('./createTokenUser')

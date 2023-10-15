@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-// const contactsController = require('../../controllers/contacts')
+const middlewareToken = require('../../middleware/middlewareToken')
 const {
     listContacts,
     getContactById,
@@ -9,6 +9,8 @@ const {
     updateContact,
     updateStatusContact,
 } = require('../../controllers/contacts')
+
+router.use(middlewareToken)
 
 /**
  * @ GET /api/contacts

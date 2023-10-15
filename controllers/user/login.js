@@ -13,12 +13,14 @@ require('dotenv').config()
  * Якщо користувача не знайдено або пароль невірний, повертає помилку 401 з відповідним повідомленням.
  */
 const login = async (req, res, next) => {
+    
     const { email, password } = req.body /* req.user */
-
+    
     const user = await User.getUserByEmail(email)
-    const passwordMatch = await user.comparePasswords(password, user.password)
+    console.log('LOGIN', password )
+    const passwordMatch = await user.comparePasswords(password)
     const secretKey = process.env.JWT_SECRET;
-
+    
     const validDataUser = userSchema.validate({ email, password })
     handleUserRouter(res, validDataUser)
 

@@ -3,7 +3,7 @@ const router = express.Router()
 const middlewareToken = require('../../middleware/middlewareToken')
 const ctrl = require('../../controllers/user')
 
-router.use(middlewareToken)
+
 /**
  * @ POST /users/registration
  * Отримує body {_id, password, email, subscription}
@@ -15,9 +15,10 @@ router.post('/registration', ctrl.register)
  * @ POST /users/login
  * Отримує body {_id, password, email, subscription, token}
  * Викликає функцію login
- */
+*/
 router.post('/login', /* middlewareToken, */ ctrl.login)
 
+router.use(middlewareToken)
 /**
  * @ POST /users/logout
  * Отримує body {_id, password, email, subscription, token}

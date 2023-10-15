@@ -6,7 +6,9 @@ const secretKey = process.env.JWT_SECRET
 
 
 const logout = async (req, res, next) => {
+    
     const token = req.header('Authorization')
+    
     if (!token) {
         return res.status(401).json({ message: 'Not authorized' })
     }
@@ -14,14 +16,13 @@ const logout = async (req, res, next) => {
     try {
         const { _id } = jwt.verify(token.replace('Bearer ', ''), secretKey)
         const user = await User.findById(_id)
-
+        
         if (!user) {
             return res.status(401).json({ message: 'Not authorized' })
         }
 
-        user.token = []
+        user.token = ""
         await user.save()
-
         res.status(204).send()
     } catch (err) {
         return res.status(401).json({
