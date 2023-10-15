@@ -1,14 +1,8 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { Contact } = require("../../models");
+const { HttpError, ctrlWrapper } = require("../../helpers");
 
 const getAll = async (req, res) => {
-  const data = await listContacts();
+  const data = await Contact.find();
   if (!data) {
     throw HttpError(404, "Not found");
   }
@@ -17,7 +11,7 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
     throw HttpError(404, "Not found");
   }
@@ -25,13 +19,13 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const data = await addContact(req.body);
+  const data = await Contact.create(req.body);
   res.status(201).json({ code: 201, data });
 };
 
 const remove = async (req, res) => {
   const { contactId } = req.params;
-  const deletedContact = removeContact(contactId);
+  const deletedContact = await Contact.findByIdAndRemove(contactId);
   if (!deletedContact) {
     throw HttpError(404, "Not found");
   }
@@ -40,11 +34,27 @@ const remove = async (req, res) => {
 
 const update = async (req, res) => {
   const { contactId } = req.params;
-  const newContact = await updateContact(contactId, req.body);
+  const newContact = await Contact.findOneAndUpdate(contactId, req.body);
   if (!newContact) {
     throw HttpError(404, "Not found");
   }
   res.status(200).json({ code: 200, data: newContact });
+};
+
+const updateStatusContact = async (req, res) => {
+  if (req.body.favorite === undefined) {
+    throw HttpError(400, "missing field favorite");
+  }
+  const { contactId } = req.params;
+  const updatedContact = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite: req.body.favorite },
+    { new: true }
+  );
+  if (!updatedContact) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json({ code: 200, data: updatedContact });
 };
 
 module.exports = {
@@ -53,4 +63,5 @@ module.exports = {
   add: ctrlWrapper(add),
   remove: ctrlWrapper(remove),
   update: ctrlWrapper(update),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
