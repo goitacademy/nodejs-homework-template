@@ -1,5 +1,3 @@
-// contactsController.js
-
 const Contact = require("../contactModel");
 
 const getContacts = async (req, res, next) => {

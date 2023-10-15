@@ -73,4 +73,12 @@ const currentUser = async (req, res, next) => {
     .json({ email: req.user.email, subscription: req.user.subscription });
 };
 
-module.exports = { register, login, logout, currentUser };
+const gravatar = require("gravatar");
+
+const { email } = req.body;
+const avatarURL = gravatar.url(email, { s: "250", d: "retro" });
+
+const user = new User({ email, password, avatarURL, subscription });
+await user.save();
+
+module.exports = { register, login, logout, currentUser, gravatar };
