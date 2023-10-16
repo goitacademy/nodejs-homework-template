@@ -2,6 +2,10 @@ import express from 'express'
 import contactService from '../../models/contacts.js'
 import HttpError from '../../helpers/HttpError.js'
 import Joi from 'joi'
+import Contact from '../../models/Contact.js'
+import { contactAddSchema } from "../../models/validator.js";
+import authenticate from './middleWare/authenticate.js';
+
 
 const contactAddSchema = Joi.object({
  name: Joi.string()
@@ -28,7 +32,13 @@ const contactAddSchema = Joi.object({
 
 const router = express.Router()
 
+router.use(authenticate)
+
 router.get('/', async (req, res, next) => {
+  const {_id: owner} = req.user
+  const {page = 1, limit = 10} = req.query
+  const skip = (page - 1) * limit
+  const result = await Contact.find({owner}, "-createdAt -updatedAt", {skip, limit}).populate("owner", "email")
   try {
     const result = await contactService.listContacts()
   res.json(result)
@@ -81,18 +91,15 @@ try {
       message: `not found`
     })
   }
-
   res.json({
     message: "contact deleted"
   })
-
 } catch (error) {
   next(error)
 }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  try {
     const validateContact = contactAddSchema.validate(req.body)
     if(!validateContact.error) {
       const id = req.params.contactId
@@ -103,7 +110,14 @@ router.put('/:contactId', async (req, res, next) => {
         })
       }else {
         res.status(200).json(result)
-      }
+      }}
+  const {_id: owner } = req.user;
+  if (Object.keys(req.body).length !== 0) {
+    try {
+    const validateContact = contactAddSchema.validate(req.body)
+    if(!validateContact.error) {
+       const result = await Contact.create({...req.body, owner})
+      res.status(200).json(result)
     } else {
          res.status(400).json({
           message: validateContact.error.message
@@ -112,6 +126,6 @@ router.put('/:contactId', async (req, res, next) => {
 } catch (error) {
   next(error)
 }
-})
+}})
 
 export default router
