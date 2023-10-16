@@ -18,6 +18,9 @@ router.post('/registration', ctrl.register)
 */
 router.post('/login', /* middlewareToken, */ ctrl.login)
 
+/**
+ * add middlewar
+ */
 router.use(middlewareToken)
 
 /**
