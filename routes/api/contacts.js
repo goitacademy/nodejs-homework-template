@@ -32,9 +32,10 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, "Missing required name field");
+      throw HttpError(400, error.message);
     }
-    const result = await contactsHandler.addContact(req.body);
+    const { name, email, phone } = req.body;
+    const result = await contactsHandler.addContact(name, email, phone);
     return res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -60,14 +61,15 @@ router.put("/:id", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, "Missing fields");
+      throw HttpError(400, error.message);
     }
     const { id } = req.params;
-    const result = await contactsHandler.updateContact(id, req.body);
+    const { name, email, phone } = req.body;
+    const result = await contactsHandler.updateContact(id, name, email, phone);
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    return res.status(201).json(result);
+    return res.status(200).json(result);
   } catch (error) {
     next(error);
   }

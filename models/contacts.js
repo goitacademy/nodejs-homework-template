@@ -10,7 +10,7 @@ const listContacts = async () => {
 };
 
 const getContactById = async (id) => {
-  const contacts = await listContacts;
+  const contacts = await listContacts();
   const result = contacts.find((contact) => contact.id === id);
   return result || null;
 };
@@ -20,7 +20,7 @@ const contactsUpdate = async (contacts) => {
 };
 
 const removeContact = async (id) => {
-  const contacts = await listContacts;
+  const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   const result = contacts.splice(index, 1);
   await contactsUpdate(contacts);
@@ -28,7 +28,7 @@ const removeContact = async (id) => {
 };
 
 const addContact = async (name, email, phone) => {
-  const contacts = await listContacts;
+  const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
     name,
@@ -40,13 +40,13 @@ const addContact = async (name, email, phone) => {
   return newContact;
 };
 
-const updateContact = async (id, body) => {
+const updateContact = async (id, name, email, phone) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, ...body };
+  contacts[index] = { id, name, email, phone };
   await contactsUpdate(contacts);
   return contacts[index];
 };
