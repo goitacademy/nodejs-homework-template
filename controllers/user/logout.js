@@ -23,14 +23,14 @@ const logout = async (req, res, next) => {
         const user = await User.findById(_id)
 
         if (!user) {
-            next(HttpError(401, "Not authorized"))
+            return next(HttpError(401, "Not authorized"))
         }
 
         user.token = ""
         await user.save()
         res.status(204).send()
     } catch (err) {
-        next(HttpError(401, "Not authorized"))
+        return next(HttpError(401, "Not authorized"))
     }
 }
 

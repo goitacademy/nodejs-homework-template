@@ -25,7 +25,7 @@ const login = async (req, res, next) => {
     handleUserRouter(res, validDataUser)
 
     if (!user || !passwordMatch) {
-        next(HttpError(401, "Not authorized"))
+        return next(HttpError(401, "Not authorized"))
 
     }
 
