@@ -14,6 +14,8 @@ router.post("/register", validateBody(authSchema), authCtrl.register);
 
 router.post("/login", validateBody(authSchema), authCtrl.login);
 
+// router.get("/verify/:verificationToken", authenticate, authCtrl.verificationToken);
+
 router.get("/current", authenticate, authCtrl.getCurrent);
 
 router.post("/logout", authenticate, authCtrl.logout);

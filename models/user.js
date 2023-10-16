@@ -3,6 +3,7 @@ import { Schema, model } from "mongoose";
 import { handleMongooseError } from "../helpers/index.js";
 import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 
+// eslint-disable-next-line no-useless-escape
 const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const subscriptionList = ["starter", "pro", "business"];
 
