@@ -24,9 +24,12 @@ export const sendEmailNM = async (data) => {
     },
   };
   const transporter = nodemailer.createTransport(nodemailerConfig);
+  try {
+    await transporter.sendMail(email);
+    console.log(`Email to ${data.mail} send success !`);
+  } catch (err) {
+    console.log(err.message);
+  }
 
-  await transporter.sendMail(email);
-  // .than(() => console.log("Email send success !"))
-  // .catch((err) => console.log(err.message));
   return true;
 };

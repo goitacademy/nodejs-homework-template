@@ -35,9 +35,9 @@ const register = async (req, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: "Verify e-mail",
+    subject: "Verify your e-mail",
     // text: "Hello",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click to verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">To finish the registration click here to verify you email</a>`,
   };
 
   // await sendEmailSG(verifyEmail);
