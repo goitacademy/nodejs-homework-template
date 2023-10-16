@@ -10,7 +10,7 @@ const listContacts = async (_, res) => {
 
 const getContactById = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.find({id: id});
+  const result = await Contact.find({ _id: id });
   if (!result) {
     throw httpError(404, "Not found");
   }
@@ -35,12 +35,13 @@ const addContact = async (req, res) => {
 
 const removeContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findOneAndRemove({ id: id });
+  const deletedContact = await Contact.findById({ _id: id});
+  const result = await Contact.findOneAndRemove({ _id: id });
 
   if (!result) {
     throw httpError(404, "Contact not found");
   } else if (result) {
-    res.status(200).json({ message: "Contact deleted" });
+    res.status(200).json({ message: "Contact deleted", deletedContact});
     } else{
       throw httpError(500, "Error deleting contact");
     }
@@ -48,8 +49,8 @@ const removeContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.updateOne({id: id}, {$set: {...req.body}});
-  const updatedContact = await Contact.find({id: id});
+  const result = await Contact.updateOne({ _id: id }, {$set: {...req.body}});
+  const updatedContact = await Contact.find({ _id: id });
   if (result.matchedCount === 0) {
     throw httpError(404, "Not found");
   }
@@ -58,8 +59,8 @@ const updateContact = async (req, res) => {
 
 const updateFavorite = async(req, res) => {
   const { id } = req.params;
-  const result = await Contact.updateOne({id: id}, {$set: req.body});
-  const updatedContact = await Contact.find({id: id});
+  const result = await Contact.updateOne({ _id: id }, {$set: req.body});
+  const updatedContact = await Contact.find({ _id: id });
   if (result.matchedCount === 0){
     throw httpError(404, "Not found");
   }
