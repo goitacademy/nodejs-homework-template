@@ -1,7 +1,12 @@
-const HttpError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
+const ctrlWrapper = (ctrl) => {
+  const func = async (req, res, next) => {
+    try {
+      await ctrl(req, res, next);
+    } catch (error) {
+      next(error);
+    }
+  };
+  return func;
 };
 
-module.exports = HttpError;
+module.exports = ctrlWrapper;
