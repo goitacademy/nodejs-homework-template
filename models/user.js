@@ -15,6 +15,13 @@ export const authSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+export const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    "string.pattern.base": "Ошибка от Joi или другой библиотеки валидации",
+    // "any.required": "missing field email",
+  }),
+});
+
 export const subscriptionSchema = Joi.object({
   subscription: Joi.string()
     .valid(...subscriptionList)
@@ -54,7 +61,7 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
-      required: [true, "Verify token is required"],
+      // required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }

@@ -51,12 +51,52 @@ const register = async (req, res) => {
   });
 };
 
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+  const user = await UserDB.findOne({ verificationToken });
+
+  if (!user) {
+    throw HttpError(404, "User with email not found");
+  }
+
+  await UserDB.findByIdAndUpdate(user._id, { verify: true, verificationToken: "" });
+
+  res.status(200).json({ message: "Verification successful" });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await UserDB.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify your e-mail",
+    // text: "Hello",
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">To finish the registration click here to verify you email</a>`,
+  };
+
+  // await sendEmailSG(verifyEmail);
+  await sendEmailNM(verifyEmail);
+
+  res.status(200).json({ message: "Verification email sent" });
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await UserDB.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
+  }
+  if (!user.verify) {
+    throw HttpError(401, "Email not verify");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
@@ -139,4 +179,6 @@ export default {
   getCurrent: ctrlWrapper(getCurrent),
   subscriptionChange: ctrlWrapper(subscriptionChange),
   updateAvatar: ctrlWrapper(updateAvatar),
+  verifyEmail: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
 };
