@@ -1,5 +1,5 @@
 const User = require('../../models/users')
-const {HttpError} = require('../../helpers')
+const { HttpError } = require('../../helpers')
 
 /**
  * 
@@ -10,7 +10,7 @@ const {HttpError} = require('../../helpers')
  */
 const current = async (req, res, next) => {
     if (!req.user) {
-        next(HttpError(401, "Not authorized"))
+        return next(HttpError(401, "Not authorized"))
     }
 
     const { _id } = req.user

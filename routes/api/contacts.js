@@ -10,6 +10,10 @@ const {
     updateStatusContact,
 } = require('../../controllers/contacts')
 
+/**
+ * /**
+ * add middlewar
+ */
 router.use(middlewareToken)
 
 /**
