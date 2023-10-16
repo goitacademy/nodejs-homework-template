@@ -302,3 +302,11 @@ GET /api/contacts/?favorite=false 14-10-2023_07:42:03
 GET /api/contacts/?favorite=false 14-10-2023_07:44:00
 GET /api/contacts/?favorite=false 14-10-2023_07:44:02
 GET /api/contacts/?favorite=true 14-10-2023_07:44:13
+POST /api/users/register 16-10-2023_04:40:31
+POST /api/users/login 16-10-2023_04:49:24
+PATCH /api/users/avatars 16-10-2023_05:15:19
+POST /api/users/login 16-10-2023_05:16:53
+PATCH /api/users/avatars 16-10-2023_05:17:12
+PATCH /api/users/avatars 16-10-2023_05:24:10
+PATCH /api/users/avatars 16-10-2023_05:27:42
+PATCH /api/users/avatars 16-10-2023_06:10:10
