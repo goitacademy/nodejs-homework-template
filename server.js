@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 
-require('dotenv').config({ path: 'ENV_FILENAME' });
-
 const app = require("./app.js");
 
 //  U1XmmpMOEwO9HXnj
 
-const { DB_HOST, PORT } = process.env;
+const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose.set('strictQuery', true);
 

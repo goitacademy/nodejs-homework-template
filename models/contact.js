@@ -14,6 +14,7 @@ const contactSchema = new Schema ({
     },
     phone: {
       type: String,
+      required: true,
     },
     favorite: {
       type: Boolean,
@@ -21,16 +22,17 @@ const contactSchema = new Schema ({
     },
   })
 
-  const Contact = model("contact", contactSchema);
-
+  
   contactSchema.post("save", handleMongooseError);
-
+  
   const addSchema = Joi.object({
-	name: Joi.string().required(),
-	email: Joi.string().required(),
-	phone: Joi.string().required(),
-	favorite: Joi.boolean(),
+    name: Joi.string().required(),
+    email: Joi.string(),
+    phone: Joi.string().required(),
+    favorite: Joi.boolean(),
   });
+  
+  const Contact = model("contact", contactSchema);
 
   const updateFavoriteSchema = Joi.object({
 	favorite: Joi.boolean().required(),
