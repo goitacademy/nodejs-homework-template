@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const usersRouter = require('./users/users.router');
-const router = require('./api/index');
+const router = require('./contacts/contact.router');
 
 const app = express()
 

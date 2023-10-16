@@ -4,7 +4,7 @@ const {
     createContact,
     updateContact,
     removeContact
-} = require('../service/index');
+} = require('./contact.dao');
 const joi = require("joi");
 
 const contactValidate = joi.object({

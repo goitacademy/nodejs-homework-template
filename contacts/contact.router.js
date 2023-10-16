@@ -7,7 +7,7 @@ const {
     update,
     updateStatus,
     remove
-} = require('../controller');
+} = require('./contacts.controller');
 
 router.get('/contacts', get);
 
