@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const { SECRET_KEY } = process.env;
 
-const aunauthorized = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     const [bearer, token] = authorization.split(" ");
@@ -16,7 +16,7 @@ const aunauthorized = async (req, res, next) => {
     try {
       const { id } = jwt.verify(token, SECRET_KEY);
       const user = await User.findById(id);
-      if (!user || !user.token ||  user.token !== token) {
+      if (!user || !user.token || user.token !== token) {
         next(HttpError(401, "Not authorized"));
       }
       req.user = user;
@@ -29,4 +29,4 @@ const aunauthorized = async (req, res, next) => {
   }
 };
 
-module.exports = aunauthorized;
+module.exports = authenticate;

@@ -5,13 +5,17 @@ const listContacts = async (req, res, next) => {
   const { _id: ownero } = req.user;
   const owner = ownero.toString();
   const favorite = req.query.favorite;
-    const { page = 1, limit = 20,  ...query } = req.query;
-    const skip = (page - 1) * limit;
+  const { page = 1, limit = 20, ...query } = req.query;
+  const skip = (page - 1) * limit;
   if (favorite) {
-    await  Contact.find({ favorite:true,owner, },{skip, limit});
+    await Contact.find({ favorite: true, owner }, { skip, limit });
   }
-  console.log(owner)
-  const result = await Contact.find({owner, ...query}, "-createdAt -updatedAt", {skip, limit});
+  console.log(owner);
+  const result = await Contact.find(
+    { owner, ...query },
+    "-createdAt -updatedAt",
+    { skip, limit },
+  );
   res.json(result);
 };
 
@@ -30,7 +34,7 @@ const addContact = async (req, res, next) => {
     const { _id: ownero } = req.user;
 
     const owner = ownero.toString();
-    console.log(owner)
+    console.log(owner);
     const result = await Contact.create({ ...req.body, owner });
     res.status(201).json({ data: result });
   } catch (error) {

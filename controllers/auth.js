@@ -9,20 +9,25 @@ const { SECRET_KEY } = process.env;
 const register = async (req, res, next) => {
   console.log(req.body);
   try {
-    const { email, password ,name,subscription} = req.body;
+    const { email, password, name, subscription } = req.body;
     const user = await User.findOne({ email });
     if (user) {
       res.status(209).json({ messeage: "Email in use" });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({email , password: hashPassword,subscription, name });
+    const newUser = await User.create({
+      email,
+      password: hashPassword,
+      subscription,
+      name,
+    });
 
     res.status(201).json({
       user: {
         email: newUser.email,
-            subscription: newUser.subscription,
-            name: newUser.name,
+        subscription: newUser.subscription,
+        name: newUser.name,
       },
     });
   } catch (error) {
@@ -47,7 +52,7 @@ const login = async (req, res, next) => {
     }
 
     const payload = {
-      id: user._id,  
+      id: user._id,
     };
 
     const token = await jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
@@ -56,8 +61,8 @@ const login = async (req, res, next) => {
     res.status(200).json({
       token,
       user: {
-          email,
-        subscription: user.subscription
+        email,
+        subscription: user.subscription,
       },
     });
   } catch (error) {
@@ -96,26 +101,29 @@ const currentUser = async (req, res, next) => {
   }
 };
 const updateBySubscription = async (req, res, next) => {
-    try {
-        const { subscription } = req.body;
-        const { _id } = req.user;
-        const user = await User.findByIdAndUpdate(_id, { subscription }, {new: true});
-        
-        if (!user) {
-            throw HttpError(401, "Not authorized");
-        }
-        
-        res.json({ subscription: user.subscription })        
-    } catch (error) {
-        next(error)
-    }
- }
+  try {
+    const { subscription } = req.body;
+    const { _id } = req.user;
+    const user = await User.findByIdAndUpdate(
+      _id,
+      { subscription },
+      { new: true },
+    );
 
+    if (!user) {
+      throw HttpError(401, "Not authorized");
+    }
+
+    res.json({ subscription: user.subscription });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
-currentUser: ctrlWrapper(currentUser),
-  updateBySubscription:ctrlWrapper(updateBySubscription)
+  currentUser: ctrlWrapper(currentUser),
+  updateBySubscription: ctrlWrapper(updateBySubscription),
 };

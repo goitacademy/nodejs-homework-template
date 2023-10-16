@@ -26,11 +26,12 @@ const userSchema = new Schema(
 );
 
 const registerSchema = Joi.object({
-
-      email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }).required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
   password: Joi.string().min(6).required(),
-    subscription: Joi.string(),
-          name: Joi.string().required(),
+  subscription: Joi.string(),
+  name: Joi.string().required(),
 });
 
 const loginSchema = Joi.object({
@@ -40,11 +41,11 @@ const loginSchema = Joi.object({
     .required(),
 });
 const updateBySubscriptionSchema = Joi.object({
-    subscription: Joi.string().valid("starter", "pro", "business").required()
-})
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
 const schemas = {
   registerSchema,
-    loginSchema,
+  loginSchema,
   updateBySubscriptionSchema,
 };
 
