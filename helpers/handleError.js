@@ -1,9 +1,5 @@
 const handleError = async (func, ...params) => {
-    try {
-        return await func(...params);
-    } catch (error) {
-        throw error;
-    }
+    return await func(...params);
 };
 
-module.exports = handleError
+module.exports = handleError;

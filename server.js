@@ -1,5 +1,5 @@
 const app = require("./app");
-const db = require("./schemas/db");
+const db = require("./models/schemas/db");
 
 const PORT = process.env.PORT || 3000;
 
