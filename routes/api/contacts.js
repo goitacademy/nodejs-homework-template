@@ -1,17 +1,16 @@
 const express = require("express");
-
 const ctrl = require("../../controllers/contacts");
-
 const contactsRouter = express.Router();
+const { ctrlWrapper } = require("../../helpers");
 
-contactsRouter.get("/", ctrl.getAll);
+contactsRouter.get("/", ctrlWrapper(ctrl.getAll));
 
-contactsRouter.get("/:contactId", ctrl.getByIdContact);
+contactsRouter.get("/:contactId", ctrlWrapper(ctrl.getByIdContact));
 
-contactsRouter.post("/", ctrl.addNewContact);
+contactsRouter.post("/", ctrlWrapper(ctrl.addNewContact));
 
-contactsRouter.put("/:contactId", ctrl.updateByIdContact);
+contactsRouter.put("/:contactId", ctrlWrapper(ctrl.updateByIdContact));
 
-contactsRouter.delete("/:contactId", ctrl.removeByIdContact);
+contactsRouter.delete("/:contactId", ctrlWrapper(ctrl.removeByIdContact));
 
 module.exports = contactsRouter;
