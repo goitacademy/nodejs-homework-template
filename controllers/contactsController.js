@@ -6,16 +6,18 @@ const {
   removeContact,
   updateContact,
   updateStatusFavoriteContact,
+  filterContactsByQuery,
 } = require("../models/contacts");
 const {
   catchAsyns,
   AppError,
-  dataValidator,
   statusValidator,
+  contactValidator,
 } = require("../utilitie");
+const { Contact } = require("../models/contactModel");
 
 const getAllContacts = async (req, res) => {
-  const result = await listContacts();
+  const result = await listContacts(req);
   res.status(200).json({
     status: "success",
     code: "200",
@@ -43,13 +45,13 @@ const getOneContact = async (req, res) => {
 };
 
 const addNewContact = async (req, res) => {
-  const { error } = dataValidator(req.body);
+  const { error } = contactValidator(req.body);
   if (error) {
     error.status = 400;
     throw error;
   }
 
-  const result = await addContact(req.body);
+  const result = await addContact(req);
 
   res.status(201).json({
     status: "success",
@@ -74,7 +76,7 @@ const deleteContact = async (req, res) => {
 };
 
 const updContact = async (req, res) => {
-  const { error } = dataValidator(req.body);
+  const { error } = contactValidator(req.body);
   if (error) {
     error.status = 400;
     throw error;
@@ -117,6 +119,19 @@ const updateStatusContact = async (req, res) => {
   });
 };
 
+const filterContacts = async (req, res) => {
+
+  const contacts = await filterContactsByQuery(req.user, req.query);
+
+  res.status(200).json({
+    status: "success",
+    code: 200,
+    data: {
+      contacts,
+    },
+  });
+};
+
 module.exports = {
   getAllContacts: catchAsyns(getAllContacts),
   getOneContact: catchAsyns(getOneContact),
@@ -124,4 +139,5 @@ module.exports = {
   updContact: catchAsyns(updContact),
   deleteContact: catchAsyns(deleteContact),
   updateStatusContact: catchAsyns(updateStatusContact),
+  filterContacts: catchAsyns(filterContacts),
 };
