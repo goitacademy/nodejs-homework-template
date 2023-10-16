@@ -1,63 +1,72 @@
-const Joi = require('joi')
+const addScheme = require('../models/contact')
 
-const contacts = require('../models/contacts')
+const { Contact } = require('../models/contact')
 
 const HttpErr = require('../helpers/HttpErr')
 
-const ctrlWrapper = require('../helpers/ctrlWrapper')
+const {ctrlWrapper} = require('../helpers/ctrlWrapper')
 
-const addScheme = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required()
-})
+
 
 const getAll = async (req, res) => {
-        const response = await contacts.listContacts();
-        res.json(response)
+    const response = await Contact.find();
+    res.json(response)
 
 };
 
 const getById = async (req, res) => {
-        const { contactId } = req.params
-        const response = await contacts.getContactById(contactId)
-        if (!response) {
-            throw HttpErr(404, 'Not Foun')
-        }
-        res.json(response)
+    const { contactId } = req.params
+    const response = await Contact.findById(contactId)
+    if (!response) {
+        throw HttpErr(404, 'Not Foun')
+    }
+    res.json(response)
 };
 
 const addContact = async (req, res) => {
-        const { error } = addScheme.validate(req.body)
-        if (error) {
-            throw HttpErr(400, error.message)
-        }
-        const response = await contacts.addContact(req.body);
-        res.status(201).json(response);
+    const { error } = addScheme.validate(req.body)
+    if (error) {
+        throw HttpErr(400, error.message)
+    }
+    const response = await Contact.create(req.body);
+    res.status(201).json(response);
 };
 
 const removeContact = async (req, res) => {
-        const { id } = res.params;
-        const response = await contacts.removeContact(id)
-        if (!response) {
-            throw HttpErr(404, 'Not Foun')
-        }
-        res.status({
-            message: 'Done'
-        })
+    const { id } = res.params;
+    const response = await Contact.findByIdAndRemove(id)
+    if (!response) {
+        throw HttpErr(404, 'Not Foun')
+    }
+    res.status({
+        message: 'Done'
+    })
 };
 
 const updateContact = async (req, res) => {
-        const { error } = addScheme.validate(req.body)
-        if (error) {
-            throw HttpErr(400, error.message)
-        }
-        const { id } = res.params;
-        const response = await contacts.updateContact(id, req.body)
-        if (!response) {
-            throw HttpErr(404, 'Not Foun')
-        }
-        res.json(response);
+    const { error } = addScheme.validate(req.body)
+    if (error) {
+        throw HttpErr(400, error.message)
+    }
+    const { id } = res.params;
+    const response = await Contact.findOneAndUpdate(id, req.body, { new: true })
+    if (!response) {
+        throw HttpErr(404, 'Not Foun')
+    }
+    res.json(response);
+};
+
+const updateContactFavorite = async (req, res) => {
+    const { error } = addScheme.validate(req.body)
+    if (error) {
+        throw HttpErr(400, error.message)
+    }
+    const { id } = res.params;
+    const response = await Contact.findOneAndUpdate(id, req.body, { new: true })
+    if (!response) {
+        throw HttpErr(404, 'Not Foun')
+    }
+    res.json(response);
 };
 
 module.exports = {
@@ -66,4 +75,5 @@ module.exports = {
     addContact: ctrlWrapper(addContact),
     removeContact: ctrlWrapper(removeContact),
     updateContact: ctrlWrapper(updateContact),
+    updateContactFavorite: ctrlWrapper(updateContactFavorite)
 }
