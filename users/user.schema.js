@@ -34,8 +34,8 @@ user.pre('save', async function() {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-user.methods.validatePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+user.methods.validatePassword = function (password) {
+  return bcrypt.compare(password, this.password);
 };
 
 const User = mongoose.model("user", user);
