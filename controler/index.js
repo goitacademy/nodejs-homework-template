@@ -1,6 +1,7 @@
 const Joi = require('joi'); // метод валадації сталих виразів
 const Contact = require("../models/Contact") // підключення до БД через Contact.js
-const {HttpError} = require('../helpers'); // обробка помилок
+const { HttpError } = require('../helpers'); // обробка помилок
+
 // валідація запиту по схемі joi
 const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/
 const addSchema = Joi.object({
@@ -9,6 +10,7 @@ const addSchema = Joi.object({
   phone: Joi.string().regex(phonePattern).required(),
   favorite: Joi.boolean().optional()
 });
+
 // обробка запитів 
 const getAllContacts = async (req, res, next) => {
     try {
@@ -58,13 +60,20 @@ const newContact =  async (req, res, next) => {
   }
 
 const deleteContact = async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const result = await Contact.findByIdAndRemove(contactId);
+  try {
+     const { contactId } = req.params;
+    // отримання імʼя контаксту перед видаленням
+    const contact = await Contact.findById(contactId);
+    if (!contact) {
+      throw HttpError(404, 'Not found')
+    }
+    const nameForMessange = contact.name
+
+    const result = await Contact.findByIdAndRemove(contactId);
       if (!result) {
         throw HttpError(404, 'Not found');
       }
-      res.json({ message: 'contact deleted' });
+      res.json({ message: `contact ${nameForMessange} deleted` });
     } catch (error) {
       next(error);
     }
