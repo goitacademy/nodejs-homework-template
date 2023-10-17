@@ -22,7 +22,7 @@ const contactsUpdate = async (contacts) => {
 const removeContact = async (id) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
-  const result = contacts.splice(index, 1);
+  const [result] = contacts.splice(index, 1);
   await contactsUpdate(contacts);
   return result || null;
 };
