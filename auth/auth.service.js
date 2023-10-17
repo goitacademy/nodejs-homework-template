@@ -1,5 +1,7 @@
 const JWT = require('jsonwebtoken');
-const { jwtSecret, jwtLifetime } = require('../server');
+
+const jwtSecret = process.env.JWT_SECRET
+const jwtLifetime = process.env.JWT_LIFETIME
 
 const generateAccessToken = (user) => {
     return JWT.sign(user, jwtSecret, { expiresIn: jwtLifetime ?? '1h' });
