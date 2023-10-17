@@ -55,9 +55,7 @@ const getCurrent = async (req, res) => {
 }
 const signout = async (req, res) => {
   await User.findByIdAndUpdate(req.user._id, { token: "" });
-  res.json({
-    message: "Signout success"
-  })
+  res.status(204).json();
 }
 export default {
   signup: controllerWrapper(signup),
