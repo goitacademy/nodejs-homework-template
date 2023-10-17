@@ -46,10 +46,17 @@ const updateContact = async (id, name, email, phone) => {
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, name, email, phone };
+  const { name: oldName, email: oldEmail, phone: oldPhone } = contacts[index];
+  contacts[index] = {
+    id,
+    name: name ? name : oldName,
+    email: email ? email : oldEmail,
+    phone: phone ? phone : oldPhone,
+  };
   await contactsUpdate(contacts);
   return contacts[index];
 };
+
 module.exports = {
   listContacts,
   getContactById,

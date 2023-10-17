@@ -59,10 +59,6 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const { id } = req.params;
     const { name, email, phone } = req.body;
     const result = await contactsHandler.updateContact(id, name, email, phone);
