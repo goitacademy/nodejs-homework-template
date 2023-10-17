@@ -19,6 +19,7 @@ const getAll = async (req, res) => {
     const filteredContacts = result.filter(
       (contact) => contact.favorite === true
     );
+
     res.json(filteredContacts);
   } else {
     res.json(result);
