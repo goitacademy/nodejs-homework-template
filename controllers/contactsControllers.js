@@ -1,13 +1,17 @@
-const contacts = require("../models/contacts");
+const { Contact } = require("../models/contacts");
+
+const { ctrlWrapper } = require("../decorators/ctrl.Wrapper");
 
 // const { HttpError } = require("../helpers/HttpError");
 
-const ctrlWrapper = require("../decorators/ctrl.Wrapper");
-
-const contactAddSchema = require("../schemas/contacts");
+// const HttpError = require("../helpers/HttpError");
+const {
+  contactAddSchema,
+  updateFavoriteSchema,
+} = require("../schemas/contacts");
 
 const listContacts = async (req, res, next) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
@@ -16,33 +20,25 @@ const addContact = async (req, res, next) => {
 
   if (!name && !email && !phone) {
     return res.status(400).json({
-      message: "Missing field",
+      message: "Missing fields",
     });
   }
 
-  if (!name) {
+  if (!name || !email || !phone) {
     return res.status(400).json({
-      message: "Missing required name field",
-    });
-  }
-
-  if (!email) {
-    return res.status(400).json({
-      message: "Missing required email field",
-    });
-  }
-
-  if (!phone) {
-    return res.status(400).json({
-      message: "Missing required phone field",
+      message: "missing required field: name, email, or phone",
     });
   }
 
   try {
-    const newContact = await contacts.addContact(name, email, phone);
+    const newContact = await Contact.create({
+      name,
+      email,
+      phone,
+    });
 
     res.status(201).json({
-      id: newContact.id,
+      id: newContact._id,
       name: newContact.name,
       email: newContact.email,
       phone: newContact.phone,
@@ -53,12 +49,11 @@ const addContact = async (req, res, next) => {
 };
 
 const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  const result = await Contact.findById(req.params.contactId);
   if (!result) {
     return res.status(404).json({ message: "Not found" });
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const removeContact = async (req, res, next) => {
@@ -70,7 +65,7 @@ const removeContact = async (req, res, next) => {
     });
   }
 
-  const result = await contacts.removeContact(contactId);
+  const result = await Contact.findByIdAndRemove(contactId);
 
   if (!result) {
     return res.status(404).json({ message: "Not found" });
@@ -91,21 +86,9 @@ const updateContact = async (req, res, next) => {
     });
   }
 
-  if (!name) {
+  if (!name || !email || !phone) {
     return res.status(400).json({
-      message: "Missing required name field",
-    });
-  }
-
-  if (!email) {
-    return res.status(400).json({
-      message: "Missing required email field",
-    });
-  }
-
-  if (!phone) {
-    return res.status(400).json({
-      message: "Missing required phone field",
+      message: "missing required field: name, email, or phone",
     });
   }
 
@@ -117,7 +100,7 @@ const updateContact = async (req, res, next) => {
   }
 
   try {
-    const updatedContact = await contacts.updateContact(contactId, {
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, {
       name,
       email,
       phone,
@@ -135,10 +118,42 @@ const updateContact = async (req, res, next) => {
   }
 };
 
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  const { error } = updateFavoriteSchema.validate({ favorite });
+
+  if (error) {
+    return res.status(400).json({
+      message: `missing field favorite`,
+    });
+  }
+
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({
+        message: "Not found",
+      });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
