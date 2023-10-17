@@ -1,6 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
-const auth  = require("../../config/auth.js");
+const auth = require("../../config/auth.js");
 
 const {
   listContacts,
@@ -11,7 +11,7 @@ const {
   updateStatusContact,
 } = require("../../models/contacts.js");
 
-const {filterContacts} = require('../../models/filters.js')
+const { filterContacts } = require("../../models/filters.js");
 
 const router = express.Router();
 
@@ -47,8 +47,8 @@ const validateFavoriteField = async (req, res, next) => {
 
 router.get("/", auth, async (req, res) => {
   try {
-    const contacts = await listContacts();
-    const segmentedContacts = filterContacts (contacts, req.query)
+    const contacts = await listContacts(req.user._id);
+    const segmentedContacts = filterContacts(contacts, req.query);
     res.json(segmentedContacts);
   } catch (error) {
     console.error("Error en la ruta /:", error);
@@ -59,7 +59,7 @@ router.get("/", auth, async (req, res) => {
 router.get("/:contactId", auth, async (req, res) => {
   try {
     const id = req.params.contactId;
-    const contact = await getContactById(id);
+    const contact = await getContactById(id, req.user._id);
     res.json(contact);
   } catch (error) {
     if (error.name === "CastError") {
@@ -67,43 +67,44 @@ router.get("/:contactId", auth, async (req, res) => {
     }
     res
       .status(500)
-      .json({ error: `Error en el servidor de tipo: ${error.name}` });
+      .json({ error: `Server error type: ${error.name}` });
   }
 });
 
 router.post("/", auth, validateBody, async (req, res) => {
   try {
-    const contact = await addContact(req.body);
+    console.log(req.user);
+    const contact = await addContact(req.body, req.user._id);
     res.status(201).json(contact);
   } catch (error) {
     console.error("Error en la ruta /:", error);
-    res.status(500).json({ error: "Error en el servidor" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
 router.delete("/:contactId", auth, async (req, res) => {
   try {
     const id = req.params.contactId;
-    const contact = await removeContact(id);
+    const contact = await removeContact(id, req.user._id);
     res.json(contact);
   } catch (error) {
     if (error.name === "CastError") {
       return res.status(400).json({ message: "Invalid contact ID" });
     }
-    res.status(500).json({ error: "Error en el servidor" });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
 router.put("/:contactId", auth, validateBody, async (req, res) => {
   const id = req.params.contactId;
   try {
-    const contact = await updateContact(id, req.body);
+    const contact = await updateContact(id, req.body, req.user._id);
     res.status(201).json(contact);
   } catch (error) {
     if (error.name === "CastError") {
       return res.status(400).json({ message: "Invalid contact ID" });
     }
-    res.status(500).json({ error: "Error en el servidor" });
+    res.status(500).json({ error: "Server errorr" });
   }
 });
 router.patch(
@@ -113,13 +114,13 @@ router.patch(
   async (req, res) => {
     const id = req.params.contactId;
     try {
-      const contact = await updateStatusContact(id, req.body);
+      const contact = await updateStatusContact(id, req.body, req.user._id);
       res.status(201).json(contact);
     } catch (error) {
       if (error.name === "CastError") {
         return res.status(400).json({ message: "Invalid contact ID" });
       }
-      res.status(500).json({ error: "Error en el servidor" });
+      res.status(500).json({ error: "Server error" });
     }
   }
 );

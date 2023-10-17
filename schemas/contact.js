@@ -18,12 +18,11 @@ const contact = new Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "users",
     },
   },
   { versionKey: false, timestamps: true }
 );
-
 const ContactSchema = model("Contact", contact);
 
 module.exports = ContactSchema;
