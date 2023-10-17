@@ -43,5 +43,5 @@ console.log(`Server not running. Error message: ${err.message}`),
 
 module.exports = {
   jwtSecret,
-  jwtLifetime
+  jwtLifetime,
 }
