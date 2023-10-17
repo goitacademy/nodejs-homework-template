@@ -1,5 +1,5 @@
 const express = require("express");
-const addSchema = require("../../schemas/contacts.js");
+const { addSchema, updateSchema } = require("../../schemas/contacts.js");
 const HttpError = require("../../helpers/HttpError.js");
 
 const contactsHandler = require("../../models/contacts.js");
@@ -59,6 +59,10 @@ router.delete("/:id", async (req, res, next) => {
 
 router.put("/:id", async (req, res, next) => {
   try {
+    const { error } = updateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const { id } = req.params;
     const { name, email, phone } = req.body;
     const result = await contactsHandler.updateContact(id, name, email, phone);

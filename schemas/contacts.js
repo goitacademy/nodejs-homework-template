@@ -12,5 +12,10 @@ const addSchema = Joi.object({
     .required()
     .messages({ "any.only": "Missing required phone field" }),
 });
+const updateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+});
 
-module.exports = addSchema;
+module.exports = { addSchema, updateSchema };
