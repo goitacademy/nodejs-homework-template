@@ -4,7 +4,11 @@ import path from "path";
 import languageEncoding from "detect-file-encoding-and-language";
 import { nanoid } from "nanoid";
 
-const contactsPath = path.resolve("db", "contacts.json");
+const contactsPath = path.resolve("models", "contacts.json");
+
+//  Используйте относительный путь от текущего модуля
+// const contactsPath = path.resolve("./contacts.json");
+
 const { encoding } = languageEncoding(contactsPath);
 
 const listContacts = async () => {

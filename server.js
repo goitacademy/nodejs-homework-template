@@ -1,4 +1,4 @@
-import app from "./app";
+import app from "./app.js";
 // import mongoose from "module";
 const { PORT = 3000 } = process.env;
 app.listen(PORT, () => {

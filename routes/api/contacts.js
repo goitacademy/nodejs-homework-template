@@ -1,10 +1,9 @@
-const express = require("express");
-
+import express from "express";
 const router = express.Router();
 
 // импотрируем функции работі с контактами
 // const contactsOperations = require("../../models/contacts");
-import { contactsOperations } from "../../models/contacts";
+import contactsOperations from "../../models/contacts.js";
 
 // const contactsOBJ = require("../../models/contacts.json");
 
@@ -31,4 +30,4 @@ router.put("/:contactId", async (req, res, next) => {
   res.json({ message: "template message" });
 });
 
-module.exports = router;
+export default router;
