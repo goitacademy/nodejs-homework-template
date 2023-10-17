@@ -20,15 +20,20 @@ const validateContact = (data) => {
   return schema.validate(data);
 };
 
+const checkToken = (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    throw HttpError(401, "Unauthorized");
+  }
+  next();
+};
+
+router.use(checkToken);
+
 // GET /api/contacts
 router.get("/", passportAuthenticate, async (req, res, next) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
-    if (!token) {
-      throw HttpError(401, "Unauthorized");
-    }
     const userId = req.user._id;
-
     const { page = 1, limit = 10, favorite } = req.query;
     const filter = { owner: userId };
     if (favorite !== undefined) {
@@ -71,7 +76,6 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", passportAuthenticate, async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
-
     if (!name || !email || !phone) {
       throw HttpError(400, "missing required name field");
     }
