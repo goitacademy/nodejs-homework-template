@@ -1,9 +1,10 @@
 const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
-const { HttpError } = require("../../helpers/idex");
+const { HttpError } = require("../../helpers/index");
 
-const { Contact } = require("../../db/mongoDB");
+const { Contact } = require("../../db/contactsSchema");
+const { passportAuthenticate } = require("./auth");
 
 const validateContact = (data) => {
   const phonePattern = /^\(\d{3}\) \d{3}-\d{4}$/;
@@ -20,9 +21,24 @@ const validateContact = (data) => {
 };
 
 // GET /api/contacts
-router.get("/", async (req, res, next) => {
+router.get("/", passportAuthenticate, async (req, res, next) => {
   try {
-    const result = await Contact.find();
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+      throw HttpError(401, "Unauthorized");
+    }
+    const userId = req.user._id;
+
+    const { page = 1, limit = 10, favorite } = req.query;
+    const filter = { owner: userId };
+    if (favorite !== undefined) {
+      filter.favorite = favorite === "true";
+    }
+    const skip = (page - 1) * limit;
+
+    const result = await Contact.find(filter)
+      .skip(skip)
+      .limit(parseInt(limit, 10));
     res.json({
       status: "success",
       code: 200,
@@ -52,7 +68,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 // POST /api/contacts
-router.post("/", async (req, res, next) => {
+router.post("/", passportAuthenticate, async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
 
@@ -66,8 +82,15 @@ router.post("/", async (req, res, next) => {
       throw HttpError(400, error.details[0].message);
     }
 
+    const userId = req.user._id;
+
     if (name && email && phone) {
-      const result = await Contact.create({ name, email, phone });
+      const result = await Contact.create({
+        name,
+        email,
+        phone,
+        owner: userId,
+      });
       res.json({
         status: "success",
         code: 201,
