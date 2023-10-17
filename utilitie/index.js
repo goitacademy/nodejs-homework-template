@@ -1,5 +1,12 @@
 const AppError = require("./AppError");
 const catchAsyns = require("./catchAsync");
-const { dataValidator, statusValidator } = require("./dataValidator");
+const { contactValidator, statusValidator } = require("./dataValidator");
+const handleMongooseError = require("./handleMongooseError");
 
-module.exports = { AppError, catchAsyns, dataValidator, statusValidator };
+module.exports = {
+  AppError,
+  catchAsyns,
+  contactValidator,
+  statusValidator,
+  handleMongooseError,
+};

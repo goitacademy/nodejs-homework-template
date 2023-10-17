@@ -1,16 +1,18 @@
-const fs = require("node:fs/promises");
-const path = require("node:path");
-const { v4: uuidv4 } = require("uuid");
+const { trusted } = require("mongoose");
 const { Contact } = require("../models/contactModel");
-
-const CONTACTS_PATH = path.join(__dirname, "contacts.json");
 
 /**
  * @author Yuliya Solovenuk
  * @returns {Array}
  */
-const listContacts = async () => {
-  const contacts = await Contact.find();
+const listContacts = async (req) => {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20 } = req.query;
+  const skip = (page - 1) * limit;
+  const contacts = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "email");
   return contacts;
 };
 
@@ -30,14 +32,9 @@ const getContactById = async (id) => {
  * @param {object}
  * @returns {object}
  */
-const addContact = async (body) => {
-  const { name, email, phone } = body;
-
-  const newContact = await Contact.create({
-    name,
-    email,
-    phone,
-  });
+const addContact = async (req) => {
+  const { _id: owner } = req.user;
+  const newContact = await Contact.create({ ...req.body, owner });
 
   return newContact;
 };
@@ -65,9 +62,36 @@ const updateContact = async (id, body) => {
   return contact;
 };
 
+/**
+ * @author Yuliya Solovenuk
+ * @param {string}
+ * @param {object}
+ * @returns {object}
+ */
 const updateStatusFavoriteContact = async (id, body) => {
   const contact = await Contact.findByIdAndUpdate(id, body, { new: true });
   return contact;
+};
+
+/**
+ * @author Yuliya Solovenuk
+ * @param {object}
+ * @param {object}
+ * @returns {object}
+ */
+const filterContactsByQuery = async (user, query) => {
+  const { favorite } = query;
+  const { _id: owner } = user;
+  const contacts = await Contact.find({ owner });
+  let filtredContacts = contacts;
+
+  if (favorite === "true") {
+    filtredContacts = contacts.filter((contact) => {
+      return contact.favorite === true;
+    });
+  }
+
+  return filtredContacts;
 };
 
 module.exports = {
@@ -77,4 +101,5 @@ module.exports = {
   addContact,
   updateContact,
   updateStatusFavoriteContact,
+  filterContactsByQuery,
 };
