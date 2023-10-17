@@ -1,59 +1,29 @@
-const fs = require("fs/promises");
-const path = require("path");
-const contactsPath = path.join(__dirname, "contacts.json");
-const { nanoid } = require("nanoid");
+const { model } = require("mongoose");
+const schema = require("../schemas/contactsSchema");
+const Contact = model("contact", schema);
 
 const listContacts = async () => {
-  const all = await fs.readFile(contactsPath);
-  return JSON.parse(all);
+  return Contact.find();
 };
 
 const getContactById = async (contactId) => {
-  const data = await listContacts();
-  const contact = data.find((contact) => contact.id === contactId);
-  return contact || null;
+  return Contact.findById(contactId);
 };
 
 const removeContact = async (contactId) => {
-  const data = await listContacts();
-  const index = data.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const contact = data.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(data));
-  return contact;
+  return Contact.findByIdAndRemove(contactId);
 };
 
 const addContact = async (body) => {
-  const allContacts = await listContacts();
-  const { name, email, phone } = body;
-  const newContact = {
-    id: nanoid(),
-    name,
-    email,
-    phone,
-  };
-  allContacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-  return newContact;
+  return Contact.create(body);
 };
 
 const updateContact = async (contactId, body) => {
-  const allContacts = await listContacts();
-  const index = allContacts.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const { name, email, phone } = body;
-  allContacts[index] = {
-    id: contactId,
-    name,
-    email,
-    phone,
-  };
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
-  return allContacts[index];
+  return Contact.findByIdAndUpdate({ _id: contactId }, body, { new: true });
+};
+
+const updateStatusContact = async (contactId, body) => {
+  return Contact.findByIdAndUpdate({ _id: contactId }, body, { new: true });
 };
 
 module.exports = {
@@ -62,4 +32,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
