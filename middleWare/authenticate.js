@@ -10,7 +10,7 @@ const authenticate = async(req, res, next) => {
     const [bearer, token] = authorization.split(" ")
     if (bearer !== "Bearer") {
          res.status(401).json({
-            "massage": "not found1"
+            "massage": "not found"
         })
     }
     try {
@@ -18,14 +18,14 @@ const authenticate = async(req, res, next) => {
         const user = await User.findById(id)
         if (!user || !user.token) {
             res.status(401).json({
-                "massage": "not found2"
+                "massage": "not found"
             })
         } 
              req.user = user
              next()
     } catch (error) {
         res.status(401).json({
-            "massage": "not found3"
+            "massage": "not found"
         })
     }
 }

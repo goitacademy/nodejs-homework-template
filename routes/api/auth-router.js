@@ -60,10 +60,16 @@ authRouter.post('/login', async (req, res, next) => {
           }
           const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
           await User.findByIdAndUpdate(user._id, {token})
-          res.json({
-            token,
-          })}
-    } else {
+          res.status(200).json({
+            
+              "token": token,
+              "user": {
+                "email": user.email,
+                "subscription": user.subscription
+              
+            } 
+          })
+    }} else {
       res.status(400).json({
         message: validateUser.error.message
        })
@@ -80,7 +86,7 @@ authRouter.get("/current", async (req, res, next) => {
   const [bearer, token] = authorization.split(" ")
   if (bearer !== "Bearer") {
        res.status(401).json({
-          "massage": "not found1"
+          "massage": "not found"
       })
   }
   try {
@@ -88,14 +94,15 @@ authRouter.get("/current", async (req, res, next) => {
       const user = await User.findById(id)
       if (!user || !user.token) {
           res.status(401).json({
-              "massage": "not found2"
+              "massage": "not found"
           })
-      } 
+      } else{
          req.user = user
         const {email} = req.user
         res.json({
           email
-        })    
+        }) 
+      }
   } catch (error) {
       res.status(401).json({
           "massage": "not found"
@@ -122,7 +129,9 @@ authRouter.post("/logout", async (req, res, next) => {
       } 
       req.user = user
         await User.findByIdAndUpdate(req.user._id, {token: ""})
-        res.status(204)
+        res.status(204).json({
+          "message": "Logout success"
+        })
   } catch (error) {
       res.status(401).json({
         "message": error.message  

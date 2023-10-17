@@ -35,8 +35,12 @@ export const contactAddSchema = Joi.object({
 
 
    export const userSignUpSchema = Joi.object({
-    email: Joi.string().required(),
-    password: Joi.string().min(6).required(),
+    email: Joi.string().required().messages({
+      "any.required": "email is required"
+    }),
+    password: Joi.string().min(6).required().messages({
+      "any.required": "password is required"
+    }),
 })
 
 export const userSignInSchema = Joi.object({
