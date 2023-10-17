@@ -21,7 +21,12 @@ const contactSchema = new Schema({
     favorite: {
       type: Boolean,
       default: false,
-    },
+  },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true
+    }
   }, {versionKey: false, timestamps: true});
 
 contactSchema.post("save", handleSaveError);
@@ -40,6 +45,7 @@ export const contactAddSchema = Joi.object({
   }),
   phone: Joi.string().length(14).pattern(contactRegexp.phone).required().messages({
     "any.required": "missing required phone field",
+    'string.length': '{{#label}} length must be {{#limit}} characters long, like "(000) 000-0000"',
     'string.pattern.base': '{{#label}} with value {:[.]} fails to match the required pattern, example: "(000) 000-0000"',
   }),
   favorite: Joi.boolean()
