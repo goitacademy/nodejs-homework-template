@@ -59,8 +59,8 @@ const logoutHandler = async (req, res, next) => {
 
 const currentHandler = async (req, res, next) => {
     try {
-        const {email, role} = req.user;
-        return res.status(200).send({user: { email, role }});
+        const {email, subscription} = req.user;
+        return res.status(200).send({user: { email, subscription }});
     } catch (e) {
         return next(e);
     }

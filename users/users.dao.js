@@ -1,4 +1,4 @@
-const { User } = require('./user.schema');
+const User = require('./user.schema');
 
 class DuplicatedKeyError extends Error {
     constructor(keyName, value) {
