@@ -3,7 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 // импотрируем функции работі с контактами
-const contactsOperations = require("../../models/contacts");
+// const contactsOperations = require("../../models/contacts");
+import { contactsOperations } from "../../models/contacts";
+
 // const contactsOBJ = require("../../models/contacts.json");
 
 // Тут другий агрумент називається контроллер
