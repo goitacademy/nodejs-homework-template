@@ -1,7 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-require('./config/passport')
+require("./config/passport");
 
 const contactsRouter = require("./routes/contacts.routes");
 const authRouter = require("./routes/auth.routes");
@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/", authRouter);
-
+app.use(express.static("public"));
 
 app.use((req, res) => {
 	return res.status(404).json({ message: "Not found" });
