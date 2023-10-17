@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+
 require("./config/passport");
 
 const contactsRouter = require("./routes/contacts.routes");
