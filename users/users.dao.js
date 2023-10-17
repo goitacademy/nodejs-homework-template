@@ -14,7 +14,8 @@ class UnknownDatabaseError extends Error {
 
 const createUser = async (userData) => {
     try {
-        return await User.create(userData);
+        const result = await User.create(userData);
+        return result;
     } catch (e){
         console.log(e);
 
