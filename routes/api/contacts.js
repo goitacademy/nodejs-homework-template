@@ -4,12 +4,15 @@ const isEmptyBody = require('../../middlewares/isEmptyBody.js')
 const validateBody = require('../../decorators/validateBody.js')
 const schemaValidate = require('../../models/Contact.js')
 const isValidId = require('../../middlewares/isValidId.js')
+const authenticate = require('../../middlewares/authenticate.js')
 
 const contactAddValidate = validateBody(schemaValidate.addSchema);
 const contactUpdateValidate = validateBody(schemaValidate.updateSchema)
 const contactUpdateValidateFavorite = validateBody(schemaValidate.updateFavoriteSchema)
 
 const router = express.Router()
+
+router.use(authenticate)
 
 router.get('/', controllers.getAll)
 
