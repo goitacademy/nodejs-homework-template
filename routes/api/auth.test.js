@@ -27,12 +27,12 @@ describe("test routes", () => {
       email: "test5@test.com",
       password: `${password}`,
       subscription: "starter",
-      avatarUrl: "avatars\\652d2c213a12a6adac14f6c3_avatar.jpg"
+      avatarURL: "avatars\\652d2c213a12a6adac14f6c3_avatar.jpg"
     };
-    const user = await User.create({ newUser });
+    const user = await User.create( newUser );
     const loginUser = {
       email: "test5@test.com",
-      password: "123456",
+      password: "123456",      
     };
 
     const res = await request(app).post("/api/auth/login").send(loginUser);
@@ -44,5 +44,5 @@ describe("test routes", () => {
     expect(res.body.user).toHaveProperty("subscription");
     expect(typeof res.body.user.email).toBe("string");
     expect(typeof res.body.user.subscription).toBe("string");
-  });
+  });  
 });
