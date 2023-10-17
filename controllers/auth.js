@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp")
 const { User } = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const { SECRET_KEY } = process.env;
@@ -31,8 +32,7 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  console.log(user);
+  const user = await User.findOne({ email });  
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
   }
@@ -74,11 +74,17 @@ const logout = async (req, res) => {
 };
 
 const updateAvatar = async(req, res) => {
-  const {_id} = req.user
+  const {_id} = req.user  
   const {path: tempUpload, originalname} = req.file;
   const filename = `${_id}_${originalname}`
   const resultUpload = path.join(avatarsDir, filename)
   await fs.rename(tempUpload, resultUpload);
+  await Jimp.read(resultUpload)
+  .then(avatar => avatar.resize(250, 250).writeAsync(resultUpload))
+  .catch(error=>{
+    throw HttpError(404, error.message)
+  });
+
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, {avatarURL})
 
@@ -98,7 +104,6 @@ module.exports = {
 // const createHashPassword = async (password) => {
 //     const salt = bcrypt.genSalt(10);
 //     console.log(salt);
-
 //     const result = await bcrypt.hash(password, 10)
 //     const compareResult = await bcrypt.compare(password, result);
 // }
