@@ -1,22 +1,30 @@
-import express, { json } from 'express'
+import express from 'express'
 import logger from 'morgan'
 import cors from 'cors'
-
-import contactsRouter from './routes/api/contacts'
-
+import moment from 'moment/moment.js'
+import router from './routes/api/contacts.js'
+import fs from 'fs/promises'
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
 app.use(cors())
-app.use(json())
+app.use(express.json())
 
-app.use('/api/contacts', contactsRouter)
+app.use(async (req, res, next) => {
+  const {method, url} = req
+  const date = moment().format('DD-MM-YYYY_hh:mm:ss');
+  await fs.appendFile("./public/server.log", `\n ${method}, ${url}, ${date}`)
+  next()
+
+})
+
+app.use('/contacts', router)
+
 
 app.use((req, res, next) => {
-  console.log('GET /api/contacts');
-  // res.status(404).json({ message: 'Not found' })
+  res.status(404).json({ message: 'Not found' })
   next()
 })
 
