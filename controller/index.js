@@ -1,5 +1,5 @@
 const contactProcessing = require('./contactProcessing') // дії з контактами
-const userProcessing = require('./userProcessing')
+const userProcessing = require('./userProcessing')// дії з користувачем
 
 
 // обробка запитів для роботи з контактами
@@ -16,7 +16,7 @@ const updatedContactById = contactProcessing.updatedContactById
 const favoritStatus = contactProcessing.favoritStatus
 
 // обробка запитів для роботи з користувачами
-const userRegister = userProcessing
+const userRegister = userProcessing.register;
 
 module.exports = {
     getAllContacts,
