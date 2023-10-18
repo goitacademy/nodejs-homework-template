@@ -14,7 +14,7 @@ const {
  * /**
  * add middlewar
  */
-router.use(middlewareToken)
+// router.use(middlewareToken)
 
 /**
  * @ GET /api/contacts

@@ -10,7 +10,7 @@ const { HttpError } = require('../../helpers')
  */
 const current = async (req, res, next) => {
     if (!req.user) {
-        return next(HttpError(401, "Not authorized"))
+         next(HttpError(401, "Not authorized"))
     }
 
     const { _id } = req.user
