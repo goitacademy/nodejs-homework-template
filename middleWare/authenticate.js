@@ -2,7 +2,8 @@ import jwt  from "jsonwebtoken"
 
 const {JWT_SECRET} = process.env
 
-import User from "../../../models/User.js"
+
+import User from "../models/User.js"
 
 
 const authenticate = async(req, res, next) => {

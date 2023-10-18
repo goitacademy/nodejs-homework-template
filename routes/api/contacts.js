@@ -2,7 +2,7 @@ import express from 'express'
 import HttpError from '../../helpers/HttpError.js'
 import Contact from '../../models/Contact.js'
 import { contactAddSchema } from "../../models/validator.js";
-import authenticate from './middleWare/authenticate.js';
+import authenticate from '../../middleWare/authenticate.js';
 import { isValidObjectId } from 'mongoose';
 import { contactFavoriteUpdate } from '../../models/validator.js';
 
