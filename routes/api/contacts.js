@@ -1,8 +1,12 @@
 const express = require("express");
-const { addSchema, updateSchema } = require("../../schemas/contacts.js");
+const {
+  addSchema,
+  updateSchema,
+  updateStatusSchema,
+} = require("../../schemas/contacts.js");
 const HttpError = require("../../helpers/HttpError.js");
 
-const contactsHandler = require("../../models/contacts.js");
+const contactsHandler = require("../../controllers/contacts.js");
 
 const router = express.Router();
 
@@ -66,6 +70,25 @@ router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     const { name, email, phone } = req.body;
     const result = await contactsHandler.updateContact(id, name, email, phone);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+router.patch("/:id/favorite", async (req, res, next) => {
+  try {
+    const { error } = updateStatusSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await contactsHandler.updateStatusContact(
+      id,
+      req.body.favorite
+    );
     if (!result) {
       throw HttpError(404, "Not found");
     }

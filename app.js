@@ -1,3 +1,14 @@
+//mongoatlas
+//anyankadiachenko
+//TJtW1ZBIezb8xMw9
+const mongoose = require('mongoose');
+const {DB_HOST} = require ('./config.js')
+mongoose.set('strictQuery', true);
+mongoose.connect(DB_HOST)
+.then(() => console.log("Database connection successful"))
+.catch (error => console.log(error.message))
+
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
