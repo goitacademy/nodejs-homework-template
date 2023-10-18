@@ -84,15 +84,21 @@ const addContact = async (req, res, next) => {
 
 const updateContactById = async (req, res, next) => {
   try {
+    console.log(req.body);
     const { error } = movieUpdateSchema.validate(req.body); //тут на джой-схемі викликаємо метод валідейт і передаємо тіло.
+    // console.log(error);
     if (error) {
       throw HttpError(400, error.message);
     }
 
-    const { id } = req.params;
-    const updateResult = await contactsOperations.updateContact(id, req.body);
-    if (updateResult) {
-      throw HttpError(400, `Contacts with ${id} not found(.`);
+    const { contactId } = req.params;
+    const updateResult = await contactsOperations.updateContact(
+      contactId,
+      req.body
+    );
+    console.log("updateResult", updateResult);
+    if (!updateResult) {
+      throw HttpError(400, `Contacts with ${contactId} not found(.`);
     }
     res.json(updateResult);
   } catch (err) {
@@ -102,15 +108,14 @@ const updateContactById = async (req, res, next) => {
 
 const removeContactById = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { contactId } = req.params;
     const removeContactResult = await contactsOperations.removeContact(
-      id,
-      req.body
+      contactId
     );
-    if (removeContactResult) {
-      throw HttpError(400, `Contacts with ${id} not found(.`);
+    if (!removeContactResult) {
+      throw HttpError(400, `Contacts with ${contactId} not found(.`);
     }
-    res.json({ message: `Contact ${id} deleted` });
+    res.json({ message: `Contact ${contactId} deleted` });
     // res.status(204).send()
   } catch (err) {
     next(err);

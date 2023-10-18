@@ -35,12 +35,14 @@ const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
     const index = contacts.findIndex((contact) => contact.id === contactId);
-    console.log(index);
+    // console.log("contactId", contactId);
+    console.log("index", index);
     if (index === -1) {
       return null;
     }
     const [removedContact] = contacts.splice(index, 1);
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    console.log("removedContact1", removedContact);
     return removedContact;
   } catch (error) {
     console.log(error);

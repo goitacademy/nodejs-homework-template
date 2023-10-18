@@ -10,7 +10,7 @@ export const movieAddSchema = Joi.object({
 
 export const movieUpdateSchema = Joi.object({
   // id: Joi.string().required(),
-  name: Joi.string(),
+  name: Joi.string().required(),
   email: Joi.string(),
-  phone: Joi.string().required(),
+  phone: Joi.string(),
 });
