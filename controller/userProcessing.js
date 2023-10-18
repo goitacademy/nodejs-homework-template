@@ -1,5 +1,7 @@
-const Joi = require('joi'); // метод валадації сталих виразів
+// глобальні імпорти
+const Joi = require('joi');
 const bcrypt = require('bcryptjs'); // бібліотека для хешування 
+// локальні імпорти
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
 
@@ -48,4 +50,30 @@ const register = async (req, res, next) => {
   }
 };
 
-module.exports = {register};
+const logout = async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    user.token = null;
+    await user.save();
+
+    res.sendStatus(204);
+  } catch (error) {
+    next(error);
+  }
+}
+
+const corentUserData = (req, res) => {
+  const { email, subscription } = req.user;
+  res.status(200).json({ email, subscription });
+};
+module.exports = {
+  register,
+  logout,
+  corentUserData,
+};
