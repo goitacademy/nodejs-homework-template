@@ -59,7 +59,7 @@ router.get("/:contactId", passportAuthenticate, async (req, res, next) => {
   try {
     const userId = req.user._id;
     const { contactId } = req.params;
-    const result = await Contact.findById({ _id: contactId, owner: userId });
+    const result = await Contact.findOne({ _id: contactId, owner: userId });
     if (!result) {
       throw HttpError(404, "Not Found!");
     }
