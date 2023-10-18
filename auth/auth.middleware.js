@@ -13,17 +13,18 @@ const authMiddleware = async (req, res, next) => {
       throw new Error("Authorization token is missing.");
     }
 
-    const { email } = authService.verifyToken(token);
-    const userEntity = await usersDao.getUser({ email });
+    const { id } = authService.verifyToken(token);
+    const userEntity = await usersDao.getUser({ id });
 
     if (!userEntity || userEntity.token !== token) {
       throw new Error("Token is invalid.");
     }
 
     req.user = userEntity;
+
     return next();
   } catch (e) {
-    return res.status(401).send({ message: e.message });
+    return res.status(401).send({ message: "Not authorized" });
   }
 };
 
