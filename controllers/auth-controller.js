@@ -162,6 +162,11 @@ const updateAvatar = async (req, res) => {
     img.contain(250, 250).write(resultUpload);
   });
 
+  // Jimp.read(tempUpload, (err, img) => async {
+  //   if (err) throw HttpError(404, err);
+  //   await img.contain(250, 250).write(resultUpload);
+  // });
+
   await fs.unlink(tempUpload);
 
   const avatarURL = path.join("avatars", fileName);
