@@ -1,25 +1,78 @@
-const express = require('express')
+const express = require("express");
+const { addSchema, updateSchema } = require("../../schemas/contacts.js");
+const HttpError = require("../../helpers/HttpError.js");
 
-const router = express.Router()
+const contactsHandler = require("../../models/contacts.js");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const result = await contactsHandler.listContacts();
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsHandler.getContactById(id);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { name, email, phone } = req.body;
+    const result = await contactsHandler.addContact(name, email, phone);
+    return res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsHandler.removeContact(id);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    return res.status(200).json({
+      message: "Contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = updateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const { name, email, phone } = req.body;
+    const result = await contactsHandler.updateContact(id, name, email, phone);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
