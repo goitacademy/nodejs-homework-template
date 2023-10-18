@@ -1,10 +1,12 @@
-import * as contactsOperations from "../models/contacts.js";
-// import * as contactService from "../models/contacts.js";
 import { HttpError } from "../helpers/import.js";
 import {
   movieAddSchema,
   movieUpdateSchema,
 } from "../schemas/contacts-schemas.js";
+
+// import { contactsOperations } from "../models/contacts.js";
+import contactsOperations from "../models/contacts.js";
+// import * as contactsOperations from "../models/contacts.js";
 
 // схема валідації контакту  - створюємо для цього джоі схему (опис як повинен виглядати об'єкт) на додавання контакту
 // const movieAddSchema = Joi.object({
@@ -16,7 +18,8 @@ import {
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await contactService.listContacts();
+    console.log("contactsOperations ===>", contactsOperations);
+    const result = await contactsOperations.listContacts();
     res.json(result);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -32,7 +35,7 @@ const getById = async (req, res, next) => {
     // const contactId = req.params.contactId;
     const { contactId } = req.params;
     const contactList = await contactsOperations.getContactById(contactId);
-    if (!contactId) {
+    if (!contactList) {
       // !: Variant 3 (after optimization)
       throw HttpError(404, `Can't find such Contact ${contactId}`);
       // * Variant 2
