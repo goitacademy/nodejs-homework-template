@@ -55,10 +55,11 @@ router.get("/", passportAuthenticate, async (req, res, next) => {
 });
 
 // GET /api/contacts/:contactId
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", passportAuthenticate, async (req, res, next) => {
   try {
+    const userId = req.user._id;
     const { contactId } = req.params;
-    const result = await Contact.findById(contactId);
+    const result = await Contact.findById({ _id: contactId, owner: userId });
     if (!result) {
       throw HttpError(404, "Not Found!");
     }
@@ -107,15 +108,22 @@ router.post("/", passportAuthenticate, async (req, res, next) => {
 });
 
 // DELETE /api/contacts/:contactId
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", passportAuthenticate, async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndRemove(contactId);
+    const userId = req.user._id;
+
+    const result = await Contact.findOneAndRemove({
+      _id: contactId,
+      owner: userId,
+    });
+
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Contact Not Found or You're Not the Owner!");
     }
+
     res.json({
-      status: "contact deleted",
+      status: "Contact deleted",
       code: 200,
       data: result,
     });
@@ -125,10 +133,12 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 // PUT /api/contacts/:contactId
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", passportAuthenticate, async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const body = req.body;
+    const userId = req.user._id;
+
     const { name, email, phone } = body;
     const { error } = validateContact(body);
 
@@ -137,48 +147,21 @@ router.put("/:contactId", async (req, res, next) => {
     }
 
     if (!body) {
-      throw HttpError(400, "missing required name field");
+      throw HttpError(400, "Missing contact data");
     }
-    const check = await Contact.findById(contactId);
-    if (!check) {
-      throw HttpError(404, "Not Found!");
-    }
-    const result = await Contact.findByIdAndUpdate(
-      contactId,
+
+    const result = await Contact.findOneAndUpdate(
+      { _id: contactId, owner: userId },
       { name, email, phone },
-      { new: true }
-    );
-    res.json({
-      status: "contact updated",
-      code: 200,
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
-
-// маршрут PATCH /api/contacts/:contactId/favorite
-router.patch("/:contactId/favorite", async (req, res, next) => {
-  const { contactId } = req.params;
-  const { favorite } = req.body;
-
-  if (favorite === undefined) {
-    return res.status(400).json({ message: "Missing field favorite" });
-  }
-
-  try {
-    const result = await Contact.findByIdAndUpdate(
-      contactId,
-      { favorite },
       { new: true }
     );
 
     if (!result) {
-      throw HttpError(404, "Not Found!");
+      throw HttpError(404, "Contact Not Found or You're Not the Owner!");
     }
+
     res.json({
-      status: "contact updated",
+      status: "Contact updated",
       code: 200,
       data: result,
     });
@@ -186,5 +169,40 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
     next(error);
   }
 });
+
+// PATCH /api/contacts/:contactId/favorite
+router.patch(
+  "/:contactId/favorite",
+  passportAuthenticate,
+  async (req, res, next) => {
+    try {
+      const { contactId } = req.params;
+      const userId = req.user._id;
+      const { favorite } = req.body;
+
+      if (favorite === undefined) {
+        return res.status(400).json({ message: "Missing field favorite" });
+      }
+
+      const result = await Contact.findOneAndUpdate(
+        { _id: contactId, owner: userId },
+        { favorite },
+        { new: true }
+      );
+
+      if (!result) {
+        throw HttpError(404, "Contact Not Found or You're Not the Owner!");
+      }
+
+      res.json({
+        status: "Contact updated",
+        code: 200,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 module.exports = router;
