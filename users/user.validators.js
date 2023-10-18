@@ -1,10 +1,11 @@
 const Joi = require("joi");
 
 const userSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().min(1).required(),
-  favorite: Joi.boolean().optional(),
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  // email: Joi.string().required(),
+  // phone: Joi.string().min(1).required(),
+  // favorite: Joi.boolean().optional(),
 });
 
 const userValidationMiddleware = (req, res, next) => {

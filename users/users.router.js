@@ -4,20 +4,21 @@ const usersController = require("./users.controller");
 
 const usersRouter = Router();
 
-usersRouter.get("/", usersController.getAllUsersHandler);
-usersRouter.get("/:id", usersController.getSingleUserHandler);
 usersRouter.post(
-  "/",
+  "/signup",
   userValidationMiddleware,
-  usersController.createUserHandler
+  usersController.signUpHandler
 );
-usersRouter.put(
-  "/:id",
-  userValidationMiddleware,
-  usersController.replaceUserHandler
-);
-usersRouter.delete("/:id", usersController.deleteUserHandler);
-usersRouter.patch("/:id/favorite", usersController.updateUserStatus);
+
+// usersRouter.get("/", usersController.getAllUsersHandler);
+// usersRouter.get("/:id", usersController.getSingleUserHandler);
+// usersRouter.put(
+//   "/:id",
+//   userValidationMiddleware,
+//   usersController.replaceUserHandler
+// );
+// usersRouter.delete("/:id", usersController.deleteUserHandler);
+// usersRouter.patch("/:id/favorite", usersController.updateUserStatus);
 
 module.exports = {
   usersRouter,

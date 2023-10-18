@@ -1,23 +1,28 @@
 const express = require("express");
+const logger = require("morgan");
 const cors = require("cors");
 const { usersRouter } = require("./users/users.router");
 
 const app = express();
 
-// parse application/json
 app.use(express.json());
-// cors
+
 app.use(cors());
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+app.use(logger(formatsLogger));
+app.use("/users", usersRouter);
 
-app.use("/api/contacts", usersRouter);
-
-app.use((_, res) => {
-  return res.status(404).send({ message: "Use api on routes: /api/contacts" });
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, _, res, __) => {
-  console.log(err.stack);
-  return res.status(500).send({ message: err.message });
+app.use((err, req, res, next) => {
+  if (err.name === "ValidationError") {
+    return res
+      .status(400)
+      .json({ status: "error", code: 400, message: err.message });
+  }
+  res.status(500).json({ status: "fail", code: 500, message: err.message });
 });
 
 module.exports = {

@@ -16,3 +16,9 @@ const db = require("./db");
     console.error(e.message);
   }
 })();
+
+process.on("SIGINT", async () => {
+  console.log("Database conection closed");
+  await db.disconnect();
+  process.exit();
+});

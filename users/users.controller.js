@@ -1,58 +1,72 @@
-const {
-  getAllUsers,
-  getUserById,
-  saveUser,
-  replaceUser: updateUser,
-  removeUser,
-} = require("./users.service");
+// const {
+//   getAllUsers,
+//   getUserById,
+//   saveUser,
+//   replaceUser: updateUser,
+//   removeUser,
+// } = require("./users.service");
+const userDao = require("./users.dao");
 
-const getAllUsersHandler = async (req, res) => {
-  const users = await getAllUsers();
+const signUpHandler = async (req, res, next) => {
+  const { username, password } = req.body;
+  const createdUsrer = await userDao.createUser({ username, password });
 
-  return res.status(200).send({ users });
+  return res.status(201).send({
+    user: {
+      username: createdUsrer.username,
+      role: createdUsrer.role,
+    },
+  });
 };
 
-const getSingleUserHandler = async (req, res) => {
-  const user = await getUserById(req.params.id);
+// const getAllUsersHandler = async (req, res) => {
+//   const users = await getAllUsers();
 
-  if (!user) {
-    return res.status(404).send();
-  }
+//   return res.status(200).send({ users });
+// };
 
-  return res.status(200).send({ user });
-};
+// const getSingleUserHandler = async (req, res) => {
+//   const user = await getUserById(req.params.id);
 
-const createUserHandler = async (req, res) => {
-  const user = await saveUser(req.body);
+//   if (!user) {
+//     return res.status(404).send();
+//   }
 
-  return res.status(201).send({ user });
-};
+//   return res.status(200).send({ user });
+// };
 
-const replaceUserHandler = async (req, res) => {
-  const updatedUser = await updateUser(req.params.id, req.body);
+// const createUserHandler = async (req, res) => {
+//   const user = await saveUser(req.body);
 
-  return res.status(200).send({ user: updatedUser });
-};
+//   return res.status(201).send({ user });
+// };
 
-const deleteUserHandler = async (req, res) => {
-  await removeUser(req.params.id);
-  return res.status(204).send();
-};
+// const replaceUserHandler = async (req, res) => {
+//   const updatedUser = await updateUser(req.params.id, req.body);
 
-const updateUserStatus = async (req, res) => {
-  const { favorite } = req.body;
+//   return res.status(200).send({ user: updatedUser });
+// };
 
-  const updatedUser = await updateUser(req.params.id, { favorite });
-  // console.log(req);
-  console.log(res.params);
-  return res.status(200).send(updatedUser);
-};
+// const deleteUserHandler = async (req, res) => {
+//   await removeUser(req.params.id);
+//   return res.status(204).send();
+// };
+
+// const updateUserStatus = async (req, res) => {
+//   const { favorite } = req.body;
+
+//   const updatedUser = await updateUser(req.params.id, { favorite });
+//   // console.log(req);
+//   console.log(res.params);
+//   return res.status(200).send(updatedUser);
+// };
 
 module.exports = {
-  getAllUsersHandler,
-  getSingleUserHandler,
-  createUserHandler,
-  replaceUserHandler,
-  deleteUserHandler,
-  updateUserStatus,
+  // getAllUsersHandler,
+  // getSingleUserHandler,
+  // createUserHandler,
+  // replaceUserHandler,
+  // deleteUserHandler,
+  // updateUserStatus,
+  signUpHandler,
 };

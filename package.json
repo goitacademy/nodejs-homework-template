@@ -3,12 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
+    "start": "nodemon ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
@@ -17,7 +18,8 @@
     "joi": "^17.11.0",
     "mongoose": "^7.6.2",
     "morgan": "1.10.0",
-    "nanoid": "^3.0.0"
+    "nanoid": "^3.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
