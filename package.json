@@ -18,8 +18,7 @@
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.2",
     "morgan": "^1.10.0",
-    "path": "^0.12.7",
-    "uuid": "^9.0.1"
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "7.19.0",

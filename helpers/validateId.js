@@ -3,8 +3,8 @@ const httpError = require("./httpError.js");
 
 const isValidId = (req, res, next) => {
   const { id } = req.params;
-  if (!mongoose.isValidObjectId(id)) {
-    next(httpError(400, `${id} is not a valid id`));
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return next(httpError(400, `${id} is not a valid id`));
   }
   next();
 };
