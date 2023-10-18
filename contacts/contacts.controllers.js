@@ -4,11 +4,15 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("./contacts.services");
+
+const authService = require("../auth/auth.service");
 
 const listContactsHandler = async (req, res) => {
   try {
-    const contacts = await listContacts();
+    const userId = req.user._id;
+    const contacts = await listContacts(userId);
     return res.status(200).send({ contacts });
   } catch (error) {
     console.error(error);
@@ -18,7 +22,9 @@ const listContactsHandler = async (req, res) => {
 
 const getContactByIdHandler = async (req, res) => {
   try {
-    const contact = await getContactById(req.params.contactId);
+    const userId = req.user._id;
+    const contactId = req.params.contactId;
+    const contact = await getContactById(contactId, userId);
     return res.status(200).send({ contact });
   } catch (error) {
     return res.status(404).send({ message: "Not Found" });
@@ -27,9 +33,12 @@ const getContactByIdHandler = async (req, res) => {
 
 const removeContactHandler = async (req, res) => {
   try {
-    const contact = await removeContact(req.params.contactId);
-    console.log("Handler Removed Contact:", contact);
-    return res.status(202).send({ contact });
+    const userId = req.user._id;
+    const contactId = req.params.contactId;
+    const contact = await removeContact(contactId, userId);
+    return res
+      .status(202)
+      .send({ message: "Contact deleted succesfully", contact });
   } catch (error) {
     console.error("not deleted", error);
     return res.status(404).send({ message: "Not Found" });
@@ -38,8 +47,8 @@ const removeContactHandler = async (req, res) => {
 
 const addContactHandler = async (req, res) => {
   try {
-    const contact = await addContact(req.body);
-    console.log("Returned Contact:", contact);
+    const userId = req.user._id;
+    const contact = await addContact({ ...req.body, owner: userId });
     return res.status(201).send({ contact });
   } catch (error) {
     console.error(error);
@@ -47,18 +56,43 @@ const addContactHandler = async (req, res) => {
   }
 };
 
+// Tutaj break
+
 const updateContactHandler = async (req, res) => {
   try {
-    console.log("CONTROLLERS Received contactId:", req.params.contactId);
-    const contact = await updateContact({
-      id: req.params.contactId,
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-    });
-    return res.status(200).send({ contact });
+    const userId = req.user._id;
+    const contactId = req.params.contactId;
+    const refreshedContact = { ...req.body };
+    delete refreshedContact._id;
+
+    const updatedContact = await updateContact(
+      contactId,
+      userId,
+      refreshedContact
+    );
+    return res.status(200).send({ updatedContact });
   } catch (error) {
     console.error("Update Handler Error:", error.message);
+    return res.status(500).send({ message: "Internal Server Error" });
+  }
+};
+
+const updateStatusContactHandler = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const contactId = req.params.contactId;
+    const refreshedContact = { ...req.body };
+    delete refreshedContact._id;
+
+    const updatedStatusContact = await updateStatusContact(
+      contactId,
+      userId,
+      refreshedContact
+    );
+
+    return res.status(200).send({ updatedStatusContact });
+  } catch (error) {
+    console.error("UpdateStatus Handler Error:", error.message);
     return res.status(500).send({ message: "Internal Server Error" });
   }
 };
@@ -69,4 +103,5 @@ module.exports = {
   removeContactHandler,
   addContactHandler,
   updateContactHandler,
+  updateStatusContactHandler,
 };

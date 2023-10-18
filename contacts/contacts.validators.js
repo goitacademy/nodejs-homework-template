@@ -1,6 +1,7 @@
 const Joi = require("joi");
 
 const contactSchema = Joi.object({
+  _id: Joi.string().optional(),
   name: Joi.string()
     .required()
     .min(3)
@@ -10,6 +11,11 @@ const contactSchema = Joi.object({
     .required()
     .min(9)
     .pattern(/^[0-9]+(?:[-\s]?[0-9]+)*$/),
+  favorite: Joi.boolean().optional(),
+  createdAt: Joi.string().optional(),
+  updatedAt: Joi.string().optional(),
+  _v: Joi.number().optional(),
+  owner: Joi.string().required(),
 });
 
 const contactValidationMiddleware = (req, res, next) => {
