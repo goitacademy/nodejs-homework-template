@@ -1,9 +1,9 @@
-const { object } = require("joi");
+const { v4: uuid } = require("uuid");
 const { User } = require("./user.model");
 
 class DuplicatedKeyError extends Error {
   constructor(keyName, value) {
-    super(`${keyName} has to be unique. ${value} is already taken.`);
+    super(`${keyName} in use`);
   }
 }
 
@@ -52,8 +52,8 @@ const updateUser = async (email, userData) => {
 
 module.exports = {
   createUser,
+  getUser,
+  updateUser,
   DuplicatedKeyError,
   UnknownDatabaseError,
-  updateUser,
-  getUser,
 };

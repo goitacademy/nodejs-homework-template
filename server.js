@@ -1,5 +1,5 @@
-const { serverPort } = require("./config");
 const { app } = require("./app");
+const { serverPort } = require("./config");
 const db = require("./db");
 
 // Ta funkcja ponizej to IIFE - https://developer.mozilla.org/en-US/docs/Glossary/IIFE
@@ -8,9 +8,10 @@ const db = require("./db");
 (async () => {
   try {
     await db.connect();
-    console.log("Database connection successful.");
+    console.log("Database connection established.");
+
     app.listen(serverPort, async () => {
-      console.log(`Server running. Use our API on port: ${serverPort}`);
+      console.log(`🚀 Server is running on port ${serverPort}`);
     });
   } catch (e) {
     console.error(e.message);
@@ -18,7 +19,7 @@ const db = require("./db");
 })();
 
 process.on("SIGINT", async () => {
-  console.log("Database conection closed");
   await db.disconnect();
+  console.log("Database connection closed");
   process.exit();
 });

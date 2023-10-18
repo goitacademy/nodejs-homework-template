@@ -1,72 +1,137 @@
-// const {
-//   getAllUsers,
-//   getUserById,
-//   saveUser,
-//   replaceUser: updateUser,
-//   removeUser,
-// } = require("./users.service");
 const userDao = require("./users.dao");
+const authService = require("../auth/auth.service");
+const { sendUserVerificationMail } = require("./user-mailer.service");
 
-const signUpHandler = async (req, res, next) => {
-  const { username, password } = req.body;
-  const createdUsrer = await userDao.createUser({ username, password });
+const signupHandler = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const createdUser = await userDao.createUser({ email, password });
 
-  return res.status(201).send({
-    user: {
-      username: createdUsrer.username,
-      role: createdUsrer.role,
-    },
-  });
+    // await sendUserVerificationMail(
+    //   createdUser.email,
+    //   createdUser.verificationToken
+    // );
+
+    return res.status(201).send({
+      user: {
+        email: createdUser.email,
+        subscription: createdUser.subscription,
+      },
+    });
+  } catch (e) {
+    const { message } = e;
+
+    if (e instanceof userDao.DuplicatedKeyError) {
+      return res.status(409).send({ message });
+    }
+
+    return next(e);
+  }
 };
 
-// const getAllUsersHandler = async (req, res) => {
-//   const users = await getAllUsers();
+const loginHandler = async (req, res, next) => {
+  try {
+    const userEntity = await userDao.getUser({ email: req.body.email });
+    const isUserPasswordValid = await userEntity.validatePassword(
+      req.body.password
+    );
 
-//   return res.status(200).send({ users });
-// };
+    if (!userEntity || !isUserPasswordValid) {
+      return res.status(401).send({ message: "Wrong credentials." });
+    }
 
-// const getSingleUserHandler = async (req, res) => {
-//   const user = await getUserById(req.params.id);
+    if (!userEntity.verified) {
+      return res.status(403).send({ message: "User is not verified." });
+    }
 
-//   if (!user) {
-//     return res.status(404).send();
-//   }
+    const userPayload = {
+      email: userEntity.email,
+      role: userEntity.role,
+    };
 
-//   return res.status(200).send({ user });
-// };
+    const token = authService.generateAccessToken(userPayload);
+    await userDao.updateUser(userEntity.email, { token });
 
-// const createUserHandler = async (req, res) => {
-//   const user = await saveUser(req.body);
+    return res.status(200).send({
+      user: userPayload,
+      token,
+    });
+  } catch (e) {
+    return next(e);
+  }
+};
 
-//   return res.status(201).send({ user });
-// };
+const logoutHandler = async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    await userDao.updateUser(email, { token: null });
 
-// const replaceUserHandler = async (req, res) => {
-//   const updatedUser = await updateUser(req.params.id, req.body);
+    return res.status(204).send();
+  } catch (e) {
+    return next(e);
+  }
+};
 
-//   return res.status(200).send({ user: updatedUser });
-// };
+const currentHandler = async (req, res, next) => {
+  try {
+    const { email, role } = req.user;
+    return res.status(200).send({ user: { email, role } });
+  } catch (e) {
+    return next(e);
+  }
+};
 
-// const deleteUserHandler = async (req, res) => {
-//   await removeUser(req.params.id);
-//   return res.status(204).send();
-// };
+const verifyHandler = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await userDao.getUser({ verificationToken });
 
-// const updateUserStatus = async (req, res) => {
-//   const { favorite } = req.body;
+    if (!user) {
+      return res
+        .status(400)
+        .send({ message: "Verification token is not valid or expired. " });
+    }
 
-//   const updatedUser = await updateUser(req.params.id, { favorite });
-//   // console.log(req);
-//   console.log(res.params);
-//   return res.status(200).send(updatedUser);
-// };
+    if (user.verified) {
+      return res.status(400).send({ message: "User is already verified. " });
+    }
+
+    await userDao.updateUser(user.email, {
+      verified: true,
+      verificationToken: null,
+    });
+
+    return res.status(200).send({ message: "User has been verified." });
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const resendVerificationHandler = async (req, res, next) => {
+  try {
+    const user = await userDao.getUser({ email: req.body.email });
+
+    if (!user) {
+      return res.status(404).send({ message: "User does not exist." });
+    }
+
+    if (user.verified) {
+      return res.status(400).send({ message: "User is already verified." });
+    }
+
+    await sendUserVerificationMail(user.email, user.verificationToken);
+
+    return res.status(204).send();
+  } catch {
+    return next(e);
+  }
+};
 
 module.exports = {
-  // getAllUsersHandler,
-  // getSingleUserHandler,
-  // createUserHandler,
-  // replaceUserHandler,
-  // deleteUserHandler,
-  // updateUserStatus,
-  signUpHandler,
+  signupHandler,
+  loginHandler,
+  logoutHandler,
+  currentHandler,
+  verifyHandler,
+  resendVerificationHandler,
 };
