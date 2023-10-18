@@ -5,7 +5,7 @@ import { HttpError } from "../helpers/HttpError.js";
 import { controllerWrapper } from "../decorators/index.js";
 import { User } from "../models/User.js";
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -23,7 +23,7 @@ const signup = async (req, res) => {
   })
 };
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
@@ -42,7 +42,11 @@ const signin = async (req, res) => {
 
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
-    token
+    token,
+    user: {
+      email,
+      subscription: user.subscription
+    }
   })
 };
 
@@ -53,13 +57,13 @@ const getCurrent = async (req, res) => {
     subscription
   })
 }
-const signout = async (req, res) => {
+const logout = async (req, res) => {
   await User.findByIdAndUpdate(req.user._id, { token: "" });
   res.status(204).json();
 }
 export default {
-  signup: controllerWrapper(signup),
-  signin: controllerWrapper(signin),
+  register: controllerWrapper(register),
+  login: controllerWrapper(login),
   getCurrent: controllerWrapper(getCurrent),
-  signout: controllerWrapper(signout),
+  logout: controllerWrapper(logout),
 };

@@ -6,9 +6,9 @@ const getAll = async (req, res) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
-  let options = { owner}
+  let options = { owner }
   if (req.query.favorite) {
-    options = { owner, favorite: true}
+    options = req.query.favorite === "true" ? { owner, favorite: true } : { owner, favorite: false };
   }
    const r = await Contact.find(options, "-createdAt -updatedAt", { skip, limit }).populate("owner", "email subscription");
   res.json(r);
