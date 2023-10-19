@@ -4,6 +4,7 @@ import {
   authenticate,
   isEmptyBody,
   isValidId,
+  upload,
 } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
 import {
@@ -30,6 +31,13 @@ router.post("/login", isEmptyBody, userLoginValidate, authController.login);
 router.get("/current", authenticate, authController.getCurrent);
 
 router.post("/logout", authenticate, authController.logout);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatarURL"),
+  authController.updateUserAvatar
+);
 
 router.patch(
   "/:userId",
