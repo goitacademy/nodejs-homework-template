@@ -5,12 +5,21 @@ const { Contact } = require("../models/Contact");
 const ctrlWrapper = require("../decorators/ctrlWrapper");
 
 const getAll = async (req, res) => {
-  const contacts = await Contact.find();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+
+  const contacts = await Contact.find({ owner })
+    .skip(skip)
+    .limit(parseInt(limit))
+    .populate("owner", "email");
+
   res.json(contacts);
 };
 
 const getById = async (req, res) => {
   const { id } = req.params;
+
   console.log("Contact ID:", id);
   const contact = await Contact.findById(id);
 
@@ -21,11 +30,11 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  console.log("Inside add function", req.body);
+  const { _id: owner } = req.user;
 
   const { name, email, phone } = req.body;
 
-  const newContact = await Contact.create({ name, email, phone });
+  const newContact = await Contact.create({ name, email, phone, owner });
   res.status(201).json(newContact);
 };
 
@@ -56,7 +65,7 @@ const updateFavoriteStatus = async (req, res) => {
   const updatedContact = await Contact.findByIdAndUpdate(
     id,
     { favorite },
-    { new: true } // Вернуть обновленный объект
+    { new: true }
   );
   if (!updatedContact) {
     throw HttpError(404, `Contact with ${id} is not found`);

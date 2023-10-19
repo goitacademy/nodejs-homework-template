@@ -1,6 +1,5 @@
-// const { strict } = require("../schemes/movie-schemes");
-const Joi = require("joi");
 const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 const { handleSaveError, runValidatorsAtUpdate } = require("../models/hooks");
 
 const contactSchema = new Schema(
@@ -19,8 +18,13 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
-  { timestamps: true }
+  { versionKey: false, timestamps: true }
 );
 
 contactSchema.post("save", handleSaveError);
