@@ -20,7 +20,7 @@ router.get('/', contactsContollers.getAll)
 
 router.get('/:contactId', isValidId, contactsContollers.getContactById)
 
-router.post('/',isEmptyBody, contactAddValidate, contactsContollers.addContact)
+router.post('/', isEmptyBody, contactAddValidate, contactsContollers.addContact)
 
 router.delete('/:contactId', isValidId, contactsContollers.deleteContact)
 

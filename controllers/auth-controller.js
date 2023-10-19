@@ -3,11 +3,16 @@ import User from "../models/user.js";
 import httpError from "../helpers/httpError.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-
+import fs from "fs/promises"
+import gravatar from "gravatar"
+import Jimp from "jimp"
+import path from "path";
 
 import { ctrlWrapper } from "../decorators/index.js";
 
 const { JWT_SECRET } = process.env;
+
+const avatarsPath = path.resolve("public", "avatars")
 
 const signup = async (req, res) => {
     const { email, password } = req.body;
@@ -15,11 +20,12 @@ const signup = async (req, res) => {
     if (user) {
         throw httpError(409, `Email in use`)
     }
-
-    const hashPassword = await bcrypt.hash(password, 10)
-
-    const newUser = await User.create({...req.body, password: hashPassword});
     
+    const hashPassword = await bcrypt.hash(password, 10)
+    const avatarUrl = gravatar.url(email);
+
+    const newUser = await User.create({...req.body, password: hashPassword, avatarUrl});
+    console.log(newUser)
     res.status(201).json({
         user: {
             email: newUser.email,
@@ -31,7 +37,6 @@ const signup = async (req, res) => {
 const signin = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email })
-    console.log(JWT_SECRET)
     if (!user) {
         throw httpError(401, "Email or password is wrong")
     }
@@ -81,11 +86,32 @@ const updateSubscriotion = async (req, res) => {
     }
     res.json(result);
 }
+
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarsPath, filename)
+
+   await Jimp.read(oldPath)
+  .then((image) => {
+    image.resize(250, 250),
+        image.writeAsync(`${oldPath}`)
+     })
+    .catch((err) => {
+      new Error;
+    });
+    await fs.rename(oldPath, newPath);
+    
+    const avatar = path.join("public", "avatars", filename)
+    const result = await User.findByIdAndUpdate(_id, { avatarUrl: avatar })
+    res.status(201).json(result)
+}
  
 export default {
     signup: ctrlWrapper(signup),
     signin: ctrlWrapper(signin),
     getCurrent: ctrlWrapper(getCurrent),
     signout: ctrlWrapper(signout),
-    updateSubscriotion: ctrlWrapper(updateSubscriotion)
+    updateSubscriotion: ctrlWrapper(updateSubscriotion),
+    updateAvatar: ctrlWrapper(updateAvatar)
 }
