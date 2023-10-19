@@ -1,3 +1,3 @@
 const { Contact, addSchema, updateSchema } = require("./contact");
-
-module.exports = { Contact, addSchema, updateSchema };
+const { User, schemas } = require("./user");
+module.exports = { Contact, addSchema, updateSchema, User, schemas };
