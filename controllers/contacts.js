@@ -19,7 +19,9 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const result = await contacts.addContact(req.body);
-
+//    if (!result) {
+//    throw HttpError(400, "missing required `${name}` field");
+// }
     res.status(201).json(result);
 };
 
@@ -43,25 +45,25 @@ const updateById = async (req, res) => {
   res.status(200).json(result);
 };
 
-// const updateStatusContact = async (req, res) => {
-//   const { id } = req.params;
-//   const { favorite } = req.body;
+const updateStatusContact = async (req, res) => {
+ const { id } = req.params;
+const { favorite } = req.body;
 
-//   if (favorite === undefined) {
-//     throw HttpError(400, "missing field favorite");
-//   }
+ if (favorite === undefined) {
+   throw HttpError(400, "missing fields");
+  }
 
-//   const result = await contacts.findByIdAndUpdate(
-//     id,
-//     { favorite },
-//     { new: true }
-//   );
+  const result = await contacts.findByIdAndUpdate(
+   id,
+   { favorite },
+    { new: true }
+  );
 
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.status(200).json(result);
-// };
+  if (!result) {
+   throw HttpError(404, "Not found");
+  }
+   res.status(200).json(result);
+ };
 
 
 
@@ -71,5 +73,5 @@ module.exports = {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   deleteById: ctrlWrapper(deleteById),
-  // updateStatusContact: ctrlWrapper(updateStatusContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
