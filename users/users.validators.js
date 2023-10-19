@@ -3,6 +3,7 @@ const joi = require("joi");
 const userSchema = joi.object({
   email: joi.string().email().required(),
   password: joi.string().required(),
+  avatarURL: joi.string().uri().optional(),
 });
 
 const userValidatorMiddleware = (req, res, next) => {

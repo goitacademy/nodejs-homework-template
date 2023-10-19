@@ -1,18 +1,29 @@
 const userDao = require("./users.dao");
 const authService = require("../auth/auth.service");
-// const getIdFromToken = require("../auth/auth.service");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs").promises;
+const jimp = require("jimp");
+const mimetype = require("mime-types");
+const multer = require("multer");
+const { serverPort } = require("../config");
 
 const signupHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const createdUser = await userDao.createUser({ email, password });
+    const avatarURL = gravatar.url(`${email}`, { default: "monsterid" }, true);
+    const createdUser = await userDao.createUser({
+      email,
+      password,
+      avatarURL,
+    });
 
     return res.status(201).send({
       user: {
         email: createdUser.email,
         subscription: createdUser.subscription,
+        avatarURL: createdUser.avatarURL,
       },
-      createdUser,
     });
   } catch (e) {
     const { message } = e;
@@ -46,9 +57,6 @@ const loginHandler = async (req, res, next) => {
     await userDao.updateUser(userEntity.email, { token });
     userEntity.token = token;
 
-    // const decodedToken = authService.getIdFromToken(token);
-    // console.log("DECODED ID:", decodedToken);
-
     return res.status(200).send({
       user: userPayload,
       token,
@@ -80,9 +88,41 @@ const currentHandler = async (req, res, next) => {
   }
 };
 
+const upload = multer({
+  dest: path.join(__dirname, "../tmp"),
+  limits: 1048576,
+});
+
+avatarPatchHandler = async (req, res, next) => {
+  try {
+    const { email, avatarURL } = req.user;
+    const filename = `${email}.${mimetype.extension(req.file.mimetype)}`;
+    const avatarImage = await jimp.read(req.file.path);
+
+    await avatarImage.resize(250, 250).writeAsync(req.file.path);
+
+    await fs.rename(
+      req.file.path,
+      path.join(__dirname, "../public/avatars", filename)
+    );
+
+    userDao.updateUser(email, {
+      avatarURL: `http://localhost:${serverPort}/avatars/${filename}`,
+      new: true,
+    });
+
+    return res.status(200).send({ user: email, avatarURL });
+  } catch (e) {
+    console.log("AVATAR ERROR");
+    return next(e);
+  }
+};
+
 module.exports = {
   signupHandler,
   loginHandler,
   logoutHandler,
   currentHandler,
+  upload,
+  avatarPatchHandler,
 };

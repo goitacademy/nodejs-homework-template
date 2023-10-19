@@ -46,10 +46,24 @@ const updateUser = async (email, userData) => {
   }
 };
 
+const addAvatar = async (id, userId, modifiedContact) => {
+  try {
+    return await Contact.findOneAndUpdate(
+      { _id: id, owner: userId },
+      modifiedContact,
+      { new: true }
+    );
+  } catch (error) {
+    console.log(error.message);
+    return null;
+  }
+};
+
 module.exports = {
   createUser,
   getUser,
   updateUser,
+  addAvatar,
   DuplicatedEmailError,
   UnknownDatabaseError,
 };
