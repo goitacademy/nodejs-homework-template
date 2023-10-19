@@ -64,3 +64,17 @@
  PUT, /contacts/XCIUE_YNdyFtder0WXf4C, 18-10-2023_06:42:24
  PUT, /contacts/XCIUE_YNdyFtder0WXf4C, 18-10-2023_06:42:48
  PUT, /contacts/XCIUE_YNdyFtder0WXf4C, 18-10-2023_06:45:27
+ POST, /contacts/, 19-10-2023_12:52:00
+ POST, /api/contacts/, 19-10-2023_12:52:41
+ POST, /api/contacts/, 19-10-2023_12:53:47
+ POST, /api/contacts/, 19-10-2023_12:55:46
+ POST, /api/contacts/, 19-10-2023_12:57:06
+ POST, /api/contacts/, 19-10-2023_12:57:35
+ POST, /api/contacts/, 19-10-2023_01:01:02
+ DELETE, /api/contacts/, 19-10-2023_01:01:37
+ PUT, /api/contacts/, 19-10-2023_01:03:55
+ PUT, /api/contacts/XCIUE_YNdyFtder0WXf4C, 19-10-2023_01:04:21
+ PUT, /api/contacts/XCIUE_YNdyFtder0WXf4C, 19-10-2023_01:06:13
+ PUT, /api/contacts/XCIUE_YNdyFtder0WXf4C, 19-10-2023_01:07:26
+ PUT, /api/contacts/05olLMgyVQdWRwgKfg5J6, 19-10-2023_01:08:06
+ PUT, /api/contacts/XCIUE_YNdyFtder0WXf4C, 19-10-2023_01:10:18

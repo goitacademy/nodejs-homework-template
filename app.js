@@ -20,7 +20,7 @@ app.use(async (req, res, next) => {
 
 })
 
-app.use('/contacts', router)
+app.use('/api/contacts', router)
 
 
 app.use((req, res, next) => {

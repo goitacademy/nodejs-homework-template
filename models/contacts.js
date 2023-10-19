@@ -3,6 +3,7 @@ import path from "path";
 import { nanoid } from "nanoid";
 
 
+
 export const contactsPath = path.resolve("models", "contacts.json");
 
  export const listContacts = async () => {
@@ -12,7 +13,7 @@ export const contactsPath = path.resolve("models", "contacts.json");
 
     return contactsList;
   } catch (error) {
-    return console.error(error.message);
+    console.error(error.message);
   }
 
 }
@@ -58,7 +59,7 @@ export const addContact = async ({ name, email, phone }) => {
 
     return newContact;
   } catch (error) {
-    throw error;
+    console.error(error.message);
   }
 }
 
@@ -76,7 +77,7 @@ await updateContact(contacts);
 return contacts[index];
 }
 catch(error){
-
+  console.error(error.message);
 }
 
 }
@@ -86,7 +87,7 @@ export const updateContact = async (contacts) => {
 
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   } catch (error) {
-    throw error;
+   console.error(error.message);
   }
 }
 

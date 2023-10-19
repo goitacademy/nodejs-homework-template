@@ -7,7 +7,7 @@ import
   listContacts,
   removeContact,
   addContact,
-  updateContact,
+  updateContactById,
   
 }
  from "../../models/contacts.js";
@@ -18,7 +18,7 @@ import
   name: Joi.string().required().messages({
     "any.required": `"name" required field`,
   }),
-  phone: Joi.number().required(),
+  phone: Joi.string().required(),
   email: Joi.string().required(),
 });
 
@@ -40,7 +40,7 @@ router.get('/:contactId', async (req, res, next) => {
       throw HttpError(404, `Not found`);
     }
     res.json(contact);
-  } catch {
+  } catch(error) {
     next(error);
   }
  
@@ -57,7 +57,7 @@ router.post('/', async (req, res, next) => {
     }
     const result = await addContact(req.body);
     res.status(201).json(result);
-  } catch {
+  } catch(error) {
     next(error);
   }
 
@@ -95,9 +95,9 @@ router.put('/:contactId', async (req, res, next) => {
 
     const { contactId } = req.params;
 
-    const result = await updateContact(contactId, req.body);
+    const result = await updateContactById(contactId, req.body);
     if (!result) {
-      throw HttpError(404, `Movie with ${contactId} not found`);
+      throw HttpError(404, `Contact with ${contactId} not found`);
     }
 
     res.json(result);
