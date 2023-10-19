@@ -98,9 +98,11 @@ authRouter.get("/current", async (req, res, next) => {
           })
       } else{
          req.user = user
-        const {email} = req.user
+        const {email, subscription} = req.user
         res.json({
-          email
+          email, 
+          subscription
+
         }) 
       }
   } catch (error) {
