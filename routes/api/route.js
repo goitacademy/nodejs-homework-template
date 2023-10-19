@@ -12,7 +12,7 @@ router.delete('/:contactId', controller.deleteContact);
 router.put('/:contactId', controller.updatedContactById);
 router.patch('/:contactId/favorite', controller.favoritStatus);
 // дії з користувачами
-router.post('/user/register', controller.userRegister); // Оновлено шлях до реєстрації
+router.post('/user/register', controller.userRegister);     
 router.post('/contacts/logout', checkToken, controller.userLogout);
 router.get('/contacts/login', checkToken, controller.corentUserData)
 
