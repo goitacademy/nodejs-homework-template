@@ -33,6 +33,7 @@ router.get("/:contactId", async (req, res, next) => {
     const id = req.params.contactId;
     const contact = await getContactById(id);
     res.json(contact);
+   
   } catch (error) {
     console.error("Error en la ruta /:", error);
     res.status(500).json({ error: "Error en el servidor" });
