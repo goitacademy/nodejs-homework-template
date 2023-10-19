@@ -60,6 +60,7 @@ router.get("/:contactId", passportAuthenticate, async (req, res, next) => {
     const userId = req.user._id;
     const { contactId } = req.params;
     const result = await Contact.findOne({ _id: contactId, owner: userId });
+    
     if (!result) {
       throw HttpError(404, "Not Found!");
     }
@@ -80,7 +81,6 @@ router.post("/", passportAuthenticate, async (req, res, next) => {
     if (!name || !email || !phone) {
       throw HttpError(400, "missing required name field");
     }
-
     const { error } = validateContact({ name, email, phone });
 
     if (error) {
