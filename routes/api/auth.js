@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const middlewareToken = require('../../middleware/middlewareToken')
+const { middlewareToken, upload } = require('../../middleware')
 const ctrl = require('../../controllers/user')
 
 
@@ -30,7 +30,16 @@ router.use(middlewareToken)
  */
 router.post('/logout', /* middlewareToken, */ ctrl.logout)
 
+/**
+ * @ POST /users/current
+ * Отримує body {email, password}
+ * Викликає функцію current
+ */
 router.get('/current', /* middlewareToken, */ ctrl.current)
 
+/**
+ * @ PATCH /users/avatars
+ */
+router.patch(upload.single('/avatars'),)
 
 module.exports = router

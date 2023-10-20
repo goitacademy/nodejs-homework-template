@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const middlewareToken = require('../../middleware/middlewareToken')
+const { middlewareToken } = require('../../middleware')
 const {
     listContacts,
     getContactById,
