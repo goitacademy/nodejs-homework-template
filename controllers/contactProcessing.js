@@ -27,7 +27,7 @@ const getContactById =  async (req, res, next) => {
       const { contactId } = req.params;
       const result = await Contact.findById(contactId);
       if (!result) {
-        throw HttpError(404, 'Not found');
+        throw new HttpError(404, 'Не знайдено');
       }
       res.json(result);
     } catch (error) {
@@ -47,9 +47,9 @@ const newContact =  async (req, res, next) => {
         }
   
         if (name_error === 'phone') {
-          throw HttpError(400, `Not a pthone field  format. Format:(000) 000-0000`);
+          throw new HttpError(400, `Не правильний формат поля phone. Формат:(000) 000-0000`);
         } else {
-          throw HttpError(400, `missing required ${name_error} field`);
+          throw new HttpError(400, `відсутнє поле ${name_error}`);
         }
       }
   
@@ -66,15 +66,15 @@ const deleteContact = async (req, res, next) => {
     // отримання імʼя контаксту перед видаленням
     const contact = await Contact.findById(contactId);
     if (!contact) {
-      throw HttpError(404, 'Not found')
+      throw new HttpError(404, 'Не знайдено')
     }
     const nameForMessange = contact.name
 
     const result = await Contact.findByIdAndRemove(contactId);
       if (!result) {
-        throw HttpError(404, 'Not found');
+        throw new HttpError(404, 'Не знайдено');
       }
-      res.json({ message: `contact ${nameForMessange} deleted` });
+      res.json({ message: `Контакт ${nameForMessange} видалено` });
     } catch (error) {
       next(error);
     }
@@ -83,18 +83,18 @@ const deleteContact = async (req, res, next) => {
 const updatedContactById = async (req, res, next) => {
     try {
       if (Object.keys(req.body).length === 0) {
-        throw HttpError(400, 'missing fields');
+        throw new HttpError(400, 'Відсутнє поле');
       }
   
       const { error } = addSchema.validate(req.body);
       if (error) {
-        throw HttpError(400, `Missing required ${error.details[0].path[0]} field`);
+        throw new HttpError(400, `Відсутнє обовʼязкове поле ${error.details[0].path[0]}`);
       }
   
       const { contactId } = req.params;
       const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
       if (!result) {
-        throw HttpError(404, 'Not found');
+        throw new HttpError(404, 'Не знайдено');
       }
   
       res.json(result);
@@ -148,6 +148,6 @@ async function updateStatusContact(contactId, updateFields) {
   
       return updatedContact;
     } catch (error) {
-      throw new HttpError(500, 'Internal Server Error');
+      throw new HttpError(500, 'Внутрішня помилка серверу');
     }
   }
