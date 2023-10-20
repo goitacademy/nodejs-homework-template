@@ -131,7 +131,7 @@ router.patch("/", passportAuthenticate, async (req, res, next) => {
       throw HttpError(400, "Invalid subscription value");
     }
 
-    const user = await User.findByIdAndUpdate(
+    const user = await User.findOneAndUpdate(
       userId,
       { subscription },
       { new: true }
