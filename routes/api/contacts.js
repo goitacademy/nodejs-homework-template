@@ -3,8 +3,8 @@ const express = require("express");
 const contactsControllers = require("../../controllers/contacts-controller.js");
 
 const isValidId = require("../../middlewares/isValidId.js");
-
 const isEmptyBody = require("../../middlewares/isEmptyBody.js");
+const authenticate = require("../../middlewares/authenticate.js");
 
 const validateBody = require("../../decorators/validateBody.js");
 
@@ -17,6 +17,8 @@ const contactAddValidation = validateBody(contactAddSchema);
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", contactsControllers.getAll);
 
