@@ -4,6 +4,35 @@ const { ctrlWrapper } = require("../decorators/ctrl.Wrapper");
 const { User } = require("../models/user");
 const { JWT_SECRET } = process.env;
 
+// const authenticate = async (req, res, next) => {
+//   try {
+//     const { authorization } = req.headers;
+//     if (!authorization) {
+//       throw new HttpError(401, "Not authorized");
+//     }
+
+//     const [bearer, token] = authorization.split(" ");
+//     if (bearer !== "Bearer") {
+//       throw new HttpError(401, "Not authorized");
+//     }
+
+//     const { userId } = jwt.verify(token, JWT_SECRET);
+//     console.log("JWT_SECRET:", JWT_SECRET);
+
+//     const user = await User.findById(userId);
+
+//     if (!user || !user.token || user.token !== token) {
+//       throw new HttpError(401, "Not authorized");
+//     }
+//     console.log("Token:", token);
+
+//     req.user = user;
+//     next();
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 const authenticate = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
@@ -16,16 +45,20 @@ const authenticate = async (req, res, next) => {
       throw new HttpError(401, "Not authorized");
     }
 
-    const { userId } = jwt.verify(token, JWT_SECRET);
+    try {
+      const { userId } = jwt.verify(token, JWT_SECRET);
 
-    const user = await User.findById(userId);
+      const user = await User.findById(userId);
 
-    if (!user || !user.token || user.token !== token) {
+      if (!user || !user.token || user.token !== token) {
+        throw new HttpError(401, "Not authorized");
+      }
+
+      req.user = user;
+      next();
+    } catch (verificationError) {
       throw new HttpError(401, "Not authorized");
     }
-
-    req.user = user;
-    next();
   } catch (error) {
     next(error);
   }
