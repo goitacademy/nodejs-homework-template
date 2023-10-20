@@ -6,19 +6,26 @@ const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
 
 const addSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required().messages({
-      'string.email': 'Invalid email format',
-      'any.required': 'Email is required'
-    }),
-    password: Joi.string().min(4).required().messages({
-      'string.min': 'Password should have at least {#limit} characters',
-      'any.required': 'Password is required'
-    })
+    email: Joi.string().email().required(),
+    password: Joi.string().min(4).required()
   });
 const register = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+      const { email, password } = req.body;
+       // Перевірка на відсутність обох полів email та password
+        if (!email && !password) {
+          throw new HttpError(400, 'Ви не ввели жодного поля');
+        }
+
+        // Перевірка на відсутність поля email
+        if (!email) {
+          throw new HttpError(400, 'Відсутнє поле email');
+        }
+
+        // Перевірка на відсутність поля password
+        if (!password) {
+          throw new HttpError(400, 'Відсутнє поле password');
+        }
         // Валідація паролю та електронної адреси
         const { error } = addSchema.validate(req.body, { abortEarly: false });
     
@@ -30,7 +37,7 @@ const register = async (req, res, next) => {
     // Перевірка наявності електронної адреси в БД
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'Email in use' });
+      return res.status(409).json({ message: 'Такий email вже використовується' });
     }
 
     // Хешування паролю
