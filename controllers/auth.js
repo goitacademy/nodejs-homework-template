@@ -1,8 +1,12 @@
 const { User } = require("../models/Users");
+const Jimp = require('jimp');
+const fs = require('fs/promises');
+const path = require('path');
 const { ctrlWrapper, HttpError } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const gravatar = require("gravatar");
 dotenv.config();
 const { SECRET_KEY } = process.env;
 
@@ -16,11 +20,13 @@ const register = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+      const avatarURL = gravatar.url(email);
     const newUser = await User.create({
       email,
       password: hashPassword,
       subscription,
       name,
+      avatarURL,
     });
 
     res.status(201).json({
@@ -28,6 +34,7 @@ const register = async (req, res, next) => {
         email: newUser.email,
         subscription: newUser.subscription,
         name: newUser.name,
+        avatarURL:newUser.avatarURL
       },
     });
   } catch (error) {
@@ -42,11 +49,11 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      res.status(401).json({ messeage: "Email or password is wrong" });
+      res.status(401).json({ messeage: " or password is wrong" });
     }
 
-    const passwordCompare = password === user.password;
-    console.log(passwordCompare);
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    console.log(user.password);
     if (!passwordCompare) {
       res.status(401).json({ messeage: "Email or password is wrong" });
     }
@@ -113,12 +120,38 @@ const updateBySubscription = async (req, res, next) => {
     if (!user) {
       throw HttpError(401, "Not authorized");
     }
-
+  
     res.json({ subscription: user.subscription });
   } catch (error) {
     next(error);
   }
 };
+
+const updateByAvatar =  async (req, res, next) => {
+try{
+  const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+     const avatarDir = path.join(__dirname, "../", "public", "avatars");
+  await Jimp.read(tempUpload).then((img) =>
+    img.resize(250, 250).write(`${tempUpload}`)
+  ); 
+  const fileName = `${_id}_${originalname}`;
+const resultUpload = path.join(avatarDir, fileName);
+  await fs.rename(tempUpload, resultUpload);
+
+  const avatarURL = path.join("avatars", fileName);
+     const user =  await User.findByIdAndUpdate(_id,  {avatarURL});
+
+  if (!User) {
+      throw HttpError(401, "Not authorized");
+    }
+    res.json({ user });
+
+     } catch (error) {
+    next(error);
+  }
+}
+
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -126,4 +159,5 @@ module.exports = {
   logout: ctrlWrapper(logout),
   currentUser: ctrlWrapper(currentUser),
   updateBySubscription: ctrlWrapper(updateBySubscription),
+  updateByAvatar:ctrlWrapper(updateByAvatar)
 };

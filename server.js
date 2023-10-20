@@ -20,7 +20,6 @@ async function main() {
       console.log(`Server is listening on port: ${PORT}`);
     });
   } catch (error) {
-    console.log("vhjgj");
     console.error("Error:", error.message);
     process.exit(1);
   }

@@ -15,12 +15,14 @@ const userSchema = new Schema(
       type: String,
       enum: ["starter", "pro", "business"],
       default: "starter",
-    },
+        },
     owner: {
       type: String,
       ref: "user",
-    },
-    token: String,
+        },
+
+        token: String,
+      avatarURL: String,
   },
   { versionKey: false, timestamps: true },
 );
