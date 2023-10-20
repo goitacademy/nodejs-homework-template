@@ -1,7 +1,15 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+
 require('dotenv').config();
+const sendMail = require('./helpers/sendMail')
+
+const {transport, mail} = sendMail
+
+// transport.sendMail(mail)
+// .then(()=>console.log("email sent successfully"))
+// .catch(error => console.log(error.message))
 
 const authRouter = require('./routes/api/auth')
 const contactsRouter = require('./routes/api/contacts')
