@@ -1,23 +1,28 @@
-// const express = require("express");
+const express = require("express");
 
-// const authRouter = express.Router();
+const authRouter = express.Router();
 
-// const {
-//   signup,
-// } = require("../../controllers/authControllers");
+const isEmptyBody = require("../../middlewares/isEmptyBody");
 
-// // authRouter.post("/register", signup);
+const { signup, login } = require("../../controllers/authControllers");
 
-// // authRouter.get("/", listContacts);
+const { useValidationEmail } = require("../../auth/useValidationEmail");
 
-// // authRouter.get("/:contactId", isValidId, getContactById);
+authRouter.post("/register", useValidationEmail, isEmptyBody, signup);
 
-// // authRouter.post("/", addContact);
+authRouter.post("/login", isEmptyBody, login);
 
-// // authRouter.delete("/:contactId", isValidId, removeContact);
+// authRouter.get("/", listContacts);
 
-// // authRouter.put("/:contactId", isValidId, updateContact);
+// authRouter.get("/:contactId", isValidId, getContactById);
 
-// // authRouter.patch("/:contactId/favorite", isValidId, updateStatusContact);
+// authRouter.post("/", addContact);
 
-// module.exports = authRouter;
+// authRouter.delete("/:contactId", isValidId, removeContact);
+
+// authRouter.put("/:contactId", isValidId, updateContact);
+
+// authRouter.patch("/:contactId/favorite", isValidId, updateStatusContact);
+
+module.exports = authRouter;
+
