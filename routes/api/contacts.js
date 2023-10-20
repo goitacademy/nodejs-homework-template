@@ -1,15 +1,42 @@
 import express from "express";
-import contactsController from "../../controllers/contacts-controller.js";
-import { isEmptyBody, isValidId } from "../../middlewares/index.js";
+import contactController from "../../controllers/contactController.js";
+import { isEmptyBody } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
-import { contactsAddSchema, contactUpdateFavoriteSchema } from "../../models/Contact.js";
-const contactAddValidate = validateBody(contactsAddSchema)
-const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema)
+import {
+  contactsAddSchema,
+  contactUpdateFavoriteSchema,
+} from "../../models/Contact.js";
+import isValidId from "../../middlewares/isValidId.js";
+
+const contactAddValidate = validateBody(contactsAddSchema);
+const contactUpdateFavorite = validateBody(contactUpdateFavoriteSchema);
 const contactsRouter = express.Router();
-contactsRouter.get('/', contactsController.getAllContacts);
-contactsRouter.get('/:id', isValidId, contactsController.getContactById);
-contactsRouter.post('/', isEmptyBody, contactAddValidate, contactsController.addContact)
-contactsRouter.put('/:id', isValidId, isEmptyBody, contactAddValidate, contactsController.updateContact)
-contactsRouter.patch("/:id/favorite", isValidId, contactUpdateFavoriteValidate, contactsController.updateFavorite);
-contactsRouter.delete('/:id', isValidId, contactsController.removeContact)
+
+contactsRouter.get("/", contactController.getAllContacts);
+
+contactsRouter.get("/:id", isValidId, contactController.getContactById);
+
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  contactAddValidate,
+  contactController.addContact
+);
+
+contactsRouter.delete("/:id", isValidId, contactController.removeContact);
+
+contactsRouter.put(
+  "/:id",
+  isValidId,
+  isEmptyBody,
+  contactAddValidate,
+  contactController.updateContact
+);
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidId,
+  contactUpdateFavorite,
+  contactController.updateFavorite
+);
+
 export default contactsRouter;
