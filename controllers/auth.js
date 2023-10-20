@@ -1,5 +1,9 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
+const jimp = require("jimp");
 
 const { User } = require("../models/userModel");
 const { AppError, catchAsyns } = require("../utilitie");
@@ -10,6 +14,8 @@ const {
 require("dotenv").config();
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { error } = userSignupValidator(req.body);
@@ -26,15 +32,21 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
+  console.log(avatarURL);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     status: "success",
     code: 201,
     user: {
       email: newUser.email,
-      subscription: "starter",
+      subscription: newUser.subscription,
     },
   });
 };
@@ -68,7 +80,7 @@ const login = async (req, res) => {
     token,
     user: {
       email: user.email,
-      subscription: "starter",
+      subscription: user.subscription,
     },
   });
 };
@@ -93,9 +105,29 @@ const getCurrent = async (req, res) => {
   });
 };
 
+const updateUserAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+
+  const filename = `${_id}_${originalname}`;
+
+  const resultUpload = path.join(avatarsDir, filename);
+  await fs.rename(tempUpload, resultUpload);
+
+  const image = await jimp.read(resultUpload);
+  image.cover(250, 250);
+  await image.writeAsync(resultUpload);
+
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
+
+  res.json({ avatarURL });
+};
+
 module.exports = {
   register: catchAsyns(register),
   login: catchAsyns(login),
   getCurrent,
   logout: catchAsyns(logout),
+  updateUserAvatar: catchAsyns(updateUserAvatar),
 };

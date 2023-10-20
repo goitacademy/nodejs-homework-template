@@ -24,5 +24,4 @@ router.put("/:id", authenticate, updContact);
 
 router.patch("/:id/favorite", authenticate, updateStatusContact);
 
-
 module.exports = router;
