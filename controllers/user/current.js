@@ -10,7 +10,7 @@ const { HttpError } = require('../../helpers')
  */
 const current = async (req, res, next) => {
     if (!req.user) {
-         next(HttpError(401, "Not authorized"))
+        next(HttpError(401, "Not authorized"))
     }
 
     const { _id } = req.user
@@ -18,7 +18,8 @@ const current = async (req, res, next) => {
 
     res.status(200).json({
         email: user.email,
-        subscription: user.subscription
+        subscription: user.subscription,
+        avatarURL: user.avatarURL
     })
 }
 

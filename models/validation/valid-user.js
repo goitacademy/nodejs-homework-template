@@ -6,6 +6,8 @@ const userSchema = Joi.object({
     password: Joi.string().required().min(7).max(15),
 
     subscription: Joi.string().optional(),
+
+    avatarURL: Joi.string().required()
 })
 
 module.exports = {

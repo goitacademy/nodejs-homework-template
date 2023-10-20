@@ -16,7 +16,7 @@ router.post('/registration', ctrl.register)
  * Отримує body {_id, password, email, subscription, token}
  * Викликає функцію login
 */
-router.post('/login', /* middlewareToken, */ ctrl.login)
+router.post('/login', ctrl.login)
 
 /**
  * add middlewar
@@ -28,18 +28,18 @@ router.use(middlewareToken)
  * Отримує body {_id, password, email, subscription, token}
  * Викликає функцію logout
  */
-router.post('/logout', /* middlewareToken, */ ctrl.logout)
+router.post('/logout', ctrl.logout)
 
 /**
  * @ POST /users/current
  * Отримує body {email, password}
  * Викликає функцію current
  */
-router.get('/current', /* middlewareToken, */ ctrl.current)
+router.get('/current', ctrl.current)
 
 /**
  * @ PATCH /users/avatars
  */
-router.patch(upload.single('/avatars'),)
+router.patch('/avatars', upload.single('avatars'), ctrl.updateAvatar)
 
 module.exports = router

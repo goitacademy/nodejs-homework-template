@@ -14,19 +14,21 @@ require('dotenv').config()
  */
 const login = async (req, res, next) => {
 
-    const { email, password } = req.body
+    const { email, password, avatarURL } = req.body
 
     const user = await User.getUserByEmail(email)
-    console.log('LOGIN', password)
     const passwordMatch = await user.comparePasswords(password)
     const secretKey = process.env.JWT_SECRET
 
-    const validDataUser = userSchema.validate({ email, password })
+    const validDataUser = userSchema.validate({ email, password, avatarURL })
     handleUserRouter(res, validDataUser)
 
     if (!user || !passwordMatch) {
         return next(HttpError(401, "Not authorized"))
+    }
 
+    if (!user.avatarURL) {
+        return next(HttpError(400, "Avatar is required"));
     }
 
     const payload = { _id: user._id, email: user.email }
@@ -35,7 +37,12 @@ const login = async (req, res, next) => {
     return res.status(200).json({
         status: "success",
         code: 200,
-        data: { token, email: user.email, subscription: user.subscription },
+        data: {
+            token,
+            email: user.email,
+            subscription: user.subscription,
+            avatarURL: user.avatarURL
+        },
     })
 }
 
