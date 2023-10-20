@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 import { handleServerError, runValidatorsAtUpdate } from "./hooks.js";
 import Joi from "joi";
-import { join } from "path";
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const userSchema = new Schema(
