@@ -25,6 +25,7 @@ export const getContactById = async (id) => {
     const contact = contacts.find((c) => c.id === id);
     return contact || null;
   } catch (error) {
+    
     console.error(error.message);
   }
 }

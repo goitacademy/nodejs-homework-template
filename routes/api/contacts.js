@@ -71,7 +71,7 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw HttpError(404, `not found`);
     }
 
     res.json({
@@ -97,7 +97,7 @@ router.put('/:contactId', async (req, res, next) => {
 
     const result = await updateContactById(contactId, req.body);
     if (!result) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
+      throw HttpError(404, `not found`);
     }
 
     res.json(result);
