@@ -8,6 +8,7 @@ const {
 
 const { isValidId } = require("../../middlewares/isValidId");
 const authenticate = require("../../middlewares/authenticate");
+const upload = require("../../middlewares/upload");
 
 const contactAddValidate = validateBody(contactAddSchema);
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
@@ -24,6 +25,7 @@ contactsRouter.get("/:id", isValidId, contactsController.getById);
 
 contactsRouter.post(
   "/",
+  upload.single("avatar"),
   isEmptyBody,
   contactAddValidate,
   contactsController.add
