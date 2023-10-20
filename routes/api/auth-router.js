@@ -3,8 +3,14 @@ const express = require("express");
 const authRouter = express.Router();
 
 const isEmptyBody = require("../../middlewares/isEmptyBody");
+const authenticate = require("../../middlewares/authenticate");
 
-const { signup, login } = require("../../controllers/authControllers");
+const {
+  signup,
+  login,
+  getCurrentUser,
+  logoutUser,
+} = require("../../controllers/authControllers");
 
 const { useValidationEmail } = require("../../auth/useValidationEmail");
 
@@ -12,17 +18,8 @@ authRouter.post("/register", useValidationEmail, isEmptyBody, signup);
 
 authRouter.post("/login", isEmptyBody, login);
 
-// authRouter.get("/", listContacts);
+authRouter.get("/current", authenticate, getCurrentUser);
 
-// authRouter.get("/:contactId", isValidId, getContactById);
-
-// authRouter.post("/", addContact);
-
-// authRouter.delete("/:contactId", isValidId, removeContact);
-
-// authRouter.put("/:contactId", isValidId, updateContact);
-
-// authRouter.patch("/:contactId/favorite", isValidId, updateStatusContact);
+authRouter.post("/logout", authenticate, logoutUser);
 
 module.exports = authRouter;
-

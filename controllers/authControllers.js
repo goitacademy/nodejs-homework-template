@@ -52,7 +52,25 @@ const login = async (req, res, next) => {
   res.status(200).json({ token: token, user: { email } });
 };
 
+const getCurrentUser = async (req, res) => {
+  const { token } = req.user;
+  res.status(200).json(token);
+};
+
+// const logoutUser = async (req, res) => {
+//   const { _id } = req.user;
+//   await User.findByIdAndUpdate(_id, { token: "" });
+//   res.status(204);
+// };
+const logoutUser = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204).send(); // Send a 204 No Content response
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   login: ctrlWrapper(login),
+  getCurrentUser: ctrlWrapper(getCurrentUser),
+  logoutUser: ctrlWrapper(logoutUser),
 };
