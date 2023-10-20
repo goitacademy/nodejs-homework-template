@@ -1,11 +1,26 @@
 const userDao = require("./users.dao");
 const authService = require("../auth/auth.service");
-const { sendUserVerificationMail } = require("./user-mailer.service");
+const path = require("path");
+const fs = require("fs/promises");
+const mimetypes = require("mime-types");
+const express = require("express");
+const gravatar = require("gravatar");
+const jimp = require("jimp");
+const { User } = require("./user.model");
 
 const signupHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const createdUser = await userDao.createUser({ email, password });
+    const avatar = gravatar.url(email, {
+      protocol: req.protocol,
+      default: "retro",
+    });
+    const avatarURL = avatar;
+    const createdUser = await userDao.createUser({
+      email,
+      password,
+      avatarURL,
+    });
 
     // await sendUserVerificationMail(
     //   createdUser.email,
@@ -16,6 +31,7 @@ const signupHandler = async (req, res, next) => {
       user: {
         email: createdUser.email,
         subscription: createdUser.subscription,
+        avatar: avatarURL,
       },
     });
   } catch (e) {
@@ -52,10 +68,6 @@ const loginHandler = async (req, res, next) => {
       return res.status(401).send({ message: "Email or password is wrong" });
     }
 
-    // if (!userEntity.verified) {
-    //   return res.status(403).send({ message: "User is not verified." });
-    // }
-
     const userPayload = {
       email: userEntity.email,
       subscription: userEntity.subscription,
@@ -86,12 +98,55 @@ const logoutHandler = async (req, res, next) => {
 
 const currentHandler = async (req, res, next) => {
   try {
-    const { email, subscription } = req.user;
-    return res.status(200).send({ user: { email, subscription } });
+    const { email, subscription, avatarURL } = req.user;
+    return res.status(200).send({ user: { email, subscription, avatarURL } });
   } catch (e) {
     return next(e);
   }
 };
+
+const updatepPictureAvatar = async (req, res, next) => {
+  try {
+    const avatarImage = await jimp.read(req.file.path);
+    const resizeAvatar = await avatarImage.resize(250, 250);
+    const filename = `${Date.now()}.${mimetypes.extension(req.file.mimetype)}`;
+    await resizeAvatar.writeAsync(
+      path.join(__dirname, "public/avatars", filename)
+    );
+
+    const { email } = req.body;
+    console.log(email);
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      { avatarURL: `http://localhost:3000/avatars/${filename}` },
+      { new: true }
+    );
+
+    res.status(201).send({ user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred " });
+  }
+};
+
+// const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
+
+// const updateAvatar = async (req, res) => {
+//   try {
+//     const { _id } = req.user;
+//     const { path: tempUpload, originalname } = req.file;
+//     const extention = originalname.split(".").pop();
+//     const filename = `${_id}.${extention}`;
+//     const resultUpload = path.join(avatarsDir, filename);
+//     await fs.rename(tempUpload, resultUpload);
+//     const avatarURL = path.join("avatars", filename);
+//     await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
+
+//     res.status(200).json(avatarURL);
+//   } catch (error) {
+//     return res.status(500).json({ message: "file not write" });
+//   }
+// };
 
 module.exports = {
   signupHandler,
@@ -99,4 +154,5 @@ module.exports = {
   logoutHandler,
   currentHandler,
   secretHandler,
+  updatepPictureAvatar,
 };

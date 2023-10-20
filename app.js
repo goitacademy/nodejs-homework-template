@@ -5,6 +5,7 @@ const app = express();
 
 app.use(express.json());
 
+app.use(express.static("/avatars"));
 app.use("/users", usersRouter);
 
 app.use((err, _, res, __) => {

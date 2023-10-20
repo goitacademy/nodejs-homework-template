@@ -14,8 +14,9 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const { id } = authService.verifyToken(token);
-    const userEntity = await usersDao.getUser({ id });
 
+    const userEntity = await usersDao.getUser({ id });
+    // console.log(userEntity);
     if (!userEntity || userEntity.token !== token) {
       throw new Error("Token is invalid.");
     }
