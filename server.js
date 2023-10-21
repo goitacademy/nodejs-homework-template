@@ -12,6 +12,8 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/api', router)
 
+app.use(express.static('public'));
+
 app.use((_, res) => {
   res.status(404).json({ message: 'Not found' });
 });
