@@ -12,7 +12,7 @@ const {
   logoutUser,
 } = require("../../controllers/authControllers");
 
-const { useValidationEmail } = require("../../auth/useValidationEmail");
+const { useValidationEmail } = require("../../middlewares/useValidationEmail");
 
 authRouter.post("/register", useValidationEmail, isEmptyBody, signup);
 

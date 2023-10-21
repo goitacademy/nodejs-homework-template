@@ -21,18 +21,139 @@ const listContacts = async (req, res, next) => {
   res.json(result);
 };
 
+// const addContact = async (req, res, next) => {
+//   const { _id: owner } = req.user;
+
+//   const { name, email, phone, } = req.body;
+
+//   if (!name && !email && !phone) {
+//     return next(new HttpError(400, "Missing fields"));
+//   }
+
+//   if (!name || !email || !phone) {
+//     return next(
+//       new HttpError(400, "Missing required field: name, email, or phone")
+//     );
+//   }
+
+//   try {
+//     const newContact = await Contact.create({
+//       ...req.body,
+//       owner,
+//     });
+
+//     res.status(201).json({
+//       id: newContact._id,
+//       name: newContact.name,
+//       email: newContact.email,
+//       phone: newContact.phone,
+//       owner: newContact.owner,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// const addContact = async (req, res, next) => {
+//   const { _id: owner } = req.user;
+
+//   const { name, email, phone, favorite } = req.body;
+
+//   if (!name && !email && !phone && !favorite) {
+//     return next(new HttpError(400, "Missing fields"));
+//   }
+
+//   if (!name || !email || !phone || !favorite) {
+//     return next(
+//       new HttpError(
+//         400,
+//         "Missing required field: name, email, favorite or phone"
+//       )
+//     );
+//   }
+
+//   try {
+//     const newContact = await Contact.create({
+//       ...req.body,
+//       owner,
+//     });
+
+//     res.status(201).json({
+//       id: newContact._id,
+//       name: newContact.name,
+//       email: newContact.email,
+//       phone: newContact.phone,
+//       owner: newContact.owner,
+//       favorite: newContact.favorite,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// const addContact = async (req, res, next) => {
+//   const { _id: owner } = req.user;
+
+//   const { name, email, phone, favorite } = req.body;
+
+//   if (!name && !email && !phone && !favorite) {
+//     return next(new HttpError(400, "Missing fields"));
+//   }
+
+//   if (!name || !email || !phone || !favorite) {
+//     return next(
+//       new HttpError(
+//         400,
+//         "Missing required field: name, email, favorite or phone"
+//       )
+//     );
+//   }
+
+//   try {
+//     const newContact = await Contact.create({
+//       ...req.body,
+//       owner,
+//     });
+
+//     res.status(201).json({
+//       id: newContact._id,
+//       name: newContact.name,
+//       email: newContact.email,
+//       phone: newContact.phone,
+//       owner: newContact.owner,
+//       favorite: newContact.favorite,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 const addContact = async (req, res, next) => {
   const { _id: owner } = req.user;
 
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite } = req.body;
+  const missingFields = [];
 
-  if (!name && !email && !phone) {
+  if (!name) {
+    missingFields.push("name");
+  }
+  if (!email) {
+    missingFields.push("email");
+  }
+  if (!phone) {
+    missingFields.push("phone");
+  }
+  if (!favorite) {
+    missingFields.push("favorite");
+  }
+
+  if (missingFields.length === 4) {
     return next(new HttpError(400, "Missing fields"));
   }
 
-  if (!name || !email || !phone) {
+  if (missingFields.length > 0) {
     return next(
-      new HttpError(400, "Missing required field: name, email, or phone")
+      new HttpError(400, `Missing required fields: ${missingFields.join(", ")}`)
     );
   }
 
@@ -48,6 +169,7 @@ const addContact = async (req, res, next) => {
       email: newContact.email,
       phone: newContact.phone,
       owner: newContact.owner,
+      favorite: newContact.favorite,
     });
   } catch (error) {
     next(error);
