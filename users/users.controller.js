@@ -1,6 +1,7 @@
 const userDao = require('./users.dao');
 const authService = require('../auth/auth.service');
 const gravatar = require('gravatar');
+const jimp = require('jimp');
 
 const multer = require('multer');
 const path = require('path');
@@ -81,12 +82,15 @@ const currentHandler = async (req, res, next) => {
 };
 
 const changeAvatar = async (req, res, next) => {
-    try{
-        console.log(req.file);
-        return res.status(201);
+    try {
+        const avatarImage = await jimp.read(req.file.path);
+        const resizedAvatar = avatarImage.resize(250, 250);
+        await resizedAvatar.writeAsync(req.file.path);
+        await fs.rename(req.file.path, path.join(__dirname, 'public/avatars', Date.now()));
+        return res.status(201).send();
     } catch (e) {
-        console.error(e);
-        return res.status(500);
+        console.error(e); 
+        return res.status(500).send();
     }
 };
 
