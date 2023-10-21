@@ -104,7 +104,7 @@ const signup = async (req, res, next) => {
 			},
 		});
 	} catch (error) {
-		next(error);
+		return next(error);
 	}
 };
 
@@ -136,7 +136,7 @@ const avatarChanger = async (req, res, next) => {
 			},
 		});
 	} catch (error) {
-		next(error);
+		return next(error);
 	}
 };
 
@@ -161,7 +161,31 @@ const verify = async (req, res, next) => {
 			});
 		}
 	} catch (error) {
-		next(error);
+		return next(error);
+	}
+};
+
+const resendVerification = async (req, res, next) => {
+	try {
+		const { email } = req.body;
+		const user = await User.findOne({ email });
+
+		if (!email) {
+			return res.status(400).json({
+				message: "Missing required field email",
+			});
+		} else if (user.verify) {
+			return res.status(400).json({
+				message: "Verification has already been passed",
+			});
+		} else {
+			sendUserVerificationMail(user.email, user.verificationToken);
+			return res.status(200).json({
+				message: "Verification email sent",
+			});
+		}
+	} catch (error) {
+		return next(error);
 	}
 };
 
@@ -172,4 +196,5 @@ module.exports = {
 	current,
 	avatarChanger,
 	verify,
+	resendVerification,
 };
