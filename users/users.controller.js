@@ -1,15 +1,18 @@
 const userDao = require('./users.dao');
 const authService = require('../auth/auth.service');
+const gravatar = require('gravatar');
 
 const signUpHandler = async (req, res, next) => {
     try {
         const { email, password } = req.body;
-        const createdUser = await userDao.createUser({ email, password });
-
+        const avatarURL = gravatar.url(req.body.email, { default: 'retro'}, true);
+        const createdUser = await userDao.createUser({ email, password, avatarURL });
+        
         return res.status(201).send({
             user: {
                 email: createdUser.email,
                 password: createdUser.password,
+                avatarURL: createdUser.avatarURL,
             }
         });
     } catch (e) {
