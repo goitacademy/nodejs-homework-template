@@ -11,6 +11,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const sharp = require("sharp");
 const { nanoid } = require("nanoid");
+const { sendUserVerificationMail } = require("../services/mailer.service");
 
 const schema = Joi.object({
 	email: Joi.string()
@@ -37,7 +38,6 @@ const login = async (req, res) => {
 			message: "Email or password is wrong",
 		});
 	} else if (!user.verify) {
-		console.log(user.verify);
 		return res.status(401).json({
 			status: "Unauthorized",
 			message: "Email is not verify",
@@ -95,6 +95,8 @@ const signup = async (req, res, next) => {
 		newUser.avatarURL = avatarURL;
 		newUser.verificationToken = id;
 		await newUser.save();
+		sendUserVerificationMail(newUser.email, newUser.verificationToken);
+
 		return res.status(201).json({
 			status: "created",
 			data: {
