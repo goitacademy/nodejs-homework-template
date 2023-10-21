@@ -44,12 +44,24 @@ const updateToken = async (_id, token) => {
     return await User.updateOne(_id, { token });
 };
 
+/**
+ * 
+ * @param {string} _id 
+ * @param {Object} subscription - підписка користувача
+ * @returns {Promise<User>} - Об'єкт з результатом оновлення підписки
+ */
 const updateSubscription = async (_id, subscription) => {
     return await User.findByIdAndUpdate(_id, subscription, {
         new: true,
     });
 }
 
+/**
+ * 
+ * @param {string} _id 
+ * @param {string} avatarURL - URL аватарки
+ * @returns {Promise<User>} - Оновлення аватарки
+ */
 const updateAvatar = async (_id, avatarURL) => {
     return await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
 }

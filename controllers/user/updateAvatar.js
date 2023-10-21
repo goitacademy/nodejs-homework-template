@@ -4,6 +4,13 @@ const User = require('../../models/users')
 const Jimp = require('jimp')
 const { HttpError, handleReqError } = require('../../helpers')
 
+/**
+ * Оновлює аватар користувача
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {function} next 
+ * @returns {Promise} - Об'єкт з результатом оновлення аватара користувача
+ */
 const updateAvatar = async (req, res, next) => {
     const { _id } = req.user
     const { path: tmpUpload, originalname } = req.file
