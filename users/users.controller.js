@@ -2,6 +2,17 @@ const userDao = require('./users.dao');
 const authService = require('../auth/auth.service');
 const gravatar = require('gravatar');
 
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs/promises');
+
+const upload = multer({
+    dest: path.join(__dirname, 'tmp'),
+    limits: {
+        fieldSize: 1048576
+    }
+});
+
 const signUpHandler = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -69,9 +80,21 @@ const currentHandler = async (req, res, next) => {
     }
 };
 
+const changeAvatar = async (req, res, next) => {
+    try{
+        console.log(req.file);
+        return res.status(201);
+    } catch (e) {
+        console.error(e);
+        return res.status(500);
+    }
+};
+
 module.exports = {
     signUpHandler,
     loginHandler,
     logoutHandler,
     currentHandler,
+    changeAvatar,
+    upload,
 };
