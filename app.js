@@ -4,6 +4,9 @@ import cors from 'cors'
 import moment from 'moment/moment.js'
 import router from './routes/api/contacts.js'
 import fs from 'fs/promises'
+import dotenv from 'dotenv'
+
+dotenv.config()
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
