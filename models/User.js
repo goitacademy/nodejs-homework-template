@@ -3,8 +3,6 @@ const Joi = require("joi");
 
 const { handleSaveError, runValidatorsAtUpdate } = require("./hooks.js");
 
-// const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
 const userSchema = new Schema(
   {
     password: {
@@ -16,7 +14,6 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Email is required"],
       unique: true,
-      //   match: emailRegexp,
     },
     subscription: {
       type: String,
@@ -45,10 +42,15 @@ const userSigninSchema = Joi.object({
   password: Joi.string().min(4).required(),
 });
 
+const userUpdateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().required(),
+});
+
 const User = model("user", userSchema);
 
 module.exports = {
   userSignupSchema,
   userSigninSchema,
+  userUpdateSubscriptionSchema,
   User,
 };

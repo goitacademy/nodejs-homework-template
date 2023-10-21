@@ -6,10 +6,15 @@ const isEmptyBody = require("../../middlewares/isEmptyBody");
 const authenticate = require("../../middlewares/authenticate");
 const validateBody = require("../../decorators/validateBody.js");
 
-const { userSignupSchema, userSigninSchema } = require("../../models/User");
+const {
+  userSignupSchema,
+  userSigninSchema,
+  userUpdateSubscriptionSchema,
+} = require("../../models/User");
 
 const userSignupValidate = validateBody(userSignupSchema);
 const userSigninValidate = validateBody(userSigninSchema);
+const userUpdateSubValidate = validateBody(userUpdateSubscriptionSchema);
 
 const authRouter = Router();
 
@@ -30,5 +35,13 @@ authRouter.post(
 authRouter.get("/users/current", authenticate, authController.getCurrent);
 
 authRouter.post("/users/logout", authenticate, authController.signOut);
+
+authRouter.patch(
+  "/users",
+  isEmptyBody,
+  authenticate,
+  userUpdateSubValidate,
+  authController.updateSubscription
+);
 
 module.exports = authRouter;

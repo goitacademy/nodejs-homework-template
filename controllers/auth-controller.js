@@ -45,7 +45,7 @@ const signin = async (req, res) => {
   res.json({
     token,
     email: user.email,
-    // user.subscription,
+    subscription: user.subscription,
   });
 };
 
@@ -64,9 +64,26 @@ const signOut = async (req, res) => {
   res.status(204).json({ message: "Sign out is successful." });
 };
 
+const updateSubscription = async (req, res) => {
+  const subscriptionOptions = ["starter", "pro", "business"];
+  const { subscription } = req.body;
+  const { token } = req.user;
+
+  if (!subscriptionOptions.includes(subscription)) {
+    throw HttpError(400, `Invalid subscription type`);
+  }
+  const result = await User.findOneAndUpdate(
+    { token },
+    { subscription },
+    { new: true }
+  );
+  res.json(result);
+};
+
 module.exports = {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signOut: ctrlWrapper(signOut),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
