@@ -4,8 +4,6 @@ const cors = require('cors');
 require('dotenv').config();
 const usersRouter = require('./users/users.router');
 const router = require('./contacts/contact.router');
-const multer = require('multer');
-const upload = multer();
 
 const app = express()
 
