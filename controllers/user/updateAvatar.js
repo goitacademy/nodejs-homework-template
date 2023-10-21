@@ -17,8 +17,11 @@ const updateAvatar = async (req, res, next) => {
 
     try {
         await fs.rename(tmpUpload, uploadPath)
-        const avatarURL = path.join('avatar', filename)
-        const user = await User.updateAvatar(_id, { avatarURL })
+        const avatarURL = `avatar/${filename}`
+        // const avatarURL = path.join('avatar', filename)
+        // const user = await User.updateAvatar(_id, { avatarURL })
+        const user = await User.updateAvatar(_id, avatarURL)
+
 
         if (!user) {
             return next(HttpError(401, "Not authorized"))
