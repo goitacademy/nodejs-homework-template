@@ -38,7 +38,16 @@ router.post('/logout', ctrl.logout)
 router.get('/current', ctrl.current)
 
 /**
+ * @ PATCH /users/
+ * Отримує оновлену підписку
+ * Викликає функцію updateSubscription
+ */
+router.patch("/", ctrl.updateSubscription);
+
+/**
  * @ PATCH /users/avatars
+ * Отримує оновлену аватарку
+ * Викликає функцію updateAvatar
  */
 router.patch('/avatars', upload.single('avatars'), ctrl.updateAvatar)
 
