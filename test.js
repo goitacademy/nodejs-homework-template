@@ -14,7 +14,8 @@ const transporter = nodemailer.createTransport({
 transporter
 	.sendMail({
 		from: process.env.GMAIL_USER,
-		to: process.env.GMAIL_USER,
+        to: process.env.GMAIL_USER,
+        subject: 'habababa',
 		text: "Hello from nodemailer",
 		html: "<h1>Hello!</h1><br/><b>nodemailer</b> here !",
 	})

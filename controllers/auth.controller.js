@@ -3,9 +3,14 @@ const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const gravatar = require("gravatar");
 const { deleteToken } = require("../services/auth.service");
+const {
+	getUserByToken,
+	getUserByEmailAndUpdate,
+} = require("../services/user.service");
 const path = require("path");
 const fs = require("fs/promises");
 const sharp = require("sharp");
+const { nanoid } = require("nanoid");
 
 const schema = Joi.object({
 	email: Joi.string()
@@ -30,6 +35,12 @@ const login = async (req, res) => {
 		return res.status(401).json({
 			status: "Unauthorized",
 			message: "Email or password is wrong",
+		});
+	} else if (!user.verify) {
+		console.log(user.verify);
+		return res.status(401).json({
+			status: "Unauthorized",
+			message: "Email is not verify",
 		});
 	} else {
 		const payload = {
@@ -78,9 +89,11 @@ const signup = async (req, res, next) => {
 		});
 	}
 	try {
+		const id = nanoid();
 		const newUser = new User({ email });
 		newUser.setPassword(password);
 		newUser.avatarURL = avatarURL;
+		newUser.verificationToken = id;
 		await newUser.save();
 		return res.status(201).json({
 			status: "created",
@@ -125,10 +138,36 @@ const avatarChanger = async (req, res, next) => {
 	}
 };
 
+const verify = async (req, res, next) => {
+	try {
+		const { params } = req;
+		const { verificationToken } = params;
+		const user = await getUserByToken({ verificationToken });
+
+		if (!user) {
+			return res.status(404).json({
+				message: "User not found",
+			});
+		} else {
+			await getUserByEmailAndUpdate(user.email, {
+				verify: true,
+				verificationToken: null,
+			});
+
+			return res.status(200).json({
+				message: "Verification successful",
+			});
+		}
+	} catch (error) {
+		next(error);
+	}
+};
+
 module.exports = {
 	login,
 	logout,
 	signup,
 	current,
 	avatarChanger,
+	verify,
 };
