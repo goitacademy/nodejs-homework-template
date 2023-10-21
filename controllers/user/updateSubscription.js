@@ -14,7 +14,8 @@ const updateSubscriptionCtrl = async (req, res, next) => {
         code: 200,
         data: {
             email: user.email,
-            subscription: user.subscription
+            subscription: user.subscription,
+            avatarURL: user.avatarURL
         }
     })
 }

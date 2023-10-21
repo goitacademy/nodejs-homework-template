@@ -42,7 +42,7 @@ router.get('/current', ctrl.current)
  * Отримує оновлену підписку
  * Викликає функцію updateSubscription
  */
-router.patch("/", ctrl.updateSubscription);
+router.patch("/", ctrl.updateSubscriptionCtrl);
 
 /**
  * @ PATCH /users/avatars

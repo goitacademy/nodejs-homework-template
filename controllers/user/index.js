@@ -3,7 +3,7 @@ const login = require('./login')
 const logout = require('./logout')
 const current = require('./current')
 const updateAvatar = require('./updateAvatar')
-const updateSubscription = require('./updateSubscription')
+const updateSubscriptionCtrl = require('./updateSubscription')
 
 module.exports = {
     register,
@@ -11,5 +11,5 @@ module.exports = {
     logout,
     current,
     updateAvatar,
-    updateSubscription
+    updateSubscriptionCtrl
 }
