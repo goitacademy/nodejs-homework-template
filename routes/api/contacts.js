@@ -1,42 +1,31 @@
 import express from "express";
-import contactController from "../../controllers/contactController.js";
-import { isEmptyBody } from "../../middlewares/index.js";
-import { validateBody } from "../../decorators/index.js";
-import {
-  contactsAddSchema,
-  contactUpdateFavoriteSchema,
-} from "../../models/Contact.js";
-import isValidId from "../../middlewares/isValidId.js";
 
-const contactAddValidate = validateBody(contactsAddSchema);
-const contactUpdateFavorite = validateBody(contactUpdateFavoriteSchema);
+import contactsController from "../../controllers/contacts-controller.js";
+
+import { isEmptyBody, isValidId, authenticate } from "../../middlewares/index.js";
+
+import { validateBody } from "../../decorators/index.js";
+
+import { contactsAddSchema, contactUpdateFavoriteSchema } from "../../models/Contact.js";
+
+const contactAddValidate = validateBody(contactsAddSchema)
+
+const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema)
+
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", contactController.getAllContacts);
+contactsRouter.use(authenticate);
 
-contactsRouter.get("/:id", isValidId, contactController.getContactById);
+contactsRouter.get('/', contactsController.getAllContacts);
 
-contactsRouter.post(
-  "/",
-  isEmptyBody,
-  contactAddValidate,
-  contactController.addContact
-);
+contactsRouter.get('/:id', isValidId, contactsController.getContactById);
 
-contactsRouter.delete("/:id", isValidId, contactController.removeContact);
+contactsRouter.post('/', isEmptyBody, contactAddValidate, contactsController.addContact)
 
-contactsRouter.put(
-  "/:id",
-  isValidId,
-  isEmptyBody,
-  contactAddValidate,
-  contactController.updateContact
-);
-contactsRouter.patch(
-  "/:id/favorite",
-  isValidId,
-  contactUpdateFavorite,
-  contactController.updateFavorite
-);
+contactsRouter.put('/:id', isValidId, isEmptyBody, contactAddValidate, contactsController.updateContact)
+
+contactsRouter.patch("/:id/favorite", isValidId, contactUpdateFavoriteValidate, contactsController.updateFavorite);
+
+contactsRouter.delete('/:id', isValidId, contactsController.removeContact)
 
 export default contactsRouter;
