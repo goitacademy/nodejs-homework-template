@@ -1,5 +1,5 @@
 const User = require('../../models/users')
-const {HttpError} = require('../../helpers')
+const { HttpError } = require('../../helpers')
 
 /**
  * 
@@ -18,7 +18,8 @@ const current = async (req, res, next) => {
 
     res.status(200).json({
         email: user.email,
-        subscription: user.subscription
+        subscription: user.subscription,
+        avatarURL: user.avatarURL
     })
 }
 

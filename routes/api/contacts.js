@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const middlewareToken = require('../../middleware/middlewareToken')
+const { middlewareToken } = require('../../middleware')
 const {
     listContacts,
     getContactById,
@@ -10,7 +10,11 @@ const {
     updateStatusContact,
 } = require('../../controllers/contacts')
 
-router.use(middlewareToken)
+/**
+ * /**
+ * add middlewar
+ */
+// router.use(middlewareToken)
 
 /**
  * @ GET /api/contacts

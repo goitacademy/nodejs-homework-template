@@ -16,7 +16,7 @@ const logout = async (req, res, next) => {
     const token = req.header('Authorization')
 
     if (!token) {
-        next(HttpError(401, "Not authorized"))
+        return next(HttpError(401, "Not authorized"))
     }
     try {
         const { _id } = jwt.verify(token.replace('Bearer ', ''), secretKey)

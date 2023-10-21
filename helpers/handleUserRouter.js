@@ -1,7 +1,12 @@
-const handleUserRouter = (res, validDataUser, error) => {
-    if (validDataUser.error) {
-        return res.status(400).json({ err: validDataUser.details.map(err => err.message) })
-    }
-}
+const handleUserRouter = (schema) => {
+    return (req, res, next) => {
+        const { error } = schema.validate(req.body);
+        if (error) {
+            error.status = 400;
+            next(error);
+        }
+        next();
+    };
+};
 
-module.exports = handleUserRouter
+module.exports = handleUserRouter;

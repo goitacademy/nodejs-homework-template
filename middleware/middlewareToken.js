@@ -7,6 +7,10 @@ const { HttpError } = require('../helpers')
 const middlewareToken = async (req, res, next) => {
     const { authorization } = req.headers
 
+    if (!authorization) {
+        return next(HttpError(401, "Not authorized"))
+    }
+
     const [bearer, token] = authorization.split(' ')
 
     if (!token) {

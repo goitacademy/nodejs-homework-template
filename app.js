@@ -21,6 +21,7 @@ app.use(
 )
 
 app.use(express.json())
+app.use(express.static('public'))
 
 // app.use(passport.initialize())
 
