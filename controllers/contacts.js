@@ -2,7 +2,6 @@ const contacts = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 
-
 const getAll = async (req, res) => {
     const result = await contacts.listContacts();
     res.status(200).json(result);
@@ -19,10 +18,7 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const result = await contacts.addContact(req.body);
-//    if (!result) {
-//    throw HttpError(400, "missing required `${name}` field");
-// }
-    res.status(201).json(result);
+  res.status(201).json(result);
 };
 
 const deleteById = async (req, res) => {
@@ -47,25 +43,19 @@ const updateById = async (req, res) => {
 
 const updateStatusContact = async (req, res) => {
  const { id } = req.params;
-const { favorite } = req.body;
+ const { favorite } = req.body;
 
  if (favorite === undefined) {
-   throw HttpError(400, "missing fields");
-  }
+  throw HttpError(400, "missing fields");}
 
   const result = await contacts.findByIdAndUpdate(
-   id,
-   { favorite },
-    { new: true }
-  );
+   id,{ favorite },{ new: true });
 
   if (!result) {
    throw HttpError(404, "Not found");
   }
    res.status(200).json(result);
  };
-
-
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
