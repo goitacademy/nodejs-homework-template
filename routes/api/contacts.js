@@ -40,7 +40,22 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      return res
+        .status(400)
+        .json({ message: "missing required name, email, or phone field" });
+    }
+    const newContact = await contactsOperations.addContact(name, email, phone);
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { result: newContact },
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
