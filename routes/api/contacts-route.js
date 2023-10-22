@@ -1,10 +1,10 @@
 import express from "express";
-import contactController from "../../controllers/contacts.js";
+import contactController from "../../controllers/contacts-controller.js";
 import { validateBody } from "../../decorators/index.js";
 import {
   contactAddSchema,
   contactFavoriteSchema,
-} from "../../models/contact_model.js";
+} from "../../models/Contact.js";
 
 const isValidate = validateBody(contactAddSchema);
 

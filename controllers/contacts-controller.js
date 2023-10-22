@@ -1,6 +1,6 @@
 import { ctrlErrorWrapper } from "../decorators/index.js";
 import HttpError from "../helpers/HttpError.js";
-import { Contact } from "../models/contact_model.js";
+import { Contact } from "../models/Contact.js";
 
 const NotFoundIdError = (contactId) =>
   HttpError(404, `Contact with ${contactId} not found`);
