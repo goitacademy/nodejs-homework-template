@@ -20,6 +20,9 @@ const contactSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
   },
+  avatar: {
+    type: String,
+  },
 });
 
 export const ContactSchema = Joi.object({

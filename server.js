@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import app from "./app.js";
-
+import gravatar from "gravatar";
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: false,

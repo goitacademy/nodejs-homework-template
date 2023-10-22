@@ -1,5 +1,5 @@
 import HttpError from "../heplers/index.js";
-
+import gravatar from "gravatar";
 import Contact from "../models/contactModel.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
@@ -27,6 +27,9 @@ const getById = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   const result = await Contact.create(req.body);
+  const { contactEmail } = req.params;
+  const avatarUrl = generateAvatar(contactEmail);
+  console.log(avatarUrl);
   res.status(201).json(result);
 };
 
