@@ -1,55 +1,55 @@
-import * as contactsService from "../models/contacts.js";
+import Contact from "../models/Contact.js";
 
 import { HttpError } from "../helpers/index.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
-  const result = await contactsService.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
-const getById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsService.getById(id);
+// const getById = async (req, res) => {
+//   const { id } = req.params;
+//   const result = await contactsService.getById(id);
 
-  if (!result) {
-    throw HttpError(404);
-  }
+//   if (!result) {
+//     throw HttpError(404);
+//   }
 
-  res.json(result);
-};
+//   res.json(result);
+// };
 
-const add = async (req, res) => {
-  const result = await contactsService.addContact(req.body);
-  res.status(201).json(result);
-};
+// const add = async (req, res) => {
+//   const result = await contactsService.addContact(req.body);
+//   res.status(201).json(result);
+// };
 
-const updateById = async (req, res) => {
-  const { id } = req.params;
+// const updateById = async (req, res) => {
+//   const { id } = req.params;
 
-  const result = await contactsService.updateContacts(id, req.body);
-  if (!result) {
-    throw HttpError(404, `missing fields`);
-  }
+//   const result = await contactsService.updateContacts(id, req.body);
+//   if (!result) {
+//     throw HttpError(404, `missing fields`);
+//   }
 
-  res.json(result);
-};
-const deleteById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsService.removeContact(id);
-  if (!result) {
-    throw HttpError(400, error.message);
-  }
-  res.json({
-    message: "contact deleted",
-  });
-};
+//   res.json(result);
+// };
+// const deleteById = async (req, res) => {
+//   const { id } = req.params;
+//   const result = await contactsService.removeContact(id);
+//   if (!result) {
+//     throw HttpError(400, error.message);
+//   }
+//   res.json({
+//     message: "contact deleted",
+//   });
+// };
 
 export default {
   getAll: ctrlWrapper(getAll),
-  getById: ctrlWrapper(getById),
-  add: ctrlWrapper(add),
-  updateById: ctrlWrapper(updateById),
-  deleteById: ctrlWrapper(deleteById),
+  // getById: ctrlWrapper(getById),
+  // add: ctrlWrapper(add),
+  // updateById: ctrlWrapper(updateById),
+  // deleteById: ctrlWrapper(deleteById),
 };
