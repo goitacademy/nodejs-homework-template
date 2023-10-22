@@ -12,6 +12,8 @@ app.use(express.json())
 app.use('/users', usersRouter)
 app.use('/api', router)
 
+app.use(express.static('public'));
+
 app.use((_, res) => {
   res.status(404).json({ message: 'Not found' });
 });
@@ -35,8 +37,7 @@ connection
   })
 })
 .catch((err) =>
-console.log(`Server not running. Error message: ${err.message}`),
-// process.exit(1)
+console.log(`Server not running. Error message: ${err.message}`)
 );
 
 module.exports = connection;
