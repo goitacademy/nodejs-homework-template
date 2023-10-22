@@ -22,4 +22,8 @@ const usersSchema = new Schema(
         versionKey: false,
         timestamps: true,
       }
-)
+);
+
+const User = model('users', usersSchema);
+
+module.exports = User;
