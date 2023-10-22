@@ -1,9 +1,14 @@
+import fs from "fs/promises";
+import path from "path";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 import { HttpError } from "../helpers/HttpError.js";
 import { controllerWrapper } from "../decorators/index.js";
 import { User } from "../models/User.js";
+import { resizeAvatar } from "../middlewares/index.js";
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -13,7 +18,7 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL: gravatar.url(email, { s: "200"}) });
 
   res.status(201).json({
     user: {
@@ -50,6 +55,19 @@ const login = async (req, res) => {
   })
 };
 
+const updateAvatar = async (req, res) => {
+  const avatarsPath = path.resolve("public", "avatars");
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+  fs.rename(oldPath, newPath);
+  const pathToAvatar = path.join("avatars", filename);
+  //resizeAvatar(path);
+  await User.findByIdAndUpdate(req.user._id, {avatarURL: pathToAvatar});
+  res.status(200).json({
+    avatarURL: pathToAvatar,
+  });
+};
+
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
   res.json({
@@ -66,4 +84,5 @@ export default {
   login: controllerWrapper(login),
   getCurrent: controllerWrapper(getCurrent),
   logout: controllerWrapper(logout),
+  updateAvatar: controllerWrapper(updateAvatar),
 };
