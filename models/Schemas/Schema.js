@@ -18,7 +18,7 @@ const contact = new Schema({
     message:
       "Phone number is not valid. Only digits, " + ", and " - " are allowed.",
   },
-  favorite: {
+  favourite: {
     type: Boolean,
     default: false,
   },
