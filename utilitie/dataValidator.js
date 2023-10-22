@@ -1,4 +1,4 @@
-const  Joi  = require("joi");
+const Joi = require("joi");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -30,6 +30,14 @@ const userSignupValidator = (body) =>
     })
     .validate(body);
 
+const emailValidator = (body) =>
+  Joi.object()
+    .options({ abortEarly: false })
+    .keys({
+      email: Joi.string().pattern(emailRegexp).required(),
+    })
+    .validate(body);
+
 const userSigninValidator = (body) =>
   Joi.object()
     .options({ abortEarly: false })
@@ -43,5 +51,6 @@ module.exports = {
   contactValidator,
   statusValidator,
   userSignupValidator,
+  emailValidator,
   userSigninValidator,
 };
