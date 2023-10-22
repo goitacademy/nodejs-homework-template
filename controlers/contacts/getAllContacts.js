@@ -8,7 +8,7 @@ const getAllContacts = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "email");
-  res.status(200).json(allContacts);
+  res.status(200).json({ allContacts, query: allContacts.length });
 };
 
 module.exports = getAllContacts;
