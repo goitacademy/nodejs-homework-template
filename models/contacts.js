@@ -10,9 +10,11 @@ const contactSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    required: [true, 'Set email for contact'],
   },
   phone: {
     type: String,
+    required: [true, 'Set phone for contact'],
   },
   favorite: {
     type: Boolean,
@@ -20,7 +22,7 @@ const contactSchema = new mongoose.Schema({
   },
 });
 
-const Contact = mongoose.model('contacts', contactSchema )
+
 
 export const ContactSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -28,8 +30,10 @@ export const ContactSchema = Joi.object({
   }),
   phone: Joi.string().required(),
   email: Joi.string().required(),
-  
 });
+
+const Contact = mongoose.model('contacts', contactSchema )
+
 
 
 

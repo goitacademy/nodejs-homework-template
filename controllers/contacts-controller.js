@@ -19,8 +19,15 @@ const getAll = async (req, res, next) => {
     
 
 const addContact = async (req, res, next) => {
-    const result = await Contact.create(req.body);
+
+  try {
+  const result = await Contact.create(req.body);
     res.status(201).json(result);
+
+  } catch (err) {
+    next(err);
+  }
+    
   };
 
 
@@ -78,7 +85,9 @@ const updateById = async (req, res, next) => {
     try {
       const { contactId } = req.params;
       const result = await Contact.findByIdAndRemove(contactId);
-  
+      if(!result){
+        throw HttpError(404, `Movie width ${contactId}Contact not found`);
+      } 
       res.json({
         message: "contact deleted",
       });
