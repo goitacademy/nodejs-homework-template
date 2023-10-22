@@ -12,11 +12,9 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-<<<<<<< Updated upstream
-=======
     "joi": "^17.11.0",
     "mongoose": "^7.6.3",
->>>>>>> Stashed changes
+    "joi": "^17.11.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {
