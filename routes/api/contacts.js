@@ -1,8 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const contactsOperations = require("../../models/contacts");
+import express from "express";
+import contactSchema from "../../schemas/contactSchema.js";
+import * as contactsOperations from "../../models/contacts.js";
 
-const { contactSchema } = require("../../schemas");
+const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
@@ -47,7 +47,11 @@ router.post("/", async (req, res, next) => {
       return res.status(400).json({ message: errorMessage });
     }
     const { name, email, phone } = req.body;
-    const newContact = await contactsOperations.addContact(name, email, phone);
+    const newContact = await contactsOperations.addContact({
+      name,
+      email,
+      phone,
+    });
     res.status(201).json({
       status: "success",
       code: 201,
@@ -115,4 +119,4 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;
