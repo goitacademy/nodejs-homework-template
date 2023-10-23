@@ -8,13 +8,13 @@ const Jimp = require("jimp");
 const { User } = require("../models/user");
 const { HttpError, ctrlWrapper, sendMail } = require("../helpers");
 // const { verify } = require("crypto"); CONTROL!!!!!!!!!!!!!!!!!!!!!!!!!!!
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 const { transport } = sendMail;
 
 const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
@@ -31,17 +31,17 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  const mail = {
+  const verifyMail = {
     to: email,
     from: 'nodemailjs@ukr.net',
     subject: "підтвердження поштової скриньки",    
     html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click to verify your email</a>`,
   };
 
-  // await transport
-  //   .sendMail(mail)
-  //   .then(() => console.log("email sent success"))
-  //   .catch((err) => console.log(err.message));
+  await transport
+    .sendMail(verifyMail)
+    .then(() => console.log("email sent success"))
+    .catch((err) => console.log(err.message));
 
   res.status(201).json({
     user: {
@@ -50,6 +50,52 @@ const register = async (req, res) => {
     },
   });
 };
+
+const verifyEmail = async (req, res) => {
+  const {verificationToken} = req.params;
+  const user = await User.findOne({verificationToken});
+  console.log(user);
+  if(!user){
+    throw HttpError(404, "User not found");
+  }
+  await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: null});
+
+  res.status(200).json({
+    message: "Verification successful"
+  })
+}
+
+const resendEmail = async (req, res) => {
+  const {email} = req.body;
+  console.log("email", email);  
+  const user = await User.findOne({email});
+  console.log("user", user);
+
+  if(!user){    
+    throw HttpError(400, "missing required field email")
+  }
+
+  if(user.verify){    
+    throw HttpError(400, "Verification has already been passed")
+  }
+
+  const verifyMail = {
+    to: email,
+    from: 'nodemailjs@ukr.net',
+    subject: "підтвердження поштової скриньки",    
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click to verify your email</a>`, 
+  }
+  await transport
+    .sendMail(verifyMail)
+    .then(() => console.log("email sent success"))
+    .catch((err) => console.log(err.message)); 
+
+    res.json({
+      message: "Verification email sent"
+    })
+
+}
+
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -114,36 +160,7 @@ const updateAvatar = async (req, res) => {
   });
 };
 
-const verify = async (req, res) => {
-  const {verificationToken} = req.params;
-  const user = await User.findOne({verificationToken});
-  if(!user){
-    throw HttpError(404)
-  }
-  await User.findByIdAndUpdate(user._id, {verify: true, verificationToken: ""});
 
-  res.status(200).json({
-    message: "Verification successful"
-  })
-}
-
-const resendEmail = async (req, res) => {
-  const {email} = req.body;
-  const user = await User.findOne({email});
-  if(!user || user.verify){
-    throw HttpError(404)
-  }
-  const mail = {
-    to: email,
-    subject: "підтвердження поштової скриньки",    
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click to verify your email</a>`, 
-  }
-  // await transport
-  //   .sendMail(mail)
-  //   .then(() => console.log("email sent success"))
-  //   .catch((err) => console.log(err.message)); 
-
-}
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -151,7 +168,7 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
-  verify: ctrlWrapper(verify),
+  verifyEmail: ctrlWrapper(verifyEmail),
   resendEmail: ctrlWrapper(resendEmail),
 };
 
