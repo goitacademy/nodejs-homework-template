@@ -5,6 +5,9 @@ const bcrypt = require('bcryptjs'); // бібліотека для хешува�
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
 
+const checkToken = require('../middlewares/authMiddleware');
+const e = require('cors');
+
 const addSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(4).required()
@@ -57,6 +60,14 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async(req, res, next)=>{
+    const {email, password} = req.body
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) {
+      return res.status(409).json({ message: 'Такого email ще немає' });
+    }
+}
+
 const logout = async (req, res, next) => {
   try {
     const userId = req.user._id;
@@ -83,4 +94,5 @@ module.exports = {
   register,
   logout,
   corentUserData,
+  login,
 };

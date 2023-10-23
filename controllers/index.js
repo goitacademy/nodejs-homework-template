@@ -12,6 +12,7 @@ const favoritStatus = contactProcessing.favoritStatus
 
 // обробка запитів для роботи з користувачами
 const userRegister = userProcessing.register;
+const userLogin = userProcessing.login
 const userLogout = userProcessing.logout
 const corentUserData = userProcessing.corentUserData
 
@@ -23,6 +24,7 @@ module.exports = {
     updatedContactById,
     favoritStatus,
     userRegister,
+    userLogin,
     userLogout,
     corentUserData,
 }
