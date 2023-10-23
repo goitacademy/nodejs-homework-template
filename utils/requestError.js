@@ -6,7 +6,7 @@ const textForMessageFromCode = {
 }
 
 function requesError (status, message = textForMessageFromCode[status]) {
-
+    // console.log(message);
     const error = new Error(message);
     error.status = status;
     return error;

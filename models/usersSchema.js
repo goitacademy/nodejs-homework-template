@@ -1,4 +1,4 @@
-const {Schema, model} = require(mongoose);
+const {Schema, model} = require("mongoose");
 
 const usersSchema = new Schema(
     {
@@ -23,6 +23,16 @@ const usersSchema = new Schema(
         timestamps: true,
       }
 );
+
+// usersSchema.post('validate', (err, next) => {
+//   err.status = 400;
+//   next(err);
+// })
+
+// usersSchema.post('save', (err, next) => {
+//   err.status = 400;
+//   next(err);
+// })
 
 const User = model('users', usersSchema);
 

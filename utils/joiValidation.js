@@ -33,8 +33,19 @@ function joiFavorite (obj) {
     return error;
 }
 
+function joiRegister (obj) {
+    const schema = Joi.object({
+        email: Joi.string().email(),
+        password: Joi.string(),
+    });
+    
+    const {error} = schema.validate(obj);
+    return error;
+}
+
 module.exports = {
     joiValidation,
     joiValidationRequired,
     joiFavorite,
+    joiRegister
 };
