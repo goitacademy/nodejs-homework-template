@@ -31,12 +31,7 @@ const register = async (req, res) => {
     verificationToken,
   });
 
-  const verifyMail = {
-    to: email,
-    from: 'nodemailjs@ukr.net',
-    subject: "підтвердження поштової скриньки",    
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click to verify your email</a>`,
-  };
+  const verifyMail = sendMail.verifyEmailFunc(email, BASE_URL, verificationToken)
 
   await transport
     .sendMail(verifyMail)
@@ -54,7 +49,7 @@ const register = async (req, res) => {
 const verifyEmail = async (req, res) => {
   const {verificationToken} = req.params;
   const user = await User.findOne({verificationToken});
-  console.log(user);
+  
   if(!user){
     throw HttpError(404, "User not found");
   }
@@ -79,12 +74,8 @@ const resendEmail = async (req, res) => {
     throw HttpError(400, "Verification has already been passed")
   }
 
-  const verifyMail = {
-    to: email,
-    from: 'nodemailjs@ukr.net',
-    subject: "підтвердження поштової скриньки",    
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click to verify your email</a>`, 
-  }
+  const verifyMail = sendMail.verifyEmailFunc(email, BASE_URL, user.verificationToken)
+
   await transport
     .sendMail(verifyMail)
     .then(() => console.log("email sent success"))
