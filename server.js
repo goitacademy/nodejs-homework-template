@@ -5,8 +5,6 @@ require('dotenv').config();
 const usersRouter = require('./users/users.router');
 const router = require('./contacts/contact.router');
 
-const nodemailer = require('nodemailer');
-
 const app = express()
 
 app.use(cors())
@@ -31,24 +29,6 @@ const connection = mongoose.connect(uriDb, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASSWORD,
-  },
-});
-
-transporter.sendMail({
-  from: process.env.GMAIL_USER,
-  to: process.env.GMAIL_USER,
-  subject: 'Hello from nodemailer',
-  text: 'Hello! I am nodemailer',
-  html: `<h1>Hello!</h1><br/><b>I am nodemailer</b>`,
-})
-.then((info) => {console.log(info)})
-.catch(console.error);
 
 connection
 .then(() => {

@@ -34,9 +34,9 @@ const createUser = async ({ email, password, avatarURL }) => {
     }
 };
 
-const getUser = async (email) => {
+const getUser = async (filter) => {
     try {
-        return await User.findOne({ email });
+        return await User.findOne(filter);
     } catch (e) {
         console.log(e);
         throw new UnknownDatabaseError();
