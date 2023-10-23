@@ -121,6 +121,24 @@ const verifyHandler = async (req, res, next) => {
     }
 };
 
+const resendVerificationHandler = async (req, res, next) => {
+    try {
+        const user = await userDao.getUser({ email: req.body.email });
+        if (!user) {
+            return res.status(404).send({ message: 'User does not exist '});
+        }
+        if (user.verify) {
+            return res.status(400).send({ message: 'User is already verified'});
+        } else {
+            await sendUserVerificationMail(user.email, user.verificationToken);
+        }
+
+        return res.status(204).send();
+    } catch {
+        return next(e);
+    }
+}
+
 module.exports = {
     signUpHandler,
     loginHandler,
@@ -129,4 +147,5 @@ module.exports = {
     changeAvatar,
     upload,
     verifyHandler,
+    resendVerificationHandler,
 };
