@@ -44,6 +44,10 @@ const loginHandler = async (req, res, next) => {
             return res.status(402).send({message: 'Wrong credentials'})
        };
 
+       if (!userEntity.verify) {
+        return res.status(403).send({ message: 'User is not verified' })
+       };
+
         const userPayload = {
             email: userEntity.email,
             password: userEntity.password,

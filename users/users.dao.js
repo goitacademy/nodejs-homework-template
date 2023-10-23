@@ -1,3 +1,4 @@
+const { v4: uuid } = require('uuid');
 const User = require('./user.schema');
 
 class DuplicatedKeyError extends Error {
@@ -14,7 +15,13 @@ class UnknownDatabaseError extends Error {
 
 const createUser = async ({ email, password, avatarURL }) => {
     try {
-        const result = await User.create({ email, password, avatarURL });
+        const result = await User.create({ 
+            email,
+            password,
+            avatarURL,
+            verify: false,
+            verificationToken: uuid()
+        });
         return result;
     } catch (e){
         console.log(e);
