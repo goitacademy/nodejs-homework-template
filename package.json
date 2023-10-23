@@ -13,7 +13,10 @@
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
-    "logger": "^0.0.1"
+    "joi": "^17.11.0",
+    "logger": "^0.0.1",
+    "morgan": "^1.10.0",
+    "nanoid": "^5.0.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",
