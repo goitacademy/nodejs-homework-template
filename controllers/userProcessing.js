@@ -99,7 +99,7 @@ const logout = async (req, res, next) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(401).json({ message: 'Not authorized' });
+      return res.status(401).json({ message: 'Не авторизований' });
     }
 
     user.token = null;
@@ -111,13 +111,15 @@ const logout = async (req, res, next) => {
   }
 }
 
+
 const corentUserData = (req, res) => {
   const { email, subscription } = req.user;
   res.status(200).json({ email, subscription });
 };
 module.exports = {
   register,
+  login,
   logout,
   corentUserData,
-  login,
+ 
 };

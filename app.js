@@ -17,14 +17,14 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
-app.use('/users/', usersRouter)
+app.use('/api/users/', usersRouter)
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
+  res.status(404).json({ message: 'Не знайдено' })
 })
 
 app.use((err, req, res, next) => {
-  const {status=500, message="Server erorr"}=err
+  const {status=500, message="Помилка серверу"}=err
   res.status(status).json({ message })
 })
 

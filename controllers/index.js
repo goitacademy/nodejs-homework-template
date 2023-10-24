@@ -1,5 +1,6 @@
 const contactProcessing = require('./contactProcessing') // дії з контактами
 const userProcessing = require('./userProcessing')// дії з користувачем
+const checkToken = require('../middlewares/authMiddleware')
 
 
 // обробка запитів для роботи з контактами
