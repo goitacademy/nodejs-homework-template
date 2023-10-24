@@ -1,4 +1,5 @@
 const Contact = require('../models/contacts');
+const ctrlWrapper = require('../helpers/ctrlWrapper')
 
 const listContacts = async (req, res) => {
   try {
@@ -72,11 +73,12 @@ const getFavoriteContacts = async (req, res) => {
   }
 };
 
+
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContactById,
-  deleteContact,
-  getFavoriteContacts,
-};
+  listContacts: ctrlWrapper(listContacts),
+  getContactById: ctrlWrapper(getContactById),
+  addContact: ctrlWrapper(addContact),
+  deleteContact: ctrlWrapper(deleteContact),
+  updateContactById: ctrlWrapper(updateContactById),
+  getFavoriteContacts: ctrlWrapper(getFavoriteContacts)
+}
