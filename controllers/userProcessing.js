@@ -1,12 +1,14 @@
 // глобальні імпорти
 const Joi = require('joi');
 const bcrypt = require('bcryptjs'); // бібліотека для хешування 
+const jwt = require('jsonwebtoken');
 // локальні імпорти
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
-
 const checkToken = require('../middlewares/authMiddleware');
-const e = require('cors');
+// const e = require('cors');
+// const { use } = require('../app');
+// const { json } = require('express');
 
 const addSchema = Joi.object({
     email: Joi.string().email().required(),
@@ -16,18 +18,8 @@ const register = async (req, res, next) => {
     try {
       const { email, password } = req.body;
        // Перевірка на відсутність обох полів email та password
-        if (!email && !password) {
-          throw new HttpError(400, 'Ви не ввели жодного поля');
-        }
-
-        // Перевірка на відсутність поля email
-        if (!email) {
-          throw new HttpError(400, 'Відсутнє поле email');
-        }
-
-        // Перевірка на відсутність поля password
-        if (!password) {
-          throw new HttpError(400, 'Відсутнє поле password');
+        if (!email || !password) {
+          throw new HttpError(400, 'Потрібно заповнити всі поля');
         }
         // Валідація паролю та електронної адреси
         const { error } = addSchema.validate(req.body, { abortEarly: false });
@@ -60,13 +52,46 @@ const register = async (req, res, next) => {
   }
 };
 
-const login = async(req, res, next)=>{
-    const {email, password} = req.body
-    const existingUser = await User.findOne({ email });
-    if (!existingUser) {
-      return res.status(409).json({ message: 'Такого email ще немає' });
+
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(409).json({ message: 'Вам потрібно заповнити усі поля' });
+  }
+
+  try {
+    const user = await User.findOne({ email: email }).exec();
+    if (user) {
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (err) {
+          console.error('Помилка порівняння паролів', err);
+          return res.status(500).json({ message: 'Помилка при порівнянні паролів' });
+        } else {
+          if (result) {
+            const JWT_SECRET = process.env.JWT_SECRET
+            const payload = {userId: user._id}
+            const token = jwt.sign(payload, JWT_SECRET, {expiresIn:"1h"})
+            const responseData = {
+              token,
+              user: {
+                email: user.email,
+                subscription: user.subscription
+              }
+            }
+            return res.status(200).json(responseData)
+          } else {
+            return res.status(400).json({ message: 'Паролі не співпадають' });
+          }
+        }
+      });
+    } else {
+      return res.status(409).json({ message: 'Такого користувача не знайдено' });
     }
-}
+  } catch (err) {
+    return res.status(500).json({ message: `Помилка під час пошуку користувача: ${err}` });
+  }
+};
+
 
 const logout = async (req, res, next) => {
   try {
