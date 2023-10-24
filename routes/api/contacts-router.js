@@ -21,7 +21,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const result = await getContactById();
+    const { id } = req.params;
+    const result = await getContactById(id);
     res.json(result);
   } catch (error) {
     res.status(500).json({ message: "Server error" });
