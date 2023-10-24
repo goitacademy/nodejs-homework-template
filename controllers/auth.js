@@ -2,7 +2,9 @@ const { logRegSchema, User } = require('../models/user');
 
 const bcrypt = require('bcryptjs');
 
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+
+
 
 const TOKEN_KEY = 'hashfhhjgh1k2h3kjho9999888'
 
@@ -47,15 +49,33 @@ const login = async (req, res) => {
 
     const token = jwt.sign(payload, TOKEN_KEY, { expiresIn: '23h' })
 
-    user.token = token;
-    await user.save();
+    await User.findByIdAndUpdate(user._id, {token})
 
     res.json({
         token: token
     })
 };
 
+const getCurrent = async (req, res) => {
+    const { email, subscription } = req.user;
+    res.json({
+        email,
+        subscription
+    })
+};
+
+const logOut = async (req, res) => {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: '' })
+    
+    res.json({
+        message: 'Logout success'
+    })
+};
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
+    getCurrent: ctrlWrapper(getCurrent),
+    logOut: ctrlWrapper(logOut)
 };

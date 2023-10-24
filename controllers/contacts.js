@@ -10,7 +10,9 @@ const {ctrlWrapper} = require('../helpers/ctrlWrapper')
 
 const getAll = async (req, res) => {
     const { _id: owner } = req.user;
-    const response = await Contact.find({owner});
+    const skip = (page - 1) * limit
+    const { page = 1, limit = 3 } = req.query;
+    const response = await Contact.find({owner}, {skip: skip, limit}).populate('owner', 'email');
     res.json(response)
 
 };
