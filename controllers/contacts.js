@@ -15,7 +15,7 @@ const getById = async (req, res) => {
     const { contactId } = req.params
     const response = await Contact.findById(contactId)
     if (!response) {
-        throw HttpErr(404, 'Not Foun')
+        throw HttpErr(404, 'Not Found')
     }
     res.json(response)
 };
@@ -33,7 +33,7 @@ const removeContact = async (req, res) => {
     const { id } = res.params;
     const response = await Contact.findByIdAndRemove(id)
     if (!response) {
-        throw HttpErr(404, 'Not Foun')
+        throw HttpErr(404, 'Not Found')
     }
     res.status({
         message: 'Done'
@@ -48,7 +48,7 @@ const updateContact = async (req, res) => {
     const { id } = res.params;
     const response = await Contact.findOneAndUpdate(id, req.body, { new: true })
     if (!response) {
-        throw HttpErr(404, 'Not Foun')
+        throw HttpErr(404, 'Not Found')
     }
     res.json(response);
 };
@@ -61,7 +61,7 @@ const updateContactFavorite = async (req, res) => {
     const { id } = res.params;
     const response = await Contact.findOneAndUpdate(id, req.body, { new: true })
     if (!response) {
-        throw HttpErr(404, 'Not Foun')
+        throw HttpErr(404, 'Not Found')
     }
     res.json(response);
 };
