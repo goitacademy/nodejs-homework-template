@@ -1,6 +1,12 @@
 const express = require("express");
 
-const contactsService = require("../../models");
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../../models");
 
 const router = express.Router();
 
