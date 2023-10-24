@@ -50,7 +50,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
   return contacts[index];
 };
 
-const deleteContactById = async (contactId) => {
+const removeContact = async (contactId) => {
   let contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) {
