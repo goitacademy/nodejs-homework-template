@@ -11,8 +11,12 @@ const {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const result = await listContacts();
-  res.json(result);
+  try {
+    const result = await listContacts();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
