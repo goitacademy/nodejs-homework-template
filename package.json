@@ -6,8 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint": "eslint --ignore-pattern 'node_modules/' '**/*.js'",
+    "lint:fix": "eslint --fix --ignore-pattern 'node_modules/'   '**/*.js'"
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -18,12 +18,14 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "eslint": "7.19.0",
+    "eslint": "^8.52.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "2.0.15",
+    "tsconfig-paths": "^4.2.0"
   }
 }
