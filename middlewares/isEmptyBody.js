@@ -1,8 +1,10 @@
-// const isEmptyBody = (req, res, next) => {
-//   if (Object.keys(req.body).length === 0) {
-//     return res.status(400).json({ message: "Missing required fields" });
-//   }
-//   next();
-// };
+const { HttpError } = require("../helpers/HttpError");
 
-// module.exports = isEmptyBody;
+const isEmptyBody = (req, res, next) => {
+  if (!Object.keys(req.body).length) {
+    return next(new HttpError(400, "Missing fields"));
+  }
+  next();
+};
+
+module.exports = isEmptyBody;
