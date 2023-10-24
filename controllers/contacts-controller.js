@@ -10,7 +10,9 @@ import ctrlWrapper from '../decorators/ctrlWrappers.js';
 
 const getAll = async (req, res, next) => {
     try {
-        const result = await Contact.find();
+        const {_id: owner} = req.user;
+
+        const result = await Contact.find({owner})
         res.json(result);
     } catch (err) {
         next(err);
@@ -21,9 +23,13 @@ const getAll = async (req, res, next) => {
 const addContact = async (req, res, next) => {
 
   try {
-  const result = await Contact.create(req.body);
-    res.status(201).json(result);
 
+    const {_id: owner} = req.user;
+
+    console.log(owner);
+  const result = await Contact.create({...req.body, owner});
+    res.status(201).json(result);
+    
   } catch (err) {
     next(err);
   }
@@ -35,11 +41,13 @@ const getById = async (req, res, next) => {
     try {
 
       const { contactId } = req.params;
+      const {_id: owner} = req.user;
 
-      const contact = await Contact.findById(contactId);
+      const contact = await Contact.findById({_id: contactId, owner});
+     
 
       if (!contact) {
-        throw HttpError(404, `Not found`);
+        throw HttpError(404, `Muvie with ${contactId} Not found`);
       }
       res.json(contact);
     } catch (error) {
@@ -50,8 +58,8 @@ const getById = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
     const { contactId } = req.params;
-
-    const result = await Contact.findByIdAndUpdate(contactId, req.body,{new: true});
+    const {_id: owner} = req.user;
+    const result = await Contact.findOneAndUpdate({contactId, owner},req.body);
 
     if (!result) {
         throw HttpError(404, `Contact with id ${contactId} not found`);
