@@ -11,11 +11,13 @@ const {
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const result = await listContacts();
+  res.json(result);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const result = await getContactById();
+  res.json(result);
 });
 
 router.post("/", async (req, res, next) => {
