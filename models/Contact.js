@@ -1,5 +1,10 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
+import {
+  emailPattern,
+  handleSaveError,
+  runValidatorsAtUpdate,
+} from "./hooks.js";
 
 const contactSchema = new Schema(
   {
@@ -17,14 +22,16 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { timestamps: true }
 );
 
 const phonePattern =
   /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/;
-const emailPattern =
-  /^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z](-?[a-zA-Z0-9])*(\.[a-zA-Z](-?[a-zA-Z0-9])*)+$/;
 
 export const contactAddSchema = Joi.object({
   name: Joi.string().trim().min(2).max(15).messages({
@@ -51,17 +58,6 @@ export const contactFavoriteSchema = Joi.object({
     .required()
     .messages({ "any.required": `missing field favorite` }),
 });
-
-const handleSaveError = (error, data, next) => {
-  error.status = 400;
-  next();
-};
-
-const runValidatorsAtUpdate = function (next) {
-  this.options.runValidators = true;
-  this.options.new = true;
-  next();
-};
 
 contactSchema.post("save", handleSaveError);
 contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
