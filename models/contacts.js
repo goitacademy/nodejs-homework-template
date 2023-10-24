@@ -1,10 +1,3 @@
-// const fs = require('fs/promises')
-//const listContacts = async () => {};
-//const getContactById = async (contactId) => {};
-//const removeContact = async (contactId) => {};
-//const addContact = async (body) => {};
-//const updateContact = async (contactId, body) => {};
-
 const { readFile, writeFile } = require("fs/promises");
 const { resolve } = require("path");
 const { nanoid } = require("nanoid");
