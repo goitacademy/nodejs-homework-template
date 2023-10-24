@@ -4,7 +4,7 @@ const { Contact } = require('../models/contact')
 
 const HttpErr = require('../helpers/HttpErr')
 
-const {ctrlWrapper} = require('../helpers/ctrlWrapper')
+const ctrlWrapper = require('../helpers/ctrlWrapper')
 
 
 
