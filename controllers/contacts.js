@@ -9,7 +9,8 @@ const {ctrlWrapper} = require('../helpers/ctrlWrapper')
 
 
 const getAll = async (req, res) => {
-    const response = await Contact.find();
+    const { _id: owner } = req.user;
+    const response = await Contact.find({owner});
     res.json(response)
 
 };
@@ -24,11 +25,12 @@ const getById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+        const { _id: owner } = req.user; 
     const { error } = addScheme.validate(req.body)
     if (error) {
         throw HttpErr(400, error.message)
     }
-    const response = await Contact.create(req.body);
+    const response = await Contact.create({...req.body, owner});
     res.status(201).json(response);
 };
 
