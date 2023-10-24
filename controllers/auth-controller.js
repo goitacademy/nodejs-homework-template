@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 
 const { JWT_SECRET } = process.env;
 
-
 const register = async (req, res) => {
   const { email, password, subscription } = req.body;
 
