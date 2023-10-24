@@ -6,9 +6,6 @@ const jwt = require('jsonwebtoken');
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
 const checkToken = require('../middlewares/authMiddleware');
-// const e = require('cors');
-// const { use } = require('../app');
-// const { json } = require('express');
 
 const addSchema = Joi.object({
     email: Joi.string().email().required(),
@@ -92,7 +89,7 @@ const login = async (req, res, next) => {
   }
 };
 
-
+ 
 const logout = async (req, res, next) => {
   try {
     const userId = req.user._id;
