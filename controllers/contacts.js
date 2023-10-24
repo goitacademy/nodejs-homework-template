@@ -6,13 +6,10 @@ const HttpErr = require('../helpers/HttpErr')
 
 const ctrlWrapper = require('../helpers/ctrlWrapper')
 
-
-
 const getAll = async (req, res) => {
-    const response = await Contact.find();
-    res.json(response)
-
-};
+  const result = await Contact.find();
+  res.status(200).json(result);
+};  
 
 const getById = async (req, res) => {
     const { contactId } = req.params

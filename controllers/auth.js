@@ -1,14 +1,14 @@
-const HttpErr = require('../helpers/HttpErr');
+const {User} = require('../models/user');
+
+// const HttpErr = require('../helpers/HttpErr');
 
 const ctrlWrapper = require('../helpers/ctrlWrapper');
 
-const { User, logRegSсhema } = require('../models/user');
-
 const register = async (req, res) => {
-    const newUser = User.create(req.body)
+    const newUrer = await User.create(req.body);
     res.json({
-        email: newUser.email,
-        subscription: newUser.subscription,
+        email: newUrer.email,
+        subscription: newUrer.subscription,
     })
 };
 

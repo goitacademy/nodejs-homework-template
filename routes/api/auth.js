@@ -8,7 +8,7 @@ const ctrl = require('../../controllers/auth')
 
 const router = express.Router();
 
-// const ctrl = require('../../controllers/contacts')
+// const ctrl = require('../../controllers/auth')
 
 router.post('/', validateBody(logRegSсhema), ctrl.register)
 
