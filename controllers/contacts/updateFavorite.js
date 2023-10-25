@@ -3,9 +3,10 @@ const createError = require('http-errors');
 
 
 
-const updateContactById = async (req, res) => {
+const updateFavorite = async (req, res) => {
     const {contactId}=req.params;
-    const result =await Contact.findByIdAndUpdate(contactId,req.body,{new:true})
+    const {favorite}=req.body;
+    const result =await Contact.findByIdAndUpdate(contactId,{favorite},{new:true})
       if(!result){
         throw createError(404,`Product  with id ${contactId} not found`)
       }
@@ -19,4 +20,4 @@ const updateContactById = async (req, res) => {
     
   }
 
-  module.exports=updateContactById
+  module.exports=updateFavorite;
