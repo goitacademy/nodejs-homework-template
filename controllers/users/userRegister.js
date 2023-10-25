@@ -1,6 +1,7 @@
 const User = require("../../models/usersSchema.js");
 const { joiRegister } = require("../../utils/joiValidation.js");
 const requestError = require("../../utils/requestError.js");
+const bcrypt = require('bcryptjs');
 
 const userRegister = async (req, res, next) => {
   const { email, password } = req.body;
@@ -11,7 +12,7 @@ const userRegister = async (req, res, next) => {
     const error = requestError(400, validationError.message);
     throw error;
   }
-
+  
   const userExist = await User.find({ email });
   if (userExist.length) {
 
@@ -20,8 +21,12 @@ const userRegister = async (req, res, next) => {
     throw errorUserExist;
   }
 
+  const hashedPassword = bcrypt.hashSync(password, 10);
   
-  const result = await User.create({email, password});
+  const result = await User.create({
+    email, 
+    "password": hashedPassword
+    });
   
   res.json({
     status: "created",
