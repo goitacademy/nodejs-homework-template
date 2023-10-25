@@ -1,5 +1,5 @@
 const { updateContact } = require("../../models/contacts");
-const { schema } = require("../../validators/createContactValidator");
+const schema = require("../../validators/createContactValidator");
 
 async function updateContacts(req, res, next) {
   const { contactId } = req.params;

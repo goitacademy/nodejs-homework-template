@@ -1,5 +1,5 @@
 const { addContact } = require("../../models/contacts");
-const { schema } = require("../../validators/createContactValidator");
+const schema = require("../../validators/createContactValidator");
 
 async function postContacts(req, res, next) {
   const { name, email, phone } = req.body;
