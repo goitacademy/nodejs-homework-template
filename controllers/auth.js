@@ -73,9 +73,40 @@ const logOut = async (req, res) => {
     })
 };
 
+const changeSubscription = async (req, res, next) => {
+
+    const { email } = req.user;
+    const { newSubscription } = req.body;
+
+    try {
+        if (!["starter", "pro", "business"].includes(newSubscription)) {
+            throw new HttpErr(400, 'Invalid subscription');
+        }
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            throw new HttpErr(404, 'User not found');
+        }
+
+        user.subscription = newSubscription;
+        await user.save();
+
+        res.json({
+            message: 'Subscription changed successfully',
+            newSubscription: user.subscription
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
-    logOut: ctrlWrapper(logOut)
+    logOut: ctrlWrapper(logOut),
+    changeSubscription: ctrlWrapper(changeSubscription)
 };

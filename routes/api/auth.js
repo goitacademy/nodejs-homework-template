@@ -18,4 +18,6 @@ router.post('/logout', validateBody(logRegSchema), ctrl.logOut)
 
 router.get('/', authenticate, ctrl.getCurrent);
 
+router.patch('/change/subscription', authenticate, ctrl.changeSubscription);
+
 module.exports = router;
