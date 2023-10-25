@@ -12,13 +12,6 @@ const {
   updateContact,
 } = require("../models");
 
-const contactAddSchema = Joi.object({
-  title: Joi.string().required().messages({
-    "any.required": `"title" required field`,
-  }),
-  director: Joi.string().required(),
-});
-
 const listContactsController = async (req, res, next) => {
   const result = await listContacts();
   res.json(result);
