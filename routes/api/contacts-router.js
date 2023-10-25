@@ -76,7 +76,7 @@ router.put("/:contactId", async (req, res, next) => {
     }
 
     const { contactId } = req.params;
-    const result = await getContactById(contactId);
+    const result = await updateContact(contactId);
     if (!result) {
       throw HttpError(404, `Contact with ${contactId} not found`);
     }
