@@ -27,11 +27,6 @@ const getContactByIdController = async (req, res, next) => {
 };
 
 const addContactController = async (req, res, next) => {
-  const { error } = contactAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const result = await addContact(req.body);
   res.status(201).json(result);
 };
@@ -46,11 +41,6 @@ const removeContactController = async (req, res, next) => {
 };
 
 const updateContactController = async (req, res, next) => {
-  const { error } = contactAddSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);
   if (!result) {
