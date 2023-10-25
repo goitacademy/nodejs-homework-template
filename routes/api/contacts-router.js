@@ -36,12 +36,8 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await getContactById(contactId);
-    if (!result) {
-      throw HttpError(404, `Contact with ${contactId} not found`);
-    }
-    res.json(result);
+    const result = await addContact(req.body);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
