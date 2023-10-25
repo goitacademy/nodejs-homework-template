@@ -8,7 +8,7 @@ const router = express.Router();
 // дії з користувачами
 router.post('/register', controller.userRegister); // Оновлено шлях до реєстрації
 router.post('/login', controller.userLogin)//
-router.post('/logout', checkToken, controller.userLogout);
+router.post('/logout', checkToken);
 
 
 module.exports = router;

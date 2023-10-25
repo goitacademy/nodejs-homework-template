@@ -1,31 +1,15 @@
 const jwt = require('jsonwebtoken');
-const {HttpError} = require('../helpers');
+const { HttpError } = require('../helpers');
 const User = require('../models/User');
 
-const JWT_SECRET = process.env.JWT_SECRET
+const {JWT_SECRET} = process.env;
 
 const checkToken = async (req, res, next) => {
-  const token = req.header('Authorization');
-
-  if (!token) {
-    return next(new HttpError(401, 'Не авторизовано'));
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-
-    // Find user by id and token
-    const user = await User.findOne({ _id: decoded._id, token });
-
-    if (!user) {
-      return next(new HttpError(401, 'Не авторизовано'));;
-    }
-
-    req.user = user; // Attach user data to the request
-    next();
-  } catch (error) {
-    return next(new HttpError(401, 'Не авторизовано'));
-  }
+  const {authorization} = req.headers;
+  const [bearer, token] = authorization.split(' ');
+  console.log(bearer)
+  console.log(jwt.decode(token, JWT_SECRET))
+  
 };
 
 module.exports = checkToken;

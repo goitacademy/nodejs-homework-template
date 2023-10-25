@@ -7,7 +7,8 @@ const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
 const checkToken = require('../middlewares/authMiddleware');
 
-
+const {JWT_SECRET} = process.env
+ 
 const addSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(4).required()
@@ -65,10 +66,9 @@ const login = async (req, res, next) => {
           return res.status(500).json({ message: 'Помилка при порівнянні паролів' });
         } else {
           if (result) {
-            const JWT_SECRET = process.env.JWT_SECRET
             const payload = {userId: user._id}
-            const token = jwt.sign(payload, JWT_SECRET, {expiresIn:"1h"})
-            updateTokenStatus(user._id, {token})
+            const token = jwt.sign(payload, JWT_SECRET, {expiresIn:"23h"})
+            // updateTokenStatus(user._id, {token})
             const responseData = {
               token,
               user: {
@@ -93,22 +93,19 @@ const login = async (req, res, next) => {
  
 const logout = async (req, res, next) => {
   try {
-    const isCorectToken = checkToken();
-    if (isCorectToken) {
-      const userId = req.user._id;
-      const user = await User.findById(userId);
+    const userId = req.user._id;
+    const user = await User.findById(userId);
 
-      if (!req.user) {
-        return res.status(401).json({ message: 'Не авторизований' });
-      }
-
-      user.token = null;
-      await user.save();
-
-      res.sendStatus(204);
+    if (!user) {
+      return res.status(401).json({ message: 'Not authorized' });
     }
+
+    user.token = null;
+    await user.save();
+
+    res.sendStatus(204);
   } catch (error) {
-    next(error); // Викидаємо помилку для подальшого оброблення
+    next(error);
   }
 };
 
@@ -126,17 +123,17 @@ module.exports = {
  
 };
 
-// Функція для оновлення статусу контакту
-async function updateTokenStatus(contactId, updateFields) {
-  try {
-    const updatedContact = await User.findByIdAndUpdate(
-      contactId,
-      { $set: updateFields },
-      { new: true }
-    );
+// // Функція для оновлення статусу контакту
+// async function updateTokenStatus(contactId, updateFields) {
+//   try {
+//     const updatedContact = await User.findByIdAndUpdate(
+//       contactId,
+//       { $set: updateFields },
+//       { new: true }
+//     );
 
-    return updatedContact;
-  } catch (error) {
-    throw new HttpError(500, 'Внутрішня помилка серверу');
-  }
-}
+//     return updatedContact;
+//   } catch (error) {
+//     throw new HttpError(500, 'Внутрішня помилка серверу');
+//   }
+// }
