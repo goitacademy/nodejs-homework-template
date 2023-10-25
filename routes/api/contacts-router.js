@@ -5,12 +5,14 @@ const { HttpError } = require("../../helpers");
 const {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 } = require("../../models");
 
 const router = express.Router();
+
+const contactAddSchema = () => {};
 
 router.get("/", async (req, res, next) => {
   try {
