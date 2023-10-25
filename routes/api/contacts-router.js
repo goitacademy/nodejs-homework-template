@@ -7,8 +7,8 @@ const {
   listContacts,
   getContactById,
   addContact,
-  updateContact,
   removeContact,
+  updateContact,
 } = require("../../models");
 
 const router = express.Router();
