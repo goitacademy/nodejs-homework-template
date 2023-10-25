@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const {} = require("../../middlewares/isEmptyBody");
+const { isEmptyBody } = require("../../middlewares/isEmptyBody");
 
 const {
   listContactsController,
@@ -16,10 +16,10 @@ router.get("/", listContactsController);
 
 router.get("/:contactId", getContactByIdController);
 
-router.post("/", addContactController);
+router.post("/", isEmptyBody, addContactController);
 
 router.delete("/:contactId", removeContactController);
 
-router.put("/:contactId", updateContactController);
+router.put("/:contactId", isEmptyBody, updateContactController);
 
 module.exports = router;
