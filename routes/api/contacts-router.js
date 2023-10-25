@@ -8,6 +8,8 @@ const { validateBody } = require("../../decorators");
 
 const { contactAddSchema } = require("../../schemas");
 
+const contactAddValidate = validateBody(contactAddSchema);
+
 const {
   listContactsController,
   getContactByIdController,
