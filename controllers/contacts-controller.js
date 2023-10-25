@@ -91,3 +91,11 @@ const updateContactController = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports = {
+  listContactsController,
+  getContactByIdController,
+  addContactController,
+  removeContactController,
+  updateContactController,
+};
