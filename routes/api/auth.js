@@ -4,7 +4,7 @@ const validateBody = require('../../helpers/validateBody');
 
 const authenticate = require('../../helpers/authenticate');
 
-const {logRegSchema} = require('../../models/user')
+const { logRegSchema } = require('../../models/user');
 
 const ctrl = require('../../controllers/auth')
 
