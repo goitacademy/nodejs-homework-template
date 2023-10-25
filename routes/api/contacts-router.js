@@ -4,6 +4,8 @@ const router = express.Router();
 
 const { isEmptyBody } = require("../../middlewares/isEmptyBody");
 
+const { validateBody } = require("../../decorators");
+
 const {
   listContactsController,
   getContactByIdController,
