@@ -43,7 +43,7 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const validateResponse = contactAddSchema.validate(req.body);
-    const result = await addContact(req.body);
+    const result = await addContact(validateResponse);
     res.status(201).json(result);
   } catch (error) {
     next(error);
