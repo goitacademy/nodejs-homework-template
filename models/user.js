@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-
+      required: [false]
     },
     password: {
       type: String,
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     userSchema.post("save", handleSaveError);
 
   export const userSignUpSchema = Joi.object({
-    username: Joi.string().required(),
+    username: Joi.string(),
     email: Joi.string().required(),
     password: Joi.string().min(6).required(),
   });
