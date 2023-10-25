@@ -6,6 +6,8 @@ const { isEmptyBody } = require("../../middlewares/isEmptyBody");
 
 const { validateBody } = require("../../decorators");
 
+const { contactAddSchema } = require("../../schemas");
+
 const {
   listContactsController,
   getContactByIdController,
