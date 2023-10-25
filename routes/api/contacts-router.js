@@ -31,7 +31,7 @@ router.get("/:contactId", async (req, res, next) => {
     res.json(result);
   } catch (error) {
     const { status = 500, message = "Server error" } = error;
-    res.status(500).json({ message });
+    res.status(status).json({ message });
   }
 });
 
