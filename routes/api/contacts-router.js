@@ -10,7 +10,7 @@ const {
   addContactController,
   removeContactController,
   updateContactController,
-} = require("../../controllers/contacts-controller");
+} = require("../../controllers");
 
 router.get("/", listContactsController);
 
