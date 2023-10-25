@@ -14,7 +14,9 @@ const {
 const router = express.Router();
 
 const contactAddSchema = Joi.object({
-  title: Joi.string().required(),
+  title: Joi.string().required().messages({
+    "any.required": `"title" required field`,
+  }),
   director: Joi.string().required(),
 });
 
@@ -46,8 +48,8 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    //const result = await addContact(req.body);
-    //res.status(201).json(result);
+    const result = await addContact(req.body);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
