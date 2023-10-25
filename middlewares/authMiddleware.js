@@ -8,7 +8,7 @@ const checkToken = async (req, res, next) => {
   const token = req.header('Authorization');
 
   if (!token) {
-    return next(HttpError(401, 'Не авторизовано'));
+    return next(new HttpError(401, 'Не авторизовано'));
   }
 
   try {
@@ -18,13 +18,13 @@ const checkToken = async (req, res, next) => {
     const user = await User.findOne({ _id: decoded._id, token });
 
     if (!user) {
-      return next(HttpError(401, 'Не авторизовано'));
+      return next(new HttpError(401, 'Не авторизовано'));;
     }
 
     req.user = user; // Attach user data to the request
     next();
   } catch (error) {
-    return next(HttpError(401, 'Не авторизовано'));
+    return next(new HttpError(401, 'Не авторизовано'));
   }
 };
 

@@ -18,8 +18,7 @@ const userSchema = new Schema({
     default: 'starter'
   },
   token: {
-    type: String,
-    default: '123456'}
+    type: String}
 });
 
 const User = mongoose.model('User', userSchema);

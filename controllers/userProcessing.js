@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 // локальні імпорти
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
-// const checkToken = require('../middlewares/authMiddleware');
+const checkToken = require('../middlewares/authMiddleware');
 
 
 const addSchema = Joi.object({
@@ -93,21 +93,25 @@ const login = async (req, res, next) => {
  
 const logout = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    const user = await User.findById(userId);
+    const isCorectToken = checkToken();
+    if (isCorectToken) {
+      const userId = req.user._id;
+      const user = await User.findById(userId);
 
-    if (!user) {
-      return res.status(401).json({ message: 'Не авторизований' });
+      if (!req.user) {
+        return res.status(401).json({ message: 'Не авторизований' });
+      }
+
+      user.token = null;
+      await user.save();
+
+      res.sendStatus(204);
     }
-
-    user.token = null;
-    await user.save();
-
-    res.sendStatus(204);
   } catch (error) {
-    next(error);
+    next(error); // Викидаємо помилку для подальшого оброблення
   }
-}
+};
+
 
 
 const corentUserData = (req, res) => {
