@@ -11,8 +11,9 @@ import ctrlWrapper from '../decorators/ctrlWrappers.js';
 const getAll = async (req, res, next) => {
     try {
         const {_id: owner} = req.user;
-
-        const result = await Contact.find({owner})
+     
+        const result = await Contact.find({owner}).populate("owner", "username email");
+        
         res.json(result);
     } catch (err) {
         next(err);
@@ -26,7 +27,7 @@ const addContact = async (req, res, next) => {
 
     const {_id: owner} = req.user;
 
-    console.log(owner);
+    
   const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
     
