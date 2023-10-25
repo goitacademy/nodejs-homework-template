@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 // локальні імпорти
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
-const checkToken = require('../middlewares/authMiddleware');
+// const checkToken = require('../middlewares/authMiddleware');
+
 
 const addSchema = Joi.object({
     email: Joi.string().email().required(),
@@ -61,13 +62,13 @@ const login = async (req, res, next) => {
     if (user) {
       bcrypt.compare(password, user.password, (err, result) => {
         if (err) {
-          console.error('Помилка порівняння паролів', err);
           return res.status(500).json({ message: 'Помилка при порівнянні паролів' });
         } else {
           if (result) {
             const JWT_SECRET = process.env.JWT_SECRET
             const payload = {userId: user._id}
             const token = jwt.sign(payload, JWT_SECRET, {expiresIn:"1h"})
+            updateTokenStatus(user._id, {token})
             const responseData = {
               token,
               user: {
@@ -120,3 +121,18 @@ module.exports = {
   corentUserData,
  
 };
+
+// Функція для оновлення статусу контакту
+async function updateTokenStatus(contactId, updateFields) {
+  try {
+    const updatedContact = await User.findByIdAndUpdate(
+      contactId,
+      { $set: updateFields },
+      { new: true }
+    );
+
+    return updatedContact;
+  } catch (error) {
+    throw new HttpError(500, 'Внутрішня помилка серверу');
+  }
+}

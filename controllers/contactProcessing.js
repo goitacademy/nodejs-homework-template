@@ -110,7 +110,7 @@ const favoritStatus = async (req, res, next) => {
   
       // Перевірка наявності поля "favorite" в запиті
       if (favorite === undefined) {
-        return res.status(400).json({ message: 'Missing field "favorite"' });
+        return res.status(400).json({ message: 'Відсутнє поле "favorite"' });
       }
   
       // Виклик функції updateStatusContact для оновлення статусу у базі
@@ -118,7 +118,7 @@ const favoritStatus = async (req, res, next) => {
   
       // Перевірка наявності оновленого контакту
       if (!updatedContact) {
-        return res.status(404).json({ message: 'Not found' });
+        return res.status(404).json({ message: 'Не знайдено' });
       }
   
       res.status(200).json(updatedContact);
