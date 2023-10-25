@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 
 const { HttpError } = require("../../helpers");
 
@@ -12,7 +13,10 @@ const {
 
 const router = express.Router();
 
-const contactAddSchema = () => {};
+const contactAddSchema = Joi.object({
+  title: Joi.string().required(),
+  director: Joi.string().required(),
+});
 
 router.get("/", async (req, res, next) => {
   try {
