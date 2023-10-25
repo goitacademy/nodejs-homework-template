@@ -22,10 +22,15 @@ router.get("/", listContactsController);
 
 router.get("/:contactId", getContactByIdController);
 
-router.post("/", isEmptyBody, addContactController);
+router.post("/", isEmptyBody, contactAddValidate, addContactController);
 
 router.delete("/:contactId", removeContactController);
 
-router.put("/:contactId", isEmptyBody, updateContactController);
+router.put(
+  "/:contactId",
+  isEmptyBody,
+  contactAddValidate,
+  updateContactController
+);
 
 module.exports = router;
