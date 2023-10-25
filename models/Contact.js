@@ -1,28 +1,33 @@
 const { Schema, model } = require('mongoose');
 const handleMongooseError = require('../helpers/handleMongooseError');
 
-const { emailRegexp, phoneRegexp } = require('../helpers/commonRegexp');
+const { emailRegexp, phoneRegexp } = require('../constants/schemaCommons');
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
       match: emailRegexp,
     },
     phone: {
       type: String,
-      require: true,
+      required: true,
       match: phoneRegexp,
     },
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
     },
   },
   { versionKey: false, timestamps: true }

@@ -3,7 +3,23 @@ const asyncHandler = require('../../helpers/asyncHandler');
 
 class ContactsController {
   getAll = asyncHandler(async (req, res) => {
-    const data = await contactService.getAll();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10, favorite } = req.query;
+    const skip = limit * (page - 1);
+    const filter = { owner };
+    if (favorite) {
+      filter.favorite = Boolean(
+        favorite.replace(/\s*(false|null|undefined|0)\s*/i, '')
+      );
+    }
+    const data = await contactService.getAll(
+      filter,
+      '-owner -createdAt -updatedAt',
+      {
+        skip,
+        limit,
+      }
+    );
     res.status(200).json({
       code: 200,
       message: 'ok',
@@ -13,7 +29,8 @@ class ContactsController {
   });
 
   add = asyncHandler(async (req, res) => {
-    const contact = await contactService.addContact(req.body);
+    const { _id: owner } = req.user;
+    const contact = await contactService.addContact({ ...req.body, owner });
     res.status(200).json({
       code: 200,
       message: 'ok',

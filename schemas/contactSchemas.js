@@ -1,5 +1,5 @@
 const joi = require('joi');
-const { emailRegexp, phoneRegexp } = require('../helpers/commonRegexp');
+const { emailRegexp, phoneRegexp } = require('../constants/schemaCommons');
 
 const addContactSchema = joi.object({
   name: joi.string().required(),

@@ -1,8 +1,13 @@
 const Contact = require('../models/Contact');
 
 class ContactService {
-  async getAll() {
-    const allContacts = await Contact.find({});
+  async getAll(...args) {
+    const [filter = {}, projection = {}, options = {}] = args;
+    const allContacts = await Contact.find(
+      filter,
+      projection,
+      options
+    ).populate('owner', 'name email');
     return allContacts;
   }
 
