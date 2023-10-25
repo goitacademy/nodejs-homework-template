@@ -5,7 +5,6 @@ const contactsControllers = require("../../controllers/contacts-controller.js");
 const isValidId = require("../../middlewares/isValidId.js");
 const isEmptyBody = require("../../middlewares/isEmptyBody.js");
 const authenticate = require("../../middlewares/authenticate.js");
-const upload = require("../../middlewares/upload.js");
 
 const validateBody = require("../../decorators/validateBody.js");
 
@@ -27,7 +26,7 @@ router.get("/:contactId", isValidId, contactsControllers.getById);
 
 router.post(
   "/",
-  upload.single("avatarURL"),
+
   isEmptyBody,
   contactAddValidation,
   contactsControllers.add

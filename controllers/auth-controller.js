@@ -1,14 +1,20 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const fs = require("fs/promises");
+const path = require("path");
+const gravatar = require("gravatar");
+
 const { User } = require("../models/User.js");
+
+const avatarPath = path.resolve("public", "avatars");
 
 const ctrlWrapper = require("../decorators/ctrlWrapper.js");
 const HttpError = require("../helpers/HttpError.js");
 
 const { JWT_SECRET } = process.env;
 
-const signup = async (req, res) => {
+const signup = async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -17,10 +23,28 @@ const signup = async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashedPassword });
+  let avatarURL = gravatar.url(email, {
+    s: "200",
+    r: "pg",
+    d: "wavatar",
+  });
+
+  if (req.file) {
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarPath, filename);
+    await fs.rename(oldPath, newPath);
+    avatarURL = path.join("avatars", filename);
+  }
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashedPassword,
+    avatarURL,
+  });
   res.status(201).json({
     email: newUser.email,
     subscription: newUser.subscription,
+    avatarURL: newUser.avatarURL,
   });
 };
 
@@ -77,7 +101,42 @@ const updateSubscription = async (req, res) => {
     { subscription },
     { new: true }
   );
+
+  if (!result) {
+    throw HttpError(404, "User is not found.");
+  }
+
   res.json(result);
+};
+
+const updateAvatar = async (req, res) => {
+  const { token } = req.user;
+  let avatarURL = req.user.avatarURL;
+  if (req.file) {
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarPath, filename);
+    await fs.rename(oldPath, newPath);
+    avatarURL = path.join("avatars", filename);
+  }
+
+  const result = await User.findOneAndUpdate(
+    { token },
+    { avatarURL },
+    { new: true }
+  );
+
+  if (!result) {
+    throw HttpError(404, "User is not found");
+  }
+
+  if (req.user.avatarURL) {
+    const oldAvatarPath = path.join(path.resolve("public"), req.user.avatarURL);
+    await fs.unlink(oldAvatarPath);
+  }
+
+  res.json({
+    avatarURL: result.avatarURL,
+  });
 };
 
 module.exports = {
@@ -86,4 +145,5 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   signOut: ctrlWrapper(signOut),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

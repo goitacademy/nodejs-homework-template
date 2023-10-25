@@ -1,14 +1,9 @@
-const fs = require("fs/promises");
-const path = require("path");
-
 const { Contact } = require("../models/Contact.js");
 
 const HttpError = require("./../helpers/HttpError.js");
-const cloudinary = require("../helpers/cloudinary");
+// const cloudinary = require("../helpers/cloudinary");
 
 const ctrlWrapper = require("../decorators/ctrlWrapper.js");
-
-const avatarPath = path.resolve("public", "avatars");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -45,11 +40,8 @@ const add = async (req, res) => {
   //   folder: "avatars",
   // });
   // await fs.unlink(req.file.path);
-  const { path: oldPath, filename } = req.file;
-  const newPath = path.join(avatarPath, filename);
-  await fs.rename(oldPath, newPath);
-  const avatarURL = path.join("avatars", filename);
-  const result = await Contact.create({ ...req.body, avatarURL, owner });
+
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
