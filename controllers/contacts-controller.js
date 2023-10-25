@@ -41,10 +41,6 @@ const getContactByIdController = async (req, res, next) => {
 
 const addContactController = async (req, res, next) => {
   try {
-    if (!Object.keys(req.body).length) {
-      throw HttpError(400, "All fields empty");
-    }
-
     const { error } = contactAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
@@ -72,10 +68,6 @@ const removeContactController = async (req, res, next) => {
 
 const updateContactController = async (req, res, next) => {
   try {
-    if (!Object.keys(req.body).length) {
-      throw HttpError(400, "All fields empty");
-    }
-
     const { error } = contactAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
