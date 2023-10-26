@@ -2,17 +2,19 @@
 const Joi = require('joi');
 const bcrypt = require('bcryptjs'); // бібліотека для хешування 
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
 // локальні імпорти
 const { HttpError } = require('../helpers'); // обробка помилок
 const User = require('../models/User');
 const checkToken = require('../middlewares/authMiddleware');
 
-const {JWT_SECRET} = process.env
+const JWT_SECRET = process.env.JWT_SECRET;
  
 const addSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(4).required()
   });
+
 const register = async (req, res, next) => {
     try {
       const { email, password } = req.body;
@@ -51,13 +53,11 @@ const register = async (req, res, next) => {
   }
 };
 
-
 const login = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return res.status(409).json({ message: 'Вам потрібно заповнити усі поля' });
   }
-
   try {
     const user = await User.findOne({ email: email }).exec();
     if (user) {
@@ -93,11 +93,11 @@ const login = async (req, res, next) => {
  
 const logout = async (req, res, next) => {
   try {
-    const userId = req.user._id;
+    const userId = req.user.userId;
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(401).json({ message: 'Not authorized' });
+      return res.status(401).json({ message: 'Не авторизовано' });
     }
 
     user.token = null;
