@@ -30,6 +30,6 @@ router.patch('/:contactId/favorite', contactContollers.updateFavorite);
 router.put('/:contactId',  contactContollers.updateById);
 
 authRouter.get('/current', authenticate, authController.getCurrent );
-authRouter.post('/signout', authenticate, authController.signout)
+
 
 export default router
