@@ -29,7 +29,7 @@ router.delete('/:contactId', isValidId, contactContollers.deleteById);
 router.patch('/:contactId/favorite', contactContollers.updateFavorite);
 router.put('/:contactId',  contactContollers.updateById);
 
-authRouter.get('/current', authenticate, authController.getCurrent );
+
 
 
 export default router

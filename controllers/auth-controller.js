@@ -72,7 +72,7 @@ const signOut = async (req, res) => {
     await User.findByIdAndUpdate(_id, {token: ''}) 
     
 
-    res.status(201).json({message: "No Connect" })
+    res.status(204).json()
 }
 
 export default {
