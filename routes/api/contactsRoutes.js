@@ -1,6 +1,7 @@
 const express = require("express");
 
-const tryCatchWrapper = require("../../utils/controllerWrapper");
+const tryCatchWrapper = require("../../utils/controllerWrapper.js");
+const {auth} = require("../../utils/auth.js");
 
 const {
   listContacts,
@@ -13,16 +14,16 @@ const {
 
 const router = express.Router();
 
-router.get("/", tryCatchWrapper(listContacts));
+router.get("/", auth, tryCatchWrapper(listContacts));
 
-router.get("/:contactId", tryCatchWrapper(getContactById));
+router.get("/:contactId", auth, tryCatchWrapper(getContactById));
 
-router.post("/", tryCatchWrapper(addContact));
+router.post("/", auth, tryCatchWrapper(addContact));
 
-router.delete("/:contactId", tryCatchWrapper(removeContact));
+router.delete("/:contactId", auth, tryCatchWrapper(removeContact));
 
-router.put("/:contactId", tryCatchWrapper(updateContact));
+router.put("/:contactId", auth, tryCatchWrapper(updateContact));
 
-router.patch("/:contactId/favorite", tryCatchWrapper(updateFavorite));
+router.patch("/:contactId/favorite", auth, tryCatchWrapper(updateFavorite));
 
 module.exports = router;
