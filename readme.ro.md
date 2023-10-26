@@ -1,6 +1,6 @@
 ## GoIT Node.js Course Template Homework
 
-Realizează un fork al acestui repozitoriu pentru a îndeplini temele de acasă (2-6). Fork-ul va crea un repozitoriu pe contul tău de pe http://github.com.
+Realizează un fork al acestui repozitoriu pentru a îndeplini temele de acasă (2-6). Fork-ul va crea un repozitoriu pe contul tău de pe http://github.com
 
 Adaugă mentorul la colaborare.
 
