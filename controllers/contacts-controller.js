@@ -9,47 +9,60 @@ const getAll = async (req, res) => {
   res.json(result);
 };
 
-// const getById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contactsService.getById(id);
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findById(id);
 
-//   if (!result) {
-//     throw HttpError(404);
-//   }
+  if (!result) {
+    throw HttpError(404);
+  }
 
-//   res.json(result);
-// };
+  res.json(result);
+};
 
-// const add = async (req, res) => {
-//   const result = await contactsService.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const add = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
-// const updateById = async (req, res) => {
-//   const { id } = req.params;
+const updateById = async (req, res) => {
+  const { id } = req.params;
 
-//   const result = await contactsService.updateContacts(id, req.body);
-//   if (!result) {
-//     throw HttpError(404, `missing fields`);
-//   }
+  const result = await Contact.findByIdAndUpdate(id, req.body);
+  if (!result) {
+    throw HttpError(404, `missing fields`);
+  }
 
-//   res.json(result);
-// };
-// const deleteById = async (req, res) => {
-//   const { id } = req.params;
-//   const result = await contactsService.removeContact(id);
-//   if (!result) {
-//     throw HttpError(400, error.message);
-//   }
-//   res.json({
-//     message: "contact deleted",
-//   });
-// };
+  res.json(result);
+};
+
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+
+  const result = await Contact.findByIdAndUpdate(id, req.body);
+  if (!result) {
+    throw HttpError(400, `missing field favorite`);
+  }
+
+  res.json(result);
+};
+
+const deleteById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndDelete(id);
+  if (!result) {
+    throw HttpError(400, error.message);
+  }
+  res.json({
+    message: "contact deleted",
+  });
+};
 
 export default {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
-  // add: ctrlWrapper(add),
-  // updateById: ctrlWrapper(updateById),
-  // deleteById: ctrlWrapper(deleteById),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
+  updateById: ctrlWrapper(updateById),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
+  deleteById: ctrlWrapper(deleteById),
 };
