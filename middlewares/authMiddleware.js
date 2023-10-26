@@ -10,8 +10,7 @@ const checkToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log(decoded);
-    req.user = decoded; // Зміни "req.User" на "req.user"
+    req.user = decoded;
     next();
   } catch (error) {
     console.error(error);

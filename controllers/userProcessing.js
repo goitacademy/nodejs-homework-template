@@ -111,10 +111,27 @@ const logout = async (req, res, next) => {
 
 
 
-const corentUserData = (req, res) => {
-  const { email, subscription } = req.user;
-  res.status(200).json({ email, subscription });
+const corentUserData = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Не авторизовано' });
+    }
+
+    const userData = {
+      email: user.email,
+      subscription: user.subscription
+    };
+
+    res.status(200).json(userData);
+  } catch (error) {
+    next(error);
+  }
 };
+
+
 module.exports = {
   register,
   login,
