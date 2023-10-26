@@ -14,7 +14,8 @@
     "express": "4.17.1",
     "joi": "^17.11.0",
     "mongoose": "^7.6.3",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "nanoid": "^5.0.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",
