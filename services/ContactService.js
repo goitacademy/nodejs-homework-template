@@ -12,7 +12,7 @@ class ContactService {
   }
 
   async getContactById(id) {
-    const contact = await Contact.findById(id);
+    const contact = await Contact.findById(id, 'name email phone favorite');
 
     return contact;
   }

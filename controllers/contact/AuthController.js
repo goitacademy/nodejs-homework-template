@@ -22,10 +22,7 @@ class AuthController {
 
   logout = asyncHandler(async (req, res) => {
     await AuthSrevice.logout(req.user);
-    res.status(204).json({
-      code: 204,
-      message: 'User logged out successfully',
-    });
+    res.status(204).send();
   });
 
   current = asyncHandler((req, res) => {
