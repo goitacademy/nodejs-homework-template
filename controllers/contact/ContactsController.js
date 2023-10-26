@@ -12,14 +12,7 @@ class ContactsController {
         favorite.replace(/\s*(false|null|undefined|0)\s*/i, '')
       );
     }
-    const data = await contactService.getAll(
-      filter,
-      '-owner -createdAt -updatedAt',
-      {
-        skip,
-        limit,
-      }
-    );
+    const data = await contactService.getAll(filter, { skip, limit });
     res.status(200).json({
       code: 200,
       message: 'ok',
@@ -66,7 +59,6 @@ class ContactsController {
         code: 404,
         message: 'Not found',
       });
-
       return;
     }
 
