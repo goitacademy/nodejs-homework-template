@@ -1,5 +1,5 @@
 const HttpErr = require('./HttpErr');
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken')
 const TOKEN_KEY = 'hashfhhjgh1k2h3kjho9999888';
 const { User } = require('../models/user');
 
@@ -12,7 +12,7 @@ const authenticate = async (req, res, next) => {
 
     try {
         const { id } = jwt.verify(token, TOKEN_KEY);
-        const user = await User.findOne({ _id: id });
+        const user = await User.findOne({id});
         if (!user || !user.token || user.token !== token) {
             throw HttpErr(401);
         }
