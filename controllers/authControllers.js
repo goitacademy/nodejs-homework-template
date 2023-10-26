@@ -16,33 +16,8 @@ const { HttpError } = require("../helpers/HttpError");
 
 const { JWT_SECRET } = process.env;
 
-const avatarsPath = path.resolve("public", "posters");
+const avatarsPath = path.resolve("public", "avatars");
 console.log(avatarsPath);
-
-// const signup = async (req, res, next) => {
-//   const { email, password, subscription = "starter" } = req.body;
-//   const user = await User.findOne({ email });
-//   if (user) {
-//     return next(new HttpError(409, "Email in use"));
-//   }
-
-//   const hashPassword = await bcrypt.hash(password, 10);
-//   const avatarURL = gravatar.url(email);
-
-//   const newUser = await User.create({
-//     email,
-//     password: hashPassword,
-//     subscription,
-//     avatarURL,
-//   });
-
-//   res.status(201).json({
-//     user: {
-//       email,
-//       subscription: newUser.subscription,
-//     },
-//   });
-// };
 
 const signup = async (req, res, next) => {
   const { email, password, subscription = "starter" } = req.body;
@@ -105,21 +80,6 @@ const logoutUser = async (req, res) => {
   res.status(204).send();
 };
 
-// const updateAvatar = async (req, res) => {
-//   const { _id } = req.user;
-//   const { path: tempUpload, originalname } = req.file;
-//   const filename = `${_id}_${originalname}`;
-//   const resultupload = path.join(avatarsPath, filename);
-//   const image = await Jimp.read(tempUpload);
-//   image.resize(250, 250).quality(60);
-//   await image.writeAsync(resultupload);
-//   await fs.unlink(tempUpload);
-//   const avatarURL = path.join(filename);
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-
-//   res.status(200).json({ avatarURL });
-// };
-
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
@@ -129,7 +89,7 @@ const updateAvatar = async (req, res) => {
   image.resize(250, 250).quality(60);
   await image.writeAsync(resultupload);
   await fs.unlink(tempUpload);
-  const avatarURL = path.join(filename);
+  const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.status(200).json({ avatarURL });
