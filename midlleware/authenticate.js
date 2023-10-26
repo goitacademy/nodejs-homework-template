@@ -1,4 +1,4 @@
-const HttpErr = require('./HttpErr');
+const HttpErr = require('../helpers/HttpErr');
 const jwt = require('jsonwebtoken')
 const TOKEN_KEY = 'hashfhhjgh1k2h3kjho9999888';
 const { User } = require('../models/user');

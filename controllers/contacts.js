@@ -1,7 +1,7 @@
 const addScheme = require('../models/contact');
 const { Contact } = require('../models/contact');
 const HttpErr = require('../helpers/HttpErr');
-const { ctrlWrapper } = require('../helpers/ctrlWrapper');
+const { ctrlWrapper } = require('../midlleware');
 
 const getAll = async (req, res) => {
     const { _id: owner } = req.user;

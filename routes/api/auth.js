@@ -1,8 +1,6 @@
 const express = require('express');
 
-const validateBody = require('../../helpers/validateBody');
-
-const authenticate = require('../../helpers/authenticate');
+const { authenticate, validateBody } = require('../../midlleware');
 
 const { logRegSchema } = require('../../models/user');
 

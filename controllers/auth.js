@@ -1,16 +1,14 @@
-const { logRegSchema, User } = require('../models/user');
+const { User } = require('../models/user');
 
 const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
 
-
-
 const TOKEN_KEY = 'hashfhhjgh1k2h3kjho9999888'
 
 const HttpErr = require('../helpers/HttpErr');
 
-const { ctrlWrapper } = require('../helpers/ctrlWrapper');
+const { ctrlWrapper } = require('../midlleware');
 
 const register = async (req, res) => {
     const {email, password} = req.body;

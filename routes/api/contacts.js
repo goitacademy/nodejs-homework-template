@@ -1,9 +1,8 @@
 const express = require('express');
 
-const { isValidId } = require('../../helpers/isValidId');
+const { isValidId } = require('../../midlleware');
 const { addScheme, favoriteScheme } = require('../../models/contact');
-const validateBody = require('../../helpers/validateBody');
-const authenticate = require('../../helpers/authenticate')
+const { authenticate, validateBody } = require('../../midlleware');
 
 const router = express.Router()
 
