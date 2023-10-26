@@ -21,12 +21,12 @@ router.post ("/verify", resendVerifyEmail)
 router.post("/login", login);
 router.get("/current", authenticate, getCurrent);
 router.post("/logout", authenticate, logout);
-router.patch("/:id", authenticate, updateSubscription);
 router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
   updateUserAvatar
 );
+router.patch("/:id", authenticate, updateSubscription);
 
 module.exports = router;
