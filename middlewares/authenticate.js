@@ -36,7 +36,3 @@ const authenticate = async (req, res, next) => {
 };
 
 module.exports = ctrlWrapper(authenticate);
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMxZjAwYWNmNjhhYjIyZGE5NzBkYjEiLCJpYXQiOjE2OTc3NzE1NzEsImV4cCI6MTY5NzgxNDc3MX0.fvE_E8uQ6Y9VrTdaJXgJ43OKOe0ZzCqkbtkXpVzJTSY
-
-// lida
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NTMyOThkM2Q5NjE2NWFiNzBjYWY0ZTAiLCJpYXQiOjE2OTc4MTQ4MDcsImV4cCI6MTY5Nzg1ODAwN30.FP57rFZPo4SORJa9A_V3W4bC6CNMnzehSAOwpmCuAeY
