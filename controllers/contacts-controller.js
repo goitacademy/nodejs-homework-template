@@ -17,12 +17,12 @@ const getContactByIdController = async (req, res, next) => {
   }
   res.json(result);
 };
-
+*/
 const addContactController = async (req, res, next) => {
   const result = await addContact(req.body);
   res.status(201).json(result);
 };
-
+/*
 const removeContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
