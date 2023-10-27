@@ -6,4 +6,4 @@ const contactSchema = new Schema({
   phone: String,
 });
 
-const Movie = 
+const Movie = model();
