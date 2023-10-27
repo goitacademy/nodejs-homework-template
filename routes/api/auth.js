@@ -51,4 +51,14 @@ router.patch("/", ctrl.updateSubscriptionCtrl);
  */
 router.patch('/avatars', upload.single('avatars'), ctrl.updateAvatar)
 
+/**
+ * @ GET /users/verify/:verificationToken
+ */
+router.get('/verify/:verificationToken', ctrl.verify)
+
+/**
+ * @POST /users/verify
+ */
+router.post('/verify', ctrl.resendVerify)
+
 module.exports = router

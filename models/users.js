@@ -66,11 +66,31 @@ const updateAvatar = async (_id, avatarURL) => {
     return await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
 }
 
+const verifyEmail = async ({ verificationToken }) => {
+    return await User.findOne({ verificationToken })
+}
+
+const verifyUpdate = async _id => {
+    return await User.findByIdAndUpdate(_id)
+}
+
+/**
+ * !!!Якщо виконалася повторна веріфікація за посиланням видасти помилку!!!
+ * @param {*} param0 
+ * @returns 
+ */
+const resendVerifyEmail = async ({ email }) => {
+    return await User.findOne({ email })
+}
+
 module.exports = {
     createUser,
     getUserByEmail,
     findById,
     updateToken,
     updateSubscription,
-    updateAvatar
+    updateAvatar,
+    verifyEmail,
+    verifyUpdate,
+    resendVerifyEmail
 }
