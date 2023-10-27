@@ -5,3 +5,5 @@ const contactSchema = new Schema({
   email: String,
   phone: String,
 });
+
+const Movie = 
