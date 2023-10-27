@@ -1,5 +1,4 @@
-const addScheme = require('../models/contact');
-const { Contact } = require('../models/contact');
+const { Contact, addScheme} = require('../models/contact');
 const HttpErr = require('../helpers/HttpErr');
 const { ctrlWrapper } = require('../midlleware');
 
