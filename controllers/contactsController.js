@@ -75,6 +75,12 @@ const updateContactInfo = async (req, res, next) => {
   }
 };
 
+const updateFavoriteStatus = async (contactId, favorite) => {
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, { favorite }, { new: true });
+
+  return updatedContact;
+};
+
 module.exports = {
   getAllContacts,
   getContact,
