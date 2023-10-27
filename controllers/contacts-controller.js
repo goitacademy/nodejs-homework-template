@@ -19,7 +19,7 @@ const getContactByIdController = async (req, res, next) => {
 };
 */
 const addContactController = async (req, res, next) => {
-  const result = await addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 /*
