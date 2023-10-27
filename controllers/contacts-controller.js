@@ -16,7 +16,7 @@ const listContactsController = async (req, res, next) => {
   const result = await listContacts();
   res.json(result);
 };
-
+/*
 const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await getContactById(contactId);
@@ -48,7 +48,7 @@ const updateContactController = async (req, res, next) => {
   }
   res.json(result);
 };
-
+*/
 module.exports = {
   listContactsController: controllerWrapper(listContactsController),
   getContactByIdController: controllerWrapper(getContactByIdController),
