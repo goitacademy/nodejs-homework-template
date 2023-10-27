@@ -6,6 +6,6 @@ const contactSchema = new Schema({
   phone: String,
 });
 
-const Movie = model("movie", movieSchema);
+const Contact = model("movie", contactSchema);
 
-module.exports = 
+module.exports = { Contact };
