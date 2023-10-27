@@ -83,11 +83,27 @@ const updateContactFavorite = async (req, res) => {
     res.json(response);
 };
 
+const getFavoriteContacts = async (req, res) => {
+    const { favorite } = req.query;
+
+    const { _id: owner } = req.user;
+    
+    let contacts;
+    if (favorite === 'true') {
+        contacts = await Contact.find({ owner, favorite: true });
+    } else {
+        contacts = await Contact.find({ owner });
+    }
+
+    res.json(contacts);
+};
+
 module.exports = {
     getAll: ctrlWrapper(getAll),
     getById: ctrlWrapper(getById),
     addContact: ctrlWrapper(addContact),
     removeContact: ctrlWrapper(removeContact),
     updateContact: ctrlWrapper(updateContact),
-    updateContactFavorite: ctrlWrapper(updateContactFavorite)
+    updateContactFavorite: ctrlWrapper(updateContactFavorite),
+    getFavoriteContacts: ctrlWrapper(getFavoriteContacts)
 };

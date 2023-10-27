@@ -18,6 +18,8 @@ router.delete('/:contactId', authenticate, isValidId, ctrl.removeContact)
 
 router.put('/:contactId', authenticate, validateBody(addScheme), isValidId, ctrl.updateContact)
 
-router.patch('/:contactId/favorite', authenticate, validateBody(favoriteScheme), isValidId, ctrl.updateContactFavorite)
+router.patch('/:contactId/favorite', authenticate, validateBody(favoriteScheme), isValidId, ctrl.updateContactFavorite);
+
+router.get('/favorite', authenticate, isValidId, isValidId, ctrl.getFavoriteContacts)
 
 module.exports = router

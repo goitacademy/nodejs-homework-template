@@ -10,6 +10,8 @@ const HttpErr = require('../helpers/HttpErr');
 
 const { ctrlWrapper } = require('../midlleware');
 
+const subscriptionSchema = require('../models/user')
+
 const register = async (req, res) => {
     const {email, password} = req.body;
     const user = await User.findOne({ email });
@@ -100,11 +102,38 @@ const changeSubscription = async (req, res, next) => {
     }
 };
 
+const updateSubscription = async (req, res) => {
+    const { error } = subscriptionSchema.validate(req.body);
+    if (error) {
+        throw new HttpErr(400, 'Invalid subscription');
+    }
+
+    const { email } = req.user;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new HttpErr(404, 'User not found');
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+        { email },
+        { subscription: req.body.subscription },
+        { new: true }
+    );
+
+    if (!updatedUser) {
+        throw new HttpErr(500, 'Failed to update subscription');
+    }
+
+    res.json(updatedUser);
+};
+
 
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logOut: ctrlWrapper(logOut),
-    changeSubscription: ctrlWrapper(changeSubscription)
+    changeSubscription: ctrlWrapper(changeSubscription),
+    updateSubscription: ctrlWrapper(updateSubscription)
 };

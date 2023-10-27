@@ -42,7 +42,12 @@ const logRegSchema = Joi.object({
     password: Joi.string().min(6).required()
 });
 
+const subscriptionSchema = Joi.object({
+    subscription: Joi.string().valid('starter', 'pro', 'business').required()
+});
+
 module.exports = {
     User,
-    logRegSchema
+    logRegSchema,
+    subscriptionSchema
 };

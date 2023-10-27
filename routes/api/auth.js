@@ -2,7 +2,7 @@ const express = require('express');
 
 const { authenticate, validateBody } = require('../../midlleware');
 
-const { logRegSchema } = require('../../models/user');
+const { logRegSchema, subscriptionSchema } = require('../../models/user');
 
 const ctrl = require('../../controllers/auth')
 
@@ -16,6 +16,7 @@ router.post('/logout', validateBody(logRegSchema), ctrl.logOut)
 
 router.get('/', authenticate, ctrl.getCurrent);
 
-router.patch('/change/subscription', authenticate, ctrl.changeSubscription);
+router.patch('/change/subscription', validateBody(subscriptionSchema), authenticate, ctrl.updateSubscription);
+
 
 module.exports = router;
