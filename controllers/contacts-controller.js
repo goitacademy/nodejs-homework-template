@@ -5,7 +5,7 @@ const { HttpError } = require("../helpers");
 const { controllerWrapper } = require("../decorators");
 
 const listContactsController = async (req, res, next) => {
-  const result = await listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 /*
