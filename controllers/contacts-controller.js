@@ -44,7 +44,7 @@ const updateContactController = async (req, res, next) => {
 module.exports = {
   listContactsController: controllerWrapper(listContactsController),
   //getContactByIdController: controllerWrapper(getContactByIdController),
-  //addContactController: controllerWrapper(addContactController),
+  addContactController: controllerWrapper(addContactController),
   //removeContactController: controllerWrapper(removeContactController),
   //updateContactController: controllerWrapper(updateContactController),
 };
