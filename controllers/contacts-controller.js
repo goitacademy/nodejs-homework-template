@@ -1,16 +1,8 @@
-const Joi = require("joi");
+const { Contact } = require("../models/Contact");
 
 const { HttpError } = require("../helpers");
 
 const { controllerWrapper } = require("../decorators");
-
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../models");
 
 const listContactsController = async (req, res, next) => {
   const result = await listContacts();
