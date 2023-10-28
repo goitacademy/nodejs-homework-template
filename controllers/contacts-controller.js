@@ -31,7 +31,8 @@ const removeContactController = async (req, res, next) => {
   }
   res.json({ message: "Delete success" });
 };
-
+*/
+/*
 const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);
