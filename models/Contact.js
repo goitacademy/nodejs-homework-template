@@ -11,14 +11,14 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+contactSchema.post("save", handleSaveError);
+
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
 
-contactSchema.post("save", handleSaveError);
-
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact };
+module.exports = { Contact, contactAddSchema };
