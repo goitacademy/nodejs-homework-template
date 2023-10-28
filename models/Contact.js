@@ -7,7 +7,7 @@ const contactSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
-    favourite: { type: Boolean, required: true },
+    favorite: { type: Boolean, required: true },
   },
   { versionKey: false, timestamps: true }
 );
@@ -18,6 +18,7 @@ const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean().required(),
 });
 
 const Contact = model("contact", contactSchema);
