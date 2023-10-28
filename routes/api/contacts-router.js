@@ -22,7 +22,7 @@ router.get("/", listContactsController);
 
 //router.get("/:contactId", getContactByIdController);
 
-//router.post("/", isEmptyBody, contactAddValidate, addContactController);
+router.post("/", isEmptyBody, contactAddValidate, addContactController);
 
 //router.delete("/:contactId", removeContactController);
 
