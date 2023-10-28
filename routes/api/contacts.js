@@ -1,14 +1,14 @@
 
 import express from "express";
+
 import  contactContollers  from "../../controllers/contacts-controller.js";
 import contactSchema from '../../models/contacts.js'
- import validateBody from "../../decorators/validateBody.js";
- import {isValidId, authenticate} from '../../midllewares/midle-index.js'
-import authRouter from "./auth-router.js";
-import authController from "../../controllers/auth-controller.js";
+import validateBody from "../../decorators/validateBody.js";
+import {isValidId, authenticate} from '../../midllewares/midle-index.js'
 
 
- const router = express.Router();
+
+const router = express.Router();
 
 
  
@@ -22,7 +22,8 @@ router.get('/', contactContollers.getAll);
 
 router.get('/:contactId', isValidId,  contactContollers.getById);
 
-router.post('/',contactValidateBody, contactContollers.add);
+router.post('/', contactValidateBody, contactContollers.add);
+
 
 
 router.delete('/:contactId', isValidId, contactContollers.deleteById);

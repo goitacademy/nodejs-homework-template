@@ -2,7 +2,7 @@ import HttpError from '../helpers/index.js';
 
 
 import Contact from '../models/contacts.js'
-
+import gravatar from "gravatar";
 import mongoose from 'mongoose';
 
 import ctrlWrapper from '../decorators/ctrlWrappers.js';
@@ -26,8 +26,6 @@ const addContact = async (req, res, next) => {
   try {
 
     const {_id: owner} = req.user;
-
-    
   const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
     
