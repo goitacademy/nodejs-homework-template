@@ -10,10 +10,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-movieSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+movieSchema.post("save", handleSaveError);
 
 const Contact = model("contact", contactSchema);
 
