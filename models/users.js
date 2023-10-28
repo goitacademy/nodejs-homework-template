@@ -65,22 +65,12 @@ const updateSubscription = async (_id, subscription) => {
 const updateAvatar = async (_id, avatarURL) => {
     return await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
 }
-
-const verifyEmail = async ({ verificationToken }) => {
+const findByVerifyToken = async verificationToken => {
     return await User.findOne({ verificationToken })
 }
 
-const verifyUpdate = async _id => {
-    return await User.findByIdAndUpdate(_id)
-}
-
-/**
- * !!!Якщо виконалася повторна веріфікація за посиланням видасти помилку!!!
- * @param {*} param0 
- * @returns 
- */
-const resendVerifyEmail = async ({ email }) => {
-    return await User.findOne({ email })
+const updateVerifyToken = async (_id, verify, verificationToken) => {
+    return await User.findByIdAndUpdate(_id, { verify, verificationToken })
 }
 
 module.exports = {
@@ -90,7 +80,6 @@ module.exports = {
     updateToken,
     updateSubscription,
     updateAvatar,
-    verifyEmail,
-    verifyUpdate,
-    resendVerifyEmail
+    findByVerifyToken,
+    updateVerifyToken
 }

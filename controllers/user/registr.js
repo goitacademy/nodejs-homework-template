@@ -15,7 +15,7 @@ const registr = async (req, res, next) => {
 
     handleUserRouter(res, validDataUser)
 
-    const { email, password, /* avatarUrl */ } = req.body
+    const { email, password /* avatarUrl */ } = req.body
 
     handleConflict(req, res, email, password)
 }

@@ -4,7 +4,7 @@ const User = require('../../models/users')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
-const { randomUUID } = require('crypto')
+// const { v4: uuidv4 } = require('uuid')
 
 /**
  * Обробляє запит для отримання користувача за email та перевірки паролю.
@@ -16,9 +16,9 @@ const { randomUUID } = require('crypto')
  */
 const login = async (req, res, next) => {
 
-    const { email, password, avatarURL } = req.body
+    const { email, password, avatarURL, verificationToken } = req.body
 
-    const verificationToken = randomUUID()
+    // const verificationToken = uuidv4()
     const user = await User.getUserByEmail(email)
     const passwordMatch = await user.comparePasswords(password)
     const secretKey = process.env.JWT_SECRET
@@ -45,7 +45,7 @@ const login = async (req, res, next) => {
             email: user.email,
             subscription: user.subscription,
             avatarURL: user.avatarURL,
-            verificationToken: verificationToken
+            verificationToken: user.verificationToken
         },
     })
 }

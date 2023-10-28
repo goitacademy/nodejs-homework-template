@@ -1,7 +1,6 @@
 const User = require('../../models/users')
 const { HttpError } = require('../../helpers')
-const { randomUUID } = require('crypto')
-
+// const { v4: uuidv4 } = require('uuid')
 
 /**
  * 
@@ -11,7 +10,7 @@ const { randomUUID } = require('crypto')
  * @returns {Object} - Відповідь повертає 200 з об'єктом користувача (email та subscription) або помилку 401, якщо користувач не авторизований.
  */
 const current = async (req, res, next) => {
-    const verificationToken = randomUUID()
+    // const verificationToken = uuidv4()
     if (!req.user) {
         next(HttpError(401, "Not authorized"))
     }
@@ -23,7 +22,7 @@ const current = async (req, res, next) => {
         email: user.email,
         subscription: user.subscription,
         avatarURL: user.avatarURL,
-        verificationToken: verificationToken
+        verificationToken: user.verificationToken
     })
 }
 

@@ -2,15 +2,17 @@ const User = require('../../models/users')
 const { HttpError, handleReqError } = require('../../helpers')
 
 const verify = async (req, res, next) => {
-    const { verificationToken } = req.params
+    const { verificationToken } = req.params.token
 
-    const user = await User.resendVerifyEmail(verificationToken)
+    const user = await User.findByVerifyToken(verificationToken)
 
     if (!user) {
         return next(HttpError(404, 'User not found'))
     }
 
-    await User.verifyUpdate(user._id, { verify: true, verificationToken: '' })
+    // await User.updateVerifyToken(user._id, { verify: true }, null /* verificationToken: '' */)
+    /* OR */
+    await User.updateVerifyToken(user._id, { verify: true, verificationToken: '' })
 
     res.json({
         message: 'Verification successful'
