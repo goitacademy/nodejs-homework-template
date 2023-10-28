@@ -1,9 +1,9 @@
-const express = require('express');
+
 const mongoose = require('mongoose');
 const app = require('./app');
 const port = process.env.PORT || 3000;
 
-const dbURI = 'mongodb+srv://admin:admin@cluster0.vwiudqe.mongodb.net/cluster0?retryWrites=true&w=majority';
+const dbURI = 'mongodb+srv://admin:admin@db-contacts.vwiudqe.mongodb.net/db-contacts?retryWrites=true&w=majority';
 
 mongoose
   .connect(dbURI, {

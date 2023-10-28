@@ -1,15 +1,8 @@
+
 const express = require('express');
 const router = express.Router();
 const Contact = require('../../models/contactModel');
 
-router.post('/', async (req, res, next) => {
-  try {
-    const newContact = await Contact.create(req.body);
-    res.status(201).json(newContact);
-  } catch (error) {
-    next(error);
-  }
-});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -20,13 +13,43 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+
+router.get('/:contactId', async (req, res, next) => {
+  try {
+    const contactId = req.params.contactId;
+    console.log('Requested contactId:', contactId);
+
+    const contact = await Contact.findById(contactId);
+    if (contact) {
+      res.json(contact);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+router.post('/', async (req, res, next) => {
+  try {
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 router.put('/:contactId', async (req, res, next) => {
   try {
+    const contactId = req.params.contactId;
     const updatedContact = await Contact.findByIdAndUpdate(
-      req.params.contactId,
+      contactId,
       req.body,
       { new: true }
     );
+
     if (updatedContact) {
       res.json(updatedContact);
     } else {
@@ -37,9 +60,12 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
+
 router.delete('/:contactId', async (req, res, next) => {
   try {
-    const result = await Contact.findByIdAndDelete(req.params.contactId);
+    const contactId = req.params.contactId;
+    const result = await Contact.findByIdAndDelete(contactId);
+
     if (result) {
       res.json({ message: 'Contact deleted' });
     } else {
