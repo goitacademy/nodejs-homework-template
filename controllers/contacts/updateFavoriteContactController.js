@@ -4,45 +4,6 @@ const { HttpError } = require("../helpers");
 
 const { controllerWrapper } = require("../decorators");
 
-const listContactsController = async (req, res) => {
-  const result = await Contact.find();
-  res.json(result);
-};
-
-const getContactByIdController = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
-  if (!result) {
-    throw HttpError(404, `Contact with ${contactId} not found`);
-  }
-  res.json(result);
-};
-
-const addContactController = async (req, res) => {
-  const result = await Contact.create(req.body);
-  res.status(201).json(result);
-};
-
-const removeContactController = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
-  if (!result) {
-    throw HttpError(404, `Contact with ${contactId} not found`);
-  }
-  res.json({ message: "Delete success" });
-};
-
-const updateContactController = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
-  if (!result) {
-    throw HttpError(404, `Contact with ${contactId} not found`);
-  }
-  res.json(result);
-};
-
 const updateFavoriteContactController = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
@@ -55,11 +16,6 @@ const updateFavoriteContactController = async (req, res) => {
 };
 
 module.exports = {
-  listContactsController: controllerWrapper(listContactsController),
-  getContactByIdController: controllerWrapper(getContactByIdController),
-  addContactController: controllerWrapper(addContactController),
-  removeContactController: controllerWrapper(removeContactController),
-  updateContactController: controllerWrapper(updateContactController),
   updateFavoriteContactController: controllerWrapper(
     updateFavoriteContactController
   ),
