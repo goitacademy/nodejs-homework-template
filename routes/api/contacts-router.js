@@ -9,7 +9,7 @@ const { validateBody } = require("../../decorators");
 const {
   contactAddSchema,
   contactUpdateFavoriteSchema,
-} = require("../../models/Contact");
+} = require("../../models");
 
 const contactAddValidate = validateBody(contactAddSchema);
 const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
@@ -47,4 +47,4 @@ router.patch(
   updateFavoriteContactController
 );
 
-module.exports = router;
+module.exports = { router };
