@@ -8,13 +8,16 @@ const userSchema = require('../../models/User.js')
 const authenticate = require('../../middlewares/authenticate.js')
 
 const userSignupValidate = validateBody(userSchema.userSignupSchema);
-const userSigninValidate = validateBody(userSchema.userSigninSchema)
+const userSigninValidate = validateBody(userSchema.userSigninSchema);
+const userEmailValidate = validateBody(userSchema.userEmailSchema);
 
 const authRouter = express.Router()
 
 authRouter.post('/users/register', isEmptyBody, userSignupValidate, authControllers.signup)
 
 authRouter.get('/users/verify/:verificationToken', authControllers.verify)
+
+authRouter.post('/users/verify', userEmailValidate, authControllers.resendVerifyEmail)
 
 authRouter.post('/users/login', isEmptyBody, userSigninValidate, authControllers.signin)
 

@@ -45,8 +45,13 @@ const userSigninSchema = Joi.object({
     email: Joi.string().required(),
 });
 
+const userEmailSchema = Joi.object({
+    email: Joi.string().required(),
+});
+
 module.exports = {
   User,
   userSignupSchema,
   userSigninSchema,
+  userEmailSchema
 }
