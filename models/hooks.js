@@ -5,6 +5,7 @@ const handleSaveError = (error, data, next) => {
 
 const runValidatorsAtUpdate = function (next) {
   this.options.runValidators = true;
+  this.options.new = true;
   next();
 };
 
