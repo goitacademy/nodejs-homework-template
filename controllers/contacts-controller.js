@@ -22,7 +22,7 @@ const addContactController = async (req, res) => {
   const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
-/*
+
 const removeContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
@@ -31,7 +31,6 @@ const removeContactController = async (req, res, next) => {
   }
   res.json({ message: "Delete success" });
 };
-*/
 
 const updateContactController = async (req, res, next) => {
   const { contactId } = req.params;
@@ -48,6 +47,6 @@ module.exports = {
   listContactsController: controllerWrapper(listContactsController),
   getContactByIdController: controllerWrapper(getContactByIdController),
   addContactController: controllerWrapper(addContactController),
-  //removeContactController: controllerWrapper(removeContactController),
+  removeContactController: controllerWrapper(removeContactController),
   updateContactController: controllerWrapper(updateContactController),
 };
