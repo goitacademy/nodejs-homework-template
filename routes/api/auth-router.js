@@ -14,6 +14,8 @@ const authRouter = express.Router()
 
 authRouter.post('/users/register', isEmptyBody, userSignupValidate, authControllers.signup)
 
+authRouter.get('/users/verify/:verificationToken', authControllers.verify)
+
 authRouter.post('/users/login', isEmptyBody, userSigninValidate, authControllers.signin)
 
 authRouter.get('/users/current', authenticate, authControllers.getCurrent)
