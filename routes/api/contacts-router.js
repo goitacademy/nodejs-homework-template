@@ -6,7 +6,7 @@ const { isEmptyBody } = require("../../middlewares/isEmptyBody");
 
 const { validateBody } = require("../../decorators");
 
-const { contactAddSchema } = require("../../schemas");
+const { contactAddSchema } = require("../../models/Contact");
 
 const contactAddValidate = validateBody(contactAddSchema);
 
