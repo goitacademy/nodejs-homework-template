@@ -3,6 +3,17 @@ const router = express.Router()
 const { middlewareToken, upload } = require('../../middleware')
 const ctrl = require('../../controllers/user')
 
+const User = require('../../models/users')
+const { HttpError } = require('../../helpers')
+const nodemailer = require('nodemailer')
+const dotenv = require('dotenv')
+dotenv.config()
+const serverSMTP = 'smtp.ukr.net'
+const portSMTP = 2525
+const sender = process.env.SENDER_UKR_NET
+const password = process.env.PASSWORD_UKR_NET
+const { v4: uuidv4 } = require('uuid');
+
 
 /**
  * @ POST /users/registration
@@ -54,11 +65,62 @@ router.patch('/avatars', upload.single('avatars'), ctrl.updateAvatar)
 /**
  * @ GET /users/verify/:verificationToken
  */
-router.get('/verify/:verificationToken', ctrl.verify)
+router.get('/verify/:verificationToken', ctrl.resendVerify)
 
 /**
  * @POST /users/verify
  */
-router.post('/verify', ctrl.resendVerify)
+router.post('/verify', async (req, res, next) => {
+    if (!req.body.email) {
+        return res.status(400).json({ message: 'Missing required field email' });
+    }
+
+    const { email } = req.body
+    const user = await User.getUserByEmail(email);
+
+    if (!user) {
+        return next(HttpError(404, 'User not found'))
+    }
+
+    if (user.verify) {
+        return res.status(400).json({
+            message: 'Verification has already been passed'
+        })
+    }
+
+    const verificationToken = uuidv4();
+    user.verificationToken = verificationToken
+    await user.save()
+
+    const transporter = nodemailer.createTransport({
+        host: serverSMTP,
+        port: portSMTP,
+        secure: true,
+        auth: {
+            user: sender,
+            pass: password
+        },
+        debug: true
+    })
+
+    const mailOptions = {
+        from: sender,
+        to: email,
+        subject: 'Verification Email',
+        html: `Click this link to verify your email: ${verificationToken}`
+    }
+
+    transporter.sendMail(mailOptions, (err) => {
+        if (err) {
+            console.error('Error sending verification email:', err)
+            return res.status(500).json({
+                message: 'Error sending verification email'
+            })
+        }
+        res.status(200).json({
+            message: 'Verification email sent'
+        })
+    })
+})
 
 module.exports = router
