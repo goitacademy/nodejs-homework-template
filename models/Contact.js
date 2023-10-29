@@ -31,9 +31,9 @@ contactSchema.post("findOneAndUpdate", handleSaveError);
 
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean().required(),
+  email: Joi.string(),
+  phone: Joi.string(),
+  favorite: Joi.boolean(),
 });
 
 const Contact = model("contact", contactSchema);
