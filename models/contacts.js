@@ -23,9 +23,17 @@ const removeContact = async (contactId) => {
   return Contact.findByIdAndDelete({ _id: contactId });
 };
 
-const addContact = async (body) => {};
+const addContact = async (body) => {
+  return Contact.create(body);
+};
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, fields) => {
+  return Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { $set: fields },
+    { new: true }
+  );
+};
 
 module.exports = {
   listContacts,
