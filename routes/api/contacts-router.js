@@ -44,7 +44,7 @@ router.patch(
   isValidId,
   isEmptyBody,
   contactUpdateFavoriteValidate,
-  updateContactController
+  updateFavoriteContactController
 );
 
 module.exports = router;
