@@ -17,6 +17,7 @@ contactSchema.post("save", handleSaveError);
 
 contactSchema.pre("findOneAndUpdate", function (next) {
   this.options.runValidators = true;
+  next();
 });
 
 const contactAddSchema = Joi.object({
