@@ -6,9 +6,13 @@ const { isEmptyBody, isValidId } = require("../../middlewares");
 
 const { validateBody } = require("../../decorators");
 
-const { contactAddSchema } = require("../../models/Contact");
+const {
+  contactAddSchema,
+  contactUpdateFavoriteSchema,
+} = require("../../models/Contact");
 
 const contactAddValidate = validateBody(contactAddSchema);
+const contactUpdateFavoriteValidate = validateBody(contactUpdateFavoriteSchema);
 
 const {
   listContactsController,
