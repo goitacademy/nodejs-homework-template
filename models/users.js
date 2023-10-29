@@ -65,13 +65,19 @@ const updateSubscription = async (_id, subscription) => {
 const updateAvatar = async (_id, avatarURL) => {
     return await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
 }
+
+/**
+ * 
+ * @param {string} verificationToken 
+ * @returns генерує verificationToken
+ */
 const findByVerifyToken = async verificationToken => {
     return await User.findOne({ verificationToken })
 }
 
-const updateVerifyToken = async (email, verify, verificationToken) => {/* _id */
-    return await User.findByIdAndUpdate(email, { verify, verificationToken })
-}
+// const updateVerifyToken = async (email, verify, verificationToken) => {/* _id */
+//     return await User.findByIdAndUpdate(email, { verify, verificationToken })
+// }
 
 module.exports = {
     createUser,
@@ -81,5 +87,5 @@ module.exports = {
     updateSubscription,
     updateAvatar,
     findByVerifyToken,
-    updateVerifyToken
+    // updateVerifyToken
 }

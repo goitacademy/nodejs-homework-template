@@ -1,43 +1,34 @@
-// const User = require('../../models/users')
-// const { HttpError, handleReqError } = require('../../helpers')
+const User = require('../../models/users')
+const { HttpError, handleReqError } = require('../../helpers')
+const sendEmail = require('../../helpers/sendEmail')
+const { SENDER_UKR_NET } = process.env
 
-// const verify = async (req, res, next) => {
-//     const { verificationToken } = req.params
+const resendVerify = async (req, res, next) => {
+    const { email, verificationToken } = req.body
+    const user = await User.getUserByEmail(email)
 
-//     const user = await User.findByVerifyToken(verificationToken)
+    if (!user) {
+        return next(HttpError(404, 'User not found'))
+    }
+    if (user.verify) {
+        return next(HttpError(400, 'Verification has already been passed'))
+    }
 
-//     if (!user) {
-//         return next(HttpError(404, 'User not found'))
-//     }
+    user.verificationToken = verificationToken
+    await user.save()
 
-//     await User.updateVerifyToken(user._id, { verify: true, verificationToken: '' })
+    const verifyEmail = {
+        from: SENDER_UKR_NET,
+        to: user.email,
+        subject: 'Verification Email',
+        html: `Click this link to verify your email: ${verificationToken}`,
+    }
 
-//     res.json({
-//         message: 'Verification successful'
-//     })
-// }
+    await sendEmail(verifyEmail)
 
-// module.exports = handleReqError(verify)
+    res.json({
+        message: 'Verification email sent'
+    })
+}
 
-
-// // const User = require('../../models/users')
-// // const { HttpError, handleReqError } = require('../../helpers')
-
-// // const verify = async (req, res, next) => {
-// //     const { email } = req.body
-
-// //     const user = await User.updateVerifyToken(email)
-
-// //     if (!user) {
-// //         return next(HttpError(404, 'User not found'))
-// //     }
-// //     if (user.verify) {
-// //         return next(HttpError(400, 'Verification has already been passed'))
-// //     }
-
-// //     return res.status(200).json({
-// //         message: 'Verification successful'
-// //     })
-// // }
-
-// // module.exports = handleReqError(verify)
+module.exports = handleReqError(resendVerify)
