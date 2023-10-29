@@ -8,4 +8,4 @@ const runValidatorsAtUpdate = function (next) {
   next();
 };
 
-module.exports = { handleSaveError };
+module.exports = { handleSaveError, runValidatorsAtUpdate };
