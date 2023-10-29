@@ -24,10 +24,11 @@ router.get("/:contactId", isValidId, getContactByIdController);
 
 router.post("/", isEmptyBody, contactAddValidate, addContactController);
 
-//router.delete("/:contactId", removeContactController);
+//router.delete("/:contactId", isValidId, removeContactController);
 
 /*router.put(
   "/:contactId",
+  isValidId,
   isEmptyBody,
   contactAddValidate,
   updateContactController
