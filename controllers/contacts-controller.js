@@ -8,7 +8,7 @@ const listContactsController = async (req, res, next) => {
   const result = await Contact.find();
   res.json(result);
 };
-/*
+
 const getContactByIdController = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await getContactById(contactId);
@@ -17,7 +17,7 @@ const getContactByIdController = async (req, res, next) => {
   }
   res.json(result);
 };
-*/
+
 const addContactController = async (req, res) => {
   const result = await Contact.create(req.body);
   res.status(201).json(result);
