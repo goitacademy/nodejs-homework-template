@@ -25,7 +25,7 @@ const addContactController = async (req, res) => {
 
 const removeContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
     throw HttpError(404, `Contact with ${contactId} not found`);
   }
