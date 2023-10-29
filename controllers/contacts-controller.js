@@ -4,12 +4,12 @@ const { HttpError } = require("../helpers");
 
 const { controllerWrapper } = require("../decorators");
 
-const listContactsController = async (req, res, next) => {
+const listContactsController = async (req, res) => {
   const result = await Contact.find();
   res.json(result);
 };
 
-const getContactByIdController = async (req, res, next) => {
+const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findById(contactId);
   if (!result) {
@@ -23,7 +23,7 @@ const addContactController = async (req, res) => {
   res.status(201).json(result);
 };
 
-const removeContactController = async (req, res, next) => {
+const removeContactController = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
@@ -43,7 +43,7 @@ const updateContactController = async (req, res) => {
   res.json(result);
 };
 
-const updateFavoriteContactController = async (req, res, next) => {
+const updateFavoriteContactController = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
