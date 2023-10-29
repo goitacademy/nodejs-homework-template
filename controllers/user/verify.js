@@ -1,20 +1,43 @@
+// const User = require('../../models/users')
+// const { HttpError, handleReqError } = require('../../helpers')
+
+// const verify = async (req, res, next) => {
+//     const { verificationToken } = req.params
+
+//     const user = await User.findByVerifyToken(verificationToken)
+
+//     if (!user) {
+//         return next(HttpError(404, 'User not found'))
+//     }
+
+//     // await User.updateVerifyToken(user._id, { verify: true }, null /* verificationToken: '' */)
+//     /* OR */
+//     await User.updateVerifyToken(user._id, { verify: true, verificationToken: '' })
+
+//     res.json({
+//         message: 'Verification successful'
+//     })
+// }
+
+// module.exports = handleReqError(verify)
+
+
 const User = require('../../models/users')
 const { HttpError, handleReqError } = require('../../helpers')
 
 const verify = async (req, res, next) => {
-    const { verificationToken } = req.params.token
+    const { email } = req.body
 
-    const user = await User.findByVerifyToken(verificationToken)
+    const user = await User.findByVerifyToken(email)
 
     if (!user) {
         return next(HttpError(404, 'User not found'))
     }
+    if (user.verify) {
+        return next(HttpError(400, 'Verification has already been passed'))
+    }
 
-    // await User.updateVerifyToken(user._id, { verify: true }, null /* verificationToken: '' */)
-    /* OR */
-    await User.updateVerifyToken(user._id, { verify: true, verificationToken: '' })
-
-    res.json({
+    return res.status(200).json({
         message: 'Verification successful'
     })
 }

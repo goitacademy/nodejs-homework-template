@@ -32,7 +32,7 @@ dotenv.config();
 
 
 const serverSMTP = 'smtp.ukr.net';
-const portSMTP = 465;
+const portSMTP = 2525;
 const sender = process.env.SENDER_UKR_NET;
 const password = process.env.PASSWORD_UKR_NET;
 

@@ -46,7 +46,7 @@ const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 const { v4: uuidv4 } = require('uuid');
 const sendEmail = require('./sendEmail');
-const { BASE_URL } = process.env;
+const { BASE_URL,SENDER_UKR_NET } = process.env;
 
 const handleConflict = async (req, res, email, password) => {
     const saltIter = 10;
@@ -63,12 +63,13 @@ const handleConflict = async (req, res, email, password) => {
     });
 
     const verifyEmail = {
+        from: SENDER_UKR_NET,
         to: email,
         subject: 'Сonfirm your registration',
         html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to confirm your registration</a>`,
     };
-
     await sendEmail(verifyEmail);
+
 
     try {
         await newUser.save();
