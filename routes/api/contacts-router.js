@@ -26,12 +26,12 @@ router.post("/", isEmptyBody, contactAddValidate, addContactController);
 
 //router.delete("/:contactId", isValidId, removeContactController);
 
-/*router.put(
+router.put(
   "/:contactId",
   isValidId,
   isEmptyBody,
   contactAddValidate,
   updateContactController
-);*/
+);
 
 module.exports = router;
