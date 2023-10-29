@@ -1,8 +1,9 @@
 // const fs = require('fs/promises')
 const service = require('../services/contacts');
+
 const listContacts = async (req, res, next) => {
   //res.json({ message: 'template message 1' });
-  console.log(req.query);
+  //console.log(req.query);
   const result = await service.listAllContacts();
 
   res.status(200).json(result);
