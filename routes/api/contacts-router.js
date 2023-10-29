@@ -20,6 +20,7 @@ const {
   addContactController,
   removeContactController,
   updateContactController,
+  updateFavoriteContactController,
 } = require("../../controllers");
 
 router.get("/", listContactsController);
