@@ -67,10 +67,30 @@ async function updateById(req, res, next) {
     next(error);
   }
 }
+async function updateFavorite(req, res, next) {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (typeof favorite === "undefined") {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  try {
+    const result = await updateContact(contactId, { favorite });
+    if (result) {
+      res.status(200).json({ messgage: "favortie status updated", result });
+    } else {
+      res.status(404).json({ message: "not Found" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+}
 module.exports = {
   getAllContacts,
   getById,
   deleteById,
   createContact,
   updateById,
+  updateFavorite,
 };
