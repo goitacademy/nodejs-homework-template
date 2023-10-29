@@ -34,4 +34,12 @@ router.put(
   updateContactController
 );
 
+router.patch(
+  "/:contactId",
+  isValidId,
+  isEmptyBody,
+  contactAddValidate,
+  updateContactController
+);
+
 module.exports = router;
