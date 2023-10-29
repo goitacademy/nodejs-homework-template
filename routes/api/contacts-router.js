@@ -42,7 +42,7 @@ router.patch(
   "/:contactId/favorite",
   isValidId,
   isEmptyBody,
-  contactAddValidate,
+  contactUpdateFavoriteValidate,
   updateContactController
 );
 
