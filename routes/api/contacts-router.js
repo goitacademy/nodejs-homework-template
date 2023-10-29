@@ -20,7 +20,7 @@ const {
 
 router.get("/", listContactsController);
 
-router.get("/:contactId", getContactByIdController);
+router.get("/:contactId", isValidId, getContactByIdController);
 
 router.post("/", isEmptyBody, contactAddValidate, addContactController);
 
