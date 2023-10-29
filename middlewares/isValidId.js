@@ -8,3 +8,4 @@ const isValidId = (req, res, next) => {
     return next(HttpError(404, `${id} not valid id`));
   }
 };
+module.exports = { isValidId };
