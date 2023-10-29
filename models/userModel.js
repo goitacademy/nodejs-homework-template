@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Joi from "joi";
 
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -16,7 +18,16 @@ const userSchema = new mongoose.Schema({
     enum: ["starter", "pro", "business"],
     default: "starter",
   },
-  token: String,
+  token: {
+    type: String,
+  },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationCode: {
+    type: String,
+  },
 });
 
 export const userSignUpSchema = Joi.object({
@@ -28,6 +39,10 @@ export const userSignUpSchema = Joi.object({
 export const userSigninSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
+});
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
 });
 const User = mongoose.model("user", userSchema);
 
