@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { isEmptyBody } = require("../../middlewares/isEmptyBody");
+const { isEmptyBody, isValidId } = require("../../middlewares");
 
 const { validateBody } = require("../../decorators");
 
