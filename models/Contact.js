@@ -15,6 +15,9 @@ const contactSchema = new Schema(
     phone: {
       type: String,
     },
+    avatarURL: {
+      type: String,
+    },
     favorite: {
       type: Boolean,
       default: false,
