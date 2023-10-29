@@ -12,7 +12,6 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    console.log(contactId);
     const result = await Contact.findOne({ _id: contactId });
     return result;
   } catch (error) {
@@ -20,7 +19,9 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  return Contact.findByIdAndDelete({ _id: contactId });
+};
 
 const addContact = async (body) => {};
 
