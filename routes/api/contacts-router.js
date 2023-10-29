@@ -35,7 +35,7 @@ router.put(
 );
 
 router.patch(
-  "/:contactId/favourite",
+  "/:contactId/favorite",
   isValidId,
   isEmptyBody,
   contactAddValidate,
