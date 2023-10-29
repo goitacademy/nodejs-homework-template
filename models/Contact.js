@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleSaveError } = require("./hooks");
+const { handleSaveError, runValidatorsAtUpdate } = require("./hooks");
 
 const contactSchema = new Schema(
   {
@@ -15,10 +15,7 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleSaveError);
 
-contactSchema.pre("findOneAndUpdate", function (next) {
-  this.options.runValidators = true;
-  next();
-});
+contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
