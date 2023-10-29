@@ -8,9 +8,11 @@ const {
   updateSchema,
   updateFavoriteSchema,
 } = require("../../models/Contact");
-const isValidId = require("../../middlewares/isValidId");
+const { isValidId, authenticate } = require("../../middlewares");
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", ctrl.getAll);
 
