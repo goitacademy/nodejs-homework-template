@@ -28,7 +28,7 @@ const { HttpError, handleReqError } = require('../../helpers')
 const verify = async (req, res, next) => {
     const { email } = req.body
 
-    const user = await User.findByVerifyToken(email)
+    const user = await User.updateVerifyToken(email)
 
     if (!user) {
         return next(HttpError(404, 'User not found'))
