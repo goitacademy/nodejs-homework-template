@@ -2,6 +2,10 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const userSchema = new Schema(
   {
+     name:{
+      type: String,
+      required: [true, "Name is required"],
+    },
     password: {
       type: String,
       required: [true, "Set password for user"],
@@ -20,9 +24,16 @@ const userSchema = new Schema(
       type: String,
       ref: "user",
         },
-
         token: String,
-      avatarURL: String,
+    avatarURL: String, 
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
   },
   { versionKey: false, timestamps: true },
 );
@@ -45,10 +56,15 @@ const loginSchema = Joi.object({
 const updateBySubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
+const EmailSchema = Joi.object({
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } }).required(),
+}
+)
 const schemas = {
   registerSchema,
   loginSchema,
   updateBySubscriptionSchema,
+  EmailSchema,
 };
 
 const User = model("user", userSchema);

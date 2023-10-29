@@ -11,6 +11,8 @@ router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 router.post("/logout", authenticate, ctrl.logout);
 router.patch('/avatars', authenticate, upload.single('avatars'), ctrl.updateByAvatar);
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
+router.post('/verify', validateBody(schemas.EmailSchema), ctrl.resendVerifyEmail);
 
 module.exports = router;
 
