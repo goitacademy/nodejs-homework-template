@@ -17,6 +17,6 @@ const contactSchema = new Schema({
   },
 });
 
-const Task = model("contact", contactSchema);
+const Contact = model("contact", contactSchema, "contacts");
 
-module.exports = Task;
+module.exports = Contact;
