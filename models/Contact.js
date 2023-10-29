@@ -15,6 +15,8 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleSaveError);
 
+contactSchema.pre();
+
 const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
