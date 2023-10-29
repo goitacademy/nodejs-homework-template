@@ -1,9 +1,17 @@
-const {} = require("./contacts");
-const {} = require("./contacts");
-const {} = require("./contacts");
-const {} = require("./contacts");
-const {} = require("./contacts");
-const {} = require("./contacts");
+const { listContactsController } = require("./contacts/listContactsController");
+const {
+  getContactByIdController,
+} = require("./contacts/getContactByIdController");
+const { addContactController } = require("./contacts/addContactController");
+const {
+  removeContactController,
+} = require("./contacts/removeContactController");
+const {
+  updateContactController,
+} = require("./contacts/updateContactController");
+const {
+  updateFavoriteContactController,
+} = require("./contacts/updateFavoriteContactController");
 
 module.exports = {
   listContactsController,
