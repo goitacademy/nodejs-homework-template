@@ -8,10 +8,6 @@ const emailRegexp =
 const subscriptionList = ["starter", "pro", "business"];
 const userSchema = new Schema(
     {
-        name: {
-            type: String,
-            required: [true, "Name is required"],
-        },
         password: {
             type: String,
             minlength: 6,

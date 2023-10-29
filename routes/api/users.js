@@ -4,24 +4,24 @@ import { schemas } from "../../models/user.js"
 import ctrl from "../../controllers/auth.js";
 import { authenticate } from "../../middlewares/authenticate.js";
 
-const authRouter = express.Router();
+const usersRouter = express.Router();
 
-authRouter.post(
+usersRouter.post(
     "/register",
     validateBody(schemas.registerSchema),
     ctrl.register
 );
-authRouter.post("/login", validateBody(schemas.loginSchema), ctrl.login);
+usersRouter.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
-authRouter.get("/current", authenticate, ctrl.getCurrent);
+usersRouter.get("/current", authenticate, ctrl.getCurrent);
 
-authRouter.post("/logout", authenticate, ctrl.logout);
+usersRouter.post("/logout", authenticate, ctrl.logout);
 
-authRouter.patch(
+usersRouter.patch(
     "/",
     authenticate,
     validateBody(schemas.subscriptionSchema),
     ctrl.patchUpdateSubscription
 );
 
-export default authRouter;
+export default usersRouter;
