@@ -4,21 +4,23 @@ import User from '../models/user.js';
 import ctrlWrapper from '../decorators/ctrlWrappers.js';
 import  jwt  from 'jsonwebtoken';
 import gravatar from "gravatar";
-
+import Jimp from 'jimp';
 // const  { JWT_SECRET} = process.env
 
 
 
-const generateAvatar = (email) => {
+function generateAvatar(email) {
     const avatarURL = gravatar.url(email, {
-      s: "200",
-      r: "g",
-      d: "identicon",
+        s: "200",
+        r: "g",
+        d: "identicon",
     });
-   
-  
+
+
     return avatarURL;
-  };
+}
+
+
 
 
 
@@ -96,18 +98,25 @@ const signOut = async (req, res) => {
 }
 
 
+
+
 const updateAvatar = async (req, res, next) => {
     const { path: tempPath, originalname } = req.file;
   
     // Обробка аватарки з використанням Jimp
-  
+    
     // Оновлення поля avatarURL користувача та збереження в базу даних
     const avatarURL = `/avatars/${originalname}`;
     // Отримайте ідентифікатор користувача, наприклад, з токену
     const { contactId } = req.params;
-  
+    console.log(contactId);
+
     try {
       // Оновіть поле avatarURL для користувача в базі даних
+      const image = await Jimp.read(tempPath)
+       await image.resize(250, 250).write(`public/avatar/${originalname}`)
+      
+
       await User.findByIdAndUpdate(contactId, { avatarURL });
       res.json({ avatarURL });
     } catch (error) {

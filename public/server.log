@@ -407,3 +407,16 @@
  POST, /api/contacts/, 28-10-2023_10:54:37
  POST, /api/contacts/, 28-10-2023_10:59:31
  POST, /api/user/logout, 28-10-2023_11:01:21
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:20:29
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:22:59
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:00
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:01
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:02
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:03
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:24
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:25
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:26
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:27
+ PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:30
+ PATCH, /users/avatarsr?avatar, 29-10-2023_12:25:09
+ PATCH, /users/avatarsr?avatar, 29-10-2023_12:25:10
