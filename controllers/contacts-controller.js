@@ -47,5 +47,5 @@ module.exports = {
   getContactByIdController: controllerWrapper(getContactByIdController),
   addContactController: controllerWrapper(addContactController),
   //removeContactController: controllerWrapper(removeContactController),
-  //updateContactController: controllerWrapper(updateContactController),
+  updateContactController: controllerWrapper(updateContactController),
 };
