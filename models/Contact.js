@@ -42,4 +42,4 @@ const contactUpdateFavoriteSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-module.exports = { Contact, contactAddSchema };
+module.exports = { Contact, contactAddSchema, contactUpdateFavoriteSchema };
