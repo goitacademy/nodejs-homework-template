@@ -49,4 +49,4 @@ const userSignInSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-module.exports = { User };
+module.exports = { User, userSignUpSchema, userSignInSchema };
