@@ -1,6 +1,7 @@
 Zadania domowe GoIT z modułu Node.js (2-6).
 
 hw02 Framework Express. REST API
+hw03 Baza danych MongoDB. Mongoose
 
 ### Komendy:
 
