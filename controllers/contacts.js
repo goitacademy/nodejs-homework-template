@@ -36,7 +36,7 @@ const deleteById = async (req, res, next) => {
   if (!result) {
     throw HttpError(404, `Contacts with id=${id} not found`);
   }
-  res.json({ message: "delete success" });
+  res.json({ message: "delete all ready success" });
 };
 module.exports = {
   getAll: ctrlWrapper(getAll),
