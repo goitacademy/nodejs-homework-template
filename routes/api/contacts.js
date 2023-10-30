@@ -1,7 +1,7 @@
-
 const express = require('express');
 const router = express.Router();
 const Contact = require('../../models/contactModel');
+const contactsController = require('../../Controllers/contactsController');
 
 
 router.get('/', async (req, res, next) => {
@@ -17,8 +17,6 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
-    console.log('Requested contactId:', contactId);
-
     const contact = await Contact.findById(contactId);
     if (contact) {
       res.json(contact);
@@ -75,5 +73,8 @@ router.delete('/:contactId', async (req, res, next) => {
     next(error);
   }
 });
+
+
+router.patch('/:contactId/favorite', contactsController.updateFavoriteStatus);
 
 module.exports = router;

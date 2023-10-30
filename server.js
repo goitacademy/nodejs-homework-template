@@ -1,12 +1,11 @@
-
+require('dotenv').config();
 const mongoose = require('mongoose');
 const app = require('./app');
 const port = process.env.PORT || 3000;
 
-const dbURI = 'mongodb+srv://admin:admin@db-contacts.vwiudqe.mongodb.net/db-contacts?retryWrites=true&w=majority';
 
 mongoose
-  .connect(dbURI, {
+  .connect(process.env.DB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -20,3 +19,4 @@ mongoose
     console.error('Database connection error:', error);
     process.exit(1);
   });
+
