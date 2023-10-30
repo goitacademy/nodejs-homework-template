@@ -8,6 +8,8 @@ const { validateBody } = require("../../decorators");
 
 const { userSignUpSchema, userSignInSchema } = require("../../models");
 
+const userSignUpValidate = validateBody(userSignUpSchema);
+
 const authRouter = express.Router();
 
 module.exports = { authRouter };
