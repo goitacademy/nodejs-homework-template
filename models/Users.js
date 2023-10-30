@@ -5,7 +5,7 @@ const { handleSaveError, runValidatorsAtUpdate } = require("./hooks");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-const usersSchema = new Schema(
+const userSchema = new Schema(
   {
     username: { type: String, required: true },
     password: {
