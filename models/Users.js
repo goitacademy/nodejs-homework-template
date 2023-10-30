@@ -29,8 +29,8 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", handleSaveError);
+userSchema.post("save", handleSaveError);
 
-contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 
-contactSchema.post("findOneAndUpdate", handleSaveError);
+userSchema.post("findOneAndUpdate", handleSaveError);
