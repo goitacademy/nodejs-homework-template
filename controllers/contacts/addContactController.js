@@ -1,6 +1,6 @@
-const { Contact } = require("../models");
+const { Contact } = require("../../models");
 
-const { controllerWrapper } = require("../decorators");
+const { controllerWrapper } = require("../../decorators");
 
 const addContactController = async (req, res) => {
   const result = await Contact.create(req.body);
