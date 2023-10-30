@@ -1,17 +1,17 @@
-const {
+import {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require("../models/contacts.js");
+} from "../models/contacts.js";
 
-async function getAllContacts(req, res, next) {
+export async function getAllContacts(req, res, next) {
   const contactList = await listContacts();
   res.status(200).json({ contactList });
 }
 
-async function getById(req, res, next) {
+export async function getById(req, res, next) {
   const { contactId } = req.params;
   try {
     const foundConctact = await getContactById(contactId);
@@ -25,7 +25,7 @@ async function getById(req, res, next) {
     next(error);
   }
 }
-async function deleteById(req, res, next) {
+export async function deleteById(req, res, next) {
   const { contactId } = req.params;
   try {
     const deletedContact = await removeContact(contactId);
@@ -41,7 +41,7 @@ async function deleteById(req, res, next) {
     next(error);
   }
 }
-async function createContact(req, res, next) {
+export async function createContact(req, res, next) {
   try {
     const result = await addContact(req.body);
     res.status(201).json({ result });
@@ -51,7 +51,7 @@ async function createContact(req, res, next) {
   }
 }
 
-async function updateById(req, res, next) {
+export async function updateById(req, res, next) {
   const { contactId } = req.params;
   try {
     const result = await updateContact(contactId, req.body);
@@ -67,7 +67,7 @@ async function updateById(req, res, next) {
     next(error);
   }
 }
-async function updateFavorite(req, res, next) {
+export async function updateFavorite(req, res, next) {
   const { contactId } = req.params;
   const { favorite } = req.body;
 
@@ -86,11 +86,3 @@ async function updateFavorite(req, res, next) {
     next(error);
   }
 }
-module.exports = {
-  getAllContacts,
-  getById,
-  deleteById,
-  createContact,
-  updateById,
-  updateFavorite,
-};

@@ -1,6 +1,6 @@
-const app = require("./app");
-const mongoose = require("mongoose");
-require("dotenv").config();
+import { app } from "./app.js";
+import { mongoose } from "mongoose";
+import "dotenv/config";
 const { DB_HOST: uriDb } = process.env;
 
 const connection = mongoose.connect(uriDb);
