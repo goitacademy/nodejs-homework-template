@@ -39,7 +39,7 @@ const userSignUpSchema = Joi.object({
   username: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
-  favorite: Joi.boolean(),
+  subscription: Joi.string(),
 });
 
 const contactUpdateFavoriteSchema = Joi.object({
