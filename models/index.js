@@ -12,6 +12,9 @@ module.exports = {
   Contact,
   contactAddSchema,
   contactUpdateFavoriteSchema,
+  User,
+  userSignUpSchema,
+  userSignInSchema,
   handleSaveError,
   runValidatorsAtUpdate,
 };
