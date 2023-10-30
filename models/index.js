@@ -4,6 +4,8 @@ const {
   contactUpdateFavoriteSchema,
 } = require("./Contact");
 
+const { User, userSignUpSchema, userSignInSchema } = require("./User");
+
 const { handleSaveError, runValidatorsAtUpdate } = require("./hooks");
 
 module.exports = {
