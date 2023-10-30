@@ -3,6 +3,8 @@ const Joi = require("joi");
 
 const { handleSaveError, runValidatorsAtUpdate } = require("./hooks");
 
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 const usersSchema = new Schema(
   {
     username: { type: String, required: true },
@@ -13,6 +15,7 @@ const usersSchema = new Schema(
     },
     email: {
       type: String,
+      match: emailRegexp,
       required: [true, "Email is required"],
       unique: true,
     },
