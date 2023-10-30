@@ -12,34 +12,133 @@ const listAllContacts = async () => {
   }
 };
 
+/* metodo de busqueda con for of
 const getContactById = async contactId => {
   try {
     const result = await JSON.parse(
       (await fs.readFile(pathContacts)).toString(),
     );
     for (contact of result) {
-      if (contact.contactId == contactId) {
+      if (contact.id == contactId) {
         return contact;
       }
     }
   } catch (error) {
     console.log(error);
   }
-};
-const addContact = async body => {};
+};*/
 
-const updateContact = async (contactId, body) => {};
-
-const removeContact = async contactId => {
+const getContactById = async contactId => {
   try {
-    const user = await User.findByIdAndDelete(contactId);
-    console.log(user);
+    const contactsData = await fs.readFile(pathContacts, 'utf-8');
+    const contacts = JSON.parse(contactsData);
+
+    const contact = contacts.find(c => c.id == contactId);
+
+    if (contact) {
+      return contact;
+    } else {
+      return {
+        success: false,
+        result: null,
+        message: 'Contact not found',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const addContact = async body => {
+  try {
+    console.log(body);
+    const userRegistered = await User.create(body);
+
+    console.log(userRegistered);
+
+    if (!userRegistered) {
+      return {
+        success: false,
+        result: null,
+        message: 'There is an error try creating user.',
+      };
+    }
 
     return {
       success: true,
-      result: user,
-      message: 'The user was deleted successfully.',
+      result: userRegistered,
+      message: 'User registered successfully.',
     };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const contactsData = await fs.readFile(pathContacts, 'utf-8');
+    const contacts = JSON.parse(contactsData);
+
+    const contactIndex = contacts.findIndex(c => c.id == contactId);
+
+    if (contactIndex !== -1) {
+      contacts[contactIndex] = { ...contacts[contactIndex], ...body };
+
+      await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
+
+      return {
+        success: true,
+        result: contacts[contactIndex],
+        message: 'The contact was updated successfully.',
+      };
+    } else {
+      return {
+        success: false,
+        result: null,
+        message: 'Contact not found',
+      };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const removeContact = async contactId => {
+  try {
+    const contactsData = await fs.readFile(pathContacts, 'utf-8');
+    const contacts = JSON.parse(contactsData);
+
+    const contactIndex = contacts.findIndex(c => c.id == contactId);
+
+    if (contactIndex !== -1) {
+      contacts.splice(contactIndex, 1);
+
+      await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
+
+      return {
+        success: true,
+        result: null,
+        message: 'The contact was deleted successfully.',
+      };
+    } else {
+      return {
+        success: false,
+        result: null,
+        message: 'Contact not found',
+      };
+    }
   } catch (error) {
     return {
       success: false,
