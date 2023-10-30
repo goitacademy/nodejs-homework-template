@@ -36,8 +36,8 @@ userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 userSchema.post("findOneAndUpdate", handleSaveError);
 
 const userSignUpSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string(),
+  username: Joi.string().required(),
+  email: Joi.string().required(),
   phone: Joi.string(),
   favorite: Joi.boolean(),
 });
