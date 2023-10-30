@@ -47,4 +47,4 @@ const userSignInSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
-const Contact = model("contact", contactSchema);
+const Contact = model("user", userSchema);
