@@ -1,8 +1,8 @@
-const { Contact } = require("../models");
+const { Contact } = require("../../models");
 
-const { HttpError } = require("../helpers");
+const { HttpError } = require("../../helpers");
 
-const { controllerWrapper } = require("../decorators");
+const { controllerWrapper } = require("../../decorators");
 
 const removeContactController = async (req, res) => {
   const { contactId } = req.params;
