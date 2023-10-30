@@ -1,7 +1,8 @@
 const contacts = require("../models/contacts");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
+  // console.log(1);
   const allContacts = await contacts.listContacts();
   res.json(allContacts);
 };
