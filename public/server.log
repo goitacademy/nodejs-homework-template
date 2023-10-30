@@ -420,3 +420,6 @@
  PATCH, /api/users/avatarsr?avatar, 29-10-2023_12:23:30
  PATCH, /users/avatarsr?avatar, 29-10-2023_12:25:09
  PATCH, /users/avatarsr?avatar, 29-10-2023_12:25:10
+ GET, /api/users/verify/GUGBEngWZ6q66yvZXPDVL, 30-10-2023_12:37:00
+ GET, /favicon.ico, 30-10-2023_12:37:00
+ GET, /api/users/verify/, 30-10-2023_01:56:05

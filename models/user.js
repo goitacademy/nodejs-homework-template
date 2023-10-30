@@ -23,6 +23,14 @@ const userSchema = new mongoose.Schema({
       default: "starter",
     },
     token: String,
+
+    verify: {
+      type: Boolean,
+      default: false
+    },
+    verificationCode: {
+      type: String,
+    },
   });
 
     userSchema.post("save", handleSaveError);
@@ -36,6 +44,10 @@ const userSchema = new mongoose.Schema({
   export const userSigninSchema = Joi.object({
     email: Joi.string().required(),
     password: Joi.string().min(6).required(),
+  });
+
+  export const userEmailSchema = Joi.object({
+    email: Joi.string().required(),
   });
 
   const User = mongoose.model('User', userSchema);
