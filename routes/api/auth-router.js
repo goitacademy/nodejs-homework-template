@@ -9,6 +9,7 @@ const { validateBody } = require("../../decorators");
 const { userSignUpSchema, userSignInSchema } = require("../../models");
 
 const userSignUpValidate = validateBody(userSignUpSchema);
+const userSignInValidate = validateBody(userSignInSchema);
 
 const authRouter = express.Router();
 
