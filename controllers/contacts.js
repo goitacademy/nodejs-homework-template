@@ -6,8 +6,7 @@ const {
   updateContact,
 } = require("../models/contacts");
 
-const { HTTPError } = require("../helpers");
-const { ctrlWrapper } = require("../helpers");
+const { HTTPError, ctrlWrapper } = require("../helpers");
 const getAll = async (req, res) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
@@ -19,7 +18,7 @@ const getById = async (req, res) => {
   if (!contact) {
     throw HTTPError("Not found", 404);
   }
-  res.status(200).json({ data: contact });
+  res.status(200).json(contact);
 };
 const add = async (req, res) => {
   const result = await addContact(req.body);
