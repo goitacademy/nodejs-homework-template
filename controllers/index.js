@@ -7,6 +7,8 @@ const {
   updateFavoriteContactController,
 } = require("./contacts");
 
+const {} = require("./auth");
+
 module.exports = {
   listContactsController,
   getContactByIdController,
