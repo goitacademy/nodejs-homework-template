@@ -37,7 +37,6 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 export const userSignupSchema = Joi.object({
   email: Joi.string().pattern(emailPattern).required(),
   password: Joi.string().min(6).required(),
-  // subscription: Joi.any().valid(...userSubscription),
 });
 
 export const userSigninSchema = Joi.object({
