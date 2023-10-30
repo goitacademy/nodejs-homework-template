@@ -5,8 +5,10 @@ const { handleSaveError, runValidatorsAtUpdate } = require("./hooks");
 
 const usersSchema = new Schema(
   {
+    username: { type: String, required: true },
     password: {
       type: String,
+      minlength: 6,
       required: [true, "Set password for user"],
     },
     email: {
