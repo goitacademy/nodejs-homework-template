@@ -1,7 +1,9 @@
-export const handleSaveError = (error, data, next)=>{
-    error.status = 404;
-    next()
-}
+export const handleSaveError = (error, data, next) => {
+  const { name, code } = error;
+  
+  error.status = name === "MongoServerError" && code === 11000 ? 409 : 400;
+  next();
+};
 
 export const runValidators = function (next) {
   this.options.runValidators = true;
