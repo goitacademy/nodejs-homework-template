@@ -2,7 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const handleMongooseError = require("../helpers/handleMongooseError");
 
-
 const userSchema = new Schema(
   {
     password: {
@@ -23,7 +22,17 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
     },
-
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
+    verificationCode: {
+      type: String,
+      default: "",
+    },
     token: String,
   },
   { versionKey: false, timestamps: true }
