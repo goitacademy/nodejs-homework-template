@@ -1,11 +1,16 @@
-//import { User } from "../models/user";
+
 import { HttpError } from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapeer.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import path from "path";
+import fs from "fs/promises";
+import Jimp from "jimp";
 
 const { SECRET_KEY } = process.env;
+const avatarDir = path.resolve("public", "avatars");
 
 const register = async (req, res) => {
     const { email, password } = req.body;
@@ -16,7 +21,12 @@ const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const newUser = await User.create({
+        ...req.body,
+        password: hashPassword,
+        avatarURL,
+    });
 
     res.status(201).json({
         name: newUser.name,
@@ -25,7 +35,6 @@ const register = async (req, res) => {
         subscription: newUser.subscription,
     });
 };
-
 const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -72,10 +81,35 @@ const patchUpdateSubscription = async (req, res) => {
     res.json(result);
 };
 
+const updateAvatar = async (req, res) => {
+    try {
+        const { _id } = req.user;
+        const { path: tmpUpload, originalname } = req.file;
+        const fileName = `${_id}_${originalname}`;
+        const resultUpload = path.join(avatarDir, fileName);
+        await fs.rename(tmpUpload, resultUpload);
+
+        const avatarURL = path.join("avatars", fileName);
+
+        Jimp.read(resultUpload, (err, lenna) => {
+            if (err) throw err.message;
+            lenna.resize(250, 250).write(resultUpload);
+        });
+
+        await User.findByIdAndUpdate(_id, { avatarURL });
+
+        res.json({ avatarURL });
+    } catch (error) {
+        await fs.unlink(req.file.path);
+        throw error;
+    }
+};
+
 export default {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     patchUpdateSubscription: ctrlWrapper(patchUpdateSubscription),
+    updateAvatar: ctrlWrapper(updateAvatar),
 };

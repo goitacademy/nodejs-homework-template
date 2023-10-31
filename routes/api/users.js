@@ -1,27 +1,39 @@
 import express from "express";
+import ctrl from "../../controllers/contacts.js";
+import { isValidId } from "../../middlewares/isValidId.js";
 import { validateBody } from "../../middlewares/validateBody.js";
-import { schemas } from "../../models/user.js"
-import ctrl from "../../controllers/auth.js";
+import { schemasJoi } from "../../models/contact.js";
 import { authenticate } from "../../middlewares/authenticate.js";
 
-const usersRouter = express.Router();
+const router = express.Router();
 
-usersRouter.post(
-    "/register",
-    validateBody(schemas.registerSchema),
-    ctrl.register
-);
-usersRouter.post("/login", validateBody(schemas.loginSchema), ctrl.login);
+router.get("/", authenticate, ctrl.getAll);
 
-usersRouter.get("/current", authenticate, ctrl.getCurrent);
+router.get("/:id", authenticate, isValidId, ctrl.getById);
 
-usersRouter.post("/logout", authenticate, ctrl.logout);
-
-usersRouter.patch(
+router.post(
     "/",
     authenticate,
-    validateBody(schemas.subscriptionSchema),
-    ctrl.patchUpdateSubscription
+    validateBody(schemasJoi.controlPost),
+    ctrl.postAddContact
 );
 
-export default usersRouter;
+router.delete("/:id", authenticate, isValidId, ctrl.deleteById);
+
+router.put(
+    "/:id",
+    authenticate,
+    validateBody(schemasJoi.controlPut),
+    isValidId,
+    ctrl.putUpdateById
+);
+
+router.patch(
+    "/:id/favorite",
+    authenticate,
+    validateBody(schemasJoi.controlPatch),
+    isValidId,
+    ctrl.patchUpdateById
+);
+
+export default router;

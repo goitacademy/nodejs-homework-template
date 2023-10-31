@@ -8,6 +8,10 @@ const emailRegexp =
 const subscriptionList = ["starter", "pro", "business"];
 const userSchema = new Schema(
     {
+        name: {
+            type: String,
+            required: [true, "Name is required"],
+        },
         password: {
             type: String,
             minlength: 6,
@@ -29,6 +33,10 @@ const userSchema = new Schema(
             type: String,
             default: "",
         },
+        avatarURL: {
+            type: String,
+            required: true,
+        },
     },
     { versionKey: false, timestamps: true }
 );
@@ -36,6 +44,7 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
+    name: Joi.string().required(),
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
 });
