@@ -1,21 +1,15 @@
-const Joi = require("joi");
+
 
 const contacts = require("..models/contacts");
 const { HttpError, controllerWrapper } = require("../helpers");
 
-const router = express.Router();
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-});
 
-const listContacts = async (req, res, next) => {
+const listContacts = async (req, res) => {
   const result = await contacts.listContacts();
   res.json(result);
 };
 
-const getContactById = async (req, res, next) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contacts.getContactById(contactId);
   if (!result) {
@@ -24,20 +18,14 @@ const getContactById = async (req, res, next) => {
   res.json(result);
 };
 
-const addContact = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+const addContact = async (req, res) => {
+  
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
-const updateContactById = async (req, res, next) => {
-  const { error } = addSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+const updateContactById = async (req, res) => {
+  
   const { contactId } = req.params;
   const result = await contacts.updateContactById(contactId, req.body);
   if (!result) {
