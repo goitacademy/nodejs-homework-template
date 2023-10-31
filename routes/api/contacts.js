@@ -22,8 +22,8 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const { contactId } = req.params;
+    const result = await contacts.getContactById(contactId);
     if (!result) {
       HttpError(404, "Not found");
     }
@@ -48,8 +48,8 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId);
     if (!result) {
       throw HttpError(404, "Not Found");
     }
@@ -68,8 +68,8 @@ router.put("/:contactId", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const { id } = req.params;
-    const result = await contacts.updateContactById(id, req.body);
+    const { contactId } = req.params;
+    const result = await contacts.updateContactById(contactId, req.body);
     if (!result) {
       throw HttpError(404, "Not Found");
     }
