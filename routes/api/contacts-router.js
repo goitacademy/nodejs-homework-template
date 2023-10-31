@@ -13,7 +13,6 @@ import {
 
 const contactAddValidate = validateBody(contactAddSchema);
 const contactfavoriteValidate = validateBody(contactfavoriteSchema);
-// console.log(contactfavoriteValidate());
 
 const router = express.Router();
 
@@ -35,12 +34,12 @@ router.put(
 
 router.delete("/:contactId", isValidId, contactsController.deleteById);
 
-// router.patch(
-//   "/:contactId/favorite",
-//   isValidId,
-//   isEmptyBody,
-//   contactfavoriteValidate,
-//   contactsController.updateFavorite
-// );
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  isEmptyBody,
+  contactfavoriteValidate,
+  contactsController.updateStatusContact
+);
 
 export default router;
