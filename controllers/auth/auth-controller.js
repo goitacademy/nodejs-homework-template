@@ -13,9 +13,11 @@ const signup = async (req, res) => {
     throw HttpError(409, `${email} already in use`);
   }
 
+  const hashedPassword = await hashPassword(password);
+
   const newUser = await User.create({
     ...req.body,
-    password: hashPassword(password),
+    password: hashedPassword,
   });
 
   res.status(201).json({
