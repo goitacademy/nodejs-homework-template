@@ -7,7 +7,7 @@ const { HttpError } = require("../../helpers");
 
 const { controllerWrapper } = require("../../decorators");
 
-const { JWT_SECRET /*= "4d5CLGkYfyaEKAvMheTGkxO3cZKv7ZC2"*/ } = process.env;
+const { JWT_SECRET = "4d5CLGkYfyaEKAvMheTGkxO3cZKv7ZC2" } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -41,8 +41,6 @@ const signin = async (req, res) => {
   if (!passwordCompare) {
     throw HttpError(401, `Email or password invalid`);
   }
-
-  console.log(process.env);
 
   const payload = { id: user._id };
 
