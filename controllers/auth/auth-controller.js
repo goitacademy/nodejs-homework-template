@@ -42,12 +42,13 @@ const signin = async (req, res) => {
     throw HttpError(401, `Email or password invalid`);
   }
 
+  console.log(process.env);
+
   const payload = { id: user._id };
 
   const token = sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
   res.json({ token });
-  console.log(process.env);
 };
 
 module.exports = {
