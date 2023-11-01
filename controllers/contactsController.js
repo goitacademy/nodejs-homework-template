@@ -1,56 +1,46 @@
-import * as api from "../models/contacts.js";
+import { HttpError } from "../helpers/index.js";
+import { HTTP_STATUS } from "../constants/index.js";
+import { controllerWrapper } from "../decorators/index.js";
+import { Contact } from "../models/contacts.js";
 
-const STATUS = {
-  ok: 200,
-  created: 201,
-  badRequest: 400,
-  notFound: 404,
-  alreadyExists: 409,
-  invalidData: 422,
+const listContacts = async (req, res, next) => {
+  const list = await Contact.find();
+  res.json(list);
 };
 
-const CODE = {
-  notFound: { message: "Not found" },
-  deleted: { message: "Contact deleted" },
+const addContact = async ({ body }, res, next) => {
+  const result = await Contact.create(body);
+  res.status(HTTP_STATUS.created).json(result);
 };
 
-export const listContacts = async (req, res, next) => {
-  res.status(STATUS.ok).json(await api.listContacts());
+const getContactById = async ({ params: { id } }, res, next) => {
+  const result = await Contact.findById(id);
+  if (!result) throw HttpError(HTTP_STATUS.notFound);
+  res.json(result);
 };
 
-export const getContactById = async ({ params }, res) => {
-  const { id } = params;
-  const data = await api.getContactById(id);
-  res.status(data ? STATUS.ok : STATUS.notFound).json(data ?? CODE.notFound);
+const updateContactById = async ({ body, params: { id } }, res) => {
+  const result = await Contact.findByIdAndUpdate(id, body, { new: true });
+  if (!result) throw HttpError(HTTP_STATUS.notFound);
+  res.json(result);
 };
 
-export const removeContact = async ({ params }, res) => {
-  const { id } = params;
-  const data = await api.removeContact(id);
-
-  res
-    .status(data ? STATUS.ok : STATUS.notFound)
-    .json(data ? CODE.deleted : CODE.notFound);
+const updateContactFavoriteById = async ({ body, params: { id } }, res) => {
+  const result = await Contact.findByIdAndUpdate(id, body, { new: true });
+  if (!result) throw HttpError(HTTP_STATUS.notFound);
+  res.json(result);
 };
 
-export const addContact = async ({ body }, res) => {
-  try {
-    res.status(STATUS.created).json(await api.addContact(body));
-  } catch ({ code, message }) {
-    const status =
-      code === "ERR_INVALID_DATA" ? STATUS.badRequest : STATUS.alreadyExists;
-    res.status(status).json({ message });
-  }
+const removeContactById = async ({ params: { id } }, res, next) => {
+  const result = await Contact.findByIdAndDelete(id);
+  if (!result) throw HttpError(HTTP_STATUS.notFound);
+  res.json(result);
 };
 
-export const updateContact = async ({ body, params }, res) => {
-  const { id } = params;
-  try {
-    const updated = await api.updateContact(id, body);
-    res
-      .status(updated ? STATUS.ok : STATUS.notFound)
-      .json(updated ?? CODE.notFound);
-  } catch ({ message }) {
-    res.status(STATUS.badRequest).json({ message });
-  }
-};
+export const contactsController = {
+  listContacts: controllerWrapper(listContacts),
+  addContact: controllerWrapper(addContact),
+  getContactById: controllerWrapper(getContactById),
+  updateContactById: controllerWrapper(updateContactById),
+  updateContactFavoriteById: controllerWrapper(updateContactFavoriteById),
+  removeContactById: controllerWrapper(removeContactById),
