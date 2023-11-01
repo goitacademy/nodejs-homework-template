@@ -33,16 +33,11 @@ const signin = async (req, res) => {
     throw HttpError(401, `Email or password invalid`);
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const newUser = await User.create({
-    ...req.body,
-    password: hashedPassword,
-  });
+  const passwordCompare = await bcrypt.compare(password, user.password);
 
   res.status(201).json({
-    username: newUser.username,
-    email: newUser.email,
+    username: user.username,
+    email: user.email,
   });
 };
 
