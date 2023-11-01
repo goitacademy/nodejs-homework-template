@@ -1,6 +1,6 @@
 
 
-const contacts = require("..models/contacts");
+const contacts = require("../models/contacts");
 const { HttpError, controllerWrapper } = require("../helpers");
 
 
@@ -19,13 +19,11 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
 const updateContactById = async (req, res) => {
-  
   const { contactId } = req.params;
   const result = await contacts.updateContactById(contactId, req.body);
   if (!result) {
