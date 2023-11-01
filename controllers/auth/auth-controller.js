@@ -30,7 +30,7 @@ const signin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(409, `Email or password invalid`);
+    throw HttpError(401, `Email or password invalid`);
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
