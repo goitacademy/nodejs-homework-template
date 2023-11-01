@@ -17,7 +17,7 @@ const authRouter = express.Router();
 authRouter.post(
   "/signup",
   isEmptyBody,
-  userSignInValidate,
+  /*userSignInValidate,*/
   authController.signup
 );
 
