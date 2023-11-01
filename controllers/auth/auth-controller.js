@@ -1,10 +1,13 @@
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const { User } = require("../../models");
 
 const { HttpError } = require("../../helpers");
 
 const { controllerWrapper } = require("../../decorators");
+
+const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
@@ -39,7 +42,9 @@ const signin = async (req, res) => {
     throw HttpError(401, `Email or password invalid`);
   }
 
-  const token = "sgsfd.45234.3333";
+  const payload = { id: user._id };
+
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
   res.json({ token });
 };
