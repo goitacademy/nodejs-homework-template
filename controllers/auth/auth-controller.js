@@ -47,6 +47,7 @@ const signin = async (req, res) => {
   const token = sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
   res.json({ token });
+  console.log(process.env);
 };
 
 module.exports = {
