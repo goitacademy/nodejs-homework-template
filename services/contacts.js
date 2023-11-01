@@ -3,39 +3,24 @@ const path = require('path');
 
 const pathContacts = path.join(__dirname, '../models/contacts.json');
 
-const listAllContacts = async () => {
+const loadContacts = async () => {
   try {
     const result = (await fs.readFile(pathContacts)).toString();
     return JSON.parse(result);
   } catch (error) {
-    console.log(error);
+    console.error('Error reading JSON data:', error);
   }
 };
 
-/* metodo de busqueda con for of
-const getContactById = async contactId => {
-  try {
-    const result = await JSON.parse(
-      (await fs.readFile(pathContacts)).toString(),
-    );
-    for (contact of result) {
-      if (contact.id == contactId) {
-        return contact;
-      }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-};*/
+const listAllContacts = loadContacts;
 
 const getContactById = async contactId => {
   try {
-    const contactsData = await fs.readFile(pathContacts, 'utf-8');
-    const contacts = JSON.parse(contactsData);
+    const contacts = await loadContacts();
 
     const contact = contacts.find(c => c.id == contactId);
-
-    if (contact) {
+    return contact;
+    /*if (contact) {
       return contact;
     } else {
       return {
@@ -43,42 +28,32 @@ const getContactById = async contactId => {
         result: null,
         message: 'Contact not found',
       };
-    }
+    }*/
   } catch (error) {
     return {
       success: false,
       result: null,
-      message: error,
+      message: 'Contact not found',
     };
   }
 };
 
 const addContact = async body => {
   try {
-    console.log(body);
-    const userRegistered = await User.create(body);
+    const contactsData = await fs.readFile(pathContacts, 'utf-8');
+    const contacts = JSON.parse(contactsData);
 
-    console.log(userRegistered);
+    contacts.push(body);
 
-    if (!userRegistered) {
-      return {
-        success: false,
-        result: null,
-        message: 'There is an error try creating user.',
-      };
-    }
+    await fs.writeFile(
+      pathContacts,
+      JSON.stringify(contacts, null, 2),
+      'utf-8',
+    );
 
-    return {
-      success: true,
-      result: userRegistered,
-      message: 'User registered successfully.',
-    };
+    return body;
   } catch (error) {
-    return {
-      success: false,
-      result: null,
-      message: error,
-    };
+    throw error;
   }
 };
 
