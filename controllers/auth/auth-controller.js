@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 const { User } = require("../../models");
 
 const { HttpError } = require("../../helpers");
@@ -13,7 +15,7 @@ const signup = async (req, res) => {
     throw HttpError(409, `${email} already in use`);
   }
 
-  const hashedPassword = await hashPassword(password);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({
     ...req.body,
