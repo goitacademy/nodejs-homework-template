@@ -35,10 +35,13 @@ const signin = async (req, res) => {
 
   const passwordCompare = await bcrypt.compare(password, user.password);
 
-  res.status(201).json({
-    username: user.username,
-    email: user.email,
-  });
+  if (!passwordCompare) {
+    throw HttpError(401, `Email or password invalid`);
+  }
+
+  const token = "sgsfd.45234.3333";
+
+  res.json({ token });
 };
 
 module.exports = {
