@@ -58,3 +58,4 @@ contactSchema.post("findOneAndUpdate", hook.handlePostSaveError);
 contactSchema.post("save", hook.handlePostSaveError);
 
 export const Contact = model("contact", contactSchema);
+
