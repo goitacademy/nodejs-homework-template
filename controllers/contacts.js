@@ -10,6 +10,7 @@ const listContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
+ 
   const { contactId } = req.params;
   const result = await contacts.getContactById(contactId);
   if (!result) {
@@ -19,6 +20,7 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
+    
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };

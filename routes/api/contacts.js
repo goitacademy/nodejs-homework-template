@@ -7,6 +7,8 @@ const router = express.Router();
 const { validateBody } = require("../../middlewares")
 const schemas = require("../../schemas/contacts")
 
+
+
 router.get("/", controller.listContacts );
 
 router.get("/:contactId", controller.getContactById );
