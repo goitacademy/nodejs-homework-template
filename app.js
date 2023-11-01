@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -22,7 +23,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
+// const port = process.env.PORT || 3000;
 
-
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 module.exports = app;
