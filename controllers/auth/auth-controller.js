@@ -5,7 +5,13 @@ const { HttpError } = require("../../helpers");
 const { controllerWrapper } = require("../../decorators");
 
 const signup = async (req, res) => {
-  const user = await User.create(req.body);
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    throw HttpError(409, `${email} already in use`);
+  }
+
+  const newUser = await User.create(req.body);
   res.status(201).json({ username: user.username, email: user.email });
 };
 
