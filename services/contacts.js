@@ -17,18 +17,8 @@ const listAllContacts = loadContacts;
 const getContactById = async contactId => {
   try {
     const contacts = await loadContacts();
-
     const contact = contacts.find(c => c.id == contactId);
     return contact;
-    /*if (contact) {
-      return contact;
-    } else {
-      return {
-        success: false,
-        result: null,
-        message: 'Contact not found',
-      };
-    }*/
   } catch (error) {
     return {
       success: false,
@@ -40,16 +30,9 @@ const getContactById = async contactId => {
 
 const addContact = async body => {
   try {
-    const contactsData = await fs.readFile(pathContacts, 'utf-8');
-    const contacts = JSON.parse(contactsData);
-
+    const contacts = await loadContacts();
     contacts.push(body);
-
-    await fs.writeFile(
-      pathContacts,
-      JSON.stringify(contacts, null, 2),
-      'utf-8',
-    );
+    fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2), 'utf-8');
 
     return body;
   } catch (error) {
@@ -59,9 +42,7 @@ const addContact = async body => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const contactsData = await fs.readFile(pathContacts, 'utf-8');
-    const contacts = JSON.parse(contactsData);
-
+    const contacts = await loadContacts();
     const contactIndex = contacts.findIndex(c => c.id == contactId);
 
     if (contactIndex !== -1) {
@@ -92,9 +73,7 @@ const updateContact = async (contactId, body) => {
 
 const removeContact = async contactId => {
   try {
-    const contactsData = await fs.readFile(pathContacts, 'utf-8');
-    const contacts = JSON.parse(contactsData);
-
+    const contacts = await loadContacts();
     const contactIndex = contacts.findIndex(c => c.id == contactId);
 
     if (contactIndex !== -1) {

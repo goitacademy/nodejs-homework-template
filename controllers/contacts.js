@@ -73,7 +73,6 @@ const removeContact = async (req, res, rext) => {
   //res.json({ message: 'Contact was deleted successfully.' });
   try {
     const { id } = req.params;
-
     const { success, result, message } = await service.deleteUser(id);
 
     console.log(result);
