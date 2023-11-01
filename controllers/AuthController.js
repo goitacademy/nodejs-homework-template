@@ -1,5 +1,5 @@
-const asyncHandler = require('../../helpers/asyncHandler');
-const AuthSrevice = require('../../services/AuthService');
+const asyncHandler = require('../helpers/asyncHandler');
+const AuthSrevice = require('../services/AuthService');
 
 class AuthController {
   register = asyncHandler(async (req, res) => {

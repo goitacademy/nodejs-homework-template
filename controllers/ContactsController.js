@@ -1,5 +1,5 @@
-const contactService = require('../../services/ContactService');
-const asyncHandler = require('../../helpers/asyncHandler');
+const contactService = require('../services/ContactService');
+const asyncHandler = require('../helpers/asyncHandler');
 
 class ContactsController {
   getAll = asyncHandler(async (req, res) => {
