@@ -44,4 +44,3 @@ export const contactsController = {
   updateContactById: controllerWrapper(updateContactById),
   updateContactFavoriteById: controllerWrapper(updateContactFavoriteById),
   removeContactById: controllerWrapper(removeContactById),
-};

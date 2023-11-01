@@ -7,7 +7,6 @@ import { isValidId } from "../../middlewares/index.js";
 export const router = express.Router();
 
 router.get("/", contactsController.listContacts);
-
 router.get("/:id", isValidId, contactsController.getContactById);
 
 router.post(
