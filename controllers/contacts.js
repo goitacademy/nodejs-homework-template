@@ -31,9 +31,6 @@ const removeContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  if (!req.body) {
-    return res.status(400).json({ message: "Missing fields" });
-  }
   const { contactId } = req.params;
 
   const result = await contactsOperations.updateContact(contactId, req.body);
