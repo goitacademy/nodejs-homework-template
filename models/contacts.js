@@ -40,11 +40,9 @@ const updateContact = async (contactId, body) => {
   if (!~index) {
     return null;
   }
-  const updateContacts = contacts.map((contact, idx) =>
-    idx === index ? { ...contact, ...body } : contact
-  );
-  fs.writeFile(contactsPath, JSON.stringify(updateContacts, null, 2));
-  return updateContacts[index];
+  contacts[index] = { ...contacts[index], ...body };
+  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
 };
 
 module.exports = {

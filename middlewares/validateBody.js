@@ -2,7 +2,7 @@ const { HttpError } = require('../utils');
 
 const validateBody = (schema) => (req, res, next) => {
   const { error } = schema.validate(req.body);
-  const errorType = error.details[0].type;
+  const errorType = error?.details[0].type;
 
   if (errorType === 'any.required') {
     const missingField = error.message.split(' ')[0].replaceAll('"', '');
