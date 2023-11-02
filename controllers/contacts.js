@@ -73,12 +73,12 @@ const remove = async (req, res) => {
 
 const update = async (req, res) => {
   const id = req.params.id;
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite } = req.body;
   if (!name || !email || !phone) {
     return res.status(400).json({ message: "missing required name field" });
   }
 
-  const updatedContact = updateContact(id, { name, email, phone } );
+  const updatedContact = updateContact(id, { name, email, phone, favorite } );
   if(updatedContact){
     res.status(200).json(updatedContact);
   }else{
@@ -86,6 +86,8 @@ const update = async (req, res) => {
   }
 
 }
+
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById,
