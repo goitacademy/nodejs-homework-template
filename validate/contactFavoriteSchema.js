@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const schema = Joi.object({
-  favorite: Joi.boolean().require(),
+  favorite: Joi.boolean().required(),
 });
 
 const contactFavoriteSchema = (req, res, next) => {
