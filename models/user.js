@@ -3,7 +3,7 @@ import Joi from "joi";
 import { handleMongooseError } from "../helpers/handleMongooseError.js";
 
 const emailRegexp =
-    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
 const subscriptionList = ["starter", "pro", "business"];
 const userSchema = new Schema(
@@ -11,7 +11,7 @@ const userSchema = new Schema(
         password: {
             type: String,
             minlength: 6,
-            required: [true, 'Password is required'],
+            required: [true, "Set password for user"],
         },
         email: {
             type: String,
@@ -27,7 +27,7 @@ const userSchema = new Schema(
         },
         token: {
             type: String,
-            default: null,
+            default: "",
         },
     },
     { versionKey: false, timestamps: true }

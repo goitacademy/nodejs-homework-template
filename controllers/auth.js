@@ -1,4 +1,4 @@
-import { User } from "../models/user";
+import { User } from "../models/user.js";
 import { HttpError } from "../helpers/HttpError.js";
 import { ctrlWrapper } from "../helpers/ctrlWrapeer.js";
 import bcrypt from "bcrypt";
