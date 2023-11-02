@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const { isEmptyBody, isValidId } = require("../../middlewares");
+const { isEmptyBody, isValidId, authenticate } = require("../../middlewares");
 
 const { validateBody } = require("../../decorators");
 
@@ -22,6 +22,8 @@ const {
   updateContactController,
   updateFavoriteContactController,
 } = require("../../controllers");
+
+router.use(authenticate);
 
 router.get("/", listContactsController);
 
