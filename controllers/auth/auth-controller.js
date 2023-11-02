@@ -1,5 +1,8 @@
 const bcrypt = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
+const { config } = require("dotenv");
+
+config();
 
 const { User } = require("../../models");
 
