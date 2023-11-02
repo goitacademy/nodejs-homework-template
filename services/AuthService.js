@@ -52,8 +52,7 @@ class AuthService {
     return token;
   }
 
-  async logout(user) {
-    const { _id } = user;
+  async logout({ _id }) {
     const response = await User.findByIdAndUpdate(_id, { token: null });
     return response;
   }

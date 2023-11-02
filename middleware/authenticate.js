@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
 
   try {
     const user = await authService.authenticate(token);
-    if (!user || !user.token || user.token !== token) {
+    if (!user?.token || user.token !== token) {
       next(HttpError(401));
     }
     req.user = user;
