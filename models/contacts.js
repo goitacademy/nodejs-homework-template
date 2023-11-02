@@ -16,7 +16,6 @@ async function getContactById(id) {
 }
 
 async function addContact({ name, email, phone }) {
-     
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),

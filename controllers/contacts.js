@@ -1,8 +1,5 @@
-
-
 const contacts = require("../models/contacts");
 const { HttpError, controllerWrapper } = require("../helpers");
-
 
 const listContacts = async (req, res) => {
   const result = await contacts.listContacts();
@@ -10,7 +7,6 @@ const listContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
- 
   const { contactId } = req.params;
   const result = await contacts.getContactById(contactId);
   if (!result) {
@@ -20,7 +16,6 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-    
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
@@ -28,6 +23,10 @@ const addContact = async (req, res) => {
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
   const result = await contacts.updateContactById(contactId, req.body);
+  if (!req.body){
+    return res.status(400).json({"message": "missing fields"});
+}
+  
   if (!result) {
     throw HttpError(404, "Not Found");
   }
@@ -41,7 +40,7 @@ const removeContact = async (req, res, next) => {
     throw HttpError(404, "Not Found");
   }
   res.json({
-    message: "Delete success",
+    message: "contact deleted",
   });
 };
 
