@@ -10,7 +10,6 @@ async function listContacts() {
 }
 
 async function getContactById(id) {
-  console.log("calling getbyid_models");
   const contacts = await listContacts();
   const result = contacts.find((item) => item.id === id);
   return result || null;
