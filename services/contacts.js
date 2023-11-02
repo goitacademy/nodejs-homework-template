@@ -74,10 +74,10 @@ const updateContact = async (contactId, body) => {
 const removeContact = async contactId => {
   try {
     const contacts = await loadContacts();
-    const contactIndex = contacts.findIndex(c => c.id == contactId);
+    const contact = contacts.findIndex(c => c.id == contactId);
 
-    if (contactIndex !== -1) {
-      contacts.splice(contactIndex, 1);
+    if (contact !== -1) {
+      contacts.splice(contact, 1);
 
       await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
 
@@ -90,7 +90,7 @@ const removeContact = async contactId => {
       return {
         success: false,
         result: null,
-        message: 'Contact not found',
+        message: 'missing fields',
       };
     }
   } catch (error) {

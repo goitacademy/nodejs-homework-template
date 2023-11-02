@@ -77,7 +77,7 @@ const removeContact = async (req, res, rext) => {
     if (!success) {
       return res.status(400).json({
         result,
-        message,
+        message: 'Contact not found',
       });
     }
 
