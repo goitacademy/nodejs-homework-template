@@ -1,12 +1,11 @@
 const express = require("express");
-const {
-  get,
-  getById,
-  create,
-  remove,
-  update,
-  favorite,
-} = require("../../controller");
+import {
+  createContacts,
+  indexContacts,
+  deleteContacts,
+  showContacts,
+  updateContacts,
+} from "../controllers/index.js";
 const {
   contactPutSchema,
   contactPostSchema,
@@ -15,11 +14,11 @@ const {
 
 const router = express.Router();
 
-router.get("/", get);
-router.get("/:id", getById);
+router.get("/", indexContacts);
+router.get("/:id", showContacts);
 router.patch("/:id/favorite", contactFavoriteSchema, favorite);
-router.post("/", contactPostSchema, create);
-router.put("/:id", contactPutSchema, update);
-router.delete("/:id", remove);
+router.post("/", contactPostSchema, createContacts);
+router.put("/:id", contactPutSchema, updateContacts);
+router.delete("/:id", deleteContacts);
 
 module.exports = router;
