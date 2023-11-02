@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const { middlewareToken, upload } = require('../../middleware')
 const ctrl = require('../../controllers/user')
+const ctrlEmail = require('../../services/email/controllers')
 
 /**
  * @ POST /users/registration
@@ -55,13 +56,13 @@ router.patch('/avatars', upload.single('avatars'), ctrl.updateAvatar)
  * Отримує лист "Сonfirm your registration" та верівікацію
  * Викликає функцію resendVerify
  */
-router.get('/verify/:verificationToken', ctrl.resendVerify)
+router.get('/verify/:verificationToken', ctrlEmail.resendVerify)
 
 /**
  * @POST /users/verify
  * Отримує лист "Verification email sent" з верифікацією
  * Викликає функцію verify
  */
-router.post('/verify', ctrl.verify)
+router.post('/verify', ctrlEmail.verify)
 
 module.exports = router

@@ -2,7 +2,8 @@ const User = require('../models/schemas/users');
 const bcrypt = require('bcrypt');
 const gravatar = require('gravatar');
 const { v4: uuidv4 } = require('uuid');
-const sendEmail = require('./sendEmail');
+// const sendEmail = require('./sendEmail');
+const sendEmail = require('../services/email/helpers/sendEmail')
 const { BASE_URL,SENDER_UKR_NET } = process.env;
 
 const handleConflict = async (req, res, email, password) => {
