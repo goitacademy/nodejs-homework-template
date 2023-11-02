@@ -7,10 +7,10 @@ const express = require("express");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     const results = await contacts.listContacts();
-    res.json({ results });
+    res.json(results);
   } catch (error) {
     res.status(500).json({
       message: "Server error",
@@ -22,10 +22,10 @@ router.get("/", async (req, res, next) => {
 // res - об'єкт який дозволяє налаштувати та відправити відповідь
 
 router.get("/:contactId", async (req, res, next) => {
-  console.log(req.params);
   try {
-    const { contactId } = req.params;
-    const results = await contacts.getContactById(contactId);
+    const { contactId: id } = req.params;
+    const results = await contacts.getById(id);
+
     if (!results) {
       const error = new Error("Not found");
       error.status = 404;
@@ -34,8 +34,30 @@ router.get("/:contactId", async (req, res, next) => {
     }
     res.json(results); // відправляємо відповідь
   } catch (error) {
-    const { status = 500, message = "Server error" } = error;
-    res.status(500).json({
+    const status = error.status || 500;
+    res.status(status).json({
+      message: error.message,
+    });
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      const error = new Error("missing required name field");
+      error.status = 400;
+      throw error;
+    }
+    const results = await contacts.addContact(name, email, phone);
+    res.status(201).json(results);
+  } catch (error) {
+    if (error.status === 400) {
+     return res.status(400).json({
+        message: error.message,
+      });
+    }
+   return res.status(500).json({
       message: "Server error",
     });
   }

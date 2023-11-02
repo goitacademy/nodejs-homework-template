@@ -13,7 +13,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
 app.use(cors())// дозволяє виконання кросдоменних запитів
-app.use(express.json())
+app.use(express.json())// парс даних формату JSON
 
 app.use('/api/contacts', contactsRouter)// маршути що стосуються шляху /api/contacts
 
