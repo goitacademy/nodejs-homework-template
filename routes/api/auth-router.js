@@ -13,11 +13,19 @@ const {
   getCurrentUser,
   logoutUser,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers/authControllers");
 
 const { useValidationEmail } = require("../../middlewares/useValidationEmail");
 
+const { useEmailSchema } = require("../../middlewares/useEmailSchema");
+
 authRouter.post("/register", useValidationEmail, isEmptyBody, signup);
+
+authRouter.get("/verify/:verificationCode", verifyEmail);
+
+authRouter.post("/verify", useEmailSchema, resendVerifyEmail);
 
 authRouter.post("/login", isEmptyBody, login);
 
