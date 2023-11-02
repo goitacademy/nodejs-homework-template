@@ -3,8 +3,6 @@ const service = require('../services/contacts');
 const { nanoid } = require('nanoid');
 
 const listContacts = async (req, res, next) => {
-  //res.json({ message: 'template message 1' });
-  //console.log(req.query);
   const result = await service.listAllContacts();
 
   res.status(200).json(result);
