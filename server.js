@@ -1,4 +1,5 @@
 import { app } from "./app.js";
+
 import { mongoose } from "mongoose";
 import "dotenv/config";
 const { DB_HOST: uriDb } = process.env;
@@ -14,3 +15,4 @@ connection
   .catch((err) =>
     console.log(`Server not running. Error message: ${err.message}`)
   );
+

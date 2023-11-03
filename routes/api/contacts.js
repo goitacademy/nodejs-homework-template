@@ -1,3 +1,4 @@
+
 import express from "express";
 import {
   getAllContacts,
@@ -21,4 +22,5 @@ router.delete("/:contactId", deleteById);
 router.put("/:contactId", updateById);
 
 router.patch("/:contactId", updateFavorite);
+
 export { router };

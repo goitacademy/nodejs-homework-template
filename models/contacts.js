@@ -1,3 +1,4 @@
+
 // const fs = require('fs/promises')
 import { Contact } from "../service/schemas/Contact.js";
 
@@ -33,4 +34,5 @@ export const updateContact = async (contactId, fields) => {
     { $set: fields },
     { new: true }
   );
+
 };
