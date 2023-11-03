@@ -46,7 +46,7 @@ const userSchema = Joi.object({
     .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/)
     .error(
       new Error(
-        "The password must contain a minimum of 8 characters, at least one letter, one number, and one special character"
+        "The password must contain a minimum of 8 characters"
       )
     )
     .required(),
