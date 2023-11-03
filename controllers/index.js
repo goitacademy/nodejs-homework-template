@@ -7,7 +7,7 @@ const {
   updateFavoriteContactController,
 } = require("./contacts");
 
-const { signup, signin, getCurrent } = require("./auth");
+const { signup, signin, getCurrent, signout } = require("./auth");
 
 module.exports = {
   listContactsController,
@@ -19,4 +19,5 @@ module.exports = {
   signup,
   signin,
   getCurrent,
+  signout,
 };
