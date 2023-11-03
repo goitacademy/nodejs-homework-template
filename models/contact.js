@@ -39,6 +39,7 @@ contactSchema.post("findOneAndUpdate", handleMongooseError);
 const Contact = model("contact", contactSchema);
 
 const controlPost = Joi.object({
+    name: Joi.string().required(),
     email: Joi.string().required(),
     phone: Joi.string().required(),
     favorite: Joi.boolean(),
