@@ -19,4 +19,6 @@ authRouter.post("/signin", isEmptyBody, userSignInValidate, signin);
 
 authRouter.get("/current", authenticate, getCurrent);
 
+authRouter.post("/signout", authenticate, signout);
+
 module.exports = { authRouter };
