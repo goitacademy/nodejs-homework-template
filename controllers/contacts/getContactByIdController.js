@@ -6,7 +6,7 @@ const { controllerWrapper } = require("../../decorators");
 
 const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findOne({ _id: contactId });
   if (!result) {
     throw HttpError(404, `Contact with ${contactId} not found`);
   }
