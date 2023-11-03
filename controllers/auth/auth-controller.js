@@ -68,4 +68,5 @@ module.exports = {
   signup: controllerWrapper(signup),
   signin: controllerWrapper(signin),
   getCurrent: controllerWrapper(getCurrent),
+  signout: controllerWrapper(signout),
 };
