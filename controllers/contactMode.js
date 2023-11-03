@@ -9,6 +9,11 @@ async function getAll(req, res, next) {
 async function getById(req, res, next) {
   const { contactId } = req.params;
   const answer = await method.getContactById(contactId);
+
+  if (!answer) {
+    throw HttpError(404, "Not found");
+  }
+
   res.json(answer);
 }
 
