@@ -1,6 +1,7 @@
 const express = require("express");
 const method = require("../../models/contacts");
 const HttpError = require("../../helpers");
+const validateMethod = require("../../middlewares");
 const { ValidationSchema, PatchSchema } = require("../../schemas/Validation");
 
 const router = express.Router();
@@ -24,12 +25,8 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", validateMethod(ValidationSchema), async (req, res, next) => {
   try {
-    const { error } = ValidationSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
     const answer = await method.addContact(req.body);
     return res.status(201).json(answer);
   } catch (error) {
@@ -51,43 +48,41 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = ValidationSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
+router.put(
+  "/:contactId",
+  validateMethod(ValidationSchema),
+  async (req, res, next) => {
+    try {
+      const { contactId } = req.params;
+      const answer = await method.updateContact(contactId, req.body);
+      if (!answer) {
+        throw HttpError(404, "Not found");
+      }
+
+      res.json(answer);
+    } catch (error) {
+      next(error);
     }
+  },
+);
 
-    const { contactId } = req.params;
-    const answer = await method.updateContact(contactId, req.body);
-    if (!answer) {
-      throw HttpError(404, "Not found");
+router.patch(
+  "/:contactId",
+  validateMethod(PatchSchema),
+  async (req, res, next) => {
+    try {
+      const { contactId } = req.params;
+
+      const answer = await method.changeContact(contactId, req.body);
+      if (!answer) {
+        throw HttpError(404, "Not found");
+      }
+
+      res.json(answer);
+    } catch (error) {
+      next(error);
     }
-
-    res.json(answer);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.patch("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = PatchSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, error.message);
-    }
-
-    const { contactId } = req.params;
-
-    const answer = await method.changeContact(contactId, req.body);
-    if (!answer) {
-      throw HttpError(404, "Not found");
-    }
-
-    res.json(answer);
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 module.exports = router;
