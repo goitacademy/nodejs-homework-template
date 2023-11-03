@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const routerContacts = require('./routes/api/contacts');
+const routerContacts = require('./routes/api');
 
 const notFoundMiddleware = require('./middlewares/notFound');
 const errorHandlerMiddleware = require('./middlewares/errorHandler');
@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(logger(formatsLogger));
 app.use(cors());
 
-app.use('/api/contacts', routerContacts);
+app.use('/', routerContacts());
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
