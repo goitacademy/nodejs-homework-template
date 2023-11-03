@@ -2,17 +2,41 @@ const Joi = require('joi');
 const { listContacts, getContactById, updateContact, removeContact, addContact } = require('../models/contacts.js');
 const HttpError = require('../helpers/HttpError.js');
 
-const addSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required()
-});
+// const addSchema = Joi.object({
+//     name: Joi.string().required(),
+//     email: Joi.string().email().required(),
+//     phone: Joi.string().required()
+// });
 
 const putSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string().email(),
     phone: Joi.string()
 }).or("name", "email", "phone");
+
+const addSchema = Joi.object({
+    name: Joi.string()
+        .required()
+        .error(() => {
+            return {
+                message: 'Missing required name field',
+            };
+        }),
+    phone: Joi.number()
+        .required()
+        .error(() => {
+            return {
+                message: 'Missing required phone field',
+            };
+        }),
+    email: Joi.string()
+        .required()
+        .error(() => {
+            return {
+                message: 'Missing required email field',
+            };
+        }),
+})
 
 const getAll = async (req, res, next) => {
     try {
@@ -37,10 +61,10 @@ const getById = async (req, res, next) => {
 };
 
 const postContact = async (req, res, next) => {
-    try {
+      try {
         const { error } = addSchema.validate(req.body)
         if (error) {
-            throw HttpError(400, "Missing required name field")
+            throw HttpError(400, error.message)
         }
         const result = await addContact(req.body);
         res.status(201).json(result)
