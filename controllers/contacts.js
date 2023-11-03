@@ -17,25 +17,13 @@ const putSchema = Joi.object({
 const addSchema = Joi.object({
     name: Joi.string()
         .required()
-        .error(() => {
-            return {
-                message: 'Missing required name field',
-            };
-        }),
-    phone: Joi.number()
+        .messages({ "message": 'Missing required name field' }),
+    phone: Joi.string()
         .required()
-        .error(() => {
-            return {
-                message: 'Missing required phone field',
-            };
-        }),
+        .messages({ "message": 'Missing required phone field' }),
     email: Joi.string()
         .required()
-        .error(() => {
-            return {
-                message: 'Missing required email field',
-            };
-        }),
+        .messages({ "message": 'Missing required email emailfield' }),
 })
 
 const getAll = async (req, res, next) => {
