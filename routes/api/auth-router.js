@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { signup, signin, getCurrent } = require("../../controllers");
+const { signup, signin, getCurrent, signout } = require("../../controllers");
 
 const { isEmptyBody, authenticate } = require("../../middlewares");
 
