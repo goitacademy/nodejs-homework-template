@@ -1,14 +1,115 @@
-// const fs = require('fs/promises')
+const Contact = require('./schemas/contacts')
+const User = require('./schemas/users')
+const handleError = require('../helpers/handleError')
 
-const listContacts = async () => {}
+/**
+ * Витягує всі контакти з БД
+ * @returns {Promise<Array>} масив усіх контактів
+ */
+const listContacts = async () => {
+  return await handleError(async () => {
+    const data = await Contact.find({})
 
-const getContactById = async (contactId) => {}
+    return data
+  })
+}
 
-const removeContact = async (contactId) => {}
+/**
+ * Отримує контакти за вказаним id
+ * @param {string}  contactId - Ідентифікатор контакту
+ * @returns {Promise<Object|null>} - Повертає контакт за вказаним id, або null якщо не знайде
+ */
+const getContactById = async contactId => {
+  return handleError(async () => {
+    const contacts = await Contact.findOne({ _id: contactId })
 
-const addContact = async (body) => {}
+    return contacts
+  })
+}
 
-const updateContact = async (contactId, body) => {}
+/** (на всякий случай)
+ * Видаляє контакт за вказаним id
+ * @param {string} contactId  
+ * @returns {Promise<Object|null>} - Видалений контакт або null, якщо не знайдено
+ */
+// const removeContact = async (contactId) => {
+//   return handleError(async () => {
+//     const contacts = await Contact.findByIdAndRemove({
+//       _id: contactId,
+//     })
+
+//     return contacts
+//   })
+// }
+
+/**
+ * Видаляє контакт або user за вказаним id
+ * @param {*} contactId 
+ * @returns {Promise<Object|null>} - Видалений контакт або null, якщо не знайдено
+ */
+const removeContact = async (contactId) => {
+  return handleError(async () => {
+    const deletedContact = await Contact.findByIdAndRemove({
+      _id: contactId,
+    });
+
+    const deletedUser = await User.findByIdAndRemove({
+      _id: contactId,
+    });
+
+    return { contact: deletedContact, user: deletedUser };
+  });
+}
+
+/**
+ * Отримує дані про контакт у вигляді об'єкта body
+ * Додає контакт до БД
+ * @param {Object} body - Дані контакту у вигляді об'єкта  
+ * @returns {Promise<Object>} - Доданий контакт
+ */
+const addContact = async (body) => {
+  return handleError(async () => {
+    const contacts = await Contact.create(body)
+
+    return contacts
+  })
+}
+
+/**
+ * Оновлює контакт в БД
+ * @param {string} contactId  
+ * @param {Object} body - Оновлені дані контакту
+ * @returns {Promise<Object|null} - Оновлений контакт або null, якщо не знайдено
+ */
+const updateContact = async (contactId, body) => {
+  return await handleError(async () => {
+    const contact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { ...body },
+      { new: true }
+    )
+
+    return contact
+  })
+}
+
+/**
+ * Оновлює статус контакту в БД
+ * @param {string} contactId 
+ * @param {Object} body - Новий статус контакту
+ * @returns {Promise<Object|null>} - Оновлений контакт або null, якщо не знайдено
+ */
+const updateStatusContact = async (contactId, body) => {
+  return await handleError(async () => {
+    const contact = await Contact.findByIdAndUpdate(
+      { _id: contactId },
+      { ...body },
+      { new: true }
+    )
+
+    return contact
+  })
+}
 
 module.exports = {
   listContacts,
@@ -16,4 +117,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 }
