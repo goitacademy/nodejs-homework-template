@@ -52,7 +52,14 @@ const signin = async (req, res) => {
   res.json({ token });
 };
 
+const getCurrent = async (req, res) => {
+  const { username, email } = req.user;
+
+  res.json({ username, email });
+};
+
 module.exports = {
   signup: controllerWrapper(signup),
   signin: controllerWrapper(signin),
+  getCurrent: controllerWrapper(getCurrent),
 };

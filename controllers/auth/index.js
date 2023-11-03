@@ -1,3 +1,3 @@
-const { signup, signin } = require("./auth-controller");
+const { signup, signin, getCurrent } = require("./auth-controller");
 
-module.exports = { signup, signin };
+module.exports = { signup, signin, getCurrent };
