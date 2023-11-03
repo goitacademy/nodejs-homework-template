@@ -1,30 +1,26 @@
-import { Router } from "express";
+
+import express from "express";
 import {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} from "../../models/contacts.js";
-import {
-  schema,
-  updateSchema,
-} from "../../validators/createContactValidators.js";
-import { indexContacts } from "../../controllers/contacts/indexContacts.js";
-import { showContacts } from "../../controllers/contacts/showContacts.js";
-import { createContact } from "../../controllers/contacts/createContacts.js";
-import { deleteContacts } from "../../controllers/contacts/deleteContacts.js";
-import { updateContacts } from "../../controllers/contacts/updateContacts.js";
-const router = Router();
+  getAllContacts,
+  getById,
+  deleteById,
+  createContact,
+  updateById,
+  updateFavorite,
+} from "../../controller/controllers.js";
 
-router.get("/contacts", indexContacts);
+const router = express.Router();
 
-router.get("/:contactId", showContacts);
+router.get("/", getAllContacts);
 
-router.post("/contacts", createContact);
+router.get("/:contactId", getById);
 
-router.delete("/:contactId", deleteContacts);
+router.post("/", createContact);
 
-router.put("/:contactId", updateContacts);
+router.delete("/:contactId", deleteById);
+
+router.put("/:contactId", updateById);
+
+router.patch("/:contactId", updateFavorite);
 
 export { router };
