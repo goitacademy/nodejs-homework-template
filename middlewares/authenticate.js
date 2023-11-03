@@ -23,7 +23,7 @@ const authenticate = async (req, res, next) => {
       throw HttpError(401);
     }
     next();
-  } catch {
+  } catch (error) {
     next(HttpError(401));
   }
 };
