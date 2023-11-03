@@ -47,7 +47,7 @@ export async function createContact(req, res, next) {
     res.status(201).json({ result });
   } catch (error) {
     console.log(error.message);
-    next(e);
+    next(error);
   }
 }
 
