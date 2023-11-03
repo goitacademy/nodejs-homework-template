@@ -6,7 +6,8 @@ const { controllerWrapper } = require("../../decorators");
 
 const removeContactController = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id: contactId, owner });
   if (!result) {
     throw HttpError(404, `Contact with ${contactId} not found`);
   }
