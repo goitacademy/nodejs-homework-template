@@ -1,6 +1,7 @@
 const express = require("express");
 const method = require("../../models/contacts");
-const { HttpError, ValidationSchema, PatchSchema } = require("../../helpers");
+const HttpError = require("../../helpers");
+const { ValidationSchema, PatchSchema } = require("../../schemas/Validation");
 
 const router = express.Router();
 
@@ -52,9 +53,6 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    // if (!req.body) {
-    //   throw HttpError(400, "Missig fields");
-    // }
     const { error } = ValidationSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
