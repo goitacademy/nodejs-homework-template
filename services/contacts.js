@@ -83,7 +83,7 @@ const removeContact = async contactId => {
 
       return {
         success: true,
-        result: null,
+        result: contact,
         message: 'The contact was deleted successfully.',
       };
     } else {
