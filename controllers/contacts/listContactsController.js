@@ -4,7 +4,7 @@ const { controllerWrapper } = require("../../decorators");
 
 const listContactsController = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find();
+  const result = await Contact.find({ owner });
   res.json(result);
 };
 
