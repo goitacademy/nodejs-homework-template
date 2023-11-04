@@ -1,9 +1,8 @@
-// const fs = require('fs/promises')
 const service = require('../services/contacts');
 const { nanoid } = require('nanoid');
 
 const listContacts = async (req, res, next) => {
-  const result = await service.listAllContacts();
+  const result = await service.listContacts();
 
   res.status(200).json(result);
 };
@@ -41,21 +40,23 @@ const addContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
-  //res.json({ message: 'Contact was update successfully' });
   try {
     const { id } = req.params;
-
+    const updateData = req.body;
     const { success, result, message } = await service.updateContact(
       id,
       req.body,
     );
 
-    console.log(result);
     if (!success) {
-      return res.status(400).json({
+      return res.status(404).json({
         result,
         message,
       });
+    }
+
+    if (success && Object.keys(updateData).length === 0) {
+      return res.status(400).json({ message });
     }
 
     return res.status(200).json({
@@ -76,7 +77,6 @@ const removeContact = async (req, res, rext) => {
     const { id } = req.params;
     const { success, result, message } = await service.removeContact(id);
 
-    console.log(result);
     if (!success) {
       return res.status(400).json({
         result,

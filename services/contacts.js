@@ -1,5 +1,4 @@
 const fs = require('fs').promises;
-const { Console, log } = require('console');
 const path = require('path');
 
 const pathContacts = path.join(__dirname, '../models/contacts.json');
@@ -17,7 +16,7 @@ async function saveContacts(contacts) {
   await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
 }
 
-const listAllContacts = loadContacts;
+const listContacts = loadContacts;
 
 const getContactById = async contactId => {
   try {
@@ -47,10 +46,18 @@ const addContact = async body => {
 
 const updateContact = async (contactId, body) => {
   try {
+    console.log(body);
     const contacts = await loadContacts();
     const contactIndex = contacts.findIndex(c => c.id == contactId);
 
     if (contactIndex !== -1) {
+      if (!body || Object.keys(body).length === 0) {
+        return {
+          success: true,
+          result: null,
+          message: 'Missing fields',
+        };
+      }
       contacts[contactIndex] = { ...contacts[contactIndex], ...body };
 
       await saveContacts(contacts);
@@ -59,13 +66,12 @@ const updateContact = async (contactId, body) => {
         result: contacts[contactIndex],
         message: 'The contact was updated successfully.',
       };
-    } else {
+    } else
       return {
         success: false,
         result: null,
-        message: 'Contact not found',
+        message: 'Not found',
       };
-    }
   } catch (error) {
     return {
       success: false,
@@ -74,36 +80,6 @@ const updateContact = async (contactId, body) => {
     };
   }
 };
-/*
-const removeContact = async contactId => {
-  try {
-    const contacts = await loadContacts();
-    const contact = contacts.findIndex(c => c.id == contactId);
-
-    if (contact !== -1) {
-      const removedContact = contacts.splice(contact, 1)[0];
-      await saveContacts(contacts);
-      console.table([removedContact]);
-      return {
-        success: true,
-        result: contact,
-        message: 'The contact was deleted successfully.',
-      };
-    } else {
-      return {
-        success: false,
-        result: null,
-        message: 'missing fields',
-      };
-    }
-  } catch (error) {
-    return {
-      success: false,
-      result: null,
-      message: error,
-    };
-  }
-};*/
 
 const removeContact = async contactId => {
   try {
@@ -118,12 +94,6 @@ const removeContact = async contactId => {
         result: removedContact,
         message: 'The contact was deleted successfully.',
       };
-    } else {
-      return {
-        success: false,
-        result: null,
-        message: 'Contact not found',
-      };
     }
   } catch (error) {
     return {
@@ -135,7 +105,7 @@ const removeContact = async contactId => {
 };
 
 module.exports = {
-  listAllContacts,
+  listContacts,
   getContactById,
   addContact,
   updateContact,
