@@ -23,7 +23,7 @@ const addContact = async (req, res) => {
 
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndRemove(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
     throw createError(404, "Not found");
   }
@@ -33,7 +33,7 @@ const removeContact = async (req, res) => {
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
 
-  const result = await Contact.findAndUpdate(contactId, req.body, {
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
   });
 
@@ -46,10 +46,10 @@ const updateContact = async (req, res) => {
 
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
-  const { favourite } = req.body;
+  const { favorite } = req.body;
   const result = await Contact.findByIdAndUpdate(
     contactId,
-    { favourite },
+    { favorite },
     {
       new: true,
     }

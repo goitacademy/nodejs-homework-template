@@ -2,14 +2,14 @@ const { Schema, model } = require("mongoose");
 
 const Joi = require("joi");
 
-const handleMongooseError = require("../helpers/handleMongooseError");
+const handleMongooseError = require("../midlewares/handleMongooseError");
 
 const contactSchema = new Schema(
   {
     name: { type: String, required: [true, "Set name for contact"] },
     email: { type: String },
     phone: { type: String },
-    favourite: {
+    favorite: {
       type: Boolean,
       default: false,
     },
@@ -26,10 +26,8 @@ const joiSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": "Missing required phone field",
   }),
-  email: Joi.string().required().messages({
-    "any.required": "Missing required email field",
-  }),
-  favourite: Joi.boolean(),
+  email: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({

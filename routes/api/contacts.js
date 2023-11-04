@@ -6,6 +6,7 @@ const checkRequestBody = require("../../midlewares/checkRequestBody");
 
 const { schemas } = require("../../models/contact");
 const isValidId = require("../../midlewares/isValidId");
+// const checkFavoriteField = require("../../midlewares/checkFavoritefield");
 
 router.get("/", ctrl.listContacts);
 
@@ -24,13 +25,13 @@ router.put(
   "/:contactId",
   checkRequestBody,
   isValidId,
-  checkRequestBody,
   validateBody(schemas.joiSchema),
   ctrl.updateContact
 );
 
 router.patch(
-  "/id/favourite",
+  "/:contactId/favorite",
+  // checkFavoriteField,
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateStatusContact
