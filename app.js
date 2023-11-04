@@ -19,8 +19,18 @@ app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+// app.use((err, req, res, next) => {
+//   res.status(500).json({ message: err.message });
+// });
+
+app.use((req, res, next) => {
+  console.log(`Received a request to: ${req.originalUrl}`);
+  next();
+});
+
+app.get('/api/contacts', (req, res) => {
+  // Обработка GET-запроса для /api/contacts
+  res.status(200).json({ message: 'GET request received' });
 });
 
 

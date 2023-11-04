@@ -16,23 +16,18 @@ const schema = Joi.object({
 });
 
 const getAll = async (req, res) => {
-  
-    const contacts = listContacts();
-    res.status(200).json(contacts);
-  
-}
+  const contacts = await listContacts();
+  res.status(200).json(contacts);
+};
 
 const getById = async (req, res) => {
   const id = req.params.id;
-  try {
-    const contact = getContactById(id);
-    if (id) {
-      res.status(200).json(contact);
-    }
-  } catch (error) {
-    res.status(404).json({ message: "Not found" });
+  const contact = getContactById(id);
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
   }
-}
+  res.status(200).json(contact);
+};
 
 const add = async (req, res) => {
   const { name, email, phone } = req.body;
@@ -48,7 +43,7 @@ const add = async (req, res) => {
   }
 
   const newContact = {
-    id: uuidv4,
+    id: uuidv4(),
     name,
     email,
     phone,
@@ -57,7 +52,7 @@ const add = async (req, res) => {
   const addedContact = addContact(newContact);
 
   res.status(201).json(addedContact);
-}
+};
 
 const remove = async (req, res) => {
   const id = req.params.id;
@@ -69,7 +64,7 @@ const remove = async (req, res) => {
   } else {
     res.status(404).json({ message: "Not found" });
   }
-}
+};
 
 const update = async (req, res) => {
   const id = req.params.id;
@@ -78,15 +73,18 @@ const update = async (req, res) => {
     return res.status(400).json({ message: "missing required name field" });
   }
 
-  const updatedContact = updateContact(id, { name, email, phone, favorite } );
-  if(updatedContact){
-    res.status(200).json(updatedContact);
-  }else{
-    res.status(404).json({message: "Not found"})
+  const contact = await getContactById(id);
+  if (!contact) {
+    return res.status(404).json({ message: "Not found" });
   }
 
-}
-
+  const updatedContact = updateContact(id, { name, email, phone, favorite });
+  if (updatedContact) {
+    res.status(200).json(updatedContact);
+  } else {
+    res.status(500).json({ message: "Update failed" });
+  }
+};
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
@@ -94,4 +92,4 @@ module.exports = {
   add,
   remove,
   update,
-}
+};
