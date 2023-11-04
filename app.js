@@ -28,10 +28,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api/contacts', (req, res) => {
-  // Обработка GET-запроса для /api/contacts
-  res.status(200).json({ message: 'GET request received' });
-});
 
 
 
