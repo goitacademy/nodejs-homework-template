@@ -1,3 +1,5 @@
+import service from "../../service/schemas/contact.js";
+
 async function updateContacts(req, res, next) {
   const { id } = req.params;
   const body = req.body;
@@ -8,12 +10,13 @@ async function updateContacts(req, res, next) {
     }
 
     const putContact = await service.updateContact(id, body);
-    return res.status(200).json({ ...putContact["_doc"], ...body });
+    res.status(200).json({ ...putContact["_doc"], ...body });
   } catch (error) {
     if (error.message.includes("Cast to ObjectId failed for value")) {
-      return res.status(400).json({ message: `Not found this id: ${id}` });
+      res.status(400).json({ message: `Not found this id: ${id}` });
+      return;
     }
 
-    return res.status(404).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 }

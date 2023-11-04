@@ -1,3 +1,5 @@
+import service from "../../service/schemas/contact.js";
+
 async function showContacts(req, res, next) {
   try {
     const contact = await service.getByIdContact(req.params.id);

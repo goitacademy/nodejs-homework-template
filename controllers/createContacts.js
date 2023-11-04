@@ -1,3 +1,5 @@
+import service from "../service/schemas/contact.js";
+
 async function createContacts(req, res, next) {
   try {
     const newContact = await service.createContact(req.body);

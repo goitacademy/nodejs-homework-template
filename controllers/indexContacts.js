@@ -1,3 +1,5 @@
+import service from "../service/schemas/contact.js";
+
 async function indexContacts(req, res, next) {
   try {
     const contacts = await service.getAllContacts();

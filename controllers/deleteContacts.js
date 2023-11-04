@@ -1,3 +1,5 @@
+import service from "../../service/schemas/contact.js";
+
 async function deleteContacts(req, res, next) {
   try {
     const data = await service.removeContact(req.params.id);
