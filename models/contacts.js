@@ -20,7 +20,10 @@ const removeContact = async (contactId) => {
   const updatedContacts = contacts.filter(
     (contact) => contact.id !== parseInt(contactId)
   );
-  await fs.writeFile("contacts.json", JSON.stringify(updatedContacts, null, 2));
+  await fs.writeFile(
+    "models/contacts.json",
+    JSON.stringify(updatedContacts, null, 2)
+  );
   return true;
 };
 
@@ -28,7 +31,7 @@ const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = { id: Date.now(), ...body };
   contacts.push(newContact);
-  await fs.writeFile("contacts.json", JSON.stringify(contacts, null, 2));
+  await fs.writeFile("models/contacts.json", JSON.stringify(contacts, null, 2));
   return newContact;
 };
 
@@ -37,7 +40,10 @@ const updateContact = async (contactId, body) => {
   const updatedContacts = contacts.map((contact) =>
     contact.id === parseInt(contactId) ? { ...contact, ...body } : contact
   );
-  await fs.writeFile("contacts.json", JSON.stringify(updatedContacts, null, 2));
+  await fs.writeFile(
+    "models/contacts.json",
+    JSON.stringify(updatedContacts, null, 2)
+  );
   return updatedContacts.find((contact) => contact.id === parseInt(contactId));
 };
 
