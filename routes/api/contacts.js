@@ -1,9 +1,8 @@
-// а тут ми маєм написати логіку, тобто коли приходить запит за контактом, треба взяти контакт або додати з джейсону і повернути
-// імпортуємо функції для роботи з контактами
 const contacts = require("../../models/contacts");
-// і використовуємо. Наприклад get-запит має повертати всі контакти
 
 const express = require("express");
+
+const contactSchema = require("../../schemas/contacts");
 
 const router = express.Router();
 
@@ -18,21 +17,17 @@ router.get("/", async (req, res) => {
   }
 });
 
-// req - інфо про запит який прийшов
-// res - об'єкт який дозволяє налаштувати та відправити відповідь
-
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:id", async (req, res) => {
   try {
-    const { contactId: id } = req.params;
+    const { id } = req.params;
+    console.log(req.params);
     const results = await contacts.getById(id);
-
     if (!results) {
       const error = new Error("Not found");
       error.status = 404;
-      throw error; // генерує помилку
-      // якщо ми генеруємо помилку всередині try то відразу перевидаємось на catch
+      throw error;
     }
-    res.json(results); // відправляємо відповідь
+    res.json(results);
   } catch (error) {
     const status = error.status || 500;
     res.status(status).json({
@@ -49,30 +44,84 @@ router.post("/", async (req, res) => {
       error.status = 400;
       throw error;
     }
+
+    const validation = contactSchema.validate({ name, email, phone });
+    if (validation.error) {
+      const errorMessage = validation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res.status(400).send(`Validation Error: ${errorMessage}`);
+    }
+
     const results = await contacts.addContact(name, email, phone);
     res.status(201).json(results);
   } catch (error) {
     if (error.status === 400) {
-     return res.status(400).json({
+      return res.status(400).json({
         message: error.message,
       });
     }
-   return res.status(500).json({
+    return res.status(500).json({
       message: "Server error",
     });
   }
 });
 
-// router.post("/", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteContact = await contacts.removeContact(id);
+    if (!deleteContact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    res.json({ message: "contact deleted" });
+  } catch (error) {
+    const status = error.status || 500;
+    res.status(status).json({
+      message: error.message,
+    });
+  }
+});
 
-// router.delete("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phone } = req.body;
 
-// router.put("/:contactId", async (req, res, next) => {
-//   res.json({ message: "template message" });
-// });
+    if (!name && !email && !phone) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    const body = {};
+    if (name) {
+      body.name = name;
+    }
+    if (email) {
+      body.email = email;
+    }
+    if (phone) {
+      body.phone = phone;
+    }
+
+    const validation = contactSchema.validate(body);
+    if (validation.error) {
+      const errorMessage = validation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res.status(400).send(`Validation Error: ${errorMessage}`);
+    }
+
+    const updatedContact = await contacts.updateContact(id, body);
+
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
+    }
+    return res.status(200).json(updatedContact);
+  } catch (error) {
+    const status = error.status || 500;
+    return res.status(status).json({
+      message: error.message,
+    });
+  }
+});
 
 module.exports = router;
