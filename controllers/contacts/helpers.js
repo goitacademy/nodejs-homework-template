@@ -15,11 +15,7 @@ const updateContact = async ({ id, toUpdate, upsert = false }) => {
 };
 
 const updateStatusContact = async (id, favorite) => {
-  return Contact.findOneAndUpdate(
-    { _id: id },
-    { $set: { favorite } },
-    { new: true, runValidators: true, strict: "throw" }
-  );
+  return Contact.findOneAndUpdate({ _id: id }, { $set: favorite }, { new: true, runValidators: true, strict: "throw" });
 };
 
 const removeContact = (id) => Contact.deleteOne({ _id: id });

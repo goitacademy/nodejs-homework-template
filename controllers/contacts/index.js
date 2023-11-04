@@ -39,12 +39,26 @@ const createContact = async (req, res, next) => {
   }
 };
 
+// const patchContact = async (req, res, next) => {
+//   const { id } = req.params;
+//   try {
+//     const result = await updateContact({ id, toUpdate: req.body });
+//     if (!result) {
+//       next();
+//     } else {
+//       res.json(result);
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+
 const updateFavorite = async (req, res, next) => {
-  const { contactId } = req.params;
+  const { id } = req.params;
   const { favorite } = req.body;
 
   try {
-    const result = await updateStatusContact(contactId, favorite);
+    const result = await updateStatusContact(id, favorite);
     if (!result) {
       return res.status(404).json({ message: "Not found" });
     } else {

@@ -7,7 +7,7 @@ router.get("/contacts/:id", contacts.getContact);
 router.post("/contacts", contacts.createContact);
 router.put("/contacts/:id", contacts.putContact);
 // router.patch("/contacts/:id", contacts.patchContact);
-router.patch("/contacts/:contactId/favorite", contacts.updateFavorite);
+router.patch("/contacts/:id/favorite", contacts.updateFavorite);
 router.delete("/contacts/:id", contacts.deleteContact);
 
 module.exports = router;
