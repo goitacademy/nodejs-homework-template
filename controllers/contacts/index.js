@@ -1,24 +1,31 @@
-const { fetchContacts, fetchContact, addContact, updateContact, removeContact } = require("./helpers");
+const {
+  fetchContacts,
+  fetchContact,
+  addContact,
+  updateContact,
+  removeContact,
+  updateStatusContact,
+} = require("./helpers");
 
 const getAllContacts = async (req, res, next) => {
   try {
     const contacts = await fetchContacts();
-    res.json(contacts);
+    return res.json(contacts);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
-const getContact = async (req, res) => {
+const getContact = async (req, res, next) => {
   try {
     const contact = await fetchContact(req.params.id);
     if (contact) {
-      res.json(contact);
+      return res.json(contact);
     } else {
-      next();
+      return next();
     }
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -26,25 +33,11 @@ const createContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
     const result = await addContact({ name, email, phone });
-    res.status(201).json(result);
+    return res.status(201).json(result);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
-
-// const patchContact = async (req, res, next) => {
-//   const { id } = req.params;
-//   try {
-//     const result = await updateContact({ id, toUpdate: req.body });
-//     if (!result) {
-//       next();
-//     } else {
-//       res.json(result);
-//     }
-//   } catch (err) {
-//     next(err);
-//   }
-// };
 
 const updateFavorite = async (req, res, next) => {
   const { contactId } = req.params;
@@ -53,12 +46,12 @@ const updateFavorite = async (req, res, next) => {
   try {
     const result = await updateStatusContact(contactId, favorite);
     if (!result) {
-      res.status(404).json({ message: "Not found" });
+      return res.status(404).json({ message: "Not found" });
     } else {
-      res.status(200).json(result);
+      return res.status(200).json(result);
     }
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -66,9 +59,9 @@ const putContact = async (req, res, next) => {
   const { id } = req.params;
   try {
     const result = await updateContact({ id, toUpdate: req.body, upsert: true });
-    res.json(result);
+    return res.json(result);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -76,9 +69,9 @@ const deleteContact = async (req, res, next) => {
   const { id } = req.params;
   try {
     await removeContact(id);
-    res.status(204).send();
+    return res.status(204).send();
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
