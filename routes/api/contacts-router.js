@@ -2,7 +2,12 @@ const express = require("express");
 
 const router = express.Router();
 
-const { isEmptyBody, isValidId, authenticate } = require("../../middlewares");
+const {
+  isEmptyBody,
+  isValidId,
+  authenticate,
+  upload,
+} = require("../../middlewares");
 
 const { validateBody } = require("../../decorators");
 
@@ -29,7 +34,7 @@ router.get("/", listContactsController);
 
 router.get("/:contactId", isValidId, getContactByIdController);
 
-router.post("/", isEmptyBody, contactAddValidate, addContactController);
+router.post("/", upload, isEmptyBody, contactAddValidate, addContactController);
 
 router.delete("/:contactId", isValidId, removeContactController);
 
