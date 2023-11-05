@@ -29,9 +29,9 @@ const updateContact = async (req, res) => {
   res.json(result);
 };
 
-const deleteContact = async (req, res) => {
+const removeContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.deleteContact(id);
+  const result = await contacts.removeContact(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -43,5 +43,5 @@ module.exports = {
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
-  deleteContact: ctrlWrapper(deleteContact),
+  removeContact: ctrlWrapper(removeContact),
 };
