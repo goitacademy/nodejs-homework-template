@@ -12,9 +12,9 @@ const loadContacts = async () => {
   }
 };
 
-async function saveContacts(contacts) {
+const saveContacts = async contacts => {
   await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
-}
+};
 
 const listContacts = loadContacts;
 
