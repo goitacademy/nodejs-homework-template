@@ -13,15 +13,10 @@ router.post("/", validateBody(schemas.addSchema), ctrl.add);
 
 router.delete("/:id", isValidId, ctrl.deleteById);
 
-router.put(
-  "/:id/favorite",
-  isValidId,
-  validateBody(schemas.addSchema),
-  ctrl.updateById
-);
+router.put("/:id", isValidId, validateBody(schemas.addSchema), ctrl.updateById);
 
 router.patch(
-  "/:id",
+  "/:id/favorite",
   isValidId,
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateFavorite
