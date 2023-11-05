@@ -1,4 +1,3 @@
-
 import express from "express";
 import {
   getAllContacts,
@@ -8,19 +7,23 @@ import {
   updateById,
   updateFavorite,
 } from "../../controller/controllers.js";
+import { login, registration } from "../../controller/userControllers.js";
 
 const router = express.Router();
 
-router.get("/", getAllContacts);
+router.get("/contacts", getAllContacts);
 
-router.get("/:contactId", getById);
+router.get("/contacts/:contactId", getById);
 
-router.post("/", createContact);
+router.post("/contacts", createContact);
 
-router.delete("/:contactId", deleteById);
+router.delete("/contacts/:contactId", deleteById);
 
-router.put("/:contactId", updateById);
+router.put("/contacts/:contactId", updateById);
 
-router.patch("/:contactId", updateFavorite);
+router.patch("/contacts/:contactId", updateFavorite);
 
+router.post("/users/signup", registration);
+
+router.post("/users/login", login);
 export { router };
