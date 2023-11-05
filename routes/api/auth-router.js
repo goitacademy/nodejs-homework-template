@@ -2,7 +2,7 @@ const express = require("express");
 
 const { signup, signin, getCurrent, signout } = require("../../controllers");
 
-const { isEmptyBody, authenticate, upload } = require("../../middlewares");
+const { isEmptyBody, authenticate } = require("../../middlewares");
 
 const { validateBody } = require("../../decorators");
 
