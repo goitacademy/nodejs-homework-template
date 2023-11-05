@@ -1,18 +1,27 @@
+require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
+const bodyParser = require('body-parser');
+const contactsRouter = require('./routes/api/contacts');
+const usersRouter = require('./routes/api/users');
 
-app.use(express.json());
+app.use(bodyParser.json());
 
-app.use('/api/contacts', require('./routes/api/contacts'));
-app.use('/api/contacts', require('./routes/api/favoriteRouter')); 
+mongoose
+  .connect(process.env.DB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('Database connection successful');
+  })
+  .catch((error) => {
+    console.error('Database connection error:', error);
+    process.exit(1);
+  });
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' });
-});
-
-app.use((err, req, res, next) => {
-  const { status = 500, message = 'Server Error' } = err;
-  res.status(status).json({ message });
-});
+app.use('/contacts', contactsRouter);
+app.use('/users', usersRouter);
 
 module.exports = app;

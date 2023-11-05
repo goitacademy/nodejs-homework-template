@@ -1,16 +1,18 @@
 const Contact = require('../models/contactModel');
 
+
 const updateFavoriteStatus = async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
+    const userId = req.user._id; 
     const { favorite } = req.body;
 
     if (favorite === undefined) {
-      return res.status(400).json({ message: 'missing field favorite' });
+      return res.status(400).json({ message: 'Missing field favorite' });
     }
 
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
+    const updatedContact = await Contact.findOneAndUpdate(
+      { _id: contactId, owner: userId },
       { favorite },
       { new: true }
     );
@@ -25,10 +27,12 @@ const updateFavoriteStatus = async (req, res, next) => {
   }
 };
 
+
 const deleteContact = async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
-    const result = await Contact.findByIdAndDelete(contactId);
+    const userId = req.user._id;
+    const result = await Contact.findOneAndDelete({ _id: contactId, owner: userId });
 
     if (result) {
       res.json({ message: 'Contact deleted' });

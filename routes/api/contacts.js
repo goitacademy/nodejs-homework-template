@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../../models/contactModel');
-const contactsController = require('../../Controllers/contactsController');
+const authMiddleware = require('../../middleware/authMiddleware');
+
+
+router.use(authMiddleware); 
 
 
 router.get('/', async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const userId = req.user._id;
+    const contacts = await Contact.find({ owner: userId });
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -17,7 +21,8 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
-    const contact = await Contact.findById(contactId);
+    const userId = req.user._id; 
+    const contact = await Contact.findOne({ _id: contactId, owner: userId });
     if (contact) {
       res.json(contact);
     } else {
@@ -31,8 +36,10 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const newContact = await Contact.create(req.body);
-    res.status(201).json(newContact);
+    const userId = req.user._id; 
+    const newContact = { ...req.body, owner: userId };
+    const createdContact = await Contact.create(newContact);
+    res.status(201).json(createdContact);
   } catch (error) {
     next(error);
   }
@@ -42,8 +49,9 @@ router.post('/', async (req, res, next) => {
 router.put('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
+    const userId = req.user._id; 
+    const updatedContact = await Contact.findOneAndUpdate(
+      { _id: contactId, owner: userId },
       req.body,
       { new: true }
     );
@@ -62,7 +70,8 @@ router.put('/:contactId', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
-    const result = await Contact.findByIdAndDelete(contactId);
+    const userId = req.user._id; 
+    const result = await Contact.findOneAndDelete({ _id: contactId, owner: userId });
 
     if (result) {
       res.json({ message: 'Contact deleted' });
@@ -73,8 +82,5 @@ router.delete('/:contactId', async (req, res, next) => {
     next(error);
   }
 });
-
-
-router.patch('/:contactId/favorite', contactsController.updateFavoriteStatus);
 
 module.exports = router;

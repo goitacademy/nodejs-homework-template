@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const port = process.env.PORT || 3000;
 
-
 mongoose
   .connect(process.env.DB_URI, {
     useNewUrlParser: true,
@@ -19,4 +18,3 @@ mongoose
     console.error('Database connection error:', error);
     process.exit(1);
   });
-
