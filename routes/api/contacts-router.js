@@ -34,7 +34,13 @@ router.get("/", listContactsController);
 
 router.get("/:contactId", isValidId, getContactByIdController);
 
-router.post("/", upload, isEmptyBody, contactAddValidate, addContactController);
+router.post(
+  "/",
+  upload.single("poster"),
+  isEmptyBody,
+  contactAddValidate,
+  addContactController
+);
 
 router.delete("/:contactId", isValidId, removeContactController);
 
