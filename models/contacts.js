@@ -1,4 +1,7 @@
-// const fs = require('fs/promises')
+const fs = require('fs/promises');
+const { v4: uuidv4 } = require('uuid');
+
+const contactsPath = './contacts.json';
 
 const listContacts = async () => {}
 
@@ -16,4 +19,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
