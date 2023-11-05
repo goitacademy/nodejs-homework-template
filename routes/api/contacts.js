@@ -1,15 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
 
 const contacts = require("../../models/contacts");
 const handlerHttpError = require("./utils");
-
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.number().required(),
-});
+const addSchema = require("./schemas");
 
 router.get("/", async (_, res, next) => {
   try {
