@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     if (file.originalname.split(".").pop() === "exe") {
       cb(new Error("File extention not allowed"));
     }
-    cb(null, file.originalname);
+    cb(null, filename);
   },
 });
 
