@@ -1,27 +1,28 @@
 const service = require('../services/contacts');
 const { nanoid } = require('nanoid');
+const body = require('../schemas/contacts');
 
 const listContacts = async (req, res, next) => {
-  const result = await service.listContacts();
+  const contacts = await service.listContacts();
 
-  res.status(200).json(result);
+  res.status(200).json(contacts);
 };
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await service.getContactById(id);
+  const contact = await service.getContactById(id);
 
-  if (!result) {
+  if (!contact) {
     res.status(404).json({ message: 'Not found', error: '404' });
   } else {
-    res.status(200).json(result);
+    res.status(200).json(contact);
   }
 };
 
 const addContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
+  const { error, value } = body.validate(req.body);
 
-  if (!name || !email || !phone) {
+  if (error) {
     return res
       .status(400)
       .json({ message: 'Missing required name, email, or phone field' });
@@ -29,14 +30,14 @@ const addContact = async (req, res, next) => {
 
   const newContact = {
     id: nanoid(8),
-    name,
-    email,
-    phone,
+    name: value.name,
+    email: value.email,
+    phone: value.phone,
   };
 
-  const result = await service.addContact(newContact);
+  const contact = await service.addContact(newContact);
 
-  res.status(201).json(result);
+  res.status(201).json(contact);
 };
 
 const updateContact = async (req, res, next) => {
@@ -72,15 +73,14 @@ const updateContact = async (req, res, next) => {
 };
 
 const removeContact = async (req, res, rext) => {
-  //res.json({ message: 'Contact was deleted successfully.' });
   try {
     const { id } = req.params;
     const { success, result, message } = await service.removeContact(id);
 
     if (!success) {
-      return res.status(400).json({
+      return res.status(404).json({
         result,
-        message: 'Contact not found',
+        message,
       });
     }
 

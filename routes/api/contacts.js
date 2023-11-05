@@ -4,7 +4,6 @@ const routerContacts = express.Router();
 
 routerContacts.get('/', controller.listContacts);
 
-//routerContacts.get('/:contactId', controller.getContactById);
 routerContacts.get('/:id', controller.getContactById);
 
 routerContacts.post('/', controller.addContact);

@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 
-const pathContacts = path.join(__dirname, '../models/contacts.json');
+const pathContacts = path.join(__dirname, '../db/contacts.json');
 
 const loadContacts = async () => {
   try {
@@ -40,7 +40,11 @@ const addContact = async body => {
 
     return body;
   } catch (error) {
-    throw error;
+    return {
+      success: false,
+      result: null,
+      message: 'Missing required name, email, or phone ',
+    };
   }
 };
 
@@ -93,6 +97,12 @@ const removeContact = async contactId => {
         success: true,
         result: removedContact,
         message: 'The contact was deleted successfully.',
+      };
+    } else {
+      return {
+        success: false,
+        result: null,
+        message: 'Contact not found.',
       };
     }
   } catch (error) {

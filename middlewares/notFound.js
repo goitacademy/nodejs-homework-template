@@ -1,6 +1,7 @@
-const notFoundMiddleware = (_, __, next) => {
-  //res.status(404).json({ message: 'Not found' });
-  const error = new Error('Resource not found');
+const notFoundMiddleware = (req, res, next) => {
+  const error = new Error(
+    'Resource not found plis insert http://localhost:3000/api/Contacts',
+  );
   error.status = 404;
   next(error);
 };
