@@ -25,7 +25,6 @@ contactSchema.post("save", handleMongooseError);
 const addSchema = Joi.object({
   name: {
     type: String,
-    required: [true, "Set name for contact"],
   },
   email: {
     type: String,
