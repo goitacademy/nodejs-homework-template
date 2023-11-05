@@ -1,25 +1,75 @@
-const express = require("express");
+import { Router } from "express";
+import {
+  addContact,
+  getContactById,
+  listContacts,
+  removeContact,
+  updateContact,
+} from "../../models/api-contacts.js";
+import { contactValidate } from "../../validation/contacts.js";
 
-const router = express.Router();
+const router = Router();
 
+// Get all of the contacts
 router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const contacts = await listContacts();
+
+    if (!contacts) return next();
+    res.status(200).json(contacts);
+  } catch (error) {
+    next(error);
+  }
 });
 
+// Get contacts by ID
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+
+  const contact = await getContactById(contactId);
+
+  if (!contact) return next();
+
+  res.status(200).json(contact);
 });
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+// Add a new Contact
+router.post("/", async (req, res) => {
+  const { error } = contactValidate(req.body);
+
+  if (typeof error !== "undefined") {
+    return res
+      .status(400)
+      .send(error.details.map((err) => err.message).join(", "));
+  }
+
+  const contact = await addContact(req.body);
+
+  if (!contact) res.status(400).json({ message: "missing required fields" });
+
+  res.status(201).json(contact);
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+// Delete any Contact
+router.delete("/:contactId", async (req, res) => {
+  const { contactId } = req.params;
+
+  const contact = await removeContact(contactId);
+
+  if (!contact) res.status(400).json({ message: "missing required fields" });
+
+  res.status(200).json(contact);
 });
 
+// Update any contact's information
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+
+  const contact = await updateContact(contactId, req.body);
+
+  if (!contact) return next();
+
+  res.status(200).json(contact);
 });
 
-module.exports = router;
+export default router;
