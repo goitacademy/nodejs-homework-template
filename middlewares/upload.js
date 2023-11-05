@@ -21,6 +21,11 @@ const fileFilter = (req, file, cb) => {
   if (file.originalname.split(".").pop() === "exe") {
     cb(new Error("File extention not allowed"));
   }
+  cb(null, true);
 };
 
-const upload = multer({});
+const upload = multer({
+  storage,
+  limits,
+  fileFilter,
+});
