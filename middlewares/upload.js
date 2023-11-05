@@ -6,7 +6,7 @@ const destination = resolve("temp");
 const storage = multer.diskStorage({
   destination,
   filename: (req, file, cb) => {
-    cb(null, file);
+    cb(null, file.originalname);
   },
 });
 
