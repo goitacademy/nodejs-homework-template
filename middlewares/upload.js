@@ -4,7 +4,10 @@ const { resolve } = require("path");
 const destination = resolve("temp");
 
 const storage = multer.diskStorage({
-  destination: destination,
+  destination,
+  filename: (req, file, cb) => {
+    cb(null, file);
+  },
 });
 
 const upload = multer({});
