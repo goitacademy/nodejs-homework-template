@@ -21,7 +21,7 @@ mongoose
     process.exit(1);
   });
 
-app.use('/contacts', contactsRouter);
-app.use('/users', usersRouter);
+app.use('/api/contacts', contactsRouter);
+app.use('/api/users', usersRouter);
 
 module.exports = app;
