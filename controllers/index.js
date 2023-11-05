@@ -1,5 +1,3 @@
-const { getAll, getById, update, add, remove } = require('./contacts');
+const Contact = require('./contacts');
 
-module.exports = {
-    getAll, getById, update, add, remove,
-}
+module.exports = {Contact};

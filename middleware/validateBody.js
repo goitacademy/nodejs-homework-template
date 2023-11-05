@@ -2,8 +2,17 @@ const { HTTPError } = require("../helpers");
 
 const validateBody = (schema) => {
   const foo = (req, res, next) => {
-    const msg =
-      req.method === "PUT" ? "missing fields" : "missing required name field";
+    let msg;
+    switch (req.method) {
+      case "PUT":
+        msg = "missing fields";
+        break;
+      case "PATCH":
+        msg = `missing field "favorite"`;
+        break;
+      default:
+        msg = "missing required name field";
+    }
     const { error } = schema.validate(req.body);
     if (error) {
       next(HTTPError(msg, 400));
@@ -12,4 +21,4 @@ const validateBody = (schema) => {
   };
   return foo;
 };
-module.exports = validateBody;
+module.exports = { validateBody };

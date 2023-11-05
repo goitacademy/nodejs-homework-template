@@ -1,38 +1,29 @@
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../models/contacts");
+const {Contact } = require("../models");
 
-const { HTTPError, ctrlWrapper } = require("../helpers");
+const { ctrlWrapper, handle404error } = require("../helpers");
 const getAll = async (req, res) => {
-  const contacts = await listContacts();
+  const contacts = await Contact.listContacts();
   res.status(200).json(contacts);
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await Contact.getContactById(contactId);
   if (!contact) {
-    throw HTTPError("Not found", 404);
+    handle404error();
   }
   res.status(200).json(contact);
 };
 const add = async (req, res) => {
-  const result = await addContact(req.body);
-  if (!result) {
-    throw HTTPError("missing required name field", 400);
-  }
+  const result = await Contact.addContact(req.body);
   res.status(201).json(result);
 };
 
 const remove = async (req, res) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
+  const result = await Contact.removeContact(contactId);
   if (!result) {
-    throw HTTPError("Not found", 404);
+    handle404error();
   }
   res.status(200).json({ message: "contact deleted" });
 };
@@ -40,9 +31,18 @@ const remove = async (req, res) => {
 const update = async (req, res) => {
   const { contactId } = req.params;
 
-  const result = await updateContact(contactId, req.body);
+  const result = await Contact.updateContact(contactId, req.body);
   if (!result) {
-    throw HTTPError("Not found", 404);
+    handle404error();
+  }
+  res.status(200).json(result);
+};
+
+const updateStatus = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.updateStatusContact(contactId, req.body);
+  if (!result) {
+    handle404error();
   }
   res.status(200).json(result);
 };
@@ -53,4 +53,5 @@ module.exports = {
   update: ctrlWrapper(update),
   remove: ctrlWrapper(remove),
   add: ctrlWrapper(add),
+  updateStatus: ctrlWrapper(updateStatus),
 };

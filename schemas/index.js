@@ -1,4 +1,5 @@
-const contactsSchema = require('./contacts');
+const {addSchema, Contact, patchSchema} = require('./contacts');
 module.exports = {
-    contactsSchema,
+    addSchema,
+    Contact, patchSchema
 }
