@@ -23,10 +23,10 @@ const contactSchema = new Schema({
 contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
-  },
+  name: Joi.string().required(),
+  email: Joi.string(),
+  phone: Joi.string(),
+  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({
