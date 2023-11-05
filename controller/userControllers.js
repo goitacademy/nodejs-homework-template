@@ -1,4 +1,4 @@
-import { getUserByEmail } from "../models/users.js";
+import { getUserByEmail, updateUser } from "../models/users.js";
 import { User } from "../service/schemas/User.js";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
@@ -32,5 +32,10 @@ export const login = async (req, res, next) => {
     email: user.email,
   };
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+  const result = await updateUser(email, { token });
   return res.status(200).json({ token, user });
+};
+
+export const LogOut = async (req, res, next) => {
+  
 };

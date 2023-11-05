@@ -7,23 +7,21 @@ import {
   updateById,
   updateFavorite,
 } from "../../controller/controllers.js";
-import { login, registration } from "../../controller/userControllers.js";
+
 
 const router = express.Router();
 
-router.get("/contacts", getAllContacts);
+router.get("/", getAllContacts);
 
-router.get("/contacts/:contactId", getById);
+router.get("/:contactId", getById);
 
-router.post("/contacts", createContact);
+router.post("/", createContact);
 
-router.delete("/contacts/:contactId", deleteById);
+router.delete("/:contactId", deleteById);
 
-router.put("/contacts/:contactId", updateById);
+router.put("/:contactId", updateById);
 
-router.patch("/contacts/:contactId", updateFavorite);
+router.patch("/:contactId", updateFavorite);
 
-router.post("/users/signup", registration);
 
-router.post("/users/login", login);
 export { router };

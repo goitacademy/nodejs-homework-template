@@ -3,7 +3,8 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 
-import { router as contactsRouter } from "./routes/api/contacts.js";
+import api from "./routes/api/index.js";
+import setJWTStrategy from "./config/config-passport.js";
 
 const app = express();
 
@@ -13,8 +14,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 
 app.use(express.json());
-
-app.use("/api", contactsRouter);
+setJWTStrategy();
+app.use("/api", api);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
