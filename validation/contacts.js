@@ -11,3 +11,5 @@ const contactValidator = (schema) => (data) => {
 };
 
 export const contactValidate = contactValidator(contactSchema);
+
+// export const contactUpdateSchema = joi.object({
