@@ -1,11 +1,8 @@
-const { rename, unlink } = require("fs/promises");
-const { resolve, join } = require("path");
+const { unlink } = require("fs/promises");
 
 const { Contact } = require("../../models");
 const { controllerWrapper } = require("../../decorators");
 const { cloudinary } = require("../../helpers");
-
-const avatarPath = resolve("public", "avatars");
 
 const addContactController = async (req, res) => {
   const { _id: owner } = req.user;
