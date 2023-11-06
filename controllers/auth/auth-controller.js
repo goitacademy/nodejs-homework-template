@@ -32,7 +32,7 @@ const signup = async (req, res) => {
   const newUser = await User.create({
     ...req.body,
     password: hashedPassword,
-    avatar: avatar,
+    avatarURL: avatar,
   });
 
   res.status(201).json({
