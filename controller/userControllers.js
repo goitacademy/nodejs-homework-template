@@ -40,13 +40,18 @@ export const LogOut = async (req, res, next) => {
   const userId = res.locals.user._conditions._id;
   const user = await User.findById(userId);
   try {
-    if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
-    } else {
-      const result = await updateUser(userId, { token: null });
-      return res.status(204);
-    }
+    const result = await updateUser(userId, { token: null });
+    return res.status(204);
   } catch (error) {
     next(error);
   }
+};
+export const currentUser = async (req, res, next) => {
+  const userId = res.locals.user._conditions._id;
+  const user = await User.findById(userId);
+  const payload = {
+    email: user.email,
+    subscription: user.subscription,
+  };
+  return res.status(200).json({ payload });
 };

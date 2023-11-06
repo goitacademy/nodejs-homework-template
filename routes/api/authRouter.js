@@ -1,6 +1,7 @@
 import express from "express";
 import {
   LogOut,
+  currentUser,
   login,
   registration,
 } from "../../controller/userControllers.js";
@@ -15,4 +16,5 @@ router.post("/login", login);
 
 router.post("/logout", authMiddleware, LogOut);
 
+router.get("/current", authMiddleware, currentUser);
 export { router };
