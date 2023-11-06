@@ -14,7 +14,7 @@ router.use(morgan("combined"));
 router.get("/", async (req, res, next) => {
   try {
     const allContacts = await Contacts.listContacts();
-    res.json({ message: allContacts });
+    res.json(allContacts);
   } catch (error) {
     next(error);
   }
@@ -25,7 +25,7 @@ router.get("/:contactId", async (req, res, next) => {
     const contactId = req.params.contactId;
     const contact = await Contacts.getContactById(contactId);
     if (contact) {
-      res.json({ message: contact });
+      res.json(contact);
     } else {
       next();
     }
@@ -66,7 +66,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const contact = await Contacts.removeContact(contactId);
 
     if (contact) {
-      res.json({ message: "Contact deleted " });
+      res.json("Contact deleted ");
     } else {
       next();
     }
@@ -100,7 +100,7 @@ router.put("/:contactId", jsonParser, async (req, res, next) => {
     );
 
     if (!body) {
-      return res.status(400).json({ message: "Missing fields" });
+      return res.status(400).json("Missing fields");
     }
 
     if (updatedContact) {
