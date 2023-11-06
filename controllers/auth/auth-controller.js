@@ -1,9 +1,9 @@
 const bcrypt = require("bcryptjs");
-const {} = reqire("jimp");
+const { read } = require("jimp");
 const { sign } = require("jsonwebtoken");
 const { config } = require("dotenv");
 const { rename } = require("fs/promises");
-const { join: pathJoin, resolve } = require("path");
+const { join: pathJoin, resolve, join } = require("path");
 
 const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
@@ -74,10 +74,16 @@ const signout = async (req, res) => {
 };
 
 const updateAvatar = async (req, res, next) => {
+  const avatarsPath = pathJoin("public", "avatars");
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
-  const resultUpload = pathJoin(avatarPath, filename);
+  const resultUpload = pathJoin(avatarsPath, filename);
+  const image = await read(tempUpload);
+  image.resize(250, 250).write(tempUpload);
+  const avatarURL = pathJoin("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.json;
 };
 
 module.exports = {
