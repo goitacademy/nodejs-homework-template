@@ -13,9 +13,7 @@ router.get("/", async (req, res, next) => {
   const message = await listContacts();
 
   res.json({
-    status: "success",
-    code: 200,
-    data: message,
+    message,
   });
 });
 
@@ -26,9 +24,7 @@ router.get("/:contactId", async (req, res, next) => {
     return next();
   }
   res.json({
-    status: "success",
-    code: 200,
-    data: message,
+    message,
   });
 });
 
@@ -39,11 +35,8 @@ router.post("/", async (req, res, next) => {
       .status(400)
       .send(response.error.details.map((err) => err.message).join(", "));
   }
-  res.json({
-    status: "success",
-    code: 200,
-    message: "Added Successfully: " + response.newContact.name,
-  });
+  res.status(201);
+  res.json(response.newContact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
@@ -54,8 +47,6 @@ router.delete("/:contactId", async (req, res, next) => {
 
   res.json({
     message: "contact deleted",
-    code: 200,
-    status: "success",
   });
 });
 
@@ -66,11 +57,7 @@ router.put("/:contactId", async (req, res, next) => {
       .status(400)
       .send(response.error.details.map((err) => err.message).join(", "));
   }
-  res.json({
-    status: "success",
-    code: 200,
-    message: "Updated Successfully: " + response.updatedContact.name,
-  });
+  res.json(response.updatedContact);
 });
 
 module.exports = router;
