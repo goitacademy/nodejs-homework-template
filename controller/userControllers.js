@@ -48,10 +48,11 @@ export const LogOut = async (req, res, next) => {
 };
 export const currentUser = async (req, res, next) => {
   const userId = res.locals.user._conditions._id;
-  const user = await User.findById(userId);
-  const payload = {
-    email: user.email,
-    subscription: user.subscription,
-  };
-  return res.status(200).json({ payload });
+  const user = await User.findById(userId, {
+    email: 1,
+    subscription: 1,
+    _id: 0,
+  });
+
+  return res.status(200).json({ user });
 };
