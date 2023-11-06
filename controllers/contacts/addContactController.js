@@ -11,7 +11,7 @@ const addContactController = async (req, res) => {
   const { path: oldPath, filename } = req.file;
   const newPath = join(avatarPath, filename);
   await rename(oldPath, newPath);
-  const poster = join("public", "avatars", filename);
+  const avatar = join("public", "avatars", filename);
   const result = await Contact.create({ ...req.body, avatar, owner });
   res.status(201).json(result);
 };
