@@ -1,93 +1,165 @@
 // controllers\contacts.js
 const service = require("../services/contacts");
-const schema = require("../models/schema");
 
 const listContacts = async (req, res) => {
-  // console.log(req.query);
-  const result = await service.listContacts();
-  res.status(200).json(result);
-};
+  try {
+    // console.log(req.query);
+    const { success, result, message } = await service.listContacts();
+    if (!success) {
+      return res.status(400).json({
+        result,
+        message,
+      });
+    }
 
-const getContactById = async (req, res) => {
-  const { id } = req.params;
-  const result = await service.getContactById(id);
-  if (result.success) {
-    res.status(200).json(result);
-  } else {
-    res.status(404).json(result);
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
   }
 };
 
-const removeContact = (req, res) => {
-  const { id } = req.params;
-  service
-    .removeContact(id)
-    .then((result) => {
-      if (result.success) {
-        res.status(200).json({ message: result.message });
-      } else {
-        res.status(404).json({ message: result.message });
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+const getContactById = async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const id = req.params.id;
+    const { success, result, message } = await service.getContactById(id);
+    if (!success) {
+      return res.status(400).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(200).json({
+      result,
+      message,
     });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
+
+const removeContact = async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const id = req.params.id;
+    const { success, result, message } = await service.removeContact(id);
+    if (!success) {
+      return res.status(400).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
 };
 
 const addContact = async (req, res) => {
   try {
-    const { body } = req;
-    const { error, value } = schema.addContact.validate(body);
+    const { success, result, message } = await service.addContact(req.body);
+    console.log(result);
 
-    if (error) {
+    if (!success) {
       return res.status(400).json({
-        success: false,
-        error: error.details,
-        message: "Invalid input data",
+        result,
+        message,
       });
     }
 
-    const result = await service.addContact(value);
-
-    if (result.success) {
-      res.status(201).json({ message: result.message });
-    } else {
-      res.status(400).json({ message: result.message });
-    }
+    return res.status(201).json({
+      result,
+      message,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
   }
 };
 
 const updateContact = async (req, res) => {
   try {
     const { id } = req.params;
-    const { body } = req;
 
-    const { error, value } = schema.updateContact.validate(body);
+    const { success, result, message } = await service.updateContact(
+      id,
+      req.body
+    );
+    console.log(result);
 
-    if (error) {
-      return res
-        .status(400)
-        .json({ message: "Invalid input data", error: error.details });
-    }
-
-    const result = await service.updateContact(id, value);
-
-    if (result.success) {
-      res.status(200).json({
-        success: true,
-        result: result.result,
-        message: result.message,
+    if (!success) {
+      return res.status(400).json({
+        result,
+        message,
       });
-    } else {
-      res.status(404).json({ success: false, message: result.message });
     }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
+
+const updateStatusContact = async (req, res) => {
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
+
+    const { success, result, message } = await service.updateStatusContact(
+      contactId,
+      favorite
+    );
+
+    console.log(result);
+
+    if (favorite === undefined) {
+      return res.status(400).json({
+        result,
+        message: "missing field favorite",
+      });
+    }
+
+    if (!success) {
+      return res.status(404).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
   }
 };
 
@@ -97,4 +169,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };

@@ -1,16 +1,14 @@
 // services\contacts.js
-const fs = require("fs").promises;
-const path = require("path");
-
-const pathContacts = path.join(__dirname, "../db/contacts.json");
+const Contact = require("../models/contacts");
 
 const listContacts = async () => {
   try {
-    const result = (await fs.readFile(pathContacts)).toString();
+    const contacts = await Contact.find();
+
     return {
       success: true,
-      result: JSON.parse(result),
-      message: "List of users",
+      result: contacts,
+      message: "List of Contacts",
     };
   } catch (error) {
     return {
@@ -21,28 +19,23 @@ const listContacts = async () => {
   }
 };
 
-const getContactById = async (id) => {
+const getContactById = async (_id) => {
   try {
-    const result = await JSON.parse(
-      (await fs.readFile(pathContacts)).toString()
-    );
-
-    const foundUser = result.find((user) => user.id === id);
-
-    if (foundUser) {
-      return {
-        success: true,
-        result: foundUser,
-        message: "User found",
-      };
-    } else {
+    const contact = await Contact.findById({ _id });
+    if (!contact) {
       return {
         success: false,
         result: null,
-        message: "User not found",
+        message: `No contact found with id: ${_id}`,
       };
     }
+    return {
+      success: true,
+      result: contact,
+      message: `Contact Found`,
+    };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       result: null,
@@ -51,30 +44,28 @@ const getContactById = async (id) => {
   }
 };
 
-const addContact = async (body) => {
+const addContact = async (Data) => {
   try {
-    const result = await fs.readFile(pathContacts);
-    const contacts = JSON.parse(result);
+    // const contactRegistered = await Contact.insertMany(Data);
+    const contactRegistered = await Contact.create(Data);
+    console.log(contactRegistered);
+    //     const newId = crypto.randomUUID();
 
-    const newId = generateUniqueId(contacts);
-
-    const newContact = {
-      id: newId,
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-    };
-
-    contacts.push(newContact);
-
-    await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
+    if (!contactRegistered) {
+      return {
+        success: false,
+        result: null,
+        message: "There is an error try creating contact.",
+      };
+    }
 
     return {
       success: true,
-      result: newContact,
-      message: "Contact added successfully",
+      result: contactRegistered,
+      message: "Contact registered successfully.",
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       result: null,
@@ -83,22 +74,19 @@ const addContact = async (body) => {
   }
 };
 
-const removeContact = async (id) => {
+const removeContact = async (_id) => {
   try {
-    if (!id) {
+    if (!_id) {
       return {
         success: false,
         result: null,
         message: "Invalid ID",
       };
     }
+    const contactDelete = await Contact.findByIdAndDelete(_id);
+    console.log(contactDelete);
 
-    const contactsData = await fs.readFile(pathContacts);
-    const contacts = JSON.parse(contactsData);
-
-    const contactIndex = contacts.findIndex((contact) => contact.id === id);
-
-    if (contactIndex === -1) {
+    if (!contactDelete) {
       return {
         success: false,
         result: null,
@@ -106,16 +94,13 @@ const removeContact = async (id) => {
       };
     }
 
-    const [removedContact] = contacts.splice(contactIndex, 1);
-
-    await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
-
     return {
       success: true,
-      result: removedContact,
-      message: "Contact deleted successfully",
+      result: contactDelete,
+      message: "Contact deleted successfully.",
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       result: null,
@@ -126,34 +111,39 @@ const removeContact = async (id) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const result = await fs.readFile(pathContacts);
-    const contacts = JSON.parse(result);
-
-    const indexToUpdate = contacts.findIndex(
-      (contact) => contact.id === contactId
-    );
-
-    if (indexToUpdate === -1) {
+    if (!contactId) {
       return {
         success: false,
         result: null,
-        message: "Contact not found",
+        message: "Invalid ID",
+      };
+    }
+    // Verifica si el contactId es un ObjectId válido
+    // if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    //   return {
+    //     success: false,
+    //     result: null,
+    //     message: "Invalid ObjectId format",
+    //   };
+    // }
+    const contactUpdate = await Contact.findByIdAndUpdate(contactId, body);
+    console.log(contactUpdate);
+
+    if (!contactUpdate) {
+      return {
+        success: false,
+        result: null,
+        message: "There was an error to update contact",
       };
     }
 
-    contacts[indexToUpdate] = {
-      ...contacts[indexToUpdate],
-      ...body,
-    };
-
-    await fs.writeFile(pathContacts, JSON.stringify(contacts, null, 2));
-
     return {
       success: true,
-      result: contacts[indexToUpdate],
-      message: "Contact updated successfully",
+      result: contactUpdate,
+      message: "Contact updated successfully.",
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       result: null,
@@ -162,22 +152,45 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-// Función auxiliar para generar un ID único
-function generateUniqueId(contacts) {
-  let newId;
-  do {
-    newId = generateRandomId();
-  } while (contacts.some((contact) => contact.id === newId));
-  return newId;
-}
+const updateStatusContact = async (contactId, favorite) => {
+  try {
+    if (!contactId) {
+      return {
+        success: false,
+        result: null,
+        message: "Invalid ID",
+      };
+    }
+    const contact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
 
-// Función auxiliar para generar un ID aleatorio
-function generateRandomId() {
-  return (
-    Math.random().toString(36).substring(2, 15) +
-    Math.random().toString(36).substring(2, 15)
-  );
-}
+    console.log(contact);
+
+    if (!contact) {
+      return {
+        success: false,
+        result: null,
+        message: "Not found contact",
+      };
+    }
+
+    return {
+      success: true,
+      result: contact,
+      message: "Favorite contac updated successfully.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
 
 module.exports = {
   listContacts,
@@ -185,4 +198,5 @@ module.exports = {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 };

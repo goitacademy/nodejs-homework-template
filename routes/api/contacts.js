@@ -11,6 +11,8 @@ module.exports = () => {
 
   contactRouter.put("/:id", controller.updateContact);
 
+   contactRouter.patch("/:contactId/favorite", controller.updateStatusContact);
+
   contactRouter.delete("/:id", controller.removeContact);
 
   return contactRouter;
