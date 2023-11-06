@@ -13,13 +13,13 @@ const getContactById = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not Found");
   }
-  res.json({ result });
+  res.json(result);
 };
 
 const addContact = async (req, res) => {
   const result = await contacts.addContact(req.body);
 
-  res.status(201).json({ result });
+  res.status(201).json(result);
 };
 
 const removeContact = async (req, res) => {
