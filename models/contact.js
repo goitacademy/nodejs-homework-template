@@ -26,7 +26,9 @@ const joiSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": "Missing required phone field",
   }),
-  email: Joi.string().required(),
+  email: Joi.string().required().messages({
+    "any.required": "Missing required email field",
+  }),
   favorite: Joi.boolean(),
 });
 
