@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+const {} = reqire("jimp");
 const { sign } = require("jsonwebtoken");
 const { config } = require("dotenv");
 const { rename } = require("fs/promises");
@@ -74,8 +75,8 @@ const signout = async (req, res) => {
 
 const updateAvatar = async (req, res, next) => {
   const { _id } = req.user;
-  const { path: tempUpload, origainalname } = req.file;
-  const filename = `${_id}_${origainalname}`;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
   const resultUpload = pathJoin(avatarPath, filename);
 };
 
