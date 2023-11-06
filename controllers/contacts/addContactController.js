@@ -6,7 +6,7 @@ const { cloudinary } = require("../../helpers");
 
 const addContactController = async (req, res) => {
   const { _id: owner } = req.user;
-  const fileData = await cloudinary.uploader.upload(req.file.path, {
+  const { url: avatar } = await cloudinary.uploader.upload(req.file.path, {
     folder: "avatars",
   });
   await unlink(req.file.path);
