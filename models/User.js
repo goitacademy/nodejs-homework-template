@@ -44,6 +44,7 @@ const userSignUpSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
   subscription: Joi.string(),
+  avatar: Joi.string(),
 });
 
 const userSignInSchema = Joi.object({
