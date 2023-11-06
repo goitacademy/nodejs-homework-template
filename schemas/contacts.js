@@ -7,7 +7,7 @@ const addSchema = Joi.object({
   email: Joi.string()
     .required()
     .messages({ "any.required": "Missing required Email field" }),
-  phone: Joi.number()
+  phone: Joi.string()
     .required()
     .messages({ "any.required": "Missing required Phone field" }),
 });
