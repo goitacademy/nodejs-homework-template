@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const { User } = require("../../models/User");
 
-const HttpError = require("../../helpers");
+const { HttpError } = require("../../helpers");
 
 const { ctrlWrapper } = require("../../decorators");
 
@@ -12,8 +12,13 @@ const { JWT_SECRET } = process.env;
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (!user) {
     throw HttpError(401, "Email or password invalid");
+  }
+
+  if (!user.verify) {
+    throw HttpError(401, "Email not verify");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);

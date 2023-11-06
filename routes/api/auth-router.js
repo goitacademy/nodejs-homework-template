@@ -6,10 +6,15 @@ const { isEmptyBody, authenticate, upload } = require("../../middlewares");
 
 const { validateBody } = require("../../decorators");
 
-const { userAuthSchema, userSubscriptionSchema } = require("../../models/User");
+const {
+  userAuthSchema,
+  userSubscriptionSchema,
+  userEmailSchema,
+} = require("../../models/User");
 
 const userAuthValidate = validateBody(userAuthSchema);
 const userSubscriptionValidate = validateBody(userSubscriptionSchema);
+const userEmailValidate = validateBody(userEmailSchema);
 
 const authRouter = express.Router();
 
@@ -18,6 +23,15 @@ authRouter.post(
   isEmptyBody,
   userAuthValidate,
   authController.register
+);
+
+authRouter.get("/verify/:verificationToken", authController.verify);
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  userEmailValidate,
+  authController.resendVerifyEmail
 );
 
 authRouter.post("/login", isEmptyBody, userAuthValidate, authController.login);
