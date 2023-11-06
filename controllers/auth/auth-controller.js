@@ -72,6 +72,11 @@ const signout = async (req, res) => {
   await User.findByIdAndUpdate(_id, { token: "" });
 };
 
+const updateAvatar = async (req, res, next) => {
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+};
+
 module.exports = {
   signup: controllerWrapper(signup),
   signin: controllerWrapper(signin),
