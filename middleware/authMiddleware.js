@@ -7,7 +7,7 @@ function verifyToken(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, "your-secret-key");
+    const decoded = jwt.verify(token, "my-secret-key");
     req.userId = decoded.id;
     next();
   } catch (error) {
