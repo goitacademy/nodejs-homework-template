@@ -1,6 +1,8 @@
 const bcrypt = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { config } = require("dotenv");
+const { rename } = require("fs/promises");
+const { join: pathJoin } = require("path");
 
 const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
@@ -10,6 +12,8 @@ config();
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
+  const { path: oldPath, filename } = req.files;
+
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
