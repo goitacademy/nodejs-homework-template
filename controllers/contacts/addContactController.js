@@ -3,6 +3,7 @@ const { resolve, join } = require("path");
 
 const { Contact } = require("../../models");
 const { controllerWrapper } = require("../../decorators");
+const { cloudinary } = require("../../helpers");
 
 const avatarPath = resolve("public", "avatars");
 
