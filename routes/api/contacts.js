@@ -5,14 +5,14 @@ const router = express.Router()
 
 router.get('/', ctrl.getAll)
 
-router.get('/:contactId', ctrl.getById)
+router.get('/:id', ctrl.getById)
 
 router.post('/', ctrl.add)
 
-router.delete('/:contactId', ctrl.remove)
+router.delete('/:id', ctrl.remove)
 
-router.put('/:contactId', ctrl.update)
+router.put('/:id', ctrl.update)
 
-router.patch('/:contactId/favorite', ctrl.update)
+router.patch('/:id/favorite', ctrl.updateStatus)
 
 module.exports = router
