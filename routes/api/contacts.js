@@ -1,25 +1,58 @@
-const express = require('express')
+import express from "express";
 
-const router = express.Router()
+import contactsController from "../../controllers/controllers.js";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+  upload,
+} from "../../middlewares/index.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { validateBody } from "../../decorators/index.js";
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import {
+  contactsAddSchema,
+  contactUpdateFavoriteSchema,
+} from "../../models/Contact.js";
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsAddValidate = validateBody(contactsAddSchema);
+const contactsUpdateFavoriteValidate = validateBody(
+  contactUpdateFavoriteSchema
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsRouter = express.Router();
 
-module.exports = router
+contactsRouter.use(authenticate);
+
+contactsRouter.get("/", contactsController.getAll);
+
+contactsRouter.get("/:contactId", isValidId, contactsController.getById);
+
+contactsRouter.post(
+  "/",
+  upload.single("avatarURL"),
+  isEmptyBody,
+  contactsAddValidate,
+  contactsController.post
+);
+
+contactsRouter.delete("/:contactId", isValidId, contactsController.remove);
+
+contactsRouter.put(
+  "/:contactId",
+  isValidId,
+  isEmptyBody,
+  contactsAddValidate,
+  contactsController.updateById
+);
+
+contactsRouter.patch(
+  "/:contactId/favorite",
+  isValidId,
+  isEmptyBody,
+  contactsUpdateFavoriteValidate,
+  contactsController.updateFavorite
+);
+
+export default contactsRouter;
