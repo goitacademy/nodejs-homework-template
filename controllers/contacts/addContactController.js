@@ -10,9 +10,8 @@ const addContactController = async (req, res) => {
     folder: "avatars",
   });
   await unlink(req.file.path);
-  //const avatar = join("public", "avatars", filename);
-  //const result = await Contact.create({ ...req.body, avatar, owner });
-  //res.status(201).json(result);
+  const result = await Contact.create({ ...req.body, avatar, owner });
+  res.status(201).json(result);
 };
 
 module.exports = {
