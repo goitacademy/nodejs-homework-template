@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { config } = require("dotenv");
 const { rename } = require("fs/promises");
-const { join: pathJoin } = require("path");
+const { join: pathJoin, resolve } = require("path");
 
 const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
@@ -10,6 +10,8 @@ const { controllerWrapper } = require("../../decorators");
 
 config();
 const { JWT_SECRET } = process.env;
+
+const avatarPath = resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { path: oldPath, filename } = req.files;
