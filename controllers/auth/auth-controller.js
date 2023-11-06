@@ -13,6 +13,8 @@ const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
   const { path: oldPath, filename } = req.files;
+  const newPath = pathJoin("avatars", filename);
+  await rename(oldPath, newPath);
 
   const { email, password } = req.body;
   const user = await User.findOne({ email });
