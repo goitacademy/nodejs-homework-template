@@ -1,5 +1,6 @@
-export * from "./indexContacts.js";
-export * from "./createContacts.js";
-export * from "./deleteContacts.js";
-export * from "./showContacts.js";
-export * from "./updateContacts.js";
+export { showContacts } from "./showContacts.js";
+export { indexContacts } from "./indexContacts.js";
+export { createContacts } from "./createContacts.js";
+export { deleteContacts } from "./deleteContacts.js";
+export { updateContacts } from "./updateContacts.js";
+export { updateStatusContacts } from "./updateStatusContacts.js";

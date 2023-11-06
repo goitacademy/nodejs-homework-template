@@ -1,8 +1,8 @@
-import service from "../../service/schemas/contact.js";
+import { getByIdContact } from "#services/index.js";
 
-async function showContacts(req, res, next) {
+export async function showContacts(req, res, next) {
   try {
-    const contact = await service.getByIdContact(req.params.id);
+    const contact = await getByIdContact(req.params.id);
     if (contact) {
       return res.status(200).json(contact);
     }

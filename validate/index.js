@@ -1,5 +1,3 @@
-const contactPostSchema = require("./contactPostSchema.js");
-const contactPutSchema = require("./contactPutSchema.js");
-const contactFavoriteSchema = require("./contactFavoriteSchema.js");
-
-module.exports = { contactPostSchema, contactPutSchema, contactFavoriteSchema };
+export { contactPutSchema } from "./contactPutSchema.js";
+export { contactPostSchema } from "./contactPostSchema.js";
+export { contactFavoriteSchema } from "./contactFavoriteSchema.js";

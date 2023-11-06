@@ -1,8 +1,8 @@
-import service from "../service/schemas/contact.js";
+import { getAllContacts } from "#services/index.js";
 
-async function indexContacts(req, res, next) {
+export async function indexContacts(req, res, next) {
   try {
-    const contacts = await service.getAllContacts();
+    const contacts = await getAllContacts();
     return res.status(200).json(contacts);
   } catch (error) {
     res.status(500).json({ message: error.message });
