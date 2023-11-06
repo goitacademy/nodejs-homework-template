@@ -32,10 +32,21 @@ export const login = async (req, res, next) => {
     email: user.email,
   };
   const token = jwt.sign(payload, secret, { expiresIn: "1h" });
-  const result = await updateUser(email, { token });
+  const result = await updateUser(user.id, { token });
   return res.status(200).json({ token, user });
 };
 
 export const LogOut = async (req, res, next) => {
-  
+  const userId = res.locals.user._conditions._id;
+  const user = await User.findById(userId);
+  try {
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    } else {
+      const result = await updateUser(userId, { token: null });
+      return res.status(204);
+    }
+  } catch (error) {
+    next(error);
+  }
 };

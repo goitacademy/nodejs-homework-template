@@ -1,17 +1,18 @@
 import express from "express";
-import { login, registration } from "../../controller/userControllers.js";
-
+import {
+  LogOut,
+  login,
+  registration,
+} from "../../controller/userControllers.js";
+import { updateUser } from "../../models/users.js";
 import authMiddleware from "../../middlewares/jwt.js";
+import { User } from "../../service/schemas/User.js";
 const router = express.Router();
 
 router.post("/signup", registration);
 
 router.post("/login", login);
 
-router.get("/something", authMiddleware, (req, res, next) => {
-  const result = res.locals.user;
-  console.log(result);
-  res.json({ message: "something" });
-});
+router.post("/logout", authMiddleware, LogOut);
 
 export { router };

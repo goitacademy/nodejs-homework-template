@@ -4,9 +4,9 @@ export const getUserByEmail = (email) => {
   return User.findOne({ email }).lean;
 };
 
-export const updateUser = (email, fields) => {
-  return User.findOneAndUpdate(
-    { email: email },
+export const updateUser = (id, fields) => {
+  return User.findByIdAndUpdate(
+    { _id: id },
     { $set: fields },
     { new: true }
   );
