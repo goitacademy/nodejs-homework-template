@@ -1,4 +1,4 @@
-const { rename } = require("fs/promises");
+const { rename, unlink } = require("fs/promises");
 const { resolve, join } = require("path");
 
 const { Contact } = require("../../models");
@@ -12,9 +12,10 @@ const addContactController = async (req, res) => {
   const fileData = await cloudinary.uploader.upload(req.file.path, {
     folder: "avatars",
   });
-  const avatar = join("public", "avatars", filename);
-  const result = await Contact.create({ ...req.body, avatar, owner });
-  res.status(201).json(result);
+  await unlink(req.file.path);
+  //const avatar = join("public", "avatars", filename);
+  //const result = await Contact.create({ ...req.body, avatar, owner });
+  //res.status(201).json(result);
 };
 
 module.exports = {
