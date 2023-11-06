@@ -8,7 +8,6 @@ import {
   updateFavorite,
 } from "../../controller/controllers.js";
 
-
 const router = express.Router();
 
 router.get("/", getAllContacts);
@@ -23,5 +22,9 @@ router.put("/:contactId", updateById);
 
 router.patch("/:contactId", updateFavorite);
 
+// router.get("/filtr?favorite=", async (req, res, next) => {
+//   const result = req.query;
+//   res.json({ message:"col" });
+// });
 
 export { router };

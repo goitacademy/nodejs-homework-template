@@ -1,4 +1,3 @@
-
 // const fs = require('fs/promises')
 import { Contact } from "../service/schemas/Contact.js";
 
@@ -10,7 +9,15 @@ export const listContacts = async () => {
     console.log(error.message);
   }
 };
+export const listFavoriteContacts = async (favorite) => {
+  try {
+    const result = await Contact.find({ favorite: favorite });
 
+    return result;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 export const getContactById = async (contactId) => {
   try {
     const result = await Contact.findOne({ _id: contactId });
@@ -34,5 +41,4 @@ export const updateContact = async (contactId, fields) => {
     { $set: fields },
     { new: true }
   );
-
 };

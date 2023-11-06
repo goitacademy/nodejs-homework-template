@@ -4,11 +4,18 @@ import {
   removeContact,
   addContact,
   updateContact,
+  listFavoriteContacts,
 } from "../models/contacts.js";
 
 export async function getAllContacts(req, res, next) {
+  const { favorite } = req.query;
+  if (favorite === "true" || favorite === "false") {
+    const contactList = await listFavoriteContacts(favorite);
+
+    return res.json({ contactList });
+  }
   const contactList = await listContacts();
-  res.status(200).json({ contactList });
+  return res.status(200).json({ contactList, favorite });
 }
 
 export async function getById(req, res, next) {
@@ -86,3 +93,4 @@ export async function updateFavorite(req, res, next) {
     next(error);
   }
 }
+export const filtrContacts = async (req, res, next) => {};
