@@ -74,7 +74,9 @@ const signout = async (req, res) => {
 
 const updateAvatar = async (req, res, next) => {
   const { _id } = req.user;
-  const { path: oldPath, filename } = req.file;
+  const { path: tempUpload, origainalname } = req.file;
+  const filename = `${_id}_${origainalname}`;
+  const resultUpload = pathJoin(avatarPath, filename);
 };
 
 module.exports = {
