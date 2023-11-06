@@ -2,14 +2,11 @@ const bcrypt = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { config } = require("dotenv");
 
-config();
-
 const { User } = require("../../models");
-
 const { HttpError } = require("../../helpers");
-
 const { controllerWrapper } = require("../../decorators");
 
+config();
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
