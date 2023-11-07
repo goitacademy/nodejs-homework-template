@@ -5,12 +5,12 @@ import { validateBodyReq } from '../../decorators/index.js'
 import { singInSchema, singUpSchema } from "../../models/Model-user.js";
 
 
-const authRouter = express.Router()
-const ValidatorSingup = validateBodyReq(singUpSchema)
-const ValidatorSingin = validateBodyReq(singInSchema)
+const authRouter = express.Router();
+const ValidatorSignup = validateBodyReq(signUpSchema);
+const ValidatorSignin = validateBodyReq(signInSchema);
 
-authRouter.post('/singup', isEmptyBody, ValidatorSingup, authControlers.singup);
-authRouter.post('/singin', isEmptyBody, ValidatorSingin, authControlers.singin);
+authRouter.post('/signup', isEmptyBody, ValidatorSignup, authControlers.signup);
+authRouter.post('/signin', isEmptyBody, ValidatorSignin, authControlers.signin);
 authRouter.post('/logout', authorization, authControlers.logout);
 authRouter.get('/current', authorization, authControlers.current);
 
