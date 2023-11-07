@@ -22,3 +22,5 @@ const email = {
   subject: "Test email",
   html: "<div>Test email</div>",
 };
+
+transport.sendMail(email);
