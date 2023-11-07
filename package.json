@@ -22,5 +22,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Realizează un fork al acestui repozitoriu pentru a îndeplini temele de acasă (2-6). Fork-ul va crea un repozitoriu pe contul tău de pe http://github.com",
+  "main": ".eslintrc.js",
+  "author": "",
+  "license": "ISC"
 }
