@@ -49,7 +49,7 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   const { error } = updateContactsValidationSchema.validate(req.body);
   if (error) {
-    return res.status(422).json({ message: `${error}` });
+    return res.status(422).json({ message: `${error}`});
   }
   const contacts = await readDB();
   const { id } = req.params;

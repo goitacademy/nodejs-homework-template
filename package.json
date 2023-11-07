@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node index",
-    "start:dev": "nodemon index.js",
+    "start": "node contacts",
+    "start:dev": "nodemon contacts.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
