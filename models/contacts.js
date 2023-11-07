@@ -38,7 +38,7 @@ const updateContact = async (contactId, body) => {
   );
 
   if (contactIndex === -1) {
-    return null; // Возвращаем null, если контакт с заданным ID не найден
+    return null; 
   }
 
   const updatedContacts = [...contacts];
