@@ -1,7 +1,6 @@
 const { config } = require("dotenv");
-const {} = require("nodemailer");
+const { createTransport } = require("nodemailer");
 config();
-
 
 const { UKR_NET_PASSWORD, UKR_NET_EMAIL } = process.env;
 
@@ -15,4 +14,4 @@ const nodemailerConfig = {
   },
 };
 
-const transport
+const transport = createTransport(nodemailerConfig);
