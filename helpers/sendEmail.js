@@ -4,15 +4,15 @@ const { config } = require("dotenv");
 config();
 const { ELASTICEMAIL_API_KEY } = process.env;
 
-let defaultClient = ElasticEmail.ApiClient.instance;
+const defaultClient = ElasticEmail.ApiClient.instance;
 
-let apikey = defaultClient.authentications["apikey"];
-apikey.apiKey = "895A382DF3DCC13A97E72EXAMPLEKEY";
+const { apikey } = defaultClient.authentications;
+apikey.apiKey = ELASTICEMAIL_API_KEY;
 
-let api = new ElasticEmail.EmailsApi();
+const api = new ElasticEmail.EmailsApi();
 
 let email = ElasticEmail.EmailMessageData.constructFromObject({
-  Recipients: [new ElasticEmail.EmailRecipient("MeowWow ")],
+  Recipients: [new ElasticEmail.EmailRecipient("oleg.kozub54@gmail.com")],
   Content: {
     Body: [
       ElasticEmail.BodyPart.constructFromObject({
