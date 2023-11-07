@@ -1,5 +1,9 @@
 let ElasticEmail = require("@elasticemail/elasticemail-client");
 
+const { config } = require("dotenv");
+config();
+const { ELASTICEMAIL_API_KEY } = process.env;
+
 let defaultClient = ElasticEmail.ApiClient.instance;
 
 let apikey = defaultClient.authentications["apikey"];
