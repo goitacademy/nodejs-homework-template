@@ -1,11 +1,11 @@
-import { loginUser } from "../../controllers/users/loginUser.js";
-import { loginExistingUser } from "../../controllers/users/loginExistingUser.js";
-import { logoutExistingUser } from "../../controllers/users/logoutExistingUser.js";
-import { logoutUser } from "../../controllers/users/logoutUser.js";
-import { registerExistingUser } from "../../controllers/users/registerExistingUser.js";
-import { registerNewUser } from "../../controllers/users/registerNewUser.js";
-import { getExistingUser } from "../../controllers/users/getExistingUser.js";
-import { getCurrentUser } from "../../controllers/users/getCurrentUser.js";
+import { loginUser } from "#controllers/users/loginUser.js";
+import { loginExistingUser } from "#controllers/users/loginExistingUser.js";
+import { logoutExistingUser } from "#controllers/users/logoutExistingUser.js";
+import { logoutUser } from "#controllers/users/logoutUser.js";
+import { registerExistingUser } from "#controllers/users/registerExistingUser.js";
+import { registerNewUser } from "#controllers/users/registerNewUser.js";
+import { getExistingUser } from "#controllers/users/getExistingUser.js";
+import { getCurrentUser } from "#controllers/users/getCurrentUser.js";
 import verifyToken from "./authMiddleware.js";
 import express from "express";
 
