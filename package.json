@@ -12,6 +12,7 @@
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "4.17.1",
+    "joi": "^17.11.0",
     "morgan": "1.10.0"
   },
   "devDependencies": {
@@ -22,5 +23,10 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Realice un fork de este repositorio para realizar las tareas (2-6).El fork creará un repositorio en su",
+  "main": ".eslintrc.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
