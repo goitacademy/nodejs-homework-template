@@ -5,9 +5,17 @@ const contacts = require('../../models/contacts')
 const router = express.Router()
 
 router.get('/', async (req, res, next) => {
-  const result = await contacts.listContacts()
-  res.json(result)
-  // res.json({ message: 'template message' })
+  try {
+    const result = await contacts.listContacts()
+    res.json(result)
+  }
+  catch(error) {
+    res.status(500).json({
+       message: 'template message' 
+    })
+
+  }
+
 })
 
 router.get('/:contactId', async (req, res, next) => {
