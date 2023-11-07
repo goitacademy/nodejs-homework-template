@@ -27,10 +27,11 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const response = contactsSchema.validate(req.body);
-  // if (typeof response.error !== undefined) {
-  //   console.log(response);
-  //   return res.status(404).send("validation error!");
-  // }
+  if (typeof response.error !== "undefined") {
+    return res
+      .status(400)
+      .send(response.error.details.map((err) => err.message).join(","));
+  }
   const updContacts = await addContact(req.body);
   res.status(201).json(updContacts);
 });
@@ -47,10 +48,11 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const response = putSchema.validate(req.body);
-  // if (typeof response.error !== undefined) {
-  //   console.log(response);
-  //   return res.status(404).send("validation error!");
-  // }
+  if (typeof response.error !== "undefined") {
+    return res
+      .status(400)
+      .send(response.error.details.map((err) => err.message).join(","));
+  }
   const data = await updateContact(contactId, req.body);
   if (!data) {
     return next;
