@@ -29,11 +29,13 @@ const signup = async (req, res) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
+  const verificationCode = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashedPassword,
     avatarURL: avatar,
+    verificationCode,
   });
 
   res.status(201).json({
