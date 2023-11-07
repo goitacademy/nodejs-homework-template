@@ -1,6 +1,6 @@
 const service = require('../services/contacts');
 const { nanoid } = require('nanoid');
-const body = require('../schemas/contacts');
+const body = require('../models/contacts');
 
 const listContacts = async (req, res, next) => {
   const contacts = await service.listContacts();
