@@ -1,11 +1,17 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs/promises");
 
 const { User } = require("../models/user");
 
 const { HttpErrors, CtrlWrapper } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (res, req) => {
   const { email, password } = req.body;
@@ -17,13 +23,16 @@ const register = async (res, req) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+
+  const newUser = await User.create({
+    email,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
-    user: {
-      email: newUser.email,
-      subscription: newUser.subscription,
-    },
+    user: newUser,
   });
 };
 
@@ -85,10 +94,30 @@ const updateSubscription = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { id } = req.user;
+  const { path: tempPath, originalname } = req.file;
+  const fileName = `xs_${id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, fileName);
+  await Jimp.read(resultUpload)
+    .then((img) => {
+      return img.resize(250, Jimp.AUTO).writeAsync(resultUpload);
+    })
+    .catch((e) => console.log(e));
+  await fs.rename(tempPath, resultUpload);
+  const avatarURL = path.join("avatars", fileName);
+  await User.findByIdAndUpdate(id, { avatarURL });
+
+  res.json({
+    avatarURL,
+  });
+};
+
 module.exports = {
   register: CtrlWrapper(register),
   login: CtrlWrapper(login),
   getCurrent: CtrlWrapper(getCurrent),
   logout: CtrlWrapper(logout),
   updateSubscription: CtrlWrapper(updateSubscription),
+  updateAvatar:CtrlWrapper(updateAvatar)
 };

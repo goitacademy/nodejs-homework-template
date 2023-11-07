@@ -1,6 +1,6 @@
 const express = require("express");
 const ctrl = require("../../controllers/contacts");
-const { validateBody, authenticate } = require("../../middlewars");
+const { validateBody, authenticate } = require("../../middlewares");
 
 const router = express.Router();
 
