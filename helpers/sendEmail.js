@@ -23,4 +23,7 @@ const email = {
   html: "<div>Test email</div>",
 };
 
-transport.sendMail(email);
+transport
+  .sendMail(email)
+  .then(() => console.log("Email send success"))
+  .catch((error) => console.log(error.message));
