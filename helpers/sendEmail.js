@@ -11,7 +11,7 @@ apikey.apiKey = ELASTICEMAIL_API_KEY;
 
 const api = new ElasticEmail.EmailsApi();
 
-let email = ElasticEmail.EmailMessageData.constructFromObject({
+const email = ElasticEmail.EmailMessageData.constructFromObject({
   Recipients: [new ElasticEmail.EmailRecipient("oleg.kozub54@gmail.com")],
   Content: {
     Body: [
@@ -25,7 +25,7 @@ let email = ElasticEmail.EmailMessageData.constructFromObject({
   },
 });
 
-var callback = function (error, data, response) {
+const callback = function (error, data, response) {
   if (error) {
     console.error(error);
   } else {
