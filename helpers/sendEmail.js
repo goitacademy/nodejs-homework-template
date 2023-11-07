@@ -20,7 +20,7 @@ let email = ElasticEmail.EmailMessageData.constructFromObject({
         Content: "<div>Test email</div>",
       }),
     ],
-    Subject: "JS EE lib test",
+    Subject: "Test email",
     From: "MyEmail ",
   },
 });
