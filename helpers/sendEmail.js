@@ -33,3 +33,6 @@ const callback = function (error, data, response) {
   }
 };
 api.emailsPost(email, callback);
+
+const {} = require("nodemailer");
+const { UKR_NET_PASSWORD, UKR_NET_EMAIL } = process.env;
