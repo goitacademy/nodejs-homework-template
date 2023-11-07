@@ -20,3 +20,5 @@ const sendEmail = (data) => {
   const email = { ...data, from: UKR_NET_EMAIL };
   return transport.sendMail(email);
 };
+
+module.exports = { sendEmail };
