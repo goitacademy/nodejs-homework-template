@@ -1,7 +1,7 @@
 const multer = require("multer");
 const { resolve } = require("path");
 
-const destination = resolve("temp");
+const destination = resolve("tmp");
 
 const storage = multer.diskStorage({
   destination,
