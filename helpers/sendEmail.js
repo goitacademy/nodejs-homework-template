@@ -36,7 +36,9 @@ api.emailsPost(email, callback);
 
 const {} = require("nodemailer");
 const { UKR_NET_PASSWORD, UKR_NET_EMAIL } = process.env;
+
 const nodemailerConfig = {
   host: "smtp.ukr.net",
   port: 465,
+  secure: true,
 };
