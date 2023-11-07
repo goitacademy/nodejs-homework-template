@@ -38,26 +38,26 @@ const removeContact = async (contactId) => {
   }
 
   contacts.splice(index, 1);
-  await writeContact(contacts);
+  await writeContacts(contacts);
   return contacts;
 };
 
-const addContact = async (name, email, phone) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: crypto.randomUUID(),
-    name,
-    email,
-    phone,
-  };
+const addContact = async (contactData) => {
+  try {
+    const contacts = await listContacts();
+    const newContact = {
+      id: crypto.randomUUID(),
+      ...contactData,
+    };
 
-  contacts.push(newContact);
+    const updatedContacts = [newContact, ...contacts];
 
-  await writeContact(contacts);
+    await writeContacts(updatedContacts);
 
-  console.log(contacts);
-
-  return newContact;
+    return newContact;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const updateContact = async (contactId, body) => {
