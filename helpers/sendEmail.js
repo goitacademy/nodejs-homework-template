@@ -2,7 +2,7 @@ let ElasticEmail = require("@elasticemail/elasticemail-client");
 
 const { config } = require("dotenv");
 config();
-const { ELASTICEMAIL_API_KEY } = process.env;
+const { ELASTICEMAIL_API_KEY, ELASTICEMAIL_FROM } = process.env;
 
 const defaultClient = ElasticEmail.ApiClient.instance;
 
@@ -21,7 +21,7 @@ let email = ElasticEmail.EmailMessageData.constructFromObject({
       }),
     ],
     Subject: "Test email",
-    From: "MyEmail ",
+    From: ELASTICEMAIL_FROM,
   },
 });
 
