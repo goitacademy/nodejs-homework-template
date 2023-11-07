@@ -4,9 +4,10 @@ const { sign } = require("jsonwebtoken");
 const { config } = require("dotenv");
 const { rename } = require("fs/promises");
 const { join: pathJoin, resolve } = require("path");
+const { nanoid } = require("nanoid");
 
 const { User } = require("../../models");
-const { HttpError } = require("../../helpers");
+const { HttpError, sendEmail } = require("../../helpers");
 const { controllerWrapper } = require("../../decorators");
 
 config();
