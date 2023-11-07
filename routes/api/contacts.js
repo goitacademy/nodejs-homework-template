@@ -1,5 +1,5 @@
-const express = require('express');
-const shortid = require('shortid');
+const express = require("express");
+const shortid = require("shortid");
 const router = express.Router();
 const {
   listContacts,
@@ -7,9 +7,9 @@ const {
   removeContact,
   addContact,
   updateContact,
-} = require('../../models/contacts');
+} = require("../../models/contacts");
 
-const Joi = require('joi');
+const Joi = require("joi");
 
 const validateContact = (data) => {
   const schema = Joi.object({
@@ -21,22 +21,22 @@ const validateContact = (data) => {
   return schema.validate(data);
 };
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   const contacts = await listContacts();
   res.status(200).json(contacts);
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
   if (contact) {
     res.status(200).json(contact);
   } else {
-    res.status(404).json({ message: 'Not found' });
+    res.status(404).json({ message: "Not found" });
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const { error } = validateContact.validate(req.body);
 
   if (error) {
@@ -48,17 +48,17 @@ router.post('/', async (req, res, next) => {
   res.status(201).json(createdContact);
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
   const result = await removeContact(contactId);
   if (result) {
-    res.status(200).json({ message: 'Contact deleted' });
+    res.status(200).json({ message: "Contact deleted" });
   } else {
-    res.status(404).json({ message: 'Not found' });
+    res.status(404).json({ message: "Not found" });
   }
 });
 
-router.put('/:contactId', async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   const { error } = validateContact.validate(req.body);
   const { contactId } = req.params;
 
@@ -76,4 +76,3 @@ router.put('/:contactId', async (req, res, next) => {
 });
 
 module.exports = router;
-
