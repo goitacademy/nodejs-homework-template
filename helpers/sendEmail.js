@@ -17,7 +17,7 @@ let email = ElasticEmail.EmailMessageData.constructFromObject({
     Body: [
       ElasticEmail.BodyPart.constructFromObject({
         ContentType: "HTML",
-        Content: "My test email content ;)",
+        Content: "<div>Test email</div>",
       }),
     ],
     Subject: "JS EE lib test",
