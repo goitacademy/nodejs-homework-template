@@ -52,7 +52,9 @@ const signup = async (req, res) => {
   });
 };
 
-const verify = async (req, res) => {};
+const verify = async (req, res) => {
+  const {}
+};
 
 const signin = async (req, res) => {
   const { email, password } = req.body;
