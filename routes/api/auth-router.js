@@ -6,7 +6,7 @@ const {
   getCurrent,
   signout,
   updateAvatar,
-  verify,
+  verifyEmail,
 } = require("../../controllers");
 
 const { isEmptyBody, authenticate, upload } = require("../../middlewares");
@@ -18,14 +18,13 @@ const { verify } = require("jsonwebtoken");
 
 const userSignUpValidate = validateBody(userSignUpSchema);
 const userSignInValidate = validateBody(userSignInSchema);
-const userEmailValidate = validateBody();
 const userAvatarUpload = upload.single("avatar");
 
 const authRouter = express.Router();
 
 authRouter.post("/signup", isEmptyBody, userSignUpValidate, signup);
 
-authRouter.get("/verify/:verificationToken", verify);
+authRouter.get("/verify/:verificationToken", verifyEmail);
 
 authRouter.post("/verify", userEmailValidate);
 
