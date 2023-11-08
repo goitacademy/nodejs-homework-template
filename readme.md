@@ -1,5 +1,8 @@
 ## GoIT Node.js Course Template Homework
 
+//Vqy887uaqrFd3MzY пароль для Монго ДБ
+// Katya_Val Xy7KyuuFyCYgkRAC вхід в базу
+
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
 Форк створить репозиторій на вашому http://github.com
 
