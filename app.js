@@ -2,6 +2,7 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const contactsRouter = require("./routes/api/contacts");
+require("dotenv").config();
 
 const app = express();
 
@@ -22,3 +23,5 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 module.exports = app;
+
+// MnRBDTN8dhW8El4B ArinaMiahkykh
