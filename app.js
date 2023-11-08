@@ -24,4 +24,3 @@ app.use((err, req, res, next) => {
 });
 module.exports = app;
 
-// MnRBDTN8dhW8El4B ArinaMiahkykh
