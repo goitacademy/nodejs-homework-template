@@ -52,6 +52,8 @@ const signup = async (req, res) => {
   });
 };
 
+const verify = async (req, res) => {};
+
 const signin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -107,4 +109,5 @@ module.exports = {
   getCurrent: controllerWrapper(getCurrent),
   signout: controllerWrapper(signout),
   updateAvatar: controllerWrapper(updateAvatar),
+  verify: controllerWrapper(verify),
 };
