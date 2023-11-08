@@ -41,7 +41,7 @@ const signup = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a href="" target="_blank">Click to verify</a>`,
+    html: `<a href="http://localhost" target="_blank">Click to verify</a>`,
   };
 
   res.status(201).json({
