@@ -11,7 +11,7 @@ const { HttpError, sendEmail } = require("../../helpers");
 const { controllerWrapper } = require("../../decorators");
 
 config();
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, BASE_URL } = process.env;
 
 const avatarPath = resolve("public", "avatars");
 
