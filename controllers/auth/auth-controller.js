@@ -44,6 +44,8 @@ const signup = async (req, res) => {
     html: `<a href="http://localhost:3000/api/auth/verify/${verificationToken}" target="_blank">Click to verify</a>`,
   };
 
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     username: newUser.username,
     email: newUser.email,
