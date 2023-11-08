@@ -2,7 +2,7 @@ const express = require("express");
 const contacts = require("../../models/contacts.js");
 const validationSchemas = require("../../validation/contacts.js");
 
-const { contactCreateSchema, contactUpdateSchema } = validationSchemas;
+const { contactValidationchema} = validationSchemas;
 
 const router = express.Router();
 
@@ -28,7 +28,7 @@ router.get("/:contactId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { error } = contactCreateSchema.validate(req.body);
+  const { error } = contactValidationchema.validate(req.body);
 
   if (error) {
     return res
@@ -52,7 +52,7 @@ router.delete("/:contactId", async (req, res) => {
 });
 
 router.put("/:contactId", async (req, res) => {
-  const { error } = contactUpdateSchema.validate(req.body);
+  const { error } = contactValidationchema.validate(req.body);
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
 
