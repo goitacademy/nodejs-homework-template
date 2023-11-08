@@ -148,4 +148,5 @@ module.exports = {
   signout: controllerWrapper(signout),
   updateAvatar: controllerWrapper(updateAvatar),
   verify: controllerWrapper(verify),
+  resend: controllerWrapper(resend),
 };
