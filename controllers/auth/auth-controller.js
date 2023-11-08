@@ -63,6 +63,10 @@ const verify = async (req, res) => {
     verify: true,
     verificationToken: null,
   });
+
+  res.json({
+    message: "Verify success",
+  });
 };
 
 const signin = async (req, res) => {
