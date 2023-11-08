@@ -39,7 +39,8 @@ const signup = async (req, res) => {
   });
 
   const verifyEmail = {
-    to: 
+    to: email,
+    subject: "Verify email",
   };
 
   res.status(201).json({
