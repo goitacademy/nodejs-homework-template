@@ -7,6 +7,7 @@ const {
   signout,
   updateAvatar,
   verifyEmail,
+  resendEmail,
 } = require("../../controllers");
 
 const { isEmptyBody, authenticate, upload } = require("../../middlewares");
@@ -26,7 +27,7 @@ authRouter.post("/signup", isEmptyBody, userSignUpValidate, signup);
 
 authRouter.get("/verify/:verificationToken", verifyEmail);
 
-authRouter.post("/verify", userEmailValidate);
+authRouter.post("/verify", resendEmail);
 
 authRouter.post("/signin", isEmptyBody, userSignInValidate, signin);
 
