@@ -52,7 +52,7 @@ const signup = async (req, res) => {
   });
 };
 
-const verify = async (req, res) => {
+const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
   if (!user) {
@@ -69,7 +69,7 @@ const verify = async (req, res) => {
   });
 };
 
-const resend = async (req, res) => {
+const resendEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
@@ -147,6 +147,6 @@ module.exports = {
   getCurrent: controllerWrapper(getCurrent),
   signout: controllerWrapper(signout),
   updateAvatar: controllerWrapper(updateAvatar),
-  verify: controllerWrapper(verify),
-  resend: controllerWrapper(resend),
+  verifyEmail: controllerWrapper(verifyEmail),
+  resendEmail: controllerWrapper(verifyEmail),
 };
