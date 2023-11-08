@@ -15,7 +15,6 @@ const { isEmptyBody, authenticate, upload } = require("../../middlewares");
 const { validateBody } = require("../../decorators");
 
 const { userSignUpSchema, userSignInSchema } = require("../../models");
-const { verify } = require("jsonwebtoken");
 
 const userSignUpValidate = validateBody(userSignUpSchema);
 const userSignInValidate = validateBody(userSignInSchema);
