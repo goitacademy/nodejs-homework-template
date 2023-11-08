@@ -4,8 +4,8 @@ const {
   getCurrent,
   signout,
   updateAvatar,
-  verify,
-  resend,
+  verifyEmail,
+  resendEmail,
 } = require("./auth-controller");
 
 module.exports = {
@@ -14,6 +14,6 @@ module.exports = {
   getCurrent,
   signout,
   updateAvatar,
-  verify,
-  resend,
+  resendEmail,
+  verifyEmail,
 };
