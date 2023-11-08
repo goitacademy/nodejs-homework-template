@@ -8,14 +8,17 @@ import { validateBody } from "../../decorators/index.js";
 
 import {
   contactAddSchema,
-  // contactUpdateSchema,
-} from "../../schemas/contact-schemas.js";
+  contactUpdateSchema,
+  contactUpdateFavoriteSchema,
+} from "../../models/Contact.js";
+
+import { isValidId } from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
 
-contactsRouter.get("/:id", contactsController.getById);
+contactsRouter.get("/:id", isValidId, contactsController.getById);
 
 contactsRouter.post(
   "/",
@@ -25,10 +28,18 @@ contactsRouter.post(
 
 contactsRouter.put(
   "/:id",
-  // validateBody(contactUpdateSchema),
+  isValidId,
+  validateBody(contactUpdateSchema),
   contactsController.updateById
 );
 
-contactsRouter.delete("/:id", contactsController.deleteById);
+contactsRouter.delete("/:id", isValidId, contactsController.deleteById);
+
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(contactUpdateFavoriteSchema),
+  contactsController.updateStatusContact
+);
 
 export default contactsRouter;
