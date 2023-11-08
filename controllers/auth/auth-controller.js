@@ -38,6 +38,10 @@ const signup = async (req, res) => {
     verificationToken,
   });
 
+  const verifyEmail = {
+    to: 
+  };
+
   res.status(201).json({
     username: newUser.username,
     email: newUser.email,
