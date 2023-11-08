@@ -53,7 +53,16 @@ const signup = async (req, res) => {
 };
 
 const verify = async (req, res) => {
-  const {}
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    throw HttpError(404);
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
 };
 
 const signin = async (req, res) => {
