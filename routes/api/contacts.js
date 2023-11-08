@@ -1,25 +1,82 @@
 const express = require("express");
-
 const router = express.Router();
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("../../models/contacts");
+const contactsSchema = require("../../schemas/contacts");
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "Home work #2 done!" });
+  const contacts = await listContacts();
+  res.send(contacts);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const findedContact = await getContactById(contactId);
+  if (findedContact === undefined) {
+    return next();
+  }
+  res.send(findedContact);
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const response = contactsSchema.validate(req.body);
+
+  const { name, email, phone } = response.value;
+
+  if (typeof response.error !== "undefined") {
+    return res
+      .status(400)
+      .send(response.error.details.map((err) => err.message).join(", "));
+  }
+
+  await addContact(response.value);
+
+  res.status(201).send({ name, email, phone });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const deletedContact = await removeContact(contactId);
+
+  console.log(deletedContact);
+
+  if (!deletedContact) {
+    return next();
+  }
+  res.json({ message: "contact deleted" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const body = req.body;
+  const { contactId } = req.params;
+
+  const response = contactsSchema.validate(body);
+  if (response.error) {
+    return res
+      .status(400)
+      .json(response.error.details.map((err) => err.message).join(", "));
+  }
+
+  if (Object.keys(body).length === 0) {
+    return res.status(400).json({ message: "missing fields" });
+  }
+
+  try {
+    const updatedContact = await updateContact(contactId, body);
+
+    if (updatedContact && updatedContact.message === "Not found") {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
