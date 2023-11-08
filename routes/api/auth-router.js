@@ -18,13 +18,16 @@ const { verify } = require("jsonwebtoken");
 
 const userSignUpValidate = validateBody(userSignUpSchema);
 const userSignInValidate = validateBody(userSignInSchema);
+const userEmailValidate = validateBody();
 const userAvatarUpload = upload.single("avatar");
 
 const authRouter = express.Router();
 
 authRouter.post("/signup", isEmptyBody, userSignUpValidate, signup);
 
-authRouter.get("/verify/:verificationCode", verify);
+authRouter.get("/verify/:verificationToken", verify);
+
+authRouter.post("/verify", userEmailValidate);
 
 authRouter.post("/signin", isEmptyBody, userSignInValidate, signin);
 
