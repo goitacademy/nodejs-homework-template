@@ -2,7 +2,7 @@ const express = require("express");
 const contacts = require("../../models/contacts.js");
 const validationSchemas = require("../../validation/contacts.js");
 
-const { contactCreateSchema, contactUpdateSchema } = validationSchemas;
+const { contactValidationchema} = validationSchemas;
 
 const router = express.Router();
 
@@ -24,15 +24,11 @@ router.get("/:contactId", async (req, res) => {
     return res.status(404).json({ message: "Not found" });
   }
 
-  res.json({
-    status: "success",
-    code: 200,
-    data: { contact },
-  });
+  res.status(200).json( contact);
 });
 
 router.post("/", async (req, res) => {
-  const { error } = contactCreateSchema.validate(req.body);
+  const { error } = contactValidationchema.validate(req.body);
 
   if (error) {
     return res
@@ -43,11 +39,7 @@ router.post("/", async (req, res) => {
   const { name, email, phone } = req.body;
   const newContact = await contacts.addContact({ name, email, phone });
 
-  res.status(201).json({
-    status: "success",
-    code: 201,
-    data: newContact ,
-  });
+  res.status(201).json( newContact);
 });
 
 router.delete("/:contactId", async (req, res) => {
@@ -60,7 +52,7 @@ router.delete("/:contactId", async (req, res) => {
 });
 
 router.put("/:contactId", async (req, res) => {
-  const { error } = contactUpdateSchema.validate(req.body);
+  const { error } = contactValidationchema.validate(req.body);
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
 
@@ -68,17 +60,17 @@ router.put("/:contactId", async (req, res) => {
     return res.status(400).json({ message: "missing fields" });
   }
 
-  const updatedContact = await contacts.updateContact(contactId, { name, email, phone });
+  const updatedContact = await contacts.updateContact(contactId, {
+    name,
+    email,
+    phone,
+  });
 
   if (!updatedContact) {
     return res.status(404).json({ message: "Not found" });
   }
 
-  res.json({
-    status: "success",
-    code: 200,
-    data: {updatedContact},
-  });
+  res.status(200).json(updatedContact);
 });
 
 module.exports = router;
