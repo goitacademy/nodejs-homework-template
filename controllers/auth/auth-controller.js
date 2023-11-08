@@ -78,6 +78,18 @@ const resend = async (req, res) => {
   if (user.verify) {
     throw HttpError(400, "Email already verified");
   }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a href="${BASE_URL}/api/auth/verify/${verificationToken}" target="_blank">Click to verify</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
+  res.json({
+    message: "Verify email send",
+  });
 };
 
 const signin = async (req, res) => {
