@@ -7,6 +7,7 @@ const {
 // const express = require('express')
 // const app = express()
 
+
 const listContacts = async (req, res, next) => {
   const contacts = await readDB();
   res.json(contacts).status(200);
