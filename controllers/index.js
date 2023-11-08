@@ -14,6 +14,7 @@ const {
   signout,
   updateAvatar,
   verify,
+  resend,
 } = require("./auth");
 
 module.exports = {
@@ -29,4 +30,5 @@ module.exports = {
   signout,
   updateAvatar,
   verify,
+  resend,
 };
