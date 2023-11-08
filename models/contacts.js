@@ -4,8 +4,7 @@ const {
   createContactsValidationSchema,
   updateContactsValidationSchema,
 } = require("../utils/validation/contactsValidationSchema");
-// const express = require('express')
-// const app = express()
+
 
 
 const listContacts = async (req, res, next) => {
