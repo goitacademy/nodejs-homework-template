@@ -52,9 +52,8 @@ router.post('/', async (req, res, next) => {
   try{
     const {error} = addSchemas.validate(req.body)
     if(error){
-      throw HttpError(400, error.message)
+      throw HttpError(400, `missing required ${error.details[0].context.key} field`)
     }
-    // console.log(error)
    const result = await contacts.addContact(req.body)
    res.status(201).json(result)
   }
@@ -64,13 +63,39 @@ router.post('/', async (req, res, next) => {
 })
 
 
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.delete('/:id', async (req, res, next) => {
+  try{ 
+   const {id} = req.params
+   const result = await contacts.removeContact(id)
+   console.log(result)
+   if(!result) {
+    throw HttpError(404, 'Not found')
+   }
+   res.json({
+    message: "contact deleted"
+   })
+  }
+  catch(error) {
+    next(error)
+  }
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+router.put('/:id', async (req, res, next) => {
+  try{
+    const {error} = addSchemas.validate(req.body)
+    if(error){
+      throw HttpError(400, "missing fields")
+    }    
+   const {id} = req.params
+   const result = await contacts.updateContact(id, req.body)
+   if(!result) {
+    throw HttpError(404, 'Not found')
+   }
+   res.json(result)
+  }
+  catch(error) {
+    next(error)
+  }
 })
 
 module.exports = router
