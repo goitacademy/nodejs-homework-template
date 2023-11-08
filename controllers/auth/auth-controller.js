@@ -75,6 +75,9 @@ const resend = async (req, res) => {
   if (!user) {
     throw HttpError(404, "Email not found");
   }
+  if (user.verify) {
+    throw HttpError(400, "Email");
+  }
 };
 
 const signin = async (req, res) => {
