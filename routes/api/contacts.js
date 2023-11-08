@@ -28,15 +28,34 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      const errorMessage = `missing required ${error.details[0].context.key} field`;
+    const { name, email, phone } = req.body;
+
+    if (!name || !email || !phone) {
+      const missingFields = [];
+      if (!name) missingFields.push("name");
+      if (!email) missingFields.push("email");
+      if (!phone) missingFields.push("phone");
+
+      const errorMessage = `missing required ${missingFields.join(
+        ", "
+      )} field(s)`;
       return res.status(400).json({ message: errorMessage });
     }
-    const result = await contacts.addContact(req.body);
+
+    const validation = contactSchema.validate(req.body);
+    if (validation.error) {
+      const errorMessage = validation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res.status(400).send(`Validation Error: ${errorMessage}`);
+    }
+
+    const result = await contacts.addContact({ name, email, phone });
     res.status(201).json(result);
   } catch (error) {
-    next(error);
+    return res.status(500).json({
+      message: "Server error",
+    });
   }
 });
 
@@ -50,10 +69,26 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error } = contactSchema.validate(req.body);
+    const { name, email, phone } = req.body;
 
-    if (error) {
-      return res.status(400).json({ message: "missing fields" });
+    if (!name || !email || !phone) {
+      const missingFields = [];
+      if (!name) missingFields.push("name");
+      if (!email) missingFields.push("email");
+      if (!phone) missingFields.push("phone");
+
+      const errorMessage = `missing required ${missingFields.join(
+        ", "
+      )} field(s)`;
+      return res.status(400).json({ message: errorMessage });
+    }
+
+    const validation = contactSchema.validate(req.body);
+    if (validation.error) {
+      const errorMessage = validation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res.status(400).send(`Validation Error: ${errorMessage}`);
     }
 
     const updatedContact = await contacts.updateContact(
