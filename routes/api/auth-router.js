@@ -6,6 +6,7 @@ const {
   getCurrent,
   signout,
   updateAvatar,
+  verify,
 } = require("../../controllers");
 
 const { isEmptyBody, authenticate, upload } = require("../../middlewares");
