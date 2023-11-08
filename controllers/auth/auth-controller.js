@@ -69,9 +69,13 @@ const verify = async (req, res) => {
   });
 };
 
-const resend async(req, res)=> {
-  
-}
+const resend = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(404, "Email not found");
+  }
+};
 
 const signin = async (req, res) => {
   const { email, password } = req.body;
