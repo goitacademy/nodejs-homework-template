@@ -69,6 +69,10 @@ const verify = async (req, res) => {
   });
 };
 
+const resend async(req, res)=> {
+  
+}
+
 const signin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
