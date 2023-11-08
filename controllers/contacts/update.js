@@ -1,5 +1,4 @@
-const Contact = require("../../models/contact");
-const { schema } = require("../../schemas/schemaJoi");
+const { Contact, schema } = require("../../models/contact");
 
 const update = async (req, res) => {
   const { contactId } = req.params;

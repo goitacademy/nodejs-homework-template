@@ -1,3 +1,3 @@
 const contacts = require("./contacts/index");
-
-module.exports = contacts;
+const users = require("./users");
+module.exports = { contacts, users };
