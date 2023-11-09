@@ -1,13 +1,13 @@
 const express = require('express');
 const { register, login, logout, refresh } = require('../../controllers/users');
 const validateBody = require('../../middlewares/validateBody');
-const { registerSchema } = require('../../models/user');
+const { registerSchema, loginSchema } = require('../../models/user');
 
 const router = express.Router();
 
 router.post('/register', validateBody(registerSchema), register);
 
-router.post('/login', login);
+router.post('/login', validateBody(loginSchema), login);
 
 router.post('/logout', logout);
 
