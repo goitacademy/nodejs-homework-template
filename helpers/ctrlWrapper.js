@@ -9,4 +9,5 @@ const ctrlWpapper = ctrl => {
     }
     return fnc
 }
+
 module.exports = ctrlWpapper
