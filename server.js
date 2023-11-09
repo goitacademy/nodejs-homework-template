@@ -1,16 +1,15 @@
-// import app from "./app.js";
+import app from "./app.js";
 
-// app.listen(3000, () => {
-//   console.log("Server running. Use our API on port: 3000");
-// });
+app.listen(3000, () => {
+  console.log("Server running. Use our API on port: 3000");
+});
 
 import mongoose from "mongoose";
 
 mongoose
-  .connect("mongodb://localhost:27017/db-contacts", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(
+    "mongodb+srv://charliedajani:jamil212@cluster0.eqrgn5f.mongodb.net/db-contacts?retryWrites=true&w=majority"
+  )
   .then(() => {
     console.log("Database connection successful");
   })
