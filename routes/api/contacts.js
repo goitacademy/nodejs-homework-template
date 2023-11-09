@@ -7,7 +7,7 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
-const contactSchema = require("../schemas/contact");
+const contactSchema = require("../schemas/contacts.js");
 
 const jsonParser = express.json();
 
