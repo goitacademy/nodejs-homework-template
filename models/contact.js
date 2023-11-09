@@ -27,16 +27,26 @@ const contactSchema = new Schema(
 contactSchema.post('save', handleMongooseError);
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required name field' }),
+  email: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required email field' }),
+  phone: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required phone field' }),
 });
 
 const updateStatusContactSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean()
+    .required()
+    .messages({ 'any.required': 'missing field favorite' }),
 });
 
-const updateSchema = Joi.object().length(1);
+const updateSchema = Joi.object()
+  .length(1)
+  .messages({ 'object.length': 'missing fields' });
 
 const Contact = model('contact', contactSchema);
 
