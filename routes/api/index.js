@@ -1,3 +1,3 @@
-const contacts = require("./contacts");
+const router = require("./contacts");
 
-module.exports = contacts;
+module.exports = router;
