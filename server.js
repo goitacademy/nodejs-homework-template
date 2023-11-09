@@ -1,6 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
-
+// console.log("Hello");
 
 mongoose
   .connect(process.env.DB_HOST)

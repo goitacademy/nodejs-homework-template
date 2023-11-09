@@ -1,5 +1,4 @@
-const Contact = require("../../models/contact");
-const { schemaFavorite } = require("../../schemas/schemaJoi");
+const { Contact, schemaFavorite } = require("../../models/contact");
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
