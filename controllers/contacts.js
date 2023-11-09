@@ -1,4 +1,4 @@
-const { Contact } = require ("../models/contact")
+const { Contact } = require("../models/contact");
 const { controllerWrapper, HttpError } = require("../helpers");
 
 const listContacts = async (req, res) => {
@@ -22,14 +22,15 @@ const addContact = async (req, res) => {
 
 const updateContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new:true});
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
 
   if (!result) {
     throw HttpError(404, "Not Found");
   }
   res.json(result);
 };
-
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
@@ -45,7 +46,7 @@ const updateFavorite = async (req, res) => {
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndRemove(contactId);
+  const result = await Contact.findOneAndDelete(contactId);
   if (!result) {
     throw HttpError(404, "Not Found");
   }
@@ -60,5 +61,5 @@ module.exports = {
   removeContact: controllerWrapper(removeContact),
   addContact: controllerWrapper(addContact),
   updateContactById: controllerWrapper(updateContactById),
-  updateFavorite: controllerWrapper(updateFavorite)
+  updateFavorite: controllerWrapper(updateFavorite),
 };
