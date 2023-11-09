@@ -2,14 +2,13 @@ const express = require('express');
 const crypto = require('crypto');
 const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts');
 const Joi = require('joi');
+const router = express.Router()
 
 const schema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
 })
-
-const router = express.Router()
 
 // Route Get
 router.get('/', async (req, res, next) => {
