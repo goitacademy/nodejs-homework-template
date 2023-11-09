@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const contactsMethods = require("../../models/contacts");
+const contactControllers = require("./contactControllers");
 
 const contactSchema = Joi.object({
   name: Joi.string().required(),
@@ -45,19 +46,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  const contactId = req.params.contactId;
-  try {
-    const result = await contactsMethods.removeContact(contactId);
-    if (result) {
-      res.status(200).json({ message: "contact deleted" });
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+router.delete("/:contactId", contactControllers.deleteContact);
 
 router.put("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
