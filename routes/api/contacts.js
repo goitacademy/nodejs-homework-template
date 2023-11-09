@@ -1,25 +1,27 @@
-const express = require('express')
+import express from "express";
+import { validateBody } from "../../decorators/index.js";
+import { joiSchema as schema } from "../../schemas/contacts/index.js";
+import { mdw } from "../../middlewares/index.js";
+import { ctrl } from "../../controllers/contacts/index.js";
 
-const router = express.Router()
+export const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use(mdw.authenticate);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use("/:id", mdw.validateId);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ctrl.getAll);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", ctrl.getById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validateBody(schema.add), ctrl.add);
 
-module.exports = router
+router.put("/:id", validateBody(schema.add), ctrl.updateById);
+
+router.delete("/:id", ctrl.removeById);
+
+router.patch(
+  "/:id/favorite",
+  validateBody(schema.updateStatus),
+  ctrl.updateStatusById
+);
