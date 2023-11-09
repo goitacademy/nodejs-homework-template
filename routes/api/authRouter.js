@@ -1,13 +1,11 @@
 import express from "express";
-import {
-  LogOut,
-  currentUser,
-  login,
-  registration,
-} from "../../controller/userControllers.js";
-import { updateUser } from "../../models/users.js";
+
+import { LogOut } from "../../controller/users/logOut.js";
+import { currentUser } from "../../controller/users/currentUser.js";
+import { login } from "../../controller/users/login.js";
+import { registration } from "../../controller/users/register.js";
 import authMiddleware from "../../middlewares/jwt.js";
-import { User } from "../../service/schemas/User.js";
+
 const router = express.Router();
 
 router.post("/signup", registration);

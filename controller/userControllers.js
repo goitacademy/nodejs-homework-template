@@ -13,7 +13,8 @@ export const registration = async (req, res, next) => {
     const newUser = new User({ email, subscription });
     newUser.setPassword(password);
     await newUser.save();
-    res.status(201).json({ newUser });
+    const newUserAfterSave = await User.findOne({ email });
+    res.status(201).json({ newUserAfterSave });
   } catch (error) {
     next(error);
   }
@@ -21,7 +22,7 @@ export const registration = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).select(`+password`);
   console.log(secret);
   if (!user || !user.validPassword(password)) {
     return res.status(400).json({ message: "incorect email or password" });

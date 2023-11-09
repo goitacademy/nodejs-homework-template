@@ -14,6 +14,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 setJWTStrategy();
 app.use("/api", api);
 
