@@ -6,7 +6,7 @@ import {
   createContact,
   updateById,
   updateFavorite,
-} from "../../controller/controllers.js";
+} from "../../controllers/controllers.js";
 
 const router = express.Router();
 
