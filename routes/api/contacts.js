@@ -23,6 +23,10 @@ const updateSchema = Joi.object({
   phone: Joi.string(),
 }).min(1);
 
+const favoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 router.get("/", async (req, res, next) => {
   try {
     const result = await listContacts();
@@ -88,6 +92,29 @@ router.put("/:contactId", async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const { error } = favoriteSchema.validate(req.body);
+
+    if (error) {
+      throw new HttpError(400, "missing field favorite");
+    }
+
+    const result = await updateContact(contactId, {
+      favorite: req.body.favorite,
+    });
+
+    if (!result) {
+      throw new HttpError(404, "Not found");
+    }
+
     res.status(200).json(result);
   } catch (error) {
     next(error);
