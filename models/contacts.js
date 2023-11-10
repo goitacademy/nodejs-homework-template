@@ -13,7 +13,7 @@ mongoose
 async function listContacts(req, res, next) {
     try {
         console.log('Before Contact.find()');
-        const contacts = await Contact.find();
+        const contacts = await Contact.find().exec();
         console.log('After Contact.find()');
         res.send(contacts)
     } catch (error) {
@@ -25,7 +25,12 @@ async function listContacts(req, res, next) {
 async function getContactById(req, res, next) {
     const {contactId} = req.params;
     try {
-        const contact = await Contact.findById(contactId);
+        const contact = await Contact.findById(contactId).exec();
+        console.log(contact);
+      if(contact === null || contact === undefined){
+        return res.status(404).send({ message: "Not found" })
+      }
+      
         res.send(contact)
     } catch (error) {
         next(error)
