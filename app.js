@@ -142,8 +142,4 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Not found' });
 });
 
-// Inicia el servidor en un puerto específico
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`server is running on http://localhost:3000${port}`);
-});
+module.exports = app;
