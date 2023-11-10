@@ -3,7 +3,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const routerApi = require("./api");
+const routerContacts = require("./routes/contacts");
+const routerUsers = require("./routes/users");
+
 const { DB_HOST: uriDb } = process.env;
 
 const connection = mongoose.connect(uriDb);
@@ -13,7 +15,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api", routerApi);
+app.use("/api", routerContacts);
+app.use("/users", routerUsers);
 
 app.use((req, res) => {
   res.status(404).json({ message: `Woops - ${req.path}` });
