@@ -4,8 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "start": "node ./server.js",
+    "dev": "nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
@@ -13,11 +13,12 @@
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.3.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "fs.promises": "^0.1.2",
     "joi": "^17.11.0",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
+    "moongoose": "^0.0.5",
     "morgan": "^1.10.0",
     "nanoid": "^5.0.2"
   },
@@ -28,6 +29,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.22"
   }
 }
