@@ -63,15 +63,15 @@ export const putContact = async (req, res) => {
 
 export const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
-  const { body } = req;
+  const { favorite } = req;
 
-  if (body === undefined) {
+  if (favorite === undefined) {
     throw HttpError(400, 'Missing field favorite');
   }
 
   const result = await Contact.findByIdAndUpdate(
     contactId,
-    { body },
+    { favorite },
     { new: true }
   );
 
