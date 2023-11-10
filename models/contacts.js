@@ -7,19 +7,19 @@ const contactsPath = path.resolve("models", "contacts.json");
 const updateContacts = (contacts) =>
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-export const getAllContacts = async () => {
+export const listContacts = async () => {
   const result = await fs.readFile(contactsPath);
   return JSON.parse(result);
 };
 
 export const getContactById = async (id) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const result = contacts.find((item) => item.id === id);
   return result || null;
 };
 
 export const addContact = async ({ name, email, phone }) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
     name,
@@ -32,7 +32,7 @@ export const addContact = async ({ name, email, phone }) => {
 };
 
 export const updateContactById = async (id, data) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
@@ -43,7 +43,7 @@ export const updateContactById = async (id, data) => {
 };
 
 export const deleteContactById = async (id) => {
-  const contacts = await getAllContacts();
+  const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
