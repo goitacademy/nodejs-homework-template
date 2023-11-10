@@ -1,6 +1,6 @@
 {
-  "name": "tarea_2_node.js",
-  "version": "0.0.0",
+  "name": "tarea_3_node.js",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production nodemon ./server.js",

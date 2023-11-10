@@ -1,13 +1,5 @@
-/*const app = require('./app');
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}/api/contacts`);
-});
-*/
-const mongoose = require('mongoose');
-
 const app = require('./app');
+const mongoose = require('mongoose');
 const { DB_HOST, PORT } = process.env;
 
 mongoose.set('strictQuery', true);

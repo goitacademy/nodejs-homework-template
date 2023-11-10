@@ -1,13 +1,26 @@
-const Joi = require('joi');
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const body = Joi.object({
-  name: Joi.string().min(3).max(30).required(),
+const contactsSchema = new Schema(
+  {
+    name: String,
+    lastname: String,
+    email: {
+      type: String,
+      match: /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/,
+    },
+    phone: String,
+    favorite: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  },
+);
 
-  phone: Joi.string().required(),
+const Contacts = mongoose.model('contacts', contactsSchema);
 
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
-});
-
-module.exports = body;
+module.exports = Contacts;

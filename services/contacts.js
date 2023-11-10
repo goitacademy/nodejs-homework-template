@@ -1,12 +1,18 @@
-const fs = require('fs').promises;
-const path = require('path');
+//const fs = require('fs').promises;
+//const path = require('path');
 
-const pathContacts = path.join(__dirname, '../db/contacts.json');
+const Contacts = require('../models/contacts');
+
+//const pathContacts = path.join(__dirname, '../db/contacts.json');
 
 const loadContacts = async () => {
   try {
-    const result = (await fs.readFile(pathContacts)).toString();
-    return JSON.parse(result);
+    const contacts = await Contacts.find();
+    return {
+      success: true,
+      result: contacts,
+      message: 'List of contacts',
+    };
   } catch (error) {
     console.error('Error reading JSON data:', error);
   }
