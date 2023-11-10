@@ -54,7 +54,8 @@ export const updateStatusContact = async (req, res) => {
         throw HttpError(400, error.message)
     }
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
+    const { body } = req;
+    const result = await Contact.findByIdAndUpdate(contactId, body, { new: true });
     if (!result) {
         throw HttpError(404, "Not found")
     }
