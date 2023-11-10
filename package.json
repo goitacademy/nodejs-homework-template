@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "start": "cross-env NODE_ENV=production node --experimental-specifier-resolution=node  ./index.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon --experimental-specifier-resolution=node  ./index.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
+  "type": "module",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -33,5 +34,12 @@
   "main": ".eslintrc.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "imports": {
+    "#controllers/*": "./controllers/*",
+    "#middleware/*": "./middleware/*",
+    "#models/*": "./models/*",
+    "#repositories/*": "./repositories/*",
+    "#routes/*": "./routes/*"
+  }
 }

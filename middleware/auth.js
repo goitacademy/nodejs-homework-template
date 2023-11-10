@@ -1,11 +1,11 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const dotenv = require("dotenv");
+import jwt from "jsonwebtoken";
+import { User } from "#models/User.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
-const checkToken = async (req, res, next) => {
+export const checkToken = async (req, res, next) => {
   const token = req.header("Authorization").replace("Bearer ", "");
   try {
     const decoded = jwt.verify(token, jwtSecretKey);
@@ -19,5 +19,3 @@ const checkToken = async (req, res, next) => {
     return res.status(401).json({ message: "Not authorized" });
   }
 };
-
-module.exports = checkToken;
