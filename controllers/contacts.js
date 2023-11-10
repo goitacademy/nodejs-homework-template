@@ -60,23 +60,3 @@ export const updateStatusContact = async (req, res) => {
     }
     res.status(200).json(result);
 };
-
-// export const updateStatusContact = async (req, res) => {
-//   const { contactId } = req.params;
-//   const { favorite } = req.params;
-
-//   if (favorite === undefined) {
-//     throw HttpError(400, 'Missing field favorite');
-//   }
-
-//   const result = await Contact.findByIdAndUpdate(
-//     contactId,
-//     { favorite },
-//     { new: true }
-//   );
-
-//   if (!result) {
-//     throw HttpError(404, 'Not found');
-//   }
-//   res.status(200).json(result);
-// };

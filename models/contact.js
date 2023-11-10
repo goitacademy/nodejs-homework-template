@@ -44,8 +44,6 @@ export const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({ 'any.required': 'Missing field favorite' }),
 });
 
-// export const schemas = { addSchema, updateFavoriteSchema };
-
 export const putSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string().email(),
