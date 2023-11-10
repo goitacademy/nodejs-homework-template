@@ -1,16 +1,15 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const app = require("./app");
+import app from "./app";
 
-const DB_HOST =
-  "mongodb+srv://Nataly:mFid220821@cluster0.bjaedo8.mongodb.net/db-contacts?retryWrites=true&w=majority";
+const { DB_HOST, PORT = 3000 } = process.env;
 
 mongoose.set("strictQuery", true);
 
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000);
+    app.listen(PORT);
   })
   .catch((error) => {
     console.log(error.message);

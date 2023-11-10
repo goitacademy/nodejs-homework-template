@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const addSchema = Joi.object({
   name: Joi.string()
@@ -12,4 +12,4 @@ const addSchema = Joi.object({
     .messages({ "any.required": "Missing required Phone field" }),
 });
 
-module.exports = { addSchema };
+export default { addSchema };
