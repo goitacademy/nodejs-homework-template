@@ -1,7 +1,15 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-
+// const mongoose = require("mongoose");
+// const DB_HOST =
+//   "mongodb+srv://iryna220:M7skH5S02Xq3dTab@cluster0.gro6ykl.mongodb.net/?retryWrites=true&w=majority";
+// mongoose.set("strictQuery", true);
+// mongoose
+//   .connect(DB_HOST)
+//   .then(() => console.log("Database connect success"))
+//   .catch((error) => console.log(error.message));
+// // M7skH5S02Xq3dTab
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
