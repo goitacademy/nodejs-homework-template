@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   env: {
     commonjs: true,
     es2021: true,
@@ -9,4 +9,4 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {},
-}
+};

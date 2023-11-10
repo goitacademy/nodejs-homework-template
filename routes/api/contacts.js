@@ -2,7 +2,7 @@ import express from "express";
 
 import contactsController from "../../controllers/contacts-controllers.js";
 
-import {isEmptyBody} from "../../middlewares/index.js";
+import { isEmptyBody } from "../../middlewares/index.js";
 
 const router = express.Router();
 
