@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteContact, getAll, getById, patchFavorite, postContact, putContact } from '../../controllers/contacts.js';
+import { deleteContact, getAll, getById, updateStatusContact, postContact, putContact } from '../../controllers/contacts.js';
 import { cntrlTryCatchWrapper } from '../../helpers/cntrlTryCatchWrapper.js';
 
 const router = express.Router();
@@ -9,6 +9,6 @@ router.get('/:contactId', cntrlTryCatchWrapper(getById));
 router.post('/', cntrlTryCatchWrapper(postContact));
 router.delete('/:contactId', cntrlTryCatchWrapper(deleteContact));
 router.put('/:contactId', cntrlTryCatchWrapper(putContact));
-router.patch('/:contactId/favorite', cntrlTryCatchWrapper(patchFavorite))
+router.patch('/:contactId/favorite', cntrlTryCatchWrapper(updateStatusContact))
 
 export default router;

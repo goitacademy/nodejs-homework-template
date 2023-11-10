@@ -37,7 +37,14 @@ export const addSchema = Joi.object({
         .messages({
             'any.required': `Missing required email field`,
         }),
+    favorite: Joi.boolean().required(),
 })
+
+export const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required().messages({ 'any.required': 'Missing field favorite' }),
+});
+
+// export const schemas = { addSchema, updateFavoriteSchema };
 
 export const putSchema = Joi.object({
     name: Joi.string(),
@@ -46,10 +53,10 @@ export const putSchema = Joi.object({
     favorite: Joi.boolean()
 }).or("name", "email", "phone", "favorite");
 
-export const patchSchema = Joi.object({
-    favorite: Joi.boolean().required().messages({
-        'any.required': `Missing field favorite`,
-    }),
-});
+// export const patchSchema = Joi.object({
+//     favorite: Joi.boolean().required().messages({
+//         'any.required': `Missing field favorite`,
+//     }),
+// });
 
 export const Contact = model('contact', contactSchema);
