@@ -1,25 +1,15 @@
-const express = require('express')
+import express from 'express';
 
-const router = express.Router()
+import { getAllContacts, getContact, postContact, deleteContact, changeContact } from '../../controllers/ctrlContacts.js';
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+export const router = express.Router()
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', getAllContacts)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', getContact)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', postContact)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', deleteContact)
 
-module.exports = router
+router.put('/:contactId', changeContact)
