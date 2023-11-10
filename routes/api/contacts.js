@@ -20,6 +20,7 @@ router.post(
 
 router.put(
   "/:contactId",
+  isEmptyBody,
   validateBody(schemaAddContact),
   controllers.updateContact
 );
