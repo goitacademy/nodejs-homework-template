@@ -35,10 +35,11 @@ const remove = async (req, res) => {
 const updateByID = async (req, res) => {
   const { contactId } = req.params;
   const result = await contacts.updateContactById(contactId, req.body);
-  if (!result) {
+  console.log(result);
+    if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status(200).res.json(result);
+  res.status(200).json(result);
 };
 
 module.exports = {
