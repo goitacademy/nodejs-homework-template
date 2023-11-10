@@ -1,5 +1,5 @@
 import { HttpError } from '../helpers/HttpError.js';
-import { Contact, addSchema, putSchema } from '../models/contact.js';
+import { Contact, addSchema, patchSchema, putSchema } from '../models/contact.js';
 
 export const getAll = async (req, res) => {
     const result = await Contact.find();
@@ -48,35 +48,35 @@ export const putContact = async (req, res) => {
     res.status(200).json(result);
 };
 
-// export const patchFavorite = async (req, res) => {
-//     const { error } = patchSchema.validate(req.body)
-//     if (error) {
-//         throw HttpError(400, error.message)
-//     }
-//     const { contactId } = req.params;
-//     const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
-//     if (!result) {
-//         throw HttpError(404, "Not found")
-//     }
-//     res.status(200).json(result);
-// };
-
 export const updateStatusContact = async (req, res) => {
-  const { contactId } = req.params;
-  const { favorite } = req;
-
-  if (favorite === undefined) {
-    throw HttpError(400, 'Missing field favorite');
-  }
-
-  const result = await Contact.findByIdAndUpdate(
-    contactId,
-    { favorite },
-    { new: true }
-  );
-
-  if (!result) {
-    throw HttpError(404, 'Not found');
-  }
-  res.status(200).json(result);
+    const { error } = patchSchema.validate(req.body)
+    if (error) {
+        throw HttpError(400, error.message)
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
+    if (!result) {
+        throw HttpError(404, "Not found")
+    }
+    res.status(200).json(result);
 };
+
+// export const updateStatusContact = async (req, res) => {
+//   const { contactId } = req.params;
+//   const { favorite } = req.params;
+
+//   if (favorite === undefined) {
+//     throw HttpError(400, 'Missing field favorite');
+//   }
+
+//   const result = await Contact.findByIdAndUpdate(
+//     contactId,
+//     { favorite },
+//     { new: true }
+//   );
+
+//   if (!result) {
+//     throw HttpError(404, 'Not found');
+//   }
+//   res.status(200).json(result);
+// };
