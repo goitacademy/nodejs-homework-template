@@ -17,14 +17,14 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = await contactService.getMovieById(id);
+        const result = await contactService.getContactById(id);
         if (!result) {
-            throw HttpError(404, `Movie with id=${id} not found`);
-            // const error = new Error(`Movie with id=${id} not found`);
+            throw HttpError(404, `Contact with id=${id} not found`);
+            // const error = new Error(`Contact with id=${id} not found`);
             // error.status = 404;
             // throw error;
             // return res.status(404).json({
-            //     message: `Movie with id=${id} not found`
+            //     message: `Contact with id=${id} not found`
             // })
         }
         res.json(result);
@@ -40,7 +40,7 @@ const add = async(req, res, next)=> {
         if(error){
             throw HttpError(400, error.message);
         }
-        const result = await contactService.addMovie(req.body);
+        const result = await contactService.addContact(req.body);
 
         res.status(201).json(result);
     }
@@ -56,9 +56,9 @@ const updateById = async(req, res, next)=> {
             throw HttpError(400, error.message);
         }
         const {id} = req.params;
-        const result = await contactService.updateMovieById(id, req.body);
+        const result = await contactService.updateContactById(id, req.body);
         if (!result) {
-            throw HttpError(404, `Movie with id=${id} not found`);
+            throw HttpError(404, `Contact with id=${id} not found`);
         }
 
         res.json(result);
@@ -71,9 +71,9 @@ const updateById = async(req, res, next)=> {
 const deleteById = async(req, res, next)=> {
     try {
         const {id} = req.params;
-        const result = await contactService.deleteMovieById(id);
+        const result = await contactService.deleteContactById(id);
         if (!result) {
-            throw HttpError(404, `Movie with id=${id} not found`);
+            throw HttpError(404, `Contact with id=${id} not found`);
         }
 
         // res.status(204).send();
