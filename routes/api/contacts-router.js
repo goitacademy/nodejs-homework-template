@@ -12,9 +12,11 @@ import {
   contactUpdateFavoriteSchema,
 } from "../../models/Contact.js";
 
-import { isValidId } from "../../middlewares/index.js";
+import { authenticate, isValidId } from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactsController.getAll);
 
