@@ -6,7 +6,7 @@ const { HttpError, ctrlWrap } = require("../helpers");
 
 const getAll = async (req, res) => {
   const result = await contacts.listContacts();
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const getById = async (req, res) => {
@@ -15,7 +15,7 @@ const getById = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 const add = async (req, res) => {
@@ -38,7 +38,7 @@ const updateByID = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).res.json(result);
 };
 
 module.exports = {
