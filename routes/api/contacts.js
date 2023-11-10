@@ -1,4 +1,3 @@
-
 import express from "express";
 import {
   getAllContacts,
@@ -7,7 +6,7 @@ import {
   createContact,
   updateById,
   updateFavorite,
-} from "../../controller/controllers.js";
+} from "../../controllers/controllers.js";
 
 const router = express.Router();
 
@@ -22,5 +21,10 @@ router.delete("/:contactId", deleteById);
 router.put("/:contactId", updateById);
 
 router.patch("/:contactId", updateFavorite);
+
+// router.get("/filtr?favorite=", async (req, res, next) => {
+//   const result = req.query;
+//   res.json({ message:"col" });
+// });
 
 export { router };
