@@ -1,11 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const { signup, login, logout, getCurrentUser } = require("../controllers/users");
-const checkToken = require("../middleware/auth");
+import express from "express";
+import { signup, login, logout, getCurrentUser } from "#controllers/users/index.js";
+import { checkToken } from "#middleware/auth.js";
+export const routerUsers = express.Router();
 
-router.post("/signup", signup);
-router.post("/login", login);
-router.post("/logout", checkToken, logout);
-router.get("/current", checkToken, getCurrentUser);
-
-module.exports = router;
+routerUsers.post("/signup", signup);
+routerUsers.post("/login", login);
+routerUsers.post("/logout", checkToken, logout);
+routerUsers.get("/current", checkToken, getCurrentUser);

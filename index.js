@@ -1,10 +1,11 @@
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
-require("dotenv").config();
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import { config } from "dotenv";
+import { routerContacts } from "#routes/contacts.js";
+import { routerUsers } from "#routes/users.js";
 
-const routerContacts = require("./routes/contacts");
-const routerUsers = require("./routes/users");
+config();
 
 const { DB_HOST: uriDb } = process.env;
 
@@ -13,6 +14,7 @@ const connection = mongoose.connect(uriDb);
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/api", routerContacts);
