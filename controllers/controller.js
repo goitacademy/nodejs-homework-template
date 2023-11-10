@@ -9,9 +9,15 @@ async function getContacts(req, res, next) {
   }
 }
 
-function getContact(req, res, next) {
+async function getContact(req, res, next) {
   const { id } = req.params;
-  res.send(`get one contact id = ${id}`);
+  try {
+    const contact = await Contact.findById(id).exec();
+    console.log(contact);
+    res.send(contact);
+  } catch (error) {
+    next(error);
+  }
 }
 
 function createContact(req, res, next) {
