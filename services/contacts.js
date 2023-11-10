@@ -24,11 +24,14 @@ const saveContacts = async contacts => {
 
 const listContacts = loadContacts;
 
-const getContactById = async contactId => {
+const getContactById = async id => {
   try {
-    const contacts = await loadContacts();
-    const contact = contacts.find(c => c.id == contactId);
-    return contact;
+    const contact = await Contacts.findById(id);
+    return {
+      success: true,
+      result: contact,
+      message: 'List of contact',
+    };
   } catch (error) {
     return {
       success: false,
@@ -40,11 +43,13 @@ const getContactById = async contactId => {
 
 const addContact = async body => {
   try {
-    const contacts = await loadContacts();
-    contacts.push(body);
-    await saveContacts(contacts);
-
-    return body;
+    const contactRegistered = await Contacts.create(body);
+    console.log(contactRegistered);
+    return {
+      success: true,
+      result: contactRegistered,
+      message: 'contact registered successfully.',
+    };
   } catch (error) {
     return {
       success: false,

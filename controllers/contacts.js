@@ -28,14 +28,16 @@ const addContact = async (req, res, next) => {
       .json({ message: 'Missing required name, email, or phone field' });
   }
 
-  const newContact = {
+  const body = {
     id: nanoid(8),
     name: value.name,
+    lastname: value.lastname,
     email: value.email,
     phone: value.phone,
+    favorite: value.favorite,
   };
 
-  const contact = await service.addContact(newContact);
+  const contact = await service.addContact(body);
 
   res.status(201).json(contact);
 };
