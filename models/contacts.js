@@ -3,7 +3,6 @@ const crypto = require("node:crypto");
 const path = require("node:path");
 
 const contactsPath = path.join(__dirname, "contacts.json");
-console.log("contactsPath", contactsPath);
 
 async function readFile() {
   const contacts = await fs.readFile(contactsPath, { encoding: "UTF-8" });
@@ -78,3 +77,5 @@ module.exports = {
   addContact,
   updateContact,
 };
+
+

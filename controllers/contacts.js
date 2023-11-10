@@ -1,5 +1,7 @@
 const contactMethods = require("../models/contacts");
 
+const { httpError } = require("../helpers/httpError");
+
 const listContacts = async (req, res, next) => {
   try {
     const result = await contactMethods.listContacts();
@@ -9,10 +11,13 @@ const listContacts = async (req, res, next) => {
   }
 };
 
-const getContactById= async (req, res, next) => {
-    try {
-        const { id } = req.params;
+const getContactById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
     const result = await contactMethods.getContactById(id);
+    if (!result) {
+      throw httpError(404, 'Not found!');
+    }
     res.json(result);
   } catch (error) {
     next(error);
@@ -21,8 +26,8 @@ const getContactById= async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const result = await contactMethods.addContact();
-    res.json(result);
+    const result = await contactMethods.addContact(req.body);
+    res.status(201).json(result);
   } catch (error) {
     next(error);
   }
@@ -30,7 +35,11 @@ const addContact = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   try {
-    const result = await contactMethods.removeContact();
+    const { id } = req.params;
+    const result = await contactMethods.removeContact(id);
+    if (!result) {
+      throw httpError(404, "Not found!");
+    }
     res.json(result);
   } catch (error) {
     next(error);
@@ -39,7 +48,11 @@ const removeContact = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
-    const result = await contactMethods.updateContact();
+    const { id } = req.params;
+    const result = await contactMethods.updateContact(id, req.body);
+     if (!result) {
+       throw httpError(404, "Not found!");
+     }
     res.json(result);
   } catch (error) {
     next(error);

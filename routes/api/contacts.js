@@ -1,52 +1,17 @@
 const express = require('express')
 
-const contactMethods = require("../../models/contacts");
+const controllers = require("../../controllers/contacts");
 
 const router = express.Router()
 
-router.get("/", async (req, res, next) => {
-  try {
-    const result = await contactMethods.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", controllers.listContacts);
 
-router.get('/:contactId', async (req, res, next) => {
-   try {
-     const result = await contactMethods.getContactById();
-     res.json(result);
-   } catch (error) {
-     next(error);
-   }
-})
+router.get("/:contactId", controllers.getContactById);
 
-router.post('/', async (req, res, next) => {
-   try {
-     const result = await contactMethods.addContact();
-     res.json(result);
-   } catch (error) {
-     next(error);
-   }
-})
+router.post("/", controllers.addContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-   try {
-     const result = await contactMethods.removeContact();
-     res.json(result);
-   } catch (error) {
-     next(error);
-   }
-})
+router.delete("/:contactId", controllers.removeContact);
 
-router.put('/:contactId', async (req, res, next) => {
-   try {
-     const result = await contactMethods.updateContact();
-     res.json(result);
-   } catch (error) {
-     next(error);
-   }
-})
+router.put("/:contactId", controllers.updateContact);
 
 module.exports = router
