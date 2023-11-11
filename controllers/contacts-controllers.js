@@ -9,8 +9,6 @@ const getAllContacts = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  //     res.status(500).json({ message: error.message });
-  //   }
 };
 
 const getContactById = async (req, res, next) => {
@@ -19,16 +17,10 @@ const getContactById = async (req, res, next) => {
     const result = await moviesServise.getContactById(contactId);
     if (!result) {
       throw HttpErr(404, `Contact with id ${contactId} not found`);
-
-      //   return res  вінексти в хелперс
-      //     .status(404)
-      //     .json({ message: `Contact with id ${contactId} not faind` });
     }
     res.json(result);
   } catch (error) {
     next(error);
-    // const { status = 500, message = "Server  error" } = error;
-    // res.status(500).json({ message: error.message });
   }
 };
 

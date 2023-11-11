@@ -2,6 +2,8 @@ const Joi = require("joi");
 
 const addContactChema = Joi.object({
   name: Joi.string()
+    .min(3)
+    .max(15)
     .required()
     .messages({ "any.required": `missing required "name" field` }), // 1-09 //
   email: Joi.string()
@@ -13,7 +15,7 @@ const addContactChema = Joi.object({
 });
 
 const updateContactChema = Joi.object({
-  name: Joi.string(),
+  name: Joi.string().min(3).max(15),
   email: Joi.string(),
   phone: Joi.string(),
 });
