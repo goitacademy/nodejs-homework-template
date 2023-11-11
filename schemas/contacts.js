@@ -5,8 +5,8 @@ const contactSchema = Joi.object({
     .min(2)
     .regex(/^\p{L}+$/u)
     .messages({
-        "string.pattern.base": "Invalid name. It should only contain letters",
-      })
+      "string.pattern.base": "Invalid name. It should only contain letters",
+    })
     .required(),
   email: Joi.string()
     .email({
@@ -26,4 +26,8 @@ const contactSchema = Joi.object({
     .required(),
 });
 
-module.exports = contactSchema;
+const patchSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = {contactSchema, patchSchema};
