@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
 const extensionWitheList = [".jpg", ".jpeg", "png", ".gif"];
 const mimetypeWhiteList = ["image/png", "image/jpg", "image/jpeg", "image/gif"];
 
-const uploadMiddleware = multer({
+export const uploadMiddleware = multer({
   storage: storage,
   fileFilter: async (req, file, cb) => {
     const extension = path.extname(file.originalname).toLowerCase();
@@ -43,16 +43,7 @@ const uploadMiddleware = multer({
     fileSize: 1024 * 1024 * 5,
   },
 });
-app.post(
-  "/upload",
-  uploadMiddleware.single("pciture"),
-  async (req, res, next) => {
-    if (!req.file) {
-      return res.status(400).json({ message: "File isn't a photo" });
-    }
-    res.json(req.file);
-  }
-);
+
 app.use(logger(formatsLogger));
 app.use(cors());
 
@@ -60,6 +51,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 setJWTStrategy();
 app.use("/api", api);
+app.post(
+  "/upload",
+  uploadMiddleware.single("picture"),
+  async (req, res, next) => {
+    if (!req.file) {
+      return res.status(400).json({ message: "File isn't a photo" });
+    }
+    res.json(req.file);
+  }
+);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

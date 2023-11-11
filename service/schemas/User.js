@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import bcrypt from "bcrypt";
+
 const userSchema = new Schema({
   password: {
     type: String,
@@ -19,6 +20,9 @@ const userSchema = new Schema({
   token: {
     type: String,
     default: null,
+  },
+  avatarURL: {
+    type: String,
   },
 });
 
