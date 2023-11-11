@@ -5,7 +5,7 @@ const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
-const contactsFilePath = path.join(__dirname, 'models', 'contacts.json');
+const contactsFilePath = path.join(__dirname, '../../models/contacts.json');
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
