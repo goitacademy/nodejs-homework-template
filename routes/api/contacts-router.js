@@ -12,7 +12,7 @@ import {
   contactUpdateFavoriteSchema,
 } from "../../models/Contact.js";
 
-import { authenticate, isValidId } from "../../middlewares/index.js";
+import { authenticate, isValidId, upload } from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
 
@@ -24,6 +24,7 @@ contactsRouter.get("/:id", isValidId, contactsController.getById);
 
 contactsRouter.post(
   "/",
+  upload.single("avatar"),
   validateBody(contactAddSchema),
   contactsController.add
 );
