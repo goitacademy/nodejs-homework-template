@@ -1,8 +1,9 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-const connectToDatabase = require("./mongoose/mongoose")// підключення бази даних
 
+// пыдключення бази даних 
+require("./mongoose/mongoose")
 
 const contactsRouter = require('./routes/api/contacts')
 
@@ -10,18 +11,19 @@ const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
+// app.use - middleware (методи для обробки HTTP-запитів)
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json());
 
+// підключення шляхів по яким будуть відбуватися HTTP-запити 
 app.use('/api/contacts', contactsRouter);
 
-app.use(connectToDatabase);// підключення бази даних
 
+// Обробка помилок 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
-
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
