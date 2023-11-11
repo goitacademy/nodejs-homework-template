@@ -2,10 +2,14 @@ const { Contact } = require('../models/contact');
 const { HttpError, ctrlWrapper } = require('../utils');
 
 const getOperationsSettings = '-updatedAt -createdAt';
+const populateOptions = 'email';
 
 const getAll = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const contacts = await Contact.find({ owner }, getOperationsSettings);
+  const contacts = await Contact.find(
+    { owner },
+    getOperationsSettings
+  ).populate('owner', populateOptions);
   if (!contacts) {
     throw HttpError({ status: 404, message: 'Not found' });
   }
@@ -14,7 +18,10 @@ const getAll = async (req, res, next) => {
 
 const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await Contact.findById(contactId, getOperationsSettings);
+  const contact = await Contact.findById(
+    contactId,
+    getOperationsSettings
+  ).populate('owner', populateOptions);
   if (!contact) {
     throw HttpError({ status: 404, message: 'Not found' });
   }
