@@ -1,10 +1,13 @@
-const contacts = require("../models/contacts");
-const { addSchema } = require("../validation/contactValidationSchemas");
-const { HttpError } = require("../htttpError/httpError");
+const {
+  addSchema,
+  favoriteSchema,
+} = require("../validation/contactValidationSchemas");
+const { HttpError } = require("../helpers/httpError");
+const Contact = require("../models/contact");
 
 const getAllContact = async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -13,8 +16,8 @@ const getAllContact = async (req, res, next) => {
 
 const getOneContact = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
+    const contactId = req.params.id;
+    const result = await Contact.findById(contactId);
     if (!result) {
       const error = new Error("Not found");
       error.status = 404;
@@ -32,8 +35,14 @@ const newContact = async (req, res, next) => {
     if (error) {
       throw HttpError(404, error.message);
     } else {
-      const { name, email, phone } = req.body;
-      const result = await contacts.addContact(name, email, phone);
+      const body = {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        favorite: req.body.favorite,
+      };
+      const result = await Contact.create(body);
+
       res.status(201).json(result);
     }
   } catch (error) {
@@ -44,7 +53,7 @@ const newContact = async (req, res, next) => {
 const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       const error = new Error("Not found");
       error.status = 404;
@@ -63,7 +72,29 @@ const updateContact = async (req, res, next) => {
       throw HttpError(404, error.message);
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await Contact.findByIdAndUpdate(contactId, req.body);
+    if (!result) {
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateFavorite = async (req, res, next) => {
+  try {
+    const { error } = favoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, "missing field favorite");
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    console.log(result);
     if (!result) {
       const error = new Error("Not found");
       error.status = 404;
@@ -80,4 +111,5 @@ module.exports = {
   newContact,
   deleteContact,
   updateContact,
+  updateFavorite,
 };

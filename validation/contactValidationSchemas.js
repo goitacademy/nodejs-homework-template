@@ -10,4 +10,7 @@ const addSchema = Joi.object({
   phone: Joi.number().required(),
 });
 
-module.exports = { addSchema };
+const favoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+module.exports = { addSchema, favoriteSchema };
