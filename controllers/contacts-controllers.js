@@ -1,6 +1,6 @@
 const moviesServise = require("../models/contacts.js");
-
-// const addContactChema = require("../schemas/contacts-schems.js");
+const HttpErr = require("../helpers/HttpError.js");
+const contactChema = require("../schems/contacts-schems.js");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -19,10 +19,9 @@ const getContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await moviesServise.getContactById(contactId);
     if (!result) {
-      const error = new Error(`Contact with id ${contactId} not found`);
-      error.status = 404;
-      throw error;
-      //   return res  вінексти в хелперс 44 минута
+      throw HttpErr(404, `Contact with id ${contactId} not found`);
+
+      //   return res  вінексти в хелперс
       //     .status(404)
       //     .json({ message: `Contact with id ${contactId} not faind` });
     }
@@ -36,12 +35,11 @@ const getContactById = async (req, res, next) => {
 
 const addNewContact = async (req, res, next) => {
   try {
-    // const { error } = addContactChema.validate(req.body);
-    // if (error) {
-    //   const error = new Error();
-    //   error.status = 404;
-    //   throw error;
-    // }
+    const { error } = contactChema.addContactChema.validate(req.body);
+
+    if (error) {
+      throw HttpErr(404, error.message);
+    }
     const result = await moviesServise.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -54,9 +52,7 @@ const deleteById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await moviesServise.removeContact(contactId);
     if (!result) {
-      const error = new Error(`Contact with id ${contactId} not found`);
-      error.status = 404;
-      throw error;
+      throw HttpErr(404, `Contact with id ${contactId} not found`);
     }
     res.status(201).json({ message: "Contact deleted" });
   } catch (error) {
@@ -64,9 +60,16 @@ const deleteById = async (req, res, next) => {
   }
 };
 
+const updateContact = async (req, res, next) => {
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
 module.exports = {
   getAllContacts,
   getContactById,
   addNewContact,
   deleteById,
+  updateContact,
 };
