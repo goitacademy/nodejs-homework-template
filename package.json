@@ -14,8 +14,12 @@
     "dotenv": "^16.3.1",
     "express": "4.17.1",
     "joi": "^17.11.0",
+    "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
     "morgan": "1.10.0"
+  },
+  "engines": {
+    "node": ">=16.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
