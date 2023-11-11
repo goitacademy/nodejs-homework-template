@@ -1,21 +1,20 @@
-const Contacts = require("./contactsSchema")
+const  Contact  = require("./contactsSchema");
 
-async function listContacts (req, res, next) {
+async function listContacts(req, res, next) {
   try {
-    const getContacts = await Contacts.find().exec()
-
-    res.send(getContacts)
+    const getContacts = await Contact.find().exec();
+    res.send(getContacts);
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
 async function getContactById (req, res, next) {
-  const {id} = req.params
+  const {contactId} = req.params
   try {
-    const contact = await Contacts.findById(id).exec();
+    const contact = await Contact.findById(contactId).exec();
 
-    if (contact === null) {
+    if (contact === null ) {
       return res.status(404).send("Contact not found:(");
     }
 
@@ -26,15 +25,15 @@ async function getContactById (req, res, next) {
 }
 
 async function removeContact (req, res, next) {
-  const {id} = req.params
+  const {contactId} = req.params
   try {
-    const result = await Contacts.findByIdAndDelete(id);
+    const result = await Contact.findByIdAndDelete(contactId);
 
     if (result === null) {
       return res.status(404).send("Contact not found:(");
     }
 
-    res.send(id);
+    res.send("Contact delete");
   } catch (error) {
     next(error)
   }
@@ -49,18 +48,18 @@ async function addContact(req, res, next) {
   };
 
   try {
-    const result = await Contacts.create(contact);
+  const result = await Contact.create(contact);
 
-    res.status(201).send(result);
+  res.status(201).send(result);
   } catch (err) {
     next(err);
   }
 }
 
 async function updateContact(req, res, next) {
-  const { id } = req.params;
+  const { contactId } = req.params;
 
-  const book = {
+  const contact = {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
@@ -68,10 +67,10 @@ async function updateContact(req, res, next) {
   };
 
   try {
-    const result = await Book.findByIdAndUpdate(id, book, { new: true });
+    const result = await Contact.findByIdAndUpdate(contactId, contact, { new: true });
 
     if (result === null) {
-      return res.status(404).send("Book not found");
+      return res.status(404).send("Contact not found");
     }
 
     res.send(result);
@@ -80,20 +79,35 @@ async function updateContact(req, res, next) {
   }
 }
 
-async function updateFavorite (req, res) {
+async function updateFavorite(req, res, next) {
   const { contactId } = req.params;
+
+  if (req.body.favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+
   try {
-    const result = await Contacts.findByIdAndUpdate(contactId, req.body, {
-      new: true,
-    });
+    const result = await updateStatusContact(contactId, { favorite: req.body.favorite });
+
     if (!result) {
-      throw HttpError(404);
+      return res.status(404).json({ message: "Not found" });
     }
+
     res.json(result);
   } catch (error) {
-    next(error)
+    next(error);
   }
-};
+}
+
+async function updateStatusContact(contactId, data) {
+  try {
+    const result = await Contact.findByIdAndUpdate(contactId, data, { new: true });
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
 
 module.exports = {
   listContacts,
@@ -102,4 +116,5 @@ module.exports = {
   addContact,
   updateContact,
   updateFavorite,
+  updateStatusContact,
 }

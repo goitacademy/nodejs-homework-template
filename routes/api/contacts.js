@@ -1,21 +1,19 @@
 const express = require('express');
-
-const HttpError = require('../../HttpErrors/httpErrors');
-const bookRequest = require("../../models/contacts");
-const { schemas } = require('../../models/contactsSchema');
-const router = express.Router()
 const jsonParser = express.json();
+const contactRequest = require("../../models/contacts");
+const router = express.Router()
 
-router.get('/', bookRequest.listContacts)
 
-router.get('/:contactId', bookRequest.getContactById) 
+router.get('/', contactRequest.listContacts)
 
-router.post("/", validateBody(schemas.addSchema), bookRequest.addContact);
+router.get('/:contactId', contactRequest.getContactById) 
 
-router.delete("/:contactId", bookRequest.removeContact);
+router.post("/", jsonParser, contactRequest.addContact);
 
-router.put('/:contactId', validateBody(schemas.addSchema), bookRequest.updateContact)
+router.delete("/:contactId", contactRequest.removeContact);
 
-router.patch("/:id/favourite", validateBody(schemas.addSchema), bookRequest.updateFavorite)
+router.put('/:contactId', jsonParser, contactRequest.updateContact)
+
+router.patch("/:contactId/favorite", jsonParser, contactRequest.updateFavorite);
 
 module.exports = router
