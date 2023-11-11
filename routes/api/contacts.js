@@ -26,17 +26,15 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const response = contactsSchema.validate(req.body);
 
-  const { name, email, phone } = response.value;
-
   if (typeof response.error !== "undefined") {
     return res
       .status(400)
       .send(response.error.details.map((err) => err.message).join(", "));
   }
 
-  await addContact(response.value);
+  const newContact = await addContact(response.value);
 
-  res.status(201).send({ name, email, phone });
+  res.status(201).send(newContact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
