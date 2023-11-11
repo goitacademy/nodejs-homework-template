@@ -1,10 +1,11 @@
 const express = require("express");
+
 const router = express.Router();
 
 const contacts = require("../../models/contacts");
-const handlerHttpError = require("./utils");
-const addSchema = require("./schemas");
-const { contactControllers } = require("./controllers");
+const handlerHttpError = require("../../utils");
+const addSchema = require("../../schemas");
+const { contactControllers } = require("../../controllers");
 
 router.get("/", async (_, res, next) => {
   try {
