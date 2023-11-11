@@ -2,44 +2,42 @@ const express = require('express');
 const fs = require('fs').promises;
 const path = require('path');
 const Joi = require('joi');
+const { v4: uuidv4 } = require('uuid');
+
 const router = express.Router();
+const contactsFilePath = path.join(__dirname, 'models', 'contacts.json');
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
 
-// Obtener la ruta absoluta del archivo 'contacts.json'
-const contactsFilePath = path.join(__dirname, 'contacts.json');
-
-// Función para cargar los datos desde contacts.json
 async function loadContacts() {
   try {
     const data = await fs.readFile(contactsFilePath, 'utf8');
     return JSON.parse(data);
   } catch (error) {
-    console.error('Error loading contacts:', error);
-    throw error;
+    if (error.code === 'ENOENT') {
+      return [];
+    }
+    console.error('Error loading contacts:', error.message);
+    throw new Error('Error loading contacts');
   }
 }
 
-// Función para guardar los datos en contacts.json
 async function saveContacts(contacts) {
   try {
     await fs.writeFile(contactsFilePath, JSON.stringify(contacts, null, 2), 'utf8');
   } catch (error) {
-    console.error('Error saving contacts:', error);
-    throw error;
+    console.error('Error saving contacts:', error.message);
+    throw new Error('Error saving contacts');
   }
 }
 
-// Middleware para validar el cuerpo de la solicitud
 function validateContact(contact) {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-  });
-
-  return schema.validate(contact);
+  return contactSchema.validate(contact);
 }
 
-// Ruta para obtener todos los contactos
 router.get('/', async (req, res) => {
   try {
     const contacts = await loadContacts();
@@ -49,12 +47,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Ruta para obtener un contacto por ID
 router.get('/:id', async (req, res) => {
   try {
     const contacts = await loadContacts();
     const contactId = req.params.id;
-    const contact = contacts.find((c) => c.id === parseInt(contactId));
+    const contact = contacts.find((c) => c.id === contactId);
 
     if (!contact) {
       return res.status(404).json({ message: 'Not found' });
@@ -66,7 +63,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Ruta para agregar un nuevo contacto
 router.post('/', async (req, res) => {
   try {
     const contacts = await loadContacts();
@@ -77,7 +73,7 @@ router.post('/', async (req, res) => {
     }
 
     const newContact = {
-      id: contacts.length > 0 ? contacts[contacts.length - 1].id + 1 : 1,
+      id: uuidv4(),
       name: req.body.name,
       email: req.body.email,
       phone: req.body.phone,
@@ -91,12 +87,11 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Ruta para eliminar un contacto por ID
 router.delete('/:id', async (req, res) => {
   try {
     const contacts = await loadContacts();
     const contactId = req.params.id;
-    const contactIndex = contacts.findIndex((c) => c.id === parseInt(contactId));
+    const contactIndex = contacts.findIndex((c) => c.id === contactId);
 
     if (contactIndex === -1) {
       return res.status(404).json({ message: 'Not found' });
@@ -110,12 +105,11 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Ruta para actualizar un contacto por ID
 router.put('/:id', async (req, res) => {
   try {
     const contacts = await loadContacts();
     const contactId = req.params.id;
-    const contactIndex = contacts.findIndex((c) => c.id === parseInt(contactId));
+    const contactIndex = contacts.findIndex((c) => c.id === contactId);
 
     if (contactIndex === -1) {
       return res.status(404).json({ message: 'Not found' });
