@@ -31,13 +31,21 @@ const userSchema = new Schema(
 userSchema.post('save', handleMongooseError);
 
 const registerSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().required(),
+  password: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required password field' }),
+  email: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required email field' }),
 });
 
 const loginSchema = Joi.object({
-  password: Joi.string().required(),
-  email: Joi.string().required(),
+  password: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required password field' }),
+  email: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required email field' }),
 });
 
 const User = model('user', userSchema);

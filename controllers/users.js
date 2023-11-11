@@ -1,6 +1,9 @@
 const { User } = require('../models/user');
 const { HttpError, ctrlWrapper } = require('../utils');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -8,7 +11,7 @@ const register = async (req, res, next) => {
   if (isUser) {
     throw HttpError({ status: 409, message: 'Email in use' });
   }
-  const hashPassword = bcrypt.hashSync(password, 8);
+  const hashPassword = bcrypt.hashSync(password, 10);
   const response = await User.create({ email, password: hashPassword });
   res.status(201).json({
     user: {
@@ -25,11 +28,17 @@ const login = async (req, res, next) => {
   if (!isValidPassword || !user) {
     throw HttpError({ status: 401, message: 'Email or password is wrong' });
   }
+  const token = jwt.sign({ id: user._id }, SECRET_KEY, { expiresIn: '30d' });
+  const response = await User.findByIdAndUpdate(
+    user._id,
+    { token },
+    { new: true }
+  );
   res.status(200).json({
-    token: user.token,
+    token: response.token,
     user: {
-      email: user.email,
-      subscription: user.subscription,
+      email: response.email,
+      subscription: response.subscription,
     },
   });
 };
