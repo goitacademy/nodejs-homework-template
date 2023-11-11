@@ -32,14 +32,13 @@ async function getContactById(req, res, next) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    res.send(contact);
+    res.status(201).send(contact);
   } catch (error) {
     next(error);
   }
 }
 
 async function addContact(req, res, next) {
-  console.log("Handling POST /api/contacts request...");
   const contact = {
     name: req.body.name,
     email: req.body.email,
@@ -47,9 +46,12 @@ async function addContact(req, res, next) {
     favorite: req.body.favorite,
   };
 
+  if(contact === null){
+    res.status(404).json({message: "Not found"})
+  }
+
   try {
     const createContact = await Contact.create(contact);
-    console.log("Contact created:", createContact);
     res.status(201).send(createContact);
   } catch (error) {
     console.error("Error creating contact:", error);
@@ -84,12 +86,19 @@ async function updateContact(req, res, next) {
     favorite: req.body.favorite,
   };
 
+  if(contact === null) {
+    res.status(400).json({message: "missing fields"})
+  }
+
   try {
     const result = await Contact.findByIdAndUpdate(contactId, contact, {
       new: true,
     });
-    console.log(result);
-    res.end();
+
+    if(!result){
+      res.status(404).json({message: "Not found"})
+    }
+    res.send(result)
   } catch (error) {
     next(error);
   }
