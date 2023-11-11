@@ -13,6 +13,9 @@ async function getContact(req, res, next) {
   const { id } = req.params;
   try {
     const contact = await Contact.findById(id).exec();
+    if (contact === null) {
+      return res.status(404).send("Contact not found");
+    }
     console.log(contact);
     res.send(contact);
   } catch (error) {
@@ -20,14 +23,39 @@ async function getContact(req, res, next) {
   }
 }
 
-function createContact(req, res, next) {
-  res.send("create contact");
+async function createContact(req, res, next) {
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+
+  try {
+    const result = await Contact.create(contact);
+    console.log(result);
+    res.end();
+  } catch (error) {
+    next(error);
+  }
 }
 
-function updateContact(req, res, next) {
+async function updateContact(req, res, next) {
   const { id } = req.params;
-  res.send(`UPD contact with id ${id}`);
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+
+  try {
+    const result = await Contact.findByIdAndUpdate(id, contact);
+    console.log(result);
+    res.end();
+  } catch (error) {
+    next(error);
+  }
 }
+
 function deleteContact(req, res, next) {
   const { id } = req.params;
   res.send(`delete contact with id ${id}`);
