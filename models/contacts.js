@@ -18,17 +18,6 @@ export const getContactById = async (contactId) => {
   return result || null;
 };
 
-export const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((item) => item.id === contactId);
-  if (index === -1) {
-    return null;
-  }
-  const [result] = contacts.splice(index, 1);
-  await updateContacts(contacts);
-  return result;
-};
-
 export const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = {
@@ -42,13 +31,24 @@ export const addContact = async (body) => {
   return newContact;
 };
 
+export const removeContact = async (contactId) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = contacts.splice(index, 1);
+  await updateContacts(contacts);
+  return result;
+};
+
 export const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { contactId, ...body };
+  contacts[index] = { ...contacts[index], ...body };
   await updateContacts(contacts);
   return contacts[index];
 };
@@ -56,7 +56,7 @@ export const updateContact = async (contactId, body) => {
 export default {
   listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 };
