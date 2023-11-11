@@ -5,8 +5,7 @@ const contactChema = require("../schems/contacts-schems.js");
 const getAllContacts = async (req, res, next) => {
   try {
     const result = await moviesServise.listContacts();
-    res.json(result);
-    res.json({ message: "Your contacts" });
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -36,7 +35,6 @@ const getContactById = async (req, res, next) => {
 const addNewContact = async (req, res, next) => {
   try {
     const { error } = contactChema.addContactChema.validate(req.body);
-
     if (error) {
       throw HttpErr(404, error.message);
     }
@@ -62,6 +60,15 @@ const deleteById = async (req, res, next) => {
 
 const updateContact = async (req, res, next) => {
   try {
+    const { contactId } = req.params;
+    console.log(req.params);
+    const { error } = contactChema.updateContactChema.validate(req.body);
+    if (error) {
+      throw HttpErr(404, error.message);
+    }
+
+    const result = await moviesServise.updateContact(contactId, req.body);
+    res.json(result);
   } catch (error) {
     next(error);
   }

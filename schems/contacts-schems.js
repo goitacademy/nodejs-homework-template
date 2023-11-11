@@ -13,7 +13,7 @@ const addContactChema = Joi.object({
 });
 
 const updateContactChema = Joi.object({
-  name: Joi.string(), // 1-09 //
+  name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
 });
