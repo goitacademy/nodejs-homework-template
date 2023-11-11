@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-const queries = require("../../models/contacts");
-const schema = require("./joi");
-const errors = require("./errors"); 
+const queries = require('../../models/contacts');
+const { schema } = require('./joi');
+const errors = require('./errors');
 
 router.get('/', async (_, res, __) => {
   try {
@@ -29,7 +29,6 @@ router.get('/:contactId', async (req, res, next) => {
     next(e);
   }
 });
-
 
 router.post('/', async (req, res, _) => {
   try {
@@ -87,5 +86,4 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-
-module.exports = router
+module.exports = router;
