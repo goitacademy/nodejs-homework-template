@@ -11,24 +11,44 @@ const {
   newContacts,
   editContacts,
   favoriteSchema,
-} = require("../../models/validation");
+} = require("../../validJoi/validContacts");
 const {
   validContact,
   validUpdateContact,
-} = require("../../helpers/validWrapper")
-const ctrlWrapper = require("../../helpers/ctrlWrapper ")
+} = require("../../helpers/validContacts");
+const ctrlWrapper = require("../../helpers/ctrlWrapper ");
+const { validToken } = require("../../helpers/validToken");
 const router = express.Router();
 
-router.get("/", ctrlWrapper(getAllContacts));
+router.get("/", ctrlWrapper(validToken), ctrlWrapper(getAllContacts));
 
-router.get("/:contactId", ctrlWrapper(getContactById));
+router.get("/:contactId", ctrlWrapper(validToken), ctrlWrapper(getContactById));
 
-router.post("/", validContact(newContacts),ctrlWrapper(addContact));
+router.post(
+  "/",
+  ctrlWrapper(validToken),
+  validContact(newContacts),
+  ctrlWrapper(addContact)
+);
 
-router.delete("/:contactId", ctrlWrapper(removeContact));
+router.delete(
+  "/:contactId",
+  ctrlWrapper(validToken),
+  ctrlWrapper(removeContact)
+);
 
-router.put("/:contactId", validUpdateContact(editContacts),ctrlWrapper(updateContact));
+router.put(
+  "/:contactId",
+  ctrlWrapper(validToken),
+  validUpdateContact(editContacts),
+  ctrlWrapper(updateContact)
+);
 
-router.patch("/:contactId/favorite", validContact(favoriteSchema),ctrlWrapper(updateStatusContact));
+router.patch(
+  "/:contactId/favorite",
+  ctrlWrapper(validToken),
+  validContact(favoriteSchema),
+  ctrlWrapper(updateStatusContact)
+);
 
 module.exports = router;
