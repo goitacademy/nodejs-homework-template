@@ -22,7 +22,7 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await queries.getContactById(contactId);
     if (!result) {
-      throw new errors(404);
+      res.status(400).json({ message: 'missing required field' });
     }
     res.json(result);
   } catch (e) {
