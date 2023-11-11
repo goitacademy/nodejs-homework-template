@@ -1,6 +1,6 @@
 const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const logger = require('morgan')// спец мідлвар який виводить у консоль інфо про запит(іноді то потрібно щоб дебажити код) 
+const cors = require('cors')// дозволяє виконання кросдоменних запитів
 
 // пыдключення бази даних 
 require("./mongoose/mongoose")
