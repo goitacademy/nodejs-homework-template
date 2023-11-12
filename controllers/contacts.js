@@ -84,9 +84,6 @@ const deleteById = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({ message: "missing field favorite" });
-  }
   const id = req.params.contactId;
   const contactNew = {
     name: req.body.name,
