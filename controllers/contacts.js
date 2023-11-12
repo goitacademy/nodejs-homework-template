@@ -6,6 +6,7 @@ const populateOptions = 'email';
 const ownerField = 'owner';
 
 const getAll = async (req, res, next) => {
+  const { favorite } = req.query;
   const { _id: owner } = req.user;
   const contacts = await Contact.find(
     { owner },
@@ -14,7 +15,14 @@ const getAll = async (req, res, next) => {
   if (!contacts) {
     throw HttpError({ status: 404, message: 'Not found' });
   }
-  res.status(200).json(contacts);
+  if (favorite !== 'true') {
+    res.status(200).json(contacts);
+  } else {
+    const favoriteContacts = contacts.filter(
+      (contact) => contact.favorite === true
+    );
+    res.status(200).json(favoriteContacts);
+  }
 };
 
 const getById = async (req, res, next) => {

@@ -44,14 +44,15 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  // const { id: _id } = req;
-  // console.log(_id);
-  // const user = await User.findOne({ _id });
-  // console.log(user);
-  // res.status(204).json();
+  const { _id: id } = req.user;
+  await User.findByIdAndUpdate(id, { token: null }, { new: true });
+  res.status(204).json();
 };
 
-const refresh = async (req, res, next) => {};
+const refresh = async (req, res, next) => {
+  const { email, subscription } = req.user;
+  res.status(200).json({ email, subscription });
+};
 
 module.exports = {
   register: ctrlWrapper(register),
