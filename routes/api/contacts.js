@@ -99,6 +99,7 @@ router.put("/:contactId", async (req, res, next) => {
 });
 
 router.patch("/:contactId/favorite", async (req, res, next) => {
+  console.log(req.params);
   try {
     const { contactId } = req.params;
     const { error } = favoriteSchema.validate(req.body);
