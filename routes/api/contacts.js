@@ -1,19 +1,19 @@
 const express = require('express');
-const jsonParser = express.json();
 const contactRequest = require("../../models/contacts");
 const router = express.Router()
+const { validateBody } = require("../../middleware");
+const { schemas } = require('../../models/contactsSchema');
 
+router.get('/', contactRequest.listContacts);
 
-router.get('/', contactRequest.listContacts)
+router.get('/:contactId', contactRequest.getContactById);
 
-router.get('/:contactId', contactRequest.getContactById) 
-
-router.post("/", jsonParser, contactRequest.addContact);
+router.post("/", validateBody(schemas.addSchema), contactRequest.addContact);
 
 router.delete("/:contactId", contactRequest.removeContact);
 
-router.put('/:contactId', jsonParser, contactRequest.updateContact)
+router.put('/:contactId', validateBody(schemas.addSchema), contactRequest.updateContact);
 
-router.patch("/:contactId/favorite", jsonParser, contactRequest.updateFavorite);
+router.patch("/:contactId/favorite", validateBody(schemas.addSchema), contactRequest.updateFavorite);
 
-module.exports = router
+module.exports = router;

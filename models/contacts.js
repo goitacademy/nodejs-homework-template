@@ -100,13 +100,12 @@ async function updateFavorite(req, res, next) {
 }
 
 async function updateStatusContact(contactId, data) {
-  try {
-    const result = await Contact.findByIdAndUpdate(contactId, data, { new: true });
-
-    return result;
-  } catch (error) {
-    throw error;
-  }
+ try {
+  const result = await Contact.findByIdAndUpdate(contactId, data, { new: true });
+  return result;
+ } catch (error) {
+  console.log(error)
+ }
 }
 
 module.exports = {
