@@ -1,48 +1,67 @@
-const {Contact } = require("../models");
+const { Contact } = require("../schemas/contacts");
 
-const { ctrlWrapper, handle404error } = require("../helpers");
+const { ctrlWrapper, HTTPError } = require("../helpers");
 const getAll = async (req, res) => {
-  const contacts = await Contact.listContacts();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite = null } = req.query;
+
+  const searchQuery =
+    favorite === null ? { owner } : { owner, favorite: req.query.favorite };
+  const skip = (page - 1) * limit;
+
+  const contacts = await Contact.find(searchQuery, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "_id");
   res.status(200).json(contacts);
 };
 
-const getById = async (req, res) => {
+const getById = async (req, res, next) => {
   const { contactId } = req.params;
-  const contact = await Contact.getContactById(contactId);
+  const contact = await Contact.findById(contactId);
   if (!contact) {
-    handle404error();
+    next(HTTPError(404));
   }
   res.status(200).json(contact);
 };
 const add = async (req, res) => {
-  const result = await Contact.addContact(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
-const remove = async (req, res) => {
+const remove = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.removeContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
-    handle404error();
+    next(HTTPError(404));
   }
   res.status(200).json({ message: "contact deleted" });
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   const { contactId } = req.params;
 
-  const result = await Contact.updateContact(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    { ...req.body },
+    { new: true }
+  );
   if (!result) {
-    handle404error();
+    next(HTTPError(404));
   }
   res.status(200).json(result);
 };
 
-const updateStatus = async (req, res) => {
+const updateStatus = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await Contact.updateStatusContact(contactId, req.body);
+  const result = await Contact.findByIdAndUpdate(
+    contactId,
+    { ...req.body },
+    { new: true }
+  );
   if (!result) {
-    handle404error();
+    next(HTTPError(404));
   }
   res.status(200).json(result);
 };
