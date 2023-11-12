@@ -5,12 +5,12 @@ const { HttpError, ctrlWrap } = require("../helpers");
 
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({}, '-createdAt -updatedAt');
   res.status(200).json(result);
 };
 
 const getById = async (req, res) => {
-  const result = await Contact.findById(req.params.contactId);
+  const result = await Contact.findById(req.params.contactId, '-createdAt -updatedAt');
   if (!result) {
     throw HttpError(404, "Not found");
   }

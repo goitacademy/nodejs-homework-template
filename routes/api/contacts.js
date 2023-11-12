@@ -12,10 +12,10 @@ router.get("/", ctrl.getAll);
 
 router.get("/:contactId", validId, ctrl.getById);
 
-router.post("/", validateBody(schemes.addScheme), ctrl.add);
+router.post("/", validateBody(schemes.addSchema), ctrl.add);
 
 // router.delete("/:contactId", validId,ctrl.remove);
 
-// router.put("/:contactId", validateBody(schemes.addScheme),validId, ctrl.updateByID);
+// router.put("/:contactId", validateBody(schemes.addSchema),validId, ctrl.updateByID);
 
 module.exports = router;
