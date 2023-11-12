@@ -40,6 +40,8 @@ const updateById = async (req, res) => {
     new: true,
   });
 
+  if (!updatedContact) throw HttpError({ status: 404, message: "Not found" });
+
   res.json(updatedContact);
 };
 
@@ -50,6 +52,8 @@ const updateFavorite = async (req, res) => {
   const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
     new: true,
   });
+
+  if (!updatedContact) throw HttpError({ status: 404, message: "Not found" });
 
   res.json(updatedContact);
 };
