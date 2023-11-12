@@ -9,14 +9,13 @@ const getAll = async (req, res) => {
   res.status(200).json(result);
 };
 
-// const getById = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await contacts.getContactById(contactId);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.status(200).json(result);
-// };
+const getById = async (req, res) => {
+  const result = await Contact.findById(req.params.contactId);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json(result);
+};
 
 const add = async (req, res) => {
   const result = await Contact.create(req.body);
@@ -24,8 +23,7 @@ const add = async (req, res) => {
 };
 
 // const remove = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await contacts.removeContact(contactId);
+//   const result = await contacts.removeContact(req.params.contactId);
 //   if (!result) {
 //     throw HttpError(404, "Not found");
 //   }
@@ -33,8 +31,7 @@ const add = async (req, res) => {
 // };
 
 // const updateByID = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await contacts.updateContactById(contactId, req.body);
+//   const result = await contacts.updateContactById(req.params.contactId, req.body);
 //   console.log(result);
 //     if (!result) {
 //     throw HttpError(404, "Not found");
@@ -44,7 +41,7 @@ const add = async (req, res) => {
 
 module.exports = {
   getAll: ctrlWrap(getAll),
-  // getById: ctrlWrap(getById),
+  getById: ctrlWrap(getById),
   add: ctrlWrap(add),
   // remove: ctrlWrap(remove),
   // updateByID: ctrlWrap(updateByID),
