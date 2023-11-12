@@ -8,15 +8,17 @@ export const contactAddSchema = Joi.object({
     .required()
     .messages({
       "string.base": '"Name" should be a type of "text"',
-      "any.required": `"Name" must be exist `,
+      "any.required": `missing required name field`,
       "string.pattern.base": '"Name" must contains only latters',
     }),
-  email: Joi.string().email().required(),
+  email: Joi.string().email().required().messages({
+    "any.required": `missing required name field`,
+  }),
   phone: Joi.string()
     .pattern(/^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/)
     .required()
     .messages({
-      "any.required": `"Phone" must be exist `,
+      "any.required": `missing required phone field`,
       "string.pattern.base": '"Phone" must be like (111) 111-1111',
     }),
 });
