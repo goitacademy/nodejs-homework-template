@@ -1,8 +1,10 @@
 const express = require("express");
-const contacts = require("../../models/contacts.js");
-const validationSchemas = require("../../validation/contacts.js");
+const contacts = require("../../controllers/contacts.js");
+const {contactValidationSchema} = require("../../validation/contacts.js");
 
-const { contactValidationchema} = validationSchemas;
+
+const contactValidationchema = contactValidationSchema;
+
 
 const router = express.Router();
 
@@ -23,18 +25,19 @@ router.get("/:contactId", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { error } = contactValidationchema.validate(req.body);
-
+  const { name, email, phone, favorite = false } = req.body;
   if (error) {
     return res
       .status(400)
       .json({ message: "missing required name, email, or phone field" });
   }
 
-  const { name, email, phone } = req.body;
-  const newContact = await contacts.addContact({ name, email, phone });
+
+  const newContact = await contacts.addContact({ name, email, phone, favorite });
 
   res.status(201).json( newContact);
 });
+
 
 router.delete("/:contactId", async (req, res) => {
   const { contactId } = req.params;
@@ -42,7 +45,7 @@ router.delete("/:contactId", async (req, res) => {
   if (!deletedContact) {
     return res.status(404).json({ message: "Not found" });
   }
-  res.status(200).json({ message: "contact deleted" });
+  res.status(200).json({ message: "Contact deleted" });
 });
 
 router.put("/:contactId", async (req, res) => {
@@ -66,5 +69,22 @@ router.put("/:contactId", async (req, res) => {
 
   res.status(200).json(updatedContact);
 });
+
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+
+  const { contactId } = req.params;
+  const { favorite: body } = req.body;
+
+  if (body === null) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  const updatedStatus = await contacts.updateStatusContact(contactId, body);
+  if (!updatedStatus) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  res.status(200).json(updatedStatus);
+});
+
 
 module.exports = router;
