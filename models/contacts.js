@@ -2,7 +2,6 @@ const fs = require('fs/promises');
 const path = require('path');
 const { error } = require('console');
 const { v4: uuidv4 } = require('uuid');
-
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
