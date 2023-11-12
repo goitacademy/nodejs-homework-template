@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const result = Contact.findById(id);
+  const result = await Contact.findById(id);
   if (!result) {
     throw handleHttpError(404, "Not found ");
   }
@@ -39,8 +39,6 @@ const updateFavorite = async (req, res) => {
   res.json(result);
 };
 
-
-
 const deleteById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndDelete(id);
@@ -60,16 +58,3 @@ module.exports = {
   updateFavorite: wrapController(updateFavorite),
   deleteById: wrapController(deleteById),
 };
-// const { listContacts } = require("../models/contacts");
-// const handlerHttpError = require("../utils/handlerHttpError");
-
-// const contactControllers = async (req) => {
-//   const { contactId } = req.params;
-//   const result = await listContacts.getContactById(contactId);
-//   if (!result) {
-//     throw handlerHttpError(404, "Not FOUND !");
-//   }
-//   return result;
-// };
-
-// module.exports = contactControllers;

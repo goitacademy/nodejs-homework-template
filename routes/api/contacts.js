@@ -2,71 +2,31 @@ const express = require("express");
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
-const handlerHttpError = require("../../utils");
-const addSchema = require("../../schemas");
-const { contactControllers } = require("../../controllers");
+const controllers = require("../../controllers/contactControllers");
 
-router.get("/", async (_, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json({ result });
-  } catch (error) {
-    next(error);
-  }
-});
+const { validateBody, isValidId } = require("../../middlewares");
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
-    const result = contactControllers(req);
-    res.json({ result });
-  } catch (error) {
-    next(error);
-  }
-});
+const { schemas } = require("../../models/contacts");
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw handlerHttpError(400, "Missing required name field");
-    }
-    const result = await contacts.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/", controllers.getAll);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-    if (!result) {
-      throw handlerHttpError(404, "Not FOUND !");
-    }
-    res.json({ massage: "contact delate !" });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get("/:Id", controllers.getById);
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      throw handlerHttpError(400, "missing fields");
-    }
-    const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+router.post("/", validateBody(schemas.addSchema), controllers.add);
 
-    if (!result) {
-      throw handlerHttpError(404, "Not FOUND !");
-    }
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
-  }
-});
+router.put(
+  "/:id",
+  isValidId,
+  validateBody(schemas.addSchema),
+  controllers.updateById
+);
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.updateFavoriteSchema),
+  controllers.updateFavorite
+);
+
+router.delete("/:Id", isValidId, controllers.deleteById);
 
 module.exports = router;
