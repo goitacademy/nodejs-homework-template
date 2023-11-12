@@ -10,7 +10,7 @@ const { schemas } = require("../../models/contacts");
 
 router.get("/", controllers.getAll);
 
-router.get("/:Id", controllers.getById);
+router.get("/:Id", isValidId, controllers.getById);
 
 router.post("/", validateBody(schemas.addSchema), controllers.add);
 
@@ -20,6 +20,7 @@ router.put(
   validateBody(schemas.addSchema),
   controllers.updateById
 );
+
 router.patch(
   "/:id/favorite",
   isValidId,

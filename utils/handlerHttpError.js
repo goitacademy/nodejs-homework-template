@@ -1,5 +1,5 @@
-const massage = {
-  400: "missing required name field",
+const messages = {
+  400: "Bad request",
   401: "Not authorized",
   403: "Forbidden",
   404: "Not found",
@@ -10,8 +10,8 @@ const massage = {
   409: "Conflict",
 };
 
-const handlerHttpError = (status, message = massage[status]) => {
-  const error = new Error(massage);
+const handlerHttpError = (status, message = messages[status]) => {
+  const error = new Error(message);
   error.status = status;
 
   return error;

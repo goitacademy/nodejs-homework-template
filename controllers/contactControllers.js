@@ -3,7 +3,7 @@ const { Contact } = require("../models/contacts");
 const { handleHttpError, wrapController } = require("../utils");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find({});
+  const result = await Contact.find();
   res.json(result);
 };
 
