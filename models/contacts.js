@@ -10,6 +10,7 @@ mongoose
     process.exit(1);
   });
 
+  // List Contact
 async function listContacts(req, res, next) {
   try {
     console.log("Before Contact.find()");
@@ -22,6 +23,7 @@ async function listContacts(req, res, next) {
   }
 }
 
+// Get Contact By Id
 async function getContactById(req, res, next) {
   const { contactId } = req.params;
   try {
@@ -34,44 +36,49 @@ async function getContactById(req, res, next) {
 
     res.status(201).send(contact);
   } catch (error) {
+    console.error(`Error while fetching contact with ID ${contactId}: ${error}`);
     next(error);
   }
 }
 
+// Add Contact
 async function addContact(req, res, next) {
-  const contact = {
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    favorite: req.body.favorite,
-  };
-
-  if(contact === null){
-    res.status(404).json({message: "Not found"})
-  }
+  const { name, email, phone } = req.body;
 
   try {
-    const createContact = await Contact.create(contact);
-    res.status(201).send(createContact);
+    // Создаем экземпляр контакта
+    const newContact = new Contact({ name, email, phone });
+
+    // Валидируем контакт с использованием схемы
+    const validationError = newContact.validateSync();
+
+    if (validationError) {
+      console.error(`Validation error while creating a new contact: ${validationError.message}`)
+      return res.status(400).send({ message: validationError.message });
+    }
+
+    const result = await newContact.save();
+    res.status(201).send(result);
   } catch (error) {
-    console.error("Error creating contact:", error);
+    console.error(`Error while adding a new contact: ${error}`)
     next(error);
   }
 }
 
+// Remove Contact
 async function removeContact(req, res, next) {
   const { contactId } = req.params;
 
   try {
-    const result = await Contact.findByIdAndRemove(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
 
     if (result === null) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    res.status(200).send({ message: "contact deleted" });
-    res.send({ contactId });
+    res.send(result)
   } catch (error) {
+    console.error(`Error while removing contact with ID ${contactId}: ${error.message}`)
     next(error);
   }
 }
@@ -83,27 +90,33 @@ async function updateContact(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    favorite: req.body.favorite,
   };
 
-  if(contact === null) {
-    res.status(400).json({message: "missing fields"})
-  }
-
   try {
+    const updateContact = new Contact(contact);
+
+    // Валидируем контакт с использованием схемы
+   await updateContact.validate();
+
+   if(updateContact.error){
+    return res.status(400).send({message: "Validation Error"})
+   }
+
     const result = await Contact.findByIdAndUpdate(contactId, contact, {
       new: true,
     });
 
-    if(!result){
-      res.status(404).json({message: "Not found"})
+    if (result === null) {
+      return res.status(404).send({ message:"Not found"});
     }
-    res.send(result)
+    res.status(201).send(result);
   } catch (error) {
+    console.error(`Error updating contact: ${error.message}`);
     next(error);
   }
 }
 
+// Status Contact
 async function statusContact(req, res, next) {
   const { contactId } = req.params;
   const { favorite } = req.body;

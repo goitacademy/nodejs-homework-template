@@ -17,5 +17,4 @@ const schemaContacts = new mongoose.Schema ({
  }
 })
 
-const Contact = mongoose.model('Contact', schemaContacts)
-module.exports = Contact;
+module.exports = mongoose.model('Contact', schemaContacts)
