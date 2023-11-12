@@ -72,14 +72,16 @@ async function deleteContact(req, res, next) {
 
 async function updateStatusContact(req, res, next) {
   const { id } = req.params;
-
+  const { favorite } = req.body;
   try {
-    if (!req.body.favorite) {
+    if (favorite === undefined) {
       return res.status(400).json({ message: "missing field 'favorite'" });
     }
-    const result = await Contact.findByIdAndUpdate(id, req.body.favorite, {
-      new: true,
-    });
+    const result = await Contact.findByIdAndUpdate(
+      id,
+      { favorite },
+      { new: true }
+    );
 
     if (result === null) {
       return res.status(404).send("contact not found");
