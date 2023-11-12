@@ -2,7 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
-const contactsRouter = require('./routes/api/contacts');
+const contactsRouter = require('./routes/api/contacts.routes');
 
 const app = express();
 
@@ -23,3 +23,4 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
