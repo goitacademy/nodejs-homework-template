@@ -3,6 +3,7 @@ const Joi = require('joi');
 const { handleMongooseError } = require('../utils');
 
 const options = { versionKey: false, timestamps: true };
+const subscriptionValues = ['starter', 'pro', 'business'];
 
 const userSchema = new Schema(
   {
@@ -17,7 +18,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
+      enum: subscriptionValues,
       default: 'starter',
     },
     token: {
@@ -48,10 +49,21 @@ const loginSchema = Joi.object({
     .messages({ 'any.required': 'missing required email field' }),
 });
 
+const updateSubscriptionUserSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionValues)
+    .required()
+    .messages({
+      'any.required': 'missing field subscription',
+      'any.only': 'subscription must be one of starter, pro or business',
+    }),
+});
+
 const User = model('user', userSchema);
 
 module.exports = {
   User,
   registerSchema,
   loginSchema,
+  updateSubscriptionUserSchema,
 };
