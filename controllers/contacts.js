@@ -38,7 +38,7 @@ export const deleteContact = async (req, res) => {
 export const putContact = async (req, res) => {
     const { error } = putSchema.validate(req.body)
     if (error) {
-        throw HttpError(400, error.message)
+        throw HttpError(400, "Missing fields")
     }
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate({ _id: contactId }, req.body, { new: true });
