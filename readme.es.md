@@ -17,7 +17,7 @@ Después de completar una tarea en su rama, debe hacer una solicitud de extracci
 
 Lea atentamente los comentarios del mentor. Corrija los comentarios y haga un commit en la rama de la tarea. Los cambios se reflejarán automáticamente en el PR después de que envíe el commit con las correcciones a GitHub. Luego, agregue nuevamente al mentor para la revisión del código.- Al entregar una tarea, incluya un enlace al PR.
 
-- El código JavaScript debe estar limpio y claro, y se debe usar Prettier para el formato.
+- El código Javaript debe estar limpio y claro, y se debe usar Prettier para el formato.
 
 ### Comandos:
 
