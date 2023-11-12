@@ -13,7 +13,6 @@ async function getContactById(contactId) {
     const contacts = await listContacts()
     const result = contacts.find(obj => obj.id === contactId)
     return result || null
-
 }
 
 async function removeContact(contactId) {
@@ -42,7 +41,13 @@ async function addContact({ name, email, phone }) {
 
 async function updateContact(contactId, body) {
   const contacts = await listContacts()
-  
+    const index = contacts.findIndex(item => item.id === contactId)
+    if (index === -1) {
+        return null
+    }
+    contacts[index] = { ...contacts[index], ...body }
+    await fs.writeFile(contactsPaths, JSON.stringify(contacts, null, 2))
+    return contacts[index]
 }
 
 export default {

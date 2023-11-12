@@ -1,5 +1,9 @@
 import express from 'express'
 import contactsController from '../../controllers/contacts-controller.js'
+import { isEmptyBody } from '../../middlewares/index.js'
+import { validateBody } from '../../decorators/index.js'
+import { contactAddScheme, contactUpdateScheme } from '../../schemas/contact-schemas.js'
+
 
 const router = express.Router()
 
@@ -7,14 +11,10 @@ router.get('/', contactsController.getAllContacts)
 
 router.get('/:contactId', contactsController.getById)
 
-router.post('/', contactsController.add)
+router.post('/', isEmptyBody, validateBody(contactAddScheme), contactsController.add)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', isEmptyBody, validateBody(contactUpdateScheme), contactsController.updateById)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', contactsController.deleteById)
 
 export default router
