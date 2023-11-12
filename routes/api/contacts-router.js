@@ -2,7 +2,9 @@ import express from "express";
 
 import contactsController from "../../controllers/contacts-controller.js";
 
-import contactsService from "../../models/index.js";
+import { isEmptyBody } from "../../middlewares/index.js";
+
+//import contactsService from "../../models/index.js";
 
 const contactsRouter = express.Router();
 
@@ -10,16 +12,12 @@ contactsRouter.get('/', contactsController.getListContacts);
 
 contactsRouter.get("/:id", contactsController.getContactById);
 
-contactsRouter.post('/', contactsController.addContact);
+contactsRouter.post("/", isEmptyBody, contactsController.addContact);
 
+contactsRouter.put("/:id", isEmptyBody, contactsController.updateById);
 
-contactsRouter.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.delete("/:id", contactsController.deleteById);
 
-contactsRouter.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
 export default contactsRouter;
 

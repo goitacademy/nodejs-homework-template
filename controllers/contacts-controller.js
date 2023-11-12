@@ -1,13 +1,10 @@
 import * as contactsService from "../models/index.js";
-import Joi from "joi";
+
+import { contactAddSchema, contactUpdateSchema } from "../schemas/contacts-schemas.js";
 
 import { HttpError } from "../helpers/index.js";
 
-const contactAddSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().required(),
-    phone: Joi.string().required(),
-})
+
 
 const getListContacts = async (req, res) => {
     try {
@@ -47,8 +44,45 @@ const addContact = async (req, res, next) => {
     }
 }
 
+const updateById = async (req, res, next) => {
+    try {
+        const { error } = contactUpdateSchema.validate(req.body);
+        if (error) {
+            throw HttpError(400, error.message);
+        }
+        const { id } = req.params;
+        const result = await contactsService.updateContactById(id, req.body);
+        if (!result) {
+            throw HttpError(404, `Contact with id=${id} not found`);
+        }
+        res.json(result);
+    }
+    catch (error) {
+        next(error);
+    }
+};
+
+
+const deleteById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const result = await contactsService.removeContact(id);
+        if (!result) {
+            throw HttpError(404, `Contact with id=${id} was not found`);
+        }
+        res.json({
+            message: "Contact is deleted"
+        })
+    }
+    catch (error) {
+        next(error);
+    }
+};
+
 export default {
     getListContacts,
     getContactById,
     addContact,
+    updateById,
+    deleteById,
 }
