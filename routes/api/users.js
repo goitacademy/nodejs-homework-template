@@ -26,5 +26,5 @@ router.post(
 router.post("/logout", authMiddleware, contrWrapper(logout));
 router.get("/current", authMiddleware, contrWrapper(getCurrent));
 router.patch("/updateSubscription", authMiddleware, updateSubscription);
-
+router.patch("/avatars");
 module.exports = router;
