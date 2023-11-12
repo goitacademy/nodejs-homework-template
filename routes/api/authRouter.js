@@ -18,5 +18,10 @@ router.post("/logout", authMiddleware, LogOut);
 
 router.get("/current", authMiddleware, currentUser);
 
-router.patch("/avatars", uploadMiddleware.single("avatar"), updateAvatar);
+router.patch(
+  "/avatars",
+  uploadMiddleware.single("avatar"),
+  authMiddleware,
+  updateAvatar
+);
 export { router };
