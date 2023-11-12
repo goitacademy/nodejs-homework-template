@@ -44,7 +44,6 @@ const getContactById = async id => {
 const addContact = async body => {
   try {
     const contactRegistered = await Contacts.create(body);
-    console.log(contactRegistered);
     return {
       success: true,
       result: contactRegistered,
@@ -59,26 +58,14 @@ const addContact = async body => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   try {
-    console.log(body);
-    const contacts = await loadContacts();
-    const contactIndex = contacts.findIndex(c => c.id == contactId);
+    const contact = await Contacts.findByIdAndUpdate(id, body);
 
-    if (contactIndex !== -1) {
-      if (!body || Object.keys(body).length === 0) {
-        return {
-          success: true,
-          result: null,
-          message: 'Missing fields',
-        };
-      }
-      contacts[contactIndex] = { ...contacts[contactIndex], ...body };
-
-      await saveContacts(contacts);
+    if (contact) {
       return {
         success: true,
-        result: contacts[contactIndex],
+        result: contact,
         message: 'The contact was updated successfully.',
       };
     } else
@@ -96,26 +83,14 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const removeContact = async contactId => {
+const removeContact = async id => {
   try {
-    const contacts = await loadContacts();
-    const contactIndex = contacts.findIndex(c => c.id == contactId);
-
-    if (contactIndex !== -1) {
-      const removedContact = contacts.splice(contactIndex, 1)[0];
-      await saveContacts(contacts);
-      return {
-        success: true,
-        result: removedContact,
-        message: 'The contact was deleted successfully.',
-      };
-    } else {
-      return {
-        success: false,
-        result: null,
-        message: 'Contact not found.',
-      };
-    }
+    const contact = await Contacts.findByIdAndDelete(id);
+    return {
+      success: true,
+      result: contact,
+      message: 'The contact was deleted successfully.',
+    };
   } catch (error) {
     return {
       success: false,

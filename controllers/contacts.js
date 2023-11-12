@@ -20,26 +20,25 @@ const getContactById = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
-  const { error, value } = body.validate(req.body);
+  try {
+    const { success, result, message } = await service.addContact(req.body);
+    if (!success) {
+      return res.status(400).json({
+        result,
+        message,
+      });
+    }
 
-  if (error) {
-    return res
-      .status(400)
-      .json({ message: 'Missing required name, email, or phone field' });
+    return res.status(201).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
   }
-
-  const body = {
-    id: nanoid(8),
-    name: value.name,
-    lastname: value.lastname,
-    email: value.email,
-    phone: value.phone,
-    favorite: value.favorite,
-  };
-
-  const contact = await service.addContact(body);
-
-  res.status(201).json(contact);
 };
 
 const updateContact = async (req, res, next) => {
