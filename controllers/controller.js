@@ -32,8 +32,7 @@ async function createContact(req, res, next) {
 
   try {
     const result = await Contact.create(contact);
-    console.log(result);
-    res.end();
+    res.send(result);
   } catch (error) {
     next(error);
   }
@@ -48,22 +47,47 @@ async function updateContact(req, res, next) {
   };
 
   try {
-    const result = await Contact.findByIdAndUpdate(id, contact);
-    console.log(result);
-    res.end();
+    const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
+    if (res === null) {
+      return res.status(404).send("contact bot found");
+    }
+    res.send(result);
   } catch (error) {
     next(error);
   }
 }
 
-function deleteContact(req, res, next) {
+async function deleteContact(req, res, next) {
   const { id } = req.params;
-  res.send(`delete contact with id ${id}`);
+  try {
+    const result = await Contact.findByIdAndDelete(id);
+    if (result === null) {
+      return res.status(404).send("contact not found");
+    }
+    res.send(id);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function updateStatusContact(req, res, next) {
+async function updateStatusContact(req, res, next) {
   const { id } = req.params;
-  res.send(`upd status contact with id ${id}`);
+
+  try {
+    if (!req.body.favorite) {
+      return res.status(400).json({ message: "missing field 'favorite'" });
+    }
+    const result = await Contact.findByIdAndUpdate(id, req.body.favorite, {
+      new: true,
+    });
+
+    if (result === null) {
+      return res.status(404).send("contact not found");
+    }
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {
