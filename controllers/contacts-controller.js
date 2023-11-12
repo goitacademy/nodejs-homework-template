@@ -11,7 +11,7 @@ const contactAddScheme = Joi.object({
     "string.base": "email must be text",
   }),
   phone: Joi.number().required().messages({
-    "any.required": "missing required number field",
+    "any.required": "missing required phone field",
     "number.base": "phone must be number",
   }),
 });
