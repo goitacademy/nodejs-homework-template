@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { checkRequestBody } = require("../../helpers");
+const { checkRequestValidateBody } = require("../../helpers");
 const jsonParser = express.json();
 const ContactsControllers = require("../../controllers/contacts");
 router.get("/", ContactsControllers.getAll);
@@ -10,7 +10,7 @@ router.delete("/:contactId", ContactsControllers.deleteById);
 router.patch(
   "/:contactId/favorite",
   jsonParser,
-  checkRequestBody,
+  checkRequestValidateBody,
   ContactsControllers.updateStatusContact
 );
 router.put("/:contactId", jsonParser, ContactsControllers.putById);

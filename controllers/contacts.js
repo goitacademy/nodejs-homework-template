@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
 const getById = async (req, res) => {
   const id = req.params.contactId;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid Id");
+    throw HttpError(400, "Invalid Id");
   }
   const contactOn = await Contact.findById(id);
   if (contactOn) {
@@ -50,7 +50,7 @@ const putById = async (req, res) => {
     favorite: req.body.favorite,
   };
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid Id");
+    throw HttpError(400, "Invalid Id");
   }
   const schema = Joi.object({
     name: Joi.string(),
@@ -74,7 +74,7 @@ const putById = async (req, res) => {
 const deleteById = async (req, res) => {
   const id = req.params.contactId;
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid Id");
+    throw HttpError(400, "Invalid Id");
   }
   const result = await Contact.findByIdAndDelete(id);
   if (result === null) {
@@ -92,17 +92,7 @@ const updateStatusContact = async (req, res) => {
     favorite: !req.body.favorite,
   };
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send("Invalid Id");
-  }
-  const schema = Joi.object({
-    name: Joi.string(),
-    email: Joi.string().email(),
-    phone: Joi.string().min(10).max(15),
-    favorite: Joi.boolean(),
-  });
-  const { error } = schema.validate(req.body);
-  if (error) {
-    throw HttpError(400, "missing fields");
+    throw HttpError(400, "Invalid Id");
   }
   const newContact = await Contact.findByIdAndUpdate(id, contactNew, {
     new: true,
