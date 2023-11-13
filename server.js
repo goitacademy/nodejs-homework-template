@@ -4,9 +4,9 @@ import { mongoose } from "mongoose";
 import "dotenv/config";
 const { DB_HOST: uriDb } = process.env;
 
-const connection = mongoose.connect(uriDb);
-
-connection
+export const dbConnection = (uri) => mongoose.connect(uri);
+export const dbDisconect = mongoose.connection.close();
+dbConnection(uriDb)
   .then(
     app.listen(3000, () => {
       console.log("Server running. Use our API on port: 3000");
@@ -15,4 +15,3 @@ connection
   .catch((err) =>
     console.log(`Server not running. Error message: ${err.message}`)
   );
-
