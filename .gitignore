@@ -1,4 +1,10 @@
 node_modules/
-.env
 .idea
 .vscode
+
+# dotenv invironment veriable filse
+.env
+.env.development.local
+.env.tast.local
+.env.production.local
+.env.local
