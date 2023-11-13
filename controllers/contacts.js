@@ -125,7 +125,7 @@ async function updateFavorite(req, res, hext) {
         res.status(201).json(result);
         res.send(result)
     } catch (err) {
-        next(err)
+     
     }
 }
 
