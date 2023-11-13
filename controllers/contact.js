@@ -61,7 +61,7 @@ async function updateContact(req, res, next) {
 
 async function deleteContact(req, res, next) {
   const { id } = req.params;
-  //   res.send(`Delete contact ${id}`);
+  
   try {
     const result = await Contact.findByIdAndDelete(id);
 
