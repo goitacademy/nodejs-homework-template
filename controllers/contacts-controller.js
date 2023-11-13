@@ -22,12 +22,6 @@ const getById = async (req, res, next) => {
     const result = await contactService.getContactById(id);
     if (!result) {
       throw HttpError(404, `Contact with id=${id} not found`);
-      // const error = new Error(`Movie with id=${id} not found`);
-      // error.status = 404;
-      // throw error;
-      // return res.status(404).json({
-      //     message: `Movie with id=${id} not found`
-      // })
     }
     res.json(result);
   } catch (error) {
@@ -56,7 +50,7 @@ const updateById = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { id } = req.params;
-    const result = await contactService.updateContact(id, req.body);
+    const result = await contactService.updateContactById(id, req.body);
     if (!result) {
       throw HttpError(404, `Contact with id=${id} not found`);
     }
@@ -72,10 +66,8 @@ const deleteById = async (req, res, next) => {
     const { id } = req.params;
     const result = await contactService.removeContact(id);
     if (!result) {
-      throw HttpError(404, `Movie with id=${id} not found`);
+      throw HttpError(404, `Contact with id=${id} not found`);
     }
-
-    // res.status(204).send();
 
     res.json({
       message: "Delete success",

@@ -10,29 +10,18 @@ const getContactIndex = (contacts, contactId) =>
 const updateContact = (contacts) =>
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-async function listContacts() {
-  try {
-    const contactsBuffer = await fs.readFile(contactsPath, "utf8");
-    const contacts = JSON.parse(contactsBuffer);
-    return contacts;
-  } catch (error) {
-    console.error(error.message);
-    return null;
-  }
-}
+export const listContacts = async () => {
+  const result = await fs.readFile(contactsPath);
+  return JSON.parse(result);
+};
 
-async function getContactById(contactId) {
-  try {
-    const contactsData = await fs.readFile(contactsPath, "utf8");
-    const contacts = JSON.parse(contactsData);
-    const index = getContactIndex(contacts, contactId);
-    return index === -1 ? null : contacts[index];
-  } catch (error) {
-    console.error(error.message);
-  }
-}
+export const getContactById = async (id) => {
+  const contacts = await listContacts();
+  const result = contacts.find((item) => item.id === id);
+  return result || null;
+};
 
-async function removeContact(contactId) {
+export const removeContact = async (contactId) => {
   try {
     const contactsData = await fs.readFile(contactsPath, "utf8");
     const contacts = JSON.parse(contactsData);
@@ -47,9 +36,9 @@ async function removeContact(contactId) {
     console.error(error.message);
     return null;
   }
-}
+};
 
-async function addContact(name, email, phone) {
+export const addContact = async ({ name, email, phone }) => {
   try {
     const contactsBuffer = await fs.readFile(contactsPath, "utf8");
     const contacts = JSON.parse(contactsBuffer);
@@ -61,12 +50,15 @@ async function addContact(name, email, phone) {
     console.error(error.message);
     return null;
   }
-}
+};
 
-export default {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+export const updateContactById = async (id, data) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === id);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { ...contacts[index], ...data };
+  await updateContact(contacts);
+  return contacts[index];
 };
