@@ -4,6 +4,7 @@ const cntrlWrapper = (ctrl) => {
       await ctrl(req, res, next);
     } catch (error) {}
   };
+  return func;
 };
 
 module.exports = cntrlWrapper;
