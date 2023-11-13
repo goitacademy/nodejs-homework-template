@@ -1,125 +1,143 @@
-import { Router } from "express";
-import Joi from "joi";
-import {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} from "../../models/contacts.js";
-import { HttpError } from "../../helpers/HttpError.js";
+const express = require("express");
+const contactSchema = require("../../schemas/contacts");
+const HttpError = require("../../helpers/HttpError");
+const Contact = require("../../controllers/contact");
+const contacts = require("../../models/contacts");
 
-const router = Router();
-
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
-const updateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string(),
-}).min(1);
-
-const favoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
+const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await listContacts();
-    res.status(200).json(result);
+    const results = await contacts.listContacts();
+    res.json(results);
   } catch (error) {
-    next(error);
+    next(new HttpError(500, "Server error"));
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await getContactById(contactId);
+    const { id } = req.params;
+    const result = await contacts.getById(id);
     if (!result) {
-      throw HttpError(404, "Not found");
+      throw new HttpError(404, "Contact not found");
     }
-    res.status(200).json(result);
+    res.json(result);
   } catch (error) {
-    next(error);
+    next(
+      error instanceof HttpError ? error : new HttpError(500, "Server error")
+    );
   }
 });
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-      res.status(400).json({
-        message: "Missing required name field",
-      });
+    const { name, email, phone } = req.body;
+    if (!name || !email || !phone) {
+      throw new HttpError(400, "Missing required name, email, or phone field");
     }
-    const result = await addContact(req.body);
+
+    const validation = contactSchema.validate({ name, email, phone });
+    if (validation.error) {
+      throw new HttpError(
+        400,
+        `Validation Error: ${validation.error.details
+          .map((e) => e.message)
+          .join(", ")}`
+      );
+    }
+
+    const result = await contacts.addContact({ name, email, phone });
     res.status(201).json(result);
   } catch (error) {
-    next(error);
+    next(
+      error instanceof HttpError ? error : new HttpError(500, "Server error")
+    );
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.patch("/:id/favorite", async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const result = await removeContact(contactId);
-    if (!result) {
-      res.status(404).json({
-        message: "Not found",
-      });
+    const { id } = req.params;
+    const { favorite } = req.body;
+
+    if (favorite === undefined) {
+      return res.status(400).json({ message: "missing field favorite" });
     }
-    res.status(200).json({
-      message: "Contact deleted",
+
+    const updatedContact = await Contact.findByIdAndUpdate(
+      id,
+      { favorite },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
+    res.status(200).json(updatedContact);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
     });
-  } catch (error) {
-    next(error);
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.delete("/:id", async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const { error } = updateSchema.validate(req.body);
-    if (error) {
-      throw HttpError(400, "missing fields");
+    const { id } = req.params;
+    const deleteContact = await contacts.removeContact(id);
+    if (!deleteContact) {
+      return res.status(404).json({ message: "Not found" });
     }
-    const result = await updateContact(contactId, req.body);
-    if (!result) {
-      throw HttpError(404, "Not found");
-    }
-    res.status(200).json(result);
+    res.json({ message: "contact deleted" });
   } catch (error) {
-    next(error);
-  }
-});
-
-router.patch("/:contactId/favorite", async (req, res, next) => {
-  console.log(req.params);
-  try {
-    const { contactId } = req.params;
-    const { error } = favoriteSchema.validate(req.body);
-
-    if (error) {
-      throw new HttpError(400, "missing field favorite");
-    }
-
-    const result = await updateContact(contactId, {
-      favorite: req.body.favorite,
+    const status = error.status || 500;
+    res.status(status).json({
+      message: error.message,
     });
-
-    if (!result) {
-      throw new HttpError(404, "Not found");
-    }
-
-    res.status(200).json(result);
-  } catch (error) {
-    next(error);
   }
 });
 
-export default router;
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, phone } = req.body;
+
+    if (!name && !email && !phone) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    const body = {};
+    if (name) {
+      body.name = name;
+    }
+    if (email) {
+      body.email = email;
+    }
+    if (phone) {
+      body.phone = phone;
+    }
+
+    const validation = contactSchema.validate(body);
+    if (validation.error) {
+      const errorMessage = validation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res.status(400).send(`Validation Error: ${errorMessage}`);
+    }
+
+    const updatedContact = await contacts.updateContact(id, body);
+
+    if (!updatedContact) {
+      res.status(404).json({ message: "Not found" });
+    }
+    return res.status(200).json(updatedContact);
+  } catch (error) {
+    const status = error.status || 500;
+    return res.status(status).json({
+      message: error.message,
+    });
+  }
+});
+
+module.exports = router;
