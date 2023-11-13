@@ -75,10 +75,37 @@ async function deleteContact(req, res, next) {
   }
 }
 
+async function updateStatusContact(req, res) {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  // Check if favorite field is provided in the request body
+  if (favorite === undefined) {
+    return res.status(400).json({ message: 'missing field favorite' });
+  }
+
+  try {
+    const contact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!contact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    return res.status(200).json(contact);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getContacts,
   getContact,
   createContact,
   updateContact,
   deleteContact,
+  updateStatusContact,
 };

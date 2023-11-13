@@ -72,4 +72,6 @@ router.put("/:contactId", jsonParser, ContactControllers.updateContact)
 //   res.json(updatedContact);
 // });
 
+router.patch('/:contactId/favorite', ContactControllers.updateStatusContact)
+
 module.exports = router;
