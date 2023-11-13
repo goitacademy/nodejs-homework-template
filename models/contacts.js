@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Contact = require("../Schema/schema");
+const {joiSchema} = require('../Schema/schema')
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -46,18 +47,15 @@ async function addContact(req, res, next) {
   const { name, email, phone } = req.body;
 
   try {
-    // Создаем экземпляр контакта
-    const newContact = new Contact({ name, email, phone });
-
-    // Валидируем контакт с использованием схемы
-    const validationError = newContact.validateSync();
-
-    if (validationError) {
-      console.error(`Validation error while creating a new contact: ${validationError.message}`)
-      return res.status(400).send({ message: validationError.message });
+    // Валидация email с использованием Joi
+    const validation = joiSchema.validate({name, email, phone});
+    if (validation.error) {
+      return res.status(400).send({ message: validation.error.details.map((error) => error.message)
+        .join(", ") });
     }
 
-    const result = await newContact.save();
+    const result = await Contact.create({ name, email, phone });
+
     res.status(201).send(result);
   } catch (error) {
     console.error(`Error while adding a new contact: ${error}`)
