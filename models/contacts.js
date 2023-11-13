@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const Contact = require("../Schema/schema");
-const {joiSchema} = require('../Schema/schema')
+const { joiSchema, model: Contact } = require("../Schema/schema");
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose

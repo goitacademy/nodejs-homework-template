@@ -52,5 +52,8 @@ const patchSchema = Joi.object({
 });
 
 
-module.exports = mongoose.model('Contact', schemaContacts);
-module.exports = {joiSchema, patchSchema};
+module.exports = {
+   model: mongoose.model('Contact', schemaContacts),
+   joiSchema,
+   patchSchema,
+ };
