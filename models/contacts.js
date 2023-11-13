@@ -84,6 +84,7 @@ async function removeContact(req, res, next) {
 async function updateContact(req, res, next) {
   const { contactId } = req.params;
   const contact = {
+    id: req.body.id,
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
