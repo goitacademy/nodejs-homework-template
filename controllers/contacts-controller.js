@@ -1,6 +1,9 @@
 import contactService from "../models/index.js";
 import HttpError from "../helpers/htppEror.js";
-import { contactAddSchema, contactUpdateSchema } from "../contact-shemas.js";
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+} from "../schemas/contact-shemas.js";
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -39,7 +42,7 @@ const add = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
   try {
-    const { error } = contactUpdateSchema.validate(req.dody);
+    const { error } = contactUpdateSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
