@@ -33,7 +33,7 @@ router.get("/:contactId", ContactControllers.getContact);
 // });
 
 
-router.post("/",jsonParser, ContactControllers.createContact)
+router.post("/", jsonParser, ContactControllers.createContact)
 // router.post("/", async (req, res, next) => {
 //   const { error } = contactSchema.validate(req.body);
 //   if (error) {
@@ -56,7 +56,7 @@ router.delete("/:contactId", ContactControllers.deleteContact)
 // });
 
 
-router.put("/:contactId",jsonParser, ContactControllers.updateContact)
+router.put("/:contactId", jsonParser, ContactControllers.updateContact)
 // router.put("/:contactId", async (req, res, next) => {
 //   const { error } = contactSchema.validate(req.body);
 //   if (error) {

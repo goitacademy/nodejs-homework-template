@@ -10,9 +10,9 @@ async function getContacts(req, res, next) {
   }
 }
 async function getContact(req, res, next) {
-  const { id } = req.params;
+  const { contactId } = req.params;
   try {
-    const contact = await Contact.findById(id).exec();
+    const contact = await Contact.findById(contactId).exec();
     if (contact === null) {
       return res.status(404).send("Contact not found");
     }
@@ -27,25 +27,52 @@ async function createContact(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    favorite: req.body.favorite,
+    favorite: Boolean(req.body.favorite),
   };
   try {
     const result = await Contact.create(contact);
     console.log(result);
-    res.end();
+    res.status(201).send(result);
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+    next(err);
+  }
+}
+
+async function updateContact(req, res, next) {
+  const { contactId } = req.params;
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    favorite: Boolean(req.body.favorite),
+  };
+  try {
+    const result = await Contact.findByIdAndUpdate(contactId, contact, {
+      new: true,
+    });
+    if (result === null) {
+      return res.status(404).send("Contact not found");
+    }
+    console.log(result);
+    res.send(result);
   } catch (err) {
     next(err);
   }
 }
 
-function updateContact(req, res, next) {
-  const { id } = req.params;
-  res.send(`Got book ${id}`);
-}
+async function deleteContact(req, res, next) {
+  const { contactId } = req.params;
 
-function deleteContact(req, res, next) {
-  const { id } = req.params;
-  res.send(`Deleted book ${id}`);
+  try {
+    const result = await Contact.findByIdAndDelete(contactId);
+    if (result === null) {
+      return res.status(404).send("Contact not found");
+    }
+    res.send({ contactId });
+  } catch (err) {
+    next(err);
+  }
 }
 
 module.exports = {
