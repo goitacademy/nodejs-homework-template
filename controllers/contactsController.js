@@ -1,8 +1,10 @@
 import Joi from 'joi';
 
-import * as contactsService from '../models/contacts.js';
+// import * as contactsService from '../models/contacts.js';
 
-import { HttpError } from '../helpers/HttpError.js';
+import listContacts from '../models/contacts.js';
+
+import HttpError from '../helpers/HttpError.js';
 
 const contactAddSchema = Joi.object({
 	name: Joi.string().required().messages({
@@ -21,7 +23,7 @@ const contactAddSchema = Joi.object({
 
 const getAllContacts = async (req, res, next) => {
 	try {
-		const result = await contactsService.listContacts();
+		const result = await listContacts();
 		res.json(result);
 	} catch (error) {
 		next(error);
