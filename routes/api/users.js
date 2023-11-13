@@ -6,7 +6,7 @@ import { registerExistingUser } from "#controllers/users/registerExistingUser.js
 import { registerNewUser } from "#controllers/users/registerNewUser.js";
 import { getExistingUser } from "#controllers/users/getExistingUser.js";
 import { getCurrentUser } from "#controllers/users/getCurrentUser.js";
-import verifyToken from "./authMiddleware.js";
+import verifyToken from "#middleware/authMiddleware.js";
 import express from "express";
 
 const router = express.Router();
