@@ -37,7 +37,7 @@ async function createContact(req, res, next) {
     next(error);
   }
 }
-
+//upd fix
 async function updateContact(req, res, next) {
   const { id } = req.params;
   const contact = {
@@ -46,10 +46,19 @@ async function updateContact(req, res, next) {
     phone: req.body.phone,
   };
 
+  if (
+    contact.name === undefined ||
+    contact.email === undefined ||
+    contact.phone === undefined
+  ) {
+    return res.status(400).json({ message: "missing some field" });
+  }
   try {
-    const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
-    if (res === null) {
-      return res.status(404).send("contact bot found");
+    const result = await Contact.findByIdAndUpdate(id, contact, {
+      new: true,
+    });
+    if (result === null) {
+      return res.status(404).send("contact not found");
     }
     res.send(result);
   } catch (error) {
