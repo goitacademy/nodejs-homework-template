@@ -6,7 +6,7 @@ const { HttpError, ctrlWrap } = require("../helpers");
 
 const getAll = async (req, res) => {
   const result = await Contact.find({}, '-createdAt -updatedAt');
-  res.status(200).json(result);
+  res.json(result);
 };
 
 const getById = async (req, res) => {
@@ -14,11 +14,18 @@ const getById = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status(200).json(result);
+  res.json(result);
 };
 
 const add = async (req, res) => {
   const result = await Contact.create(req.body);
+
+  const { name } = req.params;
+  const contact = await Contact.findOne({ name });
+  if (contact) {
+    throw HttpError(409, "Contact already exists");
+  }
+  
   res.status(201).json(result);
 };
 
@@ -36,7 +43,7 @@ const updateByID = async (req, res) => {
     if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status(200).json(result);
+  res.json(result);
 };
 
 const updateStatusContact = async (req, res) => {
@@ -45,7 +52,7 @@ const updateStatusContact = async (req, res) => {
     if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status(200).json(result);
+  res.json(result);
 };
 
 module.exports = {

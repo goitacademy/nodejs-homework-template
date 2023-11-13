@@ -7,14 +7,21 @@ const contactSchema = new Schema(
     name: {
       type: String,
       required: [true, "Set name for contact"],
+      index: true,
+      unique: true,
+      trim: true,
+      minLength: 2,
+      maxLength: 20,
     },
     email: {
       type: String,
       required: [true, "Set email for contact"],
+      match:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/,
     },
     phone: {
       type: String,
       required: [true, "Set phone for contact"],
+      match: /^\(\d{3}\) \d{3}-\d{4}$/,
     },
     favorite: {
       type: Boolean,
@@ -26,6 +33,4 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", MongooseError);
 
-const Contact = model("contacts", contactSchema);
-
-module.exports = Contact;
+module.exports = model("Contact", contactSchema);
