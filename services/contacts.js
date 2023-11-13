@@ -1,16 +1,24 @@
 // services\contacts.js
 const Contact = require("../models/contacts");
 
-const listContacts = async () => {
+const getContactOwner = async (query, skip, limit) => {
   try {
-    const contacts = await Contact.find();
+    const contact = await Contact.find(query).skip(skip).limit(limit);
 
+    if (!contact) {
+      return {
+        success: false,
+        result: null,
+        message: `No contacts found for owner:`,
+      };
+    }
     return {
       success: true,
-      result: contacts,
-      message: "List of Contacts",
+      result: contact,
+      message: `Contacts Found`,
     };
   } catch (error) {
+    // console.log(error);
     return {
       success: false,
       result: null,
@@ -19,9 +27,10 @@ const listContacts = async () => {
   }
 };
 
-const getContactById = async (_id) => {
+const getContactOwnerById = async (owner, _id) => {
   try {
-    const contact = await Contact.findById({ _id });
+    const contact = await Contact.findOne({ owner, _id });
+
     if (!contact) {
       return {
         success: false,
@@ -35,7 +44,7 @@ const getContactById = async (_id) => {
       message: `Contact Found`,
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return {
       success: false,
       result: null,
@@ -44,28 +53,30 @@ const getContactById = async (_id) => {
   }
 };
 
-const addContact = async (Data) => {
+const getContactCurrent = async (_id) => {
   try {
-    // const contactRegistered = await Contact.insertMany(Data);
-    const contactRegistered = await Contact.create(Data);
-    console.log(contactRegistered);
-    //     const newId = crypto.randomUUID();
+    // console.log("id:", _id);
 
-    if (!contactRegistered) {
+    const contact = await Contact.findById({ _id });
+
+    if (!contact) {
       return {
         success: false,
         result: null,
-        message: "There is an error try creating contact.",
+        message: `No contact found with id: ${_id}`,
       };
     }
-
+    const { email, subscription } = contact;
     return {
       success: true,
-      result: contactRegistered,
-      message: "Contact registered successfully.",
+      result: {
+        email,
+        subscription,
+      },
+      message: `Contact Found`,
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return {
       success: false,
       result: null,
@@ -74,7 +85,7 @@ const addContact = async (Data) => {
   }
 };
 
-const removeContact = async (_id) => {
+const removeContact = async (owner, _id) => {
   try {
     if (!_id) {
       return {
@@ -83,8 +94,8 @@ const removeContact = async (_id) => {
         message: "Invalid ID",
       };
     }
-    const contactDelete = await Contact.findByIdAndDelete(_id);
-    console.log(contactDelete);
+    const contactDelete = await Contact.findByIdAndDelete({_id, owner});
+    // console.log(contactDelete);
 
     if (!contactDelete) {
       return {
@@ -100,7 +111,7 @@ const removeContact = async (_id) => {
       message: "Contact deleted successfully.",
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return {
       success: false,
       result: null,
@@ -109,9 +120,9 @@ const removeContact = async (_id) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (owner, _id, subscription) => {
   try {
-    if (!contactId) {
+    if (!_id) {
       return {
         success: false,
         result: null,
@@ -126,8 +137,13 @@ const updateContact = async (contactId, body) => {
     //     message: "Invalid ObjectId format",
     //   };
     // }
-    const contactUpdate = await Contact.findByIdAndUpdate(contactId, body);
-    console.log(contactUpdate);
+
+    const contactUpdate = await Contact.findOneAndUpdate(
+      { _id, owner },
+      { subscription },
+      { new: true }
+    );
+    // console.log(contactUpdate);
 
     if (!contactUpdate) {
       return {
@@ -143,7 +159,7 @@ const updateContact = async (contactId, body) => {
       message: "Contact updated successfully.",
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return {
       success: false,
       result: null,
@@ -152,22 +168,28 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, favorite) => {
+const updateStatusContact = async (owner, _id, favorite) => {
   try {
-    if (!contactId) {
+    // console.log("id1; ", owner);
+    // console.log("id12; ", _id);
+
+    if (!_id) {
       return {
         success: false,
         result: null,
         message: "Invalid ID",
       };
     }
-    const contact = await Contact.findByIdAndUpdate(
-      contactId,
+    const contact = await Contact.findOneAndUpdate(
+      {
+        _id,
+        owner,
+      },
       { favorite },
       { new: true }
     );
 
-    console.log(contact);
+    // console.log("serv", contact);
 
     if (!contact) {
       return {
@@ -183,7 +205,47 @@ const updateStatusContact = async (contactId, favorite) => {
       message: "Favorite contac updated successfully.",
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const updateTokenRemove = async (_id, token) => {
+  try {
+    if (!_id) {
+      return {
+        success: false,
+        result: null,
+        message: "Not authorized",
+      };
+    }
+    const contact = await Contact.findByIdAndUpdate(
+      _id,
+      { token },
+      { new: true }
+    );
+
+    // console.log(contact);
+
+    if (!contact) {
+      return {
+        success: false,
+        result: null,
+        message: "Not found contact",
+      };
+    }
+
+    return {
+      success: true,
+      result: contact,
+      message: "No Content",
+    };
+  } catch (error) {
+    // console.log(error);
     return {
       success: false,
       result: null,
@@ -193,10 +255,11 @@ const updateStatusContact = async (contactId, favorite) => {
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
+  getContactOwner,
+  getContactOwnerById,
+  getContactCurrent,
   removeContact,
   updateContact,
+  updateTokenRemove,
   updateStatusContact,
 };

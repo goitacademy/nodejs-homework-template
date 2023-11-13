@@ -12,8 +12,26 @@ const contactSchema = new Schema(
     email: {
       type: String,
       // match: /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/,
-      // required:[true, 'Set emaila8l for contact'],
+      required: [true, "Email is required"],
+      unique: true,
     },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: {
+      type: String,
+      default: null,
+    },
+    // temporaryKey: {
+    //   type: String,
+    //   default: null,
+    // },
     phone: {
       type: String,
     },
@@ -21,15 +39,23 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    active: {
+      type: Boolean,
+      default: null,
+    },
     // rol: {
     //   type: String,
     //   enum: ["ADMIN", "SELLER", "DELIVER"],
     // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "Contact",
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
   }
-  // {
-  //   versionKey: false,
-  //   timestamps: true,
-  // }
 );
 
 // "Contact" name is Collection, schema is Document

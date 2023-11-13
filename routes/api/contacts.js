@@ -1,19 +1,46 @@
 // routes\api\contacts.js
 const express = require("express");
 const controller = require("../../controllers/contacts");
+const { ensureAuthenticated } = require("../../middlewares/validateJWT");
 const contactRouter = express.Router();
 
 module.exports = () => {
-  contactRouter.get("/", controller.listContacts);
-  contactRouter.get("/:id", controller.getContactById);
+  // ensureAuthenticated is auth
+  // contactRouter.get("/", ensureAuthenticated, controller.listContacts);
+  contactRouter.get(
+    "/current",
+    ensureAuthenticated,
+    controller.getContactCurrent
+  );
+  contactRouter.get("/:owner", ensureAuthenticated, controller.getContactOwner);
 
-  contactRouter.post("/", controller.addContact);
+  contactRouter.get(
+    "/:owner/:id",
+    ensureAuthenticated,
+    controller.getContactOwnerById
+  );
 
-  contactRouter.put("/:id", controller.updateContact);
+  // contactRouter.post("/", controller.addContact);
 
-   contactRouter.patch("/:contactId/favorite", controller.updateStatusContact);
+  contactRouter.patch(
+    "/:owner/:id",
+    ensureAuthenticated,
+    controller.updateContact
+  );
 
-  contactRouter.delete("/:id", controller.removeContact);
+  contactRouter.patch(
+    "/favorite/:owner/:id",
+    ensureAuthenticated,
+    controller.updateStatusContact
+  );
+
+  contactRouter.patch(
+    "/logout/:owner/:id",
+    ensureAuthenticated,
+    controller.updateTokenRemove
+  );
+
+  contactRouter.delete("/:owner/:id", ensureAuthenticated, controller.removeContact);
 
   return contactRouter;
 };
