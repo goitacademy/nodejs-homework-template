@@ -16,16 +16,4 @@ contactsRouter.put('/:contactId', isEmptyBody, contactsController.updateById);
 
 contactsRouter.delete('/:contactId', contactsController.deleteById);
 
-// router.post('/', async (req, res, next) => {
-// 	res.json({ message: 'template message' });
-// });
-
-// router.delete('/:contactId', async (req, res, next) => {
-// 	res.json({ message: 'template message' });
-// });
-
-// router.put('/:contactId', async (req, res, next) => {
-// 	res.json({ message: 'template message' });
-// });
-
 export default contactsRouter;

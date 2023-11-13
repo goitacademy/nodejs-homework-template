@@ -44,7 +44,7 @@ export const addContact = async ({ name, email, phone }) => {
 
 export const updateContactById = async (contactId, data) => {
 	const contacts = await listContacts();
-	const index = movies.findIndex((item) => item.id === contactId);
+	const index = contacts.findIndex((item) => item.id === contactId);
 	if (index === -1) {
 		return null;
 	}
@@ -52,11 +52,3 @@ export const updateContactById = async (contactId, data) => {
 	await updateContacts(contacts);
 	return contacts[index];
 };
-
-// export default {
-// 	listContacts,
-// 	getContactById,
-// 	removeContact,
-// 	addContact,
-// 	updateContactById,
-// };
