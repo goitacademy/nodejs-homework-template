@@ -1,6 +1,6 @@
 import * as contactsService from '../models/contacts.js';
 
-import HttpError from '../helpers/index.js';
+import HttpError from '../helpers/HttpError.js';
 
 import {
 	contactAddSchema,
@@ -25,20 +25,10 @@ const getById = async (req, res, next) => {
 		const result = await contactsService.getContactById(contactId);
 		if (!result) {
 			throw HttpError(404, `Contact with id=${contactId} not found`);
-			// const error = new Error(`Contact with id=${contactId} not found`);
-			// error.status = 404;
-			// throw error;
-			// return res.status(404).json({
-			// 	message: `Contact with id=${contactId} not found`,
-			// });
 		}
 		res.json(result);
 	} catch (error) {
 		next(error);
-		// const { status = 500, message = 'Server error' } = error;
-		// res.status(status).json({
-		// 	message,
-		// });
 	}
 };
 

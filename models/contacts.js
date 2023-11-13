@@ -7,18 +7,18 @@ const contactsPath = path.resolve('models', 'contacts.json');
 const updateContacts = (contacts) =>
 	fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
-const listContacts = async () => {
+export const listContacts = async () => {
 	const allContacts = await fs.readFile(contactsPath, 'utf-8');
 	return JSON.parse(allContacts);
 };
 
-const getContactById = async (contactId) => {
+export const getContactById = async (contactId) => {
 	const contacts = await listContacts();
 	const contact = contacts.find((item) => item.id === contactId);
 	return contact || null;
 };
 
-const removeContact = async (contactId) => {
+export const removeContact = async (contactId) => {
 	const contacts = await listContacts();
 	const index = contacts.findIndex((item) => item.id === contactId);
 	if (index === -1) {
@@ -29,7 +29,7 @@ const removeContact = async (contactId) => {
 	return result;
 };
 
-const addContact = async ({ name, email, phone }) => {
+export const addContact = async ({ name, email, phone }) => {
 	const contacts = await listContacts();
 	const newContact = {
 		contactId: nanoid(),
@@ -42,7 +42,7 @@ const addContact = async ({ name, email, phone }) => {
 	return newContact;
 };
 
-const updateContactById = async (contactId, data) => {
+export const updateContactById = async (contactId, data) => {
 	const contacts = await listContacts();
 	const index = movies.findIndex((item) => item.id === contactId);
 	if (index === -1) {
@@ -53,10 +53,10 @@ const updateContactById = async (contactId, data) => {
 	return contacts[index];
 };
 
-export default {
-	listContacts,
-	getContactById,
-	removeContact,
-	addContact,
-	updateContactById,
-};
+// export default {
+// 	listContacts,
+// 	getContactById,
+// 	removeContact,
+// 	addContact,
+// 	updateContactById,
+// };

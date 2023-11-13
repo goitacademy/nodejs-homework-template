@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const contactAddSchema = Joi.object({
+export const contactAddSchema = Joi.object({
 	name: Joi.string().required().messages({
 		'any.required': `"name" is a required field`,
 		'string.base': `"name" should be a type of 'text'`,
@@ -15,10 +15,8 @@ const contactAddSchema = Joi.object({
 	}),
 });
 
-const contactUpdateById = Joi.object({
+export const contactUpdateById = Joi.object({
 	name: Joi.string(),
 	email: Joi.string(),
 	phone: Joi.string(),
 });
-
-export default { contactAddSchema, contactUpdateById };
