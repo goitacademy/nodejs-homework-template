@@ -61,8 +61,9 @@ class Contacts {
       // console.log("Not found")
       return null;
     }
-    contacts.splice(idx, 1);
-    return await this.write(contacts);
+    const removedContact = contacts.splice(idx, 1);
+    await this.write(contacts);
+    return removedContact;
   };
 
   getContactById = async (contactId) => {
