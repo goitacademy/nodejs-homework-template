@@ -2,3 +2,5 @@ node_modules/
 .idea
 .vscode
 config.js
+.env 
+.env.local
