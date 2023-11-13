@@ -1,5 +1,3 @@
-const validateBody = require("./validateBody");
+import validateBody from "../decorators/validateBody";
 
-module.exports = {
-  validateBody,
-};
+import isvalidId from "./isValidId";
