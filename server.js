@@ -5,7 +5,7 @@ import "dotenv/config";
 const { DB_HOST: uriDb } = process.env;
 
 export const dbConnection = (uri) => mongoose.connect(uri);
-export const dbDisconect = mongoose.connection.close();
+export const dbDisconect = mongoose.disconnect;
 dbConnection(uriDb)
   .then(
     app.listen(3000, () => {

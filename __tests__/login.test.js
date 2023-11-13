@@ -7,15 +7,16 @@ describe("Users controller", () => {
   beforeAll(() => dbConnection(process.env.DB_HOST));
 
   test("login user", async () => {
-    const response = (await supertest(app).post("/api/users/login"))
+    const response = await supertest(app)
+      .post("/api/users/login")
       .send({
         email: "somethingnew@gmail.com",
         password: "costam",
       })
       .set("Content-Type", "application/json")
-      .set("Accept", "application/json")
-      .expect(response.statusCode)
-      .toEqual(200);
+      .set("Accept", "application/json");
+    console.log(response.body);
+    expect(response.statusCode).toEqual(200);
   });
 
   afterAll(async () => {

@@ -8,7 +8,7 @@
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js",
-    "test-jest": "jest --coverage"
+    "test-jest": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
