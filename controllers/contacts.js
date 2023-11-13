@@ -1,6 +1,8 @@
 const contactMethods = require("../models/contacts");
 
-const { httpError } = require("../helpers/httpError");
+const contactSchema = require("../schemas/contacts");
+
+const httpError = require("../helpers/httpError");
 
 const listContacts = async (req, res, next) => {
   try {
@@ -13,30 +15,8 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactMethods.getContactById(id);
-    if (!result) {
-      throw httpError(404, 'Not found!');
-    }
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const addContact = async (req, res, next) => {
-  try {
-    const result = await contactMethods.addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
-};
-
-const removeContact = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contactMethods.removeContact(id);
+    const { contactId } = req.params;
+    const result = await contactMethods.getContactById(contactId);
     if (!result) {
       throw httpError(404, "Not found!");
     }
@@ -46,13 +26,40 @@ const removeContact = async (req, res, next) => {
   }
 };
 
+const addContact = async (req, res, next) => {
+  try {
+    const verifiedResult = contactSchema.validate(req.body);
+    if (verifiedResult.error !== undefined) {
+      throw httpError(400, "missing required name field");
+    }
+    const reqBody = verifiedResult.value;
+    const result = await contactMethods.addContact(reqBody);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await contactMethods.removeContact(contactId);
+    if (!result) {
+      throw httpError(404, "Not found!");
+    }
+    res.json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const updateContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactMethods.updateContact(id, req.body);
-     if (!result) {
-       throw httpError(404, "Not found!");
-     }
+    const { contactId } = req.params;
+    const result = await contactMethods.updateContact(contactId, req.body);
+    if (!result) {
+      throw httpError(404, "Not found!");
+    }
     res.json(result);
   } catch (error) {
     next(error);
