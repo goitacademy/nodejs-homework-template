@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 const contactPath = path.join(__dirname, "contacts.json");
 
-const updateContacts = contacts => fs.writeFile(contactPath, JSON.stringify(contacts, null, 4));
+const updateContacts = contacts => fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
 
 const listContacts = async () => {
   const rawJson = await fs.readFile(contactPath);

@@ -5,6 +5,9 @@ const {
   createContact,
   deleteContact,
   upContact } = require('../../controllers/contactsController');
+  
+const isEmptyBody = require('../../middlewares/isEmptyBody');
+
 
 const router = express.Router()
 
@@ -12,10 +15,10 @@ router.get('/', getAllContacts)
 
 router.get('/:contactId', getOneContact)
 
-router.post('/', createContact)
+router.post('/', isEmptyBody, createContact)
 
 router.delete('/:contactId', deleteContact)
 
-router.put('/:contactId', upContact)
+router.put('/:contactId', isEmptyBody, upContact)
 
 module.exports = router

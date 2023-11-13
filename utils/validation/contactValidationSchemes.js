@@ -5,7 +5,8 @@ const createContactValidationSchema = Joi.object({
     'any.required': `Missing required name field`,
   }),
   "email": Joi.string().min(3).max(40).required().messages({
-    'any.required': `Missing required email field`,
+    'any.required': 'Missing required email field',
+    
   }),
   "phone": Joi.string().min(3).max(40).required().messages({
     'any.required': `Missing required phone field`,
