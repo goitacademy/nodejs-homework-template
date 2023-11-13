@@ -93,7 +93,7 @@ const login = async (email, password) => {
         FullName: `${isUserExist.name} ${isUserExist.subscription}`,
         Rol: isUserExist.subscription,
         iat: moment().unix(), // moment when it was created
-        exp: moment().add(24, "hours").unix(),
+        exp: moment().add(2, "hours").unix(),
         // exp: moment().add(1250, "minutes").unix(),
       },
       process.env.SECRET_KEY
