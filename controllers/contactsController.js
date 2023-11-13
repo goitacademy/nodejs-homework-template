@@ -1,29 +1,15 @@
-import Joi from 'joi';
+import * as contactsService from '../models/contacts.js';
 
-// import * as contactsService from '../models/contacts.js';
+import HttpError from '../helpers/index.js';
 
-import listContacts from '../models/contacts.js';
-
-import HttpError from '../helpers/HttpError.js';
-
-const contactAddSchema = Joi.object({
-	name: Joi.string().required().messages({
-		'any.required': `"name" is a required field`,
-		'string.base': `"name" should be a type of 'text'`,
-	}),
-	email: Joi.string().required().messages({
-		'any.required': `"email" is a required field`,
-		'string.base': `"email" should be a type of 'text'`,
-	}),
-	phone: Joi.string().required().messages({
-		'any.required': `"phone" is a required field`,
-		'string.base': `"string" should be a type of 'text'`,
-	}),
-});
+import {
+	contactAddSchema,
+	contactUpdateById,
+} from '../schemas/contact-schemas.js';
 
 const getAllContacts = async (req, res, next) => {
 	try {
-		const result = await listContacts();
+		const result = await contactsService.listContacts();
 		res.json(result);
 	} catch (error) {
 		next(error);
@@ -69,8 +55,42 @@ const add = async (req, res, next) => {
 	}
 };
 
+const updateById = async (req, res, next) => {
+	try {
+		const { error } = contactUpdateById.validate(req.body);
+		if (error) {
+			throw HttpError(400, error.message);
+		}
+		const { contactId } = req.params;
+		const result = await contactsService.updateContactById(contactId, req.body);
+		if (!result) {
+			throw HttpError(404, `Contact with id=${contactId} not found`);
+		}
+		res.json(result);
+	} catch (error) {
+		next(error);
+	}
+};
+
+const deleteById = async (req, res, next) => {
+	try {
+		const { contactId } = req.params;
+		const result = await contactsService.removeContact();
+		if (!result) {
+			throw HttpError(404, `Contact with id=${contactId} not found`);
+		}
+		res.json({
+			message: 'Delete success',
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 export default {
 	getAllContacts,
 	getById,
 	add,
+	updateById,
+	deleteById,
 };

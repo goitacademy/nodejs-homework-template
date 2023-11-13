@@ -42,12 +42,21 @@ const addContact = async ({ name, email, phone }) => {
 	return newContact;
 };
 
-// const updateContact = async (contactId, body) => {}
+const updateContactById = async (contactId, data) => {
+	const contacts = await listContacts();
+	const index = movies.findIndex((item) => item.id === contactId);
+	if (index === -1) {
+		return null;
+	}
+	contacts[index] = { ...contacts[index], ...data };
+	await updateContacts(contacts);
+	return contacts[index];
+};
 
 export default {
 	listContacts,
 	getContactById,
 	removeContact,
 	addContact,
-	// updateContact,
+	updateContactById,
 };
