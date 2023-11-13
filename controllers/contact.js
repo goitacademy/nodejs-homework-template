@@ -1,4 +1,14 @@
+const { isValidObjectId } = require("mongoose");
 const Contact = require("../models/contact");
+
+async function validateContactId(req, res, next) {
+  const { contactId } = req.params;
+
+  if (!isValidObjectId(contactId)) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  next();
+}
 
 async function getContacts(req, res, next) {
   try {
@@ -77,31 +87,34 @@ async function deleteContact(req, res, next) {
 
 async function updateStatusContact(req, res) {
   const { contactId } = req.params;
-  const { favorite } = req.body;
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    favorite: Boolean(req.body.favorite),
+  };
 
-  // Check if favorite field is provided in the request body
-  if (favorite === undefined) {
-    return res.status(400).json({ message: 'missing field favorite' });
+  if (contact.favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
   }
 
   try {
-    const contact = await Contact.findByIdAndUpdate(
-      contactId,
-      { favorite },
-      { new: true }
-    );
+    const result = await Contact.findByIdAndUpdate(contactId, contact, {
+      new: true,
+    });
 
-    if (!contact) {
-      return res.status(404).json({ message: 'Not found' });
+    if (!result) {
+      return res.status(404).json({ message: "Not found" });
     }
 
-    return res.status(200).json(contact);
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 }
 
 module.exports = {
+  validateContactId,
   getContacts,
   getContact,
   createContact,
