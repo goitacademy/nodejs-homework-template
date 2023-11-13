@@ -1,3 +1,6 @@
+require("dotenv").config();
+require('./server.js')
+
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
@@ -22,17 +25,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-
-
-
 module.exports = app;
-
-
-// app.get("/api/contacts", (req, res) => {
-//   console.log({ method: req.method, url: req.url });
-//   res.send("Home");
-// });
-
-// app.listen(8000, () => {
-//   console.log("Server running on port 8080");
-// });
