@@ -25,6 +25,7 @@ class Contacts {
     // console.log(data);
     return data;
   };
+ 
 
   addContact = async (contact) => {
     const contacts = await this.read();
@@ -51,7 +52,7 @@ class Contacts {
     return await this.write(contacts);
   };
 
-  removeContact = async (contactId, body) => {
+  removeContact = async (contactId) => {
     const contacts = await this.read();
     const idx = contacts.findIndex(item => item.id === contactId);
     // console.log(idx);
@@ -60,11 +61,25 @@ class Contacts {
       // console.log("Not found")
       return null;
     }
-    contacts[idx] = { id: contactId, ...body }
+    contacts.splice(idx, 1);
     return await this.write(contacts);
   };
+
+  getContactById = async (contactId) => {
+    const contacts = await this.read();
+    const contact = contacts.find((item) => item.id === contactId);
+
+    if (!contact) {
+      
+      return null;
+    }
+    console.log(contact);
+    return contact;
+  };
 }
-const contacts = new Contacts(contactsPath);
+
+module.exports = new Contacts(contactsPath);
+
 // contacts.read();
 // contacts.listContacts();
 // contacts.addContact({
@@ -86,20 +101,8 @@ const contacts = new Contacts(contactsPath);
   // },
   // );
 
-// const listContacts = async () => {};
+// contacts.removeContact("9f077ee2-02a3-4604-a030-f0ed175f8992");
 
-const getContactById = async (contactId) => {};
+// contacts.getContactById("rsKkOQUi80UsgVPCcLZZW");
 
-const removeContact = async (contactId) => {};
 
-// const addContact = async (body) => {};
-
-// const updateContact = async (contactId, body) => {};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
