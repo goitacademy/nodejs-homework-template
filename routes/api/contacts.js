@@ -40,7 +40,10 @@ router.post("/", async (req, res) => {
   const { error } = validateContact(req.body);
 
   if (error) {
-    res.status(400).json({ message: error.details[0].message });
+    const errorMessage = error.details
+      .map((detail) => detail.message.split('"').join(""))
+      .join(", ");
+    res.status(400).json({ message: `Missing fields ${errorMessage}` });
     return;
   }
 
@@ -62,10 +65,19 @@ router.delete("/:contactId", async (req, res) => {
 
 router.put("/:contactId", async (req, res) => {
   const { contactId } = req.params;
+
+  if (!req.body) {
+    res.status(400).json({ message: "Missing fields" });
+    return;
+  }
+
   const { error } = validateContact(req.body);
 
   if (error) {
-    res.status(400).json({ message: error.details[0].message });
+    const errorMessage = error.details
+      .map((detail) => detail.message.split('"').join(""))
+      .join(", ");
+    res.status(400).json({ message: `Missing fields ${errorMessage}` });
     return;
   }
 
