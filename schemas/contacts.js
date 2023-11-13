@@ -1,5 +1,11 @@
 const Joi = require("joi");
 
+const phoneRegexp = /^\(\d{3}\) \d{3}-\d{4}$/;
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string()
@@ -8,9 +14,8 @@ const addSchema = Joi.object({
       tlds: { allow: ["com", "net", "ua", "pl"] },
     })
     .required(),
-  phone: Joi.string()
-    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
-    .required(),
+  phone: Joi.string().pattern(phoneRegexp).required(),
+  favorite: Joi.boolean(),
 });
 
 const updateSchema = Joi.object({
@@ -19,10 +24,12 @@ const updateSchema = Joi.object({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net", "ua", "pl"] },
   }),
-  phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/),
+  phone: Joi.string().pattern(phoneRegexp),
+  favorite: Joi.boolean(),
 });
 
 module.exports = {
+  updateFavoriteSchema,
   addSchema,
   updateSchema,
 };
