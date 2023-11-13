@@ -4,18 +4,21 @@ const cors = require('cors');
 require('dotenv').config();
 const routerContacts = require('./routes/api');
 
+// import middlewares
 const notFoundMiddleware = require('./middlewares/notFound');
 const errorHandlerMiddleware = require('./middlewares/errorHandler');
 
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
+// parse application/json
 app.use(express.json());
 app.use(logger(formatsLogger));
 app.use(cors());
 
-app.use('/', routerContacts());
+app.use('/api', routerContacts());
 
+// middleware
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
