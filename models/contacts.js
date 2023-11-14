@@ -1,95 +1,124 @@
-const fs = require('node:fs/promises');
-const path = require('node:path');
-const { randomUUID } = require('crypto');
+const { Contact } = require('./schema');
 
-const contactsPath = path.join(__dirname, 'contacts.json');
-
-async function saveDataToFile(data) {
-  await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
-}
-
-async function listContacts() {
+async function listContacts(_, res, next) {
   // Повертає масив контактів.
-  const data = await fs.readFile(contactsPath, 'utf-8');
-
-  return JSON.parse(data);
+  try {
+    const getContacts = await Contact.find().exec();
+    res.send(getContacts);
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function getContactById(contactId) {
+async function getContactById(req, res, next) {
   // Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
-  const data = await listContacts();
+  const { contactId } = req.params;
+  try {
+    const contact = await Contact.findById(contactId).exec();
 
-  const contact = data.find(contact => contact.id === contactId) || null;
+    if (contact === null) {
+      return res.status(404).send('Contact not found');
+    }
 
-  return contact;
+    res.send(contact);
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function removeContact(contactId) {
+async function removeContact(req, res, next) {
   // Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-  const data = await listContacts();
+  const { contactId } = req.params;
+  try {
+    const contact = await Contact.findByIdAndDelete(contactId);
 
-  const index = data.findIndex(contact => contact.id === contactId);
+    if (contact === null) {
+      return res.status(404).send('Contact not found');
+    }
 
-  if (index === -1) {
-    return null;
+    res.send('Contact deleted');
+  } catch (error) {
+    next(error);
   }
-
-  const [result] = data.splice(index, 1);
-
-  await saveDataToFile(data);
-
-  return result;
 }
 
-async function addContact({ name, email, phone }) {
+async function addContact(req, res, next) {
   // Повертає об'єкт доданого контакту.
-  const data = await listContacts();
-
-  const newContact = {
-    id: randomUUID(),
-    name,
-    email,
-    phone,
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    favorite: req.body.favorite,
   };
 
-  data.push(newContact);
+  try {
+    const newContact = await Contact.create(contact);
 
-  await saveDataToFile(data);
-
-  return newContact;
+    res.status(201).send(newContact);
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function updateContact(contactId, { name, email, phone }) {
+async function updateContact(req, res, next) {
   // Повертає оновлений об'єкт контакту.
-  const data = await listContacts();
+  const { contactId } = req.params;
 
-  const index = data.findIndex(contact => contact.id === contactId);
-
-  if (index === -1) {
-    return { message: 'Not found' };
-  }
-
-  if (
-    !name ||
-    !email ||
-    !phone ||
-    name.trim() === '' ||
-    email.trim() === '' ||
-    phone.trim() === ''
-  ) {
-    return { message: 'missing fields' };
-  }
-
-  data[index] = {
-    ...data[index],
-    name,
-    email,
-    phone,
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+    favorite: req.body.favorite,
   };
 
-  await saveDataToFile(data);
+  try {
+    const result = await Contact.findByIdAndUpdate(contactId, contact, {
+      new: true,
+    });
 
-  return data[index];
+    if (result === null) {
+      return res.status(404).send('Contact not found');
+    }
+
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function addToFavorites(req, res, next) {
+  // В обраному чи ні знаходиться зазначений контакт.
+  const { contactId } = req.params;
+
+  if (req.body.favorite === undefined) {
+    return res.status(400).json({ message: 'missing field favorite' });
+  }
+
+  try {
+    const result = await updateStatusContact(contactId, {
+      favorite: req.body.favorite,
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updateStatusContact(contactId, data) {
+  // Поновлення контакту в базі.
+  try {
+    const result = await Contact.findByIdAndUpdate(contactId, data, {
+      new: true,
+    });
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = {
@@ -98,4 +127,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  addToFavorites,
+  updateStatusContact,
 };
