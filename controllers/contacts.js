@@ -18,14 +18,15 @@ const getContact = async (req, res) => {
 };
 
 const createContact = async (req, res) => {
-  const result = await Contact.create(req.body);
-
-  const { name } = req.params;
-  const contact = await Contact.findOne({ name }).exec();
+const {name} = req.body;
+  const contact = await Contact.findOne({name}).exec();
+  console.log(contact)
   if (contact) {
     throw HttpError(409, "Contact already exists");
   }
-  
+
+  const result = await Contact.create(req.body);
+
   res.status(201).send(result);
 };
 
