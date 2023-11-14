@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
     const answer = await method.listContacts();
     res.json(answer);
   } catch (error) {
-    next(new HttpError(500, error.message));
+    next( HttpError(500, error.message));
   }
 });
 
@@ -19,7 +19,7 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const answer = await method.getContactById(contactId);
     if (!answer) {
-      throw new HttpError(404, 'Not found');
+      throw  HttpError(404, 'Not found');
     } 
     res.json(answer);
   } catch (error) {
@@ -54,7 +54,7 @@ router.delete('/:contactId', async (req, res, next) => {
     if (answer) {
       res.json({ message: 'contact deleted' });
     } else {
-      throw new Error(404, 'Not found');
+      throw  Error(404, 'Not found');
     }
   } catch (error) {
     next(error);
@@ -66,16 +66,15 @@ router.put('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
 
-    // Валідація вхідних даних
     const { error } = PatchSchema.validate({ name, email, phone });
 
     if (error) {
-      throw new HttpError(400, error.details[0].message);
+      throw  HttpError(400, error.details[0].message);
     }
 
     const answer = await method.updateContact(contactId, { name, email, phone });
     if (!answer) {
-      throw new HttpError(404, 'Not found');
+      throw  HttpError(404, 'Not found');
     }
 
     res.json(answer);
