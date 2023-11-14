@@ -5,6 +5,7 @@ const {
   getContactById,
   createContact,
   updateContact,
+  updateStatusContacts,
   removeContact,
 } = require('../../controllers/contacts');
 
@@ -17,6 +18,8 @@ routerContacts.get('/:id', getContactById);
 routerContacts.post('/', createContact);
 
 routerContacts.put('/:id', updateContact);
+
+routerContacts.put('/:id/favorite', updateStatusContacts);
 
 routerContacts.delete('/:id', removeContact);
 
