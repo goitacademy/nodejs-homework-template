@@ -41,12 +41,20 @@ const removeContact = async (req, res) => {
 
 const favorite = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!result) {
-    throw HttpError(404, "Not found");
+
+  if (!req.body || !req.body.favorite) {
+    return res.status(400).json({ message: "missing field favorite" });
   }
+
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+
+  if (!result) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
   res.json(result);
 };
+
 
 module.exports = {
   listContacts,
