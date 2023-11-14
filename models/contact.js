@@ -34,3 +34,13 @@ const contactSchema = new Schema(
 contactSchema.post("save", MongooseError);
 
 module.exports = model("Contact", contactSchema);
+
+// const contactStatusSchema = new Schema(
+//   {   
+//    favorite: {
+//       type: Boolean,
+//      required: true,
+//     },
+//   },
+//   { versionKey: false, timestamps: true }
+// );

@@ -10,20 +10,20 @@ const { validateBody, validateId } = require("../../middlewares");
 
 const schemes = require("../../schemes/contacts");
 
-router.get("/", ContactsCtrl.getAll);
+router.get("/", ContactsCtrl.getContacts);
 
-router.get("/:contactId", validateId, ContactsCtrl.getById);
+router.get("/:contactId", validateId, ContactsCtrl.getContact);
 
-router.post("/", jsonParser, validateBody(schemes.addSchema), ContactsCtrl.add);
+router.post("/", jsonParser, validateBody(schemes.addSchema), ContactsCtrl.createContact);
 
-router.delete("/:contactId", validateId, ContactsCtrl.remove);
+router.delete("/:contactId", validateId, ContactsCtrl.deleteContact);
 
 router.put(
   "/:contactId",
   jsonParser,
   validateBody(schemes.addSchema),
   validateId,
-  ContactsCtrl.updateByID
+  ContactsCtrl.updateContact
 );
 
 router.patch(

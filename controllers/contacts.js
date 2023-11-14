@@ -4,12 +4,12 @@ const { HttpError, ctrlWrap } = require("../helpers");
 
 
 
-const getAll = async (req, res) => {
+const getContacts = async (req, res) => {
   const result = await Contact.find({}, '-createdAt -updatedAt').exec();
   res.send(result);
 };
 
-const getById = async (req, res) => {
+const getContact = async (req, res) => {
   const result = await Contact.findById(req.params.contactId, '-createdAt -updatedAt').exec();
   if (!result) {
     throw HttpError(404, "Not found");
@@ -17,7 +17,7 @@ const getById = async (req, res) => {
   res.send(result);
 };
 
-const add = async (req, res) => {
+const createContact = async (req, res) => {
   const result = await Contact.create(req.body);
 
   const { name } = req.params;
@@ -29,7 +29,7 @@ const add = async (req, res) => {
   res.status(201).send(result);
 };
 
-const remove = async (req, res) => {
+const deleteContact = async (req, res) => {
   const result = await Contact.findByIdAndDelete(req.params.contactId).exec();
   if (!result) {
     throw HttpError(404, "Not found");
@@ -37,9 +37,8 @@ const remove = async (req, res) => {
   res.send({ message: "contact deleted" });
 };
 
-const updateByID = async (req, res) => {
+const updateContact = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {new: true}).exec();
-  console.log(result);
     if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -48,7 +47,6 @@ const updateByID = async (req, res) => {
 
 const updateStatusContact = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(req.params.contactId, req.body, {new: true}).exec();
-  console.log(result);
     if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -56,10 +54,10 @@ const updateStatusContact = async (req, res) => {
 };
 
 module.exports = {
-  getAll: ctrlWrap(getAll),
-  getById: ctrlWrap(getById),
-  add: ctrlWrap(add),
-  remove: ctrlWrap(remove),
-  updateByID: ctrlWrap(updateByID),
+  getContacts: ctrlWrap(getContacts),
+  getContact: ctrlWrap(getContact),
+  createContact: ctrlWrap(createContact),
+  deleteContact: ctrlWrap(deleteContact),
+  updateContact: ctrlWrap(updateContact),
   updateStatusContact: ctrlWrap(updateStatusContact),
 };
