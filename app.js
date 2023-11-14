@@ -1,8 +1,8 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
 
-const contactsRouter = require('./routes/api/contacts')
+import contactsRouter from "./routes/api/contacts"
 
 const app = express()
 
