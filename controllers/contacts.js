@@ -3,7 +3,18 @@ const ctrlWrapper = require("../helpers/ctrlWrapper");
 const createError = require("../helpers/createError");
 
 const listContacts = async (req, res) => {
-  const result = await Contact.find({}, "-createdAT -updatedAT");
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+
+  const skip = (page - 1) * limit;
+  const searchOptions = { owner };
+  if (favorite) {
+    searchOptions.favorite = favorite;
+  }
+  const result = await Contact.find(searchOptions, "-createdAT -updatedAT", {
+    skip,
+    limit,
+  }).populate("owner", "email");
   res.json(result);
 };
 
@@ -17,7 +28,8 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
