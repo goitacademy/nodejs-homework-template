@@ -25,15 +25,19 @@ const removeContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status({ message: "Delete complite" }).json(result);
+  res.status(200).json({ message: "contact deleted" });
 };
 
 const updateContact = async (req, res) => {
+  if (!req.body.name && !req.body.emaile && !req.body.phone) {
+    throw HttpError(400, "missing fields");
+  }
+
   const result = await contacts.updateContact(req.params.contactId, req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.status(200).json(result);
 };
 
 module.exports = {

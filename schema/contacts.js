@@ -6,4 +6,10 @@ const schema = Joi.object({
   phone: Joi.string().required(),
 });
 
-module.exports = { schema };
+const schemaPut = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
+
+module.exports = { schema, schemaPut };
