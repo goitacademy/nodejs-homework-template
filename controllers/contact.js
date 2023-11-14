@@ -27,16 +27,14 @@ async function getContact(req, res, next) {
 }
 
 async function createContact(req, res, next) {
-  const contact = {
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-  };
-
   try {
-    const result = await Contact.create(contact);
-
-    res.status(201).send(result);
+    const contact = new Contact({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    });
+    const result = await contact.save();
+    res.status(201).json(result);
   } catch (err) {
     next(err);
   }
