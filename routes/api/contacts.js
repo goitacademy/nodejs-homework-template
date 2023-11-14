@@ -8,7 +8,7 @@ const {
 } = require("../../controllers/contacts");
 
 const { validateBody } = require("../../middlewares/validateBody");
-const { schema } = require("../../schema/contacts");
+const { schema, schemaPut } = require("../../schema/contacts");
 
 const router = express.Router();
 
@@ -20,6 +20,6 @@ router.post("/", validateBody(schema), addContact);
 
 router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", validateBody(schema), updateContact);
+router.put("/:contactId", validateBody(schemaPut), updateContact);
 
 module.exports = router;
