@@ -277,6 +277,7 @@
     "uri-js": "^4.4.1",
     "url-parse-lax": "^3.0.0",
     "utils-merge": "^1.0.1",
+    "uuid": "^9.0.1",
     "v8-compile-cache": "^2.2.0",
     "validate-npm-package-license": "^3.0.4",
     "vary": "^1.1.2",
