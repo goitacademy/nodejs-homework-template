@@ -16,7 +16,7 @@ const contactSchema = new Schema(
     email: {
       type: String,
       required: [true, "Set email for contact"],
-      match:/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/,
+      match: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,6})+$/,
     },
     phone: {
       type: String,
@@ -33,14 +33,23 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", MongooseError);
 
-module.exports = model("Contact", contactSchema);
+const Contact = model("Contact", contactSchema);
 
-// const contactStatusSchema = new Schema(
-//   {   
-//    favorite: {
-//       type: Boolean,
-//      required: true,
-//     },
-//   },
-//   { versionKey: false, timestamps: true }
-// );
+const contactStatusSchema = new Schema(
+  {
+    favorite: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  { versionKey: false }
+);
+
+contactStatusSchema.post("save", MongooseError);
+
+const ContactStatus = model("Contact", contactSchema);
+
+module.exports = {
+  Contact,
+  ContactStatus,
+};
