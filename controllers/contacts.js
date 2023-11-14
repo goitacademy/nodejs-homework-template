@@ -25,7 +25,7 @@ const removeContact = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.status({ message: "Delete complite" }).json(result);
+  res.status(200).json({ message: "Delete complite" });
 };
 
 const updateContact = async (req, res) => {
