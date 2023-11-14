@@ -21,6 +21,7 @@ const contactSchema = Joi.object({
         "Phone number should consist of at least 10 digits",
     })
     .required(),
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = contactSchema;
