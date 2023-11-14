@@ -11,22 +11,22 @@ contactsRouter.get("/", async (req, res, next) => {
 
 contactsRouter.get("/:contactId", async (req, res, next) => {
   const result = await movieService.getContactById();
-  res.json({ message: "template message" });
+  res.json({ result });
 });
 
 contactsRouter.post("/", async (req, res, next) => {
   const result = await movieService.addContact();
-  res.json({ message: "template message" });
+  res.json({ result });
 });
 
 contactsRouter.delete("/:contactId", async (req, res, next) => {
   const result = await movieService.removeContact();
-  res.json({ message: "template message" });
+  res.json({ result });
 });
 
 contactsRouter.put("/:contactId", async (req, res, next) => {
   const result = await movieService.updateContact();
-  res.json({ message: "template message" });
+  res.json({ result });
 });
 
 export default contactsRouter;
