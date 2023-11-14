@@ -28,22 +28,24 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  try {
-    const { name, email, phone } = req.body;
-
-    // Валідація вхідних даних
-    const { error } = ValidationSchema.validate({ name, email, phone });
-
-    if (error) {
-      throw new HttpError(400, error.details[0].message);
+  
+    try {
+      const { name, email, phone } = req.body;
+  
+      // Валідація вхідних даних
+      const { error } = ValidationSchema.validate({ name, email, phone });
+  
+      if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+      }
+  
+      const answer = await method.addContact({ name, email, phone });
+      res.status(201).json(answer);
+    } catch (error) {
+      next(error);
     }
-
-    const answer = await method.addContact({ name, email, phone });
-    res.status(201).json(answer);
-  } catch (error) {
-    next(error);
-  }
-});
+  });
+  
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
@@ -52,7 +54,7 @@ router.delete('/:contactId', async (req, res, next) => {
     if (answer) {
       res.json({ message: 'contact deleted' });
     } else {
-      throw new HttpError(404, 'Not found');
+      throw new Error(404, 'Not found');
     }
   } catch (error) {
     next(error);
