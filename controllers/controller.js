@@ -29,7 +29,13 @@ async function createContact(req, res, next) {
     email: req.body.email,
     phone: req.body.phone,
   };
-
+  if (
+    contact.name === undefined ||
+    contact.email === undefined ||
+    contact.phone === undefined
+  ) {
+    return res.status(400).json({ message: "missing some field" });
+  }
   try {
     const result = await Contact.create(contact);
     res.send(result);
@@ -37,7 +43,7 @@ async function createContact(req, res, next) {
     next(error);
   }
 }
-//upd fix
+
 async function updateContact(req, res, next) {
   const { id } = req.params;
   const contact = {
