@@ -2,10 +2,13 @@ const express = require("express");
 const router = express.Router();
 const contactsController = require("../../controllers/contacts-controllers");
 
-const validaterBody = require("../../decorators/validaterBody");
+const { validaterBody } = require("../../decorators/index");
 const contactsSchemas = require("../../schemas/contactsSchemas");
-const isEmptyBody = require("../../middlewares/isEmptyBody");
-const isMissingRequiredFields = require("../../middlewares/isMissingRequiredFields");
+
+const {
+  isMissingRequiredFields,
+  isEmptyBody,
+} = require("../../middlewares/index");
 
 router.get("/", contactsController.getAll);
 

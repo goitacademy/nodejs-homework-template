@@ -33,7 +33,7 @@ const addContact = async ({ name, email, phone }) => {
     const contacts = await listContacts();
 
     const newContact = { id: nanoid(), name, email, phone };
-
+    console.log(newContact);
     contacts.push(newContact);
 
     await updateContacts(contacts);
@@ -55,8 +55,9 @@ const removeContact = async (contactId) => {
       return null;
     }
 
-    const deletedContact = contacts.splice(index, 1);
-    await updateContact(contacts);
+    const [deletedContact] = contacts.splice(index, 1);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
 
     return deletedContact;
   } catch (error) {

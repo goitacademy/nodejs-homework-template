@@ -1,6 +1,6 @@
 const contactsOperations = require("../models/contacts");
 
-const ctrlWrapper = require("../decorators/ctrlWrapper");
+const { ctrlWrapper } = require("../decorators/index");
 
 const HttpError = require("../helpers/HttpError");
 
