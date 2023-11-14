@@ -1,4 +1,5 @@
 const { Contact } = require('../models');
+const createError = require('http-errors');
 
 const getContacts = async (req, res, next) => {
   const contacts = await Contact.find();
@@ -26,32 +27,23 @@ const createContact = async (req, res, next) => {
 };
 
 const updateContact = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body);
-
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
     if (Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: 'Missing field' });
-    }
-    if (!result) {
-      return res.status(200).json({
-        message: 'found',
-      });
     }
     return res.status(200).json({
       result,
     });
   } catch (error) {
-    return res.status(500).json({
-      result: null,
-      message: error,
-    });
+    return next(createError(404, 'Contact not found'));
   }
 };
 
-const removeContact = async (req, res, rext) => {
+const removeContact = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
     const result = await Contact.findByIdAndDelete(id);
     if (!result) {
       return res.status(404).json({
@@ -62,10 +54,7 @@ const removeContact = async (req, res, rext) => {
       message: 'Deleted contact',
     });
   } catch (error) {
-    return res.status(500).json({
-      result: null,
-      message: error,
-    });
+    return next(createError(404, 'Contact not found'));
   }
 };
 

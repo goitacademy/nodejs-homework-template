@@ -6,4 +6,4 @@ const notFoundMiddleware = (req, res, next) => {
   next(error);
 };
 
-module.exports = notFoundMiddleware;
+module.exports = { notFoundMiddleware };
