@@ -16,11 +16,15 @@ const getAll = async (req, res) => {
   res.status(200).json(contacts);
 };
 
-const getById = async (req, res, next) => {
+const getById = async (req, res) => {
   const { contactId } = req.params;
   const contact = await Contact.findById(contactId);
+  const { _id: owner } = req.user;
+  if (owner.toString() !== contact.owner.toString()) {
+    throw HTTPError(401);
+  }
   if (!contact) {
-    next(HTTPError(404));
+    throw HTTPError(404);
   }
   res.status(200).json(contact);
 };
@@ -30,38 +34,57 @@ const add = async (req, res) => {
   res.status(201).json(result);
 };
 
-const remove = async (req, res, next) => {
+const remove = async (req, res) => {
   const { contactId } = req.params;
+  const contact = await Contact.findById(contactId);
+  const { _id: owner } = req.user;
+
+  if (owner.toString() !== contact.owner.toString()) {
+    throw HTTPError(401);
+  }
+
   const result = await Contact.findByIdAndDelete(contactId);
+
   if (!result) {
-    next(HTTPError(404));
+    throw HTTPError(404);
   }
   res.status(200).json({ message: "contact deleted" });
 };
 
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   const { contactId } = req.params;
+  const contact = await Contact.findById(contactId);
+  const { _id: owner } = req.user;
 
+  if (owner.toString() !== contact.owner.toString()) {
+    throw HTTPError(401);
+  }
   const result = await Contact.findByIdAndUpdate(
     contactId,
     { ...req.body },
     { new: true }
   );
   if (!result) {
-    next(HTTPError(404));
+    throw HTTPError(404);
   }
   res.status(200).json(result);
 };
 
-const updateStatus = async (req, res, next) => {
+const updateStatus = async (req, res) => {
   const { contactId } = req.params;
+  const contact = await Contact.findById(contactId);
+  const { _id: owner } = req.user;
+
+  if (owner.toString() !== contact.owner.toString()) {
+    throw HTTPError(401);
+  }
   const result = await Contact.findByIdAndUpdate(
     contactId,
     { ...req.body },
     { new: true }
   );
   if (!result) {
-    next(HTTPError(404));
+    throw HTTPError(404);
   }
   res.status(200).json(result);
 };

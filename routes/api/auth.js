@@ -10,7 +10,7 @@ router.post("/login", validateBody(schemas.loginSchema), User.login);
 
 router.post("/logout", authenticate, User.logout);
 
-router.post("/current", authenticate, User.getCurrent);
+router.get("/current", authenticate, User.getCurrent);
 
 router.patch(
   "/subscription",
