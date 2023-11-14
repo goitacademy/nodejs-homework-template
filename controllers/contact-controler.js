@@ -1,30 +1,9 @@
 import contactService from "../models/contacts.js";
 import { HttpError } from "../helpers/index.js";
-import Joi from "joi";
-
-const contactsAddSchema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": "missing required name field",
-  }),
-  email: Joi.string().email().required().messages({
-    "any.required": "missing required email field",
-  }),
-  phone: Joi.string()
-    .length(13)
-    .pattern(/[0-9]?()+?[0-9]+$/)
-    .required()
-    .messages({
-      "any.required": "missing required phone number field",
-    }),
-});
-
-const contactsUpdateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string()
-    .length(13)
-    .pattern(/[0-9]?()+?[0-9]+$/),
-});
+import {
+  contactsAddSchema,
+  contactsUpdateSchema,
+} from "../schemas/contact-schema.js";
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -41,7 +20,7 @@ const getContactId = async (req, res, next) => {
     const { contactId } = req.params; // Деструктуризуэмо запит req та дістаємо ключ contactId(ключ перед : значення після)
     const result = await contactService.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found`);
+      throw HttpError(404, `Not found`);
     }
     res.json(result);
   } catch (error) {
@@ -71,7 +50,7 @@ const updateContacts = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactService.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found`);
+      throw HttpError(404, `Not found`);
     }
     res.status(201).json(result);
   } catch (error) {
@@ -82,13 +61,11 @@ const updateContacts = async (req, res, next) => {
 const deleteContacts = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-
-    const result = contactService.deleteContact(contactId);
-
+    const result = await contactService.deleteContact(contactId);
     if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found`);
+      throw HttpError(404, `Not found`);
     }
-    res.status(201).json(result);
+    res.json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
