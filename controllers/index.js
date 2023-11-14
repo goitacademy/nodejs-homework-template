@@ -4,7 +4,7 @@ import {
   getContactById,
   removeContact,
   updateContact,
-} from "../service/index.js";
+} from "#services/index.js";
 import Joi from "joi";
 
 const contactBodySchema = Joi.object({

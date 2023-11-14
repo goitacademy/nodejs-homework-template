@@ -6,20 +6,20 @@ import {
   remove,
   update,
   updateStatusContact,
-} from "../controller/index.js";
+} from "#controllers/index.js";
 
 const router = Router();
 
 router.get("/", get);
 
-router.get("/:contactId", getById);
+router.get("/:id", getById);
 
 router.post("/", create);
 
-router.delete("/:contactId", remove);
+router.delete("/:id", remove);
 
-router.put("/:contactId", update);
+router.put("/:id", update);
 
-router.patch("/:contactId/favorite", updateStatusContact);
+router.patch("/:id/favorite", updateStatusContact);
 
 export default router;

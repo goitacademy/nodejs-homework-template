@@ -1,4 +1,4 @@
-import Contact from "./schemas/contact.js";
+import Contact from "./schemas/contacts.js";
 
 const getAllContacts = async () => {
   return Contact.find();
@@ -17,7 +17,7 @@ const updateContact = async ({ id, fields }) => {
 };
 
 const removeContact = async (id) => {
-  return Contact.findByIdAndRemove({ _id: id });
+  return Contact.findByIdAndRemove({ contactId: id });
 };
 
 export {
