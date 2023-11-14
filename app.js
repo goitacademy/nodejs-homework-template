@@ -1,25 +1,25 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+import express from "express";
+import { router } from "./routes/api/contacts.js";
+import logger from "morgan";
+import cors from "cors";
+export const app = express();
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-const contactsRouter = require('./routes/api/contacts')
+app.use(logger(formatsLogger));
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  methods: ["PUT", "DELETE"],
+};
+app.use(cors(corsOptions));
 
-const app = express()
+app.use(express.json());
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
-
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
-
-app.use('/api/contacts', contactsRouter)
+app.use("/api/contacts", router);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found" });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
-
-module.exports = app
+  res.status(500).json({ message: err.message });
+});
