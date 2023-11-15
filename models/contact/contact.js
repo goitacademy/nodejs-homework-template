@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const { MongooseError } = require("../helpers");
+const { MongooseError } = require("../../helpers");
 
 const contactSchema = new Schema(
   {
@@ -35,21 +35,4 @@ contactSchema.post("save", MongooseError);
 
 const Contact = model("Contact", contactSchema);
 
-const contactStatusSchema = new Schema(
-  {
-    favorite: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  { versionKey: false }
-);
-
-contactStatusSchema.post("save", MongooseError);
-
-const ContactStatus = model("Contact", contactSchema);
-
-module.exports = {
-  Contact,
-  ContactStatus,
-};
+module.exports = {Contact};
