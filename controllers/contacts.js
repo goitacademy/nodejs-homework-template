@@ -29,7 +29,7 @@ const removeContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  if (!req.body.name && !req.body.emaile && !req.body.phone) {
+  if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "missing fields");
   }
 
