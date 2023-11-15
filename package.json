@@ -8,7 +8,8 @@
     "dev": "nodemon app.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "kill-port": "npx kill-port 8080"
   },
   "dependencies": {
     "cors": "2.8.5",
@@ -25,6 +26,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
+    "kill-port": "^2.0.1",
     "nodemon": "^2.0.15"
   }
 }
