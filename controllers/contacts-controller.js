@@ -62,7 +62,7 @@ export const updateById = async (req, res, next) => {
 export const deleteById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactsService.removeContact(contactId);
+    const result = await contactsService.deleteContactContact(contactId);
     if (!result) {
       throw HttpError(404, `Movie with id=${contactId} not found`);
     }

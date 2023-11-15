@@ -19,7 +19,7 @@ export const getContactById = async (contactId) => {
   return result || null;
 };
 
-export const removeContact = async (contactId) => {
+export const deleteContact = async (contactId) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === contactId);
 
