@@ -2,18 +2,17 @@ const Contact = require("../models/contacts");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const getAll = async (req, res, next) => {
-  const result = await Contact.listContacts();
-  res.json(result);
+const getAll = async (req, res) => {
+  const result = await Contact.find();
+  res.status(200).json(result);
 };
-
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
-  if (!result) {
-    throw HttpError(404, `Contact with id=${contactId} not found`);
+  const data = await Contact.findById(contactId);
+  if (!data) {
+    throw RequestError(404, `id:${contactId} not found`);
   }
-  res.status(200).json(result);
+  res.status(200).json({ status: "success", code: 200, data });
 };
 
 const addContacts = async (req, res, next) => {
@@ -23,6 +22,9 @@ const addContacts = async (req, res, next) => {
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
   const data = req.body;
+  if (data === undefined || data.favorite === undefined) {
+    return res.status(400).json({ message: "missing field 'favorite'" });
+  }
   const result = await Contact.findByIdAndUpdate(contactId, data, {
     new: true,
   });

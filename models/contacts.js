@@ -17,14 +17,6 @@ const contactSchema = new Schema({
     default: false,
   },
 });
-contactSchema.statics.listContacts = async function () {
-  try {
-    const contacts = await this.find();
-    return contacts;
-  } catch (error) {
-    throw new Error("Error fetching contacts");
-  }
-};
 
 const Contact = model("contact", contactSchema);
 module.exports = Contact;
