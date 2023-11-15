@@ -16,16 +16,6 @@ router.get("/:contactId", async (req, res, next) => {
   res.json({ message: "Contact have been found", data: contact });
 });
 
-/* router.post('/', async (req, res, next) => {
-  const data = {
-      "name": "Katherine Kortis",
-      "email": "kor.in@egetlacus.ca",
-      "phone": "(294) 840-8888"
-    }
-  const contactsList = await contacts.addContact(data);
-  res.status(201).json({ message: 'Successfull Post', data: contactsList})
-}) */
-
 router.post("/", async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
@@ -40,7 +30,6 @@ router.post("/", async (req, res, next) => {
     };
 
     const addedContact = await contacts.addContact(newContact);
-
     res
       .status(201)
       .json({ message: "Contact added successfully", data: addedContact });
