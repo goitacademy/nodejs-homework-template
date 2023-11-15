@@ -14,9 +14,8 @@ async function listContacts(req, res, next) {
         })
     } catch(err) {
         next(err)
-    }
-   
-}
+  }
+};
 
 async function getContactById(req, res, next) {
     const {  contactId } = req.params;
@@ -47,21 +46,14 @@ async function removeContact (req, res, next) {
         if (!result) {
       throw createError(404, `Contact with id=${contactId} not found`);
     }
-    res.json({
-      status: "success",
-      code: 200,
-      message: "contact deleted",
-      data: {
+      res.status(200).json({
         result,
-      },
-    }); res.send({contactId})
+      });
+ res.send({contactId})
   } catch (error) {
     next(error);
   }
 }   
-
-
-
 
 async function addContact(req, res, next) {
     const contact = {
@@ -70,7 +62,6 @@ async function addContact(req, res, next) {
         phone: req.body.phone,
         favorite: req.body.favorite
     }
-
     try {
         const result = await Contact.create(contact)
         console.log(result)
@@ -84,13 +75,10 @@ async function addContact(req, res, next) {
     } catch (error) {
         next(error);
     }
-}
-
-    
+};
 
 async function updateContact(req, res, next) {
-    const { contactId } = req.params;
-      
+    const { contactId } = req.params; 
     const contact = {
         name: req.body.name,
         email: req.body.email,
@@ -111,25 +99,18 @@ async function updateContact(req, res, next) {
     }
 }
 
-
-
 async function updateFavorite(req, res, hext) {
     const { contactId } = req.params;
-     
     try {
         if (!req.body) throw createError(400, `missing field favorite`);
         const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
-        
         if (!result) throw createError(404, `404, "Not found"`);
-        
         res.status(201).json(result);
         res.send(result)
-    } catch (err) {
-     
+    } catch (error) {
+      next(error);
     }
-}
-
-
+};
 
 module.exports = {
   listContacts,
