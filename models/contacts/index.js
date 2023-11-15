@@ -57,10 +57,10 @@ export const updateContactById = async (id, data) => {
 };
 console.log(updateContactById);
 
-// export default {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// };
+export default {
+  listContacts,
+  getContactById,
+  removeContactById,
+  addContact,
+  updateContactById,
+};
