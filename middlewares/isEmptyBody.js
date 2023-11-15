@@ -1,6 +1,6 @@
-import { HttpError } from "../helpers/index";
+import { HttpError } from "../helpers/index.js";
 
-const isEmptyBody = (req, res, next) => {
+const isEmptyBody = (req, _, next) => {
   if (!Object.keys(req.body).length) {
     return next(HttpError(400, "All fields are empty"));
   }

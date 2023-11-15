@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import handleMongooseError from "..helpers/";
+import handleMongooseError from "../helpers/handleMongooseError";
 import Joi from "joi";
 
 const phoneRegExp = /^\(\d{3}\)\s\d{3}-\d{4}$/;

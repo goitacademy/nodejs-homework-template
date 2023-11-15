@@ -1,3 +1,3 @@
-import validateBody from "../decorators/validateBody";
+import { default as isEmptyBody } from "./isEmptyBody.js";
 
-import isvalidId from "./isValidId";
+import { default as isValidId } from "./isValidId.js";

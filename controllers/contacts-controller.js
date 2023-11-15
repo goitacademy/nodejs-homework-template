@@ -1,5 +1,6 @@
-import { HttpError, ctrlWrapper } from "../helpers/index";
-import Contact from "../models/contact";
+import { HttpError } from "../helpers/index.js";
+import { ctrlWrapper } from "../decorators/index.js";
+import Contact from "../models/Contact.js";
 
 const listContacts = async (_, res) => {
   const result = await Contact.fnd({}, -createdAt, -updatedAt);
@@ -10,7 +11,7 @@ const getContactById = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findById(id);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, `Contact with id ${id} not found`);
   }
   res.json(result);
 };
@@ -24,7 +25,7 @@ const updateContact = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, `Contact with id ${id} not found`);
   }
   res.status(200).json(result);
 };
@@ -33,7 +34,7 @@ const updateFavorite = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, `Contact with id ${id} not found`);
   }
   res.status(200).json(result);
 };
@@ -42,7 +43,7 @@ const removeContact = async (req, res) => {
   const { id } = req.params;
   const result = await Contact.findByIdAndRemove(id);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, `Contact with id ${id} not found`);
   }
   res.status(200).json({ message: "Contact deleted" });
 };
