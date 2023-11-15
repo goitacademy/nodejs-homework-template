@@ -1,7 +1,7 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-import contactsRouter from "./routes/api/contacts-router";
+import contactsRouter from "./routes/api/contacts-router.js";
 import "dotenv/config";
 
 const app = express();
@@ -14,11 +14,11 @@ app.use(express.json());
 
 app.use("/api/routs", contactsRouter);
 
-app.use((_, res) => {
+app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, _, res, _) => {
+app.use((err, req, res, next) => {
   const { status = 500, message = " Server error" } = err;
   res.status(status).json({ message });
 });

@@ -1,8 +1,8 @@
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
-import Contact from "../models/Contact.js";
+import Contact from "../models/contact.js";
 
-const listContacts = async (_, res) => {
+const listContacts = async (req, res) => {
   const result = await Contact.fnd({}, -createdAt, -updatedAt);
   res.status(200).json(result);
 };

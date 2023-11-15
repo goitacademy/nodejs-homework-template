@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { handleSaveError, runValidatorsAtUpdate } from "./hooks";
+import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 import Joi from "joi";
 
 const phoneRegExp = /^\(\d{3}\)\s\d{3}-\d{4}$/;
