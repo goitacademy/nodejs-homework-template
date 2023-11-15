@@ -2,6 +2,9 @@ import express from "express";
 
 import movieService from "../../models/contacts/index.js";
 
+import contactsController from "../../controllers/contacts-controller.js";
+import { isEmptyBody } from "../../middlewares/index.js";
+
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", async (req, res, next) => {
