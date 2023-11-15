@@ -9,6 +9,7 @@ class Contacts {
   constructor(path) {
     this.path = path;
   }
+
   read = async () => {
     const contacts = await fs.readFile(this.path, "utf-8");
     // console.log(typeof contacts)
@@ -25,9 +26,8 @@ class Contacts {
     // console.log(data);
     return data;
   };
- 
 
-  addContact = async (contact) => {
+  /*  addContact = async (contact) => {
     const contacts = await this.read();
     const newContact = {
       id: uuidv4(),
@@ -37,24 +37,36 @@ class Contacts {
     contacts.push(newContact);
 
     return await this.write(contacts);
+  }; */
+
+  addContact = async (contact) => {
+    const contacts = await this.read();
+    const newContact = {
+      id: uuidv4(),
+      ...contact,
+    };
+
+    contacts.push(newContact);
+    await this.write(contacts);
+    return newContact;
   };
 
   updateContact = async (contactId, body) => {
     const contacts = await this.read();
-    const idx = contacts.findIndex(item => item.id === contactId);
+    const idx = contacts.findIndex((item) => item.id === contactId);
     // console.log(idx);
 
     if (idx === -1) {
       // console.log("Not found")
       return null;
     }
-    contacts[idx] = { id: contactId, ...body }
+    contacts[idx] = { id: contactId, ...body };
     return await this.write(contacts);
   };
 
   removeContact = async (contactId) => {
     const contacts = await this.read();
-    const idx = contacts.findIndex(item => item.id === contactId);
+    const idx = contacts.findIndex((item) => item.id === contactId);
     // console.log(idx);
 
     if (idx === -1) {
@@ -71,7 +83,6 @@ class Contacts {
     const contact = contacts.find((item) => item.id === contactId);
 
     if (!contact) {
-      
       return null;
     }
     console.log(contact);
@@ -95,15 +106,13 @@ module.exports = new Contacts(contactsPath);
     phone: "(294) 840-7777",
   },
   ); */
-  // contacts.updateContact(1, {
-  //   name: "Katherine Kortchenko",
-  //   email: "kor.ko@egetlacus.ca",
-  //   phone: "(294) 840-7777",
-  // },
-  // );
+// contacts.updateContact(1, {
+//   name: "Katherine Kortchenko",
+//   email: "kor.ko@egetlacus.ca",
+//   phone: "(294) 840-7777",
+// },
+// );
 
 // contacts.removeContact("9f077ee2-02a3-4604-a030-f0ed175f8992");
 
 // contacts.getContactById("rsKkOQUi80UsgVPCcLZZW");
-
-
