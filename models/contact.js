@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import handleMongooseError from "../helpers/handleMongooseError";
+import { handleSaveError, runValidatorsAtUpdate } from "./hooks";
 import Joi from "joi";
 
 const phoneRegExp = /^\(\d{3}\)\s\d{3}-\d{4}$/;
@@ -30,9 +30,11 @@ const contactSchema = new Schema(
   }
 );
 
-contactSchema.post("save", handleMongooseError);
+contactSchema.post("save", handleSaveError);
+contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+contactSchema.post("findOneAndUpdate", handleSaveError);
 
-const addSchema = Joi.object({
+export const addSchema = Joi.object({
   name: Joi.string()
     .required()
     .messages({ "any.required": "Missing required Name field" }),
@@ -46,12 +48,10 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const updateFavoriteSchema = {
+export const updateFavoriteSchema = {
   favorite: Joi.boolean().required(),
 };
 
-const schemas = { addSchema, updateFavoriteSchema };
-
 const Contact = model("contact", contactSchema);
 
-export default { Contact, schemas };
+export default Contact;
