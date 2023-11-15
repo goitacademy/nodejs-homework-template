@@ -79,7 +79,26 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/:contactId/favorite', contactsController.updateStatusContact);
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
 
 module.exports = router;
