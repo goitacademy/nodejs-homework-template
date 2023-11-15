@@ -1,6 +1,5 @@
 const Contact = require("../models/contact");
-const mongoose = require("mongoose");
-const contactSchema = require("../schemas/contacts");
+const { contactSchema, favoriteSchema } = require("../schemas/contacts");
 
 async function getContacts(req, res, next) {
   try {
@@ -14,12 +13,11 @@ async function getContacts(req, res, next) {
 async function getContact(req, res, next) {
   const { id } = req.params;
 
-  if (!mongoose.isValidObjectId(id)) {
-    return res.status(404).json({ message: "Contact not found" });
-  }
-
   try {
     const contact = await Contact.findById(id).exec();
+    if (contact === null) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
     res.send(contact);
   } catch (error) {
     next(error);
@@ -60,6 +58,7 @@ async function deleteContact(req, res, next) {
     const { id } = req.params;
 
     const deletedContact = await Contact.findByIdAndDelete(id);
+    console.log(deletedContact);
 
     if (!deletedContact) {
       return res.status(404).json({ message: "Contact not found" });
@@ -112,17 +111,28 @@ async function updateStatusContact(req, res, next) {
     const { id } = req.params;
     const { favorite } = req.body;
 
-    if (favorite === undefined) {
-      return res.status(400).json({ message: "Missing field favorite" });
+    const favoriteValidation = favoriteSchema.validate(
+      { favorite },
+      { abortEarly: false }
+    );
+    if (favoriteValidation.error) {
+      const errorMessage = favoriteValidation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res
+        .status(400)
+        .json({ message: `Validation Error: ${errorMessage}` });
     }
 
     const updatedContact = await Contact.findByIdAndUpdate(
       id,
-      { favorite },
+      {
+        favorite,
+      },
       { new: true }
     );
 
-    if (!updatedContact) {
+    if (updatedContact === null) {
       return res.status(404).json({ message: "Not found" });
     }
 

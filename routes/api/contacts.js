@@ -16,6 +16,10 @@ router.put("/:id", jsonParser, ContactsController.updateContact);
 
 router.delete("/:id", ContactsController.deleteContact);
 
-router.patch("/:id", jsonParser, ContactsController.updateStatusContact);
+router.patch(
+  "/:id/favorite",
+  jsonParser,
+  ContactsController.updateStatusContact
+);
 
 module.exports = router;
