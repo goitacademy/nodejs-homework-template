@@ -15,6 +15,4 @@ const validateBody = shema => {
     return func
 }
 
-module.exports = {
-  validateBody,
-}
+module.exports = validateBody
