@@ -1,25 +1,52 @@
-const express = require('express')
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
+const listContacts = require('../../controllers/listContacts');
+const getContactById = require('../../controllers/getContactById');
+const addContact = require('../../controllers/addContacts');
+const removeContact = require('../../controllers/removeContacts');
+const updateContact = require('../../controllers/updateContact');
 
-const router = express.Router()
+const addContactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const updateContactSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', (req, res) => {
+  listContacts(req, res);
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', (req, res) => {
+  getContactById(req, res);
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', (req, res) => {
+  const { error } = addContactSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  addContact(req, res);
+});
 
-module.exports = router
+router.delete('/:id', (req, res) => {
+  removeContact(req, res);
+});
+
+router.put('/:id', (req, res) => {
+  const { error } = updateContactSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  updateContact(req, res);
+});
+
+module.exports = router;
