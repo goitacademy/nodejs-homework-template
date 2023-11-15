@@ -1,14 +1,18 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import path from "path";
 import contactsRouter from "./routes/api/contacts.js";
 import usersRouter from "./routes/api/users.js";
 import { noFound } from "./controllers/errors/noFound.js";
 import { errorMessage } from "./controllers/errors/errorMessage.js";
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
-app.use(express.static(path.join(process.cwd(), "public")));
+app.use(
+  "/avatars",
+  express.static(path.join(process.cwd(), "public", "avatars"))
+);
+//app.use(express.static(path.join(process.cwd(), "public")));
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());

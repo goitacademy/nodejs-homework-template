@@ -1,5 +1,6 @@
 import User from "../../models/userModel.js";
 import Joi from "joi";
+import bcrypt from "bcrypt";
 
 // Definiowanie schematu Joi do walidacji danych wejściowych
 const loginSchema = Joi.object({
