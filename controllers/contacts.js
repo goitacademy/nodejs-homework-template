@@ -31,7 +31,7 @@ const removeContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  if (!req.body.name && !req.body.emaile && !req.body.phone) {
+  if (Object.keys(req.body).length === 0) {
     throw HttpError(400, "missing fields");
   }
 
@@ -49,9 +49,6 @@ const updateContact = async (req, res) => {
 };
 
 const updateFavorite = async (req, res) => {
-  if (!req.body) {
-    throw HttpError(400, "missing field favorite");
-  }
   const result = await Contact.findByIdAndUpdate(
     req.params.contactId,
     req.body,
@@ -61,7 +58,7 @@ const updateFavorite = async (req, res) => {
   );
   if (!result) throw HttpError(404, "Not found");
 
-  res.status(201).json(result);
+  res.status(200).json(result);
 };
 
 module.exports = {

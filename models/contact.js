@@ -32,7 +32,7 @@ const addSchema = Joi.object({
 
 const favoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
-});
+}).messages({ "any.required": "missing field {#key}" });
 
 const putSchema = Joi.object({
   name: Joi.string(),
