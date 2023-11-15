@@ -15,11 +15,9 @@ export async function updateAvatar(req, res) {
   try {
     const { path: tempPath, originalname } = avatar[0];
 
-    // Opracuj awatar przy pomocy Jimp
     const image = await jimp.read(tempPath);
     await image.resize(250, 250).writeAsync(tempPath);
 
-    // Przenieś awatar użytkownika z folderu tmp do folderu public/avatars i nadaj mu unikalną nazwę
     const uniqueFilename = `${uuidv4()}.${originalname.split(".").pop()}`;
     const avatarPath = path.join(
       process.cwd(),
@@ -29,7 +27,6 @@ export async function updateAvatar(req, res) {
     );
     await fs.rename(tempPath, avatarPath);
 
-    // Zapisz URL avatara w polu avatarURL użytkownika
     const avatarURL = `/avatars/${uniqueFilename}`;
     await User.findByIdAndUpdate(userId, { avatarURL });
 

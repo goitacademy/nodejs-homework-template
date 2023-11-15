@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 
 export async function loginExistingUser(req, res) {
   try {
-    // Tutaj powinno być pobranie użytkownika z bazy danych na podstawie emaila
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
@@ -14,7 +13,6 @@ export async function loginExistingUser(req, res) {
       expiresIn: "1h",
     });
 
-    // Aktualizacja pola token w bazie danych
     user.token = token;
     await user.save();
 

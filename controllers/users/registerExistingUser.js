@@ -1,14 +1,13 @@
 import User from "../../models/userModel.js";
 import Joi from "joi";
 
-// Definiowanie schematu Joi do walidacji danych wejściowych
 const registerExistingUserSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required(),
 });
 export async function registerExistingUser(req, res) {
   const { email, password } = req.body;
-  // Walidacja danych wejściowych
+
   const { error } = registerExistingUserSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });

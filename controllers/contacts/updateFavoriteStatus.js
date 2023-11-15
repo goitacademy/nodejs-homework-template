@@ -11,7 +11,7 @@ export async function updateFavoriteStatus(req, res, next) {
     const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
       { favorite },
-      { new: true } // Zwraca zaktualizowany dokument
+      { new: true }
     );
 
     if (updatedContact) {

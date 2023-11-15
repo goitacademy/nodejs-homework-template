@@ -12,7 +12,6 @@ app.use(
   "/avatars",
   express.static(path.join(process.cwd(), "public", "avatars"))
 );
-//app.use(express.static(path.join(process.cwd(), "public")));
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());

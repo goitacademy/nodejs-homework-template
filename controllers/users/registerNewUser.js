@@ -9,8 +9,8 @@ const registerNewUserSchema = Joi.object({
 });
 export async function registerNewUser(req, res) {
   const { email, password } = req.body;
-  const avatarURL = gravatar.url(email, { s: "250", d: "retro", r: "g" }); // Tworzy URL avatara przy użyciu Gravatara
-  // Walidacja danych wejściowych
+  const avatarURL = gravatar.url(email, { s: "250", d: "retro", r: "g" });
+
   const { error } = registerNewUserSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
