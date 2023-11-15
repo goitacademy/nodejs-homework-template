@@ -27,18 +27,6 @@ class Contacts {
     return data;
   };
 
-  /*  addContact = async (contact) => {
-    const contacts = await this.read();
-    const newContact = {
-      id: uuidv4(),
-      ...contact,
-    };
-
-    contacts.push(newContact);
-
-    return await this.write(contacts);
-  }; */
-
   addContact = async (contact) => {
     const contacts = await this.read();
     const newContact = {
