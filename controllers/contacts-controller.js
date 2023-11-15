@@ -3,7 +3,7 @@ import { ctrlWrapper } from "../decorators/index.js";
 import Contact from "../models/contact.js";
 
 const listContacts = async (req, res) => {
-  const result = await Contact.fnd({}, -createdAt, -updatedAt);
+  const result = await Contact.find({}, "-createdAt -updatedAt");
   res.status(200).json(result);
 };
 
