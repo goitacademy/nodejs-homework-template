@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 const Joi = require("joi");
 
@@ -27,3 +28,4 @@ const addSchema = Joi.object({
 
 module.exports = mongoose.model("Contact", cocntactShema)
 module.exports = {addSchema}
+

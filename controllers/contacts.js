@@ -1,3 +1,4 @@
+ 03-mongodb
 const Contact = require('../models/contacts')
 const createError = require("http-errors");
 
@@ -25,17 +26,21 @@ async function getContactById(req, res, next) {
           if (!contact) {
       throw createError(404, `Contact with id=${contactId} not found`);
     }
+
     res.json({
       status: "success",
       code: 200,
       data: {
-        contact,
+
+        result,
+
       },
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 async function removeContact (req, res, next) {
     const { contactId } = req.params;
