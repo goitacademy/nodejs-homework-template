@@ -82,3 +82,34 @@ module.exports = schemasValidations;
 
 //   addContact,
 //   updateContact,
+
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *      SchemaSignIn:
+ *          type: object
+ *          properties:
+ *               name:
+ *                 type: string
+ *                 description: User's full name
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address
+ *               password:
+ *                 type: string
+ *                 description: User's password
+ *               subscription:
+ *                 type: string
+ *                 description: User's subscription type (e.g., starter, pro, business)
+ *               phone:
+ *                 type: string
+ *                 description: User's phone number
+ *               favorite:
+ *                 type: boolean
+ *                 description: Whether the user is marked as favorite
+ *               active:
+ *                 type: boolean
+ *                 description: Whether the user is active
+ */

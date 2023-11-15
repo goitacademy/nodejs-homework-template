@@ -4,17 +4,13 @@ const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
   try {
-    // console.log("test: ", req.body);
 
     const token = req.headers.authorization.split(" ")[1];
     const payload = jwt.verify(token, process.env.SECRET_KEY);
 
     req.body.owner = payload.Id;
-    // console.log("test2: ", req.body);
 
     const { success, result, message } = await service.signup(req.body);
-
-    // console.log(result);
 
     if (!success) {
       if (message === "Email in use") {
@@ -43,7 +39,6 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    // console.log(req.body);
     const { email, password, active } = req.body;
 
     const { success, result, message } = await service.login(
@@ -51,8 +46,6 @@ const login = async (req, res) => {
       password,
       active
     );
-
-    // console.log("a:", result.token);
 
     if (!success) {
       if (message === "Email or password is wrong") {
@@ -79,7 +72,83 @@ const login = async (req, res) => {
   }
 };
 
+const getContactCurrent = async (req, res) => {
+  try {
+    const owner = req.user.Id;
+    let id = req.params.id;
+
+    if (!id) {
+      id = owner;
+    }
+    const { success, result, message } = await service.getContactCurrent(id, owner);
+
+    if (!success) {
+      return res.status(401).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
+
+const updateTokenRemove = async (req, res) => {
+  try {
+    const owner = req.user.Id;
+    let id = req.params.id;
+
+    if (!id) {
+      id = owner;
+    }
+
+    const token = null;
+
+    const { success, result, message } = await service.updateTokenRemove(
+      id,
+      token,
+      owner
+    );
+
+    // console.log(result);
+
+    // if (token === undefined) {
+    //   return res.status(400).json({
+    //     result,
+    //     message: "missing field favorite",
+    //   });
+    // }
+
+    if (!success) {
+      return res.status(401).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(204).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   signup,
   login,
+  getContactCurrent,
+  updateTokenRemove,
 };

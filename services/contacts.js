@@ -18,7 +18,6 @@ const getContactOwner = async (query, skip, limit) => {
       message: `Contacts Found`,
     };
   } catch (error) {
-    // console.log(error);
     return {
       success: false,
       result: null,
@@ -27,9 +26,9 @@ const getContactOwner = async (query, skip, limit) => {
   }
 };
 
-const getContactOwnerById = async (owner, _id) => {
+const getContactOwnerById = async (_id, owner) => {
   try {
-    const contact = await Contact.findOne({ owner, _id });
+    const contact = await Contact.findById({ _id, owner });
 
     if (!contact) {
       return {
@@ -44,7 +43,6 @@ const getContactOwnerById = async (owner, _id) => {
       message: `Contact Found`,
     };
   } catch (error) {
-    // console.log(error);
     return {
       success: false,
       result: null,
@@ -53,39 +51,7 @@ const getContactOwnerById = async (owner, _id) => {
   }
 };
 
-const getContactCurrent = async (_id) => {
-  try {
-    // console.log("id:", _id);
-
-    const contact = await Contact.findById({ _id });
-
-    if (!contact) {
-      return {
-        success: false,
-        result: null,
-        message: `No contact found with id: ${_id}`,
-      };
-    }
-    const { email, subscription } = contact;
-    return {
-      success: true,
-      result: {
-        email,
-        subscription,
-      },
-      message: `Contact Found`,
-    };
-  } catch (error) {
-    // console.log(error);
-    return {
-      success: false,
-      result: null,
-      message: error,
-    };
-  }
-};
-
-const removeContact = async (owner, _id) => {
+const removeContact = async (_id, owner) => {
   try {
     if (!_id) {
       return {
@@ -94,8 +60,7 @@ const removeContact = async (owner, _id) => {
         message: "Invalid ID",
       };
     }
-    const contactDelete = await Contact.findByIdAndDelete({_id, owner});
-    // console.log(contactDelete);
+    const contactDelete = await Contact.findByIdAndDelete({ _id, owner });
 
     if (!contactDelete) {
       return {
@@ -111,7 +76,6 @@ const removeContact = async (owner, _id) => {
       message: "Contact deleted successfully.",
     };
   } catch (error) {
-    // console.log(error);
     return {
       success: false,
       result: null,
@@ -120,7 +84,7 @@ const removeContact = async (owner, _id) => {
   }
 };
 
-const updateContact = async (owner, _id, subscription) => {
+const updateContactSubscription = async (_id, subscription, owner) => {
   try {
     if (!_id) {
       return {
@@ -138,12 +102,11 @@ const updateContact = async (owner, _id, subscription) => {
     //   };
     // }
 
-    const contactUpdate = await Contact.findOneAndUpdate(
+    const contactUpdate = await Contact.findByIdAndUpdate(
       { _id, owner },
       { subscription },
       { new: true }
     );
-    // console.log(contactUpdate);
 
     if (!contactUpdate) {
       return {
@@ -159,7 +122,6 @@ const updateContact = async (owner, _id, subscription) => {
       message: "Contact updated successfully.",
     };
   } catch (error) {
-    // console.log(error);
     return {
       success: false,
       result: null,
@@ -168,11 +130,8 @@ const updateContact = async (owner, _id, subscription) => {
   }
 };
 
-const updateStatusContact = async (owner, _id, favorite) => {
+const updateStatusContact = async (_id, favorite, owner) => {
   try {
-    // console.log("id1; ", owner);
-    // console.log("id12; ", _id);
-
     if (!_id) {
       return {
         success: false,
@@ -189,8 +148,6 @@ const updateStatusContact = async (owner, _id, favorite) => {
       { new: true }
     );
 
-    // console.log("serv", contact);
-
     if (!contact) {
       return {
         success: false,
@@ -202,50 +159,9 @@ const updateStatusContact = async (owner, _id, favorite) => {
     return {
       success: true,
       result: contact,
-      message: "Favorite contac updated successfully.",
+      message: "Favorite contact updated successfully.",
     };
   } catch (error) {
-    // console.log(error);
-    return {
-      success: false,
-      result: null,
-      message: error,
-    };
-  }
-};
-
-const updateTokenRemove = async (_id, token) => {
-  try {
-    if (!_id) {
-      return {
-        success: false,
-        result: null,
-        message: "Not authorized",
-      };
-    }
-    const contact = await Contact.findByIdAndUpdate(
-      _id,
-      { token },
-      { new: true }
-    );
-
-    // console.log(contact);
-
-    if (!contact) {
-      return {
-        success: false,
-        result: null,
-        message: "Not found contact",
-      };
-    }
-
-    return {
-      success: true,
-      result: contact,
-      message: "No Content",
-    };
-  } catch (error) {
-    // console.log(error);
     return {
       success: false,
       result: null,
@@ -257,9 +173,7 @@ const updateTokenRemove = async (_id, token) => {
 module.exports = {
   getContactOwner,
   getContactOwnerById,
-  getContactCurrent,
   removeContact,
-  updateContact,
-  updateTokenRemove,
+  updateContactSubscription,
   updateStatusContact,
 };

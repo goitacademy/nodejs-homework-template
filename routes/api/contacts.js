@@ -7,40 +7,32 @@ const contactRouter = express.Router();
 module.exports = () => {
   // ensureAuthenticated is auth
   // contactRouter.get("/", ensureAuthenticated, controller.listContacts);
-  contactRouter.get(
-    "/current",
-    ensureAuthenticated,
-    controller.getContactCurrent
-  );
-  contactRouter.get("/:owner", ensureAuthenticated, controller.getContactOwner);
+
+  contactRouter.get("/", ensureAuthenticated, controller.getContactOwner);
 
   contactRouter.get(
-    "/:owner/:id",
+    "/:id",
     ensureAuthenticated,
     controller.getContactOwnerById
   );
 
-  // contactRouter.post("/", controller.addContact);
-
   contactRouter.patch(
-    "/:owner/:id",
+    "/:id/subscription",
     ensureAuthenticated,
-    controller.updateContact
+    controller.updateContactSubscription
   );
 
   contactRouter.patch(
-    "/favorite/:owner/:id",
+    "/:id/favorite/",
     ensureAuthenticated,
     controller.updateStatusContact
   );
 
-  contactRouter.patch(
-    "/logout/:owner/:id",
+  contactRouter.delete(
+    "/:id",
     ensureAuthenticated,
-    controller.updateTokenRemove
+    controller.removeContact
   );
-
-  contactRouter.delete("/:owner/:id", ensureAuthenticated, controller.removeContact);
 
   return contactRouter;
 };
