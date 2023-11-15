@@ -14,6 +14,6 @@ export async function registerExistingUser(req, res) {
       return res.status(409).json({ message: "Email is already in use" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }
