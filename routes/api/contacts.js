@@ -1,25 +1,82 @@
-const express = require('express')
+const express = require('express');
+const router = express.Router();
+const Contact = require('../../service/schemas/task');
 
-const router = express.Router()
-
+// Получение всех контактов
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  try {
+      const contacts = await Contact.find();
+      res.json(contacts);
+  } catch (error) {
+      next(error);
+  }
+});
 
+// Получение контакта по ID
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const { contactId } = req.params;
 
+  try {
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+// Создание нового контакта
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  try {
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
+// Удаление контакта по ID
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const { contactId } = req.params;
 
+  try {
+    const deletedContact = await Contact.findByIdAndDelete(contactId);
+
+    if (!deletedContact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    res.json({ message: 'Contact deleted successfully', deletedContact });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Обновление контакта по ID
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  const { contactId } = req.params;
 
-module.exports = router
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Contact not found' });
+    }
+
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
+
