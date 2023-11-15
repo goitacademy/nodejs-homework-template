@@ -5,7 +5,7 @@ import { HttpError } from "../helpers/index.js";
 import {
   contactAddSchema,
   contactUpdateSchema,
-} from "../schemas/movie-schemas.js";
+} from "../schemas/contact-schemas.js";
 
 const getAll = async (req, res, next) => {
   try {
