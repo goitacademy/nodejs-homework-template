@@ -9,13 +9,13 @@ const contactsRouter = express.Router();
 const contactAddvalidate = validateBody(addSchema);
 const updateFavoriteValidate = validateBody(updateFavoriteSchema);
 
-router.get("/", ctrl.listContacts);
+contactsRouter.get("/", ctrl.listContacts);
 
-router.get("/:id", isValidId, ctrl.getContactById);
+contactsRouter.get("/:id", isValidId, ctrl.getContactById);
 
-router.post("/", isEmptyBody, contactAddvalidate, ctrl.addContact);
+contactsRouter.post("/", isEmptyBody, contactAddvalidate, ctrl.addContact);
 
-router.put(
+contactsRouter.put(
   "/:id",
   isValidId,
   isEmptyBody,
@@ -23,7 +23,7 @@ router.put(
   ctrl.updateContact
 );
 
-router.patch(
+contactsRouter.patch(
   "/:id/favorite",
   isValidId,
   isEmptyBody,
@@ -31,6 +31,6 @@ router.patch(
   ctrl.updateFavorite
 );
 
-router.delete("/:id", isValidId, ctrl.removeContact);
+contactsRouter.delete("/:id", isValidId, ctrl.removeContact);
 
 export default contactsRouter;
