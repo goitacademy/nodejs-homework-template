@@ -8,9 +8,15 @@ const updateContact = async (req, res, next) => {
       contactId,
       req.body
     );
-    res.json(updatedContact);
+
+    if (updatedContact) {
+      res.json(updatedContact);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
   } catch (error) {
-    res.status(404).json({ message: 'Not found' });
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 

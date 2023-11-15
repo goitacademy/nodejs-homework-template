@@ -18,7 +18,11 @@ const getContactById = async contactId => {
   try {
     const contactsData = await fs.readFile(contactsFilePath, 'utf-8');
     const contacts = JSON.parse(contactsData);
-    const contact = contacts.find(c => c.id === contactId);
+
+    const contact = contacts.find(
+      c => c.id.toString() === contactId.toString()
+    );
+
     return contact;
   } catch (error) {
     console.error('Error reading contacts file:', error.message);
@@ -64,7 +68,9 @@ const updateContact = async (contactId, body) => {
     const contactsData = await fs.readFile(contactsFilePath, 'utf-8');
     const contacts = JSON.parse(contactsData);
 
-    const index = contacts.findIndex(c => c.id === contactId);
+    const index = contacts.findIndex(
+      c => c.id.toString() === contactId.toString()
+    );
 
     if (index === -1) {
       throw new Error('Contact not found');

@@ -1,43 +1,52 @@
-const { Command } = require('commander');
-const program = new Command();
-const contactsModel = require('./models/contacts');
-const listContacts = require('./controllers/listContacts');
-const getContactById = require('./controllers/getContactById');
-const addContact = require('./controllers/addContact');
-const removeContact = require('./controllers/removeContact');
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
+const listContacts = require('../../controllers/listContacts');
+const getContactById = require('../../controllers/getContactById');
+const addContact = require('../../controllers/addContact');
+const removeContact = require('../../controllers/removeContact');
+const updateContact = require('../../controllers/updateContact');
 
-program
-  .option('-a, --action <type>', 'choose action')
-  .option('-i, --id <type>', 'user id')
-  .option('-n, --name <type>', 'user name')
-  .option('-e, --email <type>', 'user email')
-  .option('-p, --phone <type>', 'user phone');
+const addContactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
 
-program.parse(process.argv);
+const updateContactSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+});
 
-const argv = program.opts();
+router.get('/', (req, res) => {
+  listContacts(req, res);
+});
 
-function invokeAction({ action, id, name, email, phone }) {
-  switch (action) {
-    case 'list':
-      listContacts();
-      break;
+router.get('/:id', (req, res) => {
+  getContactById(req, res);
+});
 
-    case 'get':
-      getContactById(id);
-      break;
-
-    case 'add':
-      addContact({ name, email, phone });
-      break;
-
-    case 'remove':
-      removeContact(id);
-      break;
-
-    default:
-      console.warn('\x1B[31m Unknown action type!');
+router.post('/', (req, res) => {
+  const { error } = addContactSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
-}
 
-invokeAction(argv);
+  addContact(req, res);
+});
+
+router.delete('/:id', (req, res) => {
+  removeContact(req, res);
+});
+
+router.put('/:id', (req, res) => {
+  const { error } = updateContactSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  updateContact(req, res);
+});
+
+module.exports = router;
