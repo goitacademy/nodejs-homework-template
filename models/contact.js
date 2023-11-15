@@ -45,7 +45,9 @@ export const addSchema = Joi.object({
     .pattern(phoneRegExp)
     .required()
     .messages({ "any.required": "Missing required Phone field" }),
-  favorite: Joi.boolean(),
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": "Missing field favorite" }),
 });
 
 export const updateFavoriteSchema = {
