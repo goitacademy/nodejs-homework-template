@@ -1,3 +1,3 @@
-const validId = require("./validId");
+const isValidId = require("./isValidId");
 
-module.exports = validId;
+module.exports = isValidId;
