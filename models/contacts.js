@@ -11,14 +11,12 @@ export const updateContacts = async contacts => {
 
 export const listContacts = async () => {
   const result = await fs.readFile(contactsPath, 'utf-8');
-  console.log(result);
   return JSON.parse(result);
 };
 
 export const getContactById = async id => {
   const contacts = await listContacts();
   const result = contacts.find(item => item.id === id);
-  console.log(result);
   return result || null;
 };
 

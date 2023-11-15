@@ -64,8 +64,6 @@ const deleteById = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, `Movie with id=${id} not found`);
     }
-    // res.status(204).send();
-
     res.json({
       message: 'Delete success',
     });
