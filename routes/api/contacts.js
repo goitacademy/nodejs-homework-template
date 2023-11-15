@@ -1,55 +1,43 @@
-const express = require('express');
-const router = express.Router();
-const contactsModel = require('../../models/contacts');
+const { Command } = require('commander');
+const program = new Command();
+const contactsModel = require('./models/contacts');
+const listContacts = require('./controllers/listContacts');
+const getContactById = require('./controllers/getContactById');
+const addContact = require('./controllers/addContact');
+const removeContact = require('./controllers/removeContact');
 
-router.get('/', async (req, res, next) => {
-  const contacts = await contactsModel.listContacts();
-  res.json(contacts);
-});
+program
+  .option('-a, --action <type>', 'choose action')
+  .option('-i, --id <type>', 'user id')
+  .option('-n, --name <type>', 'user name')
+  .option('-e, --email <type>', 'user email')
+  .option('-p, --phone <type>', 'user phone');
 
-router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await contactsModel.getContactById(contactId);
+program.parse(process.argv);
 
-  if (contact) {
-    res.json(contact);
-  } else {
-    res.status(404).json({ message: 'Not found' });
+const argv = program.opts();
+
+function invokeAction({ action, id, name, email, phone }) {
+  switch (action) {
+    case 'list':
+      listContacts();
+      break;
+
+    case 'get':
+      getContactById(id);
+      break;
+
+    case 'add':
+      addContact({ name, email, phone });
+      break;
+
+    case 'remove':
+      removeContact(id);
+      break;
+
+    default:
+      console.warn('\x1B[31m Unknown action type!');
   }
-});
+}
 
-router.post('/', async (req, res, next) => {
-  try {
-    const newContact = await contactsModel.addContact(req.body);
-    res.status(201).json(newContact);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-router.delete('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contactsModel.removeContact(contactId);
-
-  if (result) {
-    res.json({ message: 'Contact deleted' });
-  } else {
-    res.status(404).json({ message: 'Not found' });
-  }
-});
-
-router.put('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-
-  try {
-    const updatedContact = await contactsModel.updateContact(
-      contactId,
-      req.body
-    );
-    res.json(updatedContact);
-  } catch (error) {
-    res.status(404).json({ message: 'Not found' });
-  }
-});
-
-module.exports = router;
+invokeAction(argv);
