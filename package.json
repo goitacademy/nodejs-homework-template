@@ -6,7 +6,8 @@
   "imports": {
     "#models/*": "./models/*",
     "#controllers/*": "./controllers/*",
-    "#middleware/*": "./middleware/*"
+    "#middleware/*": "./middleware/*",
+    "#validators/*": "./validators/*"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",

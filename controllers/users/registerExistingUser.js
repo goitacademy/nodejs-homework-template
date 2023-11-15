@@ -1,10 +1,6 @@
 import User from "#models/userModel.js";
-import Joi from "joi";
+import { registerExistingUserSchema } from "#validators/registerExistingUserSchema.js";
 
-const registerExistingUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-});
 export async function registerExistingUser(req, res) {
   const { email, password } = req.body;
 

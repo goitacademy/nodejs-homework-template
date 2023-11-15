@@ -1,12 +1,8 @@
 import User from "#models/userModel.js";
+import { registerNewUserSchema } from "#validators/registerNewUserSchema.js";
 import bcrypt from "bcrypt";
-import Joi from "joi";
 import gravatar from "gravatar";
 
-const registerNewUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-});
 export async function registerNewUser(req, res) {
   const { email, password } = req.body;
   const avatarURL = gravatar.url(email, { s: "250", d: "retro", r: "g" });
