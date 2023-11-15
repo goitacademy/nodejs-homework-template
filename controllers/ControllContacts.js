@@ -20,6 +20,20 @@ const addContacts = async (req, res, next) => {
   const result = await Contact.addContact(req.body);
   res.status(201).json(result);
 };
+const updateFavorite = async (req, res) => {
+  const { contactId } = req.params;
+  const data = req.body;
+  const result = await Contact.findByIdAndUpdate(contactId, data, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(
+      404,
+      `Contact with id=${contactId} not found and not updated`
+    );
+  }
+  res.status(200).json(result);
+};
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
@@ -50,4 +64,5 @@ module.exports = {
   addContacts: ctrlWrapper(addContacts),
   updateById: ctrlWrapper(updateById),
   deleteContact: ctrlWrapper(deleteContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
