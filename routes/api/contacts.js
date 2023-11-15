@@ -3,8 +3,8 @@ const router = express.Router();
 const Joi = require('joi');
 const listContacts = require('../../controllers/listContacts');
 const getContactById = require('../../controllers/getContactById');
-const addContact = require('../../controllers/addContact');
-const removeContact = require('../../controllers/removeContact');
+const addContact = require('../../controllers/addContacts');
+const removeContact = require('../../controllers/removeContacts');
 const updateContact = require('../../controllers/updateContact');
 
 const addContactSchema = Joi.object({
