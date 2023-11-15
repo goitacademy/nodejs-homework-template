@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const contactsController = require('../../controllers');
 const Contact = require('../../service/schemas/task');
 
 // Получение всех контактов
@@ -77,6 +78,9 @@ router.put('/:contactId', async (req, res, next) => {
     next(error);
   }
 });
+
+router.patch('/:contactId/favorite', contactsController.updateStatusContact);
+
 
 module.exports = router;
 
