@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js";
+import User from "#models/userModel.js";
 import bcrypt from "bcrypt";
 import Joi from "joi";
 import gravatar from "gravatar";

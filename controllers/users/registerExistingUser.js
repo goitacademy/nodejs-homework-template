@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js";
+import User from "#models/userModel.js";
 import Joi from "joi";
 
 const registerExistingUserSchema = Joi.object({

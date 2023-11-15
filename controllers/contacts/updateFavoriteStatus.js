@@ -1,4 +1,4 @@
-import Contact from "../../models/contactModel.js";
+import Contact from "#models/contactModel.js";
 export async function updateFavoriteStatus(req, res, next) {
   const contactId = req.params.contactId;
   const { favorite } = req.body;

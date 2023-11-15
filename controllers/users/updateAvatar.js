@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import jimp from "jimp";
-import User from "../../models/userModel.js";
+import User from "#models/userModel.js";
 
 export async function updateAvatar(req, res) {
   const userId = req.userId;

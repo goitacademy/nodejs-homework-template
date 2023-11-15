@@ -1,4 +1,4 @@
-import Contact from "../../models/contactModel.js";
+import Contact from "#models/contactModel.js";
 
 export async function createContacts(req, res, next) {
   const { name, email, phone } = req.body;

@@ -1,4 +1,4 @@
-import User from "../../models/userModel.js";
+import User from "#models/userModel.js";
 import jwt from "jsonwebtoken";
 
 export async function loginExistingUser(req, res) {
