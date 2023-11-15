@@ -2,61 +2,65 @@ import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
 
-const contactsPath = path.join("db", "contacts.json");
+const contactsPath = path.resolve("models", "contacts", "contacts.json");
+const updateContacts = (contacts) =>
+  fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+
 console.log(contactsPath);
 
-const listContacts = async () => {
+export const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
 console.log(listContacts);
 
-const getContactById = async (id) => {
+export const getContactById = async (id) => {
   const contacts = await listContacts();
   return contacts.find((contact) => contact.id === id) || null;
 };
 console.log(getContactById);
 
-const addContact = async (data) => {
+export const addContact = async (data) => {
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
     ...data,
   };
   contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  await updateContacts(contacts);
   return newContact;
 };
 console.log(addContact);
 
-const removeContact = async (id) => {
+export const removeContactById = async (id) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
   const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  await updateContacts(contacts);
   return result;
 };
-console.log(removeContact);
+console.log(removeContactById);
 
-const updateContact = async (id) => {
+export const updateContactById = async (id, data) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
     return null;
   }
-  const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return result;
+  movies[index] = { ...movies[index], ...data };
+  contacts[index] = { ...contacts[index], ...data };
+  await updateContacts(contacts);
+  return contacts[index];
 };
-console.log(updateContact);
+console.log(updateContactById);
 
-export default {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+// export default {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// };
