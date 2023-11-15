@@ -1,7 +1,6 @@
 
 import * as contactsService from "../../models/contacts.js";
 import { HttpError } from "../../helpers/index.js"
-import { contactAddSchema, contactUpdateSchema } from "../../schemas/contact-schema.js";
 import tryCatchWrapper from "../../decorators/tryCatchWrapper.js";
 
 
@@ -22,20 +21,12 @@ const getContactById = async (req, res, next) => {
 }
 
 const addContact = async (req, res, next) => {
-    const {error} = contactAddSchema.validate(req.body);
-    if (error) {
-     throw HttpError(400, error.message)
-   }
     const { name, email, phone } = req.body;
     const result = await contactsService.addContact(name, email, phone);
     res.status(201).json(result);
 }
 
 const updateContactById = async (req, res, next) => {
-    const { error } = contactUpdateSchema.validate(req.body);
-    if (error) {
-     throw HttpError(400, error.message)
-    }
     const { contactId } = req.params;
     const result = await contactsService.updateContact(contactId, req.body);
     if (!result) {
