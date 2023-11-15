@@ -2,9 +2,11 @@ const express = require("express")
 
 const router = express.Router();
 
-const contactRoutes = require("./contacts");
-console.log(contactRoutes);
+const authRoutes = require('./auth');
 
+const contactRoutes = require("./contacts");
+
+router.use("/auth", authRoutes);
 router.use("/contacts", contactRoutes);
 
 module.exports = router;
