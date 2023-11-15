@@ -6,8 +6,8 @@ export const contactAddSchema = Joi.object({
     "string.base": `name must be a string`,
   }),
   email: Joi.string().required().messages({
-    "any.required": `missing required phone field`,
-    "string.base": `phone must be a string`,
+    "any.required": `missing required email field`,
+    "string.base": `email must be a string`,
   }),
   phone: Joi.string().required().messages({
     "any.required": `missing required phone field`,
