@@ -10,7 +10,7 @@ mongoose
     process.exit(1);
   });
 
-  // List Contact
+// List Contact
 async function listContacts(req, res, next) {
   try {
     console.log("Before Contact.find()");
@@ -27,16 +27,17 @@ async function listContacts(req, res, next) {
 async function getContactById(req, res, next) {
   const { contactId } = req.params;
   try {
-    const contact = await Contact.findById(contactId).exec();
-    console.log(contact);
+    const contact = await Contact.findById(contactId);
 
-    if (contact === null || contact === undefined) {
+    if (!contact) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    res.status(201).send(contact);
+    res.status(200).send(contact);
   } catch (error) {
-    console.error(`Error while fetching contact with ID ${contactId}: ${error}`);
+    console.error(
+      `Error while fetching contact with ID ${contactId}: ${error.message}`
+    );
     next(error);
   }
 }
@@ -47,17 +48,20 @@ async function addContact(req, res, next) {
 
   try {
     // Валидация email с использованием Joi
-    const validation = joiSchema.validate({name, email, phone});
+    const validation = joiSchema.validate({ name, email, phone });
     if (validation.error) {
-      return res.status(400).send({ message: validation.error.details.map((error) => error.message)
-        .join(", ") });
+      return res.status(400).send({
+        message: validation.error.details
+          .map((error) => error.message)
+          .join(", "),
+      });
     }
 
     const result = await Contact.create({ name, email, phone });
 
     res.status(201).send(result);
   } catch (error) {
-    console.error(`Error while adding a new contact: ${error}`)
+    console.error(`Error while adding a new contact: ${error}`);
     next(error);
   }
 }
@@ -73,9 +77,11 @@ async function removeContact(req, res, next) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    res.send(result)
+    res.send(result);
   } catch (error) {
-    console.error(`Error while removing contact with ID ${contactId}: ${error.message}`)
+    console.error(
+      `Error while removing contact with ID ${contactId}: ${error.message}`
+    );
     next(error);
   }
 }
@@ -83,29 +89,29 @@ async function removeContact(req, res, next) {
 // Update Contact
 async function updateContact(req, res, next) {
   const { contactId } = req.params;
-  const contact = {
-    id: req.body.id,
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-  };
+  const { name, email, phone } = req.body;
 
   try {
-    const updateContact = new Contact(contact);
-
     // Валидируем контакт с использованием схемы
-   await updateContact.validate();
+    const validation = joiSchema.validate({ name, email, phone });
+    if (validation.error) {
+      return res.status(400).send({
+        message: validation.error.details
+          .map((error) => error.message)
+          .join(", "),
+      });
+    }
 
-   if(updateContact.error){
-    return res.status(400).send({message: "Validation Error"})
-   }
-
-    const result = await Contact.findByIdAndUpdate(contactId, contact, {
-      new: true,
-    });
+    const result = await Contact.findByIdAndUpdate(
+      contactId,
+      { name, email, phone },
+      {
+        new: true,
+      }
+    );
 
     if (result === null) {
-      return res.status(404).send({ message:"Not found"});
+      return res.status(404).send({ message: "Not found" });
     }
     res.status(201).send(result);
   } catch (error) {
