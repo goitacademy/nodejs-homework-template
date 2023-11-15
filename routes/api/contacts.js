@@ -1,27 +1,26 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const contactsController = require('../../controllers');
-const Contact = require('../../service/schemas/task');
+const Contact = require("../../service/schemas/task");
 
 // Получение всех контактов
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-      const contacts = await Contact.find();
-      res.json(contacts);
+    const contacts = await Contact.find();
+    res.json(contacts);
   } catch (error) {
-      next(error);
+    next(error);
   }
 });
 
 // Получение контакта по ID
-router.get('/:contactId', async (req, res, next) => {
+router.get("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
     const contact = await Contact.findById(contactId);
 
     if (!contact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({ message: "Contact not found" });
     }
 
     res.json(contact);
@@ -30,9 +29,8 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-
 // Создание нового контакта
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const newContact = await Contact.create(req.body);
     res.status(201).json(newContact);
@@ -42,24 +40,24 @@ router.post('/', async (req, res, next) => {
 });
 
 // Удаление контакта по ID
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
     const deletedContact = await Contact.findByIdAndDelete(contactId);
 
     if (!deletedContact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({ message: "Contact not found" });
     }
 
-    res.json({ message: 'Contact deleted successfully', deletedContact });
+    res.json({ message: "Contact deleted successfully", deletedContact });
   } catch (error) {
     next(error);
   }
 });
 
 // Обновление контакта по ID
-router.put('/:contactId', async (req, res, next) => {
+router.put("/:contactId", async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -70,7 +68,7 @@ router.put('/:contactId', async (req, res, next) => {
     );
 
     if (!updatedContact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({ message: "Contact not found" });
     }
 
     res.json(updatedContact);
@@ -79,9 +77,14 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-router.patch('/:contactId/favorite', async (req, res, next) => {
+router.patch("/:contactId/favorite", async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
+
+  // Проверка, что поле favorite присутствует в запросе
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
 
   try {
     const updatedContact = await Contact.findByIdAndUpdate(
@@ -91,7 +94,7 @@ router.patch('/:contactId/favorite', async (req, res, next) => {
     );
 
     if (!updatedContact) {
-      return res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({ message: "Contact not found" });
     }
 
     res.json(updatedContact);
@@ -100,6 +103,4 @@ router.patch('/:contactId/favorite', async (req, res, next) => {
   }
 });
 
-
 module.exports = router;
-

@@ -1,5 +1,4 @@
-const Contact = require('../service/schemas/task');
-
+const Contact = require("../service/schemas/task");
 
 async function getContacts(req, res, next) {
   try {
@@ -86,34 +85,29 @@ async function deleteContact(req, res, next) {
 }
 
 const updateStatusContact = async (req, res, next) => {
-    const { contactId } = req.params;
-    const { favorite } = req.body;
-  
-    // Перевірка, чи вказане поле favorite в запиті
-    if (favorite === undefined) {
-      return res.status(400).json({ message: 'missing field favorite' });
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).json({ message: "Not found" });
     }
-  
-    try {
-      // Оновлення статусу контакту в базі даних
-      const updatedContact = await Contact.findByIdAndUpdate(
-        contactId,
-        { favorite },
-        { new: true }
-      );
-  
-      // Перевірка, чи контакт був знайдений та оновлений
-      if (!updatedContact) {
-        return res.status(404).json({ message: 'Not found' });
-      }
-  
-      // Відправлення оновленого контакту та статусу 200
-      res.json(updatedContact);
-    } catch (error) {
-      // Обробка помилок та пересилання їх до middleware для подальшого оброблення
-      next(error);
-    }
-  };
+
+    res.json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getContacts,
@@ -122,5 +116,4 @@ module.exports = {
   updateContact,
   deleteContact,
   updateStatusContact,
-
 };
