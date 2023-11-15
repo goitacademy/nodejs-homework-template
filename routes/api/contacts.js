@@ -22,11 +22,11 @@ const validateContact = (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
     const error = new Error("missing fields");
     error.status = 400;
-    next(error);
+    return res.status(400).json({ message: error.message });
   }
   const { error } = schema.validate(req.body);
   if (error) {
-    next(error);
+    return res.status(400).json({ message: error.message });
   }
   next();
 };
