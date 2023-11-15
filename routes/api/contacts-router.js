@@ -1,6 +1,6 @@
 import express from "express";
 
-import contactService from "../../models/contacts/index.js";
+// import contactService from "../../models/contacts/index.js";
 
 import contactsController from "../../controllers/contacts-controller.js";
 import { isEmptyBody } from "../../middlewares/index.js";

@@ -8,19 +8,19 @@ const updateContacts = (contacts) =>
 
 console.log(contactsPath);
 
-export const listContacts = async () => {
+const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
 console.log(listContacts);
 
-export const getContactById = async (id) => {
+const getContactById = async (id) => {
   const contacts = await listContacts();
   return contacts.find((contact) => contact.id === id) || null;
 };
 console.log(getContactById);
 
-export const addContact = async (data) => {
+const addContact = async (data) => {
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
@@ -32,7 +32,7 @@ export const addContact = async (data) => {
 };
 console.log(addContact);
 
-export const removeContactById = async (id) => {
+const removeContactById = async (id) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
@@ -44,7 +44,7 @@ export const removeContactById = async (id) => {
 };
 console.log(removeContactById);
 
-export const updateContactById = async (id, data) => {
+const updateContactById = async (id, data) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === id);
   if (index === -1) {
