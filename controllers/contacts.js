@@ -1,10 +1,10 @@
 const { NotFound } = require("http-errors");
-const  {Contact}  = require("../models/contact");
+const  { Contact }  = require("../models/contact");
 
 const listContacts = async (req, res, next) => {
   try {
-    const listContacts = await Contact.find({});
-    res.json(listContacts);
+    const result = await Contact.find({});
+    res.json(result);
   } catch (error) {
     next(error);
   }
