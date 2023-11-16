@@ -1,5 +1,6 @@
 require("dotenv").config();
 require("./db");
+const { HttpError } = require("./helpers");
 
 const express = require("express");
 const logger = require("morgan");
@@ -22,7 +23,11 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  if (err instanceof HttpError) {
+    res.status(err.status).json({ message: err.message });
+  } else {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 module.exports = app;
