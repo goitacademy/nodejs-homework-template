@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const Ctrl = require("../controllers/auth");
-const joiUserSchemas = require("../schemas/userSchemas");
-const BASE_URL = process.env.DATABASE_URL;
+// const Ctrl = require("../controllers/auth");
+// const joiUserSchemas = require("../schemas/userSchemas");
+const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
   .connect(BASE_URL)
@@ -11,10 +11,12 @@ mongoose
     process.exit(1);
   });
 
-async function addUser(req, res, next) {
-  const { password, email, subscription, token, owner } = req.body;
+async function register(req, res, next) {
+  // const { password, email, subscription, token, owner } = req.body;
+  console.log(req.body);
+  res.send("Ok")
 }
 
 module.exports = {
-  addUser,
+  register
 };
