@@ -1,4 +1,4 @@
-import {HttpError} from "../helpers/index.js";
+import {HttpError} from "../helpers/HttpError.js";
 
 const isEmptyBody = async(req, res, next) => {
     const keys = Object.keys(req.body);
@@ -7,5 +7,11 @@ const isEmptyBody = async(req, res, next) => {
     }
     next()
 };
+
+// export const contactUpdateSchema = Joi.object({
+//     name: Joi.string(),
+//     email: Joi.string(),
+//     phone: Joi.string()
+// })
 
 export default isEmptyBody
