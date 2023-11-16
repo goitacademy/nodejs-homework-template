@@ -8,10 +8,5 @@ const isEmptyBody = async(req, res, next) => {
     next()
 };
 
-// export const contactUpdateSchema = Joi.object({
-//     name: Joi.string(),
-//     email: Joi.string(),
-//     phone: Joi.string()
-// })
-
 export default isEmptyBody
+
