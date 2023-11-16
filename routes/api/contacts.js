@@ -23,13 +23,13 @@ router.post("/", async (req, res, next) => {
       return res.status(400).json({ message: "missing required name field" });
     }
 
-    const newContact = {
-      name,
-      email,
-      phone,
-    };
+    // const newContact = {
+    //   name,
+    //   email,
+    //   phone,
+    // };
 
-    const addedContact = await contacts.addContact(newContact);
+    const addedContact = await contacts.addContact({ ...req.body });
     res
       .status(201)
       .json({ message: "Contact added successfully", data: addedContact });
