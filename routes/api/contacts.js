@@ -2,7 +2,7 @@ const express = require("express");
 const ControllerContacts = require("../../models/contacts");
 const router = express.Router();
 const jsonParser = express.json();
-const { isValidId } = require('../../Middlewares/middlewares');
+const isValidId = require('../../Middlewares/middlewares');
 
 // Route Get
 router.get("/", ControllerContacts.listContacts);
