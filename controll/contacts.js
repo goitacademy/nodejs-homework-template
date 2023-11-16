@@ -1,28 +1,19 @@
 const { errorHttp } = require("../error");
-const {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact,
-} = require("../models/contacts");
+const Contact = require("../models/contacts");
 
-const { contactShema } = require("../validation/contact");
-
-const getAll = async(res, req, next) => {
+const getAll = async(req, res, next) => {
     try {
-        const result = await listContacts();
+        const result = await Contact.find();
         res.status(200).json(result);
     } catch (error) {
         next(error);
     }
 };
 
-const getById = async(res, req, next) => {
+const getById = async(req, res, next) => {
     try {
         const { contactId } = req.params;
-        const contact = await getContactById(contactId);
-
+        const contact = await Contact.findById(contactId);
         if (!contact) {
             next();
         }
@@ -32,10 +23,21 @@ const getById = async(res, req, next) => {
     }
 };
 
-const deleteById = async(res, req, next) => {
+const add = async(req, res, next) => {
+    try {
+        const newContact = await Contact.create(req.body);
+        console.log(req.body);
+        res.status(201).json(newContact);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteById = async(req, res, next) => {
     try {
         const { contactId } = req.params;
-        const contact = await removeContact(contactId);
+
+        const contact = await Contact.findByIdAndDelete(contactId);
 
         if (!contact) {
             next();
@@ -46,30 +48,37 @@ const deleteById = async(res, req, next) => {
     }
 };
 
-const add = async(res, req, next) => {
+const updateById = async(req, res, next) => {
     try {
-        const { error } = contactShema.validate(req.body);
-        if (error) {
-            throw errorHttp(400, "missing required name field");
+        if (!req.body) {
+            throw errorHttp(400, "missing fields");
         }
-        const newContact = await addContact(req.body);
-        res.status(201).json(newContact);
+
+        const { contactId } = req.params;
+        const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+            new: true,
+        });
+
+        if (contact) {
+            res.status(200).json(contact);
+        }
+        next();
     } catch (error) {
         next(error);
     }
 };
 
-const updateById = async(res, req, next) => {
+const updateFavorite = async(req, res, next) => {
     try {
-        const { error } = contactShema.validate(req.body);
-        if (error) {
-            throw errorHttp(400, "missing required name field");
-        }
         if (!req.body) {
             throw errorHttp(400, "missing fields");
         }
+
         const { contactId } = req.params;
-        const contact = await updateContact(contactId, req.body);
+        const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+            new: true,
+        });
+
         if (contact) {
             res.status(200).json(contact);
         }
@@ -82,7 +91,8 @@ const updateById = async(res, req, next) => {
 module.exports = {
     getAll,
     getById,
-    deleteById,
     add,
     updateById,
+    deleteById,
+    updateFavorite,
 };
