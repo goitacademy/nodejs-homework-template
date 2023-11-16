@@ -1,7 +1,7 @@
 import path from "path";
-import { promises as fs } from "fs";
-//const fs = require("fs/promises");
-const contactsPath = path.join(process.cwd(), "db", "contacts.json");
+import fs from "fs/promises";
+
+const contactsPath = path.join(process.cwd(), "models", "contacts.json");
 
 export async function writeDataToFile(data) {
   try {

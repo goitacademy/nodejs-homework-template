@@ -6,10 +6,9 @@ export async function removeContact(contactId) {
   const contacts = await readDataFromFile();
   const newContacts = contacts.filter((contact) => contact.id !== contactId);
 
-  if (contacts.length === newContacts.length) {
-    console.log(`There is no contact with id: ${contactId}`);
-  } else {
+  if (contacts.length > newContacts.length) {
     await writeDataToFile(newContacts);
     listContacts();
   }
+  return false;
 }
