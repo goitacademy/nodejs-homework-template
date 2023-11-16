@@ -4,6 +4,20 @@ import Joi from "joi";
 
 const phoneRegExp = /^\(\d{3}\)\s\d{3}-\d{4}$/;
 
+const addSchemaErrorMessages = {
+  "string.base": "Field{#label} must be a string.",
+  "string.empty": "Field {#label} cannot be empty.",
+  "string.email": "Field {#label} must be a valid email address.",
+  "string.pattern.base": "Field {#label} must be in the format (000) 000-0000.",
+  "object.min": "Missing fields",
+  "any.required": "Missing required {#label} field.",
+};
+
+const updateFavoriteSchemaErrorMesages = {
+  "any.required": "Missing field favorite.",
+  "object.min": "Missing field favorite.",
+};
+
 const contactSchema = new Schema(
   {
     name: {
@@ -34,25 +48,25 @@ contactSchema.post("save", handleSaveError);
 contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 contactSchema.post("findOneAndUpdate", handleSaveError);
 
-export const addSchema = Joi.object({
-  name: Joi.string()
-    .required()
-    .messages({ "any.required": "Missing required Name field" }),
-  email: Joi.string()
-    .required()
-    .messages({ "any.required": "Missing required Email field" }),
-  phone: Joi.string()
-    .pattern(phoneRegExp)
-    .required()
-    .messages({ "any.required": "Missing required Phone field" }),
-  favorite: Joi.boolean()
-    .required()
-    .messages({ "any.required": "Missing field favorite" }),
-});
+export const addSchema = Joi.object()
+  .min(1)
+  .when(Joi.object().min(1), {
+    then: Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      phone: Joi.string().pattern(phoneRegExp).required(),
+    }),
+  })
+  .messages(addSchemaErrorMessages);
 
-export const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
+export const updateFavoriteSchema = Joi.object()
+  .min(1)
+  .when(Joi.object().min(1), {
+    then: Joi.object({
+      favorite: Joi.boolean().required(),
+    }),
+  })
+  .messages(updateFavoriteSchemaErrorMesages);
 
 const Contact = model("contact", contactSchema);
 
