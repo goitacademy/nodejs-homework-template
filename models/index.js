@@ -33,7 +33,7 @@ export const updateContactById = async (id, data) => {
     return null;
   }
   contacts[index] = { ...contacts[index], ...data };
-  await updateContactById(contacts);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contacts[index];
 };
 
