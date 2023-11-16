@@ -1,9 +1,7 @@
-const path = require("path");
-
-const HttpErrorPath = path.join(__dirname, "HttpError.js");
-
-const HttpError = require(HttpErrorPath);
+const HttpError = require("./HttpError");
+const ctrlWrapper = require("./ctrlWrapper");
 
 module.exports = {
   HttpError,
+  ctrlWrapper,
 };
