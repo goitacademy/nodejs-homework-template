@@ -1,4 +1,4 @@
-import * as contactService from "../models/contacts/index.js";
+import contactService from "../models/contacts/index.js";
 
 import { HttpError } from "../helpers/index.js";
 
