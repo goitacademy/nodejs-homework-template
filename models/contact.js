@@ -50,9 +50,9 @@ export const addSchema = Joi.object({
     .messages({ "any.required": "Missing field favorite" }),
 });
 
-export const updateFavoriteSchema = {
+export const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
-};
+});
 
 const Contact = model("contact", contactSchema);
 
