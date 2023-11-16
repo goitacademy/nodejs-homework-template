@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const Ctrl = require("../controllers/auth");
+const User = require("../models/user");
 // const joiUserSchemas = require("../schemas/userSchemas");
 const BASE_URL = process.env.DATABASE_URI;
 
@@ -12,11 +12,23 @@ mongoose
   });
 
 async function register(req, res, next) {
-  // const { password, email, subscription, token, owner } = req.body;
-  console.log(req.body);
-  res.send("Ok")
+  const { email, password, subscription } = req.body;
+
+  try {
+    const user = await User.findOne({ email, password });
+
+    if (user === null) {
+      return res.status(409).send({ message: "Email in use" });
+    };
+
+    const addUser = await User.create({ email, password, subscription });
+    res.status(201).send(addUser);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 }
 
 module.exports = {
-  register
+  register,
 };
