@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Contact = require("../../service/schemas/task");
+const validateId = require('../../middlewares/validateId');
 
 // Получение всех контактов
 router.get("/", async (req, res, next) => {
@@ -13,7 +14,7 @@ router.get("/", async (req, res, next) => {
 });
 
 // Получение контакта по ID
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", validateId, async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -40,7 +41,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // Удаление контакта по ID
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", validateId, async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -57,7 +58,7 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 // Обновление контакта по ID
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", validateId, async (req, res, next) => {
   const { contactId } = req.params;
 
   try {
@@ -77,7 +78,7 @@ router.put("/:contactId", async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", validateId, async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
 
