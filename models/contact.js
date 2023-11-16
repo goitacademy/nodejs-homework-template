@@ -13,7 +13,7 @@ const addSchemaErrorMessages = {
   "any.required": "Missing required {#label} field.",
 };
 
-const updateFavoriteSchemaErrorMesages = {
+const updateFavoriteSchemaErrorMessages = {
   "any.required": "Missing field favorite.",
   "object.min": "Missing field favorite.",
 };
@@ -66,7 +66,7 @@ export const updateFavoriteSchema = Joi.object()
       favorite: Joi.boolean().required(),
     }),
   })
-  .messages(updateFavoriteSchemaErrorMesages);
+  .messages(updateFavoriteSchemaErrorMessages);
 
 const Contact = model("contact", contactSchema);
 
