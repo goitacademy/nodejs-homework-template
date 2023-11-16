@@ -5,6 +5,7 @@ require('dotenv').config();
 const contactsRouter = require('./routes/api');
 
 // import middlewares
+const { notFound, errorHandler } = require('./middlewares');
 const { notFoundMiddleware } = require('./middlewares/notFound');
 const { errorHandlerMiddleware } = require('./middlewares/errorHandler');
 
@@ -19,7 +20,7 @@ app.use(cors());
 app.use('/api', contactsRouter());
 
 // middleware
-app.use(notFoundMiddleware);
-app.use(errorHandlerMiddleware);
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports = app;

@@ -1,5 +1,6 @@
 const express = require('express');
-const { contactsFunctions } = require('../../controllers/contacts');
+const { ctrlWrapper } = require('../../middlewares');
+const ctrl = require('../../controllers');
 const {
   getContacts,
   getContactById,
@@ -7,20 +8,25 @@ const {
   updateContact,
   updateStatusContacts,
   removeContact,
-} = require('../../controllers/contacts');
+} = require('../../controllers');
 
 const routerContacts = express.Router();
+//routerContacts.get('/', getContacts);
+routerContacts.get('/', ctrlWrapper(ctrl.getContacts));
 
-routerContacts.get('/', getContacts);
+//routerContacts.get('/:id', getContactById);
+routerContacts.get('/:id', ctrlWrapper(ctrl.getContactById));
 
-routerContacts.get('/:id', getContactById);
+//routerContacts.post('/', createContact);
+routerContacts.post('/', ctrlWrapper(ctrl.createContact));
 
-routerContacts.post('/', createContact);
+//routerContacts.put('/:id', updateContact);
+routerContacts.put('/:id', ctrlWrapper(ctrl.updateContact));
 
-routerContacts.put('/:id', updateContact);
+//routerContacts.put('/:id/favorite', updateStatusContacts);
+routerContacts.put('/:id', ctrlWrapper(ctrl.updateStatusContacts));
 
-routerContacts.put('/:id/favorite', updateStatusContacts);
-
-routerContacts.delete('/:id', removeContact);
+//routerContacts.delete('/:id', removeContact);
+routerContacts.delete('/:id', ctrlWrapper(ctrl.removeContact));
 
 module.exports = routerContacts;
