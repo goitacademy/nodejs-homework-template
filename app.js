@@ -3,10 +3,11 @@ const logger = require("morgan");
 const cors = require("cors");
 
 require("dotenv").config();
+require("./db");
 
 console.log(process.env.DB_URI);
 
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./routes/api/index");
 
 const app = express();
 

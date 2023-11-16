@@ -8,4 +8,5 @@ mongoose
   .then(() => console.info("DB connection successfully"))
   .catch((err) => {
     console.error(err);
+    process.exit(1);
   });
