@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
+import { handleSaveError, preUpdate } from "./hooks.js";
 import Joi from "joi";
 
 const phoneRegExp = /^\(\d{3}\)\s\d{3}-\d{4}$/;
@@ -45,7 +45,7 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleSaveError);
-contactSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+contactSchema.pre("findOneAndUpdate", preUpdate);
 contactSchema.post("findOneAndUpdate", handleSaveError);
 
 export const addSchema = Joi.object()
