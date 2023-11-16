@@ -6,20 +6,20 @@ import { validateBody } from "../../decorators/index.js";
 
 const contactsRouter = express.Router();
 
-const contactAddvalidate = validateBody(addSchema);
+const contactAddValidate = validateBody(addSchema);
 const updateFavoriteValidate = validateBody(updateFavoriteSchema);
 
 contactsRouter.get("/", ctrl.listContacts);
 
 contactsRouter.get("/:id", isValidId, ctrl.getContactById);
 
-contactsRouter.post("/", isEmptyBody, contactAddvalidate, ctrl.addContact);
+contactsRouter.post("/", isEmptyBody, contactAddValidate, ctrl.addContact);
 
 contactsRouter.put(
   "/:id",
   isValidId,
   isEmptyBody,
-  contactAddvalidate,
+  contactAddValidate,
   ctrl.updateContact
 );
 
