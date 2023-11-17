@@ -3,9 +3,18 @@ const contacts = require('../models/contacts');
 const Joi = require('joi');
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string()
+    .min(6)
+    .required()
+    .messages({ 'any.required': 'missing required name field' }),
+  email: Joi.string()
+    .min(6)
+    .email()
+    .messages({ 'any.required': 'missing required email field' }),
+  phone: Joi.string()
+    .required()
+    .min(6)
+    .messages({ 'any.required': 'missing required phone field' }),
 });
 
 //  get all contacts
@@ -60,6 +69,7 @@ const deleteContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { error } = addSchema.validate(req.body);
+  console.log(error);
   if (error) {
     throw HttpError(400, error.message);
   }
