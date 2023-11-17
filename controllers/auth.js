@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 
+const jwt = require("jsonwebtoken");
+
 const User = require("../models/user");
 
 async function register(req, res, next) {
@@ -29,7 +31,7 @@ async function login(req, res, next) {
     const user = await User.findOne({ email }).exec();
 
     if (user === null) {
-    //   console.log("EMAIL");
+     
       return res
         .status(401)
         .send({ message: "Email or password is incorrect" });
@@ -38,13 +40,18 @@ async function login(req, res, next) {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch === false) {
-  
       return res
         .status(401)
         .send({ message: "Email or password is incorrect" });
     }
 
-    res.send({ token: "TOKEN" });
+    const token = jwt.sign(
+      { id: user._id, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: 60 * 60 }
+    );
+
+    res.send({ token });
   } catch (error) {
     next(error);
   }

@@ -21,8 +21,11 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  // default: "name",
 }, {
+  userid: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
   versionKey: false,
   timestamps: true,
 });
