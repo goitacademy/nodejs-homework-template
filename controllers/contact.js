@@ -3,6 +3,7 @@ const Contact = require("../models/contacts");
 async function getContacts(req, res, next) {
   console.log({ user: req.user });
 
+  
   try {
     const contact = await Contact.find({ userId: req.user.id }).exec();
     if (contact === null) return res.status(404).send("Contact not Found:(*)");
