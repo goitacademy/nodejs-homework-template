@@ -17,14 +17,14 @@ const addSchema = Joi.object({
     .messages({ 'any.required': 'missing required phone field' }),
 });
 
-const updateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
-})
-  .min(1)
-  .required()
-  .messages({ 'object.min': 'missing fields' });
+// const updateSchema = Joi.object({
+//   name: Joi.string(),
+//   email: Joi.string(),
+//   phone: Joi.string(),
+// })
+//   .min(1)
+//   .required()
+//   .messages({ 'object.min': 'missing fields' });
 
 //  get all contacts
 
@@ -77,8 +77,10 @@ const deleteContact = async (req, res) => {
 // Update contact
 
 const updateContact = async (req, res) => {
-  const { error } = updateSchema.validate(req.body);
-  console.log(error);
+  const { error } = addSchema.validate(req.body);
+  if (Object.keys(req.body).length === 0) {
+    throw HttpError(400, 'missing fields');
+  }
   if (error) {
     throw HttpError(400, error.message);
   }
