@@ -1,11 +1,11 @@
 import app from "./app.js";
 import mongoose from "mongoose";
-
+import { DB_HOST } from "./config.js";
 //tXqh9e02unoMColZ
 
-const DB_HOST="mongodb+srv://Kate:tXqh9e02unoMColZ@cluster0.a4kfnzb.mongodb.net/My-Contacts?retryWrites=true&w=majority"
+console.log(process.env);
 
-mongoose.connect(DB_HOST)
+/*mongoose.connect(DB_HOST)
   .then(() => {
     app.listen(3000, () => {
   console.log("Server is running. Use our API on port: 3000")
@@ -15,6 +15,6 @@ mongoose.connect(DB_HOST)
     process.exit(1);
     console.log(error.message);
   })
-
+*/
 
 
