@@ -9,10 +9,14 @@ async function listContacts(req, res, next) {
   }
 }
 
-function getContactById(req, res, next) {
+async function getContactById(req, res, next) {
   const { id } = req.params;
-
-  res.send(`Get book ${id})`);
+  try {
+    const contacts = await Contact.findById(id).exec();
+    res.send(contacts);
+  } catch (err) {
+    next(err);
+  }
 }
 
 function addContact(req, res, next) {
