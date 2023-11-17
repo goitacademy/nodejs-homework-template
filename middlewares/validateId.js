@@ -8,12 +8,11 @@ const validateId = (req, res, next) => {
   const { error } = schema.validate({ id: req.params.id });
 
   if (error) {
-    return res.status(404).json({ message: 'Not found' });
+    console.error('Error validating ID:', error);
+    return res.status(400).json({ message: 'Invalid ID format' });
   }
 
   next();
 };
-
-
 
 module.exports = validateId;
