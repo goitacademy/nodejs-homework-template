@@ -56,7 +56,12 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactMethods.updateContact(contactId, req.body);
+    const verifiedResult = contactSchema.validate(req.body);
+    if (verifiedResult.error !== undefined) {
+      throw httpError(400, "missing fields");
+    }
+    const reqBody = verifiedResult.value;
+    const result = await contactMethods.updateContact(contactId, reqBody);
     if (!result) {
       throw httpError(404, "Not found!");
     }
