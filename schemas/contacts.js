@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi')
 
 const addSchemaErrorMessages = {
   "string.base": "Field {#label} must be a string.",
@@ -9,12 +9,12 @@ const addSchemaErrorMessages = {
   "any.required": "missing required {#label} field",
 };
 
-const addSchema = Joi.object({
-      name: Joi.string().required(),
-      email: Joi.string().email().required(),
-      phone: Joi.string().required(),
-    }).messages(addSchemaErrorMessages);
+const addSchemas = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+  }).messages(addSchemaErrorMessages);
 
   module.exports = {
-    addSchema,
+    addSchemas,
   }
