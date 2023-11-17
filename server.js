@@ -3,9 +3,7 @@ import app from "./app.js";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
-//const dbConnectionURI = process.env.DB_URL;
-const dbConnectionURI =
-  "mongodb+srv://mielnikmagdalena:3kMJIYHF3nYNLhGT@cluster0.5lgwxxf.mongodb.net/db-contacts";
+const dbConnectionURI = process.env.DB_URL;
 
 mongoose.connect(dbConnectionURI, {
   useNewUrlParser: true,
