@@ -29,8 +29,13 @@ const validateContact = (contact) => {
   return schema.validate(contact, { abortEarly: false });
 };
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 module.exports = {
   Contact: mongoose.model('Contact', contactSchema),
   validateContact,
+  updateFavoriteSchema,
 };
 
