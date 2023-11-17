@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -55,7 +56,9 @@ async function login(req, res, next){
       return res.status(401).send({message: "Email or password is wrong"})
     }
 
-    res.status(201).send({token : "Token"})
+    const token = jwt.sign({id: user._id, name: user.name}, process.env.JWT_SECRET, {expiresIn: 1000})
+
+    res.send({token})
   } catch (error) {
     console.error(error);
     next(error);
