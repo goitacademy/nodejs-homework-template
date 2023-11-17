@@ -26,12 +26,13 @@ const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const contact = await Contacts.findByIdAndDelete(contactId);
+    console.log({ contact });
     if (contact === null) {
       res.send(404).send("Contact not found");
     }
     res.send({ contactId });
   } catch (error) {
-    next(error);
+    next();
   }
 };
 
@@ -47,6 +48,9 @@ const addContact = async (req, res, next) => {
     const result = await Contacts.create(contact);
     res.status(201).send(result);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      error.message = `${error.errors.phone.value} is not a valid phone number! Please use the format (XXX) XXX-XXXX`;
+    }
     next(error);
   }
 };

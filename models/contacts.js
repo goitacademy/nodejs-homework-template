@@ -1,20 +1,32 @@
 const mongoose = require("mongoose");
+const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
 
-const contactSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const contactSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      required: [true, "Set email for contact"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Set phone for contact"],
+      validate: function (v) {
+        return phoneRegex.test(v);
+      },
+      message: (props) =>
+        `${props.value} is not a valid phone number! Please use the format (XXX) XXX-XXXX`,
+    },
+    favorite: {
+      type: Boolean,
+      required: [true, "Set name for contact"],
+      default: false,
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { versionKey: false }
+);
 
 module.exports = mongoose.model("Contact", contactSchema);
