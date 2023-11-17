@@ -1,7 +1,5 @@
 const { Schema, model } = require("mongoose");
-
 const Joi = require("joi");
-
 const handleMongooseError = require("../helpers/handleMongooseError");
 
 const contactSchema = new Schema(
@@ -13,11 +11,21 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
 contactSchema.post("save", handleMongooseError);
+contactSchema.pre("findOneAndUpdate", function (next) {
+  this.options.new = true;
+  this.options.runValidators = true;
+  next();
+});
+contactSchema.post("findOneAndUpdate", handleMongooseError);
 
 const joiSchema = Joi.object({
   name: Joi.string().required().messages({
