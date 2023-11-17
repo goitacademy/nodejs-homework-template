@@ -23,7 +23,7 @@ const userSchemas = new mongoose.Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
     },
   },
   { versionKey: false, timestamps: true }

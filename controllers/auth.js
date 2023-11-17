@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
-// const joiUserSchemas = require("../schemas/userSchemas");
+const bcrypt = require("bcryptjs");
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -11,18 +11,51 @@ mongoose
     process.exit(1);
   });
 
+  // Register User
 async function register(req, res, next) {
   const { email, password, subscription } = req.body;
+  console.log("Received data:", req.body);
+  try {
+    const user = await User.findOne({ email }).exec();
+
+    if (user !== null) {
+      return res.status(409).send({ message: "Email in use" });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10)
+    
+    const addUser = await User.create({
+      email,
+      password: passwordHash,
+      subscription,
+    });
+    res
+      .status(201)
+      .send({ email: addUser.email, subscription: addUser.subscription });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
+
+// Login User
+async function login(req, res, next){
+  const {email, password} = req.body;
 
   try {
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({email}).exec();
 
-    if (user === null) {
-      return res.status(409).send({ message: "Email in use" });
+    if(user === null){
+      return res.status(401).send({message: "Email or password is wrong"})
     };
 
-    const addUser = await User.create({ email, password, subscription });
-    res.status(201).send(addUser);
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if(isMatch === false){
+      return res.status(401).send({message: "Email or password is wrong"})
+    }
+
+    res.status(201).send({token : "Token"})
   } catch (error) {
     console.error(error);
     next(error);
@@ -31,4 +64,5 @@ async function register(req, res, next) {
 
 module.exports = {
   register,
+  login,
 };
