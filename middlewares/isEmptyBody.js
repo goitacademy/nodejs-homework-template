@@ -1,9 +1,10 @@
 import {HttpError} from "../helpers/HttpError.js";
+import { isEmptySchema } from "../schemas/contact-schema.js";
 
 const isEmptyBody = async(req, res, next) => {
-    const keys = Object.keys(req.body);
-    if(!keys.length) {
-        return next(HttpError(400, "missing fields"))
+    const {error} = isEmptySchema.validate(req.body);
+    if(error) {
+        return next(HttpError(406, error.message));
     }
     next()
 };

@@ -14,3 +14,5 @@ export const contactUpdateSchema = Joi.object({
     email: Joi.string(),
     phone: Joi.string()
 })
+
+export const isEmptySchema = Joi.object().min(1);
