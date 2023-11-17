@@ -5,9 +5,9 @@ const { body, validationResult } = require('express-validator');
 const validateBody = (schema) => {
   return [
     body().custom((value, { req }) => {
-      const result = schema.validate(req.body);
+      const result = schema.validate(req.body, { abortEarly: false });
       if (result.error) {
-        throw new Error(result.error.details[0].message);
+        throw new Error(result.error.details.map((err) => err.message).join(', '));
       }
       return true;
     }),

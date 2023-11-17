@@ -72,7 +72,7 @@ async function deleteContact(req, res, next) {
       return res.status(404).send("Contact not found");
     }
 
-    res.send({ id });
+    res.json({ message: "Contact deleted" });
   } catch (err) {
     next(err);
   }
@@ -83,6 +83,7 @@ const updateStatusContact = async (req, res, next) => {
   const { favorite } = req.body;
 
   try {
+    console.log('Received favorite:', favorite);
     if (favorite === undefined) {
       return res.status(400).json({ message: 'missing field favorite' });
     }

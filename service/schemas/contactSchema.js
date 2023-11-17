@@ -26,12 +26,11 @@ const validateContact = (contact) => {
     favorite: Joi.boolean(),
   });
 
-  return schema.validate(contact);
+  return schema.validate(contact, { abortEarly: false });
 };
 
 module.exports = {
   Contact: mongoose.model('Contact', contactSchema),
   validateContact,
 };
-
 
