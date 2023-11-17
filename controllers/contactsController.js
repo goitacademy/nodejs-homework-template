@@ -13,9 +13,6 @@ const getAllContacts = async (req, res, next) => {
 		res.json(result);
 	} catch (error) {
 		next(error);
-		// res.status(500).json({
-		// 	message: error.message,
-		// });
 	}
 };
 
@@ -36,7 +33,7 @@ const add = async (req, res, next) => {
 	try {
 		const { error } = contactAddSchema.validate(req.body);
 		if (error) {
-			throw HttpError(400, error.message);
+			throw HttpError(406, error.message);
 		}
 		const result = await contactsService.addContact(req.body);
 		res.status(201).json(result);
