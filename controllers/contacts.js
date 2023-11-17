@@ -19,8 +19,9 @@ const listContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById({ _id: contactId, owner });
   if (!result) {
     throw createError(404, "Not found");
   }
@@ -29,13 +30,20 @@ const getContactById = async (req, res) => {
 
 const addContact = async (req, res) => {
   const { _id: owner } = req.user;
+  const { name, phoneNumber } = req.body;
+  const existingContact = await Contact.findOne({ name, phoneNumber, owner });
+
+  if (existingContact) {
+    throw createError(409, "Contact already exists");
+  }
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const removeContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
+  const result = await Contact.findByIdAndDelete({ _id: contactId, owner });
   if (!result) {
     throw createError(404, "Not found");
   }
@@ -44,10 +52,15 @@ const removeContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
-
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const { _id: owner } = req.user;
+  const result = await Contact.findByIdAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!result) {
     throw createError(404, "Not found");
@@ -57,10 +70,11 @@ const updateContact = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
   const { favorite } = req.body;
   const result = await Contact.findByIdAndUpdate(
-    contactId,
+    { _id: contactId, owner },
     { favorite },
     {
       new: true,

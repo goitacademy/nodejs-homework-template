@@ -20,6 +20,12 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleMongooseError);
+contactSchema.pre("findOneAndUpdate", function (next) {
+  this.options.new = true;
+  this.options.runValidators = true;
+  next();
+});
+contactSchema.post("findOneAndUpdate", handleMongooseError);
 
 const joiSchema = Joi.object({
   name: Joi.string().required().messages({
