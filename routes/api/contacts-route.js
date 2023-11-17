@@ -1,13 +1,10 @@
 import express from "express";
 import { ctrlWrapper, validateBody } from "../../decorators/index.js";
 import {
-  add,
   contactGetById,
   contactsGet,
-  remove,
-  updateById,
 } from "../../controllers/contacts-controller.js";
-import { isEmptyBody } from "../../middlewares/index.js";
+import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 import {
   contactAddSchema,
   contactUpdateSchema,
@@ -17,22 +14,22 @@ const contactsRouter = express.Router();
 
 contactsRouter.get("/", ctrlWrapper(contactsGet));
 
-contactsRouter.get("/:contactId", ctrlWrapper(contactGetById));
+contactsRouter.get("/:contactId", isValidId, ctrlWrapper(contactGetById));
 
-contactsRouter.post(
-  "/",
-  isEmptyBody,
-  validateBody(contactAddSchema),
-  ctrlWrapper(add)
-);
+// contactsRouter.post(
+//   "/",
+//   isEmptyBody,
+//   validateBody(contactAddSchema),
+//   ctrlWrapper(add)
+// );
 
-contactsRouter.delete("/:contactId", ctrlWrapper(remove));
+// contactsRouter.delete("/:contactId", ctrlWrapper(remove));
 
-contactsRouter.put(
-  "/:contactId",
-  isEmptyBody,
-  validateBody(contactUpdateSchema),
-  ctrlWrapper(updateById)
-);
+// contactsRouter.put(
+//   "/:contactId",
+//   isEmptyBody,
+//   validateBody(contactUpdateSchema),
+//   ctrlWrapper(updateById)
+// );
 
 export default contactsRouter;
