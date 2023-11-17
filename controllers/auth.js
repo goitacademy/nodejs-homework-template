@@ -31,7 +31,6 @@ async function login(req, res, next) {
     const user = await User.findOne({ email }).exec();
 
     if (user === null) {
-     
       return res
         .status(401)
         .send({ message: "Email or password is incorrect" });
@@ -51,10 +50,22 @@ async function login(req, res, next) {
       { expiresIn: 60 * 60 }
     );
 
+    await User.findByIdAndUpdate(user._id, { token }).exec();
+
     res.send({ token });
   } catch (error) {
     next(error);
   }
 }
 
-module.exports = { register, login };
+async function logout(req, res, next) {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { token: null }).exec();
+
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, logout };

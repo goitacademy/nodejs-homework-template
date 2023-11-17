@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema({
-  // name: String,
-  // email: String,
-  // phone: Number,
-
   name: {
     type: String,
     required: true,
@@ -21,15 +17,16 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-}, {
   userid: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
   },
+}, {
   versionKey: false,
   timestamps: true,
 });
 
 module.exports = mongoose.model("Contact", contactSchema);
+
 
 
