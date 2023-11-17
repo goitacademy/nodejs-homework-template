@@ -1,4 +1,7 @@
 node_modules/
 .env
+.env.local
 .idea
 .vscode
+yarn.lock
+yarn.error
