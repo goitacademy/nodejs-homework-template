@@ -3,4 +3,5 @@ const isValidId = require("./isValidid")
 
 module.exports = {
     validateBody,
+    isValidId,
 }
