@@ -6,7 +6,7 @@ import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 
 import { validateBody } from "../../decorators/index.js";
 
-import { addSchema, updateFavoriteSchema } from "../../models/Contact.js";
+import { schemas } from "../../models/Contact.js";
 
 const contactsRouter = express.Router();
 
@@ -17,17 +17,15 @@ contactsRouter.get("/:id", isValidId, contactsController.getContactById);
 contactsRouter.post(
   "/",
   isEmptyBody,
-  validateBody(addSchema, "Missing required name field"),
+  validateBody(schemas.contactAddSchema),
   contactsController.addContact
 );
-
-contactsRouter.delete("/:id", isValidId, contactsController.deleteContact);
 
 contactsRouter.put(
   "/:id",
   isValidId,
   isEmptyBody,
-  validateBody(addSchema, "Missing fields"),
+  validateBody(schemas.contactAddSchema),
   contactsController.updateContact
 );
 
@@ -35,8 +33,10 @@ contactsRouter.patch(
   "/:id/favorite",
   isValidId,
   isEmptyBody,
-  validateBody(updateFavoriteSchema, "Missing field favorite"),
-  contactsController.updateFavoriteById
+  validateBody(schemas.updateFavoriteSchema),
+  contactsController.updateStatusContact
 );
+
+contactsRouter.delete("/:id", isValidId, contactsController.deleteContact);
 
 export default contactsRouter;
