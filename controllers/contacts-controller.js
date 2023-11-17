@@ -43,10 +43,22 @@ const deleteContact = async (req, res, next) => {
   });
 };
 
+const updateFavoriteById = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+  if (!result) {
+    throw HttpError(404, `Contact with ${id} not found`);
+  }
+  res.json(result);
+};
+
 export default {
   getAllContacts: ctrlWrapper(getAllContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavoriteById: ctrlWrapper(updateFavoriteById),
   deleteContact: ctrlWrapper(deleteContact),
 };

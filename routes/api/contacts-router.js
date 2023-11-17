@@ -17,7 +17,7 @@ contactsRouter.get("/:id", isValidId, contactsController.getContactById);
 contactsRouter.post(
   "/",
   isEmptyBody,
-  validateBody(addSchema),
+  validateBody(addSchema, "Missing required name field"),
   contactsController.addContact
 );
 
@@ -27,8 +27,16 @@ contactsRouter.put(
   "/:id",
   isValidId,
   isEmptyBody,
-  validateBody(updateFavoriteSchema),
+  validateBody(addSchema, "Missing fields"),
   contactsController.updateContact
+);
+
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidId,
+  isEmptyBody,
+  validateBody(updateFavoriteSchema, "Missing field favorite"),
+  contactsController.updateFavoriteById
 );
 
 export default contactsRouter;
