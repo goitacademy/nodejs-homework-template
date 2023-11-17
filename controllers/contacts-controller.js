@@ -1,5 +1,5 @@
-import * as contactsService from "../models/index.js";
-
+//import * as contactsService from "../models/index.js";
+import Contact from "../models/Contact.js";
 import { contactAddSchema, contactUpdateSchema } from "../schemas/contacts-schemas.js";
 
 import { HttpError } from "../helpers/index.js";
@@ -7,16 +7,11 @@ import { HttpError } from "../helpers/index.js";
 
 
 const getListContacts = async (req, res) => {
-    try {
-        const result = await contactsService.getListContacts();
+        const result = await Contact.find();
         res.json(result);
-    }
-    catch (error) {
-        next(error);
-    }
 };
 
-const getContactById = async (req, res, next) => {
+/*const getContactById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await contactsService.getContactById(id);
@@ -77,12 +72,12 @@ const deleteById = async (req, res, next) => {
     catch (error) {
         next(error);
     }
-};
+};*/
 
 export default {
     getListContacts,
-    getContactById,
+   /* getContactById,
     addContact,
     updateById,
-    deleteById,
+    deleteById,*/
 }
