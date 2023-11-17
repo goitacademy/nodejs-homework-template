@@ -1,4 +1,4 @@
-const fs = require("node:fs/promises");
+/* const fs = require("node:fs/promises");
 const path = require("node:path");
 const contactsPath = path.join(__dirname, "contacts.json");
 const { v4: uuidv4 } = require("uuid");
@@ -78,7 +78,7 @@ class Contacts {
   };
 }
 
-module.exports = new Contacts(contactsPath);
+module.exports = new Contacts(contactsPath); */
 
 // contacts.read();
 // contacts.listContacts();
