@@ -31,7 +31,7 @@ const validateContact = (contact) => {
 
 const addSchema = Joi.object({    // добавив описання схеми в якості змінної, а не функції
   name: Joi.string().required(),
-  email: Joi.string().email(),
+  email: Joi.string().email().required(),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });
