@@ -27,6 +27,15 @@ contactSchema.post("save", (error, data, next) => {
   error.status = 400;
   next();
 });
+contactSchema.post("findOneAndUpdate", (error, data, next) => {
+  error.status = 400;
+  next();
+});
+contactSchema.pre("findOneAndUpdate", function (next) {
+  this.options.new = true;
+  this.options.runValidators = true;
+  next();
+});
 
 const addContactChema = Joi.object({
   name: Joi.string()
@@ -39,17 +48,17 @@ const addContactChema = Joi.object({
   phone: Joi.string()
     .required()
     .messages({ "any.required": `missing required "phone" field` }),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 });
 
 const updateContactChema = Joi.object({
   name: Joi.string().min(3).max(15),
   email: Joi.string(),
   phone: Joi.string(),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 });
 const updateFavoriteChema = Joi.object({
-  favorite: Joi.bool(),
+  favorite: Joi.boolean().required(),
 });
 
 const Contact = model("contact", contactSchema);
@@ -58,6 +67,5 @@ module.exports = {
   addContactChema,
   updateContactChema,
   updateFavoriteChema,
-  contactSchema,
   Contact,
 };

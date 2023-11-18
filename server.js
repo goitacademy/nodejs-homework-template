@@ -1,7 +1,7 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 const DB_HOST =
-  "mongodb+srv://volkigor286:hTvYhyBml3UA7bsr@cluster0.inloeca.mongodb.net/contacts?retryWrites=true&w=majority";
+  "mongodb+srv://volkigor286:hTvYhyBml3UA7bsr@cluster0.inloeca.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 mongoose
   .connect(DB_HOST)
