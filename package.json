@@ -20,7 +20,8 @@
 		"joi": "^17.11.0",
 		"mongoose": "^8.0.1",
 		"morgan": "1.10.0",
-		"nanoid": "^5.0.3"
+		"nanoid": "^5.0.3",
+		"yarn": "^1.22.21"
 	},
 	"devDependencies": {
 		"eslint": "7.19.0",
