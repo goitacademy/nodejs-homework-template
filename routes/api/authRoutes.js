@@ -6,6 +6,12 @@ const bcrypt = require('bcrypt');
 const userModel = require('../../models/userModel');
 const jwt = require('jsonwebtoken');
 const verifyToken = require('../../middleware/authMiddleware');
+const multer = require('multer');
+const jimp = require('jimp');
+const gravatar = require('gravatar');
+const path = require('path');
+const fs = require('fs');
+
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -16,6 +22,9 @@ const loginSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 router.post('/signup', async (req, res) => {
   try {
     const { error } = signupSchema.validate(req.body);
@@ -24,6 +33,9 @@ router.post('/signup', async (req, res) => {
     }
 
     const { email, password } = req.body;
+
+    // Utwórz odnośnik do awatara przy pomocy Gravatara
+    const avatarURL = gravatar.url(email, { s: '250', d: 'retro' }, true);
 
     const existingUser = await userModel.findOne({ email });
     if (existingUser) {
@@ -36,6 +48,7 @@ router.post('/signup', async (req, res) => {
       email,
       password: hashedPassword,
       subscription: 'starter',
+      avatarURL,
     });
 
     res.status(201).json({
@@ -46,6 +59,55 @@ router.post('/signup', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+router.patch(
+  '/avatars',
+  verifyToken,
+  upload.single('avatar'),
+  async (req, res) => {
+    try {
+      const userId = req.user._id;
+
+      // Sprawdź, czy użytkownik istnieje
+      const user = await userModel.findById(userId);
+      if (!user) {
+        return res.status(401).json({ message: 'Not authorized' });
+      }
+
+      // Odczytaj plik z żądania
+      const fileBuffer = req.file.buffer;
+
+      // Obróbka obrazu przy użyciu jimp
+      const image = await jimp.read(fileBuffer);
+      await image.resize(250, 250);
+      const processedBuffer = await image.getBufferAsync(jimp.MIME_JPEG);
+
+      // Zapisz załadowany awatar w folderze tmp
+      const tempAvatarPath = path.join(__dirname, '../../tmp', `${userId}.jpg`);
+      await image.writeAsync(tempAvatarPath);
+
+      // Przenieś awatar do folderu public/avatars
+      const avatarPath = path.join(
+        __dirname,
+        '../../public/avatars',
+        `${userId}.jpg`
+      );
+      await image.writeAsync(avatarPath);
+
+      // Usuń plik tymczasowy
+      fs.unlinkSync(tempAvatarPath);
+
+      // Zaktualizuj avatarURL w bazie danych
+      user.avatarURL = `/avatars/${userId}.jpg`;
+      await user.save();
+
+      res.status(200).json({ avatarURL: user.avatarURL });
+    } catch (error) {
+      console.error('Error updating avatar:', error.message);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+);
 
 router.post('/login', async (req, res) => {
   try {
@@ -138,5 +200,57 @@ router.get('/current', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+router.patch(
+  '/avatars',
+  verifyToken,
+  upload.single('avatar'),
+  async (req, res) => {
+    try {
+      const userId = req.user._id;
+
+      // Sprawdź, czy użytkownik istnieje
+      const user = await userModel.findById(userId);
+      if (!user) {
+        return res.status(401).json({ message: 'Not authorized' });
+      }
+
+      // Odczytaj plik z żądania
+      const fileBuffer = req.file.buffer;
+
+      // Obróbka obrazu przy użyciu jimp
+      const image = await jimp.read(fileBuffer);
+      await image.resize(250, 250);
+      const processedBuffer = await image.getBufferAsync(jimp.MIME_JPEG);
+
+      // Utwórz unikalną nazwę pliku
+      const uniqueFileName = `${userId}-${Date.now()}.jpg`;
+
+      // Zapisz załadowany awatar w folderze tmp
+      const tempAvatarPath = path.join(__dirname, '../../tmp', uniqueFileName);
+      await image.writeAsync(tempAvatarPath);
+
+      // Przenieś awatar do folderu public/avatars
+      const avatarPath = path.join(
+        __dirname,
+        '../../public/avatars',
+        uniqueFileName
+      );
+      await image.writeAsync(avatarPath);
+
+      // Usuń plik tymczasowy
+      fs.unlinkSync(tempAvatarPath);
+
+      // Zaktualizuj avatarURL w bazie danych
+      user.avatarURL = `/avatars/${uniqueFileName}`;
+      await user.save();
+
+      res.status(200).json({ avatarURL: user.avatarURL });
+    } catch (error) {
+      console.error('Error updating avatar:', error.message);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+);
 
 module.exports = router;
