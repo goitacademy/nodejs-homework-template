@@ -1,8 +1,7 @@
 const Contact = require("../models/contacts");
 
 async function getContacts(req, res, next) {
-  console.log({ user: req.user });
-
+  
   try {
     const contact = await Contact.find({ userId: req.user.id }).exec();
     if (contact === null) return res.status(404).send("Contact not Found:(*)");
@@ -21,7 +20,6 @@ async function getContact(req, res, next) {
     }
 
     if (contact.userId.toString() !== req.use.id) {
-      // return res.status(403).send("Forbidden");
 
       return res.status(404).send("Contact not found:(*)");
     }
