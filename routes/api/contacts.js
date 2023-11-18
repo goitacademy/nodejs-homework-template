@@ -1,3 +1,4 @@
+// routes/api/contacts.js
 
 const express = require('express');
 const router = express.Router();
@@ -8,6 +9,8 @@ const addContact = require('../../controllers/addContacts');
 const removeContact = require('../../controllers/removeContacts');
 const updateContact = require('../../controllers/updateContact');
 const updateStatusContact = require('../../controllers/updateStatusContact');
+const authController = require('../../controllers/authController');
+const verifyToken = require('../../middleware/authMiddleware');
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
@@ -21,15 +24,19 @@ const updateContactSchema = Joi.object({
   phone: Joi.string(),
 });
 
-router.get('/', (req, res) => {
+router.post('/login', authController.login);
+
+router.post('/signup', authController.signup);
+
+router.get('/', verifyToken, (req, res) => {
   listContacts(req, res);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', verifyToken, (req, res) => {
   getContactById(req, res);
 });
 
-router.post('/', (req, res) => {
+router.post('/', verifyToken, (req, res) => {
   const { error } = addContactSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -38,11 +45,11 @@ router.post('/', (req, res) => {
   addContact(req, res);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', verifyToken, (req, res) => {
   removeContact(req, res);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', verifyToken, (req, res) => {
   const { error } = updateContactSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -51,7 +58,7 @@ router.put('/:id', (req, res) => {
   updateContact(req, res);
 });
 
-router.patch('/:id/favorite', async (req, res) => {
+router.patch('/:id/favorite', verifyToken, async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
 
@@ -88,6 +95,5 @@ router.patch('/:id/favorite', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 module.exports = router;
