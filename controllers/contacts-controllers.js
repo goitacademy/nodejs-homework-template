@@ -41,7 +41,7 @@ const updateContact = async (req, res, next) => {
   try {
     const { error } = contactUpdateSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, `missing fields`);
+      throw HttpError(400, error.message);
     }
     const { id } = req.params;
     const result = await contactsService.updateContactById(id, req.body);
