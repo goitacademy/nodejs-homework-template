@@ -29,6 +29,13 @@ const validateContact = (contact) => {
   return schema.validate(contact, { abortEarly: false });
 };
 
+const addSchema = Joi.object({    // добавив описання схеми в якості змінної, а не функції
+  name: Joi.string().required(),
+  email: Joi.string().email(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
+
 const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
@@ -36,6 +43,6 @@ const updateFavoriteSchema = Joi.object({
 module.exports = {
   Contact: mongoose.model('Contact', contactSchema),
   validateContact,
-  addSchema: validateContact, // Вот здесь я добавил соответствие для addSchema
+  addSchema, // було addSchema: validateContact, 
   updateFavoriteSchema,
 };
