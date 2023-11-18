@@ -16,6 +16,10 @@ const contactSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId, // наш id
+      ref: "user", // зовнішній ключ який посилається на об'єкт іншої моделі
+    },
   },
   {
     versionKey: false,
@@ -24,4 +28,3 @@ const contactSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Contact", contactSchema);
-

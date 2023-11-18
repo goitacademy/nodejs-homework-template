@@ -2,42 +2,43 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    password: {
       type: String,
-      require: true,
+      required: [true, "Set password for user"],
     },
     email: {
       type: String,
-      require: true,
-      index: true,
+      required: [true, "Email is required"],
       unique: true,
     },
-    password: {
+    subscription: {
       type: String,
-      require: true,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
     },
-  },
-  {
-    versionKey: false,
-    timestamps: true,
+    token: String,
   }
-); 
-// {
-//     password: {
-//       type: String,
-//       required: [true, 'Set password for user'],
-//     },
-//     email: {
-//       type: String,
-//       required: [true, 'Email is required'],
-//       unique: true,
-//     },
-//     subscription: {
-//       type: String,
-//       enum: ["starter", "pro", "business"],
-//       default: "starter"
-//     },
-//     token: String
-//   }
+);
 
 module.exports = mongoose.model("User", userSchema);
+
+  // {
+  //   name: {
+  //     type: String,
+  //     require: true,
+  //   },
+  //   email: {
+  //     type: String,
+  //     require: true,
+  //     index: true,
+  //     unique: true,
+  //   },
+  //   password: {
+  //     type: String,
+  //     require: true,
+  //   },
+  // },
+  // {
+  //   versionKey: false,
+  //   timestamps: true,
+  // }

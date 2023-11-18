@@ -6,12 +6,14 @@ const ContactControllers = require('../../controllers/contacts');
 
 const jsonParser = express.json();
 
+const auth = require("../../middleware/auth");// підключення мідлвари для прочекання токену 
 
-router.get("/", ContactControllers.getContacts);
 
-router.get("/:id", ContactControllers.getContactById);
+router.get("/",auth, ContactControllers.getContacts);
 
-router.post("/", jsonParser, ContactControllers.postContact);
+router.get("/:id",auth, ContactControllers.getContactById);
+
+router.post("/", jsonParser, auth, ContactControllers.postContact);
 
 router.delete("/:id", ContactControllers.deleteContact);
 
