@@ -19,7 +19,7 @@ router.delete("/:contactId", isValidId, ctrl.removeContacts);
 router.put(
   "/:contactId",
   isValidId,
-  validateBody(schemas.updateSchema),
+  validateBody(schemas.addSchema),
   ctrl.updateContact
 );
 router.patch(
