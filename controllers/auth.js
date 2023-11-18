@@ -2,14 +2,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
+const { token } = require("morgan");
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
-  console.log(req.body)
+  console.log(req.body);
   const user = await User.findOne({ email });
-  console.log(user)
+  console.log(user);
   if (user) {
     throw HttpError(409, "Email in use");
   }
@@ -40,17 +41,46 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23" });
-
+  await User.findByIdAndUpdate(user._id, { token });
   res.json({
     token,
     user: {
-      email: user.email,
-      subscription: user.subscription,
+      email,
+      subscription,
     },
   });
+};
+
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.status(200).json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204).json();
+};
+
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { _id } = req.user;
+  const validSubscriptions = ["starter", "pro", "business"];
+  await User.findByIdAndUpdate(_id, { subscription });
+  if (!validSubscriptions.includes(subscription)) {
+    throw HttpError(400, "Invalid subscription value");
+  }
+  res.json({ subscription });
 };
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
