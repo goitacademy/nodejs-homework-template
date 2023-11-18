@@ -36,6 +36,6 @@ const updateFavoriteSchema = Joi.object({
 module.exports = {
   Contact: mongoose.model('Contact', contactSchema),
   validateContact,
+  addSchema: validateContact, // Вот здесь я добавил соответствие для addSchema
   updateFavoriteSchema,
 };
-
