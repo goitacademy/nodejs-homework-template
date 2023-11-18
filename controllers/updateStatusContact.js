@@ -1,4 +1,4 @@
-// controllers/updateStatusContact.js
+
 const contactsModel = require('../models/contactModel');
 
 const updateStatusContact = async (contactId, { favorite }) => {
