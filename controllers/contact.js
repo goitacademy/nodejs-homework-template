@@ -7,21 +7,24 @@ async function listContacts(req, res, next) {
     console.log(contacts);
     res.send(contacts);
   } catch (err) {
-    console.error(err);
     next(err);
   }
 }
 
 async function getContactById(req, res, next) {
-  const { id } = req.params;
+  const {id} = req.params;
   try {
+    console.log(`Searching for contact with id: ${id}`);
     const contact = await Contact.findById(id).exec();
-
-    // console.log(contact);
-    if (contact === null) 
-    return res.status(404).send("Contact not found");
+   
+    console.log(contact);
+    if (contact === null) {
+      return res.status(404).send("Contact not found");
+    }
+    console.log(`Found contact: ${contact}`);
     res.send(contact);
   } catch (err) {
+    console.error(err)
     next(err);
   }
 }
