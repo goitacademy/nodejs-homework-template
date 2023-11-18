@@ -24,7 +24,6 @@ contactsRouter.post(
 contactsRouter.put(
   "/:id",
   isValidId,
-  isEmptyBody,
   validateBody(schemas.contactAddSchema),
   contactsController.updateContact
 );
@@ -32,7 +31,6 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,
-  isEmptyBody,
   validateBody(schemas.updateFavoriteSchema),
   contactsController.updateStatusContact
 );

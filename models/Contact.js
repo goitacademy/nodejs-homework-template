@@ -46,7 +46,7 @@ const contactAddSchema = Joi.object({
     "string.pattern.base":
       "Phone number must be a valid phone number for region UA, digits and can contain spaces, dashes, parentheses and can start with +",
   }),
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean(),
 });
 
 const updateFavoriteSchema = Joi.object({
