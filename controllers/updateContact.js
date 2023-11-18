@@ -1,3 +1,4 @@
+
 const contactsModel = require('../models/contactModel');
 
 const updateContact = async (req, res, next) => {

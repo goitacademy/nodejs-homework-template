@@ -7,6 +7,7 @@ const getContactById = require('../../controllers/getContactById');
 const addContact = require('../../controllers/addContacts');
 const removeContact = require('../../controllers/removeContacts');
 const updateContact = require('../../controllers/updateContact');
+
 const updateStatusContact = require('../../controllers/updateStatusContact');
 
 const addContactSchema = Joi.object({
@@ -29,11 +30,13 @@ router.get('/:id', (req, res) => {
   getContactById(req, res);
 });
 
+
 router.post('/', (req, res) => {
   const { error } = addContactSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
+
 
   addContact(req, res);
 });
@@ -82,7 +85,10 @@ router.patch('/:id/favorite', async (req, res) => {
   } catch (error) {
     console.error('Error updating contact status:', error.message);
     res.status(500).json({ message: 'Internal Server Error' });
+
   }
+
+  updateContact(req, res);
 });
 
 module.exports = router;
