@@ -14,7 +14,7 @@ const getContactById = async (req, res, next) => {
   try {
     const contact = await Contacts.findById(contactId);
     if (contact === null) {
-      res.status(404).send("Book not found");
+      res.status(404).send({ message: "Not found" });
     }
     res.send(contact);
   } catch (error) {

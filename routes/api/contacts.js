@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const ContactsController = require("../../controllers/contacts");
+const { isValidId } = require("../../middlewares");
 
 router.get("/", ContactsController.listContacts);
 
-router.get("/:contactId", ContactsController.getContactById);
+router.get("/:contactId", isValidId, ContactsController.getContactById);
 
 router.post("/", ContactsController.addContact);
 

@@ -14,15 +14,17 @@ const contactSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: [true, "Set phone for contact"],
-      validate: function (v) {
-        return phoneRegex.test(v);
+      validate: {
+        validator: function (v) {
+          return phoneRegex.test(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid phone number! Please use the format (XXX) XXX-XXXX`,
       },
-      message: (props) =>
-        `${props.value} is not a valid phone number! Please use the format (XXX) XXX-XXXX`,
     },
     favorite: {
       type: Boolean,
-      required: [true, "Set name for contact"],
+      required: [true],
       default: false,
     },
   },
