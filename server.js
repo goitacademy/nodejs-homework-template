@@ -1,18 +1,17 @@
-import app from "./app.js";
+import "dotenv/config";
 import mongoose from "mongoose";
+import app from "./app.js";
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
-});
+const { DB_URI, PORT = 3000 } = process.env;
+
+mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(
-    "mongodb+srv://charliedajani:jamil212@cluster0.eqrgn5f.mongodb.net/db-contacts?retryWrites=true&w=majority"
-  )
+  .connect(DB_URI)
   .then(() => {
-    console.log("Database connection successful");
+    app.listen(PORT, () => console.log("Database connection successful"));
   })
   .catch((error) => {
-    console.error("Database connection error:", error);
+    console.log(error.message);
     process.exit(1);
   });
