@@ -57,9 +57,13 @@ router.patch('/:id/favorite', async (req, res) => {
 
   console.log('Received PATCH request:', { id, favorite });
 
-  if (favorite === undefined) {
-    console.log('Error: Missing field "favorite" in the request body');
-    return res.status(400).json({ message: 'missing field favorite' });
+  if (favorite === undefined && typeof favorite !== 'boolean') {
+    console.log(
+      'Error: Missing or invalid field "favorite" in the request body'
+    );
+    return res
+      .status(400)
+      .json({ message: 'missing or invalid field favorite' });
   }
 
   try {
@@ -84,5 +88,6 @@ router.patch('/:id/favorite', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 module.exports = router;
