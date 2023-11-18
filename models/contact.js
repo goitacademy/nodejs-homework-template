@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { handleMongooseError } = require("../helpers/handleMongooseError");
+
 const contactSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -15,8 +16,14 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // owner: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'user',
+  // },
 });
 
 contactSchema.post("save", handleMongooseError);
 
-module.export = mongoose.model("Contact", contactSchema);
+const Contact = mongoose.model("Contact", contactSchema);
+
+module.exports = {Contact};
