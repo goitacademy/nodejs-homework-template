@@ -7,7 +7,7 @@ require("./db");
 
 console.log(process.env.DB_URI);
 
-const contactsRouter = require("./routes/api/index");
+const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 

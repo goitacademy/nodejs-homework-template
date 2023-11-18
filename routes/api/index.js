@@ -1,9 +1,9 @@
-const express = require("express");
+// const express = require("express");
 
-const router = express.Router();
+// const router = express.Router();
 
-const contactsRouter = require("./contacts");
+// const contactsRouter = require("./contacts");
 
-router.use("/api/contacts", contactsRouter);
+// router.use("/api/contacts", contactsRouter);
 
-module.exports = router;
+// module.exports = router;
