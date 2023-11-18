@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 function auth(req, res, next) {
   const authHeader = req.headers["authorization"];
-  console.log(authHeader);
+
+  if (typeof authHeader === "undefined") {
+    return res.status(401).send({ message: "Invalid Token" });
+  }
+
   const [bearer, token] = authHeader.split(" ", 2);
 
   if (bearer !== "Bearer") {
@@ -12,7 +16,7 @@ function auth(req, res, next) {
     if (err) {
       return res.status(401).send({ message: "Invalid Token" });
     }
-    console.log(decode);
+    req.user = decode;
     next();
   });
 }

@@ -18,10 +18,11 @@ const contactSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    // },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false }
 );
