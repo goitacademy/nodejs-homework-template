@@ -1,19 +1,11 @@
-// const crypto = require("crypto");
-
-const Book = require("../models/contact");
-
-// const { readDB, writeDb } = require("../utils/db");
-
-// const listContactsService = async () => {
-//   return await readDB();
-// };
+const Contact = require("../models/contact");
 
 const listContactsService = async () => {
-  return await Book.find().exec();
+  return await Contact.find().exec();
 };
 
 const getContactByIdService = async (id) => {
-  const tasks = await Book.find().exec();
+  const tasks = await Contact.find().exec();
   const task = tasks.find((task) => task.id === id);
   if (!task) {
     throw new Error("Contact not found");
@@ -22,25 +14,18 @@ const getContactByIdService = async (id) => {
 };
 
 const addContactService = async (body) => {
-  // const tasks = await readDB();
-  // const tasks = await Book.find().exec();
-  // const newTask = { ...body, id: crypto.randomUUID() };
-  // tasks.push(newTask);
-  // await writeDb(tasks);
-  //  return newTask;
   const contact = {
     name: body.name,
     email: body.email,
     phone: body.phone,
     favorite: body.favorite,
   };
-  await Book.create(contact);
+  await Contact.create(contact);
   return contact;
 };
 
 const removeContactService = async (id) => {
-  // const tasks = await readDB();
-  const tasks = await Book.find().exec();
+  const tasks = await Contact.find().exec();
   console.log(
     "це Contact Services - removeContact, довжина масиву ",
     tasks.length
@@ -50,14 +35,8 @@ const removeContactService = async (id) => {
   if (index === -1) {
     throw new Error("Contact not found");
   }
-  // const newTasks = [...tasks.slice(0, index), ...tasks.slice(index + 1)];
 
-  // console.log(
-  //   "це Contact Services - removeContact, довжина нового масиву",
-  //   newTasks.length
-  // );
-
-  await Book.findByIdAndDelete(id);
+  await Contact.findByIdAndDelete(id);
 
   console.log("це Contact Services - removeContact - видалено ", id);
 
@@ -65,8 +44,7 @@ const removeContactService = async (id) => {
 };
 
 const updateContactService = async (id, body) => {
-  // const tasks = await readDB();
-  const tasks = await Book.find().exec();
+  const tasks = await Contact.find().exec();
   console.log(
     "1- це Contact Services - updateContact, довжина масиву ",
     tasks.length
@@ -77,7 +55,6 @@ const updateContactService = async (id, body) => {
     throw new Error("Contact not found");
   }
 
-  // const { name, email, phone } = body;
   const contact = {
     name: body.name,
     email: body.email,
@@ -89,22 +66,13 @@ const updateContactService = async (id, body) => {
     throw new Error("Not specified all values");
   } // не працює з полем яке має значення true - false
 
-  // const newTask = { ...body, id };
-  // const newTasks = [
-  //   ...tasks.slice(0, index),
-  //   newTask,
-  //   ...tasks.slice(index + 1),
-  // ];
-
-  await Book.findByIdAndUpdate(id, contact, { new: true });
-  const newTasks = await Book.find().exec();
+  await Contact.findByIdAndUpdate(id, contact, { new: true });
+  const newTasks = await Contact.find().exec();
 
   console.log(
     "2 - це Contact Services - updateContact, довжина нового масиву",
     newTasks.length
   );
-
-  // await writeDb(newTasks);
 
   console.log("це Contact Services - updateContact - оновлено ", id);
 
@@ -112,7 +80,7 @@ const updateContactService = async (id, body) => {
 };
 
 const favoriteContactService = async (id, body) => {
-  const tasks = await Book.find().exec();
+  const tasks = await Contact.find().exec();
   console.log(
     "1- це Contact Services - favoriteContact, довжина масиву ",
     tasks.length
@@ -136,15 +104,15 @@ const favoriteContactService = async (id, body) => {
     { contact }
   );
 
-  if (contact.favorite === undefined) {
+  if (!contact.favorite) {
     throw new Error({ message: "missing field favorite" });
   }
 
   const newContact = tasks[index];
   newContact.favorite = contact.favorite;
 
-  await Book.findByIdAndUpdate(id, newContact, { new: true });
-  const newTasks = await Book.find().exec();
+  await Contact.findByIdAndUpdate(id, newContact, { new: true });
+  const newTasks = await Contact.find().exec();
 
   console.log(
     "2 - це Contact Services - favoriteContact, довжина нового масиву",
@@ -157,37 +125,49 @@ const favoriteContactService = async (id, body) => {
 };
 
 const partiallyContactService = async (id, body) => {
-  const tasks = await Book.find().exec();
+  const tasks = await Contact.find().exec();
   console.log(
-    "1- це Contact Services - putTask, довжина масиву ",
+    "1- це Contact Services - partiallyContact, довжина масиву ",
     tasks.length
   );
   const index = tasks.findIndex((el) => el.id === id);
-
+  
   if (index === -1) {
     throw new Error("Contact not found");
   }
+
+  const newContact = tasks[index];
 
   const contact = {
     name: body.name,
     email: body.email,
     phone: body.phone,
     favorite: body.favorite,
+  };  
+
+  if ( !contact.name && !contact.email && !contact.phone ) {
+    throw new Error("Not specified at least one value");
+  }
+
+  if (contact.name !== undefined) {
+    newContact.name = contact.name;
   };
+  if (contact.email !== undefined) {
+    newContact.email = contact.email;
+  };
+  if (contact.phone !== undefined) {
+    newContact.phone = contact.phone;
+  };  
 
-  if ((contact.name && contact.email && contact.phone) === undefined) {
-    throw new Error("Not specified all values");
-  } // не працює з полем яке має значення true - false
-
-  await Book.findByIdAndUpdate(id, contact, { new: true });
-  const newTasks = await Book.find().exec();
+  await Contact.findByIdAndUpdate(id, newContact, { new: true });
+  const newTasks = await Contact.find().exec();
 
   console.log(
-    "2 - це Contact Services - putTask, довжина нового масиву",
+    "2 - це Contact Services - partiallyContact, довжина нового масиву",
     newTasks.length
   );
 
-  console.log("це Contact Services - putTask - оновлено ", id);
+  console.log("це Contact Services - partiallyContact - оновлено ", id);
 
   return id;
 };
