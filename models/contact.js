@@ -10,6 +10,7 @@ const contactSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
+    required: [true, "Set phone for contact"],
   },
   favorite: {
     type: Boolean,
@@ -17,7 +18,8 @@ const contactSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Contact", contactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
+module.exports = Contact;
 
 /* Крок 5
 
