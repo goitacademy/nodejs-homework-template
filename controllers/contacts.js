@@ -63,4 +63,12 @@ const {HttpError, ctrlWrapper} = require("../helpers");
     removeContact: ctrlWrapper(removeContact),
   }
 
-  
+  // module.exports = {
+  //   listContacts: ctrlWrapper(listContacts),
+  //   getContactById: ctrlWrapper(getContactById),
+  //   addContact: ctrlWrapper(addContact),
+  //   updateContact: ctrlWrapper(updateContact),
+  //   updateFavorite: ctrlWrapper(updateFavorite),
+  //   removeContact: ctrlWrapper(removeContact),
+  // }
+
