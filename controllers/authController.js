@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 //register function
@@ -32,8 +33,12 @@ async function login(req, res, next) {
     if (isMatch === false) {
       return res.status(401).send({ message: "password is incorrect" });
     }
-
-    return res.send({ token: "TOKEN" });
+    const token = jwt.sign(
+      { id: user._id, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    return res.send({ token });
   } catch (error) {
     next(error);
   }
