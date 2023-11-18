@@ -1,8 +1,9 @@
 const Contact = require("../models/contacts");
 
 async function getContacts(req, res, next) {
+
   try {
-    const contact = await Contact.find().exec();
+    const contact = await Contact.find({ userId: req.user.id }).exec();
     if (contact === null) return res.status(404).send("Contact not Found:(*)");
     res.send(contact);
   } catch (err) {
@@ -17,6 +18,12 @@ async function getContact(req, res, next) {
     if (contact === null) {
       return res.status(404).send("Contact not found:(*)");
     }
+
+    if (contact.userId.toString() !== req.use.id) {
+      // return res.status(403).send("Forbidden");
+
+      return res.status(404).send("Contact not found:(*)");
+    }
     res.send(contact);
   } catch (err) {
     next(err);
@@ -28,6 +35,7 @@ async function createContact(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
+    userid: req.user.id,
   };
 
   try {
@@ -61,7 +69,7 @@ async function updateContact(req, res, next) {
 
 async function deleteContact(req, res, next) {
   const { id } = req.params;
-  //   res.send(`Delete contact ${id}`);
+
   try {
     const result = await Contact.findByIdAndDelete(id);
 
