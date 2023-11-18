@@ -20,6 +20,7 @@ async function register(req, res, next) {
     const user = await User.findOne({ email }).exec();
 
     if (user !== null) {
+      console.log("User already exists");
       return res.status(409).send({ message: "Email in use" });
     }
 
@@ -30,11 +31,14 @@ async function register(req, res, next) {
       password: passwordHash,
       subscription,
     });
+
+    console.log("User registered successfully:", addUser);
+
     res
       .status(201)
       .send({ email: addUser.email, subscription: addUser.subscription });
   } catch (error) {
-    console.error(error);
+    console.error("Error during registration:", error);
     next(error);
   }
 }
@@ -47,20 +51,23 @@ async function login(req, res, next){
     const user = await User.findOne({email}).exec();
 
     if(user === null){
+      console.log("User not found");
       return res.status(401).send({message: "Email or password is wrong"})
     };
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if(isMatch === false){
+      console.log("Password doesn't match");
       return res.status(401).send({message: "Email or password is wrong"})
     }
 
     const token = jwt.sign({id: user._id, name: user.name}, process.env.JWT_SECRET, {expiresIn: 1000})
 
+    console.log("User logged in successfully");
     res.send({token})
   } catch (error) {
-    console.error(error);
+    console.error("Error during login:", error);
     next(error);
   }
 }

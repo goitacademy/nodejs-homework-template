@@ -45,12 +45,13 @@ async function getContactById(req, res, next) {
 
 // Add Contact
 async function addContact(req, res, next) {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, owner } = req.body;
 
   try {
     // Валидация email с использованием Joi
-    const validation = joiSchema.validate({ name, email, phone });
+    const validation = joiSchema.validate({ name, email, phone, owner });
     if (validation.error) {
+      console.log("Validation error:", validation.error.details.map((error) => error.message).join(", "));
       return res.status(400).send({
         message: validation.error.details
           .map((error) => error.message)
@@ -59,7 +60,7 @@ async function addContact(req, res, next) {
     }
 
     const result = await Contact.create({ name, email, phone });
-
+    console.log("Contact added successfully:", result);
     res.status(201).send(result);
   } catch (error) {
     console.error(`Error while adding a new contact: ${error}`);
