@@ -12,12 +12,21 @@ router.get("/", ctrl.listContacts);
 
 router.get("/:id", isValidId, ctrl.getContactById);
 
-router.post("/", validateBody(addSchema), ctrl.addContact);
+router.post(
+  "/",
+  validateBody(addSchema),
+  ctrl.addContact
+);
 
-router.put("/:id", isValidId, validateBody(addSchema), ctrl.updateContact);
+router.put(
+	"/:id",
+  isValidId,
+  validateBody(addSchema),
+  ctrl.updateContact
+);
 
 router.patch(
-  "/:id/favorite",
+	"/:id/favorite",
   isValidId,
   validateBody(updateFavoriteSchema),
   ctrl.updateStatusContact
