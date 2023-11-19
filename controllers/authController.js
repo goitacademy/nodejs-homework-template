@@ -38,10 +38,23 @@ async function login(req, res, next) {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
+
+    await User.findByIdAndUpdate(user._id, { token });
+
     return res.send({ token });
   } catch (error) {
     next(error);
   }
   res.send("OK");
 }
-module.exports = { register, login };
+
+async function logout(req, res, next) {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { token: null }).exec();
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, logout };
