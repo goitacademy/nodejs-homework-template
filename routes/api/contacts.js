@@ -19,7 +19,7 @@ router.delete("/:id",auth, ContactControllers.deleteContact);
 
 router.put("/:id",auth, jsonParser, ContactControllers.putContact)
 
-router.patch("/:id/favorite", ContactControllers.patchContact);
+router.patch("/:id/favorite",auth, ContactControllers.patchContact);
 
 
 module.exports = router;
