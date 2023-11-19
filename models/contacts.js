@@ -66,7 +66,7 @@ const updateContact = async (contactId, body) => {
     if (contactIndex === -1) return null;
 
     allContacts[contactIndex] = {
-      contactId,
+      id: contactId,
       ...body,
     };
 
