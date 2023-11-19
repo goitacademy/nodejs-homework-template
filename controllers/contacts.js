@@ -50,7 +50,6 @@ const postContact = async (req, res, next) => {
   };
 
   try {
-    console.log({owner: req.user.id})
     const validation = contactSchema.validate(contact);
     if (validation.error) {
       const errorMessage = validation.error.details
@@ -106,10 +105,17 @@ const deleteContact = async (req, res, next) => {
     if (!hexIdPattern.test(id)) {
       return res.status(400).json({ message: "not valid id" });
     }
-    const result = await Contact.findByIdAndDelete(id);
-    if (result === null) {
-      return res.status(404).send({ message: "Contact not found" });
+
+    // перевірити чи id юзеру === owner контакта
+    const contact = await Contact.findById(id);
+    console.log(contact.owner.toString());
+    console.log(req.user.id.toString());
+    if (contact.owner.toString() !== req.user.id.toString()) {
+      return res.status(404).json({ message: "Contact not found" });
     }
+
+    const result = await Contact.findByIdAndDelete(id);
+
     res.send(result);
   } catch (error) {
     next(error);
