@@ -1,25 +1,40 @@
-const express = require('express')
+const express = require("express");
+const controllers = require("../../controllers/contacts-controllers.js");
+const isEmptyBody = require("../../middlewars/isEmptyBody.js");
+const router = express.Router();
+const isValidId = require("../../middlewars/isValidId.js");
+const {
+  updateContactChema,
+  updateFavoriteChema,
+} = require("../../models/Contact.js");
+const validateBody = require("../../helpers/validationBody.js");
 
-const router = express.Router()
+router.get("/", controllers.getAllContacts);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", isValidId, controllers.getContactById);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  "/",
+  isEmptyBody,
+  validateBody(updateContactChema),
+  controllers.addNewContact
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", isValidId, controllers.deleteById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  isValidId,
+  isEmptyBody,
+  validateBody(updateContactChema),
+  controllers.updateContact
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  isEmptyBody,
+  validateBody(updateFavoriteChema),
+  controllers.updateStatusContact
+);
+module.exports = router;
