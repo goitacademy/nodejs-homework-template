@@ -1,5 +1,5 @@
 const handleMongooseError = (error, data, next) => {
-  error.sattus = 400;
+  error.status = 400;
   next();
 };
 
