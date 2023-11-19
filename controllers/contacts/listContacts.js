@@ -13,7 +13,7 @@ const listContacts = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "email");
-  res.json(result);
+  res.json({ result, qty: result.length });
 };
 
 module.exports = listContacts;
