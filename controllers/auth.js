@@ -34,9 +34,7 @@ async function register(req, res, next) {
 
     console.log("User registered successfully:", addUser);
 
-    res
-      .status(201)
-      .send({ email: addUser.email, subscription: addUser.subscription });
+    res.status(201).send({ email: addUser.email, subscription: addUser.subscription });
   } catch (error) {
     console.error("Error during registration:", error);
     next(error);
@@ -62,10 +60,15 @@ async function login(req, res, next){
       return res.status(401).send({message: "Email or password is wrong"})
     }
 
-    const token = jwt.sign({id: user._id, name: user.name}, process.env.JWT_SECRET, {expiresIn: 60 * 60})
+    const token = jwt.sign({id: user._id, name: user.name}, process.env.JWT_SECRET, {expiresIn: "1d"})
+
+    await User.findByIdAndUpdate(user._id, {token}).exec();
 
     console.log("User logged in successfully");
-    res.send({token})
+    res.send({token, user: {
+      email: user.email,
+      subscription: user.subscription
+    }});
   } catch (error) {
     console.error("Error during login:", error);
     next(error);
