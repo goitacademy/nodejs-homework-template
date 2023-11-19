@@ -2,10 +2,10 @@ import contactService from "../models/contacts/index.js";
 
 import { HttpError } from "../helpers/index.js";
 
-import {
-  contactAddSchema,
-  contactUpdateSchema,
-} from "../schemas/contact-schemas.js";
+// import {
+//   contactAddSchema,
+//   contactUpdateSchema,
+// } from "../schemas/contact-schemas.js";
 
 const getAll = async (req, res, next) => {
   try {
