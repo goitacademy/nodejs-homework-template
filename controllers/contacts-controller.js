@@ -26,7 +26,7 @@ const updateById = async (req, res) => {
         const { id } = req.params;
         const result = await Contact.findByIdAndUpdate(id, req.body);
         if (!result) {
-            throw HttpError(404, `Contact with id=${id} not found`);
+            throw HttpError(404, `Contact with id=${id} was not found`);
         }
         res.json(result);
 };

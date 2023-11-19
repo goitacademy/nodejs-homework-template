@@ -40,7 +40,9 @@ export const contactUpdateSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
     phone: Joi.string(),
-    favorite: Joi.boolean(),
+    favorite: Joi.boolean().messages({
+        "string.base": `missing field favorite`,
+    }),
 });
 
 export const contactFavoriteSchema = Joi.object({
