@@ -21,7 +21,7 @@ const contactSchema = new Schema(
       default: false,
     },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
 contactSchema.post("save", (error, data, next) => {
   error.status = 400;
