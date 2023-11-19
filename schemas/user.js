@@ -1,6 +1,6 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
-const bcrypt = require("bcryptjs"); // Import bcryptjs
+const bcrypt = require("bcryptjs");
 const {
   handleSaveError,
   runValidatorsAsUpdate,
@@ -64,6 +64,21 @@ export const userSignInSchema = Joi.object({
 
 export const userEmailSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
+});
+
+export const addUserSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).required(),
+});
+
+export const loginUserSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});
+
+export const updateUserSchema = Joi.object({
+  email: Joi.string().email(),
+  password: Joi.string().min(8),
 });
 
 const User = mongoose.model("user", userSchema);
