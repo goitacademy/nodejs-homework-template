@@ -10,14 +10,14 @@ const {
   updateStatusContact,
 } = require("../../controllers/contacts");
 
-const authController = require("./controllers/authController");
-const authMiddleware = require("./middleware/authMiddleware");
+const authController = require("../../controllers/authController");
+const authMiddleware = require("../../middlewares/authMiddleware");
 
 const {
   addUserSchema,
   loginUserSchema,
   updateUserSchema,
-} = require("../../schemas/userSchemas");
+} = require("../../schemas/user");
 
 const { validateBody, isValidId } = require("../../middlewares/index");
 
@@ -50,12 +50,12 @@ router.post(
   "/users/register",
   validateBody(addUserSchema),
   authController.register
-); // Додати addUserSchema
+);
 router.post(
   "/users/login",
   validateBody(loginUserSchema),
   authController.login
-); // Додати loginUserSchema
+);
 router.get("/users/current", authMiddleware, authController.getCurrentUser);
 router.post("/users/logout", authMiddleware, authController.logout);
 router.patch(
@@ -63,7 +63,7 @@ router.patch(
   authMiddleware,
   validateBody(updateUserSchema),
   authController.updateUser
-); // Додати updateUserSchema
+);
 router.delete("/users", authMiddleware, authController.deleteUser);
 
 module.exports = router;

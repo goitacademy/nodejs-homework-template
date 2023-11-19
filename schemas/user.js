@@ -49,38 +49,35 @@ userSchema.post("save", handleSaveError);
 userSchema.pre("findOneAndUpdate", runValidatorsAsUpdate);
 userSchema.post("findOneAndUpdate", handleSaveError);
 
-export const userSignUpSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(8).required(),
-  subscription: Joi.string()
-    .valid("starter", "pro", "business")
-    .default("starter"),
-});
-
-export const userSignInSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(8).required(),
-});
-
-export const userEmailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-});
-
-export const addUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(8).required(),
-});
-
-export const loginUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-});
-
-export const updateUserSchema = Joi.object({
-  email: Joi.string().email(),
-  password: Joi.string().min(8),
-});
-
 const User = mongoose.model("user", userSchema);
 
-export default User;
+module.exports = User;
+
+module.exports = {
+  userSignUpSchema: Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+    password: Joi.string().min(8).required(),
+    subscription: Joi.string()
+      .valid("starter", "pro", "business")
+      .default("starter"),
+  }),
+  userSignInSchema: Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+    password: Joi.string().min(8).required(),
+  }),
+  userEmailSchema: Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+  }),
+  addUserSchema: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required(),
+  }),
+  loginUserSchema: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
+  updateUserSchema: Joi.object({
+    email: Joi.string().email(),
+    password: Joi.string().min(8),
+  }),
+};
