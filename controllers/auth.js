@@ -47,17 +47,6 @@ export const register = async (req, res, next) => {
     });
 
     generateToken(newUser, 201, res);
-
-    // res.status(201).json({
-    //   status: 'success',
-    //   code: 201,
-    //   data: {
-    //     user: {
-    //       email: newUser.email,
-    //       subscription: newUser.subscription,
-    //     },
-    //   },
-    // });
   } catch (error) {
     next(error);
   }
@@ -81,7 +70,7 @@ export const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
-    // add token to the user
+    // to add a token to the user
     await User.findByIdAndUpdate(user._id, { token });
 
     res.status(200).json({
@@ -118,14 +107,7 @@ export async function updateSubscription(req, res, next) {
   const { email, subscription } = userSubscription;
 
   res.status(200).json({
-    status: "success",
-    code: 201,
-    data: {
-      user: {
-        id: user,
-        email,
-        subscription,
-      },
-    },
+    email,
+    subscription,
   });
 }
