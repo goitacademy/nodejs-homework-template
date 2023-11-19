@@ -17,7 +17,7 @@ router.post("/", jsonParser, auth, ContactControllers.postContact);
 
 router.delete("/:id",auth, ContactControllers.deleteContact);
 
-router.put("/:id", jsonParser, ContactControllers.putContact)
+router.put("/:id",auth, jsonParser, ContactControllers.putContact)
 
 router.patch("/:id/favorite", ContactControllers.patchContact);
 
