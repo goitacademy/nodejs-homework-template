@@ -22,23 +22,3 @@ const userSchema = new mongoose.Schema(
 
 module.exports = mongoose.model("User", userSchema);
 
-  // {
-  //   name: {
-  //     type: String,
-  //     require: true,
-  //   },
-  //   email: {
-  //     type: String,
-  //     require: true,
-  //     index: true,
-  //     unique: true,
-  //   },
-  //   password: {
-  //     type: String,
-  //     require: true,
-  //   },
-  // },
-  // {
-  //   versionKey: false,
-  //   timestamps: true,
-  // }
