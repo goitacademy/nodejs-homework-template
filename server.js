@@ -1,5 +1,5 @@
-import app from './app';
+import app from './app.js';
 
-app.listen(5500, () => {
-  console.log("Server running. Use our API on port: 3000")
+app.listen(3001, () => {
+  console.log("Server running on the port: 3001")
 })
