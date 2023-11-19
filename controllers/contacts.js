@@ -31,11 +31,9 @@ const getContactById = async (req, res, next) => {
     }
     // console.log( req.user.id );
     // console.log(contact.owner.toHexString());
-    if(contact.owner.toString() !== req.user.id) {
+    if (contact.owner.toString() !== req.user.id) {
       return res.status(404).json({ message: "Contact not found" });
     }
-    
-
 
     res.send(contact);
   } catch (error) {
@@ -52,6 +50,7 @@ const postContact = async (req, res, next) => {
   };
 
   try {
+    console.log({owner: req.user.id})
     const validation = contactSchema.validate(contact);
     if (validation.error) {
       const errorMessage = validation.error.details
