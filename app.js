@@ -37,8 +37,8 @@ app.use((req, res, next) => {
 
 // Обробник помилок сервера
 app.use((err, req, res, next) => {
+
   console.error(err.stack);
   res.status(500).json({ message: "Internal Server Error" });
-});
 
 module.exports = app;
