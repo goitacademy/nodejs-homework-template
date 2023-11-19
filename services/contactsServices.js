@@ -127,9 +127,7 @@ const favoriteContactService = async (id, body) => {
 const partiallyContactService = async (id, body) => {
   const tasks = await Contact.find().exec();
   console.log(
-    "1- це Contact Services - partiallyContact, довжина масиву ",
-    tasks.length
-  );
+    "1- це Contact Services - partiallyContact, довжина масиву ", tasks.length );
   const index = tasks.findIndex((el) => el.id === id);
   
   if (index === -1) {
@@ -163,8 +161,7 @@ const partiallyContactService = async (id, body) => {
   const newTasks = await Contact.find().exec();
 
   console.log(
-    "2 - це Contact Services - partiallyContact, довжина нового масиву",
-    newTasks.length
+    "2 - це Contact Services - partiallyContact, довжина нового масиву", newTasks.length
   );
 
   console.log("це Contact Services - partiallyContact - оновлено ", id);
