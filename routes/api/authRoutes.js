@@ -11,6 +11,8 @@ const jimp = require('jimp');
 const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuidv4 } = require('uuid');
+const nodemailer = require('nodemailer');
 
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -34,31 +36,56 @@ router.post('/signup', async (req, res) => {
 
     const { email, password } = req.body;
 
-    // Utwórz odnośnik do awatara przy pomocy Gravatara
-    const avatarURL = gravatar.url(email, { s: '250', d: 'retro' }, true);
+    // Utwórz unikalny token weryfikacyjny
+    const verificationToken = uuidv4();
 
-    const existingUser = await userModel.findOne({ email });
-    if (existingUser) {
-      return res.status(409).json({ message: 'Email in use' });
-    }
+    // Utwórz odnośnik do weryfikacji emaila
+    const verificationLink = `http://localhost:3000/auth/verify/${verificationToken}`;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Wysyłka e-maila z odnośnikiem do weryfikacji
+    await sendVerificationEmail(email, verificationLink);
 
+    // Zapisz użytkownika w bazie danych z tokenem weryfikacyjnym
     const newUser = await userModel.create({
       email,
-      password: hashedPassword,
+      password,
       subscription: 'starter',
-      avatarURL,
+      avatarURL: gravatar.url(email, { s: '250', d: 'retro' }, true),
+      verificationToken,
     });
 
     res.status(201).json({
       user: { email: newUser.email, subscription: newUser.subscription },
+      message:
+        'User created successfully. Please check your email for verification.',
     });
   } catch (error) {
     console.error('Error during signup:', error.message);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
+// Funkcja do wysyłania e-maila z odnośnikiem do weryfikacji
+async function sendVerificationEmail(email, verificationLink) {
+  const transporter = nodemailer.createTransport({
+    // Skonfiguruj transportera, np. do serwera SMTP
+    // Przykład dla Gmail:
+    service: 'gmail',
+    auth: {
+      user: 'your_email@gmail.com',
+      pass: 'your_email_password',
+    },
+  });
+
+  const mailOptions = {
+    from: 'your_email@gmail.com',
+    to: email,
+    subject: 'Email Verification',
+    text: `Click the following link to verify your email: ${verificationLink}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
 
 router.patch(
   '/avatars',
@@ -252,5 +279,89 @@ router.patch(
     }
   }
 );
+router.get('/verify/:verificationToken', async (req, res) => {
+  try {
+    const { verificationToken } = req.params;
 
+    // Sprawdź, czy istnieje użytkownik z podanym tokenem w bazie danych
+    const user = await userModel.findOne({ verificationToken });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Aktualizuj pola verify i verificationToken
+    user.verify = true;
+    user.verificationToken = null;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Verification successful' });
+  } catch (error) {
+    console.error('Error during email verification:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+router.post('/verify', async (req, res) => {
+  try {
+    const { error } = resendVerificationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: 'Missing required field email' });
+    }
+
+    const { email } = req.body;
+
+    // Sprawdź, czy istnieje użytkownik o podanym adresie e-mail
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Sprawdź, czy użytkownik nie został już zweryfikowany
+    if (user.verify) {
+      return res
+        .status(400)
+        .json({ message: 'Verification has already been passed' });
+    }
+
+    // Wygeneruj nowy token weryfikacyjny
+    const verificationToken = uuidv4();
+    user.verificationToken = verificationToken;
+    await user.save();
+
+    // Utwórz odnośnik do weryfikacji emaila
+    const verificationLink = `http://localhost:3000/auth/verify/${verificationToken}`;
+
+    // Wysyłka e-maila z odnośnikiem do weryfikacji
+    await sendVerificationEmail(email, verificationLink);
+
+    res.status(200).json({ message: 'Verification email sent' });
+  } catch (error) {
+    console.error('Error during email resend:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+// Funkcja do wysyłania e-maila z odnośnikiem do weryfikacji
+async function sendVerificationEmail(email, verificationLink) {
+  const transporter = nodemailer.createTransport({
+    // Skonfiguruj transportera, np. do serwera SMTP
+    // Przykład dla Gmail:
+    service: 'gmail',
+    auth: {
+      user: 'your_email@gmail.com',
+      pass: 'your_email_password',
+    },
+  });
+
+  const mailOptions = {
+    from: 'your_email@gmail.com',
+    to: email,
+    subject: 'Email Verification',
+    text: `Click the following link to verify your email: ${verificationLink}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
 module.exports = router;

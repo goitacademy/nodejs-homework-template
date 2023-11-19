@@ -24,8 +24,10 @@
     "mongoose": "^8.0.1",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.7",
     "path": "^0.12.7",
-    "shortid": "^2.2.16"
+    "shortid": "^2.2.16",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",

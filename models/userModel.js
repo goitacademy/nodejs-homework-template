@@ -1,3 +1,5 @@
+// user.model.js
+
 const mongoose = require('mongoose');
 const gravatar = require('gravatar');
 
@@ -22,10 +24,17 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
-  avatarURL: String, // Nowa właściwość avatarURL
+  avatarURL: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verification token is required'],
+  },
 });
 
-// Przykład użycia gravatar do generowania URL dla awatara
 userSchema.pre('save', function (next) {
   if (!this.avatarURL) {
     this.avatarURL = gravatar.url(this.email, { s: '250', d: 'retro' }, true);
