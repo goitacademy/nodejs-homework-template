@@ -18,18 +18,7 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const updateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net", "ua", "pl"] },
-  }),
-  phone: Joi.string().pattern(phoneRegexp),
-  favorite: Joi.boolean(),
-});
-
 module.exports = {
   updateFavoriteSchema,
   addSchema,
-  updateSchema,
 };
