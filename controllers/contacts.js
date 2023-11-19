@@ -1,7 +1,7 @@
 // Підключаємо моделс для роботи mongoose з колекцією mongoDB
 // const contacts = require("../models/contacts");
 const Contact = require("../models/contacts");
-
+// валідація
 const { contactSchema, patchSchema } = require("../schemas/contacts");
 
 // функції controllers для контактів

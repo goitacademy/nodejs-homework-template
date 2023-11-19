@@ -39,6 +39,14 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
+    const validation = userSchema.validate({ email, password });
+    if (validation.error) {
+      const errorMessage = validation.error.details
+        .map((error) => error.message)
+        .join(", ");
+      return res.status(400).send(`Validation Error: ${errorMessage}`);
+    }
+
     const user = await User.findOne({ email }).exec();
     if (user === null) {
       return res.status(401).send({ message: "Email or password is wrong" });
