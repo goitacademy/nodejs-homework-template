@@ -7,9 +7,8 @@ const { contactSchema, patchSchema } = require("../schemas/contacts");
 // функції controllers для контактів
 const getContacts = async (req, res, next) => {
   try {
-    // console.log({ owner: req.user });
+
     const contacts = await Contact.find({ owner: req.user.id }).exec();
-    // console.log(contacts);
     res.send(contacts);
   } catch (error) {
     next(error);
@@ -29,8 +28,7 @@ const getContactById = async (req, res, next) => {
     if (contact === null) {
       return res.status(404).send({ message: "Contact not found" });
     }
-    // console.log( req.user.id );
-    // console.log(contact.owner.toHexString());
+
     if (contact.owner.toString() !== req.user.id) {
       return res.status(404).json({ message: "Contact not found" });
     }

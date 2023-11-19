@@ -24,7 +24,7 @@ const contactSchema = Joi.object({
         'Invalid phone number format. It should consist of digits and optional "+" sign for international numbers.',
     })
     .required(),
-    owner: Joi.required(),
+    owner: Joi.object().optional(),
 });
 
 const patchSchema = Joi.object({
