@@ -1,11 +1,11 @@
-const Contact = require("../models/contacts");
+const Contact = require("../models/contact");
 
 const { contactSchema, favoriteSchema } = require("../routes/shemas/contactSchema");
 
 async function listContacts(req, res, next) {
   try {
     const contacts = await Contact.find().exec();
-
+  
     res.json(contacts);
   } catch (err) {
     next(err);
@@ -96,7 +96,10 @@ async function updateStatusContact(req, res, next) {
   const body = favoriteSchema.validate(req.body);
   const contactBody = body.value;
 
-  if (typeof body.error !== "undefined") {
+  // if (typeof body.error !== "undefined") {
+  //   return res.status(400).json({ message: "Missing field favorite" });
+  // }
+  if (body.error) {
     return res.status(400).json({ message: "Missing field favorite" });
   }
 
@@ -110,8 +113,21 @@ async function updateStatusContact(req, res, next) {
       return res.status(404).json({ message: "Not found" });
     }
 
-    res.json(switchFavorite);
-  } catch (err) {
+    res.json(switchFavorite);}
+  // try {
+  //   const updatedContact = await Contact.findByIdAndUpdate(
+  //     contactId,
+  //     { favorite: contactBody.favorite },
+  //     { new: true }
+  //   );
+
+  //   if (updatedContact === null) {
+  //     return res.status(404).json({ message: "Not found" });
+  //   }
+
+  //   res.json(updatedContact);}
+
+  catch (err) {
     next(err);
   }
 }
