@@ -20,10 +20,6 @@ const userSchemas = new mongoose.Schema(
       type: String,
       default: null,
     },
-    owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-    },
   },
   { versionKey: false, timestamps: true }
 );

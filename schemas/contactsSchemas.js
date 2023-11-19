@@ -8,6 +8,7 @@ const joiSchema = Joi.object({
     .required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
+    owner: Joi.object().optional()
  });
  
  const patchSchema = Joi.object({

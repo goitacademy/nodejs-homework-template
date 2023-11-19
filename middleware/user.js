@@ -1,32 +1,39 @@
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const User = require("../models/contacts")
 
-    function auth(req, res, next) {
-      const authHeader = req.headers.authorization;
-    
-      if (!authHeader) {
-        return res.status(401).send({ message: "Не предоставлен заголовок авторизации" });
-      }
-    
-      try {
-        const [bearer, token] = authHeader.split(" ", 2);
-    
-        if (bearer !== "Bearer") {
-          return res.status(401).send({ message: "Not authorized" });
-        }
-    
-        jwt.verify(token, process.env.JWT_SECRET, (err, decode) => {
-          if (err) {
-            return res.status(401).send({ message: "Not authorized" });
-          }
-    
-          console.log(decode);
-    
-          next();
-        });
-      } catch (error) {
-        console.error("Error during authentication:", error);
-        return res.status(500).send({ message: "Ошибка аутентификации" });
-      }
+function auth(req, res, next) {
+  const authHeader = req.headers.authorization;
+
+  if (typeof authHeader === "undefined") {
+    return res.status(401).send({ message: "Invalid token" });
+  }
+  const [bearer, token] = authHeader.split(" ", 2);
+  if (bearer !== "Bearer") {
+    return res.status(401).send({ message: "Invalid token" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
+    if (err) {
+      return res.status(401).send({
+        message: "Not authorized",
+      });
     }
 
-    module.exports = auth;
+    try {
+      req.user = decode;
+      const user = await User.findById(decode.id).exec();
+      if (user === null) {
+        return res.status(401).send({ message: "Invalid token" });
+      }
+
+      if (user.token !== token) {
+        return res.status(401).send({ message: "Invalid token" });
+      }
+      req.user = { id: user._id, name: user.name };
+      next();
+    } catch (error) {
+      next(error);
+    }
+  });
+}
+module.exports = auth;

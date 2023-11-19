@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Contact = require("../models/contacts");
-const joiSchema = require("../schemas/contactsSchemas");
+const { joiSchema } = require("../schemas/contactsSchemas");
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -15,7 +15,7 @@ mongoose
 async function listContacts(req, res, next) {
   try {
     console.log("Before Contact.find()");
-    const contacts = await Contact.find().exec();
+    const contacts = await Contact.find({owner: req.user.id}).exec();
     console.log("After Contact.find()");
     res.send(contacts);
   } catch (error) {
@@ -28,10 +28,14 @@ async function listContacts(req, res, next) {
 async function getContactById(req, res, next) {
   const { contactId } = req.params;
   try {
-    const contact = await Contact.findById(contactId);
+    const contact = await Contact.findById(contactId).exec();
 
     if (!contact) {
       return res.status(404).send({ message: "Not found" });
+    }
+
+    if(contact.owner !== req.user.id){
+      return res.status(403).send({message: "Forbidden"})
     }
 
     res.status(200).send(contact);
@@ -45,11 +49,11 @@ async function getContactById(req, res, next) {
 
 // Add Contact
 async function addContact(req, res, next) {
-  const { name, email, phone, owner } = req.body;
+  const { name, email, phone } = req.body;
 
   try {
     // Валидация email с использованием Joi
-    const validation = joiSchema.validate({ name, email, phone, owner });
+    const validation = joiSchema.validate({ name, email, phone});
     if (validation.error) {
       console.log("Validation error:", validation.error.details.map((error) => error.message).join(", "));
       return res.status(400).send({
