@@ -1,10 +1,10 @@
 import Contact from "../models/Contact.js";
-import { HttpError } from "../helpers/HttpError.js";
+import { HttpError } from "../utils/helpers/HttpError.js";
 import {
   contactAddSchema,
   contactUpdateSchema,
   contactFavoriteSchema,
-} from "../models/Contact.js";
+} from "../utils/validation/contactValidationSchemas.js";
 
 const getAll = async (req, res, next) => {
   try {
