@@ -12,10 +12,10 @@ async function listContacts(req, res, next) {
 }
 
 async function getContactById(req, res, next) {
-  const {id} = req.params;
+  const {contactId} = req.params;
   try {
-    console.log(`Searching for contact with id: ${id}`);
-    const contact = await Contact.findById(id).exec();
+    console.log(`Searching for contact with id: ${contactId}`);
+    const contact = await Contact.findById(contactId).exec();
    
     console.log(contact);
     if (contact === null) {
@@ -48,7 +48,7 @@ async function addContact(req, res, next) {
 }
 
 async function updateContact(req, res, next) {
-  const { id } = req.params;
+  const { contactId } = req.params;
   const contact = {
     name: req.body.name,
     email: req.body.email,
@@ -56,7 +56,7 @@ async function updateContact(req, res, next) {
     favorite: req.body.favorite
   }
   try {
-    const result = await Contact.findByIdAndUpdate(id, contact, {new: true}); 
+    const result = await Contact.findByIdAndUpdate(contactId, contact, {new: true}); 
     // console.log(result);
     if (result === null){
       return res.status(404).send("Contact Not Found");
@@ -71,19 +71,42 @@ async function updateContact(req, res, next) {
 }
 
 async function removeContact(req, res, next) {
-  const { id } = req.params;
+  const { contactId } = req.params;
 
   try {
-    const result = await Contact.findByIdAndDelete(id);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (result === null) {
       return res.status(404).send("Contact Not Found");
     }
-    res.send(`Deleted book ${id})`);
+    res.json({ message: 'Contact deleted successfully', data: result });
+    // res.send(`Deleted book ${contactId})`);
   } catch (err) {
     next(err);
   }
+}
 
-  
+async function updateStatusOfContact(req, res, next) {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined) {
+    return res.status(400).send('favorite field missing' );
+  }
+
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite: true },
+      { new: true }
+    );
+
+    if (!updatedContact) {
+      return res.status(404).send('Not found');
+    }
+    res.status(200).send(updatedContact);
+  } catch (err) {
+    next(err);
+  }
 }
 
 module.exports = {
@@ -92,4 +115,5 @@ module.exports = {
   addContact,
   updateContact,
   removeContact,
+  updateStatusOfContact,
 };
