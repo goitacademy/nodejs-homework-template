@@ -1,14 +1,13 @@
 
-const express = require('express');
-const router = express.Router();
-const Joi = require('joi');
-const listContacts = require('../../controllers/listContacts');
-const getContactById = require('../../controllers/getContactById');
-const addContact = require('../../controllers/addContacts');
-const removeContact = require('../../controllers/removeContacts');
-const updateContact = require('../../controllers/updateContact');
+import express from 'express';
+import Joi from 'joi';
+import listContacts  from '../../controllers/listContacts.js';
+import  getContactById  from '../../controllers/getContactById.js';
+import addContact from '../../controllers/addContacts.js';
+import  removeContact  from '../../controllers/removeContacts.js';
+import  updateContact  from '../../controllers/updateContact.js';
+import  updateStatusContact  from '../../controllers/updateStatusContact.js';
 
-const updateStatusContact = require('../../controllers/updateStatusContact');
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
@@ -21,6 +20,8 @@ const updateContactSchema = Joi.object({
   email: Joi.string().email(),
   phone: Joi.string(),
 });
+
+const router = express.Router();
 
 router.get('/', (req, res) => {
   listContacts(req, res);
@@ -58,24 +59,18 @@ router.patch('/:id/favorite', async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
 
-  console.log('Received PATCH request:', { id, favorite });
-
-  if (favorite === undefined) {
-    console.log('Error: Missing field "favorite" in the request body');
-    return res.status(400).json({ message: 'missing field favorite' });
+  if (favorite === undefined || typeof favorite !== 'boolean') {
+    return res
+      .status(400)
+      .json({ message: 'Missing or invalid field "favorite"' });
   }
 
   try {
-    console.log(`Received PATCH request for contact with id: ${id}`);
-
     const updatedContact = await updateStatusContact(id, { favorite });
 
     if (!updatedContact) {
-      console.log(`Contact not found for id: ${id}`);
       return res.status(404).json({ message: 'Contact not found' });
     }
-
-    console.log('Contact updated successfully:', updatedContact);
 
     res.status(200).json({
       status: 'success',
@@ -91,4 +86,4 @@ router.patch('/:id/favorite', async (req, res) => {
   updateContact(req, res);
 });
 
-module.exports = router;
+export default router;

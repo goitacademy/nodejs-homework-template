@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -90,7 +90,7 @@ const updateStatusContact = async (contactId, { favorite }) => {
   }
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,

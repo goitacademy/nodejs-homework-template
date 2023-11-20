@@ -1,4 +1,4 @@
-const contactsModel = require('../models/contactModel');
+import * as contactsModel from '../models/contactModel.js';
 
 
 const listContacts = async (req, res, next) => {
@@ -12,4 +12,4 @@ const listContacts = async (req, res, next) => {
   }
 };
 
-module.exports = listContacts;
+export default listContacts;
