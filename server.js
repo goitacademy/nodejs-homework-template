@@ -1,7 +1,19 @@
-import app from './app.js';
-
 // mg9zDJTBLTvL3K2X;
 
-app.listen(3000, () => {
-  console.log('Server running. Use our API on port: 3000');
-});
+import mongoose from 'mongoose';
+import app from './app.js';
+const DB_HOST =
+  'mongodb+srv://Ivanna:mg9zDJTBLTvL3K2X@cluster0.2cyfzlb.mongodb.net/my-contacts?retryWrites=true&w=majority';
+
+mongoose
+  .connect(DB_HOST)
+  .then(() => {
+    console.log('Database connection successful');
+    app.listen(3000, () => {
+      console.log('Server running. Use our API on port: 3000');
+    });
+  })
+  .catch(error => {
+    console.log(error.message);
+    process.exit(1);
+  });
