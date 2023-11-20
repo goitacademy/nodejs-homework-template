@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const handleMongooseError = require("../helpers/handleMongooseError");
+
 const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
 
 const contactSchema = new mongoose.Schema(
@@ -30,5 +32,7 @@ const contactSchema = new mongoose.Schema(
   },
   { versionKey: false }
 );
+
+contactSchema.post("save", handleMongooseError);
 
 module.exports = mongoose.model("Contact", contactSchema);
