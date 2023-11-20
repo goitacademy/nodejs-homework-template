@@ -7,11 +7,15 @@ const {
 
 const getAll = async (req, res, next) => {
 	try {
-		const results = await service.getAll();
+		const page = parseInt(req.query.page) || 1;
+		const limit = parseInt(req.query.limit) || 20;
+		const favorite = req.query.favorite;
+
+		const results = await service.getContactsQuery(page, limit, favorite);
 		res.status(200).json({
 			status: 'success',
 			code: 200,
-			data: {
+			ResponseQueryData: {
 				contacts: results,
 			},
 		});

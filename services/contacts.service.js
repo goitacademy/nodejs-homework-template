@@ -4,6 +4,17 @@ const getAll = async () => {
 	return Contact.find();
 };
 
+const getContactsQuery = async (page, limit, favorite) => {
+	let query = Contact.find();
+	if (favorite !== undefined) {
+		query = query.find({ favorite: favorite });
+	}
+	return query
+		.skip((page - 1) * limit)
+		.limit(limit)
+		.exec();
+};
+
 const getById = async contactId => {
 	return Contact.findById(contactId);
 };
@@ -26,6 +37,7 @@ const removeContact = async contactId => {
 
 module.exports = {
 	getAll,
+	getContactsQuery,
 	getById,
 	createContact,
 	updateContact,
