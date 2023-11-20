@@ -1,5 +1,5 @@
 import express from "express";
-import ctrl from "../../controllers/contacts-controller.js";
+import contactsController from "../../controllers/contacts-controller.js";
 import {
   isEmptyBody,
   isValidId,
@@ -13,16 +13,21 @@ const contactsRouter = express.Router();
 const contactAddValidate = validateBody(addSchema);
 const updateFavoriteValidate = validateBody(updateFavoriteSchema);
 
-contactsRouter.get("/", authenticate, ctrl.listContacts);
+contactsRouter.get("/", authenticate, contactsController.listContacts);
 
-contactsRouter.get("/:id", authenticate, isValidId, ctrl.getContactById);
+contactsRouter.get(
+  "/:id",
+  authenticate,
+  isValidId,
+  contactsController.getContactById
+);
 
 contactsRouter.post(
   "/",
   authenticate,
   isEmptyBody,
   contactAddValidate,
-  ctrl.addContact
+  contactsController.addContact
 );
 
 contactsRouter.put(
@@ -31,7 +36,7 @@ contactsRouter.put(
   isValidId,
   isEmptyBody,
   contactAddValidate,
-  ctrl.updateContact
+  contactsController.updateContact
 );
 
 contactsRouter.patch(
@@ -39,9 +44,14 @@ contactsRouter.patch(
   authenticate,
   isValidId,
   updateFavoriteValidate,
-  ctrl.updateFavorite
+  contactsController.updateFavorite
 );
 
-contactsRouter.delete("/:id", authenticate, isValidId, ctrl.removeContact);
+contactsRouter.delete(
+  "/:id",
+  authenticate,
+  isValidId,
+  contactsController.removeContact
+);
 
 export default contactsRouter;

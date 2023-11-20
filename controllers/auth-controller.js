@@ -14,21 +14,23 @@ const signUp = async (req, res) => {
     throw HttpError(409, `${email} already in use`);
   }
   const hashPassword = await bcrypt.hash(password, 10);
-
   const newUser = await User.create({ ...req.body, password: hashPassword });
+
   res.status(201).json({
-    username: newUser.username,
-    email: newUser.email,
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
 const signIn = async (req, res) => {
-  const { email, passworrd } = req.body;
+  const { email, password } = req.body;
   const user = User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password invalid");
   }
-  const passwordCompare = await bcrypt.compare(passworrd, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
     throw HttpError(401, "Email or password invalid");
   }
@@ -37,15 +39,23 @@ const signIn = async (req, res) => {
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+
+  await User.findByIdAndUpdate(user._id, { token });
+
   res.json({
     token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
+
 const getCurrent = async (req, res) => {
-  const { username, email } = req.user;
+  const { email, subscription } = req.user;
   res.json({
-    username,
     email,
+    subscription,
   });
 };
 
