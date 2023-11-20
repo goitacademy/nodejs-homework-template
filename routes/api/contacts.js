@@ -1,22 +1,14 @@
 import express from "express";
-import { postContactSchema } from "./services/postContactSchema.js";
-import { updateContactSchema } from "./services/updateContactSchema.js";
-import { listContacts } from "../../models/controllers/contacts/listContacts.js";
-import { getContactById } from "../../models/controllers/contacts/getContacts.js";
-import { addContact } from "../../models/controllers/contacts/addContact.js";
-import { removeContact } from "../../models/controllers/contacts/removeContact.js";
-import { updateContact } from "../../models/controllers/contacts/updateContact.js";
-
+import { postContactSchema } from "./validators/postContactSchema.js";
+import { updateContactSchema } from "./validators/updateContactSchema.js";
+import { getContactById } from "../../repositories/contacts/getContacts.js";
+import { addContact } from "../../repositories/contacts/addContact.js";
+import { removeContact } from "../../repositories/contacts/removeContact.js";
+import { updateContact } from "../../repositories/contacts/updateContact.js";
+import { indexContacts } from "../../controllers/contacts/indexContacts.js";
 export const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
-    const contacts = await listContacts();
-    res.status(200).json(contacts);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+router.get("/", indexContacts);
 
 router.get("/:contactId", async (req, res, next) => {
   try {
