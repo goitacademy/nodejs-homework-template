@@ -1,3 +1,4 @@
+
 import express from 'express';
 import Joi from 'joi';
 import listContacts  from '../../controllers/listContacts.js';
@@ -6,6 +7,7 @@ import addContact from '../../controllers/addContacts.js';
 import  removeContact  from '../../controllers/removeContacts.js';
 import  updateContact  from '../../controllers/updateContact.js';
 import  updateStatusContact  from '../../controllers/updateStatusContact.js';
+
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
@@ -29,11 +31,13 @@ router.get('/:id', (req, res) => {
   getContactById(req, res);
 });
 
+
 router.post('/', (req, res) => {
   const { error } = addContactSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
+
 
   addContact(req, res);
 });
@@ -76,7 +80,10 @@ router.patch('/:id/favorite', async (req, res) => {
   } catch (error) {
     console.error('Error updating contact status:', error.message);
     res.status(500).json({ message: 'Internal Server Error' });
+
   }
+
+  updateContact(req, res);
 });
 
 export default router;
