@@ -2,29 +2,17 @@ import express from "express";
 import { postContactSchema } from "./validators/postContactSchema.js";
 import { updateContactSchema } from "./validators/updateContactSchema.js";
 import { showContacts } from "../../controllers/contacts/showContacts.js";
-import { addContact } from "../../repositories/contacts/addContact.js";
 import { removeContact } from "../../repositories/contacts/removeContact.js";
 import { updateContact } from "../../repositories/contacts/updateContact.js";
 import { indexContacts } from "../../controllers/contacts/indexContacts.js";
+import { createContacts } from "../../controllers/contacts/createContacts.js";
 export const router = express.Router();
 
 router.get("/", indexContacts);
 
 router.get("/:contactId", showContacts);
 
-router.post("/", async (req, res, next) => {
-  try {
-    const { error } = postContactSchema.validate(req.body);
-    if (error) {
-      res.status(400).json({ message: error.message });
-    } else {
-      const newContact = await addContact(req.body);
-      res.status(201).json(newContact);
-    }
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+router.post("/", createContacts);
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
