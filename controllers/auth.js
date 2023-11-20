@@ -1,8 +1,14 @@
 const mongoose = require("mongoose");
+<<<<<<< Updated upstream
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const BASE_URL = process.env.DATABASE_URI;
+=======
+// const Ctrl = require("../controllers/auth");
+// const joiUserSchemas = require("../schemas/userSchemas");
+const BASE_URL = process.env.DATABASE_URL;
+>>>>>>> Stashed changes
 
 mongoose
   .connect(BASE_URL)
@@ -12,6 +18,7 @@ mongoose
     process.exit(1);
   });
 
+<<<<<<< Updated upstream
 // Register User
 async function register(req, res, next) {
   const { email, password, subscription } = req.body;
@@ -114,11 +121,20 @@ async function current(req, res, next){
     console.log(error)
     next(error)
   }
+=======
+async function register(req, res, next) {
+  // const { password, email, subscription, token, owner } = req.body;
+  console.log(req.body)
+  res.send("Ok")
+>>>>>>> Stashed changes
 }
 
 module.exports = {
   register,
+<<<<<<< Updated upstream
   login,
   logout,
   current
+=======
+>>>>>>> Stashed changes
 };

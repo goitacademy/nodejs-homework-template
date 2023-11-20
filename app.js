@@ -3,7 +3,11 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
+<<<<<<< Updated upstream
 const routers = require("./routes/api");
+=======
+const routers = require("./routes/api/index");
+>>>>>>> Stashed changes
 
 const app = express();
 
