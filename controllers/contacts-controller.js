@@ -35,29 +35,27 @@ const updateById = async (req, res, next) => {
 };
 
 const updateFavorite = async (req, res) => {
-  const { id } = req.params;
-  const data = await Contact.findByIdAndUpdate(id, req.body, { new: true });
-  if (!data) {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
     throw HttpError(400, "missing field favorite");
   }
-  res.json(data);
+  res.json(result);
 };
 
-//  const deleteById = async (req, res, next) => {
-//   try {
-//     const { contactId } = req.params;
-//     const result = await contactsService.deleteContactContact(contactId);
-//     if (!result) {
-//       throw HttpError(404, `Movie with id=${contactId} not found`);
-//     }
+const deleteById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    throw HttpError(404, `Movie with id=${contactId} not found`);
+  }
 
-//     res.json({
-//       message: "Delete success",
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+  res.json({
+    message: "Delete success",
+  });
+};
 
 export default {
   getAllContacts: ctrlWrapper(getAllContacts),
@@ -65,4 +63,5 @@ export default {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   updateFavorite: ctrlWrapper(updateFavorite),
+  deleteById: ctrlWrapper(deleteById),
 };
