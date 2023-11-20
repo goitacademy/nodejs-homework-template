@@ -1,5 +1,4 @@
-
-const contactsModel = require('../models/contactModel');
+import * as contactsModel from '../models/contactModel.js';
 
 const updateStatusContact = async (contactId, { favorite }) => {
   try {
@@ -18,4 +17,4 @@ const updateStatusContact = async (contactId, { favorite }) => {
   }
 };
 
-module.exports = updateStatusContact;
+export default updateStatusContact;

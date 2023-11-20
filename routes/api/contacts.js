@@ -1,16 +1,13 @@
-// routes/api/contacts.js
-
-const express = require('express');
-const router = express.Router();
-const Joi = require('joi');
-const listContacts = require('../../controllers/listContacts');
-const getContactById = require('../../controllers/getContactById');
-const addContact = require('../../controllers/addContacts');
-const removeContact = require('../../controllers/removeContacts');
-const updateContact = require('../../controllers/updateContact');
-const updateStatusContact = require('../../controllers/updateStatusContact');
-const authController = require('../../controllers/authController');
-const verifyToken = require('../../middleware/authMiddleware');
+import express from 'express';
+import Joi from 'joi';
+import listContacts from '../../controllers/listContacts.js';
+import getContactById from '../../controllers/getContactById.js';
+import addContact from '../../controllers/addContacts.js';
+import removeContact from '../../controllers/removeContacts.js';
+import updateContact from '../../controllers/updateContact.js';
+import updateStatusContact from '../../controllers/updateStatusContact.js';
+import authController from '../../controllers/authController.js';
+import verifyToken from '../../middleware/authMiddleware.js';
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
@@ -23,6 +20,8 @@ const updateContactSchema = Joi.object({
   email: Joi.string().email(),
   phone: Joi.string(),
 });
+
+const router = express.Router();
 
 router.post('/login', authController.login);
 
@@ -96,4 +95,4 @@ router.patch('/:id/favorite', verifyToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const contactsModel = require('../models/contactModel');
+import * as contactsModel from '../models/contactModel.js';
 
 const updateContact = async (req, res, next) => {
   const { id } = req.params;
@@ -17,4 +17,4 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-module.exports = updateContact;
+export default updateContact;
