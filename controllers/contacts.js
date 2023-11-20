@@ -8,39 +8,41 @@ const listContacts = async (req, res) => {
   res.json(result);
 };
 
-const getContactById = async (req, res) => {
+const getContactById = async (req, res,next) => {
   const { contactId } = req.params;
   const result = await contacts.getContactById(contactId);
   if (!result) {
-    throw HttpError(404, "Not found");
-  }
+    const error = HttpError(404, "Not found");
+    return next(error);  }
   res.json(result);
 };
 
 const addContact = async (req, res) => {
-  
+
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
 
-const updateContact = async (req, res) => {
-  if (!req.body) {
-    throw HttpError(400, "missing fields");
-  }
+const updateContact = async (req, res,next) => {
   const { contactId } = req.params;
+  
+  if (!req.body && contactId) {
+    const error = HttpError(400, "missing fields");
+    return next(error); 
+  }
   const result = await contacts.updateContact(contactId, req.body);
   if (!result) {
-    throw HttpError(404, "Not found");
-  }
+    const error = HttpError(404, "Not found");
+    return next(error);   }
   res.json(result);
 };
 
-const removeContact = async (req, res) => {
+const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await contacts.removeContact(contactId);
   if (!result) {
-    throw HttpError(404, "Not found");
-  }
+    const error = HttpError(404, "Not found");
+    return next(error);  }
   res.json({ message: "contact deleted" });
 };
 
