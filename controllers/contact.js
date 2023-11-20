@@ -96,12 +96,12 @@ async function updateStatusContact(req, res, next) {
   const body = favoriteSchema.validate(req.body);
   const contactBody = body.value;
 
-  // if (typeof body.error !== "undefined") {
-  //   return res.status(400).json({ message: "Missing field favorite" });
-  // }
-  if (body.error) {
+  if (typeof body.error !== "undefined") {
     return res.status(400).json({ message: "Missing field favorite" });
   }
+  // if (body.error) {
+  //   return res.status(400).json({ message: "Missing field favorite" });
+  // }
 
   try {
     const switchFavorite = await Contact.findByIdAndUpdate(
