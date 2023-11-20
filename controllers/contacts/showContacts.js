@@ -1,4 +1,4 @@
-import { getContactById } from "../../repositories/contacts/getContacts";
+import { getContactById } from "../../repositories/contacts/getContacts.js";
 
 export async function showContacts(req, res, next) {
   try {
