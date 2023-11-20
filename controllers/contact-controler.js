@@ -1,9 +1,9 @@
 import Contact from "../models/Contact.js";
-import contactService from "../models/contacts.js";
 import { HttpError } from "../helpers/index.js";
 import {
   contactsAddSchema,
   contactsUpdateSchema,
+  contactFavoriteSchema,
 } from "../schemas/contact-schema.js";
 
 const getAllContacts = async (req, res, next) => {
@@ -31,7 +31,7 @@ const getContactId = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const { error } = false;
+    const { error } = contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -49,7 +49,26 @@ const updateContacts = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
+    console.log(req.body);
     const result = await Contact.findByIdAndUpdate(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, `Not found`);
+    }
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateContactsFiled = async (req, res, next) => {
+  try {
+    const { error } = contactFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body);
+
     if (!result) {
       throw HttpError(404, `Not found`);
     }
@@ -62,7 +81,7 @@ const updateContacts = async (req, res, next) => {
 const deleteContacts = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactService.deleteContact(contactId);
+    const result = await Contact.findByIdAndDelete(contactId);
     if (!result) {
       throw HttpError(404, `Not found`);
     }
@@ -78,4 +97,5 @@ export default {
   addContact,
   updateContacts,
   deleteContacts,
+  updateContactsFiled,
 };

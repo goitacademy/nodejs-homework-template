@@ -2,13 +2,12 @@
 import mongoose from "mongoose";
 import app from "./app.js";
 
-const DB_HOST =
-  "mongodb+srv://Oleksandr:ai4485vm@cluster0.nvgnpmu.mongodb.net/db-contacts?retryWrites=true&w=majority";
-// Підключаємось до кластера обовязково вказати між /назву бази? а також пароль
+const { DB_HOST, PORT } = process.env;
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
+    app.listen(PORT, () => {
       console.log("Database connection successful");
     });
   })
