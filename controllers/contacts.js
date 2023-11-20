@@ -40,9 +40,7 @@ async function getContactById(req, res, next) {
 
     res.status(200).send(contact);
   } catch (error) {
-    console.error(
-      `Error while fetching contact with ID ${contactId}: ${error.message}`
-    );
+    console.error(`Error while fetching contact with ID ${contactId}: ${error.message}`);
     next(error);
   }
 }
@@ -62,7 +60,6 @@ async function addContact(req, res, next) {
           .join(", "),
       });
     }
-
     const result = await Contact.create({ name, email, phone });
     console.log("Contact added successfully:", result);
     res.status(201).send(result);
@@ -85,9 +82,7 @@ async function removeContact(req, res, next) {
 
     res.send(result);
   } catch (error) {
-    console.error(
-      `Error while removing contact with ID ${contactId}: ${error.message}`
-    );
+    console.error(`Error while removing contact with ID ${contactId}: ${error.message}`);
     next(error);
   }
 }
