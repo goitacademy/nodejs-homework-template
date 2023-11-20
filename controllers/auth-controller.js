@@ -4,7 +4,7 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const { SECRET_KEY } = process.env;
+const { JWT_SECRET } = process.env;
 
 const signUp = async (req, res) => {
   const { email, password } = req.body;
@@ -17,8 +17,8 @@ const signUp = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
+    username: newUser.username,
     email: newUser.email,
-    name: newUser.name,
   });
 };
 
@@ -36,13 +36,28 @@ const signIn = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
   res.json({
     token,
   });
+};
+const getCurrent = async (req, res) => {
+  const { username, email } = req.user;
+  res.json({
+    username,
+    email,
+  });
+};
+
+const signOut = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.json({ message: "Signout success" });
 };
 
 export default {
   signUp: ctrlWrapper(signUp),
   signIn: ctrlWrapper(signIn),
+  getCurrent: ctrlWrapper(getCurrent),
+  signOut: ctrlWrapper(signOut),
 };
