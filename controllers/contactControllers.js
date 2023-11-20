@@ -7,13 +7,19 @@ const Contact = require("../models/contact");
 
 const getAllContact = async (req, res, next) => {
   try {
-    const { page = 1, limit = 20 } = req.query;
+    const { page = 1, limit = 20, favorite } = req.query;
     const skip = (page - 1) * limit;
-    const result = await Contact.find(
-      { owner: req.user.id },
-      "-createdAt -updatedAt",
-      { skip, limit }
-    ).populate("owner", "name email");
+
+    const query = { owner: req.user.id };
+
+    if (favorite === "true") {
+      query.favorite = true;
+    }
+
+    const result = await Contact.find(query, "-createdAt -updatedAt", {
+      skip,
+      limit,
+    }).populate("owner", "name email");
     res.json(result);
   } catch (error) {
     next(error);
@@ -48,8 +54,6 @@ const newContact = async (req, res, next) => {
         favorite: req.body.favorite,
         owner: req.user.id,
       };
-      // const { _id: owner } = req.user;
-      console.log(req.user);
       const result = await Contact.create(body);
 
       res.status(201).json(result);
@@ -103,7 +107,7 @@ const updateFavorite = async (req, res, next) => {
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
-    console.log(result);
+
     if (!result) {
       const error = new Error("Not found");
       error.status = 404;

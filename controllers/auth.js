@@ -78,4 +78,15 @@ const logout = async (req, res) => {
     message: "No content",
   });
 };
-module.exports = { register, login, getCurrent, logout };
+
+const updateSubscription = async (req, res) => {
+  try {
+    const { _id } = req.user;
+    const result = await User.findOneAndUpdate(_id, req.user, { new: true });
+
+    res.status(200).json({ subscription: result.subscription });
+  } catch (error) {
+    next(error);
+  }
+};
+module.exports = { register, login, getCurrent, logout, updateSubscription };
