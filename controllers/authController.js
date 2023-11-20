@@ -47,9 +47,15 @@ async function login(req, res, next) {
       { expiresIn: "1h" }
     );
 
-    await User.findByIdAndUpdate(user._id, { token });
+    const loginUser = await User.findByIdAndUpdate(user._id, { token });
 
-    return res.send({ token });
+    return res.send({
+      token: token,
+      user: {
+        email: email,
+        subscription: loginUser.subscription,
+      },
+    });
   } catch (error) {
     next(error);
   }
