@@ -15,6 +15,7 @@ async function listContacts(req, res, next) {
         })
     } catch(err) {
         next(err)
+
   }
 };
 
@@ -31,13 +32,16 @@ async function getContactById(req, res, next) {
       status: "success",
       code: 200,
       data: {
+
         result,
+
       },
     });
   } catch (error) {
     next(error);
   }
 };
+
 
 async function removeContact (req, res, next) {
     const { contactId } = req.params;
@@ -81,9 +85,14 @@ async function addContact(req, res, next) {
 
 async function updateContact(req, res, next) {
     const { contactId } = req.params; 
-   
+    const contact = {
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        favorite: req.body.favorite
+    }
     try {
-         const result = Contact.findByIdAndUpdate(contactId, req.body)
+        const result = Contact.findByIdAndUpdate(contactId, contact)
         res.json({
             status: "success",
             code: 201,
@@ -105,7 +114,7 @@ async function updateFavorite(req, res, hext) {
         res.status(201).json(result);
         res.send(result)
     } catch (error) {
-     
+      next(error);
     }
 };
 
