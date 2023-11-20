@@ -10,7 +10,7 @@ const { DB_HOST, PORT = 3000 } = process.env;
 mongoose
   .connect(DB_HOST)
   .then(() => {
-    app.listen(3001, () => {
+    app.listen(3000, () => {
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   })
