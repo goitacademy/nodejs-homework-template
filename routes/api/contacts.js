@@ -1,4 +1,3 @@
-
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
@@ -88,6 +87,5 @@ router.patch('/:id/favorite', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
 
 module.exports = router;
