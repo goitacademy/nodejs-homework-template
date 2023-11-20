@@ -4,6 +4,7 @@ const router = express.Router()
 const jsonParser = express.json();
 
 
+
 const ContactsControllers = require('../../controllers/contacts')
 
 router.get('/',ContactsControllers.listContacts)
@@ -17,6 +18,7 @@ router.delete('/:contactId',ContactsControllers.removeContact)
 router.put('/:contactId', jsonParser, ContactsControllers.updateContact)
 
 router.patch( '/:contactId', jsonParser, ContactsControllers.updateFavorite);
+
 
 
 module.exports = router
