@@ -1,4 +1,5 @@
 import { addContact } from "../../repositories/contacts/addContact";
+import { postContactSchema } from "../../routes/api/validators/postContactSchema";
 
 export async function createContacts(req, res, next) {
   try {

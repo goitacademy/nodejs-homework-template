@@ -1,5 +1,4 @@
 import express from "express";
-import { postContactSchema } from "./validators/postContactSchema.js";
 import { updateContactSchema } from "./validators/updateContactSchema.js";
 import { showContacts } from "../../controllers/contacts/showContacts.js";
 import { removeContact } from "../../repositories/contacts/removeContact.js";
