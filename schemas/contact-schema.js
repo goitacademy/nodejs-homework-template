@@ -7,20 +7,15 @@ export const contactsAddSchema = Joi.object({
   email: Joi.string().email().required().messages({
     "any.required": "missing required email field",
   }),
-  phone: Joi.string()
-    .length(13)
-    .pattern(/[0-9]?()+?[0-9]+$/)
-    .required()
-    .messages({
-      "any.required": "missing required phone number field",
-    }),
+  phone: Joi.string().required().messages({
+    "any.required": "missing required phone number field",
+  }),
+  favorite: Joi.boolean().required(),
 });
 
 export const contactsUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().email(),
-  phone: Joi.string()
-    .length(13)
-    .pattern(/[0-9]?()+?[0-9]+$/),
+  phone: Joi.string(),
+  favorite: Joi.boolean().required(),
 });
-//mdfmdf
