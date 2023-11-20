@@ -1,7 +1,6 @@
-
 const HttpError = require('../helpers/HttpError');
-const {Contact} = require('../models/Contact');
-const contactSchema=require('../schemas/contactSchema')
+const { Contact } = require('../models/Contact');
+
 
 const getAll = async (req, res) => {
   const result = await Contact.find();
@@ -20,15 +19,9 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { error, value } = contactSchema.validate(req.body);
-
-  if (error) {
-    return res.status(400).json({ message: "Validation error", details: error.details });
-  }
-
-  const { name, email, phone } = value;
+  const { name, email, phone } = req.body;
   const newContact = new Contact({ name, email, phone });
-  
+
   await newContact.save();
 
   res.status(201).json(newContact);
@@ -47,13 +40,8 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { id } = req.params;
-  const { error, value } = contactSchema.validate(req.body);
-
-  if (error) {
-    return res.status(400).json({ message: "Validation error", details: error.details });
-  }
-
-  const updatedContact = await Contact.findByIdAndUpdate(id, value, { new: true });
+  const { name, email, phone } = req.body;
+  const updatedContact = await Contact.findByIdAndUpdate(id, { name, email, phone }, { new: true });
 
   if (updatedContact) {
     res.json(updatedContact);
@@ -62,10 +50,26 @@ const updateById = async (req, res) => {
   }
 };
 
+
+const updateStatusContact = async (contactId, { favorite }) => {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
+  
+    if (!updatedContact) {
+      throw new HttpError(404, `Contact with id=${contactId} not found`);
+    }
+  
+    return updatedContact;
+  };
+
 module.exports = {
   getAll,
   getById,
   add,
   deleteById,
   updateById,
+  updateStatusContact
 };
