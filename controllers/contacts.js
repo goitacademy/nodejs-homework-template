@@ -1,4 +1,4 @@
- 03-mongodb
+
 const Contact = require('../models/contacts')
 const createError = require("http-errors");
 
@@ -15,6 +15,7 @@ async function listContacts(req, res, next) {
         })
     } catch(err) {
         next(err)
+
   }
 };
 
