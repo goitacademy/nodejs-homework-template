@@ -32,14 +32,21 @@ async function register(req, res, next) {
 async function login(req, res, next) {
   const { email, password } = req.body;
   try {
+    if (email === undefined || password === undefined) {
+      return res.status(400).send({ message: "missing some fields" });
+    }
     const user = await User.findOne({ email }).exec();
     if (user === null) {
-      return res.status(401).send({ message: "email is incorrect" });
+      return res
+        .status(401)
+        .send({ message: "email or password is incorrect" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch === false) {
-      return res.status(401).send({ message: "password is incorrect" });
+      return res
+        .status(401)
+        .send({ message: "email or password is incorrect" });
     }
     const token = jwt.sign(
       { id: user._id, email: user.email },
@@ -71,4 +78,16 @@ async function logout(req, res, next) {
   }
 }
 
-module.exports = { register, login, logout };
+async function current(req, res, next) {
+  try {
+    const user = await User.findById(req.user.id).exec();
+    return res.status(200).send({
+      email: req.user.email,
+      subscription: user.subscription,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, logout, current };
