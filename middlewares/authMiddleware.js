@@ -1,21 +1,27 @@
 const jwt = require("jsonwebtoken");
-const User = require("../schemas/user");
+const { HttpError } = require("../helpers");
+const User = require("../models/user");
 
+const { JWT_SECRET } = process.env;
 const auth = async (req, res, next) => {
-  try {
-    const token = req.header("Authorization").replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ _id: decoded.id, token });
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
 
-    if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
+  if (bearer !== "Bearer") {
+    next(HttpError(401, "Not authorized!"));
+  }
+  // перевірка на валідність токену
+  try {
+    const { id } = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(id);
+    if (!user || !user.token || user.token !== token) {
+      next(HttpError(401, "Not authorized! User not found!"));
     }
 
     req.user = user;
-    req.token = token;
     next();
-  } catch (error) {
-    res.status(401).json({ message: "Not authorized" });
+  } catch {
+    next(HttpError(401, "Not authorized!"));
   }
 };
 

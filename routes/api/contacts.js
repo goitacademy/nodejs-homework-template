@@ -10,15 +10,6 @@ const {
   updateStatusContact,
 } = require("../../controllers/contacts");
 
-const authController = require("../../controllers/authController");
-const authMiddleware = require("../../middlewares/authMiddleware");
-
-const {
-  addUserSchema,
-  loginUserSchema,
-  updateUserSchema,
-} = require("../../schemas/user");
-
 const { validateBody, isValidId } = require("../../middlewares/index");
 
 const {
@@ -44,26 +35,5 @@ router.patch(
   validateBody(updateFavoriteSchema),
   updateStatusContact
 );
-
-// Аутентифікація та управління користувачами
-router.post(
-  "/users/register",
-  validateBody(addUserSchema),
-  authController.register
-);
-router.post(
-  "/users/login",
-  validateBody(loginUserSchema),
-  authController.login
-);
-router.get("/users/current", authMiddleware, authController.getCurrentUser);
-router.post("/users/logout", authMiddleware, authController.logout);
-router.patch(
-  "/users",
-  authMiddleware,
-  validateBody(updateUserSchema),
-  authController.updateUser
-);
-router.delete("/users", authMiddleware, authController.deleteUser);
 
 module.exports = router;
