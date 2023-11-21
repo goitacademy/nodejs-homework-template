@@ -1,5 +1,10 @@
 const MongooseError = (error, data, next) => {
-  error.status = 404;
+  if (error.code === 11000) {
+    error.status = 409;
+    error.message = "Email in use";
+  } else {
+    error.status = 404;
+  }
   next();
 };
 
