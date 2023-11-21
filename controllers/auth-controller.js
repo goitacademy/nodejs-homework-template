@@ -3,10 +3,13 @@ import { ctrlWrapper } from "../decorators/index.js";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { configDotenv } from "dotenv";
+
+configDotenv();
 
 const { JWT_SECRET } = process.env;
 
-const signUp = async (req, res) => {
+const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -24,15 +27,15 @@ const signUp = async (req, res) => {
   });
 };
 
-const signIn = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = User.findOne({ email });
+  const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(401, "Email or password invalid");
+    throw HttpError(401, "Email or password is wrong");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Email or password invalid");
+    throw HttpError(401, "Email or password is wrong");
   }
   const payload = {
     id: user._id,
@@ -59,15 +62,28 @@ const getCurrent = async (req, res) => {
   });
 };
 
-const signOut = async (req, res) => {
+const logout = async (req, res) => {
   const { _id } = req.user;
+
   await User.findByIdAndUpdate(_id, { token: "" });
-  res.json({ message: "Signout success" });
+  res.status(204).json();
+};
+
+const updateSubscription = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { subscription } = req.body;
+  const result = await User.findByIdAndUpdate(
+    owner,
+    { subscription },
+    { new: true }
+  );
+  res.json(result);
 };
 
 export default {
-  signUp: ctrlWrapper(signUp),
-  signIn: ctrlWrapper(signIn),
+  register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
-  signOut: ctrlWrapper(signOut),
+  logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };

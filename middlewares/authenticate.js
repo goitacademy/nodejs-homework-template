@@ -1,7 +1,9 @@
 import jwt from "jsonwebtoken";
 import { HttpError } from "../helpers/index.js";
-import { ctrlWrapper } from "../decorators/index.js";
 import User from "../models/user.js";
+import { configDotenv } from "dotenv";
+
+configDotenv();
 
 const { JWT_SECRET } = process.env;
 
@@ -19,8 +21,8 @@ const authenticate = async (req, res, next) => {
     }
     req.user = user;
     next();
-  } catch {
-    next(HttpError(401));
+  } catch (error) {
+    next(HttpError(401, error.message));
   }
 };
 

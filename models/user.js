@@ -32,14 +32,21 @@ userSchema.post("save", handleSaveError);
 userSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
 userSchema.post("findOneAndUpdate", handleSaveError);
 
-export const signUpSchema = Joi.object({
+export const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
 
-export const signInSchema = Joi.object({
+export const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+});
+
+export const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .required()
+    .messages({ "any.required": "Missing field subscription" }),
 });
 
 const User = model("user", userSchema);
