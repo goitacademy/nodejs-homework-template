@@ -1,4 +1,4 @@
-const HttpError = require('../helpers/HttpError');
+const {HttpError}= require('../helpers/HttpError');
 const { Contact } = require('../models/Contact');
 
 
@@ -40,26 +40,33 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { id } = req.params;
-  const { name, email, phone } = req.body;
-  const updatedContact = await Contact.findByIdAndUpdate(id, { name, email, phone }, { new: true });
+  const { name, email, phone} = req.body;
+
+  const updatedContact = await Contact.findByIdAndUpdate(
+    id,
+    { name, email, phone},
+    { new: true }
+  );
 
   if (updatedContact) {
     res.json(updatedContact);
   } else {
     throw new HttpError(404, `Contact with id=${id} not found`);
+  
   }
 };
 
 
-const updateStatusContact = async (contactId, { favorite }) => {
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
-      { favorite },
+
+const updateStatusContact =  async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
+    const updatedContact = await Contact.findByIdAndUpdate(id, { favorite },
       { new: true }
     );
   
     if (!updatedContact) {
-      throw new HttpError(404, `Contact with id=${contactId} not found`);
+      throw new HttpError(404, `Contact with id=${id} not found`);
     }
   
     return updatedContact;

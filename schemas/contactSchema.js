@@ -9,6 +9,11 @@ const contactValidSchema = Joi.object({
     favorite: Joi.boolean(),
   });
 
+  const contactFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required(),
+})
+
+
   const validateBody = (schema) => {
     return (req, res, next) => {
       const { error } = schema.validate(req.body);
@@ -20,5 +25,6 @@ const contactValidSchema = Joi.object({
   };
   module.exports = {
     contactValidSchema,
-    validateBody
+    validateBody,
+    contactFavoriteSchema
   };
