@@ -30,12 +30,6 @@ const getContactById = async (req, res) => {
 
 const addContact = async (req, res) => {
   const { _id: owner } = req.user;
-  const { name, phoneNumber } = req.body;
-  const existingContact = await Contact.findOne({ name, phoneNumber, owner });
-
-  if (existingContact) {
-    throw createError(409, "Contact already exists");
-  }
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
