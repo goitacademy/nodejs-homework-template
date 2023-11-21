@@ -19,13 +19,12 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { name, email, phone } = req.body;
-  const newContact = new Contact({ name, email, phone });
+  const result = await Contact.create(req.body);
 
-  await newContact.save();
+  res.status(201).json(result);
+}
 
-  res.status(201).json(newContact);
-};
+
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
