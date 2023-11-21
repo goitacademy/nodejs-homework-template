@@ -6,11 +6,15 @@ const addSchema = Joi.object({
     minDomainSegments: 2,
     tlds: { allow: ["com", "net", "org", "ca", "uk"] },
   }),
-  phone: Joi.string()
-    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
-    .required(),
+  phone: Joi.string().pattern(/^\(\d{3}\) \d{3}-\d{4}$/),
+  favorite: Joi.boolean(),
+});
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
 
 module.exports = {
   addSchema,
+  updateFavoriteSchema,
 };
