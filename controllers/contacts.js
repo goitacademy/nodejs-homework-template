@@ -1,5 +1,3 @@
-// const contacts = require("../models/contacts");
-
 const { Contact } = require("../models/contact");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
@@ -21,7 +19,7 @@ const listContacts = async (req, res, next) => {
     result = await Contact.find({ owner, favorite }, "-createdAt -updatedAt", {
       startFrom,
       limit,
-    });
+    }); //.populate("owner", "email...") owner info
   }
   res.json(result);
 };
