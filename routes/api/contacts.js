@@ -13,11 +13,13 @@ import { contactAddSchema, contactUpdateSchema, contactFavoriteSchema } from '..
 
 const router = express.Router();
 
-router.get('/', getAll);
-router.get('/:contactId', IsValidId, getById);
-router.post('/', isEmptyBody, validateBody(contactAddSchema), addContact);
-router.delete('/:contactId', IsValidId, removeById);
-router.put('/:contactId', IsValidId, isEmptyBody, validateBody(contactUpdateSchema), updateById);
+router.route('/').get(getAll).post(isEmptyBody, validateBody(contactAddSchema), addContact);
+router
+  .route('/:contactId')
+  .get(IsValidId, getById)
+  .delete(IsValidId, removeById)
+  .put(IsValidId, isEmptyBody, validateBody(contactUpdateSchema), updateById);
+
 router.patch('/:contactId/favorite', IsValidId, isEmptyBody, validateBody(contactFavoriteSchema), updateStatusContact);
 
 export default router;
