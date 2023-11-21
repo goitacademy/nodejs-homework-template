@@ -13,6 +13,9 @@ export const checkToken = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: "Not authorized" });
     }
+
+    user.userId = user._id;
+
     req.user = user;
     next();
   } catch (err) {
