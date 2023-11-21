@@ -1,5 +1,4 @@
 const { Schema, model } = require("mongoose");
-const { errorMongo } = require("../error");
 
 const contactSchema = new Schema({
     name: {
@@ -16,12 +15,8 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
-}, { versionKey: false });
-
-contactSchema.post("save", function(error, doc, next) {
-    errorMongo(error, doc, next);
 });
 
 const Contact = model("contact", contactSchema);
 
-module.exports = Contact;
+module.exports = { Contact };

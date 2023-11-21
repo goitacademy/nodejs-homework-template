@@ -1,98 +1,66 @@
-const { errorHttp } = require("../error");
-const Contact = require("../models/contacts");
+const { errorHttp, errorMongo } = require("../error");
+const { Contact } = require("../models/contacts");
 
-const getAll = async(req, res, next) => {
-    try {
-        const result = await Contact.find();
-        res.status(200).json(result);
-    } catch (error) {
-        next(error);
-    }
+const getAll = async(_, res) => {
+    const result = await Contact.find();
+    console.log(result);
+    res.json(result);
 };
 
-const getById = async(req, res, next) => {
-    try {
-        const { contactId } = req.params;
-        const contact = await Contact.findById(contactId);
-        if (!contact) {
-            next();
-        }
-        res.status(200).json(contact);
-    } catch (error) {
-        next(error);
+const getById = async(req, res) => {
+    const { contactId } = req.params;
+    console.log(contactId);
+    const contact = await Contact.findById(contactId).exec();
+    if (!contact) {
+        throw errorHttp(404, "Not found");
     }
+    res.json(contact);
 };
 
-const add = async(req, res, next) => {
-    try {
-        const newContact = await Contact.create(req.body);
-        console.log(req.body);
-        res.status(201).json(newContact);
-    } catch (error) {
-        next(error);
-    }
+const add = async(req, res) => {
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
 };
 
-const deleteById = async(req, res, next) => {
-    try {
-        const { contactId } = req.params;
+const deleteById = async(req, res) => {
+    const { contactId } = req.params;
+    const contact = await Contact.findByIdAndDelete({ _id: contactId });
 
-        const contact = await Contact.findByIdAndDelete(contactId);
-
-        if (!contact) {
-            next();
-        }
-        res.status(200).json({ message: "contact deleted" });
-    } catch (error) {
-        next(error);
+    if (!contact) {
+        throw errorHttp(404, "Not found");
     }
+    res.json({ message: "contact deleted" });
 };
 
-const updateById = async(req, res, next) => {
-    try {
-        if (!req.body) {
-            throw errorHttp(400, "missing fields");
-        }
+const updateById = async(req, res) => {
+    const { contactId } = req.params;
+    const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
+        new: true,
+    });
 
-        const { contactId } = req.params;
-        const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
-            new: true,
-        });
-
-        if (contact) {
-            res.status(200).json(contact);
-        }
-        next();
-    } catch (error) {
-        next(error);
+    if (!contact) {
+        throw errorHttp(404, "Not found");
     }
+    res.json(contact);
 };
 
-const updateFavorite = async(req, res, next) => {
-    try {
-        if (!req.body) {
-            throw errorHttp(400, "missing fields");
-        }
+const updateFavorite = async(req, res) => {
+    const { contactId } = req.params;
+    const contact = await Contact.findOneAndUpdate({ _id: contactId }, req.body, {
+        new: true,
+    });
 
-        const { contactId } = req.params;
-        const contact = await Contact.findByIdAndUpdate(contactId, req.body, {
-            new: true,
-        });
-
-        if (contact) {
-            res.status(200).json(contact);
-        }
-        next();
-    } catch (error) {
-        next(error);
+    if (!contact) {
+        throw errorHttp(404, "Not found");
     }
+    res.json(contact);
 };
 
 module.exports = {
-    getAll,
-    getById,
-    add,
-    updateById,
-    deleteById,
-    updateFavorite,
+    getAll: errorMongo(getAll),
+    getById: errorMongo(getById),
+    add: errorMongo(add),
+    updateById: errorMongo(updateById),
+    deleteById: errorMongo(deleteById),
+    updateFavorite: errorMongo(updateFavorite),
 };

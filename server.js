@@ -5,6 +5,7 @@ const app = require("./app");
 
 const DB_HOST = process.env.DB_HOST;
 
+mongoose.set("strictQuery", true);
 mongoose
     .connect(DB_HOST)
     .then(() => {
