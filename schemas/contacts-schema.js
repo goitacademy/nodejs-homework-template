@@ -26,3 +26,10 @@ export const contactUpdateSchema = Joi.object({
     "string.base": "Phone must be string",
   }),
 });
+
+export const contactPatchFavorite = Joi.object({
+  favorite: Joi.boolean().required().messages({
+    "any.required": "Missing field favorite",
+    "boolean.base": "Favorite must be boolean",
+  }),
+});
