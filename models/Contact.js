@@ -23,7 +23,8 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleSaveError);
-contactSchema.pre("findByIdAndUpdate", preUpdate);
+contactSchema.pre("findOneAndUpdate", preUpdate);
+contactSchema.post("findOneAndUpdate", handleSaveError);
 
 export const contactAddSchema = Joi.object({
   name: Joi.string().required().messages({

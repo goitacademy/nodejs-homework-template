@@ -36,9 +36,7 @@ const updateById = async (req, res, next) => {
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
   if (!result) {
     throw HttpError(400, "missing field favorite");
   }
@@ -49,7 +47,7 @@ const deleteById = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
-    throw HttpError(404, `Movie with id=${contactId} not found`);
+    throw HttpError(404, `Contact with id=${contactId} not found`);
   }
 
   res.json({
