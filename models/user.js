@@ -27,18 +27,4 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-//--------------------joijoijoijoijoijoijoijoi
-const Joi = require("joi");
-
-const registerSchema = Joi.object({
-  email: Joi.string().email.required(),
-  password: Joi.string().required(),
-});
-
-const schemas = { registerSchema };
-
-module.exports = {
-  schemas,
-};
-
 module.exports = mongoose.model("User", userSchema);
