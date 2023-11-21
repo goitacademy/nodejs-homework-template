@@ -1,25 +1,32 @@
-const express = require('express')
+const express = require("express");
+const router = express.Router();
+const jsonParser = express.json();
 
-const router = express.Router()
+const ContactsController = require("../../controllers/contact");
+const { isValidObjectId } = require("mongoose");
+const { HttpError } = require("../../helpers");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const isValidId = (req, res, next) => {
+  const { id } = req.params;
+  if (!isValidObjectId(id)) {
+    next(new HttpError(404, `${id} is not valid`));
+    return;
+  }
+  next();
+};
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use("/:id", isValidId);
+router.use("/:id/favorite", isValidId);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", ContactsController.getContacts);
+router.get("/:id", ContactsController.getContact);
+router.post("/", jsonParser, ContactsController.createContact);
+router.put("/:id", jsonParser, ContactsController.updateContact);
+router.delete("/:id", ContactsController.deleteContact);
+router.patch(
+  "/:id/favorite",
+  jsonParser,
+  ContactsController.updateStatusContact
+);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
