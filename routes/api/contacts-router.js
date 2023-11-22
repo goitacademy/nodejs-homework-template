@@ -18,7 +18,7 @@ router.patch(
   '/:id/favorite',
   isValidId,
   isEmptyBody,
-  contactController.updateById
+  contactController.updateStatusContact
 );
 
 export default router;
