@@ -1,12 +1,15 @@
 
 import express from 'express';
 import Joi from 'joi';
-import listContacts  from '../../controllers/listContacts.js';
-import  getContactById  from '../../controllers/getContactById.js';
+
 import addContact from '../../controllers/addContacts.js';
-import  removeContact  from '../../controllers/removeContacts.js';
-import  updateContact  from '../../controllers/updateContact.js';
-import  updateStatusContact  from '../../controllers/updateStatusContact.js';
+import listContacts from '../../controllers/listContacts.js';
+import verifyToken from '../../middleware/authMiddleware.js';
+import updateContact from '../../controllers/updateContact.js';
+import removeContact from '../../controllers/removeContacts.js';
+import authController from '../../controllers/authController.js';
+import getContactById from '../../controllers/getContactById.js';
+import updateStatusContact from '../../controllers/updateStatusContact.js';
 
 
 const addContactSchema = Joi.object({
@@ -23,16 +26,23 @@ const updateContactSchema = Joi.object({
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+
+router.post('/login', authController.login);
+
+router.post('/signup', authController.signup);
+
+router.get('/', verifyToken, (req, res) => {
+
   listContacts(req, res);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', verifyToken, (req, res) => {
   getContactById(req, res);
 });
 
 
-router.post('/', (req, res) => {
+router.post('/', verifyToken, (req, res) => {
+
   const { error } = addContactSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -42,11 +52,11 @@ router.post('/', (req, res) => {
   addContact(req, res);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', verifyToken, (req, res) => {
   removeContact(req, res);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', verifyToken, (req, res) => {
   const { error } = updateContactSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -55,7 +65,7 @@ router.put('/:id', (req, res) => {
   updateContact(req, res);
 });
 
-router.patch('/:id/favorite', async (req, res) => {
+router.patch('/:id/favorite', verifyToken, async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
 
@@ -83,7 +93,5 @@ router.patch('/:id/favorite', async (req, res) => {
 
   }
 
-  updateContact(req, res);
-});
 
 export default router;

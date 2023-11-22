@@ -1,6 +1,10 @@
 import express from 'express';
+
+import mongoose from 'mongoose';
 import connectToDatabase from './db.js';
-import contactsRouter from './routes/api/contacts.js';
+
+import authRoutes from './routes/api/authRoutes.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -8,7 +12,8 @@ const PORT = process.env.PORT || 3000;
 connectToDatabase();
 
 app.use(express.json());
-app.use('/api/contacts', contactsRouter);
+
+app.use('/users', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
