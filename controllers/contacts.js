@@ -3,7 +3,22 @@ const  { Contact }  = require("../models/contact");
 
 const listContacts = async (req, res, next) => {
   try {
-    const result = await Contact.find({});
+    const { _id: owner } = req.user;
+
+    const { page = 1, limit = 20, favorite } = req.query;
+    const skip = (page - 1) * limit;
+
+    const contactsQuery = { owner };
+
+   
+    if (favorite === 'true') {
+      contactsQuery.favorite = true;
+    }
+
+    const result = await Contact.find(contactsQuery)
+      .skip(skip)
+      .limit(limit);
+
     res.json(result);
   } catch (error) {
     next(error);
@@ -40,17 +55,11 @@ const removeContact = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   try {
-    const newContact = {
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-    };
-
-    const result = await Contact.create(newContact);
+    const { _id: owner } = req.user;
+    const result = await Contact.create({ ...req.body, owner });
 
     res.status(201).json(result);
   } catch (error) {
-    console.error(error);  
     next(error);
   }
 };

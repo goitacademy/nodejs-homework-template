@@ -1,18 +1,6 @@
 const Joi = require("joi");
 
-const validateBody = (schema, errorMessage) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
-
-    if (error) {
-      return res.status(400).json({
-        message: errorMessage,
-      });
-    }
-
-    next();
-  };
-};
+const validateBody = require('../helpers/validateBody');
 
 const addValid = validateBody(
   Joi.object({
