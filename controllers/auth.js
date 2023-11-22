@@ -93,15 +93,19 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tmpUpload, originalname } = req.file;
+  const imgFile = req.file;
+  if (!imgFile) {
+    throw createError(400, "File is not found");
+  }
 
+  const { path: tmpUpload, originalname } = req.file;
   const image = await Jimp.read(tmpUpload);
   await image.resize(250, 250).writeAsync(tmpUpload);
 
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tmpUpload, resultUpload);
-  const avatarURL = path.join("avatars", resultUpload);
+  const avatarURL = path.join("avatars", filename);
 
   await User.findByIdAndUpdate(_id, { avatarURL });
   res.json({
