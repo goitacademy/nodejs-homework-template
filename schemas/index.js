@@ -1,1 +1,5 @@
-export { contactAddSchema, contactUpdateSchema } from "./contact-schemas.js";
+export {
+  contactAddSchema,
+  contactUpdateSchema,
+  contactFaviriteSchema,
+} from "./contact-schemas.js";
