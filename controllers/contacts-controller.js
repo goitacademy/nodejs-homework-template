@@ -7,42 +7,45 @@ const getAll = async (req, res, next) => {
   res.json(result);
 };
 
-// const getByID = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const result = await contactsService.getContactByID(contactId);
-//   if (!result) {
-//     return next(HttpError(404, "Not found"));
-//   }
-//   res.json(result);
-// };
+const getByID = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findById(contactId);
+  if (!result) {
+    return next(HttpError(404, "Not found"));
+  }
+  res.json(result);
+};
 
-// const add = async (req, res, next) => {
-//   const result = await contactsService.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const add = async (req, res, next) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
-// const deleteByID = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const result = await contactsService.removeContact(contactId);
-//   if (!result) {
-//     return next(HttpError(404, "Not found"));
-//   }
-//   res.json({ message: "contact deleted" });
-// };
+const deleteByID = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    return next(HttpError(404, "Not found"));
+  }
+  res.json({ message: "contact deleted" });
+};
 
-// const update = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const result = await contactsService.updateContactByID(contactId, req.body);
-//   if (!result) {
-//     return next(HttpError(404, "Not found"));
-//   }
-//   res.json(result);
-// };
+const update = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!result) {
+    return next(HttpError(404, "Not found"));
+  }
+  res.json(result);
+};
 
 export default {
   getAll: wrapController(getAll),
-  // getByID: wrapController(getByID),
-  // add: wrapController(add),
-  // deleteByID: wrapController(deleteByID),
-  // update: wrapController(update),
+  getByID: wrapController(getByID),
+  add: wrapController(add),
+  deleteByID: wrapController(deleteByID),
+  update: wrapController(update),
 };
