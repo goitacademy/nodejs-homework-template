@@ -1,4 +1,5 @@
 import express from 'express';
+
 import userModel from '../models/userModel.js';
 import verifyToken from '../middleware/authMiddleware.js';
 

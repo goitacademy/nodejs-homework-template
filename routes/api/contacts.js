@@ -1,14 +1,14 @@
 import express from 'express';
 import Joi from 'joi';
-import listContacts from '../../controllers/listContacts.js';
-import getContactById from '../../controllers/getContactById.js';
-import addContact from '../../controllers/addContacts.js';
-import removeContact from '../../controllers/removeContacts.js';
-import updateContact from '../../controllers/updateContact.js';
-import updateStatusContact from '../../controllers/updateStatusContact.js';
-import authController from '../../controllers/authController.js';
-import verifyToken from '../../middleware/authMiddleware.js';
 
+import addContact from '../../controllers/addContacts.js';
+import listContacts from '../../controllers/listContacts.js';
+import verifyToken from '../../middleware/authMiddleware.js';
+import updateContact from '../../controllers/updateContact.js';
+import removeContact from '../../controllers/removeContacts.js';
+import authController from '../../controllers/authController.js';
+import getContactById from '../../controllers/getContactById.js';
+import updateStatusContact from '../../controllers/updateStatusContact.js';
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),

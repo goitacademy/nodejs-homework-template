@@ -1,7 +1,7 @@
-const bcrypt = require('bcryptjs');
-const Joi = require('joi');
-const UserModel = require('../models/userModel');
-const jwt = require('jsonwebtoken');
+import bcrypt from 'bcryptjs';
+import Joi from 'joi';
+import UserModel from '../models/userModel';
+import jwt from 'jsonwebtoken';
 
 const signup = async (req, res) => {
   const schema = Joi.object({
@@ -55,6 +55,6 @@ const signup = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   signup,
 };
