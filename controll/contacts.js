@@ -1,9 +1,18 @@
 const { errorHttp, errorMongo } = require("../error");
 const { Contact } = require("../models/contacts");
 
-const getAll = async(_, res) => {
-    const result = await Contact.find();
-    console.log(result);
+const getAll = async(req, res) => {
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10, favorite } = req.query;
+    const skip = (page - 1) * limit;
+    const filter = { owner };
+    if (favorite) {
+        filter.favorite = favorite;
+    }
+    const result = await Contact.find(filter, "-createdAt -updatedAt", {
+        skip,
+        limit,
+    }).populate("owner", "name email");
     res.json(result);
 };
 
@@ -18,7 +27,8 @@ const getById = async(req, res) => {
 };
 
 const add = async(req, res) => {
-    const newContact = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const newContact = await Contact.create({...req.body, owner });
     res.status(201).json(newContact);
 };
 
