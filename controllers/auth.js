@@ -93,8 +93,7 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const imgFile = req.file;
-  if (!imgFile) {
+  if (!req.file) {
     throw createError(400, "File is not found");
   }
 
