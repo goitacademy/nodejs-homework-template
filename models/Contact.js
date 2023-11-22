@@ -45,10 +45,13 @@ export const contactUpdateSchema = Joi.object({
   phone: Joi.string(),
   favorite: Joi.boolean(),
 });
+const updateFavoriteSchemaErrorMessages = {
+  "any.required": "missing field favorite",
+};
 
 export const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
-});
+}).messages(updateFavoriteSchemaErrorMessages);
 
 const Contact = model("contact", contactSchema);
 
