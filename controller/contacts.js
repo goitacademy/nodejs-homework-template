@@ -27,17 +27,13 @@ const removeContact = async (req, res) => {
     throw HttpError(404, "Not found");
   }
   res.json({
-    message: "Delete success",
-    data: {
-      ...result,
-    },
+    message: "Contact deleted",
   });
 };
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await contactsAPI.updateContact(contactId, req.body);
-  console.log(result);
   if (!result) {
     throw HttpError(404, "Not found");
   }

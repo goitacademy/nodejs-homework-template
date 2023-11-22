@@ -18,7 +18,6 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   const contactsList = await listContacts();
   const result = await contactsList.find((contact) => contact.id === contactId);
-  console.log(contactId);
   const resultIndex = await contactsList.findIndex(
     (contact) => contact.id === contactId
   );
