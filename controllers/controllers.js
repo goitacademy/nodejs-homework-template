@@ -11,11 +11,10 @@ const getById = async (req, res) => {
   const { id } = req.params;
   const contact = await Contact.findById(id);
 
-  if (contact) {
-    res.json(contact);
-  } else {
+  if (!contact) {
     throw new HttpError(404, `Contact with id=${id} not found`);
-  }
+}
+res.json(contact);
 };
 
 const add = async (req, res) => {
@@ -30,11 +29,10 @@ const deleteById = async (req, res) => {
   const { id } = req.params;
   const contact = await Contact.findByIdAndDelete(id);
 
-  if (contact) {
-    res.json({ message: 'Contact deleted' });
-  } else {
+  if (!contact) {
     throw new HttpError(404, `Contact with id=${id} not found`);
-  }
+}
+res.json(contact);
 };
 
 const updateById = async (req, res) => {
@@ -46,15 +44,11 @@ const updateById = async (req, res) => {
     { name, email, phone},
     { new: true }
   );
-
-  if (updatedContact) {
-    res.json(updatedContact);
-  } else {
+  if (!updatedContact) {
     throw new HttpError(404, `Contact with id=${id} not found`);
-  
-  }
+}
+res.json(updatedContact);
 };
-
 
 
 const updateStatusContact =  async (req, res) => {
