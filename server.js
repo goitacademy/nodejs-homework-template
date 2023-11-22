@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 
 import app from "./app.js";
 
-const DB_HOST="mongodb+srv://KateSyvash:9DcDi55aHsPDDuXv@cluster0.43gb4ov.mongodb.net/?retryWrites=true&w=majority";
- const PORT=3000;
+const {DB_HOST, PORT = 3000} = process.env;
 
 mongoose.connect(DB_HOST)
   .then(() => {
