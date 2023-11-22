@@ -1,4 +1,3 @@
-
 import * as contactsModel from '../models/contactModel.js';
 
 

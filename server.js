@@ -15,6 +15,8 @@ app.use(express.json());
 
 app.use('/users', authRoutes);
 
+app.use(express.static('public'));
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

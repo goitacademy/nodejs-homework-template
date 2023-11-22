@@ -4,11 +4,9 @@
 1. [Introduction](#introduction)
 2. [Technologies](#technologies)
 3. [Getting Started](#getting-started)
-4. [Usage] (#User Authentication)(#usage)
+4. [Usage](#usage)
 5. [Testing](#testing)
-6. [Project Status](#project-status)
-7. [Sources](#sources)
-8. [Additional Information](#additional-information)
+
 
 ## Introduction
 This project is a simple CRUD (Create, Read, Update, Delete) application for managing contacts. It utilizes a Node.js backend with Express, MongoDB as the database, and Mongoose as the ODM (Object Data Modeling) library. The project provides RESTful API endpoints to perform various operations on contacts, such as listing, adding, updating, and removing them.
@@ -27,7 +25,7 @@ To run this project locally, follow these steps:
 
 1. Clone the repository to your local machine:
     git clone [repository_url]
-    
+
 
 2. Install the required dependencies:
     cd [project_directory]
@@ -41,8 +39,7 @@ To run this project locally, follow these steps:
 4. Run the application:
     npm start
 
-
- ### User Authentication
+### User Authentication
 The application includes user authentication using JWT (JsonWebToken). Below are the endpoints related to user authentication:
 
 #### Signup
@@ -152,10 +149,21 @@ The application includes user authentication using JWT (JsonWebToken). Below are
     }
     ```
 
+#### Update Avatar
+- **Endpoint:**
+  - `PATCH /api/avatars`
+- **Requires authentication:** Yes
+- **Request should be a form-data with a file field named "avatar".**
+- **Response includes:**
+    ```json
+    {
+      "avatarURL": "/avatars/uniqueFileName.jpg"
+    }
+    ```
+
 ### Input Validation
 Input validation is implemented using Joi. Invalid requests will receive a 400 Bad Request response with details on the validation error.
 
 ## Testing
 To run tests, use the following command:
-```bash
 npm test

@@ -1,15 +1,16 @@
 
-import express from 'express';
-import Joi from 'joi';
+const express = require('express');
+const router = express.Router();
+const Joi = require('joi');
 
-import addContact from '../../controllers/addContacts.js';
-import listContacts from '../../controllers/listContacts.js';
-import verifyToken from '../../middleware/authMiddleware.js';
-import updateContact from '../../controllers/updateContact.js';
-import removeContact from '../../controllers/removeContacts.js';
-import authController from '../../controllers/authController.js';
-import getContactById from '../../controllers/getContactById.js';
-import updateStatusContact from '../../controllers/updateStatusContact.js';
+const addContact = require('../../controllers/addContacts');
+const listContacts = require('../../controllers/listContacts');
+const verifyToken = require('../../middleware/authMiddleware');
+const updateContact = require('../../controllers/updateContact');
+const removeContact = require('../../controllers/removeContacts');
+const authController = require('../../controllers/authController');
+const getContactById = require('../../controllers/getContactById');
+const updateStatusContact = require('../../controllers/updateStatusContact');
 
 
 const addContactSchema = Joi.object({
