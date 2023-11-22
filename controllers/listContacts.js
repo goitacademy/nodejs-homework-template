@@ -1,5 +1,6 @@
 import * as contactsModel from '../models/contactModel.js';
 
+
 const listContacts = async (req, res, next) => {
   try {
     const contacts = await contactsModel.listContacts();

@@ -1,4 +1,6 @@
+
 import * as contactsModel from '../models/contactModel.js';
+
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
