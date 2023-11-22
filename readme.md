@@ -4,7 +4,7 @@
 1. [Introduction](#introduction)
 2. [Technologies](#technologies)
 3. [Getting Started](#getting-started)
-4. [Usage](#User Authentication)(#usage)
+4. [Usage] (#User Authentication)(#usage)
 5. [Testing](#testing)
 6. [Project Status](#project-status)
 7. [Sources](#sources)
