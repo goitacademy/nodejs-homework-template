@@ -2,7 +2,7 @@ const express = require("express");
 
 const wrapController = require("../../controllers/contactControllers");
 
-const { validateBody, isValidId } = require("../../middlewares");
+const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
 const {
   contactSchema: { addSchema, updateFavoriteSchema },
@@ -10,14 +10,15 @@ const {
 
 const router = express.Router();
 
-router.get("/", wrapController.getAll);
+router.get("/", authenticate, wrapController.getAll);
 
-router.get("/:id", isValidId, wrapController.getById);
+router.get("/:id", authenticate, isValidId, wrapController.getById);
 
-router.post("/", validateBody(addSchema), wrapController.add);
+router.post("/", authenticate, validateBody(addSchema), wrapController.add);
 
 router.put(
   "/:id",
+  authenticate,
   isValidId,
   validateBody(addSchema),
   wrapController.updateById
@@ -25,11 +26,12 @@ router.put(
 
 router.patch(
   "/:id/favorite",
+  authenticate,
   isValidId,
   validateBody(updateFavoriteSchema),
   wrapController.updateFavorite
 );
 
-router.delete("/:id", isValidId, wrapController.deleteById);
+router.delete("/:id", authenticate, isValidId, wrapController.deleteById);
 
 module.exports = router;

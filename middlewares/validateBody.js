@@ -3,7 +3,7 @@ const { handleHttpError } = require("../utils");
 const validateBody = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
-    console.log(error);
+
     if (error) {
       next(handleHttpError(400, error.massage));
     }
