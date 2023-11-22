@@ -80,6 +80,10 @@ async function removeContact(req, res, next) {
       return res.status(404).send({ message: "Not found" });
     }
 
+    if(result.owner !== req.user.id){
+      return res.status(403).send({message: "Forbidden"})
+    }
+
     res.send(result);
   } catch (error) {
     console.error(`Error while removing contact with ID ${contactId}: ${error.message}`);
@@ -114,6 +118,11 @@ async function updateContact(req, res, next) {
     if (result === null) {
       return res.status(404).send({ message: "Not found" });
     }
+
+    if(result.owner !== req.user.id){
+      return res.status(403).send({message: "Forbidden"})
+    }
+
     res.status(201).send(result);
   } catch (error) {
     console.error(`Error updating contact: ${error.message}`);
@@ -140,6 +149,9 @@ async function statusContact(req, res, next) {
       return res.status(404).json({ message: "Not found" });
     }
 
+    if(updatedContact.owner !== req.user.id){
+      return res.status(403).send({message: "Forbidden"})
+    }
     return res.status(200).json(updatedContact);
   } catch (error) {
     next(error);

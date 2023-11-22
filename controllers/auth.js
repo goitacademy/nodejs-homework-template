@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const joiUserSchemas = require("../schemas/userSchemas")
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -18,6 +19,17 @@ async function register(req, res, next) {
   console.log("Received data:", req.body);
   try {
     const user = await User.findOne({ email }).exec();
+
+    const validation = joiUserSchemas.validate({ email, password});
+
+    if (validation.error) {
+      console.log("Validation error:", validation.error.details.map((error) => error.message).join(", "));
+      return res.status(400).send({
+        message: validation.error.details
+          .map((error) => error.message)
+          .join(", "),
+      });
+    }
 
     if (user !== null) {
       console.log("User already exists");
@@ -49,6 +61,17 @@ async function login(req, res, next) {
 
   try {
     const user = await User.findOne({ email }).exec();
+
+    const validation = joiUserSchemas.validate({ email, password});
+
+    if (validation.error) {
+      console.log("Validation error:", validation.error.details.map((error) => error.message).join(", "));
+      return res.status(400).send({
+        message: validation.error.details
+          .map((error) => error.message)
+          .join(", "),
+      });
+    }
 
     if (user === null) {
       console.log("User not found");

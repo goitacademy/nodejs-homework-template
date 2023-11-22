@@ -1,6 +1,6 @@
 const express = require("express");
 const Ctrl = require("../../controllers/contacts");
-const isValidId = require('../../middleware/contacts');
+const isValidId = require('../../middleware/validationBody');
 const router = express.Router();
 const jsonParser = express.json();
 
