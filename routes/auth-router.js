@@ -1,12 +1,12 @@
 import express from "express";
-import { validateBody } from "../../decorators/index.js";
+import { validateBody } from "../decorators/index.js";
 import {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
-} from "../../models/user.js";
-import { authenticate } from "../../middlewares/index.js";
-import authController from "../../controllers/auth-controller.js";
+} from "../models/user.js";
+import { authenticate } from "../middlewares/index.js";
+import authController from "../controllers/auth-controller.js";
 
 const authRouter = express.Router();
 
