@@ -3,9 +3,9 @@ import { ctrlWrapper } from "../decorators/index.js";
 import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { configDotenv } from "dotenv";
+import dotenv from "dotenv";
 
-configDotenv();
+dotenv.config();
 
 const { JWT_SECRET } = process.env;
 
