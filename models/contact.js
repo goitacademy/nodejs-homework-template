@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { handleSaveError, preUpdate } from './hooks.js';
+
 const contactSchema = new Schema(
 	{
 		name: {
@@ -14,13 +16,15 @@ const contactSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		// favorite: {
-		// 	type: Boolean,
-		// 	default: false,
-		// },
 	},
 	{ versionKey: false, timestamps: true }
 );
+
+contactSchema.post('save', handleSaveError);
+
+contactSchema.pre('findOneAndUpdate', preUpdate);
+
+contactSchema.post('findOneAndUpdate', handleSaveError);
 
 const Contact = model('contact', contactSchema);
 
