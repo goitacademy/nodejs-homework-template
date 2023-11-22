@@ -6,9 +6,6 @@
 3. [Getting Started](#getting-started)
 4. [Usage](#User Authentication)(#usage)
 5. [Testing](#testing)
-6. [Project Status](#project-status)
-7. [Sources](#sources)
-8. [Additional Information](#additional-information)
 
 ## Introduction
 This project is a simple CRUD (Create, Read, Update, Delete) application for managing contacts. It utilizes a Node.js backend with Express, MongoDB as the database, and Mongoose as the ODM (Object Data Modeling) library. The project provides RESTful API endpoints to perform various operations on contacts, such as listing, adding, updating, and removing them.
