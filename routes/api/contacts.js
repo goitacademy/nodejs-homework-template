@@ -93,5 +93,5 @@ router.patch('/:id/favorite', verifyToken, async (req, res) => {
 
   }
 
-
+});
 export default router;
