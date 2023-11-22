@@ -70,10 +70,10 @@ const logout = async (req, res) => {
 };
 
 const updateSubscription = async (req, res) => {
-  const { _id } = req.user;
+  const { _id: owner } = req.user;
   const { subscription } = req.body;
   const result = await User.findByIdAndUpdate(
-    _id,
+    owner,
     { subscription },
     { new: true }
   );
