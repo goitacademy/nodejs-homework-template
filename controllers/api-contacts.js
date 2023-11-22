@@ -7,7 +7,7 @@ import "colors";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { HttpError } from "../helpers/HttpError.js";
 
-// ============= Get a full list of contacts ================ //
+// ============= Get full list of contacts ================ //
 async function listContacts(req, res) {
   const { _id: owner } = req.user;
 
@@ -30,12 +30,16 @@ async function listContacts(req, res) {
 
 export const getAll = ctrlWrapper(listContacts);
 
-// ================ Get a contact by ID ================ //
+// ================ Get contact by ID ================ //
 async function getContactById(req, res, next) {
   const { contactId } = req.params;
   const { _id } = req.user;
 
   const contact = await Contact.findById(contactId);
+
+  if (!contact) {
+    return next(HttpError(404, "Contact not found"));
+  }
 
   const verifiedContact =
     contact.owner.toString() === _id.toString()
@@ -47,7 +51,7 @@ async function getContactById(req, res, next) {
 
 export const getById = ctrlWrapper(getContactById);
 
-// ============= Add a new contact ================== //
+// ============= Add new contact ================== //
 async function addContact(req, res) {
   const { _id: owner } = req.user;
   const { error } = contactValidate(req.body);
@@ -68,13 +72,13 @@ async function addContact(req, res) {
 
 export const add = ctrlWrapper(addContact);
 
-// =============== Update an existing contact ====================== //
+// =============== Update existed contact ====================== //
 async function updateContact(req, res, next) {
   const { contactId } = req.params;
 
   const { error } = contactValidate(req.body);
 
-  if (typeof error !== "undefined") {
+  if (error) {
     const errorMessages = error.details.map(
       (err) => `missing field: ${err.message}`
     );
@@ -92,7 +96,7 @@ async function updateContact(req, res, next) {
 
 export const updateById = ctrlWrapper(updateContact);
 
-// ============== Update any contact Status by ID ============== //
+// ============== Update contact Status by ID ============== //
 async function updateStatusContact(req, res, next) {
   const { contactId } = req.params;
 
@@ -113,7 +117,7 @@ async function updateStatusContact(req, res, next) {
 
 export const updateFavorite = ctrlWrapper(updateStatusContact);
 
-// ============== Delete a contact by ID ==================== //
+// ============== Delete contact by ID ==================== //
 async function removeContact(req, res, next) {
   const { contactId } = req.params;
 
