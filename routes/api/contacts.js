@@ -8,22 +8,17 @@ const {
   removeContact,
   faoriteContact,
 } = require("../../controllers/contactControllers");
-const { contactValidation } = require("../../models/contact");
+
 const isValidId = require("../../validation/isValidid");
+const { authenticate } = require("../../middleware/autenticate");
 
 const router = express.Router();
 
-router.get("/", getAll);
-
-router.get("/:contactId", isValidId, getById);
-
-router.post("/", createContact);
-
-router.delete("/:contactId", removeContact);
-
-router.put("/:contactId", isValidId, updateContact);
-
-router.patch("/:contactId", isValidId, faoriteContact);
+router.get("/", authenticate, getAll);
+router.get("/:contactId", authenticate, isValidId, getById);
+router.post("/", authenticate, createContact);
+router.delete("/:contactId", authenticate, removeContact);
+router.put("/:contactId", authenticate, isValidId, updateContact);
+router.patch("/:contactId", authenticate, isValidId, faoriteContact);
 
 module.exports = router;
-// hello

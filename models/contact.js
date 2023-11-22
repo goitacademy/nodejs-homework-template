@@ -1,10 +1,9 @@
-const { date } = require("joi");
 const { Schema, model } = require("mongoose");
-const Joi = require("joi");
 
 const {
   handleMongooseError,
 } = require("../helpers/handleMongooseError");
+
 const contactSchema = new Schema(
   {
     name: {
@@ -23,27 +22,17 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
-
-const contactValidation = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-  phone: Joi.number().required(),
-  favorite: Joi.boolean(),
-});
-
-const favoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
 
 contactSchema.post("save", handleMongooseError);
 
 const Contact = model("contact", contactSchema);
 
 module.exports = Contact;
-module.exports = { contactValidation, favoriteSchema };

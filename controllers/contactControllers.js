@@ -1,9 +1,10 @@
 const HttpError = require("../helpers/HttpError");
-const Contact = require("../models/contact");
+
+const { Contact } = require("../models/contact");
 const {
   contactValidation,
   favoriteSchema,
-} = require("../models/contact");
+} = require("../validation/contactValidationSchemas");
 const getAll = async (req, res, next) => {
   try {
     const contacts = await Contact.find();
@@ -16,7 +17,9 @@ const getById = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await Contact.findById(contactId);
   if (!contact) {
-    return next();
+    const error = new HttpError("Contact not found");
+    error.status = 404;
+    return next(error);
   }
   res.status(200).json(contact);
 };
@@ -82,11 +85,15 @@ const faoriteContact = async (req, res, next) => {
     const { contactId } = req.params;
     const { error } = favoriteSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing field favorite");
+      throw HttpError(406, "missing field favorite");
     }
-    const contact = await Contact.findByIdAndUpdate(contactId, body, {
-      new: true,
-    });
+    const contact = await Contact.findByIdAndUpdate(
+      contactId,
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }
