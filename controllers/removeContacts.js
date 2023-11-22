@@ -1,10 +1,13 @@
+
 import * as contactsModel from '../models/contactModel.js';
+
 
 const removeContact = async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const result = await contactsModel.removeContact(id);
+
 
     if (result) {
       res.json({ message: 'Contact deleted' });

@@ -7,6 +7,7 @@
 4. [Usage](#usage)
 5. [Testing](#testing)
 
+
 ## Introduction
 This project is a simple CRUD (Create, Read, Update, Delete) application for managing contacts. It utilizes a Node.js backend with Express, MongoDB as the database, and Mongoose as the ODM (Object Data Modeling) library. The project provides RESTful API endpoints to perform various operations on contacts, such as listing, adding, updating, and removing them.
 
@@ -24,7 +25,7 @@ To run this project locally, follow these steps:
 
 1. Clone the repository to your local machine:
     git clone [repository_url]
-  
+
 
 2. Install the required dependencies:
     cd [project_directory]
@@ -37,7 +38,6 @@ To run this project locally, follow these steps:
 
 4. Run the application:
     npm start
- 
 
 ### User Authentication
 The application includes user authentication using JWT (JsonWebToken). Below are the endpoints related to user authentication:
@@ -99,6 +99,7 @@ The application includes user authentication using JWT (JsonWebToken). Below are
       "subscription": "starter"
     }
     ```
+
 
 ## Usage
 ### API Endpoints

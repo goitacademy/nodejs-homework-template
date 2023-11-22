@@ -1,9 +1,11 @@
+
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 
 import userModel from '../models/userModel.js';
+
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
