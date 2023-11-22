@@ -1,97 +1,46 @@
 const express = require("express");
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} = require("../../models/contacts");
+require("./dataBase");
 
-const contactSchema = require("../shemas/contactSchema");
+const ContactController = require("../../controllers/contact");
+
+const { isValidId, authenticate } = require("../../middlewares");
 
 const jsonParser = express.json();
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  listContacts()
-    .then((data) => {
-      res.status(200).json(data);
-    })
-    .catch((err) => next(err));
-});
+router.get("/", authenticate, ContactController.listContacts);
 
-router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
+router.get(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  ContactController.getContactById
+);
 
-  getContactById(contactId)
-    .then((data) => {
-      if (data === undefined) {
-        res.status(404).json({ message: "Not found" });
-      }
+router.post("/", authenticate, jsonParser, ContactController.addContact);
 
-      res.status(200).json(data);
-    })
-    .catch((err) => next(err));
-});
+router.delete(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  ContactController.removeContact
+);
 
-router.post("/", jsonParser, async (req, res, next) => {
-  const body = contactSchema.validate(req.body);
-  const contactBody = body.value;
+router.put(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  jsonParser,
+  ContactController.updateContact
+);
 
-  if (typeof body.error !== "undefined") {
-    console.log(body.error);
-    return res
-      .status(400)
-      .json({
-        message: body.error.details.map((err) => err.message).join(", "),
-      });
-    
-  }
-
-  addContact(contactBody)
-    .then((data) => {
-      res.status(201).json(data);
-    })
-    .catch((err) => next(err));
-});
-
-router.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-
-  removeContact(contactId)
-    .then((data) => {
-      if (data === null) {
-        res.status(404).json({ message: "Not found" });
-      }
-
-      res.status(200).json({ message: "Contact deleted" });
-    })
-    .catch((err) => next(err));
-});
-
-router.put("/:contactId", jsonParser, async (req, res, next) => {
-  const { contactId } = req.params;
-  const body = contactSchema.validate(req.body);
-  const contactBody = body.value;
-
-  if (typeof body.error !== "undefined") {
-    return res
-      .status(400)
-      .json({
-        message: body.error.details.map((err) => err.message).join(", "),
-      });
-  }
-
-  updateContact(contactId, contactBody)
-    .then((data) => {
-      if (data === null) {
-        res.status(404).json({ message: "Not found" });
-      }
-
-      res.status(200).json(data);
-    })
-    .catch((err) => next(err));
-});
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  isValidId,
+  jsonParser,
+  ContactController.updateStatusContact
+);
 
 module.exports = router;

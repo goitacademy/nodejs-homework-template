@@ -1,10 +1,27 @@
 const Contact = require("../models/contact");
 
-const { contactSchema, favoriteSchema } = require("../routes/schemas/contact");
+const { contactSchema, favoriteSchema } = require("../routes/schemas/contactSchema");
 
 async function listContacts(req, res, next) {
+  const { _id: owner } = req.user;
+  const { page = 1, limit, favorite } = req.query;
+  const skip = (page - 1) * limit;
   try {
-    const contacts = await Contact.find().exec();
+    console.log({ favorite });
+
+    if (favorite === undefined) {
+      const contacts = await Contact.find({ owner }, "", {
+        skip,
+        limit,
+      }).exec();
+
+      return res.json(contacts);
+    }
+
+    const contacts = await Contact.find({ favorite, owner }, "", {
+      skip,
+      limit,
+    }).exec();
 
     res.json(contacts);
   } catch (err) {
@@ -49,14 +66,15 @@ async function addContact(req, res, next) {
   const contactBody = body.value;
 
   if (typeof body.error !== "undefined") {
-    console.log(body.error);
     return res.status(400).json({
       message: body.error.details.map((err) => err.message).join(", "),
     });
   }
 
+  const { _id: owner } = req.user;
+
   try {
-    const newContact = await Contact.create(contactBody);
+    const newContact = await Contact.create({ ...contactBody, owner });
     res.status(201).json(newContact);
   } catch (err) {
     next(err);
@@ -104,7 +122,8 @@ async function updateStatusContact(req, res, next) {
     const switchFavorite = await Contact.findByIdAndUpdate(
       contactId,
       contactBody,
-      { new: true });
+      { new: true }
+    );
 
     if (switchFavorite === null) {
       return res.status(404).json({ message: "Not found" });
