@@ -7,6 +7,7 @@ import ctrlWrapper from '../Wrapper/ctrlWrapper.js';
 import {
 	contactAddSchema,
 	contactUpdateById,
+	contactFavoriteSchema,
 } from '../schemas/contact-schemas.js';
 
 const getAllContacts = async (req, res) => {
@@ -16,17 +17,18 @@ const getAllContacts = async (req, res) => {
 
 const add = async (req, res) => {
 	const { error } = contactAddSchema.validate(req.body);
+	const result = await Contact.create(req.body);
 	if (error) {
 		throw new HttpError(406, error.message);
 	}
-	const result = await Contact.create(req.body);
 	res.status(201).json(result);
 };
 
 const getById = async (req, res) => {
 	const { contactId } = req.params;
+	const { error } = contactUpdateById.validate(req.body);
 	const result = await Contact.findById(contactId);
-	if (!result) {
+	if (error) {
 		throw new HttpError(404, `Contact with id=${contactId} not found`);
 	}
 	res.json(result);
@@ -34,8 +36,19 @@ const getById = async (req, res) => {
 
 const updateById = async (req, res) => {
 	const { contactId } = req.params;
+	const { error } = contactUpdateById.validate(req.body);
 	const result = await Contact.findByIdAndUpdate(contactId, req.body);
-	if (!result) {
+	if (error) {
+		throw new HttpError(404, `Contact with id=${contactId} not found`);
+	}
+	res.json(result);
+};
+
+const updateByIdFavorite = async (req, res) => {
+	const { contactId } = req.params;
+	const { error } = contactFavoriteSchema.validate(req.body);
+	const result = await Contact.findByIdAndUpdate(contactId, req.body);
+	if (error) {
 		throw new HttpError(404, `Contact with id=${contactId} not found`);
 	}
 	res.json(result);
@@ -57,6 +70,6 @@ export default {
 	getById: ctrlWrapper(getById),
 	add: ctrlWrapper(add),
 	updateById: ctrlWrapper(updateById),
-	// updateByIdName: ctrlWrapper(updateByIdName),
+	updateByIdFavorite: ctrlWrapper(updateByIdFavorite),
 	deleteById: ctrlWrapper(deleteById),
 };
