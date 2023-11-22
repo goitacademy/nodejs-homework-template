@@ -19,7 +19,6 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
-  console.log(newUser);
   res.status(201).json({
     email: newUser.email,
     name: newUser.name,
@@ -28,7 +27,6 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email);
   const user = await User.findOne({ email });
 
   if (!user) {

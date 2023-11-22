@@ -9,9 +9,7 @@ const getAll = async (req, res) => {
   const result = await Contact.find({ owner }, "-createAt -updateAt", {
     skip,
     limit,
-  })
-    .populate("owner", "name email")
-    .exec();
+  }).populate("owner", "name email favorite");
   res.json(result);
 };
 
@@ -25,7 +23,7 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  console.log("???", req.user);
+  // console.log("user???", req.user);
   const { _id: owner } = req.user;
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
@@ -55,7 +53,6 @@ const updateFavorite = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw handleHttpError(404, "Not found");
