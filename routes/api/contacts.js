@@ -14,6 +14,25 @@ import {
 
 const contactsRouter = express.Router();
 
+contactsRouter
+	.route('/')
+	.get(contactsController.getAllContacts)
+	.post(contactsController.add);
+
+contactsRouter
+	.route('/:contactId')
+	.get(contactsController.getById)
+	.put(contactsController.updateById)
+	.delete(contactsController.deleteById);
+
+contactsRouter.patch(
+	'/:contactId/name',
+	// validateBody(contactNameSchema),
+	contactsController.updateById
+);
+
+export default contactsRouter;
+
 // contactsRouter.get('/', contactsController.getAllContacts);
 
 // contactsRouter.get('/:contactId', isValidId, contactsController.getById);
@@ -33,23 +52,4 @@ const contactsRouter = express.Router();
 // 	contactsController.updateById
 // );
 
-contactsRouter.patch(
-	'/:contactId/name',
-	// validateBody(contactNameSchema),
-	contactsController.updateById
-);
-
 // contactsRouter.delete('/:contactId', isValidId, contactsController.deleteById);
-
-contactsRouter
-	.route('/')
-	.get(contactsController.getAllContacts)
-	.post(contactsController.updateById);
-
-contactsRouter
-	.route('/:contactId')
-	.get(contactsController.getById)
-	.put(contactsController.updateById)
-	.delete(contactsController.deleteById);
-
-export default contactsRouter;
