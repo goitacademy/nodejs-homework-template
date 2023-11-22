@@ -1,13 +1,12 @@
 const express = require("express");
-
 const router = express.Router();
-const jsonParser = express.json();
-
 const Controller = require("../controllers/controller");
+const jsonParser = express.json();
+const isValidId = require("../middleware/isValidId");
 
 router.get("/", Controller.getContacts);
 
-router.get("/:id", Controller.getContact);
+router.get("/:id", isValidId, Controller.getContact);
 
 router.post("/", jsonParser, Controller.createContact);
 
