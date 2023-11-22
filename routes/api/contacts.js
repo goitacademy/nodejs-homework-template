@@ -2,8 +2,6 @@ import express from 'express';
 
 import contactsController from '../../controllers/contactsController.js';
 
-// import { isEmptyBody } from '../../middlewares/isEmptyBody.js';
-
 // import { isValidId } from '../../middlewares/isValidId.js';
 
 import {

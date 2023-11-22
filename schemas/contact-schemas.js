@@ -26,13 +26,3 @@ export const contactUpdateById = Joi.object()
 export const contactNameSchema = Joi.object().keys({
 	name: contactAddSchema.extract('name'),
 });
-
-// export const contactUpdateById = Joi.object({
-// 	name: Joi.string(),
-// 	email: Joi.string(),
-// 	phone: Joi.string(),
-// }).or('name', 'email', 'phone');
-
-// export const contactNameSchema = Joi.object({
-// 	name: Joi.string().required(),
-// });
