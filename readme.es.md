@@ -1,27 +1,70 @@
-## GoIT Node.js Course Template Homework
+Project Readme
 
-Realice un fork de este repositorio para realizar las tareas (2-6).El fork creará un repositorio en su
+Table of Contents
+Introduction
+Technologies
+Getting Started
+Usage
+Project Status
+Sources
+Additional Information
 
-[GitHub: Let’s build from here](https://github.com/)
+----------------------------------------------
 
-Agregue al mentor como colaborador.Para cada tarea, cree su propia rama.
+Introduction:
+This project is a simple CRUD (Create, Read, Update, Delete) application for managing contacts. It utilizes a Node.js backend with Express, MongoDB as the database, and Mongoose as the ODM (Object Data Modeling) library. The project provides RESTful API endpoints to perform various operations on contacts, such as listing, adding, updating, and removing them.
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+----------------------------------------------
 
-Cada nueva rama para la tarea debe crearse desde la rama master.
-Después de completar una tarea en su rama, debe hacer una solicitud de extracción (PR). Luego, agregue al mentor para la revisión del código. Solo después de que el mentor apruebe el PR, puede fusionar la rama de la tarea en la rama principal.
+Technologies:
+Node.js
+Express
+MongoDB
+Mongoose
+Joi (for input validation)
 
-Lea atentamente los comentarios del mentor. Corrija los comentarios y haga un commit en la rama de la tarea. Los cambios se reflejarán automáticamente en el PR después de que envíe el commit con las correcciones a GitHub. Luego, agregue nuevamente al mentor para la revisión del código.- Al entregar una tarea, incluya un enlace al PR.
+----------------------------------------------
 
-- El código JavaScript debe estar limpio y claro, y se debe usar Prettier para el formato.
+Getting Started
+To run this project locally, follow these steps:
+1.Clone the repository to your local machine:
+-git clone [repository_url]
+2.Install the required dependencies:
+-cd [project_directory]
+-npm install
+3.Set up the MongoDB database:
+-Create a MongoDB Atlas account or use an existing one.
+=Replace the connection string in the connectToDatabase.js file with your own MongoDB connection string.
+4.Run the application:
+-npm start
 
-### Comandos:
+----------------------------------------------
 
-- `npm start` — Inicia el servidor en modo de producción.
-- `npm run start:dev` — Inicia el servidor en modo de desarrollo.
-- `npm run lint` — Ejecuta la comprobación del código con eslint. Debe ejecutarse antes de cada PR y corregir todos los errores del linter.
-- `npm lint:fix` — Lo mismo que la comprobación del linter, pero con correcciones automáticas de errores simples.
+Usage:
+API Endpoints
+List Contacts:
+
+GET /api/contacts
+Get Contact by ID:
+
+GET /api/contacts/:id
+Add Contact:
+
+POST /api/contacts
+Request body should include: { "name": "John Doe", "email": "john@example.com", "phone": "1234567890" }
+Remove Contact:
+
+DELETE /api/contacts/:id
+Update Contact:
+
+PUT /api/contacts/:id
+Request body should include one or more of the following: { "name": "New Name", "email": "new.email@example.com", "phone": "9876543210" }
+Update Contact Status (Favorite):
+
+PATCH /api/contacts/:id/favorite
+Request body should include: { "favorite": true } or { "favorite": false }
+
+----------------------------------------------
+
+Input Validation
+Input validation is implemented using Joi. Invalid requests will receive a 400 Bad Request response with details on the validation error.
