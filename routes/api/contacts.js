@@ -1,16 +1,15 @@
-// routes/api/contacts.js
-
 const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
-const listContacts = require('../../controllers/listContacts');
-const getContactById = require('../../controllers/getContactById');
+
 const addContact = require('../../controllers/addContacts');
-const removeContact = require('../../controllers/removeContacts');
-const updateContact = require('../../controllers/updateContact');
-const updateStatusContact = require('../../controllers/updateStatusContact');
-const authController = require('../../controllers/authController');
+const listContacts = require('../../controllers/listContacts');
 const verifyToken = require('../../middleware/authMiddleware');
+const updateContact = require('../../controllers/updateContact');
+const removeContact = require('../../controllers/removeContacts');
+const authController = require('../../controllers/authController');
+const getContactById = require('../../controllers/getContactById');
+const updateStatusContact = require('../../controllers/updateStatusContact');
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
