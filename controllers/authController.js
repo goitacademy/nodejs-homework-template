@@ -90,4 +90,8 @@ async function current(req, res, next) {
   }
 }
 
-module.exports = { register, login, logout, current };
+function uploadAvatar(req, res, next) {
+  res.send({ message: "load Avatar!" });
+}
+
+module.exports = { register, login, logout, current, uploadAvatar };
