@@ -95,6 +95,7 @@ const updateSubscription = async(req, res) => {
             email: user.email,
             subscription: user.subscription,
         });
+        
     } catch (error) {
         res.status(error.status || 500).json({ error: error.message });
     }
