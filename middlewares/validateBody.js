@@ -6,7 +6,7 @@ const validateBody = (schema) => {
       next(HttpError(400, "missing fields" ));
     }
     const { error } = schema.validate(req.body);
-    if (error) {
+      if (error) {
       const { message } = error.details[0];
       next(HttpError(400, message));
     }
