@@ -71,9 +71,40 @@ const logout = async(req, res) => {
     res.status(204).json()
 }
 
+const updateSubscription = async(req, res) => {
+    try {
+        const { _id: userId } = req.user;
+        const { subscription } = req.body;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            throw HttpError(404, 'User is not found');
+        }
+
+        const allowedSubscriptions = ['starter', 'pro', 'business'];
+
+        if (!allowedSubscriptions.includes(subscription)) {
+            throw HttpError(400, 'Invalid subscription value');
+        }
+
+        user.subscription = subscription;
+        await user.save();
+
+        res.json({
+            email: user.email,
+            subscription: user.subscription,
+        });
+    } catch (error) {
+        res.status(error.status || 500).json({ error: error.message });
+    }
+}
+
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
-    logout: ctrlWrapper(logout)
+    logout: ctrlWrapper(logout),
+    updateSubscription: ctrlWrapper(updateSubscription)
 }
