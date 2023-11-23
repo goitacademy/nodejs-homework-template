@@ -6,7 +6,7 @@ const addSchema = Joi.object({
     .required()
     .messages({
       "string.pattern.base": "field name is incorrect format",
-      "string.empty": "missing required name field",
+      "string.empty": "field name cannot be empty",
       "any.required": "missing required name field",
     }),
   email: Joi.string()
@@ -18,7 +18,7 @@ const addSchema = Joi.object({
     .messages({
       "string.email": "field email is incorrect format",
       "string.pattern.base": "field email is incorrect format",
-      "string.empty": "missing required email field",
+      "string.empty": "field email cannot be empty",
       "any.required": "missing required email field",
     }),
   phone: Joi.string()
@@ -26,7 +26,7 @@ const addSchema = Joi.object({
     .required()
     .messages({
       "string.pattern.base": "field phone is incorrect format",
-      "string.empty": "missing required phone field",
+      "string.empty": "field phone cannot be empty",
       "any.required": "missing required phone field",
     }),
 });
