@@ -19,7 +19,8 @@
     "mongodb": "^6.3.0",
     "mongoos": "^0.0.1-security",
     "mongoose": "^8.0.1",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
