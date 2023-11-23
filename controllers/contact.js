@@ -10,7 +10,6 @@ async function getContacts(req, res, next) {
     next(err);
   }
 }
-
 async function getContact(req, res, next) {
   
   const { id } = req.params;
