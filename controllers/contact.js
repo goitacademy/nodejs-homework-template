@@ -20,7 +20,6 @@ async function getContact(req, res, next) {
       return res.status(404).send("Contact not found:(*)");
     }
     if (contact.userId.toString() !== req.use.id) {
-      // return res.status(403).send("Forbidden");
       return res.status(404).send("Contact not found:(*)");
     }
     res.send(contact);
