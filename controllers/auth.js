@@ -8,7 +8,7 @@ const { SECRET_KEY } = process.env;
 
 const { handleHttpError, wrapController } = require("../utils");
 
-const register = async (req, res) => {
+const registerUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -19,13 +19,16 @@ const register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
-  res.status(201).json({
-    email: newUser.email,
-    name: newUser.name,
-  });
+  const response = {
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  };
+  res.status(201).json(response);
 };
 
-const login = async (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
@@ -46,25 +49,31 @@ const login = async (req, res) => {
 
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({ token });
+  res.json({
+    token,
+    user: {
+      email,
+      subscription: user.subscription,
+    },
+  });
 };
 
 const getCurrent = async (req, res) => {
-  const { name, email } = req.user;
+  const { email, subscription } = req.user;
 
-  res.json({ name, email });
+  res.json({ email, subscription });
 };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({ message: "Logout success" });
+  res.status(204);
 };
 
 module.exports = {
-  register: wrapController(register),
-  login: wrapController(login),
+  register: wrapController(registerUser),
+  login: wrapController(loginUser),
   getCurrent: wrapController(getCurrent),
   logout: wrapController(logout),
 };
