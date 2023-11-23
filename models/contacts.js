@@ -14,7 +14,7 @@ export const listContacts = async () => {
 export const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
-    return contacts.find((item) => item.id === contactId);
+    return await contacts.find((item) => item.id === contactId);
   } catch (error) {
     return error;
   }
@@ -36,8 +36,10 @@ export const addContact = async (body) => {
 export const removeContact = async (contactId) => {
   try {
     const contacts = await listContacts();
-    if (contacts.find((item) => item.id === contactId)) {
-      const updatedContacts = contacts.filter((item) => item.id !== contactId);
+    if (await contacts.find((item) => item.id === contactId)) {
+      const updatedContacts = await contacts.filter(
+        (item) => item.id !== contactId
+      );
       await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
       return true;
     } else {
@@ -48,4 +50,23 @@ export const removeContact = async (contactId) => {
   }
 };
 
-export const updateContact = async (contactId, body) => {};
+export const updateContact = async (contactId, obj) => {
+  try {
+    const contacts = await listContacts();
+    const isOnList = await contacts.find((item) => item.id === contactId);
+    if (isOnList) {
+      const updatedContacts = await contacts.map((item) =>
+        item.id === contactId ? { ...item, ...obj } : item
+      );
+      await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
+      return {
+        isOnList: true,
+        contact: updatedContacts.find((item) => item.id === contactId),
+      };
+    } else {
+      return { isOnList: false, contact: null };
+    }
+  } catch (error) {
+    return error;
+  }
+};

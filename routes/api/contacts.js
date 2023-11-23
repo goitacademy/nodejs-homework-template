@@ -4,6 +4,7 @@ import {
   getContactById,
   addContact,
   removeContact,
+  updateContact,
 } from "../../models/contacts.js";
 import Joi from "joi";
 
@@ -51,7 +52,18 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const result = schema.validate(req.body);
+  if (result.error) {
+    res.status(400).json({ message: "missing fields" }); // result.error.details[0].message // ZROBIONE WEDŁUG INSTRUKCJI ZADANIA
+  } else {
+    const { isOnList, contact } = await updateContact(contactId, result.value);
+    if (!isOnList) {
+      res.status(404).json({ message: "Not found" });
+    } else {
+      res.status(200).json(contact);
+    }
+  }
 });
 
 export default router;
