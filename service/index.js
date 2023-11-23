@@ -47,7 +47,6 @@ const removeContact = async (contactId) => {
 const updateContact = async (contactId, body) => {
   try {
     const ret = await Contact.findByIdAndUpdate(contactId, body, {
-      // Aby zwrócić kontakt PO aktualizacji, należy użyć flagi "new"
       new: true,
     });
     return ret;
@@ -58,12 +57,8 @@ const updateContact = async (contactId, body) => {
 };
 
 const updateStatusContact = async (contactId, body) => {
-  // Kod jest taki sam jak w metodzie updateContact,
-  // ale w wymaganiach było, aby utworzyć metodę `updateStatusContact`
-  // Normalnie bym zrobiła jedną funkcję :)
   try {
     const ret = await Contact.findByIdAndUpdate(contactId, body, {
-      // Aby zwrócić kontakt PO aktualizacji, należy użyć flagi "new"
       new: true,
     });
     return ret;

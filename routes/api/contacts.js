@@ -25,8 +25,6 @@ const router = express.Router();
 
 router.get("/", authMiddleware, async (req, res, next) => {
   try {
-    // Pobranie atrybutów query, czyli ?page=1&limit=20 z URI
-    // do paginacji w zadaniu dodatkowym
     const { page, limit } = req.query;
     const contacts = await listContacts(page, limit);
     res.status(200).send({ contacts });
@@ -36,7 +34,6 @@ router.get("/", authMiddleware, async (req, res, next) => {
 });
 
 router.get("/:contactId", authMiddleware, async (req, res, next) => {
-  // Params to są te po ukośniku w URI, np. http://adres:port/nazwa/funkcji/12345 - gdzie 12345 to contactId
   const { contactId } = req.params;
   try {
     const contact = await getContactById(contactId);
@@ -51,21 +48,13 @@ router.get("/:contactId", authMiddleware, async (req, res, next) => {
 });
 
 router.post("/", authMiddleware, async (req, res, next) => {
-  // Bez Joi musielibyśmy walidować w ten, a być może nawet bardziej skomplikowany sposób
-  // if (!req.body.name || !req.body.email || !req.body.field) {
-  //   res.status(400).json({ message: "missing required name - field" });
-  // }
-
-  // Z Joi:
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
     res.status(400).json({ message: "missing required name - field" });
   } else {
     try {
-      // req.body zawiera dane, które są przekazywane jako body requestu typu POST lub innych typów - odpowiednik parametrów po znaku zapytania (query) albo po ukośniku (params)
-      // tylko pozwalają wprowadzić dużo więcej danych w różnym formacie
       const newContact = await addContact(req.body);
-      res.status(201).json(newContact); // TODO: dodac wygenerowany obiekt kontaktu
+      res.status(201).json(newContact);
     } catch (e) {
       res.status(500).send({ error: e });
     }
