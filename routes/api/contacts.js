@@ -3,6 +3,7 @@ import {
   listContacts,
   getContactById,
   addContact,
+  removeContact,
 } from "../../models/contacts.js";
 import Joi from "joi";
 
@@ -40,7 +41,13 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { contactId } = req.params;
+  const contact = await removeContact(contactId);
+  if (contact) {
+    res.status(200).json({ message: "contact deleted" });
+  } else {
+    res.status(404).json({ message: "Not found" });
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {

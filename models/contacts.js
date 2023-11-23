@@ -33,6 +33,19 @@ export const addContact = async (body) => {
   }
 };
 
-export const removeContact = async (contactId) => {};
+export const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    if (contacts.find((item) => item.id === contactId)) {
+      const updatedContacts = contacts.filter((item) => item.id !== contactId);
+      await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return error;
+  }
+};
 
 export const updateContact = async (contactId, body) => {};
