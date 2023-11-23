@@ -1,6 +1,6 @@
 import express from 'express';
 
-import mongoose from 'mongoose';
+
 import connectToDatabase from './db.js';
 
 import authRoutes from './routes/api/authRoutes.js';
