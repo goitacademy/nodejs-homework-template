@@ -13,8 +13,7 @@ import { contactAddSchema, contactUpdateSchema, contactFavoriteSchema } from '..
 
 const router = express.Router();
 
-router.route('/').get(getAll)
-  .post(isEmptyBody, validateBody(contactAddSchema), addContact);
+router.route('/').get(getAll).post(isEmptyBody, validateBody(contactAddSchema), addContact);
 router
   .route('/:contactId')
   .get(IsValidId, getById)
