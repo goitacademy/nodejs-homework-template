@@ -1,7 +1,6 @@
-// user.model.js
+import mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
-const gravatar = require('gravatar');
+import gravatar from 'gravatar';
 
 const { Schema } = mongoose;
 
@@ -25,14 +24,6 @@ const userSchema = new Schema({
     default: null,
   },
   avatarURL: String,
-  verify: {
-    type: Boolean,
-    default: false,
-  },
-  verificationToken: {
-    type: String,
-    required: [true, 'Verification token is required'],
-  },
 });
 
 userSchema.pre('save', function (next) {
@@ -44,4 +35,4 @@ userSchema.pre('save', function (next) {
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User;

@@ -1,4 +1,6 @@
-const contactsModel = require('../models/contactModel');
+
+import * as contactsModel from '../models/contactModel.js';
+
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
@@ -16,4 +18,4 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-module.exports = getContactById;
+export default getContactById;

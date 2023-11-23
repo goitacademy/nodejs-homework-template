@@ -1,10 +1,9 @@
-/* const express = require('express');
-const router = express.Router();
-const userModel = require('../models/userModel');
-const verifyToken = require('../middleware/authMiddleware');
-const jwt = require('jsonwebtoken');
+import express from 'express';
 
-console.log('Before /logout endpoint definition');
+import userModel from '../models/userModel.js';
+import verifyToken from '../middleware/authMiddleware.js';
+
+const router = express.Router();
 
 router.get('/logout', verifyToken, async (req, res) => {
   try {
@@ -27,15 +26,6 @@ router.get('/logout', verifyToken, async (req, res) => {
 
     console.log(`User with ID ${userId} logged out successfully`);
 
-    // Dodaj ten fragment do wygenerowania nowego tokenu
-    const newToken = jwt.sign(
-      { userId: user._id },
-      'sekretnehaslo', // Tutaj powinno być bezpieczne hasło do podpisywania tokenów
-      { expiresIn: '1h' } // Przykładowy czas ważności tokena, możesz dostosować
-    );
-
-    console.log(`New token generated: ${newToken}`);
-
     res.status(204).send();
   } catch (error) {
     console.error('Error during logout:', error.message);
@@ -43,7 +33,4 @@ router.get('/logout', verifyToken, async (req, res) => {
   }
 });
 
-console.log('After /logout endpoint definition');
-
-module.exports = router;
- */
+export default router;

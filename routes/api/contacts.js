@@ -1,16 +1,14 @@
-// routes/api/contacts.js
+import express from 'express';
+import Joi from 'joi';
 
-const express = require('express');
-const router = express.Router();
-const Joi = require('joi');
-const listContacts = require('../../controllers/listContacts');
-const getContactById = require('../../controllers/getContactById');
-const addContact = require('../../controllers/addContacts');
-const removeContact = require('../../controllers/removeContacts');
-const updateContact = require('../../controllers/updateContact');
-const updateStatusContact = require('../../controllers/updateStatusContact');
-const authController = require('../../controllers/authController');
-const verifyToken = require('../../middleware/authMiddleware');
+import addContact from '../../controllers/addContacts.js';
+import listContacts from '../../controllers/listContacts.js';
+import verifyToken from '../../middleware/authMiddleware.js';
+import updateContact from '../../controllers/updateContact.js';
+import removeContact from '../../controllers/removeContacts.js';
+import authController from '../../controllers/authController.js';
+import getContactById from '../../controllers/getContactById.js';
+import updateStatusContact from '../../controllers/updateStatusContact.js';
 
 const addContactSchema = Joi.object({
   name: Joi.string().required(),
@@ -23,6 +21,8 @@ const updateContactSchema = Joi.object({
   email: Joi.string().email(),
   phone: Joi.string(),
 });
+
+const router = express.Router();
 
 router.post('/login', authController.login);
 
@@ -62,28 +62,18 @@ router.patch('/:id/favorite', verifyToken, async (req, res) => {
   const { id } = req.params;
   const { favorite } = req.body;
 
-  console.log('Received PATCH request:', { id, favorite });
-
-  if (favorite === undefined && typeof favorite !== 'boolean') {
-    console.log(
-      'Error: Missing or invalid field "favorite" in the request body'
-    );
+  if (favorite === undefined || typeof favorite !== 'boolean') {
     return res
       .status(400)
-      .json({ message: 'missing or invalid field favorite' });
+      .json({ message: 'Missing or invalid field "favorite"' });
   }
 
   try {
-    console.log(`Received PATCH request for contact with id: ${id}`);
-
     const updatedContact = await updateStatusContact(id, { favorite });
 
     if (!updatedContact) {
-      console.log(`Contact not found for id: ${id}`);
       return res.status(404).json({ message: 'Contact not found' });
     }
-
-    console.log('Contact updated successfully:', updatedContact);
 
     res.status(200).json({
       status: 'success',
@@ -95,5 +85,4 @@ router.patch('/:id/favorite', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
-module.exports = router;
+export default router;
