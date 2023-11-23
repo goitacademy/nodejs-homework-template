@@ -154,5 +154,4 @@ Input validation is implemented using Joi. Invalid requests will receive a 400 B
 
 ## Testing
 To run tests, use the following command:
-```bash
 npm test
