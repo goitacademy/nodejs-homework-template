@@ -1,7 +1,18 @@
 import { Router } from "express";
-import { listContacts, getContactById } from "../../models/contacts.js";
+import {
+  listContacts,
+  getContactById,
+  addContact,
+} from "../../models/contacts.js";
+import Joi from "joi";
 
 const router = Router();
+
+const schema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(30).required(),
+  email: Joi.required(),
+  phone: Joi.required(),
+});
 
 router.get("/", async (req, res, next) => {
   const list = await listContacts();
@@ -19,7 +30,13 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const result = schema.validate(req.body);
+  if (result.error) {
+    res.status(400).json({ message: result.error.details[0].message });
+  } else {
+    const { id, name, email, phone } = await addContact(result.value);
+    res.status(201).json({ id, name, email, phone });
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {

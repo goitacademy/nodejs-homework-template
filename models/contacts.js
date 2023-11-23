@@ -1,4 +1,5 @@
-import { readFile } from "fs/promises";
+import { readFile, writeFile } from "fs/promises";
+import { nanoid } from "nanoid";
 
 export const listContacts = async () => {
   try {
@@ -13,15 +14,25 @@ export const listContacts = async () => {
 export const getContactById = async (contactId) => {
   try {
     const contacts = await listContacts();
-    const contact = contacts.find((item) => item.id === contactId);
-    return contact;
+    return contacts.find((item) => item.id === contactId);
+  } catch (error) {
+    return error;
+  }
+};
+
+export const addContact = async (body) => {
+  try {
+    const contacts = await listContacts();
+    const id = nanoid();
+    const newContact = { id: id, ...body };
+    const updatedContacts = [...contacts, newContact];
+    await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
+    return newContact;
   } catch (error) {
     return error;
   }
 };
 
 export const removeContact = async (contactId) => {};
-
-export const addContact = async (body) => {};
 
 export const updateContact = async (contactId, body) => {};
