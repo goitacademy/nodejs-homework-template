@@ -20,5 +20,6 @@ router.post(
 );
 router.post("/logout", auth, AunthController.logout);
 router.get("/current", auth, AunthController.current);
+router.patch("avatar/", userController.uploadAvatar);
 
 module.exports = router;
