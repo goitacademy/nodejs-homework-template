@@ -3,6 +3,10 @@ require('dotenv').config();
 const service = require('../services/users.service');
 const { userValidator, userValidateSubscription } = require('../utils/joi/joi');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
+const fs = require('fs').promises;
+const path = require('path');
+const Jimp = require('jimp');
 
 const secret = process.env.JWT_SECRET;
 
@@ -32,13 +36,19 @@ const registerUser = async (req, res, next) => {
 		});
 	}
 	try {
-		const newUser = new User({ email, password });
+		const avatarURL = gravatar.url(email, {
+			s: '200',
+			r: 'pg',
+		});
+
+		const newUser = new User({ email, password, avatarURL });
 		newUser.setPassword(password);
 		await newUser.save();
 		const response = {
 			user: {
 				email: newUser.email,
 				subscription: newUser.subscription,
+				avatarURL: newUser.avatarURL,
 			},
 		};
 		res.status(201).json({
@@ -175,10 +185,48 @@ const updateSubscription = async (req, res, next) => {
 	}
 };
 
+const updateAvatar = async (req, res, next) => {
+	const { id } = req.user;
+
+	try {
+		const storeImage = path.join(process.cwd(), 'public', 'avatars');
+		const { path: temporaryName, originalname } = req.file;
+
+		await Jimp.read(`tmp/${originalname}`)
+			.then(avatar => {
+				return avatar.resize(250, 250).greyscale().write(`tmp/${originalname}`);
+			})
+			.catch(err => {
+				console.error(err);
+			});
+
+		const ext = path.extname(originalname);
+		const avatarNewName = `avatar-id_${id}${ext}`;
+		const fileName = path.join(storeImage, avatarNewName);
+		await fs.rename(temporaryName, fileName);
+
+		const avatarNewURL = `/avatars/${avatarNewName}`;
+		const response = await service.updateUserAvatar(id, avatarNewURL);
+
+		return res.status(200).json({
+			status: 'success',
+			code: 200,
+			data: 'OK',
+			ResponseBody: {
+				avatarURL: response.avatarURL,
+			},
+		});
+	} catch (err) {
+		console.error(err);
+		next(err);
+	}
+};
+
 module.exports = {
 	registerUser,
 	loginUser,
 	logoutUser,
 	currentUser,
 	updateSubscription,
+	updateAvatar,
 };

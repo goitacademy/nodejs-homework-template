@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 const app = require('./app');
+const { createFolderIfNotExist, uploadDir } = require('./middlewares/upload');
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -14,6 +16,7 @@ connection
 	.then(() => {
 		console.log('\nDatabase connection successful');
 		app.listen(PORT, () => {
+			createFolderIfNotExist(uploadDir);
 			console.log(`Server running. App listens on port ${PORT}`);
 		});
 	})
