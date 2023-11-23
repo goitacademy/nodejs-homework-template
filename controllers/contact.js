@@ -12,6 +12,7 @@ async function getContacts(req, res, next) {
 }
 
 async function getContact(req, res, next) {
+  console.log({ user: req.user });
   const { id } = req.params;
   try {
     const contact = await Contact.findById(id).exec();
@@ -20,7 +21,7 @@ async function getContact(req, res, next) {
     }
 
     if (contact.userId.toString() !== req.use.id) {
-
+      // return res.status(403).send("Forbidden");
       return res.status(404).send("Contact not found:(*)");
     }
     res.send(contact);

@@ -5,12 +5,13 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 async function register(req, res, next) {
+ 
   const { name, email, password } = req.body;
 
   try {
     const user = await User.findOne({ email }).exec();
 
-    if (user) {
+    if (user !== null) {
       return res.status(409).send({ message: "User already registered" });
     }
 
