@@ -1,15 +1,15 @@
 const express = require('express');
-const fs = require('fs').promises;
-const path = require('path');
+const { promises: fs } = require('fs');
 const Joi = require('joi');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
-const contactsFilePath = path.join(__dirname, '../../models/contacts.json');
+const contactsFilePath = `${__dirname}/../../models/contacts.json`;
 const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean().required(),
 });
 
 async function loadContacts() {
@@ -137,3 +137,4 @@ router.put('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
