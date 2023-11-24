@@ -30,7 +30,22 @@ const getContactById = async (contactId) => {
   else return null;
 };
 
-const removeContact = async (contactId) => {};
+const removeContact = async (contactId) => {
+  const data = await fs
+    .readFile(contactsPath)
+    .catch((e) => console.log(e.message));
+
+  const contactFound = Parcer(data).find((item) => item.id === contactId);
+
+  if (contactFound) {
+    const filteredArray = Parcer(data).filter((item) => item.id !== contactId);
+
+    await fs
+      .writeFile(contactsPath, JSON.stringify(filteredArray))
+      .catch((e) => console.log(e.message));
+    return contactFound;
+  } else return null;
+};
 
 const addContact = async (newContact) => {
   const data = await fs
