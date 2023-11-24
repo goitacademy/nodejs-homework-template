@@ -5,6 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users"); // Добавляем эту строку
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter); // Добавляем эту строку
 
 const { DB_URI } = process.env;
 
