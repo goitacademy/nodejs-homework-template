@@ -5,11 +5,17 @@ const router = express.Router();
 const contacts = require("../../models/contacts");
 
 // Схема валідації
-const schema = Joi.object({
+const postSchema = Joi.object({
   name: Joi.required(),
   email: Joi.required(),
   phone: Joi.required(),
 });
+
+const putSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+}).or("name", "email", "phone");
 
 router.get("/", async (req, res, next) => {
   const myContacts = await contacts
@@ -41,7 +47,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { error, value } = schema.validate(req.body);
+  const { error, value } = postSchema.validate(req.body);
   if (error)
     res.status(400).json({
       status: 400,
