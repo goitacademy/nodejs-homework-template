@@ -1,11 +1,15 @@
 const express = require("express");
 const logger = require("morgan");
 require("./db");
+
+const path = require("node.path");
 // require("dotenv").config();
 // const cors = require("cors");
 const routes = require("./routes");
 
 const app = express();
+
+app.use("/avatars", express.static(path.jion(__dirname, "public", "avatars")));
 
 app.use(routes);
 

@@ -98,6 +98,17 @@ async function uploadAvatar(req, res, next) {
       req.file.path,
       path.join(__dirname, "..", "public/avatars", req.file.filename)
     );
+
+    const result = User.findByIdAndUpdate(
+      req.user.id,
+      {
+        avatar: req.file.filename,
+      },
+      { new: true }
+    ).exec();
+    if (result === null) {
+      return res.status(404).send({ message: "user not found" });
+    }
     res.send({ message: "load Avatar!" });
   } catch (error) {
     next(error);
