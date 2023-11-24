@@ -3,26 +3,29 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 const fs = require("node:fs/promises");
 const path = require("node:path");
+const gravatar = require("gravatar");
 
 //register function
 async function register(req, res, next) {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email: email }).exec();
+    const user = await User.findOne({ email }).exec();
     if (user !== null) {
       return res.status(409).send({ message: "user already register!" });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-
+    const avatar = gravatar.url(email);
     const newUser = await User.create({
       email,
       password: passwordHash,
+      avatar,
     });
     res.status(201).send({
       user: {
         email: email,
         subscription: newUser.subscription,
+        avatar: newUser.avatar,
       },
     });
   } catch (error) {

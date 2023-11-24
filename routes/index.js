@@ -10,4 +10,3 @@ router.use("/users", authRoutes);
 router.use("/contacts", auth, contactsRoutes);
 
 module.exports = router;
-//
