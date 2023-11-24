@@ -1,5 +1,10 @@
 const userDao = require("./user.dao");
 const authService = require("../auth/auth.service");
+const jimp = require("jimp");
+const mimetypes = require("mime-types");
+const path = require("path");
+const appDir = path.dirname(require.main.filename);
+const fs = require("fs/promises");
 
 const signupHandler = async (req, res, next) => {
   try {
@@ -53,8 +58,6 @@ const loginHandler = async (req, res, next) => {
 const logoutHandler = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    // Nie wiem czemu musi to być po _id, skoro wszędzie update był po mailu,
-    // ale takie są wymagania
     console.log(await userDao.updateUserById(_id, { token: null }));
 
     return res.status(204).send();
@@ -72,9 +75,36 @@ const currentHandler = async (req, res, next) => {
   }
 };
 
+const avatarsHandler = async (req, res, next) => {
+  try {
+    const { email } = req.user;
+    const filename = `${email}_${Date.now()}.${mimetypes.extension(
+      req.file.mimetype
+    )}`;
+
+    const avatarImage = await jimp.read(req.file.path);
+
+    await avatarImage.resize(250, 250).writeAsync(req.file.path);
+
+    await fs.rename(
+      req.file.path,
+      path.join(appDir, "public/avatars", filename)
+    );
+
+    const updatedUser = await userDao.updateUser(email, {
+      avatarURL: `http://localhost:3000/avatars/${filename}`,
+    });
+
+    return res.status(200).send({ avatarURL: updatedUser.avatarURL });
+  } catch (e) {
+    return next(e);
+  }
+};
+
 module.exports = {
   signupHandler,
   loginHandler,
   logoutHandler,
   currentHandler,
+  avatarsHandler,
 };
