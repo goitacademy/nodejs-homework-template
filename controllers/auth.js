@@ -1,14 +1,14 @@
 // service/auth.js
 const service = require("../services/auth");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
 const signup = async (req, res) => {
   try {
 
-    const token = req.headers.authorization.split(" ")[1];
-    const payload = jwt.verify(token, process.env.SECRET_KEY);
+    // const token = req.headers.authorization.split(" ")[1];
+    // const payload = jwt.verify(token, process.env.SECRET_KEY);
 
-    req.body.owner = payload.Id;
+    // req.body.owner = payload.Id;
 
     const { success, result, message } = await service.signup(req.body);
 
@@ -72,7 +72,7 @@ const login = async (req, res) => {
   }
 };
 
-const getContactCurrent = async (req, res) => {
+const current = async (req, res) => {
   try {
     const owner = req.user.Id;
     let id = req.params.id;
@@ -80,7 +80,7 @@ const getContactCurrent = async (req, res) => {
     if (!id) {
       id = owner;
     }
-    const { success, result, message } = await service.getContactCurrent(id, owner);
+    const { success, result, message } = await service.current(id, owner);
 
     if (!success) {
       return res.status(401).json({
@@ -101,7 +101,7 @@ const getContactCurrent = async (req, res) => {
   }
 };
 
-const updateTokenRemove = async (req, res) => {
+const logout = async (req, res) => {
   try {
     const owner = req.user.Id;
     let id = req.params.id;
@@ -112,7 +112,7 @@ const updateTokenRemove = async (req, res) => {
 
     const token = null;
 
-    const { success, result, message } = await service.updateTokenRemove(
+    const { success, result, message } = await service.logout(
       id,
       token,
       owner
@@ -146,9 +146,47 @@ const updateTokenRemove = async (req, res) => {
   }
 };
 
+const updateContactSubscription = async (req, res) => {
+  try {
+    const owner = req.user.Id;
+    const { id } = req.params;
+    const { subscription } = req.body;
+
+    if (
+      subscription &&
+      !["starter", "pro", "business"].includes(subscription)
+    ) {
+      return res
+        .status(400)
+        .json({ result: null, message: "Ïnvalid subscription value" });
+    }
+
+    const { success, result, message } =
+      await service.updateContactSubscription(id, subscription, owner);
+
+    if (!success) {
+      return res.status(400).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   signup,
   login,
-  getContactCurrent,
-  updateTokenRemove,
+  current,
+  logout,
+  updateContactSubscription,
 };

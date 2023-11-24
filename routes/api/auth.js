@@ -1,11 +1,11 @@
 // routes\api\auth.js
-const express = require("express");
-const controller = require("../../controllers/auth");
-const validateSchemas = require("../../middlewares/validateSchemas");
-const { ensureAuthenticated } = require("../../middlewares/validateJWT");
-const schemasJoi = require("../../models/schemas");
+const express = require('express')
+const controller = require('../../controllers/auth')
+const validateSchemas = require('../../middlewares/validateSchemas')
+const { ensureAuthenticated } = require('../../middlewares/validateJWT')
+const schemasJoi = require('../../models/schemas')
 
-const authRouter = express.Router();
+const authRouter = express.Router()
 
 module.exports = () => {
   /**
@@ -49,26 +49,32 @@ module.exports = () => {
    *                 message: "Internal server error"
    */
 
-  authRouter.get("/current", ensureAuthenticated, controller.getContactCurrent);
+  authRouter.get('/current', ensureAuthenticated, controller.current)
 
   authRouter.post(
-    "/signup",
-    ensureAuthenticated,
-    validateSchemas(schemasJoi.registerSchema, "body"),
+    '/signup',
+    validateSchemas(schemasJoi.registerUserSchema, 'body'),
     controller.signup
-  );
+  )
 
   authRouter.post(
-    "/log-in",
-    validateSchemas(schemasJoi.loginSchema, "body"),
+    '/log-in',
+    validateSchemas(schemasJoi.loginSchema, 'body'),
     controller.login
-  );
+  )
 
   authRouter.patch(
-    "/logout/:id?",
+    '/logout/:id?',
     ensureAuthenticated,
-    controller.updateTokenRemove
-  );
+    controller.logout
+  )
 
-  return authRouter;
-};
+  // auth cambai
+  authRouter.patch(
+    '/:id/subscription',
+    ensureAuthenticated,
+    controller.updateContactSubscription
+  )
+
+  return authRouter
+}

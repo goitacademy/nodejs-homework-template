@@ -1,5 +1,6 @@
 // services\contacts.js
-const Contact = require("../models/contacts");
+const { Contact } = require("../models/contacts");
+// const util = require('util');
 
 const getContactOwner = async (query, skip, limit) => {
   try {
@@ -51,6 +52,8 @@ const getContactOwnerById = async (_id, owner) => {
   }
 };
 
+
+
 const removeContact = async (_id, owner) => {
   try {
     if (!_id) {
@@ -84,53 +87,9 @@ const removeContact = async (_id, owner) => {
   }
 };
 
-const updateContactSubscription = async (_id, subscription, owner) => {
-  try {
-    if (!_id) {
-      return {
-        success: false,
-        result: null,
-        message: "Invalid ID",
-      };
-    }
-    // Verifica si el contactId es un ObjectId válido
-    // if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    //   return {
-    //     success: false,
-    //     result: null,
-    //     message: "Invalid ObjectId format",
-    //   };
-    // }
 
-    const contactUpdate = await Contact.findByIdAndUpdate(
-      { _id, owner },
-      { subscription },
-      { new: true }
-    );
 
-    if (!contactUpdate) {
-      return {
-        success: false,
-        result: null,
-        message: "There was an error to update contact",
-      };
-    }
-
-    return {
-      success: true,
-      result: contactUpdate,
-      message: "Contact updated successfully.",
-    };
-  } catch (error) {
-    return {
-      success: false,
-      result: null,
-      message: error,
-    };
-  }
-};
-
-const updateStatusContact = async (_id, favorite, owner) => {
+const updateFavoriteContact = async (_id, favorite, owner) => {
   try {
     if (!_id) {
       return {
@@ -170,10 +129,84 @@ const updateStatusContact = async (_id, favorite, owner) => {
   }
 };
 
+
+// list contact
+const listContacts = async () => {
+  try {
+    const contacts = await Contact.find();
+
+    return {
+      success: true,
+      result: contacts,
+      message: "List of Contacts",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const addContact = async (Data) => {
+  try {
+    // console.log('dT', Data);
+    
+    const email = Data.email;
+     const contact = await Contact.insertMany({
+    // const contact = await Contact.findOne({
+      email,
+    });
+// console.log(contact);
+    if (contact) {
+      return {
+        success: false,
+        result: null,
+        // message:  `Contact is already registered:\n${util.inspect(contact, { depth: null, colors: true })}`,
+        message: `contact is already registered with this email: ${contact.email} *-* ${contact.name} `,
+
+};
+    }
+    const contactRegistered = await Contact.create(Data);
+    console.log(contactRegistered);
+    //     const newId = crypto.randomUUID();
+
+    if (!contactRegistered) {
+      return {
+        success: false,
+        result: null,
+        message: "There is an error try creating contact.",
+      };
+    }
+
+    return {
+      success: true,
+      result: contactRegistered,
+      message: "Contact registered successfully.",
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+
+
+
 module.exports = {
+  // Contact
+  listContacts,
+  addContact,
+  // User
   getContactOwner,
   getContactOwnerById,
   removeContact,
-  updateContactSubscription,
-  updateStatusContact,
+  
+  updateFavoriteContact,
+  
 };

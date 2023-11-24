@@ -1,15 +1,17 @@
 // services\auth.js
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Contact = require("../models/contacts");
+const {User} = require("../models/contacts");
 const moment = require("moment");
 
 const signup = async (Data) => {
   try {
-    const user = await Contact.findOne({
-      email: Data.email,
+    console.log(Data);
+    const email = Data.email;
+    const user = await User.findOne({
+      email,
     });
-
+console.log(user);
     if (user) {
       return {
         success: false,
@@ -26,7 +28,7 @@ const signup = async (Data) => {
       Data.active = true;
     }
 
-    const createdUser = await Contact.create(Data);
+    const createdUser = await User.create(Data);
 
     return {
       success: true,
@@ -34,6 +36,7 @@ const signup = async (Data) => {
       message: "Signup successfully.",
     };
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       result: null,
@@ -44,9 +47,9 @@ const signup = async (Data) => {
 
 const login = async (email, password) => {
   try {
-    const isUserExist = await Contact.findOne({
-      email,
-    });
+    const isUserExist = await User.findOne({
+  email,
+});
 
     if (!isUserExist) {
       return {
@@ -86,9 +89,9 @@ const login = async (email, password) => {
       process.env.SECRET_KEY
     );
 
-    // const addToken = await Contact.updateOne(
-    // const _ = await Contact.updateOne(
-    await Contact.updateOne(
+    // const addToken = await User.updateOne(
+    // const _ = await User.updateOne(
+    await User.updateOne(
       {
         email: isUserExist.email,
       },
@@ -121,25 +124,25 @@ const login = async (email, password) => {
   }
 };
 
-const getContactCurrent = async (_id, owner) => {
+const current = async (_id, owner) => {
   try {
-    const contact = await Contact.findById({ _id, owner });
+    const user = await User.findById({ _id, owner });
 
-    if (!contact) {
+    if (!user) {
       return {
         success: false,
         result: null,
-        message: `No contact found with id: ${_id}`,
+        message: `No user found with id: ${_id}`,
       };
     }
-    const { email, subscription } = contact;
+    const { email, subscription } = user;
     return {
       success: true,
       result: {
         email,
         subscription,
       },
-      message: `Contact Found`,
+      message: `User Found`,
     };
   } catch (error) {
     return {
@@ -150,7 +153,7 @@ const getContactCurrent = async (_id, owner) => {
   }
 };
 
-const updateTokenRemove = async (_id, token, owner) => {
+const logout = async (_id, token, owner) => {
   try {
     if (!_id) {
       return {
@@ -159,24 +162,72 @@ const updateTokenRemove = async (_id, token, owner) => {
         message: "Not authorized",
       };
     }
-    const contact = await Contact.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       { _id, owner },
       { token },
       { new: true }
     );
 
-    if (!contact) {
+    if (!user) {
       return {
         success: false,
         result: null,
-        message: "Not found contact",
+        message: "Not found user",
       };
     }
 
     return {
       success: true,
-      result: contact,
+      result: user,
       message: "No Content",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
+const updateContactSubscription = async (_id, subscription, owner) => {
+  try {
+    if (!_id) {
+      return {
+        success: false,
+        result: null,
+        message: "Invalid ID",
+      };
+    }
+    // Verifica si el contactId es un ObjectId válido
+    // if (!mongoose.Types.ObjectId.isValid(contactId)) {
+    //   return {
+    //     success: false,
+    //     result: null,
+    //     message: "Invalid ObjectId format",
+    //   };
+    // }
+
+    const contactUpdate = await User.findByIdAndUpdate(
+      { _id, owner },
+      { subscription },
+      { new: true }
+    );
+
+    if (!contactUpdate) {
+      return {
+        success: false,
+        result: null,
+        message: "There was an error to update contact",
+      };
+    }
+
+  const { _id: Id, name, subscription: Subscription } = contactUpdate;
+
+    return {
+      success: true,
+      result: { _id: Id, name, subscription: Subscription },
+      message: "Contact updated successfully.",
     };
   } catch (error) {
     return {
@@ -190,6 +241,7 @@ const updateTokenRemove = async (_id, token, owner) => {
 module.exports = {
   signup,
   login,
-  getContactCurrent,
-  updateTokenRemove,
+  current,
+  logout,
+  updateContactSubscription,
 };
