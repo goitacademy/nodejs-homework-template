@@ -68,7 +68,7 @@ const getCurrent = async(req, res) => {
 const logout = async(req, res) => {
     const {_id} = req.user;
     await User.findByIdAndUpdate(_id, {token: ''})
-    res.status(204).json()
+    res.status(204).end()
 }
 
 const updateSubscription = async(req, res) => {
@@ -95,7 +95,7 @@ const updateSubscription = async(req, res) => {
             email: user.email,
             subscription: user.subscription,
         });
-        
+
     } catch (error) {
         res.status(error.status || 500).json({ error: error.message });
     }
