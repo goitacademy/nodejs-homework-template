@@ -19,9 +19,15 @@ const getContactById = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   const { contactId } = req.params;
-  await Contacts.findByIdAndDelete(contactId);
 
-  res.send({ contactId });
+  const contact = await Contacts.findById(contactId);
+
+  if (contact === null) {
+    next();
+  }
+
+  await Contacts.findByIdAndDelete(contactId);
+  res.send({ message: `contact with id ${contactId} removed` });
 };
 
 const addContact = async (req, res) => {
