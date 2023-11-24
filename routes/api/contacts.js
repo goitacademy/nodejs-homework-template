@@ -1,5 +1,5 @@
 import express from "express";
-import contactsController from "../../controllers/contactsController.js";
+import contactsController from "../../controllers/contact/index.js";
 import { isValidId } from "../../middlewares/isValidid.js";
 import { contactCheck, favoriteValid } from "../../models/Contact.js";
 import validate from "../../decorators/validate.js";
