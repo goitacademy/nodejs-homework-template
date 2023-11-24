@@ -104,15 +104,19 @@ async function logoutUser(req, res, next) {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
+  // Проверяем, что токен в запросе соответствует токену в базе данных
+  if (req.headers.authorization.split(' ')[1].localeCompare(user.token) !== 0) {
+    return res.status(401).json({ message: 'Not authorized: Token mismatch' });
+  }
+  
     // Удаляем токен у пользователя
     user.token = null;
+
+    // Сохраняем изменения в базе данных
     await user.save();
 
-    // Отправляем успешный ответ . Было   res.status(204).end();
-    res.status(200).json({
-      email: req.user.email,
-      subscription: req.user.subscription
-    });
+    // Отправляем успешный ответ . 
+    res.status(204).end();
     
   } catch (error) {
     console.error(error);
@@ -123,14 +127,31 @@ async function logoutUser(req, res, next) {
 
 async function getCurrentUser(req, res, next) {
   // Реализация получения данных текущего пользователя
-  const userData = {
-    email: req.user.email,
-    subscription: req.user.subscription,
-  };
+  try {
+    const authHeader = req.headers.authorization;
 
-  res.status(200).json(userData);
-}
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
 
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.userId);
+
+    if (!user || token !== user.token) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    res.status(200).json({
+      email: user.email,
+      subscription: user.subscription,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(401).json({ message: 'Not authorized' });
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
