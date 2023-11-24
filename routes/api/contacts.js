@@ -2,17 +2,47 @@ const express = require('express');
 
 const contacts = require('../../models/contacts');
 
+const { HttpError } = require('../../helpers');
+
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
-  const result = await contacts.listContacts();
-  res.json({ status: 200, message: 'success', result });
+  try {
+    const result = await contacts.listContacts();
+    res.json({
+      status: 200,
+      message: 'Success',
+      result,
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get('/:contactId', async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
-  res.json({ status: 200, message: `contact id: ${contactId}`, result });
+  try {
+    const { contactId } = req.params;
+    const result = await contacts.getContactById(contactId);
+    if (!result) {
+      throw HttpError(404, 'Not found');
+      // return res.status(404).json({
+      //   status: 404,
+      //   message: 'Not found',
+      // });
+    }
+    res.json({
+      status: 200,
+      message: `contact id: ${contactId}`,
+      result,
+    });
+  } catch (err) {
+    next(err);
+    // res.status(500).json({
+    //   status: 500,
+    //   message: 'Server error',
+    // });
+
+  }
 });
 
 router.post('/', async (req, res, next) => {
