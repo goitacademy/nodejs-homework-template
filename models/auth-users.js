@@ -29,11 +29,12 @@ userSchema.pre('findOneAndUpdate', preUpdate);
 
 userSchema.post('findOneAndUpdate', handleSaveError);
 
-export const userSingupSchema = Joi.object({
+export const userRegisterSchema = Joi.object({
   password: Joi.string()
     .required()
     .messages({ 'any.required': 'missing required password field' }),
   email: Joi.string()
+    .email()
     .required()
     .messages({ 'any.required': 'missing required email field' }),
   subscription: Joi.string()
@@ -42,7 +43,7 @@ export const userSingupSchema = Joi.object({
 });
 
 export const userLoginSchema = Joi.object({
-  email: Joi.string().required().messages({
+  email: Joi.string().required().email().messages({
     'any.required': 'missing required email field',
   }),
   password: Joi.string().required().messages({
