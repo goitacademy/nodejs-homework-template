@@ -32,7 +32,18 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {};
 
-const addContact = async (body) => {};
+const addContact = async (newContact) => {
+  const data = await fs
+    .readFile(contactsPath)
+    .catch((e) => console.log(e.message));
+
+  const updatedArr = [...Parcer(data), newContact];
+
+  await fs
+    .writeFile(contactsPath, JSON.stringify(updatedArr))
+    .catch((e) => console.log(e.message));
+  return newContact;
+};
 
 const updateContact = async (contactId, body) => {};
 

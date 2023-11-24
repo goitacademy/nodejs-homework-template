@@ -1,7 +1,15 @@
 const express = require("express");
-
+const { nanoid } = require("nanoid");
+const Joi = require("joi");
 const router = express.Router();
 const contacts = require("../../models/contacts");
+
+// Схема валідації
+const schema = Joi.object({
+  name: Joi.required(),
+  email: Joi.required(),
+  phone: Joi.required(),
+});
 
 router.get("/", async (req, res, next) => {
   const myContacts = await contacts
@@ -26,14 +34,30 @@ router.get("/:contactId", async (req, res, next) => {
       contactFound,
     });
   else
-    res.json({
+    res.status(404).json({
       status: 404,
       message: "Not found",
     });
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { error, value } = schema.validate(req.body);
+  if (error)
+    res.status(400).json({
+      status: 400,
+      message: "missing required name field",
+    });
+  else {
+    const newContact = {
+      id: nanoid(),
+      ...value,
+    };
+    await contacts.addContact(newContact).catch((e) => console.log(e.message));
+    res.status(201).json({
+      status: 201,
+      newContact,
+    });
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
