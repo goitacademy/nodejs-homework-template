@@ -3,7 +3,13 @@ const { Contact } = require("../models/contacts");
 const { handleHttpError, wrapController } = require("../utils");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find().exec();
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Contact.find({ owner }, "-createAt -updateAt", {
+    skip,
+    limit,
+  }).populate("owner", "name email favorite");
   res.json(result);
 };
 
@@ -17,7 +23,9 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  // console.log("user???", req.user);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -45,7 +53,6 @@ const updateFavorite = async (req, res) => {
 
 const deleteById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw handleHttpError(404, "Not found");

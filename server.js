@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const app = require("./app");
 
 const { DB_URI, PORT = 3000 } = process.env;
-// console.log(DB_URI);
 
 if (!DB_URI) {
   console.error(
