@@ -119,6 +119,12 @@ async function logoutUser(req, res, next) {
 
 async function getCurrentUser(req, res, next) {
   // Реализация получения данных текущего пользователя
+  const userData = {
+    email: req.user.email,
+    subscription: req.user.subscription,
+  };
+
+  res.status(200).json(userData);
 }
 
 module.exports = {

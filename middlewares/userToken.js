@@ -20,7 +20,7 @@ const userToken = async (req, res, next) => {
     console.log('User:', user);
 
     if (!user || token !== user.token.toString()) {
-      return res.status(401).json({ message: 'Not authorized: User or token mismatch' });
+      return res.status(401).json({ message: 'Not authorized: User or token mismatch' }); // саме тут виникає помилка!!!!
     }
 
     req.user = {
