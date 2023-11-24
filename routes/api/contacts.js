@@ -8,41 +8,39 @@ const {
   updateContact,
 } = require("../../models/contacts");
 const { schema } = require("../../helpers/validationSchema");
+const ctrlWrapper = require("../../helpers/ctrlWrapper");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  try {
+router.get(
+  "/",
+  ctrlWrapper(async (req, res) => {
     const contacts = await listContacts();
 
     res.json({
       message: "All contacts",
       contacts,
     });
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
-router.get("/:contactId", async (req, res, next) => {
-  try {
+router.get(
+  "/:contactId",
+  ctrlWrapper(async (req, res) => {
     const foundContact = await getContactById(req.params.contactId);
 
-    if (!foundContact) {
-      return res.status(400).json({ message: "Not found" });
-    }
+    if (!foundContact) return res.status(400).json({ message: "Not found" });
 
     res.json({
       message: "Found contact by the following id",
       foundContact,
     });
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
-router.post("/", async (req, res, next) => {
-  try {
+router.post(
+  "/",
+  ctrlWrapper(async (req, res) => {
     const { name, email, phone } = req.body;
 
     if (!name || !email || !phone) {
@@ -57,47 +55,39 @@ router.post("/", async (req, res, next) => {
       message: "Contact added",
       newContact,
     });
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
-router.delete("/:contactId", async (req, res, next) => {
-  try {
+router.delete(
+  "/:contactId",
+  ctrlWrapper(async (req, res) => {
     const contactToDelete = await removeContact(req.params.contactId);
 
-    if (!contactToDelete) {
-      return res.status(404).json({ message: "Not found" });
-    }
+    if (!contactToDelete) return res.status(404).json({ message: "Not found" });
 
     res.json({
       message: "contact deleted",
       contactToDelete,
     });
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
-router.put("/:contactId", async (req, res, next) => {
-  try {
+router.put(
+  "/:contactId",
+  ctrlWrapper(async (req, res) => {
     const { name, phone, email } = req.body;
     const id = req.params.contactId;
     const values = await schema.validateAsync({ name, email, phone });
 
     const updatedContact = await updateContact(id, values);
 
-    if (!updatedContact) {
-      return res.status(404).json({ message: "Not found" });
-    }
+    if (!updateContact) return res.status(404).json({ message: "Not found" });
 
     res.json({
       message: "contact updated",
       updatedContact,
     });
-  } catch (error) {
-    next(error);
-  }
-});
+  })
+);
 
 module.exports = router;
