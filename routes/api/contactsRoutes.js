@@ -1,6 +1,6 @@
 const express = require("express");
 
-const contactController = require("../../controllers/contact");
+const contactController = require("../../controllers/contactControllers");
 
 const router = express.Router();
 const jsonParser = express.json();

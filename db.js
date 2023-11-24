@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const DB_URI = process.env.DB_URI;
+const {DB_URI} = process.env;
 
 // mongoose.connect will  return for us promise;
   mongoose
