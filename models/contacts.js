@@ -1,19 +1,38 @@
-// const fs = require('fs/promises')
+const mongoose = require("mongoose");
+const handleMongooseError = require("../helpers/handleMongooseError");
 
-const listContacts = async () => {}
+const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
 
-const getContactById = async (contactId) => {}
+const contactSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      required: [true, "Set email for contact"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Set phone for contact"],
+      validate: {
+        validator: function (v) {
+          return phoneRegex.test(v);
+        },
+        message: (props) =>
+          `${props.value} is not a valid phone number! Please use the format (XXX) XXX-XXXX`,
+      },
+    },
+    favorite: {
+      type: Boolean,
+      required: [true],
+      default: false,
+    },
+  },
+  { versionKey: false }
+);
 
-const removeContact = async (contactId) => {}
+contactSchema.post("save", handleMongooseError);
 
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = mongoose.model("Contact", contactSchema);
