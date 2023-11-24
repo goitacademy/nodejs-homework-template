@@ -23,6 +23,7 @@ contactsRouter.patch(
   isEmptyBody,
   contactsControllers.patchContact
 );
+
 contactsRouter.delete("/:id", isValidId, contactsControllers.removeContact);
 
 export default contactsRouter;
