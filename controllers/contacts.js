@@ -1,4 +1,5 @@
 const contacts = require("../models/contacts");
+
 const { httpError, ctrlWrapper } = require("../helpers");
 
 
@@ -39,6 +40,7 @@ const updateById = async (req, res) => {
     }
     res.status(201).json(editedContact);
 };
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
