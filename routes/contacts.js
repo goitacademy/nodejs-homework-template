@@ -1,10 +1,7 @@
-const express = require("express");
-
-const ctrl = require("../../controllers/contacts");
-
-const { validateBody, isValidId } = require("../../middlewares/index");
-
-const { addSchema, updateFavoriteSchema } = require("../../models/Contact");
+import express from "express";
+import ctrl from "../controllers/contacts.js";
+import { isValidId, validateBody } from "../middlewares/index.js";
+import { addSchema, updateFavoriteSchema } from "../models/Contact.js";
 
 const router = express.Router();
 
@@ -33,4 +30,4 @@ router.patch(
 
 router.delete("/:id", isValidId, ctrl.removeContact);
 
-module.exports = router;
+export default router;

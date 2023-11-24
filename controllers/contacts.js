@@ -1,5 +1,5 @@
-const { Contact } = require("../models/Contact");
-const { ctrlWrapper } = require("../helpers");
+import {Contact} from "../models/Contact.js";
+import {ctrlWrapper} from "../helpers/index.js";
 
 const listContacts = async (req, res) => {
   const result = await Contact.find();
@@ -52,7 +52,7 @@ const removeContact = async (req, res) => {
 };
 
 
-module.exports = {
+const ctrl = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   removeContact: ctrlWrapper(removeContact),
@@ -60,3 +60,5 @@ module.exports = {
   updateContact: ctrlWrapper(updateContact),
   updateStatusContact: ctrlWrapper(updateStatusContact),
 };
+
+export default ctrl;
