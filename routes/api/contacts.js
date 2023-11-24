@@ -14,7 +14,7 @@ const postSchema = Joi.object({
 const putSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
-  phone: Joi.string(),
+  phone: Joi.Joi.alternatives().try(Joi.string(), Joi.number()),
 }).or("name", "email", "phone");
 
 router.get("/", async (req, res, next) => {
