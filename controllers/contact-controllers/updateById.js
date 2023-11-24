@@ -1,6 +1,6 @@
-import Contact from "../models/Contact.js";
-import { HttpError } from "../helpers/index.js";
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import Contact from "../../models/Contact.js";
+import { HttpError } from "../../helpers/index.js";
+import ctrlWrapper from "../../decorators/ctrlWrapper.js";
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;

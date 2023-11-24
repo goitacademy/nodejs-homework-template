@@ -1,6 +1,5 @@
 import express from "express";
-// import contactController from "../../controllers/contact-controller.js";
-import * as contactController from "../../controllers/index.js";
+import * as contactController from "../../controllers/contact-controllers/index.js";
 
 import { isEmptyBody, isValidId } from "../../middelwares/index.js";
 import validateBody from "../../decorators/validaterBody.js";
