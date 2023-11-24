@@ -2,11 +2,20 @@ const User = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { userSchema } = require("../schemas/users");
+const gravatar = require("gravatar");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
+
+  const avatarURL = gravatar.profile_url(`${email}`, {
+    s: "200",
+    r: "pg",
+    d: "identicon",
+  });
+  // console.log(avatarURL);
+
   try {
-    const validation = userSchema.validate({ email, password });
+    const validation = userSchema.validate({ email, password, avatarURL });
     if (validation.error) {
       const errorMessage = validation.error.details
         .map((error) => error.message)
@@ -21,12 +30,18 @@ const register = async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const userCreate = await User.create({ email, password: passwordHash });
+    const userCreate = await User.create({
+      email,
+      password: passwordHash,
+      avatarURL,
+    });
 
     const responseData = {
       user: {
         email: userCreate.email,
         subscription: userCreate.subscription,
+        // додати аватар при реєстрації
+        avatarURL: userCreate.avatarURL,
       },
     };
     res.status(201).json(responseData);

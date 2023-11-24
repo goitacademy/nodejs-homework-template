@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan"); // спец мідлвар який виводить у консоль інфо про запит(іноді то потрібно щоб дебажити код)
 const cors = require("cors"); // дозволяє виконання кросдоменних запитів
+const path = require("node:path");
 
 const app = express();
 // підключення бази даних
@@ -15,10 +16,17 @@ app.use(express.json());
 
 // підключення шляхів по яким будуть відбуватися HTTP-запити
 const contactsRouter = require("./routes/api/contacts");
-app.use("/api/contacts", contactsRouter);
-
 const authRouter = require("./routes/api/auth");
+const userRouter = require("./routes/api/users");
+const auth = require("./middleware/auth");
+
+// використання шляху та його підключення + наявність авторизації 
+app.use("/api/contacts", contactsRouter);
 app.use("/users", authRouter);
+app.use("/users",auth, userRouter);
+
+// якщо буде get запит на /avatars то віддати статичні файли з public / avatars
+app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")));
 
 // Обробка помилок
 app.use((req, res) => {

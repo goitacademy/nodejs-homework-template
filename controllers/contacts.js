@@ -86,8 +86,7 @@ const putContact = async (req, res, next) => {
 
     // перевірити чи id юзеру === owner контакта
     const ownContact = await Contact.findById(id);
-    // console.log(ownContact.owner.toString());
-    // console.log(req.user.id.toString());
+
     // res.send(ownContact)
     if (ownContact.owner.toString() !== req.user.id.toString()) {
       return res.status(404).json({ message: "Contact not found" });
@@ -114,8 +113,7 @@ const deleteContact = async (req, res, next) => {
 
     // перевірити чи id юзеру === owner контакта
     const contact = await Contact.findById(id);
-    // console.log(contact.owner.toString());
-    // console.log(req.user.id.toString());
+
     if (contact.owner.toString() !== req.user.id.toString()) {
       return res.status(404).json({ message: "Contact not found" });
     }

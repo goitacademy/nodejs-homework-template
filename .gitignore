@@ -5,3 +5,7 @@ node_modules/
 .env.local
 .idea
 .vscode
+tmp/*
+!tmp/.gitkeep
+public/avatars*
+!public/avatars/.gitkeep

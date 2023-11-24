@@ -9,6 +9,7 @@ const userSchema = Joi.object({
     .label("Subscription"),
   token: Joi.string()
   .label("Token"),
+  avatarURL: Joi.string()
 });
 
 module.exports = { userSchema };
