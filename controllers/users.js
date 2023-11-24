@@ -1,4 +1,4 @@
-// users.js
+// controllers\users.js
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -108,8 +108,12 @@ async function logoutUser(req, res, next) {
     user.token = null;
     await user.save();
 
-    // Отправляем успешный ответ
-    res.status(204).end();
+    // Отправляем успешный ответ . Было   res.status(204).end();
+    res.status(200).json({
+      email: req.user.email,
+      subscription: req.user.subscription
+    });
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });

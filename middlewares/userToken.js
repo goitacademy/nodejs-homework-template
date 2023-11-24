@@ -14,13 +14,13 @@ const userToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.userId); // виправив id на userId
 
     console.log('Decoded:', decoded);
     console.log('User:', user);
 
     if (!user || token !== user.token.toString()) {
-      return res.status(401).json({ message: 'Not authorized: User or token mismatch' }); // саме тут виникає помилка!!!!
+      return res.status(401).json({ message: 'Not authorized: User or token mismatch' }); 
     }
 
     req.user = {
@@ -31,7 +31,7 @@ const userToken = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({message: 'Not authorized: Token verification failed' });
+    return res.status(401).json({message: 'Not authorized: Token verification failed' }); // саме тут виникає помилка!!!!
   }
 };
 
