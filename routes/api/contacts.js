@@ -70,7 +70,6 @@ router.delete("/:contactId", async (req, res, next) => {
     res.json({
       status: 200,
       message: "contact deleted",
-      contactFound,
     });
   else
     res.status(404).json({
