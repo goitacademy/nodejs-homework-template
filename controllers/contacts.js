@@ -34,8 +34,8 @@ async function getContactById(req, res, next) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    if(contact.owner !== req.user.id){
-      return res.status(403).send({message: "Forbidden"})
+    if (contact.owner.toString() !== req.user.id.toString()) {
+      return res.status(403).send({ message: "Forbidden" });
     }
 
     res.status(200).send(contact);
@@ -80,8 +80,8 @@ async function removeContact(req, res, next) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    if(result.owner !== req.user.id){
-      return res.status(403).send({message: "Forbidden"})
+    if (result.owner.toString() !== req.user.id.toString()) {
+      return res.status(403).send({ message: "Forbidden" });
     }
 
     res.send(result);
@@ -119,8 +119,8 @@ async function updateContact(req, res, next) {
       return res.status(404).send({ message: "Not found" });
     }
 
-    if(result.owner !== req.user.id){
-      return res.status(403).send({message: "Forbidden"})
+    if (result.owner.toString() !== req.user.id.toString()) {
+      return res.status(403).send({ message: "Forbidden" });
     }
 
     res.status(201).send(result);
@@ -149,8 +149,8 @@ async function statusContact(req, res, next) {
       return res.status(404).json({ message: "Not found" });
     }
 
-    if(updatedContact.owner !== req.user.id){
-      return res.status(403).send({message: "Forbidden"})
+    if (updatedContact.owner.toString() !== req.user.id.toString()) {
+      return res.status(403).send({ message: "Forbidden" });
     }
     return res.status(200).json(updatedContact);
   } catch (error) {

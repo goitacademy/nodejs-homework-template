@@ -3,9 +3,7 @@ const Joi = require("joi");
 // Joi Schema
 const joiSchema = Joi.object({
 
-    name: Joi.string()
-    .min(4)
-    .required(),
+    name: Joi.string().min(4).required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
     owner: Joi.object().optional()

@@ -18,8 +18,6 @@ async function register(req, res, next) {
   const { email, password, subscription } = req.body;
   console.log("Received data:", req.body);
   try {
-    const user = await User.findOne({ email }).exec();
-
     const validation = joiUserSchemas.validate({ email, password});
 
     if (validation.error) {
@@ -30,6 +28,8 @@ async function register(req, res, next) {
           .join(", "),
       });
     }
+
+     const user = await User.findOne({ email }).exec();
 
     if (user !== null) {
       console.log("User already exists");
@@ -60,8 +60,6 @@ async function login(req, res, next) {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email }).exec();
-
     const validation = joiUserSchemas.validate({ email, password});
 
     if (validation.error) {
@@ -73,6 +71,8 @@ async function login(req, res, next) {
       });
     }
 
+    const user = await User.findOne({ email }).exec();
+    
     if (user === null) {
       console.log("User not found");
       return res.status(401).send({ message: "Email or password is wrong" });
