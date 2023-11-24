@@ -1,5 +1,5 @@
 const express = require("express");
-const { validateBody, auth, isValidId } = require("../../middlewares");
+const { validateBody, auth } = require("../../middlewares");
 const {
   registerJoiSchema,
   loginJoiSchema,
@@ -20,11 +20,10 @@ authRouter.get("/current", auth, ctrl.getCurrent);
 authRouter.post("/logout", auth, ctrl.logout);
 
 authRouter.patch(
-  "/:contactId/subscription",
-  isValidId,
+  "/subscription",
   auth,
   validateBody(subscriptionJoiSchema),
-  ctrl.subscription
+  ctrl.changeSubscription
 );
 
 module.exports = authRouter;
