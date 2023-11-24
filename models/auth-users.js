@@ -37,9 +37,7 @@ export const userRegisterSchema = Joi.object({
     .email()
     .required()
     .messages({ 'any.required': 'missing required email field' }),
-  subscription: Joi.string()
-    .valid('starter', 'pro', 'business')
-    .messages({ 'any.valid': 'must be starter, pro or business' }),
+  subscription: Joi.string().valid('starter', 'pro', 'business'),
 });
 
 export const userLoginSchema = Joi.object({
@@ -49,6 +47,13 @@ export const userLoginSchema = Joi.object({
   password: Joi.string().required().messages({
     'any.required': 'missing required password field',
   }),
+});
+
+export const updateSubsctiptionSchema = Joi.object({
+  subscription: Joi.string()
+    .required()
+    .valid('starter', 'pro', 'business')
+    .messages({ 'any.required': 'missing required subscription field' }),
 });
 
 const User = model('user', userSchema);

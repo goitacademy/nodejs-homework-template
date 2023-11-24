@@ -5,13 +5,21 @@ import { HttpError } from '../helpers/index.js';
 import { ctrlWrapper } from '../decorators/index.js';
 
 const getAllContacts = async (req, res, next) => {
-  const result = await Contact.find({});
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, ...filterParams } = req.query;
+  const skip = (page - 1) * limit;
+  const filter = { owner, ...filterParams };
+  const result = await Contact.find(filter, '-createdAt -updatedAt', {
+    skip,
+    limit,
+  }).populate('owner', 'email subscription');
   res.json(result);
 };
 
 const getContactsById = async (req, res, next) => {
+  const { _id: owner } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById({ contactId, owner });
   if (!result) {
     throw HttpError(404, `Not found`);
   }

@@ -44,9 +44,26 @@ const login = async (req, res) => {
   });
 };
 
-const logout = async (req, res) => {
+const current = async (req, res) => {
+  const { subscription, email } = req.user;
+  console.log(subscription, email);
+
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const updateSubscription = async (req, res, next) => {
   const { _id } = req.user;
   console.log(_id);
+  const { subscription } = req.body;
+  await User.findByIdAndUpdate(_id, { subscription });
+  res.json({ subscription });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: '' });
 
   res.status(204).json();
@@ -56,4 +73,6 @@ export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
+  current: ctrlWrapper(current),
 };

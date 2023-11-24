@@ -6,6 +6,7 @@ import { validateBody } from '../../decorators/index.js';
 import {
   userRegisterSchema,
   userLoginSchema,
+  updateSubsctiptionSchema,
 } from '../../models/auth-users.js';
 
 authRouter.post(
@@ -15,11 +16,21 @@ authRouter.post(
   authControllers.register
 );
 
+authRouter.get('/current', authenticate, authControllers.current);
+
 authRouter.post(
   '/login',
   isEmptyBody,
   validateBody(userLoginSchema),
   authControllers.login
+);
+
+authRouter.post(
+  '/subscription',
+  authenticate,
+  isEmptyBody,
+  validateBody(updateSubsctiptionSchema),
+  authControllers.updateSubscription
 );
 
 authRouter.post('/logout', authenticate, authControllers.logout);
