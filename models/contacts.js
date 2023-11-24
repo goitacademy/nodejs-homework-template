@@ -60,7 +60,28 @@ const addContact = async (newContact) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, newUpdatedData) => {
+  const data = await fs
+    .readFile(contactsPath)
+    .catch((e) => console.log(e.message));
+
+  let contactFound = Parcer(data).find((item) => item.id === contactId);
+
+  if (contactFound) {
+    const contactFoundIndex = Parcer(data).indexOf(contactFound);
+    contactFound = {
+      ...contactFound,
+      ...newUpdatedData,
+    };
+    await fs
+      .writeFile(
+        contactsPath,
+        JSON.stringify(Parcer(data)).slplice(contactFoundIndex, 1, contactFound)
+      )
+      .catch((e) => console.log(e.message));
+    return contactFound;
+  } else return null;
+};
 
 module.exports = {
   listContacts,
