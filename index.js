@@ -2,11 +2,15 @@ require("dotenv").config();
 
 require("./db");
 
+const path = require("node:path");
+
 const express = require("express");
 
 const routes = require("./routes");
 
 const app = express();
+
+app.use("/avatars", express.static(path.join(__dirname, "public", "avatars")));
 
 app.use("/api", routes);
 
@@ -22,5 +26,3 @@ app.use((error, req, res, next) => {
 app.listen(3000, () => {
   console.info("Server status on port 3000");
 });
-
-
