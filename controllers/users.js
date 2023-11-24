@@ -108,16 +108,21 @@ async function logoutUser(req, res, next) {
   if (req.headers.authorization.split(' ')[1].localeCompare(user.token) !== 0) {
     return res.status(401).json({ message: 'Not authorized: Token mismatch' });
   }
+  // Выводим данные о пользователе и токене перед удалением
+  console.log('User before logout:', user);
   
-    // Удаляем токен у пользователя
-    user.token = null;
+    // Удаляем токен у пользователя  / Убрал удаление токена при logout
+    // user.token = null;
 
     // Сохраняем изменения в базе данных
     await user.save();
 
     // Отправляем успешный ответ . 
     res.status(204).end();
-    
+
+     // Выводим данные о пользователе после удаления токена
+     console.log('User after logout:', user);
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
