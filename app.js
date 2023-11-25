@@ -1,7 +1,6 @@
-import express, { json } from "express";
+import express from "express";
 import logger from "morgan";
 import cors from "cors";
-import mongoose from "mongoose";
 
 import { startServer } from "./server.js";
 
@@ -13,7 +12,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
-app.use(json());
+app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 

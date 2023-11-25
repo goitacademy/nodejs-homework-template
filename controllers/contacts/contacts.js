@@ -1,12 +1,23 @@
 // import { readFile, writeFile } from "fs/promises";
 
-export const listContacts = async () => {
+import { fetchContacts } from "./helpers.js";
+
+// export const listContacts = async () => {
+//   try {
+//     const data = await listContacts();
+//     const contacts = JSON.parse(data);
+//     return contacts;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+export const listContacts = async (req, res, next) => {
   try {
-    const data = await listContacts();
-    const contacts = JSON.parse(data);
-    return contacts;
+    const contacts = await fetchContacts();
+    res.json(contacts);
   } catch (error) {
-    console.log(error);
+    next(error);
   }
 };
 

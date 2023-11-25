@@ -1,12 +1,15 @@
 import { Router } from "express";
-import {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} from "../../controllers/contacts/contacts.js";
+// import {
+//   listContacts,
+//   getContactById,
+//   addContact,
+//   removeContact,
+//   updateContact,
+// } from "../../controllers/contacts/contacts.js";
+
 // import Joi from "joi";
+
+import { listContacts } from "../../controllers/contacts/contacts.js";
 
 const router = Router();
 
@@ -16,10 +19,7 @@ const router = Router();
 //   phone: Joi.required(),
 // });
 
-router.get("/", async (req, res, next) => {
-  const list = await listContacts();
-  res.status(200).json(list);
-});
+router.get("/", listContacts);
 
 // router.get("/:contactId", async (req, res, next) => {
 //   const { contactId } = req.params;
