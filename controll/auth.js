@@ -54,7 +54,7 @@ const logout = async(res, req, next) => {
     res.status(204).json({ message: "Logout success" });
 };
 
-const current = async(res, req, next) => {
+const current = async(req, res, next) => {
     const { email, subcription } = req.user;
     res.json({ email, subcription });
 };
