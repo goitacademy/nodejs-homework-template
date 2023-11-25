@@ -23,7 +23,7 @@ mongoose
     process.exit(1);
   });
 
-app.use('./routes/api/contacts', contactsRouter);  // Ruta corregida al módulo
+app.use('./api/contacts', contactsRouter);  // Ruta corregida al módulo
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not Found' });

@@ -1,4 +1,4 @@
-const { loadContacts, saveContacts, validateContact } = require('../../models/contacts');
+const { loadContacts, saveContacts, validateContact } = require('../contacts');
 
 const HTTP_STATUS = {
   OK: 200,
