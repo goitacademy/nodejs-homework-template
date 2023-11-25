@@ -30,10 +30,15 @@ const userValidateSubscription = Joi.object({
 	subscription: Joi.string().valid('starter', 'pro', 'business'),
 });
 
+const emailResendValidator = Joi.object({
+	email: Joi.string().email({ tlds: true }).required(),
+});
+
 module.exports = {
 	validateSchemaPost,
 	validateSchemaPut,
 	validateSchemaFavorite,
 	userValidator,
 	userValidateSubscription,
+	emailResendValidator,
 };
