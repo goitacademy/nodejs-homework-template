@@ -1,5 +1,5 @@
 
-import * as contactsModel from '../models/contactModel.js';
+import * as contactsModel from '#models/contactModel.js';
 
 
 const getContactById = async (req, res, next) => {
@@ -18,6 +18,4 @@ const getContactById = async (req, res, next) => {
   }
 };
 
-
 export default getContactById;
-

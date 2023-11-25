@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import express from 'express';
 
-import userModel from '../models/userModel.js';
+import userModel from '#models/userModel.js';
 import { sendVerificationEmail } from './emailUtils.js';
 
 const verifyEmailSchema = Joi.object({

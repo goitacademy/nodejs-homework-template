@@ -1,9 +1,8 @@
 import Joi from 'joi';
 import bcrypt from 'bcryptjs';
+import UserModel from '#models/userModel';
+
 import jwt from 'jsonwebtoken';
-
-import UserModel from '../models/userModel';
-
 
 const signup = async (req, res) => {
   const schema = Joi.object({

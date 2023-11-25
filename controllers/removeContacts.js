@@ -1,5 +1,5 @@
 
-import * as contactsModel from '../models/contactModel.js';
+import * as contactsModel from '#models/contactModel.js';
 
 
 const removeContact = async (req, res, next) => {

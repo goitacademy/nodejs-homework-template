@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import express from 'express';
 import bcrypt from 'bcrypt';
-import userModel from '../models/userModel.js';
+import userModel from '#models/userModel.js';
 
 import avatar from './avatar.js';
 import { sendVerificationEmail, generateUniqueToken } from './emailUtils.js';
