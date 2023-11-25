@@ -1,10 +1,17 @@
 const express = require('express');
+const Joi = require('joi');
 
 const contacts = require('../../models/contacts');
 
 const { HttpError } = require('../../helpers');
 
 const router = express.Router();
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
 router.get('/', async (req, res, next) => {
   try {
@@ -25,10 +32,6 @@ router.get('/:contactId', async (req, res, next) => {
     const result = await contacts.getContactById(contactId);
     if (!result) {
       throw HttpError(404, 'Not found');
-      // return res.status(404).json({
-      //   status: 404,
-      //   message: 'Not found',
-      // });
     }
     res.json({
       status: 200,
@@ -37,24 +40,50 @@ router.get('/:contactId', async (req, res, next) => {
     });
   } catch (err) {
     next(err);
-    // res.status(500).json({
-    //   status: 500,
-    //   message: 'Server error',
-    // });
-
   }
 });
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { contactId } = req.params;
+    const result = await contacts.removeContact(contactId);
+    if (!result) {
+      throw HttpError(404, 'Not found');
+    }
+    res.json({ message: 'Contact deleted' });
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contacts.updateContact(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, 'Not found');
+    }
+    res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
