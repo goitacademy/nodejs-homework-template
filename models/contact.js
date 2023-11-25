@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import { Schema, model } from "mongoose";
 import joi from "joi";
 import { contactValidator } from "../middlewares/bodyValidatorWrapper.js";
@@ -34,7 +35,7 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
-// Joi lib
+// Joi
 export const contactSchemaJoi = joi.object({
   name: joi.string().min(2).required(),
   email: joi.string().pattern(emailRegexp).required().messages({
