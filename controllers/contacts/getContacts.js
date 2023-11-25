@@ -1,5 +1,4 @@
-// getcontacts.js
-const { loadContacts } = require('../../controller/contacts');
+const { loadContacts } = require('../../models/contacts');
 
 const getContacts = async (req, res) => {
   try {
@@ -7,7 +6,7 @@ const getContacts = async (req, res) => {
     res.json(contacts);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
 

@@ -1,28 +1,37 @@
 const express = require('express');
-const logger = require('morgan');
-const cors = require('cors');
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+const contactsRouter = require('./routes/api/contacts');  // Ruta corregida al módulo
+
 const app = express();
+const port = process.env.PORT || 3000;
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
-app.use(logger(formatsLogger));
-app.use(cors());
-app.use(express.json());
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('Database connection successful');
+    app.listen(port, () => {
+      console.log(`Server running. Use our API on port: ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.log('There was an error', error);
+    process.exit(1);
+  });
 
-const contactRoutes = require('./routes/api/contacts');
+app.use('./routes/api/contacts', contactsRouter);  // Ruta corregida al módulo
 
-app.use('/api/contacts', contactRoutes);
-
-app.use((req, res, next) => {
-  res.status(404).json({ message: 'Ruta no encontrada' });
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not Found' });
 });
 
 app.use((err, req, res, next) => {
-  if (err.name === 'CorsError') {
-    res.status(403).json({ message: 'Error de CORS: No permitido por política de CORS' });
-  } else {
-    console.error('Error en la aplicación:', err.message);
-    res.status(500).json({ message: 'Error interno del servidor' });
-  }
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal Server Error' });
 });
 
 module.exports = app;

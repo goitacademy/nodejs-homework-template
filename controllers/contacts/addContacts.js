@@ -1,5 +1,12 @@
 const { v4: uuidv4 } = require('uuid');
-const { loadContacts, saveContacts, validateContact } = require('../../controller/contacts/');
+const { loadContacts, saveContacts, validateContact } = require('../../models/contacts');
+
+const HTTP_STATUS = {
+  OK: 200,
+  CREATED: 201,
+  BAD_REQUEST: 400,
+  INTERNAL_SERVER_ERROR: 500,
+};
 
 const addContacts = async (req, res) => {
   try {
@@ -7,7 +14,7 @@ const addContacts = async (req, res) => {
     const { error } = validateContact(req.body);
 
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: error.details[0].message });
     }
 
     const newContact = {
@@ -20,10 +27,10 @@ const addContacts = async (req, res) => {
 
     contacts.push(newContact);
     await saveContacts(contacts);
-    res.status(201).json(newContact);
+    res.status(HTTP_STATUS.CREATED).json(newContact);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error' });
   }
 };
 

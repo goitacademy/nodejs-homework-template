@@ -2,93 +2,95 @@ const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
 const { Contact } = require('./contacts-db');
 
-const listContacts = async () => {
+const handleErrors = (fn) => async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
-    console.log('Contacts found:', contacts);
-    return contacts;
+    await fn(req, res, next);
   } catch (error) {
-    console.error('Error listing contacts:', error.message);
-    throw error;
+    console.error('Error:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-const getContactById = async (contactId) => {
-  try {
-    const contact = await Contact.findById(contactId);
-    return contact;
-  } catch (error) {
-    console.error('Error getting contact by ID:', error.message);
-    throw error;
+const listContacts = handleErrors(async (req, res) => {
+  const contacts = await Contact.find();
+  console.log('Contacts found:', contacts);
+  res.json(contacts);
+});
+
+const getContactById = handleErrors(async (req, res) => {
+  const contactId = req.params.id;
+  const contact = await Contact.findById(contactId);
+  res.json(contact);
+});
+
+const removeContact = handleErrors(async (req, res) => {
+  const contactId = req.params.id;
+  const result = await Contact.findByIdAndDelete(contactId);
+
+  if (!result) {
+    res.status(404).json({ message: 'Contact not found' });
+  } else {
+    res.json({ message: 'Contact deleted' });
   }
-};
+});
 
-const removeContact = async (contactId) => {
-  try {
-    const result = await Contact.findByIdAndDelete(contactId);
-
-    if (!result) {
-      throw new Error('Contact not found');
-    }
-
-    return { message: 'Contact deleted' };
-  } catch (error) {
-    console.error('Error removing contact:', error.message);
-    throw error;
-  }
-};
-
-const addContact = async (body) => {
+const addContact = handleErrors(async (req, res) => {
   const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
     phone: Joi.string().required(),
+    favorite: Joi.boolean(),
   });
 
-  const { error } = schema.validate(body);
+  const { error } = schema.validate(req.body);
 
   if (error) {
-    throw new Error(error.details[0].message);
-  }
-
-  try {
+    res.status(400).json({ message: error.details[0].message });
+  } else {
     const newContact = await Contact.create({
       id: uuidv4(),
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-      favorite: body.favorite || false,
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      favorite: req.body.favorite || false,
     });
-    return newContact;
-  } catch (error) {
-    console.error('Error adding contact:', error.message);
-    throw error;
+    res.status(201).json(newContact);
   }
-};
+});
 
-const updateContact = async (contactId, body) => {
-  try {
+const updateContact = handleErrors(async (req, res) => {
+  const contactId = req.params.id;
+
+  const schema = Joi.object({
+    name: Joi.string(),
+    email: Joi.string().email(),
+    phone: Joi.string(),
+    favorite: Joi.boolean(),
+  });
+
+  const { error } = schema.validate(req.body);
+
+  if (error) {
+    res.status(400).json({ message: error.details[0].message });
+  } else {
     const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
       {
-        name: body.name,
-        email: body.email,
-        phone: body.phone,
-        favorite: body.favorite || false,
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        favorite: req.body.favorite || false,
       },
       { new: true }
     );
 
     if (!updatedContact) {
-      throw new Error('Contact not found');
+      res.status(404).json({ message: 'Contact not found' });
+    } else {
+      res.json(updatedContact);
     }
-
-    return updatedContact;
-  } catch (error) {
-    console.error('Error updating contact:', error.message);
-    throw error;
   }
-};
+});
 
 module.exports = {
   listContacts,
