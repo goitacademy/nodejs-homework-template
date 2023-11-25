@@ -65,19 +65,23 @@ const updateContact = async (contactId, newUpdatedData) => {
     .readFile(contactsPath)
     .catch((e) => console.log(e.message));
 
-  let contactFound = Parcer(data).find((item) => item.id === contactId);
+  const contactFoundIndex = Parcer(data).findIndex(
+    (item) => item.id === contactId
+  );
 
-  if (contactFound) {
-    const contactFoundIndex = Parcer(data).indexOf(contactFound);
+  if (contactFoundIndex !== -1) {
+    let contactFound = Parcer(data).find((item) => item.id === contactId);
+    const filteredArr = Parcer(data).filter((item) => item.id !== contactId);
+
     contactFound = {
       ...contactFound,
       ...newUpdatedData,
     };
+
+    const updatedArr = [...filteredArr, contactFound];
+
     await fs
-      .writeFile(
-        contactsPath,
-        JSON.stringify(Parcer(data)).slplice(contactFoundIndex, 1, contactFound)
-      )
+      .writeFile(contactsPath, JSON.stringify(updatedArr))
       .catch((e) => console.log(e.message));
     return contactFound;
   } else return null;

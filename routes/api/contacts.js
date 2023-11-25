@@ -4,7 +4,7 @@ const Joi = require("joi");
 const router = express.Router();
 const contacts = require("../../models/contacts");
 
-// Схема валідації
+// Схеми валідації
 const postSchema = Joi.object({
   name: Joi.required(),
   email: Joi.required(),
@@ -93,7 +93,21 @@ router.put("/:contactId", async (req, res, next) => {
       status: 400,
       message: "missing fields",
     });
-  else res.json(contacts.updateContact(contactId, value));
+  else {
+    const updatedContact = await contacts
+      .updateContact(contactId, value)
+      .catch((e) => console.log(e.message));
+    if (updatedContact)
+      res.json({
+        status: 200,
+        updatedContact,
+      });
+    else
+      res.status(404).json({
+        status: 404,
+        message: "Not found",
+      });
+  }
 });
 
 module.exports = router;
