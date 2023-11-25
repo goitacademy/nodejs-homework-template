@@ -4,3 +4,5 @@ node_modules/
 .vscode
 tmp/*
 !tmp/.gitkeep
+public/avatars/*
+!public/avatars/.gitkeep
