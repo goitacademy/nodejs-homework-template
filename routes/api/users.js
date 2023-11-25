@@ -7,6 +7,8 @@ const UserControllers = require('../../controllers/users');
 
 const upload = require("../../middleware/upload");
 
-router.patch("/avatars", upload.single("avatar"), UserControllers.patchUser);
+const auth = require("../../middleware/auth")
+
+router.patch("/avatars",auth, upload.single("avatar"), UserControllers.patchUser);
 
 module.exports = router;

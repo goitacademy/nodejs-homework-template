@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
   // модель аватарки
   avatarURL: {
     type: String,
+    default: null,
   },
 });
 
