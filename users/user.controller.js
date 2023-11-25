@@ -5,11 +5,17 @@ const mimetypes = require("mime-types");
 const path = require("path");
 const appDir = path.dirname(require.main.filename);
 const fs = require("fs/promises");
+const { sendUserVerificationMail } = require("./user-mailer.service");
 
 const signupHandler = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const createdUser = await userDao.createUser({ email, password });
+
+    await sendUserVerificationMail(
+      createdUser.email,
+      createdUser.verificationToken
+    );
 
     return res.status(201).send({
       user: {
@@ -30,12 +36,16 @@ const signupHandler = async (req, res, next) => {
 
 const loginHandler = async (req, res, next) => {
   try {
-    const userEntity = await userDao.getUser(req.body.email);
+    const userEntity = await userDao.getUser({ email: req.body.email });
     const isUserPasswordValid = await userEntity.validatePassword(
       req.body.password
     );
     if (!userEntity || !isUserPasswordValid) {
       return res.status(401).send({ message: "Wrong credentials." });
+    }
+
+    if (!userEntity.verify) {
+      return res.status(403).send({ message: "User is not verified." });
     }
 
     const userPayload = {
@@ -101,10 +111,53 @@ const avatarsHandler = async (req, res, next) => {
   }
 };
 
+const verifyHandler = async (req, res, next) => {
+  try {
+    const { verificationToken } = req.params;
+    const user = await userDao.getUser({ verificationToken });
+
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    await userDao.updateUser(user.email, {
+      verify: true,
+      verificationToken: null,
+    });
+
+    return res.status(200).send({ message: "Verification successful" });
+  } catch (e) {
+    return next(e);
+  }
+};
+
+const resendVerificationHandler = async (req, res, next) => {
+  try {
+    const user = await userDao.getUser({ email: req.body.email });
+
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    if (user.verify) {
+      return res
+        .status(400)
+        .send({ message: "Verification has already been passed" });
+    }
+
+    await sendUserVerificationMail(user.email, user.verificationToken);
+    return res.status(200).send({ message: "Verification email sent" });
+  } catch (e) {
+    return next(e);
+  }
+};
+
 module.exports = {
   signupHandler,
   loginHandler,
   logoutHandler,
   currentHandler,
   avatarsHandler,
+  verifyHandler,
+  resendVerificationHandler,
 };

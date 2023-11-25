@@ -1,4 +1,5 @@
 const User = require("./user.model");
+const { v4: uuid } = require("uuid");
 
 class DuplicatedEmailError extends Error {
   constructor() {
@@ -14,7 +15,7 @@ class UnknownDatabaseError extends Error {
 
 const createUser = async (userData) => {
   try {
-    return await User.create(userData);
+    return await User.create({ ...userData, verificationToken: uuid() });
   } catch (e) {
     console.error(e);
 
@@ -27,9 +28,9 @@ const createUser = async (userData) => {
   }
 };
 
-const getUser = async (email) => {
+const getUser = async (filter) => {
   try {
-    return await User.findOne({ email });
+    return await User.findOne(filter);
   } catch (e) {
     console.error(e);
     throw new UnknownDatabaseError();

@@ -9,6 +9,7 @@ const testUser = {
   subscription: "pro",
   token: "test-auth-token",
   avatarURL: "http://localhost:3000/avatars/test.jpg",
+  verify: true,
 };
 
 jest.mock("./user.dao", () => ({
@@ -77,7 +78,7 @@ describe("signupHandler test", () => {
       throw new Error(e);
     }
 
-    expect(getUser).toHaveBeenCalledWith("test@email.com");
+    expect(getUser).toHaveBeenCalledWith({ email: "test@email.com" });
     expect(generateAccessToken).toHaveBeenCalledWith({
       email: "test@email.com",
       subscription: "pro",

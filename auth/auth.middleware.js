@@ -14,10 +14,16 @@ const authMiddleware = async (req, res, next) => {
     }
 
     const { email } = authService.verifyToken(token);
-    const userEntity = await usersDao.getUser(email);
+    const userEntity = await usersDao.getUser({ email });
 
     if (!userEntity || userEntity.token !== token) {
       throw new Error("Not authorized");
+    }
+
+    if (!userEntity.verify) {
+      throw new Error(
+        "User is not verified. Please verify user by link you've recieved by email."
+      );
     }
 
     req.user = userEntity;
