@@ -12,7 +12,7 @@ router.use("/contacts", auth, contactsRouter);
 
 // роутер для загрузки аватарки пользователя с авторизацией
 const avatarRouter = require("./avatars");
-router.use("/avatars", auth, avatarRouter);
+router.use("/users", auth, avatarRouter);
 
 
 module.exports = router;
