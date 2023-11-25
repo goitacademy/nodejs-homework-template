@@ -4,7 +4,7 @@ const { JWT_SECRET } = process.env;
 
 const auth = async(req, res, next) => {
     const { authorization = "" } = req.headers;
-    const [bearer, token] = authorization.split(" ", 2);
+    const [bearer, token] = authorization.split(" ");
 
     if (bearer !== "Bearer") {
         return res.status(401).send("Unauthorization");
