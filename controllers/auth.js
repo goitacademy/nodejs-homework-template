@@ -8,6 +8,32 @@ const { authSchema, subscriptionSchema } = require("../routes/schemas/user");
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
+// async function register(req, res, next) {
+//   const body = authSchema.validate(req.body);
+//   const userBody = body.value;
+
+//   if (typeof body.error !== "undefined") {
+//     return res.status(400).json({
+//       message: body.error.details.map((err) => err.message).join(", "),
+//     });
+//   }
+
+//   const { password } = req.body;
+//   const hashPassword = await bcrypt.hash(password, 10);
+
+//   try {
+//     const newUser = await User.create({ ...userBody, password: hashPassword });
+//     res.status(201).json({
+//       user: { email: newUser.email, subscription: newUser.subscription },
+//     });
+//   } catch (err) {
+//     if (err.name === "MongoServerError" && err.code === 11000) {
+//       return res.status(409).json({ message: "Email in use" });
+//     }
+//     next(err);
+//   }
+// }
+
 async function register(req, res, next) {
   const body = authSchema.validate(req.body);
   const userBody = body.value;
@@ -18,18 +44,23 @@ async function register(req, res, next) {
     });
   }
 
-  const { password } = req.body;
-  const hashPassword = await bcrypt.hash(password, 10);
+  const { email, password } = req.body;
 
   try {
+    // Перевірка, чи існує користувач з таким email
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Email is already in use" });
+    }
+
+    const hashPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({ ...userBody, password: hashPassword });
     res.status(201).json({
       user: { email: newUser.email, subscription: newUser.subscription },
     });
   } catch (err) {
-    if (err.name === "MongoServerError" && err.code === 11000) {
-      return res.status(409).json({ message: "Email in use" });
-    }
     next(err);
   }
 }
