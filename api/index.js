@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const contactsTask = require("../controller/contacts");
 const userTask = require("../controller/user");
+const multer = require("multer");
+const avatarStorage = multer.memoryStorage();
+const avatarUpload = multer({ storage: avatarStorage });
 
 router.get("/contacts", contactsTask.get);
 
@@ -22,5 +25,7 @@ router.post("/users/login", userTask.login);
 router.get("/users/logout", userTask.auth, userTask.logout);
 
 router.get("/users/current", userTask.auth, userTask.listUser);
+
+router.patch("/users/avatars", userTask.auth, avatarUpload.single("avatar"), userTask.updateAvatar);
 
 module.exports = router;
