@@ -1,17 +1,18 @@
 import express from "express";
 import contactsController from "../../controllers/contacts-controller.js";
-import { isEmptyBody } from "../../middlewares/index.js";
+import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 import { validaterBody } from "../../decorators/index.js";
 import {
   contactAddSchema,
   contactUpdateSchema,
-} from "../../shemas/contact-shemas.js";
+  contactFavoriteSchema,
+} from "../../models/Contact.js";
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
 
-contactsRouter.get("/:contactId", contactsController.getById);
+contactsRouter.get("/:id", isValidId, contactsController.getById);
 
 contactsRouter.post(
   "/",
@@ -20,13 +21,21 @@ contactsRouter.post(
   contactsController.add
 );
 
-contactsRouter.delete("/:contactId", contactsController.deleteById);
-
 contactsRouter.put(
-  "/:contactId",
+  "/:id",
+  isValidId,
   isEmptyBody,
   validaterBody(contactUpdateSchema),
   contactsController.updateById
 );
+
+contactsRouter.patch(
+  "/:id/favorite",
+  isValidId,
+  isEmptyBody,
+  validaterBody(contactFavoriteSchema),
+  contactsController.updateById
+);
+contactsRouter.delete("/:id", isValidId, contactsController.deleteById);
 
 export default contactsRouter;

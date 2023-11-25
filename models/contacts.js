@@ -52,10 +52,10 @@ const getContactById = async (contactId) => {
   return result || null;
 };
 
-export default {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContactById,
-  removeContactById,
-};
+// export default {
+//   listContacts,
+//   getContactById,
+//   addContact,
+//   updateContactById,
+//   removeContactById,
+// };
