@@ -15,17 +15,17 @@ async function register(req, res, next) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const avatar = gravatar.url(email);
+    const avatarURL = gravatar.url(email);
     const newUser = await User.create({
       email,
       password: passwordHash,
-      avatar,
+      avatarURL,
     });
     res.status(201).send({
       user: {
         email: email,
         subscription: newUser.subscription,
-        avatar: newUser.avatar,
+        avatarURL: newUser.avatarURL,
       },
     });
   } catch (error) {
@@ -102,17 +102,17 @@ async function uploadAvatar(req, res, next) {
       path.join(__dirname, "..", "public/avatars", req.file.filename)
     );
 
-    const result = User.findByIdAndUpdate(
+    const result = await User.findByIdAndUpdate(
       req.user.id,
       {
-        avatar: req.file.filename,
+        avatarURL: req.file.filename,
       },
       { new: true }
     ).exec();
     if (result === null) {
       return res.status(404).send({ message: "user not found" });
     }
-    res.send({ message: "load Avatar!" });
+    res.send({ avatarURL: result.avatarURL });
   } catch (error) {
     next(error);
   }
