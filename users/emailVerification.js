@@ -2,7 +2,8 @@ import express from 'express';
 import Joi from 'joi';
 import userModel from '../models/userModel.js';
 import nodemailer from 'nodemailer';
-
+import { config } from 'dotenv';
+config();
 const router = express.Router();
 
 // Konfiguracja nodemailer
@@ -38,9 +39,10 @@ router.get('/verify/:verificationToken', async (req, res) => {
     }
 
     // Ustaw verificationToken na null i verify na true
-    user.verificationToken = null;
-    user.verify = true;
-    await user.save();
+    await user.updateOne(
+      { $set: { verificationToken: null, verify: true } },
+      { new: true }
+    );
 
     return res.status(200).json({ message: 'Verification successful' });
   } catch (error) {
@@ -51,6 +53,7 @@ router.get('/verify/:verificationToken', async (req, res) => {
 
 // Endpoint do ponownego wysyłania e-maila weryfikacyjnego
 router.post('/verify', async (req, res) => {
+  console.log('wszedłem');
   try {
     const { error } = verifyEmailSchema.validate(req.body);
     if (error) {
@@ -73,19 +76,19 @@ router.post('/verify', async (req, res) => {
         .json({ message: 'Verification has already been passed' });
     }
 
-    // Wygeneruj nowy verificationToken
-    const newVerificationToken = generateUniqueToken();
+    /*   // Wygeneruj nowy verificationToken
+    const newVerificationToken = generateUniqueToken(); */
 
     // Aktualizuj verificationToken w bazie danych
-    user.verificationToken = newVerificationToken;
-    await user.save();
+    /*     user.verificationToken = newVerificationToken;
+    await user.save(); */
 
     // Wyślij e-mail z nowym verificationToken
     const mailOptions = {
-      from: 'your_email@example.com',
+      from: process.env.MAILGUN_USER,
       to: email,
       subject: 'Verification Email',
-      text: `Click the following link to verify your email: http://yourapi.com/users/verify/${newVerificationToken}`,
+      text: `Click the following link to verify your email: localhost:3000/users/verify/${user.verificationToken}`, //http://yourapi.com/users/verify/${user.verificationToken}`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -96,10 +99,11 @@ router.post('/verify', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
-
+/* 
 // Funkcja do generowania unikalnego tokena
 function generateUniqueToken() {
-  // Implementacja generowania unikalnego tokena (np. używając pakietu uuid)
-}
+  const token = uuidv4();
+  return token;
+} */
 
 export default router;
