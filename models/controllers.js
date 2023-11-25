@@ -28,17 +28,19 @@ async function fileWriter(path, payload) {
   return data;
 }
 
-async function handleContactUpdate(
-  contacts,
-  contactId,
-  contact,
-  dataForUpdate
-) {
-  const filteredArr = Parcer(contacts).filter((item) => item.id !== contactId);
+async function handleContactUpdate(req, newData) {
+  const { contactId } = req.params;
+
+  const data = await fileReader(contactsPath);
+  const contactFound = Parcer(data).find((item) => item.id === contactId);
+
+  if (!contactFound) return null;
+
+  const filteredArr = Parcer(data).filter((item) => item.id !== contactId);
 
   const updatedContact = {
-    ...contact,
-    ...dataForUpdate,
+    ...contactFound,
+    ...newData,
   };
 
   const updatedArr = [...filteredArr, updatedContact];
@@ -121,32 +123,25 @@ const addContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
   const { error, value } = forPuting.validate(req.body);
-  const { contactId } = req.params;
-
-  const data = await fileReader(contactsPath);
-  const contactFound = Parcer(data).find((item) => item.id === contactId);
 
   if (error)
     res.status(400).json({
       status: 400,
       message: "missing fields",
     });
-  else if (!contactFound)
-    res.status(404).json({
-      status: 404,
-      message: "Not found",
-    });
   else {
-    const updatedContact = await handleContactUpdate(
-      data,
-      contactId,
-      contactFound,
-      value
-    );
-    res.json({
-      status: 200,
-      updatedContact,
-    });
+    const updatedContact = await handleContactUpdate(req, value);
+
+    if (updatedContact)
+      res.json({
+        status: 200,
+        updatedContact,
+      });
+    else
+      res.status(404).json({
+        status: 404,
+        message: "Not found",
+      });
   }
 };
 
