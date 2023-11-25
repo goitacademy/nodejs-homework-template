@@ -5,13 +5,12 @@ const { User } = require("../models/user");
 const register = async (req, res, next) => {
   const { name, email, password } = req.body;
   const user = await User.findOne({ email });
-
   if (user) {
     throw HttpError(409, `User with ${email} already exists`);
   }
-  const hashPassword = await bcrypt.hash(password, 10);
-
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = new User({ email });
+  newUser.setPassword(password);
+  await newUser.save();
 
   res.status(201).json({
     email: newUser.email,
@@ -40,16 +39,6 @@ const logout = async (req, res) => {
   });
 };
 
-const updateSubscription = async (req, res) => {
-  const { _id, email } = req.user;
-  const { subscription } = req.body;
-  await User.findByIdAndUpdate(_id, { subscription });
-
-  res.status(200).json({
-    email,
-    subscription,
-  });
-};
 const current = async (req, res) => {
   const { email, subscription } = req.user;
 
@@ -64,5 +53,4 @@ module.exports = {
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
-  updateSubscription: ctrlWrapper(updateSubscription),
 };
