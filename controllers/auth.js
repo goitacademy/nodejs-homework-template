@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const joiUserSchemas = require("../schemas/userSchemas")
+const joiUserSchemas = require("../schemas/userSchemas");
+const gravatar = require("gravatar");
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -18,10 +19,13 @@ async function register(req, res, next) {
   const { email, password, subscription } = req.body;
   console.log("Received data:", req.body);
   try {
-    const validation = joiUserSchemas.validate({ email, password});
+    const validation = joiUserSchemas.validate({ email, password });
 
     if (validation.error) {
-      console.log("Validation error:", validation.error.details.map((error) => error.message).join(", "));
+      console.log(
+        "Validation error:",
+        validation.error.details.map((error) => error.message).join(", ")
+      );
       return res.status(400).send({
         message: validation.error.details
           .map((error) => error.message)
@@ -29,7 +33,9 @@ async function register(req, res, next) {
       });
     }
 
-     const user = await User.findOne({ email }).exec();
+const avatarURL = gravatar.url(email, { s: "250", r: "http", d: "identicon" }); // генерируем аватар на основе email
+
+    const user = await User.findOne({ email }).exec();
 
     if (user !== null) {
       console.log("User already exists");
@@ -42,13 +48,18 @@ async function register(req, res, next) {
       email,
       password: passwordHash,
       subscription,
+      avatarURL, // Сохраняем URL аватара в поле avatarURL
     });
 
     console.log("User registered successfully:", addUser);
 
     res
       .status(201)
-      .send({ email: addUser.email, subscription: addUser.subscription });
+      .send({
+        email: addUser.email,
+        subscription: addUser.subscription,
+        avatarURL: addUser.avatarURL,
+      });
   } catch (error) {
     console.error("Error during registration:", error);
     next(error);
