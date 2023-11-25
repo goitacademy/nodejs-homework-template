@@ -22,6 +22,10 @@ const contactsSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+  },
 });
 contactsSchema.post("save", handleMongooseError);
 const updateFavorite = Joi.object({ favorite: Joi.boolean().required() });
