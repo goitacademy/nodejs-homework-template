@@ -72,7 +72,13 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    if (Object.keys(req.body).length === 0) {
+    const requiredFields = ["name", "email", "phone"];
+    const fieldsInBody = Object.keys(req.body);
+    const allFieldsPresent = requiredFields.every((field) =>
+      fieldsInBody.includes(field)
+    );
+
+    if (!allFieldsPresent) {
       return res.status(400).json({ message: "missing fields" });
     }
 
