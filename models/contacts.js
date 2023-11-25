@@ -70,20 +70,20 @@ const updateContact = async (contactId, newUpdatedData) => {
   );
 
   if (contactFoundIndex !== -1) {
-    let contactFound = Parcer(data).find((item) => item.id === contactId);
+    const contactFound = Parcer(data).find((item) => item.id === contactId);
     const filteredArr = Parcer(data).filter((item) => item.id !== contactId);
 
-    contactFound = {
+    const updatedContact = {
       ...contactFound,
       ...newUpdatedData,
     };
 
-    const updatedArr = [...filteredArr, contactFound];
+    const updatedArr = [...filteredArr, updatedContact];
 
     await fs
       .writeFile(contactsPath, JSON.stringify(updatedArr))
       .catch((e) => console.log(e.message));
-    return contactFound;
+    return updatedContact;
   } else return null;
 };
 
