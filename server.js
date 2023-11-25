@@ -6,6 +6,8 @@ const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const User = require("./service/schemas/user");
 
+const path = require("path");
+
 require("dotenv").config();
 const secret = process.env.SECRET;
 
@@ -38,6 +40,10 @@ app.use(cors());
 require("./config/config-passport");
 const routerApi = require("./api");
 app.use("/api", routerApi);
+
+const avatarsDir = path.join(__dirname, "public", "avatars");
+console.log(avatarsDir)
+app.use("/avatars", express.static(avatarsDir));
 
 app.use((_, res, __) => {
   res.status(404).json({
