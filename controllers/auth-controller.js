@@ -7,6 +7,7 @@ import { configDotenv } from "dotenv";
 import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
+import { error } from "console";
 
 configDotenv();
 
@@ -92,6 +93,12 @@ const updateSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+  if (!req.file) {
+    throw HttpError(400, "file is not defined");
+  }
+
+  const avatarImg = await Jimp.read(tempUpload);
+  await avatarImg.cover(250, 250).writeAsync(tempUpload);
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, filename);
   await fs.rename(tempUpload, resultUpload);
