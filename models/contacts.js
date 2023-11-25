@@ -65,12 +65,9 @@ const updateContact = async (contactId, newUpdatedData) => {
     .readFile(contactsPath)
     .catch((e) => console.log(e.message));
 
-  const contactFoundIndex = Parcer(data).findIndex(
-    (item) => item.id === contactId
-  );
+  const contactFound = Parcer(data).find((item) => item.id === contactId);
 
-  if (contactFoundIndex !== -1) {
-    const contactFound = Parcer(data).find((item) => item.id === contactId);
+  if (contactFound) {
     const filteredArr = Parcer(data).filter((item) => item.id !== contactId);
 
     const updatedContact = {
