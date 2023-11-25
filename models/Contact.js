@@ -52,7 +52,10 @@ export const contactUpdateSchema = Joi.object({
 });
 
 export const contactFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+    "string.empty": `missing field favorite`,
+  }),
 });
 
 const Contact = model("contact", contactSchema);
