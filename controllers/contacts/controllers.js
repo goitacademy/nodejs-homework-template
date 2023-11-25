@@ -36,7 +36,7 @@ export const addContact = async (req, res, next) => {
 export const removeContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await helpers.removeContact(contactId);
+    const contact = await helpers.dbDeleteContact(contactId);
     if (contact) {
       res.status(200).json({ message: "contact deleted" });
     } else {
@@ -47,22 +47,19 @@ export const removeContact = async (req, res, next) => {
   }
 };
 
-// export const removeContact = async (contactId) => {
-//   try {
-//     const contacts = await listContacts();
-//     if (await contacts.find((item) => item.id === contactId)) {
-//       const updatedContacts = await contacts.filter(
-//         (item) => item.id !== contactId
-//       );
-//       await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   } catch (error) {
-//     return error;
-//   }
-// };
+export const updateContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const contact = await helpers.dbUpdateContact(contactId, req.body);
+    if (contact) {
+      res.status(200).json(contact);
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 // export const updateContact = async (contactId, obj) => {
 //   try {

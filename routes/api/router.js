@@ -9,6 +9,7 @@ router.get("/", controllers.getContacts);
 router.get("/:contactId", controllers.getContact);
 router.post("/", validateContact, controllers.addContact);
 router.delete("/:contactId", controllers.removeContact);
+router.put("/:contactId", validateContact, controllers.updateContact);
 
 // router.put("/:contactId", async (req, res, next) => {
 //   const { contactId } = req.params;
