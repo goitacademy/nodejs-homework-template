@@ -1,6 +1,6 @@
 const express = require("express");
 const { nanoid } = require("nanoid");
-const validatioSchema = require("../../validation/schemas");
+const validationSchema = require("../../validation/schemas");
 const router = express.Router();
 const contacts = require("../../models/contacts");
 
@@ -34,7 +34,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { error, value } = validatioSchema.forPosting.validate(req.body);
+  const { error, value } = validationSchema.forPosting.validate(req.body);
   if (error)
     res.status(400).json({
       status: 400,
@@ -72,7 +72,7 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { error, value } = validatioSchema.forPuting.validate(req.body);
+  const { error, value } = validationSchema.forPuting.validate(req.body);
   const { contactId } = req.params;
 
   if (error)
