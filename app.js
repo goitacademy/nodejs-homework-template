@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/authRouter");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+app.use("/users", authRouter);
 
 app.use((_, res) => {
   res.status(404).json({ message: "Page not found!" });
