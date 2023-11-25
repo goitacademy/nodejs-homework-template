@@ -1,7 +1,11 @@
 import express from "express";
 import * as contactController from "../../controllers/contact-controllers/index.js";
 
-import { isEmptyBody, isValidId } from "../../middelwares/index.js";
+import {
+  isEmptyBody,
+  isValidId,
+  authenticate,
+} from "../../middelwares/index.js";
 import validateBody from "../../decorators/validaterBody.js";
 import {
   contactAddSchema,
@@ -10,6 +14,8 @@ import {
 } from "../../schemas/index.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get("/", contactController.getAllContacts);
 

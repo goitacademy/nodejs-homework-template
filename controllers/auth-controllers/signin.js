@@ -1,7 +1,11 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import "dotenv/config.js";
 import User from "../../models/User.js";
 import { HttpError } from "../../helpers/index.js";
 import ctrlWrapper from "../../decorators/ctrlWrapper.js";
+
+const { JWT_SECRET } = process.env;
 
 const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -14,9 +18,17 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  const token = "example.token.1234";
+  const payload = {
+    id: user._id,
+  };
 
-  res.json({ token });
+  console.log("JWT_SECRET", JWT_SECRET);
+
+  const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+
+  const { subscription } = user;
+
+  res.json({ token, user: { email, subscription } });
 };
 
 export default ctrlWrapper(signin);

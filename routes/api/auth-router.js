@@ -10,16 +10,16 @@ import {
 const authRouter = express.Router();
 
 authRouter.post(
-  "/signup",
+  "/register",
   isEmptyBody,
   validateBody(userSignupSchema),
   authController.signup
 );
 
 authRouter.post(
-  "/signin",
+  "/login",
   isEmptyBody,
-  validateBody(userSignupSchema),
+  validateBody(userSigninSchema),
   authController.signin
 );
 
