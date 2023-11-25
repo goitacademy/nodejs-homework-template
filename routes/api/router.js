@@ -5,16 +5,16 @@ import {
   addContact,
   removeContact,
   updateContact,
-} from "../../models/contacts.js";
+} from "../../controllers/contacts/contacts.js";
 import Joi from "joi";
 
 const router = Router();
 
-const schema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.required(),
-  phone: Joi.required(),
-});
+// const schema = Joi.object({
+//   name: Joi.string().alphanum().min(3).max(30).required(),
+//   email: Joi.required(),
+//   phone: Joi.required(),
+// });
 
 router.get("/", async (req, res, next) => {
   const list = await listContacts();

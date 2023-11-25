@@ -15,6 +15,7 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.11.0",
+    "mongoose": "^8.0.1",
     "morgan": "1.10.0",
     "nanoid": "^5.0.3"
   },
@@ -26,5 +27,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "^2.0.15"
+  },
+  "imports": {
+    "#models/*": "./models/*",
+    "#validators/*": "./validators/*"
   }
 }
