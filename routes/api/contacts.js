@@ -1,21 +1,8 @@
 const express = require("express");
 const { nanoid } = require("nanoid");
-const Joi = require("joi");
+const validatioSchema = require("../../validation/schemas");
 const router = express.Router();
 const contacts = require("../../models/contacts");
-
-// Схеми валідації
-const postSchema = Joi.object({
-  name: Joi.required(),
-  email: Joi.required(),
-  phone: Joi.required(),
-});
-
-const putSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.alternatives().try(Joi.string(), Joi.number()),
-}).or("name", "email", "phone");
 
 router.get("/", async (req, res, next) => {
   const myContacts = await contacts
@@ -47,7 +34,7 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const { error, value } = postSchema.validate(req.body);
+  const { error, value } = validatioSchema.forPosting.validate(req.body);
   if (error)
     res.status(400).json({
       status: 400,
@@ -85,7 +72,7 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { error, value } = putSchema.validate(req.body);
+  const { error, value } = validatioSchema.forPuting.validate(req.body);
   const { contactId } = req.params;
 
   if (error)
