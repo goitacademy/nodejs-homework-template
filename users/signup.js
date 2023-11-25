@@ -1,12 +1,12 @@
 import express from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
+
 import { v4 as uuidv4 } from 'uuid';
 import nodemailer from 'nodemailer';
 import { config } from 'dotenv';
 config();
 
-// Konfiguracja nodemailer
 const transporter = nodemailer.createTransport({
   host: process.env.MAILGUN_HOST,
   port: process.env.MAILGUN_PORT,
@@ -19,6 +19,7 @@ const transporter = nodemailer.createTransport({
 import userModel from '../models/userModel.js';
 import avatar from './avatar.js';
 
+
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -26,7 +27,9 @@ const signupSchema = Joi.object({
 
 const router = express.Router();
 
+
 router.use('/avatars', avatar);
+
 
 router.post('/signup', async (req, res) => {
   try {
@@ -51,7 +54,7 @@ router.post('/signup', async (req, res) => {
       verificationToken: generateUniqueToken(),
     });
 
-    // Sprawdź, czy użytkownik nie był już wcześniej zweryfikowany
+
     if (newUser.verify) {
       return res
         .status(400)
@@ -68,11 +71,13 @@ router.post('/signup', async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     return res.status(200).json({ message: 'Verification email sent' });
+
   } catch (error) {
     console.error('Error during signup:', error.message);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 function generateUniqueToken() {
   const token = uuidv4();
