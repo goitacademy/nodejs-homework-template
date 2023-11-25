@@ -1,6 +1,5 @@
 const express = require("express");
-const { nanoid } = require("nanoid");
-const validationSchema = require("../../validation/schemas");
+
 const router = express.Router();
 const contacts = require("../../models/contacts");
 
