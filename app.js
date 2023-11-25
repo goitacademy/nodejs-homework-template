@@ -3,12 +3,13 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const routers = require("./routes/api");
+const path = require("path");
 
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use(express.static('public'))
+app.use("/avatars", express.static(path.join(__dirname, "public/avatars")))
 
 app.use(logger(formatsLogger));
 app.use(cors());
