@@ -17,11 +17,6 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Set password for user"],
     },
-    subscription: {
-      type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
-    },
     token: {
       type: String,
       default: null,
@@ -30,6 +25,6 @@ const UserSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-const User = mongoose.model("user", UserSchema);
+const User = model("user", UserSchema);
 
 module.exports = { User };
