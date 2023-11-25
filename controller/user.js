@@ -3,25 +3,34 @@ const jwt = require("jsonwebtoken");
 const User = require("../service/schemas/user");
 require("dotenv").config();
 const secret = process.env.SECRET;
-
+const jimp = require("jimp");
+const path = require("path");
+const multer = require("multer");
+const fs = require("fs").promises;
 const Joi = require("joi");
+const gravatar = require("gravatar");
 
-// Validation schema for registration
 const registrationSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
   username: Joi.string().required(),
 });
 
-// Validation schema for login
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
 });
 
+const tmpFolder = path.join(__dirname, "..", "tmp");
+const avatarsFolder = path.join(__dirname, "..", "public", "avatars");
+
+fs.mkdir(tmpFolder, { recursive: true });
+
+const avatarStorage = multer.memoryStorage();
+const avatarUpload = multer({ storage: avatarStorage });
+
 const register = async (req, res, next) => {
   try {
-    // Validate request body
     const { error } = registrationSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -32,7 +41,6 @@ const register = async (req, res, next) => {
       });
     }
 
-    // Check if email is already in use
     const { email, username, password } = req.body;
     const user = await User.findOne({ email }).lean();
     if (user) {
@@ -44,10 +52,13 @@ const register = async (req, res, next) => {
       });
     }
 
-    // Create a new user
-    const newUser = new User({ username, email });
+    const avatarURL = gravatar.url(
+      email,
+      { s: "250", r: "pg", d: "identicon" },
+      true
+    );
+    const newUser = new User({ username, email, avatarURL });
     newUser.setPassword(password);
-    await newUser.save();
 
     res.status(201).json({
       status: "success",
@@ -57,9 +68,11 @@ const register = async (req, res, next) => {
         user: {
           email,
           username,
+          avatarURL,
         },
       },
     });
+    await newUser.save();
   } catch (error) {
     next(error);
   }
@@ -67,8 +80,7 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
   try {
-    // Validate request body
-    const { error } = loginSchema.validate(req.body);
+        const { error } = loginSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: "error",
@@ -78,11 +90,9 @@ const login = async (req, res, next) => {
       });
     }
 
-    // Find user by email
     const { email, password } = req.body;
     const user = await User.findOne({ email });
 
-    // Check if user and password are valid
     if (!user || !user.validPassword(password)) {
       return res.status(401).json({
         status: "error",
@@ -92,7 +102,6 @@ const login = async (req, res, next) => {
       });
     }
 
-    // Generate and send token
     const payload = {
       id: user._id,
       username: user.username,
@@ -125,11 +134,10 @@ const logout = async (req, res, next) => {
       });
     }
 
-    // Clear the token in the user model
     user.token = null;
     await user.save();
 
-    res.status(204).send(); // Logout success response
+    res.status(204).send();
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -171,10 +179,44 @@ const listUser = async (req, res, next) => {
   });
 };
 
+const updateAvatar = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const user = req.user;
+    const imageBuffer = req.file.buffer;
+
+    const processedImage = await jimp.read(imageBuffer);
+    await processedImage.resize(250, 250);
+
+    const uniqueFileName = `${user._id}_${Date.now()}.png`;
+
+    const tmpFilePath = path.join(tmpFolder, uniqueFileName);
+
+
+    await processedImage.writeAsync(tmpFilePath);
+
+        const avatarPath = path.join(avatarsFolder, uniqueFileName);
+
+        await fs.rename(tmpFilePath, avatarPath);
+
+        user.avatarURL = `/avatars/${uniqueFileName}`;
+    await user.save();
+
+        res.status(200).json({ avatarURL: user.avatarURL });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   auth,
   listUser,
+  updateAvatar,
 };
