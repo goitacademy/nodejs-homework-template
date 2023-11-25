@@ -4,6 +4,7 @@ const { User } = require("../models/user");
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const gravatar = require("gravatar");
+const jimp = require("jimp");
 
 //register function
 async function register(req, res, next) {
@@ -97,6 +98,9 @@ async function current(req, res, next) {
 
 async function uploadAvatar(req, res, next) {
   try {
+    await jimp.read(req.file.path).then((img) => {
+      return img.cover(250, 250).write(req.file.path);
+    });
     await fs.rename(
       req.file.path,
       path.join(__dirname, "..", "public/avatars", req.file.filename)
