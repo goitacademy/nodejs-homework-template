@@ -11,19 +11,6 @@ import authController from '../../controllers/authController.js';
 import getContactById from '../../controllers/getContactById.js';
 import updateStatusContact from '../../controllers/updateStatusContact.js';
 
-
-const addContactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
-const updateContactSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string(),
-});
-
 const router = express.Router();
 
 

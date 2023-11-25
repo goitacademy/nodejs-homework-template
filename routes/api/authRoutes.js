@@ -4,6 +4,8 @@ import login from '../../users/login.js';
 import logout from '../../users/logout.js';
 import signup from '../../users/signup.js';
 import current from '../../users/current.js';
+import { addContactSchema, updateContactSchema } from '#validators';
+
 
 const router = express.Router();
 
