@@ -1,34 +1,27 @@
-// import { readFile, writeFile } from "fs/promises";
+import * as helpers from "./helpers.js";
 
-import { fetchContacts } from "./helpers.js";
-
-// export const listContacts = async () => {
-//   try {
-//     const data = await listContacts();
-//     const contacts = JSON.parse(data);
-//     return contacts;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-export const listContacts = async (req, res, next) => {
+export const getContacts = async (req, res, next) => {
   try {
-    const contacts = await fetchContacts();
+    const contacts = await helpers.fetchContacts();
     res.json(contacts);
   } catch (error) {
     next(error);
   }
 };
 
-// export const getContactById = async (contactId) => {
-//   try {
-//     const contacts = await listContacts();
-//     return await contacts.find((item) => item.id === contactId);
-//   } catch (error) {
-//     return error;
-//   }
-// };
+export const getContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const contact = await helpers.fetchContact(contactId);
+    if (contact) {
+      res.json(contact);
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 // export const addContact = async (body) => {
 //   try {

@@ -9,7 +9,7 @@ import { Router } from "express";
 
 // import Joi from "joi";
 
-import { listContacts } from "../../controllers/contacts/contacts.js";
+import * as controllers from "../../controllers/contacts/contacts.js";
 
 const router = Router();
 
@@ -19,17 +19,8 @@ const router = Router();
 //   phone: Joi.required(),
 // });
 
-router.get("/", listContacts);
-
-// router.get("/:contactId", async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const contact = await getContactById(contactId);
-//   if (contact) {
-//     res.status(200).json(contact);
-//   } else {
-//     res.status(404).json({ message: "Not found" });
-//   }
-// });
+router.get("/", controllers.getContacts);
+router.get("/:contactId", controllers.getContact);
 
 // router.post("/", async (req, res, next) => {
 //   const result = schema.validate(req.body);
