@@ -11,15 +11,15 @@ import { isEmptyBody, IsValidId } from '../../middlewares/index.js';
 import { validateBody } from '../../decorators/index.js';
 import { contactAddSchema, contactUpdateSchema, contactFavoriteSchema } from '../../models/Contact.js';
 
-const router = express.Router();
+const contactRouter = express.Router();
 
-router.route('/').get(getAll).post(isEmptyBody, validateBody(contactAddSchema), addContact);
-router
+contactRouter.route('/').get(getAll).post(isEmptyBody, validateBody(contactAddSchema), addContact);
+contactRouter
   .route('/:contactId')
   .get(IsValidId, getById)
   .delete(IsValidId, removeById)
   .put(IsValidId, isEmptyBody, validateBody(contactUpdateSchema), updateById);
 
-router.patch('/:contactId/favorite', IsValidId, isEmptyBody, validateBody(contactFavoriteSchema), updateStatusContact);
+contactRouter.patch('/:contactId/favorite', IsValidId, isEmptyBody, validateBody(contactFavoriteSchema), updateStatusContact);
 
-export default router;
+export default contactRouter;
