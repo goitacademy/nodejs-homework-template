@@ -6,7 +6,9 @@ const validationSchema = require("../validation/schemas");
 const contactsPath = path.resolve(__dirname, "contacts.json");
 
 const { readFile, writeFile } = fs;
+const { forPosting, forPuting } = validationSchema;
 
+// Helpers **
 function Parcer(data) {
   try {
     return JSON.parse(data);
@@ -16,22 +18,49 @@ function Parcer(data) {
 }
 
 async function fileReader(path) {
-  await readFile(path).catch((e) => console.log(e.message));
+  const data = await readFile(path).catch((e) => console.log(e.message));
+  return data;
 }
 async function fileWriter(path, payload) {
-  await writeFile(path, payload).catch((e) => console.log(e.message));
+  const data = await writeFile(path, payload).catch((e) =>
+    console.log(e.message)
+  );
+  return data;
 }
 
-const listContacts = (req, res) => {
+async function handleContactUpdate(
+  contacts,
+  contactId,
+  contact,
+  dataForUpdate
+) {
+  const filteredArr = Parcer(contacts).filter((item) => item.id !== contactId);
+
+  const updatedContact = {
+    ...contact,
+    ...dataForUpdate,
+  };
+
+  const updatedArr = [...filteredArr, updatedContact];
+
+  await fileWriter(contactsPath, JSON.stringify(updatedArr));
+
+  return updatedContact;
+}
+
+// main controllers ***
+const listContacts = async (req, res) => {
+  const data = await fileReader(contactsPath);
+  const parcedData = Parcer(data);
   res.json({
     status: 200,
-    data: Parcer(fileReader(contactsPath)),
+    parcedData,
   });
 };
 
-const getContactById = (req, res) => {
+const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const data = fileReader(contactsPath);
+  const data = await fileReader(contactsPath);
 
   const contactFound = Parcer(data).find((item) => item.id === contactId);
 
@@ -47,15 +76,15 @@ const getContactById = (req, res) => {
     });
 };
 
-const removeContact = (req, res) => {
+const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  const data = fileReader(contactsPath);
+  const data = await fileReader(contactsPath);
 
   const contactFound = Parcer(data).find((item) => item.id === contactId);
 
   if (contactFound) {
     const filteredArray = Parcer(data).filter((item) => item.id !== contactId);
-    fileWriter(contactsPath, JSON.stringify(filteredArray));
+    await fileWriter(contactsPath, JSON.stringify(filteredArray));
     res.json({
       status: 200,
       message: "contact deleted",
@@ -67,9 +96,9 @@ const removeContact = (req, res) => {
     });
 };
 
-const addContact = (req, res) => {
-  const { error, value } = validationSchema.forPosting.validate(req.body);
-  const data = fileReader(contactsPath);
+const addContact = async (req, res) => {
+  const { error, value } = forPosting.validate(req.body);
+  const data = await fileReader(contactsPath);
 
   if (error)
     res.status(400).json({
@@ -82,7 +111,7 @@ const addContact = (req, res) => {
       ...value,
     };
     const updatedArr = [...Parcer(data), newContact];
-    fileWriter(contactsPath, JSON.stringify(updatedArr));
+    await fileWriter(contactsPath, JSON.stringify(updatedArr));
     res.status(201).json({
       status: 201,
       newContact,
@@ -90,11 +119,11 @@ const addContact = (req, res) => {
   }
 };
 
-const updateContact = (req, res) => {
-  const { error, value } = validationSchema.forPuting.validate(req.body);
+const updateContact = async (req, res) => {
+  const { error, value } = forPuting.validate(req.body);
   const { contactId } = req.params;
 
-  const data = fileReader(contactsPath);
+  const data = await fileReader(contactsPath);
   const contactFound = Parcer(data).find((item) => item.id === contactId);
 
   if (error)
@@ -108,16 +137,12 @@ const updateContact = (req, res) => {
       message: "Not found",
     });
   else {
-    const filteredArr = Parcer(data).filter((item) => item.id !== contactId);
-
-    const updatedContact = {
-      ...contactFound,
-      ...value,
-    };
-
-    const updatedArr = [...filteredArr, updatedContact];
-
-    fileWriter(contactsPath, JSON.stringify(updatedArr));
+    const updatedContact = await handleContactUpdate(
+      data,
+      contactId,
+      contactFound,
+      value
+    );
     res.json({
       status: 200,
       updatedContact,
