@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { validateContact } from "../../validators/contacts/JoiSchema.js";
 // import {
 //   listContacts,
 //   getContactById,
@@ -9,7 +10,7 @@ import { Router } from "express";
 
 // import Joi from "joi";
 
-import * as controllers from "../../controllers/contacts/contacts.js";
+import * as controllers from "../../controllers/contacts/controllers.js";
 
 const router = Router();
 
@@ -21,6 +22,7 @@ const router = Router();
 
 router.get("/", controllers.getContacts);
 router.get("/:contactId", controllers.getContact);
+router.post("/", validateContact, controllers.addContact);
 
 // router.post("/", async (req, res, next) => {
 //   const result = schema.validate(req.body);

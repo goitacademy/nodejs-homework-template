@@ -23,6 +23,15 @@ export const getContact = async (req, res, next) => {
   }
 };
 
+export const addContact = async (req, res, next) => {
+  try {
+    const contact = await helpers.insertContact(req.body);
+    res.status(201).json(contact);
+  } catch (error) {
+    next(error);
+  }
+};
+
 // export const addContact = async (body) => {
 //   try {
 //     const contacts = await listContacts();

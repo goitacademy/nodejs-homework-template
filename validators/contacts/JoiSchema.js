@@ -1,7 +1,16 @@
 import Joi from "joi";
 
-export const JoiSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.required(),
-  phone: Joi.required(),
+const schema = Joi.object({
+  name: Joi.string().required("Set name for contact"),
+  email: Joi.string(),
+  phone: Joi.string(),
+  favorite: Joi.boolean().default(false),
 });
+
+export const validateContact = (req, res, next) => {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+  next();
+};
