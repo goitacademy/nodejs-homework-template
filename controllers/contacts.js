@@ -4,13 +4,7 @@ const {ctrlWrapper} = require('../helpers/ctrlWrapper');
 
   const getAllContacts = async (req, res) => {
       const result = await contacts.listContacts();
-      res.json({
-        status: "success",
-      code: 200,
-      data: {
-        result,
-      },
-      });
+      res.json(result);
   }
 
   const getContactById = async (req, res) => {
