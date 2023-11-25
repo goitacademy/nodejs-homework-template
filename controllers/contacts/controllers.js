@@ -1,3 +1,4 @@
+import e from "express";
 import * as helpers from "./helpers.js";
 
 export const getContacts = async (req, res, next) => {
@@ -32,18 +33,19 @@ export const addContact = async (req, res, next) => {
   }
 };
 
-// export const addContact = async (body) => {
-//   try {
-//     const contacts = await listContacts();
-//     const id = nanoid();
-//     const newContact = { id: id, ...body };
-//     const updatedContacts = [...contacts, newContact];
-//     await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
-//     return newContact;
-//   } catch (error) {
-//     return error;
-//   }
-// };
+export const removeContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const contact = await helpers.removeContact(contactId);
+    if (contact) {
+      res.status(200).json({ message: "contact deleted" });
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 // export const removeContact = async (contactId) => {
 //   try {
