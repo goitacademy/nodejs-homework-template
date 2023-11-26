@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-const { DB_HOST, PORT = 3000 } = process.env;
+const { DB_HOST='mongodb+srv://09022023Rik:09022023Rik@cluster0.f0abo8p.mongodb.net/contacts_reader?retryWrites=true&w=majority', PORT = 4500 } = process.env;
 mongoose.set("strictQuery", true);
 mongoose
   .connect(DB_HOST)
@@ -13,6 +13,6 @@ mongoose
     app.listen(PORT);
   })
   .catch((er) => {
-    console.log(er.message);
+    console.log(`Error-${er.message}`);
     process.exit(1);
   });
