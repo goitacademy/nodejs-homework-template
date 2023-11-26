@@ -1,8 +1,12 @@
+// controllers\index.js
+
 const { Contact, validateContact } = require("../service/schemas/contactSchema");
 
 async function getContacts(req, res, next) {
+  console.log({user: req.user});
+
   try {
-    const contacts = await Contact.find().exec();
+    const contacts = await Contact.find({ userId: req.user.id }).exec(); // добавить { userId: req.user.id }
     res.send(contacts);
   } catch (err) {
     next(err);
@@ -26,17 +30,18 @@ async function getContact(req, res, next) {
 }
 
 async function createContact(req, res, next) {
+  const contact = {
+    name: req.body.name,
+    phone: req.body.phone,
+    userId: req.user._id,  // Возможно ошибка здесь. (используйте _id из объекта req.user)
+  };
+
   try {
-    const { error } = validateContact(req.body);
+    const result = await Contact.create(contact);
 
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-
-    const newContact = await Contact.create(req.body);
-    res.status(201).json(newContact);
-  } catch (error) {
-    next(error);
+    res.status(201).send(result);
+  } catch (err) {
+    next(err);
   }
 }
 

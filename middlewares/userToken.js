@@ -31,7 +31,7 @@ const userToken = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(401).json({message: 'Not authorized: Token verification failed' }); // саме тут виникає помилка!!!!
+    return res.status(401).json({message: 'Not authorized: Token verification failed' }); 
   }
 };
 

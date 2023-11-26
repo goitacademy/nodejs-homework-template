@@ -1,3 +1,5 @@
+// service\schemas\contactSchema.js
+
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
@@ -16,6 +18,14 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
+},
+{
+  versionKey: false,
+  timestamps: true,
 });
 
 const validateContact = (contact) => {
@@ -29,7 +39,7 @@ const validateContact = (contact) => {
   return schema.validate(contact, { abortEarly: false });
 };
 
-const addSchema = Joi.object({    // добавив описання схеми в якості змінної, а не функції
+const addSchema = Joi.object({    
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),

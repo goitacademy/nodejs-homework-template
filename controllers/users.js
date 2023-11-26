@@ -112,7 +112,7 @@ async function logoutUser(req, res, next) {
   console.log('User before logout:', user);
   
     // Удаляем токен у пользователя  / Убрал удаление токена при logout
-    // user.token = null;
+    user.token = null;
 
     // Сохраняем изменения в базе данных
     await user.save();
