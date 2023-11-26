@@ -21,7 +21,7 @@ async function auth(req, res, next) {
 
     try {
       req.user = decode;
-      const user = await User.findById(decode.id).exec();
+      const user = await User.findById(decode._id).exec();
       if (user === null) {
         return res.status(401).send({ message: "Not authorized" });
       }
@@ -30,7 +30,7 @@ async function auth(req, res, next) {
         return res.status(401).send({ message: "Not authorized" });
       }
 
-      req.user = { id: user._id, email: user.email };
+      req.user = { _id: user._id, email: user.email };
 
       next();
     } catch (error) {
