@@ -1,8 +1,10 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
 
 const contactsRouter = require('./routes/api/contacts')
+
 
 const app = express()
 
@@ -25,16 +27,3 @@ app.use((err, req, res, next) => {
 
 module.exports = app
 
-<<<<<<< Updated upstream
-// http://localhost:3000/api/contacts
-=======
-const mongoose = require('mongoose');
-
-const DB_HOST = 'mongodb+srv://dimen:3nkQJv2pkmfERAuR@cluster0.kymbo0y.mongodb.net/db-contacts?retryWrites=true&w=majority'
-
-mongoose.set('strictQuery', true);
-
-mongoose.connect(DB_HOST)
-  .then(()=> console.log("Database connection successful"))
-  .catch(error => console.log(error.message))
->>>>>>> Stashed changes
