@@ -4,13 +4,17 @@ import { HttpError } from "../helpers/index.js";
 
 
 const getListContacts = async (req, res) => {
-        const result = await Contact.find();
-        res.json(result);
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+    const result = await Contact.find({owner}, "-createdAt -updatedAt", {skip, limit});
+    res.json(result);
 };
 
 const getContactById = async (req, res) => {
-        const { id } = req.params;
-    const result = await Contact.findById(id);
+    const { id } = req.params;
+    const { _id: owner } = req.user;
+    const result = await Contact.findOne({ _id: id, owner });
         if (!result) {
             throw HttpError(404, `Contact with id=${id} was not found`);
         }
@@ -24,8 +28,9 @@ const addContact = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-        const { id } = req.params;
-        const result = await Contact.findByIdAndUpdate(id, req.body);
+    const { id } = req.params;
+     const { _id: owner } = req.user;
+    const result = await Contact.findOneAndUpdate({ _id: id, owner}, req.body);
         if (!result) {
             throw HttpError(404, `Contact with id=${id} was not found`);
         }
@@ -34,8 +39,9 @@ const updateById = async (req, res) => {
 
 
 const deleteById = async (req, res) => {
-        const { id } = req.params;
-        const result = await Contact.findByIdAndDelete(id);
+    const { id } = req.params;
+    const { _id: owner } = req.user;
+    const result = await Contact.findOneAndDelete({ _id: id, owner });
         if (!result) {
             throw HttpError(404, `Contact with id=${id} was not found`);
         }
