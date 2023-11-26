@@ -1,5 +1,5 @@
 import Contact from "../models/Contact.js";
-import * as contactsService from "../models/index.js";
+// import * as contactsService from "../models/index.js";
 import { HttpError } from "../helpers/index.js";
 
 import {
