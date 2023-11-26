@@ -33,7 +33,7 @@ async function register(req, res, next) {
       });
     }
 
-const avatarURL = gravatar.url(email, { s: "250", r: "http", d: "identicon" }); // генерируем аватар на основе email
+    const avatarURL = gravatar.url(email, { protocol: "http", s: "200"}); // генерируем аватар на основе email
 
     const user = await User.findOne({ email }).exec();
 
