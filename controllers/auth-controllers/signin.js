@@ -22,9 +22,8 @@ const signin = async (req, res) => {
     id: user._id,
   };
 
-  console.log("JWT_SECRET", JWT_SECRET);
-
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+  await User.findByIdAndUpdate(user._id, { token });
 
   const { subscription } = user;
 
