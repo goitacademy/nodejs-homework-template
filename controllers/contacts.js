@@ -1,6 +1,6 @@
 const contacts = require("../models/contacts");
-const HttpError = require("../controllers/ctrlWrapper");
-const ctrlWrapper = require("../controllers/ctrlWrapper");
+const HttpError = require("../helpers/HttpError");
+const ctrlWrapper = require("../decorators/ctrlWrapper");
 const { nanoid } = require("nanoid");
 
 const listContacts = async (req, res, next) => {

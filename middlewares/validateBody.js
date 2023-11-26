@@ -1,4 +1,4 @@
-const HttpError = require("../controllers/HttpError");
+const HttpError = require("../helpers/HttpError");
 
 const validateBody = (schema) => (req, res, next) => {
   if (Object.keys(req.body).length < 1) {
