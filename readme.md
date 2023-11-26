@@ -1,29 +1,46 @@
-## GoIT Node.js Course Template Homework
+# Contacts REST API
 
-Wykonaj forka tego repozytorium, aby wykonywać zadania domowe (2-6). Fork utworzy repozytorium na Twoim koncie na http://github.com
+Contacts REST API to prosta aplikacja Node.js oparta na MongoDB, która pozwala na modyfikację listy kontaktów za pomocą żądań HTTP. Jest to część kursu GoIT, na którym uczyłem się Node.js i narzędzi z nim związanych.
 
-Dodaj mentora jako collaboratora.
+## Funkcje
 
-Dla każdego zadania domowego utwórz nową gałąź (branch).
+- Dodawanie nowego kontaktu
+- Wyświetlanie listy wszystkich kontaktów
+- Wyświetlanie szczegółów konkretnego kontaktu
+- Aktualizacja kontaktu
+- Usuwanie kontaktu
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+## Instalacja
 
-Każda nowa gałąź dla zadania powinna być tworzona z gałęzi master.
+1. Sklonuj repozytorium na swoje lokalne środowisko.
+2. Zainstaluj zależności za pomocą `npm install`.
+3. Uruchom serwer w trybie deweloperskim za pomocą `npm run start:dev`.
 
-Po zakończeniu wykonania zadania domowego na swojej gałęzi, należy zrobić pull request (PR). Następnie dodaj mentora do przeglądu kodu. Dopiero po zatwierdzeniu PR przez mentora możesz scalić gałąź z zadaniem domowym do gałęzi master.
+## Użycie
 
-Uważnie czytaj komentarze mentora. Popraw uwagi i zrób commit na gałęzi z zadaniem domowym. Zmiany automatycznie pojawią się w PR po wysłaniu commitu z poprawkami na GitHub. Po poprawkach ponownie dodaj mentora do przeglądu kodu.
+### Wyświetlanie listy wszystkich kontaktów
 
-- Podczas oddawania zadania domowego podaj link do PR.
-- Kod JS jest czytelny i zrozumiały, do formatowania używany jest Prettier.
+Wyślij żądanie GET na `/api/contacts`.
 
-### Komendy:
+### Dodawanie nowego kontaktu
 
-- `npm start` &mdash;  uruchamia serwer w trybie produkcyjnym
-- `npm run start:dev` &mdash; uruchamia serwer w trybie deweloperskim (development)
-- `npm run lint` &mdash; uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
-- `npm lint:fix` &mdash; to samo co powyższe, ale również automatycznie poprawia proste błędy.
+Wyślij żądanie POST na `/api/contacts` z JSON zawierającym `name`, `email` i `phone`.
+
+### Wyświetlanie szczegółów konkretnego kontaktu
+
+Wyślij żądanie GET na `/api/contacts/:id`.
+
+### Aktualizacja kontaktu
+
+Wyślij żądanie PATCH na `/api/contacts/:id` z JSON zawierającym pola do zaktualizowania.
+
+### Usuwanie kontaktu
+
+Wyślij żądanie DELETE na `/api/contacts/:id`.
+
+## Komendy
+
+- `npm start` — uruchamia serwer w trybie produkcyjnym
+- `npm run start:dev` — uruchamia serwer w trybie deweloperskim (development)
+- `npm run lint` — uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
+- `npm run lint:fix` — to samo co powyższe, ale również automatycznie poprawia proste błędy
