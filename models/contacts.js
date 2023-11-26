@@ -1,4 +1,6 @@
-const Joi = require('joi');
+// const Joi = require('joi');
+const contactSchema = require('../schemas/contactsSchema');
+const updateContactSchema = require('../schemas/updateContactSchema');
 
 const path = require('path');
 const fs = require('fs/promises');
@@ -47,13 +49,9 @@ const removeContact = async (contactId) => {
 };
 
 const addContact = async (body) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-  });
 
-  const validationResult = schema.validate(body);
+
+  const validationResult = contactSchema.validate(body);
   if (validationResult.error) {
     throw new Error('Validation failed');
   }
@@ -73,13 +71,9 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  const schema = Joi.object({
-    name: Joi.string(),
-    email: Joi.string().email(),
-    phone: Joi.string(),
-  });
+ 
 
-  const validationResult = schema.validate(body);
+ const validationResult = updateContactSchema.validate(body);
   if (validationResult.error) {
     throw new Error('Validation failed');
   }

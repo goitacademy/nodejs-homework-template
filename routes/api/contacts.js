@@ -1,6 +1,7 @@
 const express = require('express');
 const contactsModel = require('../../models/contacts');
-const Joi = require('joi');
+const contactSchema = require('../../schemas/contactsSchema');
+const updateContactSchema = require('../../schemas/updateContactSchema');
 
 const router = express.Router();
 
@@ -26,14 +27,10 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const { body } = req;
 
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-  });
+
 
   try {
-    const validationResult = schema.validate(body);
+     const validationResult = contactSchema.validate(body);
     if (validationResult.error) {
       res.status(400).json({ message: 'Validation failed', error: validationResult.error.details });
       return;
@@ -64,14 +61,10 @@ router.put('/:contactId', async (req, res, next) => {
   const { contactId } = req.params;
   const { body } = req;
 
-  const schema = Joi.object({
-    name: Joi.string(),
-    email: Joi.string().email(),
-    phone: Joi.string(),
-  });
+
 
   try {
-    const validationResult = schema.validate(body);
+   const validationResult = updateContactSchema.validate(body);
     if (validationResult.error) {
       res.status(400).json({ message: 'Validation failed', error: validationResult.error.details });
       return;
