@@ -17,7 +17,6 @@ const register = async (req, res, next) => {
     name: newUser.name,
   });
 };
-// complete
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -30,7 +29,7 @@ const login = async (req, res) => {
   }
   const token = jwt.sign(
     { id: user._id, name: user.name },
-    process.env.JWT_SECRET,
+    process.env.JWT_SEACRET,
     { expiresIn: "1days" }
   );
   await User.findByIdAndUpdate(user._id, { token });
@@ -39,23 +38,17 @@ const login = async (req, res) => {
     user: { email: user.email, name: user.name },
   });
 };
-// complete але потрібно получити токен покі з цим помилка
 
 const logout = async (req, res) => {
-  await User.findByIdAndUpdate(req.user.id, { token: null });
-
+  await User.findByIdAndUpdate(req.user, { token: null });
   res.status(204).json({
-    message: "Logout",
+    message: "You are logged out",
   });
 };
 
 const current = async (req, res) => {
-  const { email, subscription } = req.user;
-
-  res.json({
-    email,
-    subscription,
-  });
+  const { email, name } = req.user;
+  res.json({ email, name });
 };
 
 module.exports = {
