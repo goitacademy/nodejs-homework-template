@@ -8,7 +8,11 @@ import {
   updateById,
   updateStatusContact,
 } from "../../controllers/contacts-controller.js";
-import { isEmptyBody, isValidId } from "../../middlewares/index.js";
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+} from "../../middlewares/index.js";
 import {
   contactAddSchema,
   contactPatchFavorite,
@@ -16,6 +20,8 @@ import {
 } from "../../schemas/contacts-schema.js";
 
 const contactsRouter = express.Router();
+
+contactsRouter.use(ctrlWrapper(authenticate));
 
 contactsRouter.get("/", ctrlWrapper(contactsGet));
 

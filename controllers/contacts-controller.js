@@ -2,7 +2,8 @@ import { HttpError } from "../helpers/index.js";
 import Contact from "../models/Сontacts.js";
 
 export const contactsGet = async (req, res, next) => {
-  const result = await Contact.find({}, "-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -16,13 +17,21 @@ export const contactGetById = async (req, res, next) => {
 };
 
 export const add = async (req, res, next) => {
-  const result = await Contact.create(req.body);
-  res.status(201).json(result);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
+  res.status(201).json({
+    name: result.name,
+    email: result.email,
+    phone: result.phone,
+    favorite: result.favorite,
+    id: result._id,
+  });
 };
 
 export const remove = async (req, res, next) => {
-  const id = req.params.contactId;
-  const result = await Contact.findByIdAndDelete(id);
+  const { _id: owner } = req.user;
+  const _id = req.params.contactId;
+  const result = await Contact.findOneAndDelete({ _id, owner });
   if (!result) {
     return next(HttpError(404, "Not found"));
   }
@@ -30,9 +39,10 @@ export const remove = async (req, res, next) => {
 };
 
 export const updateById = async (req, res, next) => {
-  const id = req.params.contactId;
+  const { _id: owner } = req.user;
+  const _id = req.params.contactId;
   const body = req.body;
-  const result = await Contact.findByIdAndUpdate(id, body, {
+  const result = await Contact.findOneAndUpdate({ _id, owner }, body, {
     new: true,
     select: "-createdAt",
   });
@@ -43,9 +53,10 @@ export const updateById = async (req, res, next) => {
 };
 
 export const updateStatusContact = async (req, res, next) => {
-  const id = req.params.contactId;
+  const { _id: owner } = req.user;
+  const _id = req.params.contactId;
   const body = req.body;
-  const result = await Contact.findByIdAndUpdate(id, body, {
+  const result = await Contact.findOneAndUpdate({ _id, owner }, body, {
     new: true,
     select: "-createdAt",
   });
