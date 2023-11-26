@@ -14,7 +14,7 @@ async function getContact(req, res, next) {
   const { contactId } = req.params;
   try {
     const contact = await Contact.findById(contactId).exec();
-    if (contact === null) {
+    if (!contact) {
       return res.status(404).send("Contact not found:(");
     }
 
