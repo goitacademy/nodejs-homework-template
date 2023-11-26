@@ -9,6 +9,8 @@ const errorHandlerMiddleware = require("./middlewares/errorHandler");
 
 const swaggerJSDOC = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
+const path = require('path');
+const multer = require('multer');
 
 const port = process.env.PORT || 3000;
 
@@ -65,6 +67,22 @@ const swaggerOptions = {
 const apiSpecification = swaggerJSDOC(swaggerOptions);
 app.use("/swagger", swaggerUI.serve, swaggerUI.setup(apiSpecification));
 
+// Configuración de Multer para subir avatares
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'public', 'avatars'));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
+
+
+app.use('/avatars', express.static(path.join(__dirname, 'public', 'avatars')));
+
 app.use("/api", routes());
 
 app.use(notFoundMiddleware);
@@ -73,6 +91,7 @@ app.use(errorHandlerMiddleware);
 
 module.exports = {
   app,
+  upload,
   startServer: async () => {
     try {
       await mongoose.connect(process.env.CONNECTION_MONGODB);

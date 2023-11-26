@@ -5,7 +5,12 @@ const validateSchemas = require('../../middlewares/validateSchemas')
 const { ensureAuthenticated } = require('../../middlewares/validateJWT')
 const schemasJoi = require('../../models/schemas')
 
+const multer = require('multer')
+const path = require('path')
+
 const authRouter = express.Router()
+
+const upload = multer({ dest: path.join(__dirname, '../../tmp') })
 
 module.exports = () => {
   /**
@@ -74,6 +79,13 @@ module.exports = () => {
     '/:id/subscription',
     ensureAuthenticated,
     controller.updateContactSubscription
+  )
+
+  authRouter.patch(
+    '/avatars',
+    ensureAuthenticated,
+    upload.single('avatar'),
+    controller.updateAvatar
   )
 
   return authRouter

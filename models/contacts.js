@@ -43,14 +43,18 @@ const UserSchema = new Schema(
       type: Boolean,
       default: null
     },
-    // rol: {
-    //   type: String,
-    //   enum: ["ADMIN", "SELLER", "DELIVER"],
-    // },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Contact'
-    // }
+    avatarURL: {
+      type: String,
+      default: null
+    },
+  // rol: {
+  //   type: String,
+  //   enum: ["ADMIN", "SELLER", "DELIVER"],
+  // },
+  // owner: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Contact'
+  // }
   },
   {
     versionKey: false,
@@ -71,11 +75,11 @@ const contactSchema = new Schema(
       unique: true
     },
     phone: {
-      type: String,
+      type: String
     },
     favorite: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // password: {
     //   type: String,
@@ -111,5 +115,4 @@ const Contact = mongoose.model('Contact', contactSchema)
 
 module.exports = {
   User,
-  Contact,
-}
+Contact}
