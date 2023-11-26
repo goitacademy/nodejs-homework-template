@@ -6,6 +6,10 @@ dotenv.config();
 const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
 export const checkToken = async (req, res, next) => {
+  if (!req.header("Authorization")) {
+    return res.status(401).json({ message: "'Authorization' header is missing" });
+  }
+
   const token = req.header("Authorization").replace("Bearer ", "");
   try {
     const decoded = jwt.verify(token, jwtSecretKey);
