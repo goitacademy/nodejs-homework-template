@@ -2,9 +2,9 @@ import { Router } from "express";
 import {
   validateContact,
   validateFavorite,
-} from "../../validators/contacts/JoiSchema.js";
+} from "#validators/contacts/JoiSchema.js";
 
-import * as controllers from "../../controllers/contacts/controllers.js";
+import * as controllers from "#controllers/contacts/controllers.js";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.put("/:contactId", validateContact, controllers.updateContact);
 router.patch(
   "/:contactId/favorite",
   validateFavorite,
-  controllers.patchContact
+  controllers.updateStatusContact
 );
 
 export default router;

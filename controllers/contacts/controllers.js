@@ -60,7 +60,7 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
-export const patchContact = async (req, res, next) => {
+export const updateStatusContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const contact = await helpers.dbUpdateStatusContact({
@@ -68,7 +68,7 @@ export const patchContact = async (req, res, next) => {
       toUpdate: req.body,
     });
     if (contact) {
-      res.json(contact);
+      res.status(200).json(contact);
     } else {
       next();
     }
