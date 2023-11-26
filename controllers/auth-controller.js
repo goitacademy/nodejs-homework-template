@@ -2,6 +2,12 @@ import User from "../models/User.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError } from "../helpers/index.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import "dotenv/config.js";
+
+
+const { JWT_SECRET } = process.env;
+
 
 const signup = async (req, res) => {
     const { email, password } = req.body;
@@ -31,15 +37,20 @@ const signin = async (req, res) => {
     if (!passwordCompare) {
         throw HttpError(401, "Email or password is invalid");
     }
-    const token = "11111111";
+
+    const payload = {
+        id: user._id,
+    };
+
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
     res.json({
         token,
     })
-}
+};
 
 
 export default {
     signup: ctrlWrapper(signup),
-    signin:ctrlWrapper(signin),
-}
+    signin: ctrlWrapper(signin),
+};
