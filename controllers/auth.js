@@ -53,4 +53,23 @@ const login = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login };
+const logout = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" });
+    res.status(204).json({ message: "No content" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getCurrent = async (req, res, next) => {
+  try {
+    const { email, subscription } = req.user;
+    res.json({ email, subscription });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login, logout, getCurrent };

@@ -5,9 +5,16 @@ const {
   contactValidation,
   favoriteSchema,
 } = require("../validation/contactValidationSchemas");
+
 const getAll = async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
+    const { _id: owner } = req.user;
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+    const contacts = await Contact.find({ owner }, "", {
+      skip: 2,
+      limit: 2,
+    }).populate("owner", "name email");
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -33,7 +40,8 @@ const createContact = async (req, res, next) => {
         .status(400)
         .send(error.details.map((err) => err.message).join(","));
     }
-    const contact = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    const contact = await Contact.create({ ...req.body, owner });
     if (!contact) {
       res
         .status(400)
