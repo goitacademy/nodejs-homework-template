@@ -1,9 +1,8 @@
-import e from "express";
 import * as helpers from "./helpers.js";
 
 export const getContacts = async (req, res, next) => {
   try {
-    const contacts = await helpers.fetchContacts();
+    const contacts = await helpers.dbFetchContacts();
     res.json(contacts);
   } catch (error) {
     next(error);
@@ -13,7 +12,7 @@ export const getContacts = async (req, res, next) => {
 export const getContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await helpers.fetchContact(contactId);
+    const contact = await helpers.dbFetchContact(contactId);
     if (contact) {
       res.json(contact);
     } else {
@@ -26,7 +25,7 @@ export const getContact = async (req, res, next) => {
 
 export const addContact = async (req, res, next) => {
   try {
-    const contact = await helpers.insertContact(req.body);
+    const contact = await helpers.dbInsertContact(req.body);
     res.status(201).json(contact);
   } catch (error) {
     next(error);
@@ -61,23 +60,19 @@ export const updateContact = async (req, res, next) => {
   }
 };
 
-// export const updateContact = async (contactId, obj) => {
-//   try {
-//     const contacts = await listContacts();
-//     const isOnList = await contacts.find((item) => item.id === contactId);
-//     if (isOnList) {
-//       const updatedContacts = await contacts.map((item) =>
-//         item.id === contactId ? { ...item, ...obj } : item
-//       );
-//       await writeFile("models/contacts.json", JSON.stringify(updatedContacts));
-//       return {
-//         isOnList: true,
-//         contact: updatedContacts.find((item) => item.id === contactId),
-//       };
-//     } else {
-//       return { isOnList: false, contact: null };
-//     }
-//   } catch (error) {
-//     return error;
-//   }
-// };
+export const patchContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const contact = await helpers.dbUpdateStatusContact({
+      id: contactId,
+      toUpdate: req.body,
+    });
+    if (contact) {
+      res.json(contact);
+    } else {
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+};
