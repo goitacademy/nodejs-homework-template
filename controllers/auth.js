@@ -1,3 +1,4 @@
+require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { HttpError, ctrlWrapper } = require("../helpers");
@@ -17,7 +18,6 @@ const register = async (req, res, next) => {
   });
 };
 // complete
-
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
