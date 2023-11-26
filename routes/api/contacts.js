@@ -72,19 +72,22 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const requiredFields = ["name", "email", "phone"];
-    const fieldsInBody = Object.keys(req.body);
-    const allFieldsPresent = requiredFields.every((field) =>
-      fieldsInBody.includes(field)
-    );
-
-    if (!allFieldsPresent) {
+    if (Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: "missing fields" });
+    }
+
+    const requiredFields = ["name", "email", "phone"];
+    for (const field of requiredFields) {
+      if (!req.body.hasOwnProperty(field)) {
+        return res
+          .status(400)
+          .json({ message: `missing required ${field} field` });
+      }
     }
 
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw new HttpError(400, error.message);
+      return res.status(400).json({ message: error.message });
     }
 
     const { contactId } = req.params;
