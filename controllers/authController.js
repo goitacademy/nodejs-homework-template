@@ -55,7 +55,7 @@ async function login(req, res, next) {
         .send({ message: "email or password is incorrect" });
     }
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { _id: user._id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
@@ -77,7 +77,7 @@ async function login(req, res, next) {
 
 async function logout(req, res, next) {
   try {
-    await User.findByIdAndUpdate(req.user.id, { token: null }).exec();
+    await User.findByIdAndUpdate(req.user._id, { token: null }).exec();
     res.status(204).end();
   } catch (error) {
     next(error);
@@ -86,9 +86,9 @@ async function logout(req, res, next) {
 
 async function current(req, res, next) {
   try {
-    const user = await User.findById(req.user.id).exec();
+    const user = await User.findById(req.user._id).exec();
     return res.status(200).send({
-      email: req.user.email,
+      email: user.email,
       subscription: user.subscription,
     });
   } catch (error) {
@@ -98,18 +98,22 @@ async function current(req, res, next) {
 
 async function uploadAvatar(req, res, next) {
   try {
-    await jimp.read(req.file.path).then((img) => {
-      return img.cover(250, 250).write(req.file.path);
-    });
-    await fs.rename(
-      req.file.path,
-      path.join(__dirname, "..", "public/avatars", req.file.filename)
-    );
-
+    if (req.file !== undefined) {
+      await jimp.read(req.file.path).then((img) => {
+        return img.cover(250, 250).write(req.file.path);
+      });
+      await fs.rename(
+        req.file.path,
+        path.join(__dirname, "..", "public/avatars", req.file.filename)
+      );
+      avatarURL = req.file.filename;
+    } else {
+      avatarURL = gravatar.url(req.user.email);
+    }
     const result = await User.findByIdAndUpdate(
-      req.user.id,
+      req.user._id,
       {
-        avatarURL: req.file.filename,
+        avatarURL: avatarURL,
       },
       { new: true }
     ).exec();
