@@ -1,3 +1,4 @@
+const HttpError = require('../common/HttpError');
 const Contact = require('../models/contact');
 const contactRepository = require('../repositories/contactsRepository');
 
@@ -7,26 +8,29 @@ class ContactsService {
   }
 
   async getAll() {
-    return await this.contactRepository.getContacts();
+    return await this.contactRepository.findAll();
   }
 
   async getOneById(id) {
-    return await this.contactRepository.findOneById(id);
+    const contact = await this.contactRepository.findOneById(id);
+    if (!contact) {
+      throw new HttpError(404, 'Contact is not found');
+    }
+    return contact;
   }
 
-  async remove(id) {
-    return await this.contactRepository.removeContact(id);
-  }
-
-  async add(payload) {
+    async create(payload) {
     const contact = new Contact(payload);
-    return await this.contactRepository.addContact(contact);
+    return await this.contactRepository.create(contact);
+  }
+
+  async deleteById(id) {
+    return await this.contactRepository.deleteById(id);
   }
 
   async updateById(id, payload) {
-    return await this.contactRepository.updateContact(id, payload);
+    return await this.contactRepository.updateById(id, payload);
   }
-
 }
 
 const contactsService = new ContactsService(contactRepository);

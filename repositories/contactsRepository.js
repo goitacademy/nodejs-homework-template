@@ -1,48 +1,69 @@
 const path = require('node:path');
 const fs = require('node:fs/promises');
+const HttpError = require('../common/HttpError');
 
 class ContactsRepository {
   contactsPath = path.resolve(__dirname, "..", "db", "contacts.json");
-
-async getContacts() {
-  const data = await fs.readFile(this.contactsPath);
-  return JSON.parse(data);
-};
-
-async findOneById(contactId) {
-  const contacts = await this.getContacts();
-  const res = contacts.find(({ id }) => id === contactId);
-  return res || null;
-};
-
-async removeContact(contactId) {
-  const contacts = await this.getContacts(); 
-  const res = contacts.find(({ id }) => id === contactId);
-  res
-    && await fs.writeFile(
-      this.contactsPath,
-      JSON.stringify(contacts.filter(({ id }) => id !== contactId), null, 2)
-    );
-  return res || null;
-};
-
-async addContact({id, name, email, phone}) {
-  const contacts = await this.getContacts();
-  const newContact = {
-    id,
-    name,
-    email,
-    phone,
-  };
-  contacts.push(newContact);
-  await fs.writeFile(this.contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
-  };
   
-  async updateContact(contactId, body) {
-    const contacts = await this.getContacts()
-    const data = contacts.map(e => e.id === contactId ? { ...e, ...body } : e)
-    await fs.writeFile(this.contactsPath, JSON.stringify(data, null, 2))
+  async readDB() {
+    const content = await fs.readFile(this.contactsPath);
+    const data = JSON.parse(content.toString());
+    return data;
+  }
+  
+  async writeDB(contacts) {
+    const content = JSON.stringify(contacts, null, 2);
+    await fs.writeFile(this.contactsPath, content);
+  }
+  
+  async findAll() {
+    const db = await this.readDB();
+    return db;
+  }
+
+  async findOneById(contactId) {
+    const db = await this.readDB();
+    const contact = db.find(({ id }) => id === contactId);
+    return contact;
+  }
+
+  async create(contact) {
+    const db = await this.readDB();
+    db.push(contact);
+    await this.writeDB(db);
+    return contact;
+  }
+
+  async updateById(contactId, payload) {
+    const contact = await this.findOneById(contactId);
+    if (!contact) {
+      throw new HttpError(404, "Not found!")
+    }
+
+    const db = await this.readDB();
+    const contactIndex = db.findIndex(({ id }) => id === contactId);
+
+    const updatedContact = {
+      ...db[contactIndex],
+      ...payload,
+      updatedAt: new Date().toISOString(),
+    };
+
+    db[contactIndex] = updatedContact;
+    await this.writeDB(db);
+    return updatedContact;
+  }
+
+  async deleteById(contactId) {
+    const contact = await this.findOneById(contactId);
+    if (!contact) {
+      throw new HttpError(404, "Not found!")
+    }
+
+    const db = await this.readDB();
+    const filteredContacts = db.filter(({ id }) => id !== contactId);
+    await this.writeDB(filteredContacts);
+    return contact;
   }
 }
 
