@@ -21,11 +21,14 @@ const userSchema = new Schema(
       enum: subscriptionTypes,
       default: "starter",
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
+    avatarURL: {
+      type: String,
+      required: true,
     },
-    token: String,
+    token: {
+      type: String,
+      default: null,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -57,4 +60,4 @@ const schemas = {
   updateSubscriptionSchema,
 };
 
-module.exports = { User, schemas };
+module.exports = { User, schemas, subscriptionTypes };
