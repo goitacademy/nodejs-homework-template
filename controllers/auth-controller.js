@@ -3,22 +3,10 @@ import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError } from "../helpers/index.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import "dotenv/config.js";
 
 
 const { JWT_SECRET } = process.env;
-
-
-/*const decodeToken = jwt.decode(token);
-//console.log(decodeToken);
-
-try {
-  const {id} = jwt.verify(token, JWT_SECRET);
-  console.log(id);
-}
-catch(error) {
-  console.log(error.message);
-}*/
-
 
 
 const signup = async (req, res) => {
@@ -59,10 +47,10 @@ const signin = async (req, res) => {
     res.json({
         token,
     })
-}
+};
 
 
 export default {
     signup: ctrlWrapper(signup),
     signin: ctrlWrapper(signin),
-}
+};
