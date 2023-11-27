@@ -3,14 +3,23 @@ import { ctrlWrapper } from "../decorators/index.js";
 import HttpError from "../helpers/HttpError.js";
 
 const getAll = async (req, res) => {
-  const result = await Contact.find({});
-  res.json(result);
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, ...filterParams } = req.query;
+  const skip = (page - 1) * limit;
+  const filter = { owner, ...filterParams };
+
+  const result = await Contact.find(filter, _, { skip, limit }).populate(
+    "owner",
+    "subscription"
+  );
+  const total = await Contact.countDocuments(filter);
+  res.json({ result, total });
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-
-  const result = await Contact.findById(contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOne({ _id: contactId, owner });
 
   if (!result) {
     throw HttpError(404, `Contact with id=${contactId} not found`);
@@ -19,15 +28,15 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  console.log(`helolo `);
-  const result = await Contact.create(req.body);
-  console.log(`Hello 111111 `);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id: contactId, owner });
   if (!result) {
     throw HttpError(404, `Contact with id=${contactId} not found`);
   }
@@ -38,7 +47,12 @@ const deleteById = async (req, res) => {
 
 const updateById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    { new: true }
+  );
   if (!result) {
     throw HttpError(404, `Contact with id=${contactId} not found`);
   }
