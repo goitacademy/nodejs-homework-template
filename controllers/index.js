@@ -1,9 +1,11 @@
 const path = require("path");
 const { nanoid } = require("nanoid");
+
 const validationSchema = require("../schemas");
-const { forPosting, forPuting } = validationSchema;
 const helpers = require("./helpers");
+
 const { Parcer, fileReader, fileWriter, handleContactUpdate } = helpers;
+const { forPosting, forPuting } = validationSchema;
 
 const contactsPath = path.resolve(__dirname, "../models/contacts.json");
 
