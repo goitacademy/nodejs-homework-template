@@ -3,6 +3,8 @@ Zadania domowe GoIT z modułu Node.js (2-6).
 hw02 Framework Express. REST API
 hw03 Baza danych MongoDB. Mongoose
 hw04 Uwierzytelnianie i autoryzacja
+hw05 Praca z plikami. Testowanie aplikacji
+hw06 Praca z e-mail i Docker. Websockets
 
 ### Komendy:
 
