@@ -1,9 +1,7 @@
 const { ctrlWrapper } = require("../../helpers");
 const getCurrent = async (req, res) => {
   const { email } = await req.user;
-  res.json({
-    status: "success",
-    code: 200,
+  res.status(200).json({
     user: {
       email: email,
       subscription: "starter",

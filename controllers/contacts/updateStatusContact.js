@@ -3,16 +3,20 @@ const { HttpError, ctrlWrapper } = require("../../helpers");
 const Contact = require("../../models/contacts");
 const updateStatusContact = async (req, res) => {
   const id = req.params.contactId;
-  const contactNew = {
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    favorite: !req.body.favorite,
-  };
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw HttpError(400, "Invalid Id");
   }
-  const newContact = await Contact.findByIdAndUpdate(id, contactNew, {
+  // const contact = {
+  //   favorite: req.body.favorite
+  // }
+  const contactOn = await Contact.findById(id);
+  if (contactOn === null) {
+    throw HttpError(404, "Not found");
+  }
+  if (contactOn.owner.toString() !== req.user.id.toString()) {
+    throw HttpError(404, "Not found");
+  }
+  const newContact = await Contact.findByIdAndUpdate(id, contactOn, {
     new: true,
   });
   if (newContact) {

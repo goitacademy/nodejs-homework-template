@@ -5,15 +5,13 @@ const postContact = async (req, res) => {
   const contactNew = {
     name: req.body.name,
     email: req.body.email,
-    phone: req.body.phone,
-    favorite: req.body.favorite,
-    owner: req.user.id,
+    phone: req.body.phone
   };
   const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().email().required(),
-    phone: Joi.string().min(10).max(15).required(),
-    favorite: Joi.boolean(),
+    phone: Joi.string().min(8).max(15).required(),
+    // favorite: Joi.boolean(),
   });
   const { error } = schema.validate(req.body);
   if (error) {

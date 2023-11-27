@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const UsersController = require("../../controllers/users/index.js");
+const UsersController = require("../../controllers/users/index");
 const jsonParser = express.json();
 const author = require("../../middleware/author");
 const { validateUsers } = require("../../helpers");
