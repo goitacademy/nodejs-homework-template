@@ -10,9 +10,10 @@ import {
   signin,
   signout,
   signup,
+  updateSubscription,
 } from "../../controllers/user-controller.js";
 import validateBody from "../../decorators/validateBody.js";
-import { authSchema } from "../../schemas/users-schema.js";
+import { authSchema, patchSubscription } from "../../schemas/users-schema.js";
 
 const usersRouter = express.Router();
 
@@ -33,5 +34,13 @@ usersRouter.post(
 usersRouter.post("/logout", ctrlWrapper(authenticate), ctrlWrapper(signout));
 
 usersRouter.get("/current", ctrlWrapper(authenticate), ctrlWrapper(current));
+
+usersRouter.patch(
+  "/",
+  ctrlWrapper(authenticate),
+  isEmptyBody,
+  validateBody(patchSubscription),
+  ctrlWrapper(updateSubscription)
+);
 
 export default usersRouter;

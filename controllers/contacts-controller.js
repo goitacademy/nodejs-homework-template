@@ -1,5 +1,5 @@
 import { HttpError } from "../helpers/index.js";
-import Contact from "../models/Сontacts.js";
+import Contact from "../models/Contacts.js";
 
 export const contactsGet = async (req, res, next) => {
   const { page = "1", limit = "10", ...query } = req.query;

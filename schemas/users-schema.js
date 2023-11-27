@@ -16,3 +16,9 @@ export const authSchema = Joi.object({
         "Does not match the required format: test@mail.com",
     }),
 });
+
+export const patchSubscription = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").messages({
+    "any.only": "Subscription must be one of: starter, pro, business",
+  }),
+});

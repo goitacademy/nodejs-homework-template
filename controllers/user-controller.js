@@ -54,3 +54,17 @@ export const current = async (req, res, next) => {
   const user = req.user;
   res.status(200).json({ email: user.email, subscription: user.subscription });
 };
+
+export const updateSubscription = async (req, res, next) => {
+  const subscription = req.body.subscription;
+  const { _id } = req.user;
+  const result = await User.findByIdAndUpdate(
+    _id,
+    { subscription },
+    { new: true }
+  );
+
+  res
+    .status(200)
+    .json({ email: result.email, subscription: result.subscription });
+};
