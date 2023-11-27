@@ -6,7 +6,6 @@ const validateQueryParam = (schema) => {
     const isValidate = schema.validate(query);
     if (isValidate.error) {
       const { type, path: notAllowedQueryArr } = isValidate.error.details[0];
-      console.log(type);
       if (type === "object.unknown") {
         isValidate.error.message = `Query ${notAllowedQueryArr} is not allowed.`;
       }
