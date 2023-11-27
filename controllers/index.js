@@ -35,7 +35,7 @@ async function createContact(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    userId: req.user._id,  // ???????????
+    userId: req.user.id,  // змінив _id на id
   };
 
   try {

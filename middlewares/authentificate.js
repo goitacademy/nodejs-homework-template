@@ -34,7 +34,7 @@ const authenticate = async (req, res, next) => {
         const user = await User.findById(decode.userId).exec(); // Виправив id на userId
   
         if (user === null) {
-          console.log('Error: User not found');  // Помилка тут !!!!
+          console.log('Error: User not found'); 
           return res.status(401).send({ message: "User not found" });
         }
         console.log('Received token:', token);
