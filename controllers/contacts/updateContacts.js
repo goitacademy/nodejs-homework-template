@@ -1,5 +1,3 @@
-const { loadContacts, saveContacts, validateContact } = require('../contacts');
-
 const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
@@ -10,18 +8,20 @@ const HTTP_STATUS = {
 
 const updateContacts = async (req, res) => {
   try {
-    const contacts = await loadContacts();
+    // const contacts = await loadContacts();
     const contactId = req.params.id;
     const contactIndex = contacts.findIndex((c) => c.id === contactId);
 
     if (contactIndex === -1) {
-      return res.status(HTTP_STATUS.NOT_FOUND).json({ message: 'Not found' });
+      return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Not found" });
     }
 
     const { error } = validateContact(req.body);
 
     if (error) {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: error.details[0].message });
+      return res
+        .status(HTTP_STATUS.BAD_REQUEST)
+        .json({ message: error.details[0].message });
     }
 
     const updatedContact = {
@@ -33,11 +33,13 @@ const updateContacts = async (req, res) => {
     };
 
     contacts[contactIndex] = updatedContact;
-    await saveContacts(contacts);
-    res.json({ message: 'Contact updated successfully', updatedContact });
+    // await saveContacts(contacts);
+    res.json({ message: "Contact updated successfully", updatedContact });
   } catch (error) {
     console.error(error);
-    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ message: 'Internal Server Error', error: error.message });
+    res
+      .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
