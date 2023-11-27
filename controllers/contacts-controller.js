@@ -17,10 +17,6 @@ const getAll = async (req, res, next) => {
     next(error);
   }
 };
-// const getAll = async (req, res) => {
-//     const result = await Movie.find({}, "-createdAt -updatedAt");
-//     res.json(result);
-// }
 
 const getById = async (req, res, next) => {
   try {

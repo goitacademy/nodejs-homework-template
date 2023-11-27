@@ -48,14 +48,26 @@ export const contactAddSchema = Joi.object({
 });
 
 export const contactUpdateSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
+  name: Joi.string().required().messages({
+    "any.required": `missing required name field`,
+    "string.base": `name must be a string`,
+  }),
+  email: Joi.string().required().messages({
+    "any.required": `missing required email field`,
+    "string.base": `email must be a string`,
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": `missing required phone field`,
+    "string.base": `phone must be a string`,
+  }),
   favorite: Joi.boolean(),
 });
 
 export const contactFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().messages({
+    "any.required": `missing field favorite`,
+    "boolean.base": `"favorite" must be true or false`,
+  }),
 });
 
 const Contact = model("contact", contactSchema);
