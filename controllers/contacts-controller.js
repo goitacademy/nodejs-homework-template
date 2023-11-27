@@ -2,13 +2,15 @@ import { HttpError } from "../helpers/index.js";
 import Contact from "../models/Сontacts.js";
 
 export const contactsGet = async (req, res, next) => {
-  let { page = 1, limit = 10 } = req.query;
+  let { page = 1, limit = 10, ...query } = req.query;
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+  const filter = { owner, ...query };
+
+  const result = await Contact.find(filter, "-createdAt -updatedAt", {
     limit,
     skip: (page - 1) * limit,
   });
-  const total = await Contact.countDocuments({ owner });
+  const total = await Contact.countDocuments(filter);
   res.json({ data: result, totalHits: total.toString(), page, perPage: limit });
 };
 
