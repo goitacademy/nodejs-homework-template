@@ -6,7 +6,8 @@ async function getContacts(req, res, next) {
   console.log({user: req.user});
 
   try {
-    const contacts = await Contact.find({ userId: req.user.id }).exec(); // добавить { userId: req.user.id }
+    const contacts = await Contact.find({ userId: req.user.id }).exec();
+    // добавить { userId: req.user.id }
     res.send(contacts);
   } catch (err) {
     next(err);
@@ -32,15 +33,16 @@ async function getContact(req, res, next) {
 async function createContact(req, res, next) {
   const contact = {
     name: req.body.name,
+    email: req.body.email,
     phone: req.body.phone,
-    userId: req.user._id,  // Возможно ошибка здесь. (используйте _id из объекта req.user)
+    userId: req.user._id,  // ???????????
   };
 
   try {
     const result = await Contact.create(contact);
-
-    res.status(201).send(result);
+    res.status(201).json(result);
   } catch (err) {
+    console.error('Error creating contact:', err);
     next(err);
   }
 }

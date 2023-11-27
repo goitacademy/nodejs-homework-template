@@ -10,7 +10,7 @@ const authenticate = async (req, res, next) => {
   
     if (typeof authHeader === "undefined") {
       console.log('Error: Undefined token');
-      return res.status(401).send({ message: "Invalid token" });
+      return res.status(401).send({ message: "Error: token sent incorrectly" });
     }
   
     const [bearer, token] = authHeader.split(" ", 2);
@@ -18,12 +18,14 @@ const authenticate = async (req, res, next) => {
     console.log('Token:', token);
   
     if (bearer !== "Bearer") {
-      return res.status(401).send({ message: "token has not a Bearer type" });
+      console.log('Error: Token has not a Bearer type');
+      return res.status(401).send({ message: "Token has not a Bearer type" });
     }
   
     jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
       if (err) {
-        return res.status(401).send({ message: "Invalid token" });
+        console.log('Error: Invalid token', err);
+        return res.status(401).send({ message: "ошибка верификации токена" });
       }
   
       try {
@@ -32,13 +34,15 @@ const authenticate = async (req, res, next) => {
         const user = await User.findById(decode.id).exec();
   
         if (user === null) {
-          return res.status(401).send({ message: "Invalid token" });
+          console.log('Error: User not found');  // Ошибка здесь !!!!
+          return res.status(401).send({ message: "User not found" });
         }
         console.log('Received token:', token);
         console.log('User token:', user.token);
         
-        if (user.token !== token) {
-          return res.status(401).send({ message: "Invalid token" });
+        if (!user.token || user.token !== token) {
+          console.log('Error: Token mismatch');
+          return res.status(401).send({ message: "Несоответствие токенов при сравнении" });
         }
   
         req.user = { id: user._id, name: user.name };

@@ -68,8 +68,8 @@ async function loginUser(req, res, next) {
     }
 
     // Создание токена
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    // console.log(token);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '12h' });
+    console.log(token);
 
     // Сохранение токена в пользователе
     user.token = token;
@@ -111,8 +111,9 @@ async function logoutUser(req, res, next) {
   // Выводим данные о пользователе и токене перед удалением
   console.log('User before logout:', user);
   
-    // Удаляем токен у пользователя  / Убрал удаление токена при logout
-    user.token = null;
+    // Удаляем токен у пользователя  
+    delete user.token;
+    
 
     // Сохраняем изменения в базе данных
     await user.save();
