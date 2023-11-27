@@ -2,9 +2,12 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const contactsRouter = require("./routes/api/contactsRoutes");
+const authRouter = require("./routes/api/authRoutes");
+const auth = require("./middlewares/auth");
 
 require("dotenv").config();
 require("./db");
+// require("./auth/index")
 
 // console.log(process.env.DB_URI);
 
@@ -18,7 +21,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts", contactsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/contacts", auth, contactsRouter);
 
 // Обробка 404 помилки
 app.use((req, res) => {

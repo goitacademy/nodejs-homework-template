@@ -1,10 +1,12 @@
 const Contact = require("../models/contactModels");
 
 async function listContacts(req, res, next) {
-  try {
-    const contacts = await Contact.find().exec();
+  console.log({user: req.user});
 
-    console.log(contacts);
+  try {
+    const contacts = await Contact.find({owner: req.user.id}).exec();
+
+    // console.log(contacts);
     res.send(contacts);
   } catch (err) {
     next(err);
@@ -21,6 +23,10 @@ async function getContactById(req, res, next) {
     if (contact === null) {
       return res.status(404).send("Contact not found");
     }
+
+    if (contact.owner.toString() !== req.user.id){
+      return res.status(403).send("Forbidden contact")
+    }
     console.log(`Found contact: ${contact}`);
     res.send(contact);
   } catch (err) {
@@ -34,7 +40,8 @@ async function addContact(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    favorite: req.body.favorite
+    favorite: req.body.favorite,
+    owner: req.user.id,
   }
 
   try {
@@ -77,6 +84,10 @@ async function removeContact(req, res, next) {
     const result = await Contact.findByIdAndDelete(contactId);
     if (result === null) {
       return res.status(404).send("Contact Not Found");
+    }
+
+    if (result.owner !== req.user.id){
+      return res.status(403).send("Forbidden")
     }
     res.json({ message: 'Contact deleted successfully', data: result });
     // res.send(`Deleted book ${contactId})`);
