@@ -1,5 +1,9 @@
 import express from "express";
-import { ctrlWrapper, validateBody } from "../../decorators/index.js";
+import {
+  ctrlWrapper,
+  validateBody,
+  validateQueryParam,
+} from "../../decorators/index.js";
 import {
   add,
   contactGetById,
@@ -18,12 +22,17 @@ import {
   contactPatchFavorite,
   contactUpdateSchema,
 } from "../../schemas/contacts-schema.js";
+import { queryGetContactsSchema } from "../../schemas/query-schema.js";
 
 const contactsRouter = express.Router();
 
 contactsRouter.use(ctrlWrapper(authenticate));
 
-contactsRouter.get("/", ctrlWrapper(contactsGet));
+contactsRouter.get(
+  "/",
+  validateQueryParam(queryGetContactsSchema),
+  ctrlWrapper(contactsGet)
+);
 
 contactsRouter.get("/:contactId", isValidId, ctrlWrapper(contactGetById));
 

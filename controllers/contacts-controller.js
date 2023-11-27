@@ -2,9 +2,14 @@ import { HttpError } from "../helpers/index.js";
 import Contact from "../models/Сontacts.js";
 
 export const contactsGet = async (req, res, next) => {
+  let { page = 1, limit = 10 } = req.query;
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt");
-  res.json(result);
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
+    limit,
+    skip: (page - 1) * limit,
+  });
+  const total = await Contact.countDocuments({ owner });
+  res.json({ data: result, totalHits: total.toString(), page, perPage: limit });
 };
 
 export const contactGetById = async (req, res, next) => {
