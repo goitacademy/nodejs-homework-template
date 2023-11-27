@@ -3,19 +3,20 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {User} = require("../models/contacts");
 const moment = require("moment");
-
 const gravatar = require('gravatar');
 const Jimp = require('jimp');
 const path = require('path');
 
 const signup = async (Data) => {
   try {
-    console.log(Data);
+    // console.log(Data);
     const email = Data.email;
+
     const user = await User.findOne({
       email,
     });
-console.log(user);
+    // console.log(user);
+    
     if (user) {
       return {
         success: false,
@@ -98,6 +99,7 @@ const login = async (email, password) => {
 
     // const addToken = await User.updateOne(
     // const _ = await User.updateOne(
+    
     await User.updateOne(
       {
         email: isUserExist.email,
@@ -142,7 +144,9 @@ const current = async (_id, owner) => {
         message: `No user found with id: ${_id}`,
       };
     }
+
     const { email, subscription } = user;
+    
     return {
       success: true,
       result: {
@@ -169,6 +173,7 @@ const logout = async (_id, token, owner) => {
         message: "Not authorized",
       };
     }
+
     const user = await User.findByIdAndUpdate(
       { _id, owner },
       { token },
@@ -206,6 +211,7 @@ const updateContactSubscription = async (_id, subscription, owner) => {
         message: "Invalid ID",
       };
     }
+
     // Verifica si el contactId es un ObjectId válido
     // if (!mongoose.Types.ObjectId.isValid(contactId)) {
     //   return {
@@ -247,26 +253,26 @@ const updateContactSubscription = async (_id, subscription, owner) => {
 
 const updateAvatar = async (userId, file) => {
   try {
-    // Procesa el avatar con Jimp
+    // Process the avatar with Jimp
     const image = await Jimp.read(file.path);
     await image.resize(250, 250).writeAsync(file.path);
 
-    // Mueve el avatar a la carpeta public/avatars con nombre único
+    // Move the avatar to the public/avatars folder with a unique name
     const avatarFileName = `avatar_${userId}_${Date.now()}${path.extname(file.originalname)}`;
     const avatarPath = path.join(__dirname, '../public/avatars', avatarFileName);
     await image.writeAsync(avatarPath);
 
-    // Actualiza la URL del avatar en la base de datos
+    // Update the avatar URL in the database
     const avatarUrlUpdate = await User.findByIdAndUpdate(userId, { avatarURL: `/avatars/${avatarFileName}` });
 
-    // Elimina el archivo temporal
+    // Delete the temporary file
     require('fs').unlinkSync(file.path);
 
-    console.log('u', avatarUrlUpdate.avatarURL);
+    // console.log('u', avatarUrlUpdate.avatarURL);
     // console.log('r', data:{ avatarURL });
     
     const { email, avatarURL } = avatarUrlUpdate;
-    // Retorna la respuesta exitosa
+    
     return {
       success: true,
       result: {email, avatarURL},
@@ -274,8 +280,7 @@ const updateAvatar = async (userId, file) => {
       message: "Avatar updated successfully.",
     };
   } catch (error) {
-    // Manejo de errores
-    console.error('Error updating avatar:', error);
+    // console.error('Error updating avatar:', error);
     return {
       success: false,
       result: null,

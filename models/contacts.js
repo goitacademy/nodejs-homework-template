@@ -28,17 +28,6 @@ const UserSchema = new Schema(
       type: String,
       default: null
     },
-    // temporaryKey: {
-    //   type: String,
-    //   default: null,
-    // },
-    // phone: {
-    //   type: String,
-    // },
-    // favorite: {
-    //   type: Boolean,
-    //   default: false,
-    // },
     active: {
       type: Boolean,
       default: null
@@ -47,14 +36,6 @@ const UserSchema = new Schema(
       type: String,
       default: null
     },
-  // rol: {
-  //   type: String,
-  //   enum: ["ADMIN", "SELLER", "DELIVER"],
-  // },
-  // owner: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Contact'
-  // }
   },
   {
     versionKey: false,
@@ -81,23 +62,6 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false
     },
-    // password: {
-    //   type: String,
-    //   required: [true, 'Password is required']
-    // },
-    // subscription: {
-    //   type: String,
-    //   enum: ['starter', 'pro', 'business'],
-    //   default: 'starter'
-    // },
-    // temporaryKey: {
-    //   type: String,
-    //   default: null,
-    // },
-    // rol: {
-    //   type: String,
-    //   enum: ["ADMIN", "SELLER", "DELIVER"],
-    // },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'Contact'

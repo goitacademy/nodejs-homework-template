@@ -4,7 +4,6 @@ const controller = require('../../controllers/auth')
 const validateSchemas = require('../../middlewares/validateSchemas')
 const { ensureAuthenticated } = require('../../middlewares/validateJWT')
 const schemasJoi = require('../../models/schemas')
-
 const multer = require('multer')
 const path = require('path')
 

@@ -20,11 +20,9 @@ module.exports = () => {
     '/:id',
     ensureAuthenticated,
     controller.getContactOwnerById
-  ) // ok 
+  )
 
   contactRouter.post('/', ensureAuthenticated, controller.addContact)
-
-
 
   contactRouter.patch(
     '/:id/favorite/',

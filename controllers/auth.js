@@ -1,15 +1,12 @@
 // service/auth.js
 const service = require("../services/auth");
-// const jwt = require("jsonwebtoken");
 const Jimp = require('jimp');
-// const path = require('path');
 
 const signup = async (req, res) => {
   try {
 
     // const token = req.headers.authorization.split(" ")[1];
     // const payload = jwt.verify(token, process.env.SECRET_KEY);
-
     // req.body.owner = payload.Id;
 
     const { success, result, message } = await service.signup(req.body);
@@ -27,6 +24,7 @@ const signup = async (req, res) => {
         });
       }
     }
+
     return res.status(201).json({
       result,
       message,
@@ -62,6 +60,7 @@ const login = async (req, res) => {
         });
       }
     }
+
     return res.status(200).json({
       result,
       message,
@@ -82,6 +81,7 @@ const current = async (req, res) => {
     if (!id) {
       id = owner;
     }
+
     const { success, result, message } = await service.current(id, owner);
 
     if (!success) {
@@ -150,6 +150,7 @@ const logout = async (req, res) => {
 
 const updateContactSubscription = async (req, res) => {
   try {
+
     const owner = req.user.Id;
     const { id } = req.params;
     const { subscription } = req.body;
@@ -198,39 +199,28 @@ const updateAvatar = async (req, res) => {
       });
     }
 
-    // Procesa el avatar con Jimp
+    // Process the avatar with Jimp
     const image = await Jimp.read(file.path);
+
     await image.resize(250, 250).writeAsync(file.path);
 
-    // // Mueve el avatar a la carpeta public/avatars con nombre único
-    // const avatarFileName = `avatar_${Id}_${Date.now()}${path.extname(file.originalname)}`;
-    // const avatarPath = path.join(__dirname, '../../public/avatars', avatarFileName);
-    // await image.writeAsync(avatarPath);
-
-    // Actualiza la URL del avatar en la base de datos
+    // Update the avatar URL in the database
      const { success, result, message } = await service.updateAvatar(Id, file);
 
-    // Elimina el archivo temporal
-   // require('fs').unlinkSync(file.path);
-
-    
      if (!success) {
-      
         return res.status(401).json({
           result,
           message,
         });
-      
     }
-     // Retorna la respuesta del servicio
+
     return res.status(200).json({
       result,
       message,
     }
       );
   } catch (error) {
-    // Manejo de errores
-    console.error('Error updating avatar:', error);
+    // console.error('Error updating avatar:', error);
     return res.status(500).json({
       result: null,
       message: error,

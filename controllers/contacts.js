@@ -72,6 +72,7 @@ const removeContact = async (req, res) => {
     const { id } = req.params;
 
     const { success, result, message } = await service.removeContact(id, owner);
+
     if (!success) {
       return res.status(400).json({
         result,
@@ -136,6 +137,7 @@ const listContacts = async (req, res) => {
   try {
     // console.log(req.query);
     const { success, result, message } = await service.listContacts();
+
     if (!success) {
       return res.status(400).json({
         result,
@@ -160,6 +162,7 @@ const getContactById = async (req, res) => {
     // console.log(req.params.id);
     const id = req.params.id;
     const { success, result, message } = await service.getContactById(id);
+
     if (!success) {
       return res.status(400).json({
         result,
@@ -178,7 +181,7 @@ const getContactById = async (req, res) => {
     });
   }
 };
-//pend
+// pend
 
 const addContact = async (req, res) => {
   try {
@@ -186,7 +189,7 @@ const addContact = async (req, res) => {
     body.owner = req.user.Id;
 
     const { success, result, message } = await service.addContact(body);
-    console.log(result);
+    // console.log(result);
 
     if (!success) {
       return res.status(400).json({
@@ -218,6 +221,5 @@ module.exports = {
   getContactOwner,
   getContactOwnerById,
   removeContact,
-  
   updateFavoriteContact,
 };

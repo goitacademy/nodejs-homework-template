@@ -54,6 +54,7 @@ const registerUserSchema = joi.object().keys({
   favorite: joi.boolean(),
   active: joi.boolean()
 })
+
 const registerSchema = joi.object().keys({
   name: nameSchema,
   email: emailSchema,

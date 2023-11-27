@@ -6,7 +6,6 @@ const cors = require("cors");
 const routes = require("./routes");
 const notFoundMiddleware = require("./middlewares/notFound");
 const errorHandlerMiddleware = require("./middlewares/errorHandler");
-
 const swaggerJSDOC = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 const path = require('path');
@@ -17,9 +16,13 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+
 app.use(logger(formatsLogger));
+
 app.use(cors());
+
 app.use(express.json());
+
 app.use(
   express.urlencoded({
     extended: false,
@@ -65,9 +68,10 @@ const swaggerOptions = {
 };
 
 const apiSpecification = swaggerJSDOC(swaggerOptions);
+
 app.use("/swagger", swaggerUI.serve, swaggerUI.setup(apiSpecification));
 
-// Configuración de Multer para subir avatares
+// conf Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.join(__dirname, 'public', 'avatars'));
@@ -79,7 +83,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
 
 app.use('/avatars', express.static(path.join(__dirname, 'public', 'avatars')));
 
