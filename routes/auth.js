@@ -2,7 +2,8 @@ const express = require("express");
 const auth = require("../middleware/authMiddleware");
 const router = express.Router();
 const jsonParser = express.json();
-const AunthController = require("../controllers/authController");
+const upload = require("../middleware/upload");
+const AuthController = require("../controllers/authController");
 const validateBody = require("../middleware/validateBody");
 const { schemas } = require("../models/user");
 
@@ -10,15 +11,21 @@ router.post(
   "/register",
   jsonParser,
   validateBody(schemas.RegisterSchema),
-  AunthController.register
+  AuthController.register
 );
 router.post(
   "/login",
   jsonParser,
   validateBody(schemas.LoginSchema),
-  AunthController.login
+  AuthController.login
 );
-router.post("/logout", auth, AunthController.logout);
-router.get("/current", auth, AunthController.current);
+router.post("/logout", auth, AuthController.logout);
+router.get("/current", auth, AuthController.current);
+router.patch(
+  "/avatar",
+  auth,
+  upload.single("avatar"),
+  AuthController.uploadAvatar
+);
 
 module.exports = router;
