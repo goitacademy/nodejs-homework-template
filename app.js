@@ -2,7 +2,7 @@ import express from "express";
 import logger from "morgan";
 import cors from "cors";
 import contactsRouter from "./routes/api/contacts-route.js";
-import usersRouter from "./routes/users/users-route.js";
+import usersRouter from "./routes/api/users-route.js";
 
 const app = express();
 
