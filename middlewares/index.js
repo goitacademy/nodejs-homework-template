@@ -1,3 +1,3 @@
-const { validateContactBody } = require("./validateContactBody");
+const validateContactBody = require("./validateContactBody");
 
-module.exports = { validateContactBody };
+module.exports =  validateContactBody;

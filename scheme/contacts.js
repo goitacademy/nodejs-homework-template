@@ -6,4 +6,5 @@ const scheme = Joi.object({
   phone: Joi.string().required(),
 }).messages({ "any.required": "missing required {#key} field" });
 
-module.exports = { scheme };
+
+module.exports = scheme;

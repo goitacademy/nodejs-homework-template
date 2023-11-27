@@ -7,8 +7,8 @@ const {
   updateContact,
 } = require("../../controllers/contacts");
 
-const { validateContactBody } = require("../../middlewares/index");
-const { scheme } = require("../../scheme/contacts");
+const validateContactBody = require("../../middlewares/index");
+const scheme = require("../../scheme/contacts");
 
 const router = express.Router()
 

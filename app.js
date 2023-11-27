@@ -3,8 +3,6 @@ const logger = require('morgan')
 const cors = require('cors')
 
 
-// const contacts = require("./models/contacts.json");
-
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
@@ -16,8 +14,6 @@ app.use(cors())
 app.use(express.json())
 
 
-// app.get("/contacts", (req, res) => {res.send(contacts)})
-
 app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
@@ -25,7 +21,7 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const {status = 500, message = "Server error"} = err;
+  res.status(status).json({ message, })
 })
-
 module.exports = app

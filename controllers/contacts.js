@@ -1,5 +1,5 @@
 const contacts = require("../models/contacts");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers/index");
 
 
 const listContacts = async (req, res) => {
@@ -30,7 +30,6 @@ const listContacts = async (req, res) => {
 
   const updateContact = async (req, res) => {
     const { contactId } = req.params;
-  
     const result = await contacts.updateContact(contactId, req.body);
   
     if (!result) throw HttpError(404, "Not found");
@@ -39,8 +38,7 @@ const listContacts = async (req, res) => {
   };
 
   module.exports = {
-    listContacts,
-    // listContacts: ctrlWrapper(listContacts),
+    listContacts: ctrlWrapper(listContacts),
     getContactById: ctrlWrapper(getContactById),
     removeContact: ctrlWrapper(removeContact),
     addContact: ctrlWrapper(addContact),
