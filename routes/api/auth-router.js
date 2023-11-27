@@ -10,22 +10,22 @@ import {
 const authRouter = express.Router();
 
 authRouter.post(
-  "/signup",
+  "/register",
   isEmptyBody,
   validateBody(userSignupSchema),
-  authController.signup
+  authController.register
 );
 
 authRouter.post(
-  "/signin",
+  "/login",
   isEmptyBody,
   validateBody(userSigninSchema),
-  authController.signin
+  authController.login
 );
 
-authRouter.get("/current", authenticate, authController.getCurrent);
+authRouter.get("/cureent", authenticate, authController.cureent);
 
-authRouter.post("/signout", authenticate, authController.signout);
+authRouter.post("/logout", authenticate, authController.logout);
 
 authRouter.patch(
   "/",

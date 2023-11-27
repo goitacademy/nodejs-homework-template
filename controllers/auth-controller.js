@@ -6,7 +6,7 @@ import { HttpError } from "../helpers/index.js";
 
 const { JWT_SECRET } = process.env;
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -23,7 +23,7 @@ const signup = async (req, res) => {
   });
 };
 
-const signin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
@@ -47,7 +47,7 @@ const signin = async (req, res) => {
   });
 };
 
-const getCurrent = async (req, res) => {
+const cureent = async (req, res) => {
   const { email, subscription } = req.user;
   res.json({
     email,
@@ -55,7 +55,7 @@ const getCurrent = async (req, res) => {
   });
 };
 
-const signout = async (req, res) => {
+const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
   res.status(204).json({
@@ -75,9 +75,9 @@ const updateSubscription = async (req, res) => {
 };
 
 export default {
-  signup: ctrlWrapper(signup),
-  signin: ctrlWrapper(signin),
-  getCurrent: ctrlWrapper(getCurrent),
-  signout: ctrlWrapper(signout),
+  register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
+  cureent: ctrlWrapper(cureent),
+  logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
 };
