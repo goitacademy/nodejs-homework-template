@@ -1,25 +1,24 @@
-const express = require('express')
+import express from 'express';
 
-const router = express.Router()
+import {getAll, getById, add, updateById, deleteById} from '../../controllers/contacts-controller.js'
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { isEmptyBody } from '../../middlewares/isEmptyBody.js';
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { ctrlWrapper } from '../../decorators/ctrlWrapper.js';
+import {validateBody} from '../../decorators/validateBody.js'
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { contactAddSchema, contactUpdateSchema } from '../../schemas/contact-schemas.js';
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ctrlWrapper(getAll));
 
-module.exports = router
+router.get('/:contactId', ctrlWrapper(getById));
+
+router.post('/', isEmptyBody, validateBody(contactAddSchema), ctrlWrapper(add));
+
+router.delete('/:contactId', ctrlWrapper(deleteById))
+
+router.put('/:contactId', isEmptyBody, validateBody(contactUpdateSchema), ctrlWrapper(updateById));
+
+export default router;
