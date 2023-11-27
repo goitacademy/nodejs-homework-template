@@ -14,6 +14,11 @@ const contactsSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false }
 );
@@ -26,7 +31,9 @@ export const contactCheck = Joi.object({
 });
 
 export const favoriteValid = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": "missing field favorite" }),
 });
 
 contactsSchema.post("save", hooks.handelSaveError);

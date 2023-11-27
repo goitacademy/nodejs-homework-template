@@ -1,12 +1,16 @@
 import express from "express";
-import contactsController from "../../controllers/contact/index.js";
-import { isValidId } from "../../middlewares/isValidid.js";
+
+import { contactsController } from "../../controllers/contact/index.js";
+import { isValidId, authenticate } from "../../middlewares/index.js";
+
 import { contactCheck, favoriteValid } from "../../models/Contact.js";
-import validate from "../../decorators/validate.js";
+import { validate } from "../../decorators/index.js";
 
 const contactsValidate = validate(contactCheck);
 const favoriteValidate = validate(favoriteValid);
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", contactsController.getList);
 
