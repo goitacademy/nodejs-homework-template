@@ -125,5 +125,6 @@ async function uploadAvatar(req, res, next) {
     next(error);
   }
 }
+//
 
 module.exports = { register, login, logout, current, uploadAvatar };
