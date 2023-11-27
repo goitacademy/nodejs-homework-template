@@ -1,22 +1,17 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const Contact = require("../controllers/contactControllers");
 
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../../models/contacts")
+const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await listContacts();
+router.get("/", async (req, res) => {
+  const contacts = await Contact.find();
   res.json(contacts);
 });
 
-router.get("/:id", async (req, res, next) => {
+router.get("/:contactId", async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const contact = await Contact.findById(contactId);
+
   if (contact) {
     res.json(contact);
   } else {
@@ -24,35 +19,54 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
-  const newContact = req.body;
-  const contact = await addContact(newContact);
-  if (contact) {
-    res.status(201).json(contact);
-  } else {
-    res.status(400).json({ message: "missing required name field" });
-  }
+router.post("/", async (req, res) => {
+  const newContact = await Contact.create(req.body);
+  res.status(201).json(newContact);
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.put("/:contactId", async (req, res) => {
   const { contactId } = req.params;
-  const result = await removeContact(contactId);
-  if (result) {
-    res.status(200).json({ message: "Contact deleted" });
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+
+  if (updatedContact) {
+    res.json(updatedContact);
   } else {
     res.status(404).json({ message: "Not found" });
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.delete("/:contactId", async (req, res) => {
   const { contactId } = req.params;
-  const updatedContact = req.body;
-  const contact = await updateContact(contactId, updatedContact);
-  if (contact) {
-    res.json(contact);
+  const deletedContact = await Contact.findByIdAndDelete(contactId);
+
+  if (deletedContact) {
+    res.json(deletedContact);
   } else {
-    res.status(404).json({ message: "missing fields" });
+    res.status(404).json({ message: "Not found" });
   }
 });
 
-module.exports = router
+router.patch("/:contactId/favorite", async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+
+  const updatedContact = await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true }
+  );
+
+  if (updatedContact) {
+    res.json(updatedContact);
+  } else {
+    res.status(404).json({ message: "Not found" });
+  }
+});
+
+module.exports = router;
