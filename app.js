@@ -1,10 +1,10 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require('express');                                    // створюємо веб-сервер
+const logger = require('morgan');                           
+const cors = require('cors');                                          // cors - всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)                                     
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require('./routes/api/contacts');               // підключаємо роутери з контактами (сторінку про контакти до книги)
 
-const app = express()
+const app = express() 
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
@@ -21,5 +21,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message })
 })
+
 
 module.exports = app
