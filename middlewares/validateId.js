@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const validateId = (req, res, next) => {
   const schema = Joi.object({
@@ -8,8 +8,8 @@ const validateId = (req, res, next) => {
   const { error } = schema.validate({ id: req.params.id });
 
   if (error) {
-    console.error('Error validating ID:', error);
-    return res.status(400).json({ message: 'Invalid ID format' });
+    console.error("Error validating ID:", error);
+    return res.status(400).json({ message: "Invalid ID format" });
   }
 
   next();
