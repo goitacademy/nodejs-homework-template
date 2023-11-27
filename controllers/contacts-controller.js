@@ -2,7 +2,7 @@ import { HttpError } from "../helpers/index.js";
 import Contact from "../models/Сontacts.js";
 
 export const contactsGet = async (req, res, next) => {
-  let { page = 1, limit = 10, ...query } = req.query;
+  const { page = "1", limit = "10", ...query } = req.query;
   const { _id: owner } = req.user;
   const filter = { owner, ...query };
 
