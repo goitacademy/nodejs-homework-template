@@ -1,27 +1,18 @@
+
+
+const mongoose = require("mongoose")
+
 const app = require('./app')
 
-// const contacts = require('./models/contacts.json')
+const DB_HOST = "mongodb+srv://Denis:R$$Xr$2P*AkrfU4@cluster0.oaexovo.mongodb.net/contacts_reader?retryWrites=true&w=majority"
 
-// app.use((req, res, next) => { 
-//   console.log('aaaaa')
-//   next()
-// })
-
-// app.get('/', (request, response) => { 
-//   response.send(console.log(request.url))
-// })
-
-// app.get('/contacts', (request, responce) => { 
-//   responce.json(contacts)
-// })
-
-// app.use((req, res)=> {
-//   // console.log(res)
-//   res.status(404).json({
-// 		message: "Not found"
-// 	})
-// })
-
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+mongoose.connect(DB_HOST)
+  .then(() => {
+    app.listen(3000, () => {
+      console.log("Server running. Use our API on port: 3000")
+    })
+  })
+  .catch(error =>{
+    console.log(error.message)
+    process.exit(1)
+  })
