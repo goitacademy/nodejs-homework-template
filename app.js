@@ -1,9 +1,3 @@
-// const express = require('express')
-// const logger = require('morgan')
-// const cors = require('cors')
-
-// const contactsRouter = require('./routes/api/contacts')
-
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
@@ -24,7 +18,10 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const { status = 500, message = 'Server Error' } = err
+  res.status(status).json({
+    message,
+  })
 })
 
 export default app

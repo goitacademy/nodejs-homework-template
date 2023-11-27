@@ -1,4 +1,3 @@
-// const fs = require('fs/promises')
 import { promises as fs } from 'fs'
 import path from 'path'
 import { nanoid } from 'nanoid';
