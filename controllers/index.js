@@ -39,6 +39,7 @@ async function createContact(req, res, next) {
   };
 
   try {
+    console.log('Creating contact:', contact);
     const result = await Contact.create(contact);
     res.status(201).json(result);
   } catch (err) {

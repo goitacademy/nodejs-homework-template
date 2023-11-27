@@ -31,7 +31,7 @@ const authenticate = async (req, res, next) => {
       try {
         req.user = decode;
   
-        const user = await User.findById(decode.id).exec(); // decode  не спрацьовує
+        const user = await User.findById(decode.userId).exec(); // Виправив id на userId
   
         if (user === null) {
           console.log('Error: User not found');  // Помилка тут !!!!
