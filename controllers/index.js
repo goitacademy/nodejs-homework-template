@@ -1,11 +1,11 @@
 const path = require("path");
 const { nanoid } = require("nanoid");
-const validationSchema = require("../validation/schemas");
-const contactsPath = path.resolve(__dirname, "contacts.json");
+const validationSchema = require("../schemas");
 const { forPosting, forPuting } = validationSchema;
 const helpers = require("./helpers");
-
 const { Parcer, fileReader, fileWriter, handleContactUpdate } = helpers;
+
+const contactsPath = path.resolve(__dirname, "../models/contacts.json");
 
 const listContacts = async (req, res) => {
   const data = await fileReader(contactsPath);
