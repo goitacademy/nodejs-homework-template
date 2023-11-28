@@ -28,9 +28,9 @@ console.log(process.env["DB_HOST"])
 // }
 
 // run().catch()
-const DB_HOST = process.env["DB_HOST"]
+// const DB_HOST = process.env["DB_HOST"]
 
-console.log(process.env["DB_HOST"])
+// console.log(process.env["DB_HOST"])
 
 // console.log(process.env)
 
@@ -53,7 +53,6 @@ console.log(process.env["DB_HOST"])
 
 mongoose.connect(DB_HOST)
   .then(() => {
-    console.log('sucksex')
     app.listen(3000, () => {
       console.log("Server running. Use our API on port: 3000")
     })

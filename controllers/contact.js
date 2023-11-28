@@ -1,4 +1,13 @@
 const Contact = require('../helpers/contactSchema')
+const {HttpError} = require('../helpers/HttpError')
+const Joi = require("joi")
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean().required()
+})
+
 
 async function getContacts(req, res, next) { 
     try { 
@@ -23,7 +32,6 @@ async function getContactById(req, res, next) {
 }
 
 async function createContact(req, res, next) {
-    // res.send('Create book')
     const contact = {
             name:req.body.name,
             email:req.body.email,
@@ -32,6 +40,10 @@ async function createContact(req, res, next) {
         }
     try {
         const result = await Contact.create(contact)
+        const { error } = addSchema.validate(req.body)
+        if (error) {
+            throw HttpError(404, "Validation error")
+        }
         res.status(201).send(result)
     } catch (e) {
         next(e)
@@ -39,37 +51,37 @@ async function createContact(req, res, next) {
 }
 
 async function updateContact(req, res, next) {
-    const { contactId } = req.params
-    // console.log(req.params)
-     const contact = {
+    const { id } = req.params
+    const contact = {
             name:req.body.name,
             email:req.body.email,
             phone:req.body.phone,
             favorite:req.body.favorite,
         }
     try {
-        const result = await Contact.findByIdAndUpdate(contactId, contact)
-        
+        const result = await Contact.findByIdAndUpdate(id, contact)
+        const { error } = addSchema.validate(req.body)
+        if (error) {
+            throw HttpError(404, "Validation error")
+        }
         if (result === null) {
             return res.status(404).send("Contact not found")
         }
-
         res.end()
-        // res.status(200).send(result)
     } catch (e) {
         next(e)
     }
 }
 
 async function deleteContact(req, res, next) {
-    const { contactId } = req.params
+    const { id } = req.params
     
     try {
-        const responce = await Contact.findByIdAndDelete(contactId)
+        const responce = await Contact.findByIdAndDelete(id)
         if (responce === null) {
             return res.status(404).send("Contact not found")
         }
-        res.send({contactId})
+        res.send({id})
     } catch (e) {
         next(e)
     }
@@ -77,15 +89,14 @@ async function deleteContact(req, res, next) {
     
 async function patchFavorites(req, res, next) {
     const { id } = req.params
-    const {favorites } = req.body
-
+    const { favorite } = req.body
     const contact = {
-            favorite:favorites,
+            favorite:favorite,
         }
     try {
 
-        if (favorites !== "true" && favorites !== "false") {
-            res.status(400).send({"message": "missing field favorite"})
+        if (favorite !== true && favorite !== false) {
+            return res.status(400).send({ "message": "missing field favorite" })  
         }
 
         const responce = await Contact.findByIdAndUpdate(id, contact, { new: true })
