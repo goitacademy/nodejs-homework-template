@@ -26,4 +26,4 @@ const authenticate = async (req, _, next) => {
     throw HttpError(401, error.message);
   }
 };
-export default authenticate;
+export default ctrlWrapper(authenticate);

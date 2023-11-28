@@ -23,7 +23,7 @@ authRouter.post(
   authController.login
 );
 
-authRouter.get("/cureent", authenticate, authController.cureent);
+authRouter.get("/current", authenticate, authController.current);
 
 authRouter.post("/logout", authenticate, authController.logout);
 

@@ -47,7 +47,7 @@ const login = async (req, res) => {
   });
 };
 
-const cureent = async (req, res) => {
+const current = async (req, res) => {
   const { email, subscription } = req.user;
   res.json({
     email,
@@ -77,7 +77,7 @@ const updateSubscription = async (req, res) => {
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
-  cureent: ctrlWrapper(cureent),
+  current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
 };
