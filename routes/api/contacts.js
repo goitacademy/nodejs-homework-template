@@ -57,9 +57,9 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
   try {
     const updatedContact = await updateStatusContact(contactId, { favorite });
     if (updatedContact) {
-      res.json(updatedContact);
+      res.status(200).json(updatedContact);
     } else {
-      next(new HttpError(404, "Not found"));
+      res.status(404).json({ message: "Not found" });
     }
   } catch (error) {
     next(new HttpError(500, "Internal Server Error"));
