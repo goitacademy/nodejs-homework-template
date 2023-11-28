@@ -43,6 +43,9 @@ async function login(req, res, next) {
         }
 
         const token = jwt.sign({id: user._id }, process.env.JWT_SECRET, {expiresIn: "1d"});
+        await User.findByIdAndUpdate(user._id, {token}).exec();
+        
+        console.log({token});
         res.send({token});
 
     } catch (error) {
@@ -51,4 +54,14 @@ async function login(req, res, next) {
     
 }
 
-module.exports = { register, login };
+async function logout(req, res, next) {
+    try {
+        await User.findByIdAndUpdate(req.user.id, {token: null});
+        
+        res.status(204).end();
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { register, login, logout };
