@@ -8,6 +8,7 @@ const {
 } = require("../../controllers/controller");
 const { isEmptyBody } = require("../../middlewares");
 const { contactSchema } = require("../../schemas/contacts-schemas");
+const { updateStatusContact } = require("../../models/contacts");
 
 const router = express.Router();
 
@@ -44,5 +45,25 @@ router.put(
   },
   updateContactData
 );
+
+router.patch("/:contactId/favorite", async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined && Object.keys(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing field favorite" });
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, { favorite });
+    if (updatedContact) {
+      res.json(updatedContact);
+    } else {
+      next(new HttpError(404, "Not found"));
+    }
+  } catch (error) {
+    next(new HttpError(500, "Internal Server Error"));
+  }
+});
 
 module.exports = router;
