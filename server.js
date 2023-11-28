@@ -1,6 +1,8 @@
 require("dotenv").config()
+require("dotenv").config()
 
 const mongoose = require("mongoose")
+ 
  
 const app = require('./app')
 
@@ -26,9 +28,32 @@ console.log(process.env["DB_HOST"])
 // }
 
 // run().catch()
+const DB_HOST = process.env["DB_HOST"]
+
+console.log(process.env["DB_HOST"])
+
+// console.log(process.env)
+
+// const client = new MongoClient(DB_HOST)
+
+// async function run() {  
+//   try {
+//     await client.connect()
+//     const contacts_reader = client.db("contacts_reader")
+//     const collections = await contacts_reader.listCollections().toArray()
+//     console.log(collections)
+//   } catch (error) { 
+//     console.log(error)
+//   } finally {
+//     await client.close()
+//   }
+// }
+
+// run().catch()
 
 mongoose.connect(DB_HOST)
   .then(() => {
+    console.log('sucksex')
     app.listen(3000, () => {
       console.log("Server running. Use our API on port: 3000")
     })
