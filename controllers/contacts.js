@@ -1,15 +1,15 @@
-const apiStore = require("../models/contacts");
+const Contact = require("../models/contact");
 const { status } = require("../consts");
-const { HttpError, decoratorCtrl, validateContact } = require("../helpers");
+const { HttpError, decoratorCtrl } = require("../helpers");
 
 const getAll = async (_, res) => {
-  const data = await apiStore.listContacts();
-  res.json({ ...status.GET_SUCCESS, data });
+  const contacts = await Contact.find();
+  res.json({ ...status.GET_SUCCESS, data: { contacts } });
 };
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
-  const data = await apiStore.getContactById(contactId);
+  const data = await Contact.findById(contactId);
 
   if (!data) {
     throw HttpError(status.NOT_FOUND);
@@ -18,27 +18,25 @@ const getById = async (req, res) => {
 };
 
 const addItem = async (req, res) => {
-  validateContact(req.body);
-  const data = await apiStore.addContact(req.body);
+  const data = await Contact.create(req.body);
   res.status(status.CREATED.status).json({ ...status.CREATED, data });
 };
 
 const deleteItem = async (req, res) => {
   const { contactId } = req.params;
-  const data = await apiStore.removeContact(contactId);
+  const data = await Contact.findByIdAndDelete(contactId);
 
   if (!data) {
     throw HttpError(status.NOT_FOUND);
   }
-  res.json({ ...status.DELETE_SUCCESS, data });
+  res.json({ ...status.DELETE_SUCCESS });
 };
 
 const updateItemById = async (req, res) => {
   const { contactId } = req.params;
   const obj = req.body;
-  validateContact(obj);
 
-  const data = await apiStore.updateContact(contactId, obj);
+  const data = await Contact.findByIdAndUpdate(contactId, obj, { new: true });
 
   if (!data) {
     throw HttpError(status.NOT_FOUND);
@@ -52,4 +50,5 @@ module.exports = {
   addItem: decoratorCtrl(addItem),
   deleteItem: decoratorCtrl(deleteItem),
   updateItemById: decoratorCtrl(updateItemById),
+  updateStatusContact: decoratorCtrl(updateItemById),
 };

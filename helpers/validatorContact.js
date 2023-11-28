@@ -1,5 +1,5 @@
 const HttpError = require("./httpError");
-const schemaContact = require("../schema/contacts");
+const schemaContact = require("../schema/contacts/joiContacts");
 const { status } = require("../consts");
 
 const validateContact = (obj) => {
