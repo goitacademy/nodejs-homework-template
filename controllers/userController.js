@@ -21,14 +21,6 @@ const updateAvatar = async (req, res) => {
       .write(fileDir);
   };
 
-  // змінюємо назву файлу на унікальну (додаючи просто id користувача)
-  // const { path: tempURL, originalname } = req.file;
-  // const filename = `${_id}_${originalname}`;
-  // const resultURL = path.join(avatarsDir, filename);
-  // await fs.rename(tempURL, resultURL);
-  // const avatarURL = path.join("avatars", filename);
-
-  // так як ми змінили назву раніше, то залишаємо її
   const { path: tempURL, filename } = req.file;
 
   await resize(tempURL);
@@ -50,7 +42,6 @@ const updateAvatar = async (req, res) => {
 
 const getAvatar = async (req, res) => {
   console.log(req.user);
-  // res.end();
   const user = await User.findById(req.user._id).exec();
   if (user === null) {
     return res.status(404).send({ message: "User not found" });

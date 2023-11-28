@@ -1,17 +1,16 @@
 const express = require("express");
-const uploadAvatar = require("../../controllers/userController");
-const { auth } = require("../../middlewares");
 
+const { auth, uploadAvatar } = require("../../middlewares");
+const ctrl = require("../../controllers/userController");
 const userRouter = express.Router();
 
-userRouter.patch("/avatar", auth, UserController.uploadAvatar);
 userRouter.patch(
   "/avatars",
   auth,
   uploadAvatar.single("avatar"),
-  ctrl.uploadAvatar
+  ctrl.updateAvatar
 );
 
-userRouter.get("/avatars", authenticate, ctrl.getAvatar);
+userRouter.get("/avatars", auth, ctrl.getAvatar);
 
 module.exports = userRouter;
