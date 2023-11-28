@@ -35,14 +35,18 @@ function auth(req, res, next) {
         return res.status(401).send({ message: "Invalid token" });
       }
 
+      if (user.verify !== true) {
+        return res
+          .status(402)
+          .send({ message: "Your account is not verified" });
+      }
+
       req.user = { id: user._id, name: user.name };
 
       next();
     } catch (error) {
       next(error);
     }
-
-
   });
 }
 

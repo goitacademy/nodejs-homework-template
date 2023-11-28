@@ -21,9 +21,17 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
     avatar: {
-        type: String,
-        default: null,
-    }
+      type: String,
+      default: null,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      default: null,
+    },
   },
   {
     versionKey: false,
@@ -32,5 +40,3 @@ const userSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("User", userSchema);
-
-
