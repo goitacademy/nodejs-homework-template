@@ -1,25 +1,32 @@
-const express = require('express')
+const express = require("express");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+  favoriteContact,
+  partiallyContact,
+} = require("../../controllers/contactsController");
 
-const router = express.Router()
+const jsonParser = express.json();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+console.log("1 - routes api contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", listContacts);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", getContactById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", jsonParser, addContact);
 
-module.exports = router
+router.delete("/:contactId", removeContact);
+
+router.put("/:contactId", jsonParser, updateContact);
+
+router.patch("/:contactId/favorite", jsonParser, favoriteContact);
+
+router.patch("/:contactId", jsonParser, partiallyContact);
+
+module.exports = { contactsRouter: router };
