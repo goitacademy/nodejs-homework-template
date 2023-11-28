@@ -7,9 +7,25 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+
+const validateContact = (contact) => {
+  
+  return { error: null };
+};
+
+const loadContacts = async () => {
+
+  return [];
+};
+
+
+const saveContacts = async (contacts) => {
+
+};
+
 const addContacts = async (req, res) => {
   try {
-    // const contacts = await loadContacts();
+    const contacts = await loadContacts();
     const { error } = validateContact(req.body);
 
     if (error) {
@@ -27,7 +43,7 @@ const addContacts = async (req, res) => {
     };
 
     contacts.push(newContact);
-    //  await saveContacts(contacts);
+    await saveContacts(contacts);
     res.status(HTTP_STATUS.CREATED).json(newContact);
   } catch (error) {
     console.error(error);

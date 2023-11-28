@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require('uuid');
 const Joi = require('joi');
-const { Contact } = require('./contacts-db');
+const { Contact } = require('../services/contactsService');
 
 const handleErrors = (fn) => async (req, res, next) => {
   try {

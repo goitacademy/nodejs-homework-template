@@ -5,9 +5,15 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+// Sample loadContacts function, replace with your actual implementation
+const loadContacts = async () => {
+
+  return [];
+};
+
 const deleteContacts = async (req, res) => {
   try {
-    //const contacts = await loadContacts();
+    const contacts = await loadContacts();
     const contactId = req.params.id;
     const contactIndex = contacts.findIndex((c) => c.id === contactId);
 

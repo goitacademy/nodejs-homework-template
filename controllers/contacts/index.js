@@ -1,7 +1,7 @@
 const addContacts = require("./addContacts");
-const deleteContacts = require("./deletecContacts");
+const deleteContacts = require("./deleteContacts");
 const getContacts = require("./getcontacts");
-const updateContacts = require("./updatecontacts");
+const updateContacts = require("./updateContacts");
 
 module.exports = {
   addContacts,

@@ -6,9 +6,22 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
+// Sample loadContacts function, replace with your actual implementation
+const loadContacts = async () => {
+ 
+  return [];
+};
+
+// Sample validateContact function, replace with your actual validation logic
+const validateContact = (contact) => {
+  
+  return { error: null };
+};
+
 const updateContacts = async (req, res) => {
   try {
-    // const contacts = await loadContacts();
+    const contacts = await loadContacts(); // Load contacts here or pass them as a parameter
+
     const contactId = req.params.id;
     const contactIndex = contacts.findIndex((c) => c.id === contactId);
 

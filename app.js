@@ -1,11 +1,11 @@
 const express = require("express");
 require("dotenv").config();
 
-const contactsRouter = require("./routes/api/contacts"); // Ruta corregida al módulo
+const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
-app.use("./api/contacts", contactsRouter); // Ruta corregida al módulo
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not Found" });
