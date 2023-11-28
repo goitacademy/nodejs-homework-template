@@ -1,5 +1,24 @@
-const app = require('./app')
+require("dotenv").config();
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const express = require("express");
+const mongoose = require("mongoose");
+
+const app = express();
+
+const dbURI = "mongodb+srv://FilipKuta:iuYm1a1CzgSYDLNU@goit.kv1ixgm.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp";
+const PORT = process.env.PORT || 3000;
+
+mongoose.set("strictQuery", false);
+
+mongoose
+  .connect(dbURI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1);
+  });
