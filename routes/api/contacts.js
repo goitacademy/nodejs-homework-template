@@ -9,20 +9,24 @@ const {
   partiallyContact,
 } = require("../../controllers/contactsController");
 
+const jsonParser = express.json();
+
+console.log("1 - routes api contacts");
+
 const router = express.Router();
 
 router.get("/", listContacts);
 
 router.get("/:contactId", getContactById);
 
-router.post("/", addContact);
+router.post("/", jsonParser, addContact);
 
 router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", updateContact);
+router.put("/:contactId", jsonParser, updateContact);
 
-router.patch("/:contactId/favorite", favoriteContact);
+router.patch("/:contactId/favorite", jsonParser, favoriteContact);
 
-router.patch("/:contactId", partiallyContact);
+router.patch("/:contactId", jsonParser, partiallyContact);
 
 module.exports = { contactsRouter: router };
