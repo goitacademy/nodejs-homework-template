@@ -1,7 +1,8 @@
 const route = {
-  API: "/api/contacts",
-  BASE: "/",
+  ROOT: "/api/contacts",
+  HOME: "/",
   ID: "/:contactId",
+  FAVORITE: "/:contactId/favorite",
 };
 
 Object.freeze(route);
