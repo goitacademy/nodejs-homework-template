@@ -6,29 +6,35 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-// Sample loadContacts function, replace with your actual implementation
-const loadContacts = async () => {
- 
-  return [];
-};
+const Joi = require("joi");
 
-// Sample validateContact function, replace with your actual validation logic
+// Importa el modelo de Contacto de Mongoose (ajusta según la base de datos que estés utilizando)
+const Contact = require("../../models/contacts");
+
+// Función de validación con Joi
 const validateContact = (contact) => {
-  
-  return { error: null };
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string().email().required(),
+    phone: Joi.string().required(),
+  });
+
+  // La validación devuelve un objeto con la propiedad "error" si la validación falla
+  return schema.validate(contact);
 };
 
 const updateContacts = async (req, res) => {
   try {
-    const contacts = await loadContacts(); // Load contacts here or pass them as a parameter
-
     const contactId = req.params.id;
-    const contactIndex = contacts.findIndex((c) => c.id === contactId);
 
-    if (contactIndex === -1) {
+    // Busca el contacto en la base de datos por su ID
+    const existingContact = await Contact.findById(contactId);
+
+    if (!existingContact) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Not found" });
     }
 
+    // Validación del objeto de contacto utilizando Joi
     const { error } = validateContact(req.body);
 
     if (error) {
@@ -37,17 +43,15 @@ const updateContacts = async (req, res) => {
         .json({ message: error.details[0].message });
     }
 
-    const updatedContact = {
-      id: contactId,
-      name: req.body.name,
-      email: req.body.email,
-      phone: req.body.phone,
-      favorite: contacts[contactIndex].favorite,
-    };
+    // Actualiza los campos del contacto existente
+    existingContact.name = req.body.name;
+    existingContact.email = req.body.email;
+    existingContact.phone = req.body.phone;
 
-    contacts[contactIndex] = updatedContact;
-    // await saveContacts(contacts);
-    res.json({ message: "Contact updated successfully", updatedContact });
+    // Guarda los cambios en la base de datos
+    await existingContact.save();
+
+    res.json({ message: "Contact updated successfully", updatedContact: existingContact });
   } catch (error) {
     console.error(error);
     res

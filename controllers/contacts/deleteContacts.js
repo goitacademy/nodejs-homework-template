@@ -1,4 +1,3 @@
-
 const HTTP_STATUS = {
   OK: 200,
   CREATED: 201,
@@ -6,25 +5,24 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-// Sample loadContacts function, replace with your actual implementation
-const loadContacts = async () => {
-
-  return [];
-};
+// Importa el modelo de Contacto de Mongoose (ajusta según la base de datos que estés utilizando)
+const Contact = require("../../models/contacts");
 
 const deleteContacts = async (req, res) => {
   try {
-    const contacts = await loadContacts();
     const contactId = req.params.id;
-    const contactIndex = contacts.findIndex((c) => c.id === contactId);
 
-    if (contactIndex === -1) {
+    // Busca el contacto en la base de datos por su ID
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
       return res.status(HTTP_STATUS.NOT_FOUND).json({ message: "Not found" });
     }
 
-    const deletedContact = contacts.splice(contactIndex, 1)[0];
-    // await saveContacts(contacts);
-    res.json({ message: "Contact deleted successfully", deletedContact });
+    // Elimina el contacto de la base de datos
+    await Contact.findByIdAndDelete(contactId);
+
+    res.json({ message: "Contact deleted successfully", deletedContact: contact });
   } catch (error) {
     console.error(error);
     res

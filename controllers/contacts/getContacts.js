@@ -3,15 +3,13 @@ const HTTP_STATUS = {
   INTERNAL_SERVER_ERROR: 500,
 };
 
-
-const loadContacts = async () => {
-
-  return [];
-};
+// Importa el modelo de Contacto de Mongoose (ajusta según la base de datos que estés utilizando)
+const Contact = require("../../models/contacts");  // Corregido: utiliza el modelo, no el controlador
 
 const getContacts = async (req, res) => {
   try {
-    const contacts = await loadContacts(); 
+    // Carga los contactos desde la base de datos
+    const contacts = await Contact.find();
 
     res.json(contacts);
   } catch (error) {

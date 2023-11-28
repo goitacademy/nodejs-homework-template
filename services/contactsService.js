@@ -1,6 +1,5 @@
-
 const { v4: uuidv4 } = require('uuid');
-const { Contact } = require('./contacts-db');
+const { Contact } = require('../models/contacts-db');
 
 const ContactsService = {
   find: async () => {
@@ -16,8 +15,18 @@ const ContactsService = {
   },
 
   create: async (data) => {
+    // Verifica que data tenga al menos los campos mínimos requeridos
+    if (!data.name || !data.email || !data.phone) {
+      throw new Error('Name, email, and phone are required fields for a new contact.');
+    }
+
+    // Crea un nuevo contacto utilizando la información proporcionada en data
     return Contact.create({
-      id: uuidv4(),  
+      id: uuidv4(),
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      // Otros campos según tu modelo de datos
     });
   },
 
