@@ -4,14 +4,16 @@ import HttpError from "../helpers/HttpError.js";
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
+
   const { page = 1, limit = 10, ...filterParams } = req.query;
+
   const skip = (page - 1) * limit;
   const filter = { owner, ...filterParams };
 
-  const result = await Contact.find(filter, _, { skip, limit }).populate(
-    "owner",
-    "subscription"
-  );
+  const result = await Contact.find(filter, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  }).populate("owner", "subscription");
   const total = await Contact.countDocuments(filter);
   res.json({ result, total });
 };
