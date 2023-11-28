@@ -1,4 +1,11 @@
 node_modules/
 .env
+.env.development.local
+.env.test.local.env.production.local
+.env.local
 .idea
 .vscode
+tmp/*
+!tmp/.gitkeep
+public/avatars*
+!public/avatars/.gitkeep

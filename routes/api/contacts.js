@@ -1,25 +1,25 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ContactControllers = require('../../controllers/contacts');
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const jsonParser = express.json();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const auth = require("../../middleware/auth");// підключення мідлвари для прочекання токену 
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/",auth, ContactControllers.getContacts);
 
-module.exports = router
+router.get("/:id",auth, ContactControllers.getContactById);
+
+router.post("/", jsonParser, auth, ContactControllers.postContact);
+
+router.delete("/:id",auth, ContactControllers.deleteContact);
+
+router.put("/:id",auth, jsonParser, ContactControllers.putContact)
+
+router.patch("/:id/favorite",auth, ContactControllers.patchContact);
+
+
+module.exports = router;
