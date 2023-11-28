@@ -1,11 +1,14 @@
 import express from "express";
 import contactControllers from "../../controllers/contact-controler.js";
 import {
+  authenticate,
   isEmptyBody,
   isVallidId as isValidId,
 } from "../../middlewares/index.js";
 
 const router = express.Router(); // Викликаємо в express метод Router
+
+router.use(authenticate);
 
 router.get("/", contactControllers.getAllContacts);
 
