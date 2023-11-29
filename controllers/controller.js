@@ -94,7 +94,7 @@ const updateContactStatus = async (req, res, next) => {
   try {
     const updatedContact = await updateStatusContact(contactId, { favorite });
     if (updatedContact) {
-      res.status(200).json(updatedContact); // Изменили статус на 200 и возвращаем обновленный объект контакта
+      res.status(200).json(updatedContact);
     } else {
       res.status(404).json({ message: "Not found" });
     }

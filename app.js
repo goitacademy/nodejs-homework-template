@@ -6,7 +6,6 @@ const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
-// Подключение к базе данных с использованием Mongoose
 mongoose
   .connect(
     "mongodb+srv://dbuser:12345@cluster0.tmfwdxi.mongodb.net/db-contacts?retryWrites=true&w=majority",
