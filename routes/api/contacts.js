@@ -1,15 +1,16 @@
-const express = require("express");                          // створюємо веб-сервер
-const Joi = require("joi");                                  // joi - для перевірки правильності даних
+const express = require("express"); // створюємо веб-сервер
+const Joi = require("joi"); // joi - для перевірки правильності даних
 
-const addSchema = Joi.object({                               // схема joi - для того, щоб кожній змінні прописати, якого типу вона повинна бути
+const addSchema = Joi.object({
+  // схема joi - для того, щоб кожній змінні прописати, якого типу вона повинна бути
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
 
-const { HttpError } = require("../../helpers/HttpError");    // імпортуємо помилку для прокидування
+const { HttpError } = require("../../helpers/HttpError"); // імпортуємо помилку для прокидування
 
-const router = express.Router();                             // створюємо router (це як записна книга, де по шляху можна побачити, що потрібно робити)
+const router = express.Router(); // створюємо router (це як записна книга, де по шляху можна побачити, що потрібно робити)
 
 const contacts = require("../../models/contacts"); // імпортуємо файл з ф-ціями, які повертають необхідні дані (усі контакти, або контакт по id...)
 
@@ -37,14 +38,14 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-// викликаємо ф-цію, яка у базу данних (файл json з даними добавить новий запис)
+// викликаємо ф-цію, яка у базу данних (файл json з даними добавить новий запис).
 router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, { message: "missing required name field" });
     }
-    
+
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -71,7 +72,7 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { error } = addSchema.validate(req.body);
-    
+
     if (error) {
       throw HttpError(400, { message: "missing fields" });
     }
