@@ -1,22 +1,34 @@
-const Joi = require('joi');
-const mongoose = require('mongoose');
+// service\schemas\contactSchema.js
 
-const contactSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Set name for contact'],
+const Joi = require("joi");
+const mongoose = require("mongoose");
+
+const contactSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
 
 const validateContact = (contact) => {
   const schema = Joi.object({
@@ -29,7 +41,7 @@ const validateContact = (contact) => {
   return schema.validate(contact, { abortEarly: false });
 };
 
-const addSchema = Joi.object({    // добавив описання схеми в якості змінної, а не функції
+const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
@@ -41,7 +53,7 @@ const updateFavoriteSchema = Joi.object({
 });
 
 module.exports = {
-  Contact: mongoose.model('Contact', contactSchema),
+  Contact: mongoose.model("Contact", contactSchema),
   validateContact,
   addSchema, 
   updateFavoriteSchema,
