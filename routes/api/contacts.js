@@ -1,46 +1,84 @@
 const express = require("express");
+const ContactsManager = require("../../Managers/ContactsManager");
+const { get, delet, put } = require("../../responses/responseMessages");
+const {
+  HttpError,
+  checkForRequiredKeys,
+  checkForSyntax,
+} = require("../../helpers");
+const { nanoid } = require("nanoid");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const contacts = await ContactsManager.listContacts();
+    res.json(contacts);
+  } catch {
+    res.status(500).json({ message: "Something went wrong" });
+  }
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.send(`<h1>contactId ${req.params.contactId}</h1>`);
-
-  /* 
-    викликає функцію getById для роботи з json-файлом contacts.json
-    якщо такий id є, повертає об'єкт контакту в json-форматі зі статусом 200
-    якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404 
-  */
+  try {
+    const contact = await ContactsManager.getById(req.params.contactId);
+    if (contact === -1) throw HttpError(get.error.status, get.error.message);
+    res.status(get.successed.status).json(contact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-  /*
-    Отримує body в форматі {name, email, phone} (усі поля обов'язкові)
-    Якщо в body немає якихось обов'язкових полів, повертає json з ключем {"message": "missing required name field"} і статусом 400
-    Якщо з body все добре, додає унікальний ідентифікатор в об'єкт контакту
-    Викликає функцію addContact(body) для збереження контакту в файлі contacts.json
-    За результатом роботи функції повертає об'єкт з доданим id {id, name, email, phone} і статусом 201
-  */
+  try {
+    const isBodyCorrect = checkForRequiredKeys(req.body);
+
+    if (!isBodyCorrect.isCorrect) {
+      throw HttpError(400, isBodyCorrect.message);
+    }
+
+    const newContact = await ContactsManager.addContact({
+      id: nanoid(),
+      ...req.body,
+    });
+
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-
-  /*
-    Не отримує body
-    Отримує параметр id
-    Викликає функцію removeContact для роботи з json-файлом contacts.json
-    якщо такий id є, повертає json формату {"message": "contact deleted"} і статусом 200
-    якщо такого id немає, повертає json з ключем "message": "Not found" і статусом 404
-  */
+  try {
+    const remove = await ContactsManager.removeContact(req.params.contactId);
+    if (remove === -1) throw HttpError(delet.error.status, delet.error.message);
+    res
+      .status(delet.successed.status)
+      .json({ message: delet.successed.message });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const isBodyCorrect = checkForSyntax(req.body);
+
+    if (!isBodyCorrect.isCorrect) {
+      throw HttpError(400, isBodyCorrect.message);
+    }
+
+    const updatedContact = await ContactsManager.updateContact(
+      req.params.contactId,
+      req.body
+    );
+
+    if (!updatedContact) throw HttpError(put.error.status, put.error.message);
+
+    res.status(put.successed.status).json(updatedContact);
+  } catch (error) {
+    next(error);
+  }
 
   /*
     Отримує параметр id

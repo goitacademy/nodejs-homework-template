@@ -1,6 +1,5 @@
 const { writeFile, readFile } = require("fs/promises");
 const { join } = require("path");
-const { deleting } = require("./responses/responseMessages");
 const { del } = require("express/lib/application");
 
 class DatabaseManager {
@@ -17,42 +16,44 @@ class DatabaseManager {
       const fetchedData = await readFile(this.filePath);
       return JSON.parse(fetchedData);
     } catch (error) {
-      console.log(error);
+      throw new Error(`something went wrong ${error}`);
     }
   };
 
-  addData = async () => {
-
-  }
+  addData = async (data) => {
+    try {
+      const fetchedData = await this.fetchData();
+      fetchedData.push(data);
+      await this.writeToDatabase(fetchedData);
+      return data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
   deleteDataById = async (id) => {
     try {
       const fetchedData = await this.fetchData();
       const idx = fetchedData.findIndex((data) => data.id === id);
       if (idx === -1) {
-        return JSON.stringify(deleting.error);
+        return -1;
       }
       const filteredData = fetchedData.toSpliced(idx, 1);
       await this.writeToDatabase(filteredData);
-      return JSON.stringify(deleting.successed);
+      return 1;
     } catch (error) {
-      console.log(error);
+      throw new Error(`something went wrond, ${error}`);
     }
   };
+
+  updateDataById = async (id, data) => {
+    const fetchedData = await this.fetchData();
+    const idx = fetchedData.findIndex((contact) => contact.id === id);
+    if (!idx) return null;
+    fetchedData[idx] = { ...fetchedData[idx], ...data };
+    await this.writeToDatabase(fetchedData);
+    return fetchedData[idx];
+  };
 }
-
-// const contacts = new DatabaseManager("contacts.json");
-// const listContacts = async () => {
-//   return await contacts.deleteDataById("qdggE76Jtbfd9eWJHrssH");
-// };
-
-// (async () => {
-//   try {
-//     const result = await listContacts();
-//     console.log(result);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// })();
 
 module.exports = DatabaseManager;

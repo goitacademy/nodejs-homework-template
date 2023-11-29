@@ -1,49 +1,36 @@
-const { getting } = require("./responses/responseMessages");
+const { getting, deleting } = require("../responses/responseMessages");
 
 const Database = require("./DatabaseManager");
 
 class ContactsManager {
   constructor() {
-    this.DataBase = new Database("contacts.json");
+    this.Database = new Database("contacts.json");
   }
 
   listContacts = async () => {
-    return await this.DataBase.fetchData();
+    return await this.Database.fetchData();
   };
 
-  getContactById = async (contactId) => {
+  getById = async (contactId) => {
     const contactsList = await this.listContacts();
     const idx = contactsList.findIndex((contact) => contact.id === contactId);
-    if (idx === -1) return JSON.stringify(getting.error);
+    if (idx === -1) return -1;
     return contactsList.splice(idx, 1);
   };
 
   removeContact = async (contactId) => {
-    return await this.DataBase.deleteDataById(contactId);
+    const deletedContact = await this.Database.deleteDataById(contactId);
+    if (deletedContact === -1) return -1;
+    return 1;
   };
 
-  addContact = async (body) => {};
+  addContact = async (body) => {
+    return await this.Database.addData(body);
+  };
 
-  updateContact = async (contactId, body) => {};
+  updateContact = async (contactId, body) => {
+    return await this.Database.updateDataById(contactId, body);
+  };
 }
 
-const contacts = new ContactsManager();
-
-const list = async () => await contacts.removeContact("drsAJ4SHPYqZeG-83QTVW");
-
-(async () => {
-  try {
-    const result = await list();
-    console.log(result);
-  } catch (error) {
-    console.log(error);
-  }
-})();
-
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// };
+module.exports = new ContactsManager();
