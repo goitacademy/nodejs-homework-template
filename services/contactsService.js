@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-const { Contact } = require('../models/contacts-db');
+const { Contact } = require('../models/contactsModel');
 
 const ContactsService = {
   find: async () => {
@@ -26,7 +26,7 @@ const ContactsService = {
       name: data.name,
       email: data.email,
       phone: data.phone,
-      // Otros campos según tu modelo de datos
+      favorite: data.bolean
     });
   },
 

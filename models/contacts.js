@@ -11,6 +11,14 @@ const handleErrors = (fn) => async (req, res, next) => {
   }
 };
 
+const validateId = (req, res, next) => {
+  const contactId = req.params.id;
+  if (!uuidv4.validate(contactId)) {
+    return res.status(400).json({ message: 'Invalid ID format' });
+  }
+  next();
+};
+
 const listContacts = handleErrors(async (req, res) => {
   const contacts = await Contact.find();
   console.log('Contacts found:', contacts);
@@ -98,4 +106,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  validateId,
 };
