@@ -6,7 +6,13 @@ const validateBody = (schema) => {
       abortEarly: false,
     });
     if (!Object.keys(req.body).length) {
-      if (req.method === "PATCH") {
+      if (req.method === "PATCH" && req.originalUrl === "/users") {
+        next(HttpError(400, "missing field subscription"));
+      }
+      if (
+        req.method === "PATCH" &&
+        req.originalUrl === "/api/contacts/:contactId/favorite"
+      ) {
         next(HttpError(400, "missing field favorite"));
       }
       next(HttpError(400, "missing fields"));
