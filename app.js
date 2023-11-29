@@ -1,8 +1,12 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+// const mogoose = require ('mongoose')
 
 const contactsRouter = require('./routes/api/contacts')
+// const DB_HOST = "mongodb+srv://Anna:A2X2Qc1MCAYBW0U0@cluster0.ah1cs3o.mongodb.net/contacts_reader?retryWrites=true&w=majority";
+
+// mogoose.connect();
 
 const app = express()
 
