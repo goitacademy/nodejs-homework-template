@@ -14,8 +14,8 @@ const getAll = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
     const result = await Contact.findById(id);
     if (!result) {
       throw HttpError(404, `Contact with id=${id} not found`);
@@ -36,9 +36,9 @@ const add = async (req, res, next) => {
   }
 };
 
-const updateById = async (req, res) => {
+const updateById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
     const result = await Contact.findByIdAndUpdate(id, req.body);
     if (!result) {
       throw HttpError(404, `Contact with id=${id} not found`);
@@ -50,11 +50,12 @@ const updateById = async (req, res) => {
   }
 };
 
-const deleteById = async (req, res) => {
+const deleteById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
     const result = await Contact.findByIdAndDelete(id);
     if (!result) {
+      console.log(`result ${result}`);
       throw HttpError(404, `Contact with id=${id} not found`);
     }
 
@@ -67,7 +68,7 @@ const deleteById = async (req, res) => {
 };
 
 const updateIsFavorite = async (req, res, next) => {
-  const id = req.params.contactId;
+  const { id } = req.params;
   const { error } = contactFavoriteSchema.validate(req.body);
 
   try {
