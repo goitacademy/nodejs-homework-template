@@ -10,7 +10,7 @@ dotenv.config();
 
 const { JWT_SECRET } = process.env;
 
-
+//register
 const signup = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -23,8 +23,11 @@ const signup = async (req, res) => {
     const newUser = await User.create({ ...req.body, password: hashPassword });
 
     res.status(201).json({
-        password: newUser.password,
-        email: newUser.email,
+        user: {
+            //password: newUser.password,
+            email: newUser.email,
+            subscription: newUser.subscription,
+        }
     })
 };
 
@@ -42,7 +45,7 @@ const signin = async (req, res) => {
 
     const payload = {
         id: user._id,
-    };
+    }
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
     await User.findByIdAndUpdate(user._id, { token });
@@ -50,7 +53,7 @@ const signin = async (req, res) => {
     res.json({
         token,
     })
-};
+}
 
 const getCurrent = async (req, res) => {
     const { email } = req.user;

@@ -25,9 +25,7 @@ const contactSchema = new Schema({
 }, {versionKey: false, timestamps: true});
 
 contactSchema.post("save", handleSaveError);
-
 contactSchema.pre("findOneAndUpdate", preUpdate);
-
 contactSchema.post("findOneAndUpdate", handleSaveError);
 
 export const contactAddSchema = Joi.object({
@@ -37,7 +35,7 @@ export const contactAddSchema = Joi.object({
     }),
     email: Joi.string(),
     phone: Joi.string(), 
-    favorite:Joi.boolean(),
+    favorite: Joi.boolean(),
 });
 
 
