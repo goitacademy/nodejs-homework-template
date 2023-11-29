@@ -2,6 +2,7 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -9,10 +10,25 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.3.1",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "fs": "^0.0.1-security",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.10",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.2.0",
+    "mongoose": "^8.0.1",
+    "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.7",
+    "path": "^0.12.7",
+    "shortid": "^2.2.16",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -22,5 +38,14 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
+  },
+  "imports": {
+    "#controllers/*": "./controllers/*",
+    "#middlewares/*": "./middlewares/*",
+    "#models/*": "./models/*",
+    "#routes/*": "./routes/*",
+    "#validators/*": "./validators/*",
+    "#users/*": "./users/*",
+    "#middleware/*": "./middleware/*"
   }
 }
