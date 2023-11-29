@@ -1,88 +1,23 @@
 const express = require('express')
-const contacts = require ('../../models/contacts') 
-const {HttpError} = require('../../helpers/HttpError')
-const Joi = require("joi")
+
+const isValidId = require('../../helpers/isValidObjectId')
+
 const router = express.Router()
-const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
-})
 
-router.get('/', async (req, res) => {
-  try {
-    const result = await contacts.listContacts()
-    res.json(result)
-  }
-  catch (error) {
-    res.status(500).json({ message: 'Server error' })
-  }
-  
-})  
+const jsonParser = express.json()
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    const { id } = req.params
-    const result = await contacts.getContactById(id) 
-    console.log(result)
-    if (!result) {
-      throw HttpError(404, "Not found")
-    }
-    res.json(result)
-  }
-  catch (error) {
-    next(error)
-  }
-})
+const ContactController = require('../../controllers/contact')
 
-router.post('/', async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body)
-    if (error) {
-      throw HttpError(400, error.message)
-    }
-    const result = await contacts.addContact(req.body)
-    res.status(201).json(result)
-  }
-  catch (error) {
-    next(error)
-  }
-  
-})
+router.get('/', ContactController.getContacts)  
 
-router.delete('/:contactId', async (req, res, next) => {
-  try {
-    const { contactId } = req.params
-    const result = await contacts.removeContact(contactId)
-    if (!result) {
-      throw HttpError(404, "Not found")
-    }
-    res.json({ message: 'Contact deleted' })
-  }
-  catch (error) {
-    next(error)
-  }
+router.get('/:id', isValidId, ContactController.getContactById)
 
-  
-})
+router.post('/', jsonParser, ContactController.createContact)
 
-router.put('/:contactId', async (req, res, next) => {
-  try {
-    const { error } = addSchema.validate(req.body)
-    if (error) {
-      throw HttpError(400, error.message)
-    }
-    const { contactId } = req.params
-    const result = await contacts.updateContact(contactId, req.body)
-    
-    if (!result) {
-      throw HttpError(404, "Not found")
-    }
-    res.json(result)
-  }
-  catch (error) {
-    next(error)
-  }
-})
+router.delete('/:id', isValidId, jsonParser, ContactController.deleteContact)
+
+router.put('/:id', isValidId, ContactController.updateContact)
+
+router.patch('/:id', isValidId, jsonParser, ContactController.patchFavorites)
 
 module.exports = router
