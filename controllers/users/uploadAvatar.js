@@ -13,6 +13,9 @@ async function uploadAvatar(req, res, next) {
     "avatars",
     req.file.filename
   );
+  if (req.file === null) {
+    return res.status(400).send({ message: "No avatar attached" })
+  }
   await fs.rename(req.file.path, newPath);
   const image = await Jimp.read(newPath);
   await image.resize(250, 250).writeAsync(newPath);
