@@ -1,14 +1,11 @@
-const express = require('express');
+const express = require("express");
 
+const ctrl = require("../../controllers/controllers");
+const addSchema = require("../../schemas/schemas");
 
-const ctrl = require("../../controllers");
-const addSchema = require("../../schemas");
-
-const { validateBody } = require("../../validateBody")
-
+const { validateBody } = require("../../middleware/validateBody");
 
 const router = express.Router();
-
 
 router.get("/", ctrl.listContacts);
 

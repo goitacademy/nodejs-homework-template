@@ -1,7 +1,7 @@
-const addShema = require("./schemas");
+const addShema = require("../schemas/schemas");
 
-const contacts = require("./models/contacts");
-const { HttpError, ctrlWrapper } = require("./helpers");
+const contacts = require("../models/contacts");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res, next) => {
   const result = await contacts.listContacts();
