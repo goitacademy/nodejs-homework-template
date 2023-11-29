@@ -55,6 +55,6 @@ const updateFavoriteSchema = Joi.object({
 module.exports = {
   Contact: mongoose.model("Contact", contactSchema),
   validateContact,
-  addSchema, // було addSchema: validateContact,
+  addSchema, 
   updateFavoriteSchema,
 };
