@@ -39,11 +39,11 @@ async function createContact(req, res, next) {
             favorite:req.body.favorite,
         }
     try {
-        const result = await Contact.create(contact)
         const { error } = addSchema.validate(req.body)
         if (error) {
             throw HttpError(404, "Validation error")
         }
+        const result = await Contact.create(contact)
         res.status(201).send(result)
     } catch (e) {
         next(e)
@@ -59,11 +59,11 @@ async function updateContact(req, res, next) {
             favorite:req.body.favorite,
         }
     try {
-        const result = await Contact.findByIdAndUpdate(id, contact)
         const { error } = addSchema.validate(req.body)
         if (error) {
             throw HttpError(404, "Validation error")
         }
+        const result = await Contact.findByIdAndUpdate(id, contact)
         if (result === null) {
             return res.status(404).send("Contact not found")
         }
@@ -75,7 +75,6 @@ async function updateContact(req, res, next) {
 
 async function deleteContact(req, res, next) {
     const { id } = req.params
-    
     try {
         const responce = await Contact.findByIdAndDelete(id)
         if (responce === null) {
@@ -94,17 +93,13 @@ async function patchFavorites(req, res, next) {
             favorite:favorite,
         }
     try {
-
         if (favorite !== true && favorite !== false) {
             return res.status(400).send({ "message": "missing field favorite" })  
         }
-
         const responce = await Contact.findByIdAndUpdate(id, contact, { new: true })
-        console.log(responce)
         if (responce === null) {
             return res.status(404).send("Contact not found")
         }
-
         res.status(200).send(responce)
     } catch(e) {
         next(e)
