@@ -17,7 +17,7 @@ const getById = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await getContactById(contactId);
   if (!result) {
-    res.status(400).json({ message: "Not found" });
+    res.status(404).json({ message: "Not found" });
   }
   res.json(result);
 };
@@ -31,7 +31,7 @@ const deleteById = async (req, res, next) => {
   const { contactId } = req.params;
   const result = removeContact(contactId);
   if (!result) {
-    res.status(400).json({ message: "Not found" });
+    res.status(404).json({ message: "Not found" });
   }
   res.json({
     message: "Delete succenss ",
@@ -42,7 +42,7 @@ const updateById = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);
   if (!result) {
-    res.status(400).json({ message: "Not found" });
+    res.status(404).json({ message: "Not found" });
   }
   res.json(result);
 };
