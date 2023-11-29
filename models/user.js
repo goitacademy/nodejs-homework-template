@@ -28,8 +28,6 @@ const userSchema = new Schema(
   { versionKey: false }
 );
 
-userSchema.post("save", handleMongooseError);
-
 const authBothSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().min(6).required(),
@@ -44,6 +42,7 @@ const updateSubscriptionSchema = Joi.object({
     }),
 });
 
+userSchema.post("save", handleMongooseError);
 const User = model("user", userSchema);
 
 module.exports = {
