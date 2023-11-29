@@ -30,16 +30,16 @@ const signup = async (req, res) => {
     })
 };
 
-
+//login
 const signin = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) {
-        throw HttpError(401, "Email or password is invalid");
+        throw HttpError(401, "Email or password is wrong");
     }
     const passwordCompare = await bcrypt.compare(password, user.password);
     if (!passwordCompare) {
-        throw HttpError(401, "Email or password is invalid");
+        throw HttpError(401, "Email or password is wrong");
     }
 
     const payload = {
@@ -56,22 +56,23 @@ const signin = async (req, res) => {
             subscription: user.subscription,
         }
     })
-}
+};
 
 const getCurrent = async (req, res) => {
-    const { email } = req.user;
+    const { email, subscription } = req.user;
 
     res.json({
         email,
+        subscription,
     })
-}
+};
 
 const signout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
 
-    res.json({
-        message:"Signout success"
+    res.status(204).json({
+        //message:"Signout success"
     })
 }
 
