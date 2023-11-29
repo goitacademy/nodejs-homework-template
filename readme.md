@@ -1,31 +1,14 @@
-## GoIT Node.js Course Template Homework
+Zadania domowe GoIT z modułu Node.js (2-6).
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+hw02 Framework Express. REST API
+hw03 Baza danych MongoDB. Mongoose
+hw04 Uwierzytelnianie i autoryzacja
+hw05 Praca z plikami. Testowanie aplikacji
+hw06 Praca z e-mail i Docker. Websockets
 
-Додайте ментора до колаборації
+### Komendy:
 
-Для кожної домашньої роботи створюйте свою гілку.
-
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
-
-Кожна нова гілка для др повинна робитися з master
-
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
-
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+- `npm start` &mdash; uruchamia serwer w trybie produkcyjnym
+- `npm run start:dev` &mdash; uruchamia serwer w trybie deweloperskim (development)
+- `npm run lint` &mdash; uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
+- `npm lint:fix` &mdash; to samo co powyższe, ale również automatycznie poprawia proste błędy.
