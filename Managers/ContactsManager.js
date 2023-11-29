@@ -1,5 +1,3 @@
-const { getting, deleting } = require("../responses/responseMessages");
-
 const Database = require("./DatabaseManager");
 
 class ContactsManager {
