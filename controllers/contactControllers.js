@@ -1,15 +1,19 @@
 const Contact = require("../models/contacts");
 
-const listContacts = () => Contact.find();
+const listContacts = (userId) => ({ owner: userId });
 
-const getContactById = (contactId) => Contact.findById(contactId);
+const getContactById = (contactId, userId) =>
+  Contact.findById({ _id: contactId, owner: userId });
 
-const removeContact = (contactId) => Contact.findByIdAndDelete(contactId);
+const removeContact = (contactId, userId) =>
+    Contact.findByIdAndDelete({ _id: contactId, owner: userId });
 
-const addContact = (body) => Contact.create(body);
+const addContact = (body, userId) => Contact.create({ ...body, owner: userId });
 
-const updateContact = (contactId, body) =>
-  Contact.findByIdAndUpdate(contactId, body, { new: true });
+const updateContact = (contactId, body, userId) =>
+  Contact.findByIdAndUpdate({ _id: contactId, owner: userId }, body, {
+    new: true,
+  });
 
 module.exports = {
   listContacts,

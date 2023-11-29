@@ -6,7 +6,6 @@ const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
-// Встановлення з'єднання з базою даних MongoDB
 mongoose.connect(
   "mongodb://atlas-sql-6513223536ac861bbc72a629-dp67o.a.query.mongodb.net/db-contacts?ssl=true&authSource=admin",
   {
@@ -30,15 +29,13 @@ app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
-// Обробник 404 помилки
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });
 });
 
-// Обробник помилок сервера
 app.use((err, req, res, next) => {
-
   console.error(err.stack);
   res.status(500).json({ message: "Internal Server Error" });
+});
 
 module.exports = app;
