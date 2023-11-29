@@ -13,7 +13,7 @@ class ContactsManager {
     const contactsList = await this.listContacts();
     const idx = contactsList.findIndex((contact) => contact.id === contactId);
     if (idx === -1) return -1;
-    return contactsList.splice(idx, 1);
+    return contactsList.splice(idx, 1)[0];
   };
 
   removeContact = async (contactId) => {
