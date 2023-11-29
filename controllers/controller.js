@@ -4,6 +4,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../models/contacts");
 const HttpError = require("../helpers/HttpError");
 
@@ -82,10 +83,31 @@ const updateContactData = async (req, res, next) => {
   }
 };
 
+const updateContactStatus = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined && Object.keys(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing field favorite" });
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, { favorite });
+    if (updatedContact) {
+      res.status(200).json(updatedContact); // Изменили статус на 200 и возвращаем обновленный объект контакта
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    next(new HttpError(500, "Internal Server Error"));
+  }
+};
+
 module.exports = {
   getAllContacts,
   getContact,
   createContact,
   deleteContact,
   updateContactData,
+  updateContactStatus,
 };

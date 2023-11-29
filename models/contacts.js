@@ -1,6 +1,24 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
+const HttpError = require("../helpers/HttpError");
 
-const contactSchema = new mongoose.Schema({
+mongoose
+  .connect(
+    "mongodb+srv://dbuser:12345@cluster0.tmfwdxi.mongodb.net/db-contacts?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  )
+  .then(() => {
+    console.log("Database connection successful");
+  })
+  .catch((error) => {
+    console.error("Database connection error:", error.message);
+    process.exit(1);
+  });
+
+const contactSchema = new Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
@@ -20,27 +38,51 @@ const contactSchema = new mongoose.Schema({
 const Contact = mongoose.model("Contact", contactSchema);
 
 const listContacts = async () => {
-  return Contact.find();
+  try {
+    return await Contact.find();
+  } catch (error) {
+    throw new HttpError(500, "Error fetching contacts from the database");
+  }
 };
 
 const getContactById = async (contactId) => {
-  return Contact.findById(contactId);
+  try {
+    return await Contact.findById(contactId);
+  } catch (error) {
+    throw new HttpError(500, "Error fetching contact from the database");
+  }
 };
 
 const removeContact = async (contactId) => {
-  return Contact.findByIdAndDelete(contactId);
+  try {
+    return await Contact.findByIdAndDelete(contactId);
+  } catch (error) {
+    throw new HttpError(500, "Error deleting contact from the database");
+  }
 };
 
 const addContact = async (body) => {
-  return Contact.create(body);
+  try {
+    return await Contact.create(body);
+  } catch (error) {
+    throw new HttpError(500, "Error adding contact to the database");
+  }
 };
 
 const updateContact = async (contactId, body) => {
-  return Contact.findByIdAndUpdate(contactId, body, { new: true });
+  try {
+    return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+  } catch (error) {
+    throw new HttpError(500, "Error updating contact in the database");
+  }
 };
 
 const updateStatusContact = async (contactId, body) => {
-  return Contact.findByIdAndUpdate(contactId, body, { new: true });
+  try {
+    return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+  } catch (error) {
+    throw new HttpError(500, "Error updating contact status in the database");
+  }
 };
 
 module.exports = {
