@@ -9,9 +9,9 @@ import Jimp from 'jimp';
 import { HttpError } from '../helpers/index.js';
 import { ctrlWrapper } from '../decorators/index.js';
 
-const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve('public', 'avatars');
 
-const avatarsPath = path.resolve('public', 'avatar');
+const { JWT_SECRET } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -21,7 +21,7 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const avatarURL = gravatar(email);
+  const avatarURL = gravatar.url(email);
 
   const newUser = await User.create({
     ...req.body,
@@ -53,7 +53,11 @@ const login = async (req, res) => {
 
   res.json({
     token,
-    user: { email: user.email, subscription: user.subscription },
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+      avatarURL: user.avatarURL,
+    },
   });
 };
 
@@ -76,21 +80,20 @@ const updateSubscription = async (req, res, next) => {
 
 const updateAvatar = async (req, res, next) => {
   const { _id } = req.user;
-  const { path: oldPath, fileName } = req.file;
-
-  Jimp.read(fileName)
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+  await Jimp.read(oldPath)
     .then((avatar) => {
       return avatar
         .resize(250, 250) // resize
-        .write(fileName); // save
+        .write(newPath); // save
     })
     .catch((err) => {
       console.error(err);
     });
 
-  const newPath = path.join(avatarsPath, fileName);
-  fs.rename(oldPath, newPath);
-  const avatarURL = path.join('avatars', fileName);
+  fs.unlink(oldPath);
+  const avatarURL = path.join('avatars', filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
   res.status(200).json({ avatarURL });
 };

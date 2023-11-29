@@ -40,7 +40,6 @@ authRouter.post(
   '/avatars',
   upload.single('avatar'),
   authenticate,
-  isEmptyBody,
   authControllers.updateAvatar
 );
 
