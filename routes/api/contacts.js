@@ -1,17 +1,17 @@
 const express = require("express");
-const contactControllers = require("../controllers/contactControllers");
-const authMiddleware = require("../middleware/authMiddleware");
+const contactControllers = require("../../controllers/contactControllers");
+const authMiddleware = require("../../middleware/authMiddleware");
 
 const router = express.Router();
 
 router.get("/", authMiddleware, async (req, res) => {
-  const contacts = await contactControllers.find();
+  const contacts = await contactControllers.listContact();
   res.json(contacts);
 });
 
 router.get("/:contactId", authMiddleware, async (req, res) => {
   const { contactId } = req.params;
-  const contact = await contactControllers.findById(contactId);
+  const contact = await contactControllers.getContactById(contactId);
 
   if (contact) {
     res.json(contact);

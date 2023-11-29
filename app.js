@@ -9,8 +9,8 @@ const app = express();
 mongoose.connect(
   "mongodb://atlas-sql-6513223536ac861bbc72a629-dp67o.a.query.mongodb.net/db-contacts?ssl=true&authSource=admin",
   {
-    useNewUrlParser: true,
     useUnifiedTopology: true,
+    useNewUrlParser: true,
   }
 );
 
