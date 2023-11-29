@@ -7,6 +7,7 @@ const {
 } = require("../../middlewares/contactsValidation");
 const isValidId = require("../../middlewares/isValidId");
 const authenticate = require("../../middlewares/authenticate");
+const userVerification = require("../../middlewares/userVerification");
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.post("/", authenticate, addValid, contactsCtrl.addContact);
 router.delete(
   "/:contactId",
   authenticate,
+  userVerification,
   isValidId,
   contactsCtrl.removeContact
 );
@@ -26,6 +28,7 @@ router.delete(
 router.put(
   "/:contactId",
   authenticate,
+  userVerification,
   isValidId,
   updateValid,
   contactsCtrl.updateContact
@@ -34,6 +37,7 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   authenticate,
+  userVerification,
   isValidId,
   updateFavoriteValid,
   contactsCtrl.updateStatusContact
