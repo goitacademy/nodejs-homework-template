@@ -17,6 +17,11 @@ const contactSchema= new Schema(  {
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+      required:true,
+    },
   });
 
   contactSchema.post("save", (error, data, next) =>{
@@ -30,6 +35,8 @@ const contactSchema= new Schema(  {
     this.options.runValidators = true;
     next();
 });
+
+
 
   contactSchema.post("findOneAndUpdate",(error, data, next) =>{
     error.status = 400;

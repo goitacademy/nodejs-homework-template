@@ -4,6 +4,10 @@ const router = express.Router();
 const controllers = require('../../controllers/controllers.js');
 const { validateBody, contactValidSchema, contactFavoriteSchema } = require('../../schemas/contactSchema.js');
 const {isValidId}= require("../../middlewars/isValidId.js")
+const {authenticate}=require("../../middlewars/authenticate.js")
+
+router.use(authenticate);
+
 
 router.get("/", controllers.getAll);
 
@@ -17,6 +21,5 @@ router.delete("/:id", controllers.deleteById);
 
 router.patch("/:id/favorite", isValidId, validateBody(contactFavoriteSchema), controllers.updateStatusContact);
 
-module.exports = {
-  router
-};
+module.exports =router;
+
