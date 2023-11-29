@@ -23,11 +23,10 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    avatarURL: String,
   },
   { versionKey: false }
 );
-
-userSchema.post("save", handleMongooseError);
 
 const authBothSchema = Joi.object({
   email: Joi.string().required(),
@@ -43,6 +42,7 @@ const updateSubscriptionSchema = Joi.object({
     }),
 });
 
+userSchema.post("save", handleMongooseError);
 const User = model("user", userSchema);
 
 module.exports = {
