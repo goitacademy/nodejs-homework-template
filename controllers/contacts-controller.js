@@ -8,14 +8,13 @@ const getListContacts = async (req, res) => {
     const { page = 1, limit = 10, ...filterParams } = req.query;
     const skip = (page - 1) * limit;
     const filter = { owner, ...filterParams };
-    let total=0;
+    //let total;
 
     const result = await Contact.find(filter, "-createdAt -updatedAt", {skip, limit}).populate("owner", "email");
     
-    res.status(200).json({
+    res.status(200).json(
         result,
-        total,
-    }
+       // total,
     );
 };
 
