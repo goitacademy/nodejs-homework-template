@@ -1,7 +1,9 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
+import "dotenv/config";
 import router from "./routes/api/contacts.js";
+import authRouter from "./routes/api/auth-router.js";
 
 const app = express();
 
@@ -11,6 +13,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use("/users", authRouter);
 app.use("/api/contacts", router);
 
 app.use((req, res) => {
@@ -22,5 +25,4 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-// module.exports = app;
 export default app;
