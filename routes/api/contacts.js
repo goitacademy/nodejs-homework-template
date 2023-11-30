@@ -5,7 +5,7 @@ const {
   add,
   deleteByID,
   update,
-  updateStatusContactavorite,
+  updateStatusContact,
 } = require("../../controllers/contacts");
 const router = express.Router();
 const { validateBody, isValidID } = require("../../middlewares");
@@ -20,7 +20,7 @@ router.patch(
   "/:contactId/favorite",
   isValidID,
   validateBody(schemas.updateSchema),
-  updateStatusContactavorite
+  updateStatusContact
 );
 
 module.exports = router;
