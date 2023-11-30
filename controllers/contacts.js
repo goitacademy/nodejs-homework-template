@@ -1,14 +1,14 @@
-const contacts = require("../models/contacts");
+const Contacts = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../helpers/index");
 
 async function listContacts(req, res) {
-  const data = await contacts.listContacts();
+  const data = await Contacts.find();
   res.json(data);
 }
 
 async function getContactById(req, res) {
   const id = req.params.contactId;
-  const data = await contacts.getContactById(id);
+  const data = await Contacts.findOne({ _id: id });
   if (!data) {
     throw HttpError(404, "Not found!");
   }
@@ -16,13 +16,13 @@ async function getContactById(req, res) {
 }
 
 async function addContact(req, res) {
-  const data = await contacts.addContact(req.body);
+  const data = await Contacts.create(req.body);
   res.json(data);
 }
 
 async function removeContact(req, res) {
   const id = req.params.contactId;
-  const data = await contacts.removeContact(id);
+  const data = await Contacts.findByIdAndDelete(id);
   console.log(data);
   if (!data) {
     throw HttpError(404, "Not found!");
@@ -32,7 +32,17 @@ async function removeContact(req, res) {
 
 async function updateContact(req, res) {
   const id = req.params.contactId;
-  const data = await contacts.updateContact(id, req.body);
+  const data = await Contacts.findByIdAndUpdate(id, req.body, { new: true });
+  if (!data) {
+    throw HttpError(404, "Not found!");
+  }
+
+  res.json(data);
+}
+
+async function updateFavorite(req, res) {
+  const id = req.params.contactId;
+  const data = await Contacts.findByIdAndUpdate(id, req.body, { new: true });
   if (!data) {
     throw HttpError(404, "Not found!");
   }
@@ -46,4 +56,5 @@ module.exports = {
   removeContact: ctrlWrapper(removeContact),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };

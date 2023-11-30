@@ -1,5 +1,8 @@
-const validateBody = require("./validateBody");
+const { validateBodyForPatch, validateBodyForPost } = require("./validateBody");
+const invalidId = require("./invalidId");
 
 module.exports = {
-  validateBody,
+  validateBodyForPost,
+  invalidId,
+  validateBodyForPatch,
 };
