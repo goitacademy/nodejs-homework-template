@@ -22,7 +22,7 @@ const userSchema = new Schema(
       unique: true, // Вказуємо що поле має бути унікальне (e-maill)
       required: [true, "Email is required"],
     },
-    // token: String,
+    token: String,
   },
   { versionKey: false, timestamps: true }
 );

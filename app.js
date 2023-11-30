@@ -15,7 +15,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/users", authRouter);
+app.use("/users", authRouter);
 app.use("/api/contacts", contactsRouter); // Вказуємо шлях куди потрібно звертатись якщо прийшов запит на /api/contacts
 
 app.use((req, res) => {
