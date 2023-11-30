@@ -3,6 +3,7 @@ import {
   authenticate,
   isEmptyBody,
   isValidId,
+  upload,
 } from "../../middlewares/index.js";
 import ctrlWrapper from "../../decorators/ctrlWrapper.js";
 import {
@@ -10,6 +11,7 @@ import {
   signin,
   signout,
   signup,
+  updateAvatar,
   updateSubscription,
 } from "../../controllers/user-controller.js";
 import validateBody from "../../decorators/validateBody.js";
@@ -41,6 +43,13 @@ usersRouter.patch(
   isEmptyBody,
   validateBody(patchSubscription),
   ctrlWrapper(updateSubscription)
+);
+
+usersRouter.patch(
+  "/avatar",
+  upload.single("avatar"),
+  ctrlWrapper(authenticate),
+  ctrlWrapper(updateAvatar)
 );
 
 export default usersRouter;

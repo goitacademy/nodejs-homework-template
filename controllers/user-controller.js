@@ -2,9 +2,12 @@ import HttpError from "../helpers/HttpError.js";
 import User from "../models/Users.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import path from "path";
+import fs from "fs/promises";
 import "dotenv/config";
 
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve("public", "avatars");
 
 export const signup = async (req, res, next) => {
   const { email, password } = req.body;
@@ -67,4 +70,16 @@ export const updateSubscription = async (req, res, next) => {
   res
     .status(200)
     .json({ email: result.email, subscription: result.subscription });
+};
+
+export const updateAvatar = async (req, res, next) => {
+  const id = req.user._id;
+  const { path: tempPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+
+  const avatarURL = path.join("avatars", filename);
+  fs.rename(tempPath, newPath);
+  await User.findByIdAndUpdate(id, { avatarURL });
+
+  res.status(200).json({ avatarURL });
 };
