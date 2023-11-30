@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const joiUserSchemas = require("../schemas/userSchemas");
 const gravatar = require("gravatar");
+const sendEmail = require("../helpers/sendEmail")
 const BASE_URL = process.env.DATABASE_URI;
 
 mongoose
@@ -44,11 +46,23 @@ async function register(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+    // создаём уникальное поле при регистрации для верификации пользователя
+    const tokenVerify = crypto.randomUUID();
+
+    //  отправка письма для подтвержения верификации пользователя
+    await sendEmail({
+      to: email,
+      subject: "Welcome to the Contacts App!",
+      html: `To confirm your email, please click <a href="http://localhost:8000/api/users/verify/${tokenVerify}">Link</a>`,
+      text: `To confirm your email, please open http://localhost:8000/api/users/verify/${tokenVerify}`,
+    });
+
     const addUser = await User.create({
       email,
       password: passwordHash,
       subscription,
       avatarURL, // Сохраняем URL аватара в поле avatarURL
+      tokenVerify, // Сохраняем значение верификации
     });
 
     console.log("User registered successfully:", addUser);
