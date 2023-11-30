@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { HttpError } from "../helpers/index.js";
 import { ctrWrapper } from "../decorators/index.js";
-import User from "../models/User.js";
+import User from "../models/users.js";
 
 const { JWT_SECRET } = process.env;
 

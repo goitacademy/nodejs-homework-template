@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import logger from "morgan";
 
-import router from "./routes/api/contacts";
-import authRouter from "./routes/api/auth-router";
+import router from "./routes/api/contacts.js";
+import authRouter from "./routes/api/auth-router.js";
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
