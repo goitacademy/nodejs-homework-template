@@ -1,10 +1,6 @@
 import { Schema, model } from "mongoose";
-import Joi from "joi";
-import { handleMongooseError } from "../helpers/handleMangooseError.js";
-
-// eslint-disable-next-line no-useless-escape
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // example@example.com
-const subscriptionList = ["starter", "pro", "business"];
+import { handleMongooseError } from "./hooks.js";
+import { emailRegexp, subscriptionList } from "../constans/user-constans.js";
 
 const userSchema = new Schema(
   {
@@ -32,31 +28,18 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+    },
   },
   { timeseries: true, versionKey: false }
 );
 
 userSchema.post("save", handleMongooseError);
-
-export const registerSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required().messages({
-    "string.pattern.base": "Email format must be - example@example.com",
-  }),
-  password: Joi.string().min(6).required(),
-  subscription: Joi.string().valid(...subscriptionList),
-});
-
-export const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
-});
-
-export const subscriprionSchema = Joi.object({
-  subscription: Joi.string().valid(...subscriptionList),
-});
-
-export const updateAvatarSchema = Joi.object({
-  payload: { files: Joi.array().items(Joi.any()) },
-});
 
 export const User = model("user", userSchema);

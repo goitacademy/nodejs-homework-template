@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 import "dotenv/config";
 import { User } from "../models/user.js";
 import { HttpError } from "../helpers/HttpError.js";
@@ -7,12 +8,15 @@ import gravatar from "gravatar";
 import path from "path";
 import { rename } from "node:fs/promises";
 import { adjustingAvatar } from "../helpers/adjustAvatar.js";
+import { sendEmail } from "../helpers/sendEmail.js";
+import { ctrlWrapper } from "../decorators/ctrlWrapper.js";
 
 const { SECRET_KEY } = process.env;
 
 const avatarsDir = path.resolve("public/avatars");
 
-export const register = async (req, res, next) => {
+// Registration
+const register = async (req, res, next) => {
   const { password, email } = req.body;
 
   const generateToken = async (newUser, statusCode, res) => {
@@ -49,11 +53,16 @@ export const register = async (req, res, next) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const avatarURL = gravatar.url(email);
 
+    const verificationToken = nanoid();
+
     const newUser = await User.create({
       ...req.body,
       password: passwordHash,
       avatarURL,
+      verificationToken,
     });
+
+    await sendEmail(email, verificationToken);
 
     generateToken(newUser, 201, res);
   } catch (error) {
@@ -61,13 +70,49 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res, next) => {
+// Verify Email
+const verifyEmail = async (req, res) => {
+  const { verificationToken } = req.params;
+
+  const user = await User.findOne({ verificationToken });
+
+  if (!user) throw HttpError(404, "User Not Found");
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.json({
+    message: "Verification successful",
+  });
+};
+
+// Resend Email with Verification Token
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) throw HttpError(401, "Email not found");
+
+  if (user.verify) throw HttpError(400, "Verification has already been passed");
+
+  await sendEmail(email, user.verificationToken);
+
+  res.json({
+    message: "Verification email sent",
+  });
+};
+
+// Login
+const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email }).exec();
 
     if (!user) throw HttpError(401, "Email or password is wrong");
+    if (!user.verify) throw HttpError(401, "Email is not verified!");
 
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -79,7 +124,7 @@ export const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
-    // add a token to the user
+    // add token to the user
     await User.findByIdAndUpdate(user._id, { token });
 
     res.status(200).json({
@@ -91,20 +136,22 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const getCurrent = async (req, res) => {
+// Check current user's token
+const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
 
   res.json({ email, subscription });
 };
 
-export const logout = async (req, res) => {
+// Logout
+const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: null });
 
   res.status(204).send();
 };
 
-export async function updateSubscription(req, res, next) {
+async function updateSubscription(req, res, next) {
   const { _id: user } = req.user;
 
   const userSubscription = await User.findByIdAndUpdate(user, req.body, {
@@ -121,8 +168,8 @@ export async function updateSubscription(req, res, next) {
   });
 }
 
-// Update a User's Avatar
-export const updateAvatar = async (req, res, next) => {
+// Update User's Avatar
+const updateAvatar = async (req, res, next) => {
   const { _id: user } = req.user;
 
   if (req.file === undefined)
@@ -141,4 +188,13 @@ export const updateAvatar = async (req, res, next) => {
   res.json({ avatarURL });
 };
 
-// export default login;
+export default {
+  signup: ctrlWrapper(register),
+  verify: ctrlWrapper(verifyEmail),
+  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
+  signin: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
+  signout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
+};
