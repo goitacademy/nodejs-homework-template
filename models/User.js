@@ -21,7 +21,8 @@ const userSchema = new Schema({
     subscription: {
         type: String,
         enum: subscriptionType,
-        default: "starter"
+        default: "starter",
+        //required: true,
     },
     token: {
         type: String,
@@ -36,15 +37,14 @@ userSchema.post("findOneAndUpdate", handleSaveError);
 export const userSignupSchema = Joi.object({
     password: Joi.string().min(6).required(),
     email: Joi.string().pattern(emailRegexp).required(),
-    subscription: Joi.string().valid(...subscriptionType),
-    token: Joi.string(),
+    subscription: Joi.string().valid(...subscriptionType)//.required(),
 });
 
 export const userSigninSchema = Joi.object({
     password: Joi.string().min(6).required(),
     email: Joi.string().pattern(emailRegexp).required(),
-    subscription: Joi.string().valid(...subscriptionType),
-    token: Joi.string(),
+    //subscription: Joi.string().valid(...subscriptionType).required(),
+    //token: Joi.string(),
 });
 
 const User = model("user", userSchema);

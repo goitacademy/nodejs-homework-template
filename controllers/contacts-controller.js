@@ -5,10 +5,17 @@ import { HttpError } from "../helpers/index.js";
 
 const getListContacts = async (req, res) => {
     const { _id: owner } = req.user;
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, ...filterParams } = req.query;
     const skip = (page - 1) * limit;
-    const result = await Contact.find({owner}, "-createdAt -updatedAt", {skip, limit});
-    res.json(result);
+    const filter = { owner, ...filterParams };
+    //let total;
+
+    const result = await Contact.find(filter, "-createdAt -updatedAt", {skip, limit}).populate("owner", "email");
+    
+    res.status(200).json(
+        result,
+       // total,
+    );
 };
 
 const getContactById = async (req, res) => {
@@ -18,7 +25,7 @@ const getContactById = async (req, res) => {
         if (!result) {
             throw HttpError(404, `Contact with id=${id} was not found`);
         }
-        res.json(result)
+    res.json(result);
 };
 
 const addContact = async (req, res) => {
