@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 
 import { app } from "./app.js"
 
-const DB_HOST = 'mongodb+srv://Sasha-hw-03:DtvxG9E9wHJLzJX8@cluster0.tsifo9g.mongodb.net/my-contacts?retryWrites=true&w=majority'
-// DtvxG9E9wHJLzJX8
+const { DB_HOST, PORT = 3000} = process.env;
+
 mongoose.connect(DB_HOST)
   .then(() => {
-    app.listen(3000, () => {
-      console.log("Server running. Use our API on port: 3000")
+    app.listen(PORT, () => {
+      console.log(`Server running. Use our API on port: ${PORT}`)
     })
   })
   .catch(err => {
