@@ -5,32 +5,43 @@ const { handleMongooseError } = require("../utils");
 
 const validateEmailRegex = /^\S+@\S+\.\S+$/;
 
-const userSchema = Schema({
-  password: {
-    type: String,
-    minlength: 6,
-    required: [true, "Password is required"],
+const userSchema = Schema(
+  {
+    password: {
+      type: String,
+      minlength: 6,
+      required: [true, "Password is required"],
+    },
+    email: {
+      type: String,
+      match: validateEmailRegex,
+      required: [true, "Email is required"],
+      unique: true,
+    },
+    subscription: {
+      type: String,
+      enum: ["starter", "pro", "business"],
+      default: "starter",
+    },
+    token: {
+      type: String,
+      default: null,
+    },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+      default: "",
+    },
   },
-  email: {
-    type: String,
-    match: validateEmailRegex,
-    required: [true, "Email is required"],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter",
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-  avatarURL: {
-    type: String,
-    required: true,
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 
 userSchema.post("save", handleMongooseError);
 
@@ -45,9 +56,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(validateEmailRegex).required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  emailSchema,
 };
 
 const User = model("user", userSchema);
