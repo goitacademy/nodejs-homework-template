@@ -15,7 +15,7 @@ const register = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 10)
 
     const newUser = await User.create({ ...req.body, password: hashPassword })
-    console.log(newUser)
+    // console.log(newUser)
     res.status(201).json({
         email: newUser.email,
         password: newUser.password
@@ -51,13 +51,28 @@ const login = async (req, res) => {
 }
 
 const logout = async (req, res, next) => {
-    const { email } = req.body
-    const user = await User.findOne({ email })
+    // const { email } = req.body
     
-    const id = user._id 
-    // console.log(id)
     try {
+        const authHeader = req.headers.authorization; 
+        const token = authHeader.split(' ')[1];
+        
+        // console.log('token:', token)
+
+        if (!token) {
+        throw HttpError(401, "Not authorized");
+        }
+
+        const user = await User.findOne({ token })
+        
+        // console.log('user', user)
+
+        if (!user) {
+            return res.status(401).json({ error: "Not authorized" });
+        }
+
         await User.findByIdAndUpdate(user._id, { token: null })
+       
         res.status(204).end()
     } catch (error) {
         next(error)
@@ -66,13 +81,19 @@ const logout = async (req, res, next) => {
 
 const currentUser = async (req, res, next) => {
     try {
-    const { token } = req.body
-
+        // const { token } = req.body
+        const authHeader = req.headers.authorization; 
+        const token = authHeader.split(' ')[1];
+        // console.log(token)
+    if (!token) {
+        throw HttpError(401, "Not authorized");
+    }
+        
     const user = await User.findOne({ token })
-
-        if (!user) {
-            throw HttpError(401, "Not authorized");
-        }
+        console.log(user)
+    if (!user) {
+        throw HttpError(401, "Not authorized");
+    }
 
     res.status(200).json({
             email: user.email,
