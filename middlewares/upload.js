@@ -1,17 +1,22 @@
 import multer from "multer";
 import path from "path";
 
-const tempDir = path.resolve("temp");
+const destination = path.resolve("temp");
 
-const multerConfig = multer.diskStorage({
-  destination: tempDir,
-  fileName: (req, file, cb) => {
+const storage = multer.diskStorage({
+  destination,
+  filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
 });
 
+const limits = {
+  filesize: 5 * 1024 * 1024,
+};
+
 const upload = multer({
-  storage: multerConfig,
+  storage,
+  limits,
 });
 
 export default upload;
