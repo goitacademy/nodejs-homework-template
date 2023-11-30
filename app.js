@@ -1,9 +1,8 @@
-import express from "express";
-import logger from "morgan";
-import cors from "cors";
-import "dotenv/config";
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
-import contactsRouter from "./routes/api/contacts-router.js";
+const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
 
