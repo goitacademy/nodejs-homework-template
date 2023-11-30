@@ -11,3 +11,4 @@ export const isValidId = (req, res, next) => {
   }
   next();
 };
+export default isValidId;

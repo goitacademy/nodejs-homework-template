@@ -1,5 +1,5 @@
 // controllers/contact/postAddContact.js
-import Contact from "../../models/Contact.js";
+import Contact from "../../models/contacts.js";
 
 export const postAddContact = async (req, res) => {
   const data = await Contact.create(req.body);

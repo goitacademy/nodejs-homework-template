@@ -1,5 +1,5 @@
 // controllers/contact/updateContact.js
-import Contact from "../../models/Contact.js";
+import Contact from "../../models/contacts.js";
 import { HttpError } from "../../helpers/index.js";
 
 export const updateContact = async (req, res) => {
