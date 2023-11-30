@@ -1,13 +1,11 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-// const mogoose = require ('mongoose')
+const dotenv = require('dotenv')
 
-const contactsRouter = require('./routes/api/contacts')
-// const DB_HOST = "mongodb+srv://Anna:A2X2Qc1MCAYBW0U0@cluster0.ah1cs3o.mongodb.net/contacts_reader?retryWrites=true&w=majority";
+const contactsRouter = require('./routes/api/contacts');
 
-// mogoose.connect();
-
+dotenv.config();
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
