@@ -2,13 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 const controllers = require("../../controler/contacts");
+const { validateBody, isValidId, authenticate } = require("../../middelwars");
 const {
-  validateBody,
-  isValidId,
+  addSchema,
   updateFavorite,
-  authenticate,
-} = require("../../middelwars");
-const { addSchema } = require("../../models/contact");
+} = require("../../utils/validation/userValidationSchemas");
 router.get("/", authenticate, controllers.getAll);
 
 router.get("/:id", authenticate, isValidId, controllers.getById);
