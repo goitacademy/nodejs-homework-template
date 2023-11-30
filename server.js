@@ -3,7 +3,7 @@ import "dotenv/config";
 
 import app from "./app.js";
 
-const { DB_HOST, PORT } = process.env["DB_HOST"];
+const { DB_HOST, PORT } = process.env;
 
 mongoose
   .connect(DB_HOST)

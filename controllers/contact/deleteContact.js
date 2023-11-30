@@ -1,5 +1,5 @@
 // controllers/contact/deleteContact.js
-import Contact from "../../models/Contact.js";
+import Contact from "../../models/contacts.js";
 import { HttpError } from "../../helpers/index.js";
 
 export const deleteContact = async (req, res) => {
