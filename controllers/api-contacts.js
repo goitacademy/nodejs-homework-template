@@ -7,7 +7,7 @@ import "colors";
 import { ctrlWrapper } from "../helpers/ctrlWrapper.js";
 import { HttpError } from "../helpers/HttpError.js";
 
-// ============= Get full list of contacts ================ //
+// ============= Get a full list of contacts ================ //
 async function listContacts(req, res) {
   const { _id: owner } = req.user;
 
@@ -30,7 +30,7 @@ async function listContacts(req, res) {
 
 export const getAll = ctrlWrapper(listContacts);
 
-// ================ Get contact by ID ================ //
+// ================ Get a contact by ID ================ //
 async function getContactById(req, res, next) {
   const { contactId } = req.params;
   const { _id } = req.user;
@@ -51,7 +51,7 @@ async function getContactById(req, res, next) {
 
 export const getById = ctrlWrapper(getContactById);
 
-// ============= Add new contact ================== //
+// ============= Add a new contact ================== //
 async function addContact(req, res) {
   const { _id: owner } = req.user;
   const { error } = contactValidate(req.body);
@@ -72,13 +72,13 @@ async function addContact(req, res) {
 
 export const add = ctrlWrapper(addContact);
 
-// =============== Update existed contact ====================== //
+// =============== Update an existing contact ====================== //
 async function updateContact(req, res, next) {
   const { contactId } = req.params;
 
   const { error } = contactValidate(req.body);
 
-  if (error) {
+  if (typeof error !== "undefined") {
     const errorMessages = error.details.map(
       (err) => `missing field: ${err.message}`
     );
@@ -96,7 +96,7 @@ async function updateContact(req, res, next) {
 
 export const updateById = ctrlWrapper(updateContact);
 
-// ============== Update contact Status by ID ============== //
+// ============== Update a contact Status by ID ============== //
 async function updateStatusContact(req, res, next) {
   const { contactId } = req.params;
 
@@ -117,7 +117,7 @@ async function updateStatusContact(req, res, next) {
 
 export const updateFavorite = ctrlWrapper(updateStatusContact);
 
-// ============== Delete contact by ID ==================== //
+// ============== Delete a contact by ID ==================== //
 async function removeContact(req, res, next) {
   const { contactId } = req.params;
 

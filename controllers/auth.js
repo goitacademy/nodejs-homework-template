@@ -3,8 +3,14 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { User } from "../models/user.js";
 import { HttpError } from "../helpers/HttpError.js";
+import gravatar from "gravatar";
+import path from "path";
+import { rename } from "node:fs/promises";
+import { adjustingAvatar } from "../helpers/adjustAvatar.js";
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.resolve("public/avatars");
 
 export const register = async (req, res, next) => {
   const { password, email } = req.body;
@@ -30,6 +36,7 @@ export const register = async (req, res, next) => {
           subscription: newUser.subscription,
         },
         token,
+        avatarURL: newUser.avatarURL,
       },
     });
   };
@@ -40,10 +47,12 @@ export const register = async (req, res, next) => {
     if (user) throw HttpError(409, "Email in use");
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const avatarURL = gravatar.url(email);
 
     const newUser = await User.create({
       ...req.body,
       password: passwordHash,
+      avatarURL,
     });
 
     generateToken(newUser, 201, res);
@@ -70,7 +79,7 @@ export const login = async (req, res, next) => {
 
     const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
-    // to add a token to the user
+    // add a token to the user
     await User.findByIdAndUpdate(user._id, { token });
 
     res.status(200).json({
@@ -111,3 +120,25 @@ export async function updateSubscription(req, res, next) {
     subscription,
   });
 }
+
+// Update a User's Avatar
+export const updateAvatar = async (req, res, next) => {
+  const { _id: user } = req.user;
+
+  if (req.file === undefined)
+    throw HttpError(404, "Image was not found, check form-data values");
+  const { path: tempUpload, originalname } = req.file;
+
+  const filename = `${user}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+  await adjustingAvatar(tempUpload);
+  await rename(tempUpload, resultUpload);
+
+  const avatarURL = path.join("avatars", filename);
+
+  await User.findByIdAndUpdate(user, { avatarURL });
+
+  res.json({ avatarURL });
+};
+
+// export default login;
