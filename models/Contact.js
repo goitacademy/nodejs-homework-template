@@ -6,10 +6,6 @@ import Joi from "joi";
 
 const contactSchema = new Schema(
   {
-    name: {
-      type: String,
-      required: [true, "Set name for contact"],
-    },
     email: {
       type: String,
     },
@@ -19,6 +15,10 @@ const contactSchema = new Schema(
     favorite: {
       type: Boolean,
       default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
     },
   },
   { versionKey: false }
