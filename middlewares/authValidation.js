@@ -32,4 +32,4 @@ const updateSubscriptionValid = validateBody(
 
 
 
-module.exports = { registerValid, loginValid, updateSubscriptionValid };
+module.exports = { registerValid, loginValid, updateSubscriptionValid,};
