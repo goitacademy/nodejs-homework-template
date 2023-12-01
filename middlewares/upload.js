@@ -23,4 +23,12 @@ const fileFilter = (req, file, cb) => {
         return cb(HttpError(400, "Invalid file extention"));
     }
     cb(null, true);
-}
+};
+
+const upload = multer({
+    storage,
+    limits,
+    //fileFilter,
+});
+
+export default upload;

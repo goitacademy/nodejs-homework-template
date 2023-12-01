@@ -2,7 +2,7 @@ import express from "express";
 import { contactAddSchema, contactUpdateSchema, contactFavoriteSchema } from "../../models/Contact.js";
 import contactsController from "../../controllers/contacts-controller.js";
 import { validateBody } from "../../decorators/index.js";
-import {authenticate, isEmptyBody, isValidId } from "../../middlewares/index.js";
+import {authenticate, isEmptyBody, isValidId, upload } from "../../middlewares/index.js";
 
 
 const contactsRouter = express.Router();
@@ -13,7 +13,7 @@ contactsRouter.get("/", contactsController.getListContacts);
 
 contactsRouter.get("/:id", isValidId, contactsController.getContactById);
 
-contactsRouter.post("/", isEmptyBody, validateBody(contactAddSchema), contactsController.addContact);
+contactsRouter.post("/", upload.single("poster"), isEmptyBody, validateBody(contactAddSchema), contactsController.addContact);
 
 contactsRouter.put("/:id", isValidId, isEmptyBody, validateBody(contactUpdateSchema), contactsController.updateById);
 
