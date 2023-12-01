@@ -48,7 +48,9 @@ const {ctrlWrapper} = require('../helpers/ctrWrapper');
     if(!result){
      throw HttpError(404, 'Not found');
     }
-    res.json(result);
+    res.json({
+      message:'missing field favorite'
+    });
    }
 
   module.exports = {
