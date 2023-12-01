@@ -3,7 +3,7 @@ const express = require("express");
 const ctrl = require("../../controllers/controllers");
 const addSchema = require("../../schemas/schemas");
 
-const { validateBody } = require("../../middleware/validateBody");
+const { validateBody } = require("../../middlewares/validateBody");
 
 const router = express.Router();
 
