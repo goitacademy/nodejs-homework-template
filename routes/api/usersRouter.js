@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { auth, uploadAvatar } = require("../../middlewares");
+const { auth, uploadAvatar } = require("../../middlewares/uploadAvatar");
 const ctrl = require("../../controllers/userController");
 const userRouter = express.Router();
 
