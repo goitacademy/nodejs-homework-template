@@ -6,6 +6,7 @@ const authRouter = require("./routes/api/authRoutes");
 const userRouter = require("./routes/api/user");
 
 const auth = require("./middlewares/auth");
+const path = require("path");
 
 require("dotenv").config();
 require("./db");
@@ -23,6 +24,9 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+
+app.use("/avatar", express.static(path.join(__dirname, "public/avatars")));
+// in case of video, app.use("/videos", express.static(path.join(__dirname, "public/videos)));
 
 app.use("/auth", authRouter);
 app.use("/api/contacts", auth, contactsRouter);
