@@ -53,8 +53,8 @@ async function register(req, res, next) {
     await sendEmail({
       to: email,
       subject: "Welcome to the Contacts App!",
-      html: `To confirm your email, please click <a href="http://localhost:8080/api/users/verify/${verificationToken}">Link</a>`,
-      text: `To confirm your email, please open http://localhost:8080/api/users/verify/${verificationToken}`,
+      html: `To confirm your email, please click <a href="http://localhost:3000/api/users/verify/${verificationToken}">Link</a>`,
+      text: `To confirm your email, please open http://localhost:3000/api/users/verify/${verificationToken}`,
     });
 
     const addUser = await User.create({
@@ -216,8 +216,8 @@ async function postVerify(req, res, next) {
     await sendEmail({
       to: email,
       subject: "Welcome to the Contacts App!",
-      html: `To confirm your email, please click <a href="http://localhost:8080/api/users/verify/${verificationToken}">Link</a>`,
-      text: `To confirm your email, please open http://localhost:8080/api/users/verify/${verificationToken}`,
+      html: `To confirm your email, please click <a href="http://localhost:3000/api/users/verify/${verificationToken}">Link</a>`,
+      text: `To confirm your email, please open http://localhost:3000/api/users/verify/${verificationToken}`,
     });
 
    res.status(200).send({message: "Verification Email Sent Successfully"});
