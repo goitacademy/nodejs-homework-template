@@ -7,6 +7,8 @@ const {
   updateStatusContact,
 } = require("../models/contacts");
 const HttpError = require("../helpers/HttpError");
+require("dotenv").config();
+require("../server");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -103,6 +105,26 @@ const updateContactStatus = async (req, res, next) => {
   }
 };
 
+const updateContactFavorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (favorite === undefined && Object.keys(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing field favorite" });
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, { favorite });
+    if (updatedContact) {
+      res.status(200).json(updatedContact);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    next(new HttpError(500, "Internal Server Error"));
+  }
+};
+
 module.exports = {
   getAllContacts,
   getContact,
@@ -110,4 +132,5 @@ module.exports = {
   deleteContact,
   updateContactData,
   updateContactStatus,
+  updateContactFavorite,
 };

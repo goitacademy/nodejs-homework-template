@@ -2,22 +2,6 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const HttpError = require("../helpers/HttpError");
 
-mongoose
-  .connect(
-    "mongodb+srv://dbuser:12345@cluster0.tmfwdxi.mongodb.net/db-contacts?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    console.log("Database connection successful");
-  })
-  .catch((error) => {
-    console.error("Database connection error:", error.message);
-    process.exit(1);
-  });
-
 const contactSchema = new Schema({
   name: {
     type: String,
