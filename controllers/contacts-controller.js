@@ -1,13 +1,14 @@
-
 import {
   getContactById,
   listContacts,
   addContact,
+  updateContactById,
 } from "../models/contacts.js";
 import { HttpError } from "../helpers/index.js";
-import { contactsAddSchema } from "../schemas/contacts-schemas.js";
-
-
+import {
+  contactsAddSchema,
+  contactsUpdateSchema,
+} from "../schemas/contacts-schemas.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -39,7 +40,6 @@ const add = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const result = await addContact(req.body);
-    console.log(result)
 
     res.status(201).json(result);
   } catch (error) {
@@ -47,8 +47,29 @@ const add = async (req, res, next) => {
   }
 };
 
+const removeById = async (req, res, next) => {};
+
+const updateById = async (req, res, next) => {
+  try {
+    const { error } = contactsUpdateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await updateContactById(contactId, req.body);
+
+    if (!result) {
+      throw HttpError(404, "Not found")
+    }
+
+    res.json(result)
+  } catch (error) {}
+};
+
 export default {
   getAll,
   getById,
   add,
+  removeById,
+  updateById,
 };

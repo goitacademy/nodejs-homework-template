@@ -5,3 +5,9 @@ export const contactsAddSchema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().required(),
 });
+
+export const contactsUpdateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string() ,
+});
