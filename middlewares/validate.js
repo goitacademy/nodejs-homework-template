@@ -1,4 +1,4 @@
-const HttpError = require("../common/HttpError");
+const HttpError = require("../common/models/HttpError");
 
 const validate = (schema) => async (req, res, next) => {
   try {

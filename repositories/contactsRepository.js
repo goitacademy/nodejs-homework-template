@@ -1,6 +1,6 @@
 const path = require('node:path');
 const fs = require('node:fs/promises');
-const HttpError = require('../common/HttpError');
+const HttpError = require('../common/models/HttpError');
 
 class ContactsRepository {
   contactsPath = path.resolve(__dirname, "..", "db", "contacts.json");

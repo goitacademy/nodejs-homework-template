@@ -1,7 +1,7 @@
 const express = require('express');
 const contactController = require('../../controllers/contacts');
 const validate = require('../../middlewares/validate');
-const errorWrapper = require('../../common/errorWrapper');
+const errorWrapper = require('../../common/utils/errorWrapper');
 const updateContactSchema = require('../../validationSchemas/updateContact');
 const createContactSchema = require('../../validationSchemas/createContact');
 

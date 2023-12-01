@@ -1,4 +1,4 @@
-const HttpError = require('../common/HttpError');
+const HttpError = require('../common/models/HttpError');
 const Contact = require('../models/contact');
 const contactRepository = require('../repositories/contactsRepository');
 
