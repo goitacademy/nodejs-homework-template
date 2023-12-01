@@ -1,15 +1,34 @@
 const Contact = require("../models/contacts");
 
-const listContacts = () => Contact.find();
+const listContacts = async (userId) => {
+  const contacts = await Contact.find({ owner: userId });
+  return contacts;
+};
 
-const getContactById = (contactId) => Contact.findById(contactId);
+const getContactById = async (contactId, userId) =>{
+  const contact = await Contact.findOne({ _id: contactId, owner: userId });
+  return contact;
+};
 
-const removeContact = (contactId) => Contact.findByIdAndDelete(contactId);
+const removeContact = async (contactId, userId) =>
+   {
+  const deletedContact = await Contact.findOneAndDelete({ _id: contactId, owner: userId });
+  return deletedContact;
+};
 
-const addContact = (body) => Contact.create(body);
+const addContact = async (body, userId) => {
+  const newContact = await Contact.create({ ...body, owner: userId });
+  return newContact;
+};
 
-const updateContact = (contactId, body) =>
-  Contact.findByIdAndUpdate(contactId, body, { new: true });
+const updateContact = async  (contactId, body, userId) => {
+  const updatedContact = await Contact.findOneAndUpdate(
+    { _id: contactId, owner: userId },
+    body,
+    { new: true }
+  );
+  return updatedContact;
+};
 
 module.exports = {
   listContacts,
