@@ -5,13 +5,15 @@ const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
-  favorite: Joi.boolean().required()
+    favorite: Joi.boolean().required(),
+    
 })
 
 
 async function getContacts(req, res, next) { 
     try { 
-        const responce = await Contact.find().exec()
+        const{ _id: owner } = req.user 
+        const responce = await Contact.find({owner}).populate("owner", " email").exec()
         res.send(responce)
     } catch (e) {
         next(e)
@@ -32,6 +34,7 @@ async function getContactById(req, res, next) {
 }
 
 async function createContact(req, res, next) {
+    
     const contact = {
             name:req.body.name,
             email:req.body.email,
@@ -40,10 +43,11 @@ async function createContact(req, res, next) {
         }
     try {
         const { error } = addSchema.validate(req.body)
+        const { _id: owner } = req.user
         if (error) {
             throw HttpError(404, "Validation error")
         }
-        const result = await Contact.create(contact)
+        const result = await Contact.create({ ...contact, owner })
         res.status(201).send(result)
     } catch (e) {
         next(e)
