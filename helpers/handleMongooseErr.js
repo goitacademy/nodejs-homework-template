@@ -1,10 +1,18 @@
 const { status } = require("../consts");
 
 const handleMongooseErr = (err) => {
-  if (err.name !== "ValidationError") {
+  const { name } = err;
+
+  if (name === "ValidationError") {
+    err.status = status.MISSING_DATA.status;
     return err;
   }
-  err.status = status.MISSING_DATA.status;
+
+  if (name === "MongoServerError") {
+    err.status = status.USER_CONFLICT.status;
+    return err;
+  }
+
   return err;
 };
 

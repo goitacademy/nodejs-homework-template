@@ -1,31 +1,47 @@
 const express = require("express");
 const controller = require("../../controllers/contacts");
-const { validateMongoId, validateBody } = require("../../middlewares");
+const {
+  validateMongoId,
+  validateBody,
+  authenticate,
+} = require("../../middlewares");
 const {
   joiContactSchema,
   joiFavoriteSchema,
 } = require("../../schema/contacts");
-const { route } = require("../../consts");
+const { pathContact } = require("../../consts");
 
 const router = express.Router();
 
-router.get(route.HOME, controller.getAll);
+router.get(pathContact.HOME, authenticate, controller.getAll);
 
-router.get(route.ID, validateMongoId, controller.getById);
+router.get(pathContact.ID, authenticate, validateMongoId, controller.getById);
 
-router.post(route.HOME, validateBody(joiContactSchema), controller.addItem);
+router.post(
+  pathContact.HOME,
+  authenticate,
+  validateBody(joiContactSchema),
+  controller.addItem
+);
 
-router.delete(route.ID, validateMongoId, controller.deleteItem);
+router.delete(
+  pathContact.ID,
+  authenticate,
+  validateMongoId,
+  controller.deleteItem
+);
 
 router.put(
-  route.ID,
+  pathContact.ID,
+  authenticate,
   validateMongoId,
   validateBody(joiContactSchema),
   controller.updateItemById
 );
 
 router.patch(
-  route.FAVORITE,
+  pathContact.FAVORITE,
+  authenticate,
   validateMongoId,
   validateBody(joiFavoriteSchema),
   controller.updateStatusContact

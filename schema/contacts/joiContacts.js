@@ -6,9 +6,9 @@ const joiContactSchema = Joi.object({
     "string.empty": "Name is not allowed to be empty",
   }),
   email: Joi.string()
-    // .email({
-    //   minDomainSegments: 2,
-    // })
+    .email({
+      minDomainSegments: 2,
+    })
     .required()
     .messages({
       "any.required": "Email is required",

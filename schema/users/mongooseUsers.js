@@ -1,16 +1,17 @@
 const check = require("validator");
 const { Schema } = require("mongoose");
+const { subscription } = require("../../consts");
 
-const mongooseContactSchema = new Schema(
+const mongooseUserShema = new Schema(
   {
-    name: {
+    password: {
       type: String,
-      trim: true,
-      required: [true, "Name is required"],
+      required: [true, "Set password for user"],
     },
     email: {
       type: String,
       required: [true, "Email is required"],
+      unique: true,
       lowercase: true,
       trim: true,
       validate: {
@@ -18,24 +19,17 @@ const mongooseContactSchema = new Schema(
         message: "Email has wrong format",
       },
     },
-    phone: {
+    subscription: {
       type: String,
-      required: [true, "Phone is required"],
-      trim: true,
+      enum: subscription,
+      default: "starter",
     },
-
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
-
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
+    token: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }
 );
 
-module.exports = mongooseContactSchema;
+module.exports = mongooseUserShema;

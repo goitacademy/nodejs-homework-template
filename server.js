@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const app = require("./app");
 
-const DB_CONNECT_TEMP = require("./tempConf");
+const { DB_CONNECT_TEMP } = require("./tempConf");
 
 (async function startServer() {
   try {

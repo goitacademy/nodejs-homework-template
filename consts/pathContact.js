@@ -1,10 +1,10 @@
-const route = {
+const pathContact = {
   ROOT: "/api/contacts",
   HOME: "/",
   ID: "/:contactId",
   FAVORITE: "/:contactId/favorite",
 };
 
-Object.freeze(route);
+Object.freeze(pathContact);
 
-module.exports = route;
+module.exports = pathContact;
