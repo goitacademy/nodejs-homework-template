@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const User = require("../models/user");
 
-
 async function register(req, res, next) {
   const { email, password } = req.body;
   // Joi
@@ -13,7 +12,7 @@ async function register(req, res, next) {
   });
 
   const validation = schema.validate({ email, password });
-
+ 
   if (validation.error) {
     return res.status(400).json({ message: validation.error.details[0].message });
   }
@@ -29,7 +28,7 @@ async function register(req, res, next) {
         message: "Registration successful",
         user: {
             email: newUser.email, 
-            subscription: newUser.subscription
+            subscription: newUser.subscription,
         }     
     });
      

@@ -22,7 +22,7 @@ async function auth(req, res, next) {
     }
 
     req.user = { id: user._id, email: user.email };
-    console.log(req.user);
+    // console.log(req.user);
 
     next();
   } catch (err) {
