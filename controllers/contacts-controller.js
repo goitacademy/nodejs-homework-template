@@ -23,7 +23,7 @@ const getById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await getContactById(contactId);
     if (!result) {
-      HttpError(404, `Contact with id=${contactId} not found`);
+      HttpError(404, `Not found`);
     }
     res.json(result);
   } catch (error) {
@@ -38,7 +38,8 @@ const add = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = addContact(req.body);
+    const result = await addContact(req.body);
+    console.log(result)
 
     res.status(201).json(result);
   } catch (error) {
