@@ -6,6 +6,8 @@ const jsonParser = express.json();
 
 const ContactController = require("../controllers/contacts");
 
+router.use("/:contactId", ContactController.validateContactId);
+
 router.get("/", ContactController.getContacts);
 
 router.get("/:contactId", ContactController.getContact);
