@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(process.env.MONGO_URI, {})
+  // mongodb+srv://dbuser:12345@cluster0.tmfwdxi.mongodb.net/db-contacts?retryWrites=true&w=majority
   .then(() => {
     console.log("Database connection successful");
 
