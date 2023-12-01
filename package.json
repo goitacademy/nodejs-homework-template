@@ -17,6 +17,8 @@
     "cross-env": "7.0.3",
     "express": "^4.18.2",
     "fs.promises": "^0.1.2",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.10",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.2.0",
