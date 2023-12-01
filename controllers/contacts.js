@@ -117,4 +117,5 @@ module.exports = {
   deleteContact,
   updateContact,
   updateStatusContact,
+  validateContactId,
 };

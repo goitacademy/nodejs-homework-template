@@ -11,7 +11,7 @@ function auth(req, res, next) {
 
   const [bearer, token] = authHeader.split(" ", 2);
 
-  if (bearer !== "Bearer") {
+  if (bearer !== "Bearer" || !token) {
     return res.status(401).send({ message: "Invalid token" });
   }
 
@@ -29,6 +29,13 @@ function auth(req, res, next) {
       if (user.token !== token) {
         return res.status(401).send({ message: "Invalid token" });
       }
+
+      if (user.verify !== true) {
+        return res
+          .status(401)
+          .send({ message: "Your account is not verifiednpm" });
+      }
+
       req.user = { id: user._id, name: user.name };
       next();
     } catch (error) {
