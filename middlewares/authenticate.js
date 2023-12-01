@@ -16,8 +16,8 @@ const authenticate = async (req, res, next) => {
 
   const [bearer, token] = authorization.split(" ");
 
-  if (bearer !== "Bearer") {
-    throw HttpError(401, "Invalid bearer token");
+  if (bearer !== "Bearer" || !token) {
+    throw HttpError(401, "Not authorized");
   }
 
   try {

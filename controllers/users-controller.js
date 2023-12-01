@@ -21,8 +21,10 @@ const register = async (req, res, next) => {
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
   res.status(201).json({
-    email: newUser.email,
-    subscription: newUser.subscription,
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
   });
 };
 
@@ -46,12 +48,23 @@ const login = async (req, res, next) => {
 
   res.json({
     token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
 
 const getCurrent = async (req, res, next) => {
   const { email, subscription } = req.user;
-
+  // const { _id } = req.user;
+  // // const user = await User.findByIdAndUpdate(_id, { token: "" },);
+  // const user = await User.findOne( {token: "" });
+  // if (!user || !token) {
+  //   return res.status(401).json({
+  //     message: "Not authorized",
+  //   });
+  // }
   res.json({
     email,
     subscription,
