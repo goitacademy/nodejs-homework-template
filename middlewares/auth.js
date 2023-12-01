@@ -9,7 +9,7 @@ async function auth(req, res, next) {
   }
 
   const [bearer, token] = authHeader.split(" ", 2);
-  if (bearer !== "Bearer" || token !== "Token") {
+  if (bearer !== "Bearer") {
     return res.status(403).send({ message: "Invalid Token" });
   }
 
