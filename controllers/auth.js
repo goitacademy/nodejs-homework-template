@@ -1,9 +1,18 @@
 const { HttpError } = require('../helpers/HttpError')
 const ctrlWrapper = require('../helpers/CtrlWrapper')
 const bcrypt = require("bcrypt")
+
+const gravatar = require("gravatar")
+
+const path = require("path")
+
+const fs =  require("fs/promises")
+
 const { User } = require('../models/user')
 const jwt = require("jsonwebtoken")
-const {SECRET_KEY} = process.env
+const { SECRET_KEY } = process.env
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars")
 
 const register = async (req, res) => {
     const { email, password } = req.body
@@ -14,7 +23,9 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10)
 
-    const newUser = await User.create({ ...req.body, password: hashPassword })
+    const avatarURL = gravatar.url(email)
+
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL })
     // console.log(newUser)
     res.status(201).json({
         email: newUser.email,
@@ -106,9 +117,32 @@ const currentUser = async (req, res, next) => {
     
 }
 
+const updateAvatar = async (req, res, next) => {
+    try {
+        const { _id } = req.user
+        if (req.file === undefined) {
+            throw HttpError(400, "No avatar image");
+        }
+        const { path: tempUpload, originalname } = req.file;
+        const filename = `${_id}_${originalname}`
+        const resultUpload = path.join(avatarsDir, filename)
+        await fs.rename(tempUpload, resultUpload)
+        const avatarURL = path.join("avatars", filename)
+        const user = await User.findByIdAndUpdate(_id, { avatarURL })
+        res.json({
+            avatarURL,
+        }) 
+        
+    } catch (e) {
+        next(e)
+    }
+    
+}
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     logout: ctrlWrapper(logout),
-    currentUser: ctrlWrapper(currentUser)
+    currentUser: ctrlWrapper(currentUser),
+    updateAvatar: ctrlWrapper(updateAvatar)
 }
