@@ -1,5 +1,4 @@
 const User = require("../models/user");
-
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
@@ -29,11 +28,7 @@ const updateAvatar = async (req, res) => {
   await fs.rename(tempURL, resultURL);
   const avatarURL = path.join("avatars", filename);
 
-  await User.findByIdAndUpdate(
-    _id,
-    { avatarURL, avatarImage: filename },
-    { new: true }
-  ).exec();
+  await User.findByIdAndUpdate(_id, { avatarURL }, { new: true }).exec();
 
   res.status(200).json({
     avatarURL,
@@ -41,7 +36,6 @@ const updateAvatar = async (req, res) => {
 };
 
 const getAvatar = async (req, res) => {
-  console.log(req.user);
   const user = await User.findById(req.user._id).exec();
   if (user === null) {
     return res.status(404).send({ message: "User not found" });

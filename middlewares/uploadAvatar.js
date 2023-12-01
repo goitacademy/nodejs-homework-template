@@ -10,7 +10,6 @@ const multerConfig = multer.diskStorage({
   filename: (req, file, cb) => {
     const { _id } = req.user;
 
-    // розширення файлу
     const extname = path.extname(file.originalname);
     const filename = `${_id}${extname}`;
 

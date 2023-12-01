@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const gravatar = require("gravatar"); // Import gravatar
 const { handleSaveError } = require("./hooks");
 
 const emailRegexp = /^\w+(\.-?\w+)*@\w+(\.-?\w+)*(\.\w{2,3})+$/;
@@ -22,7 +23,12 @@ const userSchema = new Schema(
       default: "starter",
     },
     token: { type: String, default: null },
-    avatar: { type: String, default: null },
+    avatarURL: {
+      type: String,
+      default: function () {
+        return gravatar.url(this.email, { s: "250", r: "pg", d: "mm" }, true);
+      },
+    },
   },
   {
     versionKey: false,
