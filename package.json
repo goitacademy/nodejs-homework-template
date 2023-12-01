@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
@@ -13,7 +13,6 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "2.8.5",
-    "cross-env": "7.0.3",
     "dotenv": "^16.3.1",
     "express": "4.17.1",
     "gravatar": "^1.8.2",
@@ -27,7 +26,7 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.23.3",
+    "cross-env": "^7.0.3",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",

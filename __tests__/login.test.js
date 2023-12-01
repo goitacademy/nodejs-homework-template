@@ -7,39 +7,65 @@
 import app from "../app.js";
 import request from "supertest";
 import mongoose from "mongoose";
-import { configDotenv } from "dotenv";
+import { response } from "express";
 
-configDotenv();
+const { DB_HOST, PORT } = process.env;
 
-const { DB_HOST, PORT = 3000 } = process.env;
-const testLogin = {
-  email: "test@mail.com",
+const registerData = {
+  email: "cherkashyna.n1@gmail.com",
   password: "qweqwe",
 };
 
-mongoose.set("strictQuery", true);
+describe("test /users/login route", () => {
+  let server = null;
 
-describe("POST users/login test", () => {
   beforeAll(async () => {
-    try {
-      await mongoose.connect(DB_HOST);
-      app.listen(PORT);
-    } catch (error) {
-      process.exit(1);
-    }
+    await mongoose.connect(DB_HOST);
+    server = app.listen(PORT);
   });
 
   afterAll(async () => {
     await mongoose.connection.close();
+    server.close();
   });
 
-  let response;
+  // test("/users/register with correct data", async () => {
+  //   const { body, statusCode } = await request(app)
+  //     .post("/users/register")
+  //     .send(registerData);
 
-  beforeEach(async () => {
-    response = await request(app).post("/users/login").send(testLogin);
-  });
+  //   expect(statusCode).toBe(201);
+  //   expect(body.email).tobe(registerData.email);
+  //   expect(body.password).toBe(registerData.password);
+
+  //   const user = await User.findOne({ email: registerData.email });
+  //   expect(user.email).tobe(registerData.email);
+  //   expect(user.password).toBe(registerData.password);
+  // });
 
   it("Should return statusCode 200", async () => {
-    expect(response.status).toBe(200);
+    const { statusCode } = await request(app)
+      .post("/users/login")
+      .send(registerData);
+    expect(statusCode).toBe(200);
+  });
+
+  it("Should return token", async () => {
+    const { body } = await request(app).post("/users/login").send(registerData);
+    expect(body.token).toBeDefined();
+  });
+
+  it("Should return an object with 2 fields and type String", async () => {
+    const { body } = await request(app).post("/users/login").send(registerData);
+    expect(body.user).toEqual({
+      email: body.user.email,
+      subscription: body.user.subscription,
+    });
+  });
+
+  it("Filds should be string", async () => {
+    const { body } = await request(app).post("/users/login").send(registerData);
+    expect(typeof body.user.email === "string").toBe(true);
+    expect(typeof body.user.subscription === "string").toBe(true);
   });
 });
