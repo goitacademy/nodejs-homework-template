@@ -1,9 +1,9 @@
-const app = require('./app')
 const mogoose = require ('mongoose')
+const app = require('./app')
 
-const DB_HOST = process.env;
+const {DB_HOST} = process.env;
 
-mogoose.set('strictQuery', true)
+mogoose.set('strictQuery', true);
 
 mogoose.connect(DB_HOST)
  .then(() => {
@@ -14,6 +14,6 @@ mogoose.connect(DB_HOST)
   process.exit(1);
  })
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+// app.listen(3000, () => {
+//   console.log("Server running. Use our API on port: 3000")
+// })
