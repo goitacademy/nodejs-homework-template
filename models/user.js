@@ -25,16 +25,16 @@ const userSchemas = new mongoose.Schema(
       type: String,
       default: null,
     },
-    // токен верификации
-    tokenVerify: {            
-      type: String,
-      default: null,
-    },
     // булевое значение для логина. Подтвердил пользователь свою почту или нет
     verify: {
-      type: String,
+      type: Boolean,
       default: false,
-    }
+    },
+    // токен верификации
+    verificationToken: {
+      type: String,
+      default: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );

@@ -47,14 +47,14 @@ async function register(req, res, next) {
     const passwordHash = await bcrypt.hash(password, 10);
 
     // создаём уникальное поле при регистрации для верификации пользователя
-    const tokenVerify = crypto.randomUUID();
+    const verificationToken = crypto.randomUUID();
 
     //  отправка письма для подтвержения верификации пользователя
     await sendEmail({
       to: email,
       subject: "Welcome to the Contacts App!",
-      html: `To confirm your email, please click <a href="http://localhost:8000/api/users/verify/${tokenVerify}">Link</a>`,
-      text: `To confirm your email, please open http://localhost:8000/api/users/verify/${tokenVerify}`,
+      html: `To confirm your email, please click <a href="http://localhost:8080/api/users/verify/${verificationToken}">Link</a>`,
+      text: `To confirm your email, please open http://localhost:8080/api/users/verify/${verificationToken}`,
     });
 
     const addUser = await User.create({
@@ -62,7 +62,7 @@ async function register(req, res, next) {
       password: passwordHash,
       subscription,
       avatarURL, // Сохраняем URL аватара в поле avatarURL
-      tokenVerify, // Сохраняем значение верификации
+      verificationToken, // Сохраняем значение верификации
     });
 
     console.log("User registered successfully:", addUser);
@@ -109,6 +109,12 @@ async function login(req, res, next) {
     if (isMatch === false) {
       console.log("Password doesn't match");
       return res.status(401).send({ message: "Email or password is wrong" });
+    }
+
+    if (user.verify === false) {
+      res
+        .status(401)
+        .send({ message: "You have not confirmed your e-mail address!" });
     }
 
     const token = jwt.sign(
@@ -165,9 +171,66 @@ async function current(req, res, next) {
     next(error);
   }
 }
+
+
+async function verify(req, res, next) {
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne({ verificationToken: token }).exec();
+
+    if (user === null) {
+      res.status(404).send({ message: "User not found" });
+    }
+
+    await User.findByIdAndUpdate(user._id, {
+      verify: true,
+      verificationToken: null,
+    });
+    res.status(200).send({ message: "Verification successful" });
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function postVerify(req, res, next) {
+  const { email } = req.body;
+
+  try {
+    // проверка на отсутвие электронной почты
+     if (!email) {
+       res.status(400).send({ message: "missing required field email" });
+    }
+    
+    // проверка, верифицирован ли уже пользователь или нет
+    const userVerifined = await User.findOne({ email }).exec();
+
+    if (userVerifined && userVerifined.verify) {
+       return res.status(400).send({ message: "Verification has already been successful" });
+    }
+
+    // создаём уникальное поле при регистрации для верификации пользователя
+    const verificationToken = crypto.randomUUID();
+
+    //  отправка письма для подтвержения верификации пользователя
+    await sendEmail({
+      to: email,
+      subject: "Welcome to the Contacts App!",
+      html: `To confirm your email, please click <a href="http://localhost:8080/api/users/verify/${verificationToken}">Link</a>`,
+      text: `To confirm your email, please open http://localhost:8080/api/users/verify/${verificationToken}`,
+    });
+
+   res.status(200).send({message: "Verification Email Sent Successfully"});
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   register,
   login,
   logout,
   current,
+  verify,
+  postVerify,
 };

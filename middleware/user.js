@@ -29,6 +29,12 @@ function auth(req, res, next) {
       if (user.token !== token) {
         return res.status(401).send({ message: "Invalid token" });
       }
+
+        if (user.verify === false) {
+          res
+            .status(401)
+            .send({ message: "You have not confirmed your e-mail address!" });
+        }
       req.user = { id: user._id, name: user.name };
       next();
     } catch (error) {
