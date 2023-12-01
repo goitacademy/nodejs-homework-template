@@ -13,7 +13,7 @@ describe("login", () => {
   });
 
   test("should return response status code 200", async () => {
-    const response = await supertest(app).post("/api/users/login").send({
+    const response = await supertest(app).post("/login").send({
       email: "test@gmail.com",
       password: "111111",
     });
