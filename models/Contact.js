@@ -40,6 +40,7 @@ export const contactAddSchema = Joi.object({
     email: Joi.string(),
     phone: Joi.string(), 
     favorite: Joi.boolean(),
+    //poster: Joi.string().required(),
 });
 
 
@@ -47,6 +48,7 @@ export const contactUpdateSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
     phone: Joi.string(),
+    //poster: Joi.string().required(),
     favorite: Joi.boolean().messages({
         "string.base": `missing field favorite`,
     }),

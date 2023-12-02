@@ -12,7 +12,7 @@ contactsRouter.use(authenticate);
 contactsRouter.get("/", contactsController.getListContacts);
 
 contactsRouter.get("/:id", isValidId, contactsController.getContactById);
-
+// upload.array("poster",8)
 contactsRouter.post("/", upload.single("poster"), isEmptyBody, validateBody(contactAddSchema), contactsController.addContact);
 
 contactsRouter.put("/:id", isValidId, isEmptyBody, validateBody(contactUpdateSchema), contactsController.updateById);

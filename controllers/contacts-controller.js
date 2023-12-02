@@ -3,6 +3,9 @@ import path from "path";
 import Contact from "../models/Contact.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError } from "../helpers/index.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const postersPath = path.resolve("public", "avatars");
 
@@ -33,7 +36,7 @@ const addContact = async (req, res) => {
     const newPath = path.join(postersPath, filename)
     await fs.rename(oldPath, newPath);
     
-    const poster = path.join("public", "avatars", filename);
+    const poster = path.join("avatars", filename);
     const result = await Contact.create({ ...req.body, poster, owner });
     
     res.status(201).json(result);

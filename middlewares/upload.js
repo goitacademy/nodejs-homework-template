@@ -1,6 +1,10 @@
 import multer from "multer";
 import path from "path";
 import { HttpError } from "../helpers/index.js";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 
 const destination = path.resolve("temp");
 
