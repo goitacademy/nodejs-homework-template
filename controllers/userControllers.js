@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const gravatar = require("gravatar");
 
 const register = async (email, password) => {
   const existingUser = await User.findOne({ email });
@@ -8,9 +9,12 @@ const register = async (email, password) => {
     throw new Error("Email in use");
   }
 
-  const newUser = await User.create({ email, password });
+  const avatarURL = gravatar.url(email, { s: "250", r: "pg", d: "identicon" });
+
+  const newUser = await User.create({ email, password, avatarURL });
   return newUser;
 };
+
 
 const login = async (email, password) => {
   const user = await User.findOne({ email });
@@ -23,7 +27,7 @@ const login = async (email, password) => {
     throw new Error("Email or password is wrong");
   }
 
-  const token = jwt.sign({ userId: user._id }, "your-secret-key", {
+  const token = jwt.sign({ userId: user._id }, "SECRET_KEY", {
     expiresIn: "1h",
   });
   user.token = token;
