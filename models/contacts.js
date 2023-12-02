@@ -47,7 +47,8 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   try {
-    return await Contact.create(body);
+    const newContact = await Contact.create(body);
+    return newContact.toObject({ versionKey: false });
   } catch (error) {
     throw new HttpError(500, "Error adding contact to the database");
   }

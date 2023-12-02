@@ -29,14 +29,19 @@ const getContact = async (req, res, next) => {
       next(new HttpError(404, "Not found"));
     }
   } catch (error) {
-    next(new HttpError(500, "Internal Server Error"));
+    if (error instanceof HttpError && error.statusCode === 404) {
+      next(error);
+    } else {
+      next(new HttpError(500, "Internal Server Error"));
+    }
   }
 };
-
 const createContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
-    return next(new HttpError(400, "Missing required fields"));
+    return next(
+      new HttpError(400, "Missing required fields: name, email, phone")
+    );
   }
 
   try {
