@@ -1,18 +1,17 @@
-// middlewares\uploadAvatar.js
 const multer = require('multer');
 const jimp = require('jimp');
 const fs = require('fs/promises');
 const path = require('path');
 
-const storage = multer.memoryStorage(); // Загружаем файл в память, а не на диск
+const storage = multer.memoryStorage(); // Загружаємо файл в пам'ять, а не на диск
 
 const uploadAvatar = multer({
   storage,
   limits: {
-    fileSize: 1024 * 1024, // Максимальный размер файла (1 MB)
+    fileSize: 1024 * 1024, // Максимальний розмір файлу (1 MB)
   },
   fileFilter: (req, file, cb) => {
-    // Проверка типа файла (картинка)
+    // Перевірка типу файлу (зображення)
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -20,6 +19,7 @@ const uploadAvatar = multer({
     }
   },
 });
+
 // Додана логіка для збереження файлів у папці tmp
 const saveToTmp = async (file) => {
   const tmpPath = path.join(__dirname, '..', 'tmp'); // Шлях до папки tmp в корені проекту
@@ -71,6 +71,5 @@ module.exports = async (req, res, next) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
 
 module.exports = uploadAvatar;
