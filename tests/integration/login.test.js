@@ -17,7 +17,7 @@ describe("login", () => {
     await User.deleteMany();
 
     await supertest(app).post("/users/register").send({
-      email: "userauthtest@gmail.com",
+      email: "1userauthtest@gmail.com",
       password: "123456qwert",
     });
   });
@@ -28,7 +28,7 @@ describe("login", () => {
 
   test("should login existing user", async () => {
     const response = await supertest(app).post("/users/login").send({
-      email: "userauthtest@gmail.com",
+      email: "1userauthtest@gmail.com",
       password: "123456qwert",
     });
   
@@ -36,7 +36,7 @@ describe("login", () => {
     const { user, token } = body;
   
     expect(statusCode).toBe(200);
-    expect(user.email).toBe("userauthtest@gmail.com");
+    expect(user.email).toBe("1userauthtest@gmail.com");
     expect(user).toHaveProperty("subscription");
     expect(typeof user.subscription).toBe("string");
   
@@ -58,7 +58,7 @@ describe("login", () => {
 
   test("should not login a user, because of invalid password", async () => {
     const response = await supertest(app).post("/users/login").send({
-      email: "userauthtest@gmail.com",
+      email: "1userauthtest@gmail.com",
       password: "invalidPassword",
     });
 
