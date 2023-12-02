@@ -4,7 +4,7 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const updateAvatar = async (req, res) => {
-  console.log("Update avatar function is called"); 
+  console.log("Update avatar function is called");
   try {
     // Проверяем, что req.file существует и имеет свойство path
     if (!req.file || !req.file.path) {
@@ -13,7 +13,7 @@ const updateAvatar = async (req, res) => {
 
     // Выводим в консоль информацию о файле
     console.log("File info:", req.file);
-    
+
     // Выводим в консоль информацию о пользователе
     console.log("User info:", req.user);
 
@@ -24,7 +24,7 @@ const updateAvatar = async (req, res) => {
     // Генерация уникального имени файла
     console.log("User ID:", req.user._id);
     console.log("File path:", req.file.path);
-    const uniqueFileName = `${Date.now()}-${req.user._id}${path.extname(
+    const uniqueFileName = `${Date.now()}-${req.user.id.toString()}${path.extname(  // здесь исправил _id на id
       req.file.originalname
     )}`;
 
@@ -32,7 +32,10 @@ const updateAvatar = async (req, res) => {
     console.log("Unique file name:", uniqueFileName);
 
     // Перемещение аватарки из tmp в public/avatars
-    await fs.rename(req.file.path, path.join(__dirname, '..', 'public', 'avatars', uniqueFileName));
+    await fs.rename(
+      req.file.path,
+      path.join(__dirname, "..", "public", "avatars", uniqueFileName)
+    );
 
     // Обновление поля avatarURL у пользователя
     req.user.avatarURL = `/avatars/${uniqueFileName}`;
@@ -42,7 +45,7 @@ const updateAvatar = async (req, res) => {
     res.json({ avatarURL: req.user.avatarURL });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    res.status(500).json({ message: "Internal Server Error updateAvatar" });
   }
 };
 
