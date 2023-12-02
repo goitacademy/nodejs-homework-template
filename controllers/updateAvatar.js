@@ -8,7 +8,7 @@ const updateAvatar = async (req, res) => {
   try {
     // Проверяем, что req.file существует и имеет свойство path
     if (!req.file || !req.file.path) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res.status(400).json({ message: "No file uploaded updateAvatar" });
     }
 
     // Выводим в консоль информацию о файле
@@ -32,7 +32,7 @@ const updateAvatar = async (req, res) => {
     console.log("Unique file name:", uniqueFileName);
 
     // Перемещение аватарки из tmp в public/avatars
-    await fs.rename(req.file.path, `public/avatars/${uniqueFileName}`);
+    await fs.rename(req.file.path, path.join(__dirname, '..', 'public', 'avatars', uniqueFileName));
 
     // Обновление поля avatarURL у пользователя
     req.user.avatarURL = `/avatars/${uniqueFileName}`;
