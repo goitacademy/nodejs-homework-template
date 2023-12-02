@@ -4,11 +4,12 @@ import {
   contactsAddSchema,
   contactsUpdateSchema,
   contactFavoriteSchema,
-} from "../schemas/contact-schema.js";
+} from "../models/Contact.js";
 
 const getAllContacts = async (req, res, next) => {
+  const { _id: owner } = req.user;
   try {
-    const result = await Contact.find();
+    const result = await Contact.find({ owner });
     res.json(result);
   } catch (error) {
     next(error);
@@ -17,9 +18,10 @@ const getAllContacts = async (req, res, next) => {
 
 const getContactId = async (req, res, next) => {
   // Вказуємо next для пошуку далі
+  const { _id: owner } = req.user;
   try {
     const { contactId } = req.params; // Деструктуризуэмо запит req та дістаємо ключ contactId(ключ перед : значення після)
-    const result = await Contact.findById(contactId);
+    const result = await Contact.findOne({ _id: contactId, owner });
     if (!result) {
       throw HttpError(404, `Not found`);
     }
@@ -30,12 +32,13 @@ const getContactId = async (req, res, next) => {
 };
 
 const addContact = async (req, res, next) => {
+  const { _id: owner } = req.user;
   try {
     const { error } = contactsAddSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({ ...req.body, owner });
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -43,14 +46,19 @@ const addContact = async (req, res, next) => {
 };
 
 const updateContacts = async (req, res, next) => {
+  const { _id: owner } = req.user;
+  console.log("Update");
   try {
     const { error } = contactsUpdateSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
-    console.log(req.body);
-    const result = await Contact.findByIdAndUpdate(contactId, req.body);
+
+    const result = await Contact.findOneAndUpdate(
+      { _id: contactId, owner },
+      req.body
+    );
     if (!result) {
       throw HttpError(404, `Not found`);
     }
@@ -61,13 +69,17 @@ const updateContacts = async (req, res, next) => {
 };
 
 const updateContactsFiled = async (req, res, next) => {
+  const { _id: owner } = req.user;
   try {
     const { error } = contactFavoriteSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndUpdate(contactId, req.body);
+    const result = await Contact.findOneAndUpdate(
+      { _id: contactId, owner },
+      req.body
+    );
 
     if (!result) {
       throw HttpError(404, `Not found`);
@@ -79,9 +91,10 @@ const updateContactsFiled = async (req, res, next) => {
 };
 
 const deleteContacts = async (req, res, next) => {
+  const { _id: owner } = req.user;
   try {
     const { contactId } = req.params;
-    const result = await Contact.findByIdAndDelete(contactId);
+    const result = await Contact.findOneAndDelete({ _id: contactId, owner });
     if (!result) {
       throw HttpError(404, `Not found`);
     }
