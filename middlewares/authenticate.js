@@ -21,6 +21,12 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: "Not authorized" });
     }
 
+    if (user.verify === false) {
+    return res.status(401).json({
+      message: "User is not verified",
+    });
+  }
+
     req.user = user;
     next();
   } catch {
