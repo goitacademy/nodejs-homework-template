@@ -8,7 +8,7 @@ const contactShema = new Schema(
             type: String,
             required: [true, "Set name for contact"],
         },
-        emai: {
+        email: {
             type: String,
         },
         phone: {
