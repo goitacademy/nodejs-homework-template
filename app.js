@@ -1,6 +1,6 @@
-import express from "express";
-import logger from "morgan";
-import cors from "cors";
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
 import contactsRouter from "./routes/api/contacts-router.js";
 import usersRouter from "./routes/api/users-router.js";
