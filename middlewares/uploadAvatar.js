@@ -1,3 +1,4 @@
+// middlewares\uploadAvatar.js
 const multer = require('multer');
 
 const storage = multer.memoryStorage(); // Загружаем файл в память, а не на диск

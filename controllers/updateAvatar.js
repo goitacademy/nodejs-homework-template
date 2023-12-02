@@ -12,7 +12,7 @@ const updateAvatar = async (req, res) => {
 
     // Выводим в консоль информацию о файле
     console.log("File info:", req.file);
-
+    
     // Выводим в консоль информацию о пользователе
     console.log("User info:", req.user);
 
