@@ -1,6 +1,5 @@
 const { writeFile, readFile } = require("fs/promises");
 const { join } = require("path");
-const { del } = require("express/lib/application");
 
 class DatabaseManager {
   constructor(fileName) {
