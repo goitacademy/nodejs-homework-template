@@ -4,6 +4,7 @@ const fs = require("fs/promises");
 const path = require("path");
 
 const updateAvatar = async (req, res) => {
+  console.log("Update avatar function is called"); 
   try {
     // Проверяем, что req.file существует и имеет свойство path
     if (!req.file || !req.file.path) {
