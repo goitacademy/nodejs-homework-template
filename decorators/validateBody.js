@@ -1,6 +1,6 @@
 import { HttpError } from "../helpers/HttpError.js";
 
-export const validateBody = (shema) => {
+const validateBody = (shema) => {
     const func = async(req, res, next) => {
         const isValidate = shema.validate(req.body);
         if (isValidate.error) {
@@ -10,3 +10,5 @@ export const validateBody = (shema) => {
     }
     return func
 }
+
+export default validateBody

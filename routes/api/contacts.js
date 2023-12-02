@@ -2,26 +2,28 @@ import express from 'express';
 
 import {getAll, add, getById, deleteById, updateById, updateStatusContact} from '../../controllers/contacts-controller.js'
 
-import { isEmptyBody } from '../../middlewares/isEmptyBody.js';
-import {isValidId} from '../../middlewares/isValidId.js'
+import { isEmptyBody, isValidId, authenticate } from '../../middlewares/index.js';
 
-import { ctrlWrapper } from '../../decorators/ctrlWrapper.js';
-import {validateBody} from '../../decorators/validateBody.js'
+import { ctrlWrapper, validateBody, validateQueryParam } from '../../decorators/index.js';
 
 import { contactAddSchema, contactUpdateSchema, contactPatchFavorite } from '../../schemas/contact-schemas.js';
 
-const router = express.Router();
+import {queryGetContactsSchema} from '../../schemas/query-schemas.js'
 
-router.get('/', ctrlWrapper(getAll));
+const contactsRouter = express.Router();
 
-router.get('/:contactId', isValidId, ctrlWrapper(getById));
+contactsRouter.use(ctrlWrapper(authenticate))
 
-router.post('/', isEmptyBody, validateBody(contactAddSchema), ctrlWrapper(add));
+contactsRouter.get('/', validateQueryParam(queryGetContactsSchema), ctrlWrapper(getAll));
 
-router.delete('/:contactId', isValidId, ctrlWrapper(deleteById))
+contactsRouter.get('/:contactId', isValidId, ctrlWrapper(getById));
 
-router.put('/:contactId', isValidId, isEmptyBody, validateBody(contactUpdateSchema), ctrlWrapper(updateById));
+contactsRouter.post('/', isEmptyBody, validateBody(contactAddSchema), ctrlWrapper(add));
 
-router.patch('/:contactId/favorite', isValidId, isEmptyBody, validateBody(contactPatchFavorite), ctrlWrapper(updateStatusContact))
+contactsRouter.delete('/:contactId', isValidId, ctrlWrapper(deleteById))
 
-export default router;
+contactsRouter.put('/:contactId', isValidId, isEmptyBody, validateBody(contactUpdateSchema), ctrlWrapper(updateById));
+
+contactsRouter.patch('/:contactId/favorite', isValidId, isEmptyBody, validateBody(contactPatchFavorite), ctrlWrapper(updateStatusContact))
+
+export default contactsRouter;

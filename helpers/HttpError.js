@@ -3,3 +3,4 @@ export const HttpError = (status, message) => {
     error.status = status;
     return error
 }
+

@@ -1,10 +1,16 @@
 import { Contact } from '../models/Contact.js';
-
 import { HttpError } from '../helpers/HttpError.js';
 
 export const getAll = async (req, res, next) => {
-        const result = await Contact.find()
-        res.json(result);
+    const { page = "1", limit = "10", ...query } = req.query;
+    const { _id: owner } = req.user
+
+    const result = await Contact.find(filter, "-createdAt -updatedAt", {
+        limit,
+        skip:(page-1) * limit,
+    })
+    const total = await Contact.countDocuments(filter);
+    res.json({data: result, totalHits: total.toString(), page, perPage: limit});
 }
 
 export const getById = async (req, res, next) => {
@@ -17,13 +23,21 @@ export const getById = async (req, res, next) => {
 }
 
 export const add = async (req, res) => {
-    const result = await Contact.create(req.body)   
-    res.status(201).json(result)
+    const { _id: owner } = req.user;
+    const result = await Contact.create({ ...req.body, owner});
+    res.status(201).json({
+        name: result.name,
+        email: result.email,
+        phone: result.phone,
+        favorite: result.favorite,
+        id: result._id
+    })
 }
 
 export const updateById = async (req, res, next) => {
-    const id = req.params.contactId
-    const result = await Contact.findByIdAndUpdate(id, req.body, {
+    const { _id: owner } = req.user;
+    const _id = req.params.contactId;
+    const result = await Contact.findByIdAndUpdate({_id, owner}, req.body, {
         new: true,
         select: '-createdAt',
     })
@@ -34,14 +48,14 @@ export const updateById = async (req, res, next) => {
 }
 
 export const updateStatusContact = async (req, res, next) => {
-    const id = req.params.contactId;
-    const body = req.body;
+    const { _id: owner } = req.user;
+    const _id = req.params.contactId;
 
     if (typeof body.favorite === 'undefined') {
         return res.status(400).json({ message: 'Missing field favorite' });
     }
 
-    const result = await Contact.findByIdAndUpdate(id, body, {
+    const result = await Contact.findByIdAndUpdate({_id, owner}, req.body, {
         new: true,
         select: '-createdAt',
     });
@@ -52,8 +66,9 @@ export const updateStatusContact = async (req, res, next) => {
 }
 
 export const deleteById = async (req, res, next) => {
-        const id = req.params.contactId;
-        const result = await Contact.findByIdAndDelete(id);
+    const { _id: owner } = req.user
+    const _id = req.params.contactId;
+    const result = await Contact.findByIdAndDelete({ _id, owner});
         if (!result) {
             return next(HttpError(404, `Not found`))
         }
