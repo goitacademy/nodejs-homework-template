@@ -13,4 +13,4 @@ COPY . .
 RUN yarn install --production
 
 # Команда для запуска приложения
-CMD ["node", "/app/app.js"]
+CMD ["node", "/app.js"]
