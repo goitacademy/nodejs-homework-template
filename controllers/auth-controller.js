@@ -92,11 +92,10 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-
   if (!req.file) {
-    throw HttpError(400, "file is not defined");
+    throw HttpError(400, "File is not defined");
   }
+  const { path: tempUpload, originalname } = req.file;
 
   const avatarImg = await Jimp.read(tempUpload);
   await avatarImg.cover(250, 250).writeAsync(tempUpload);
