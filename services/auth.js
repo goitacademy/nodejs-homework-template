@@ -6,6 +6,8 @@ const moment = require("moment");
 const gravatar = require('gravatar');
 const Jimp = require('jimp');
 const path = require('path');
+const { transporter } = require('../utils/nodemailer');
+const fs = require("fs").promises;
 
 const signup = async (Data) => {
   try {
@@ -37,6 +39,35 @@ const signup = async (Data) => {
       ...Data,
       avatarURL: gravatar.url(Data.email, { s: '250', d: 'identicon', r: 'pg' })
     });
+
+// Lee el contenido del archivo HTML de bienvenida
+    const htmlTemplate = (await fs.readFile(path.join(__dirname, '../static/html/welcone.html'))).toString();
+
+// Llena los marcadores de posición con los datos del usuario
+    const filledHtml = htmlTemplate
+      .replace('{{NameUser}}', createdUser.name) // Reemplaza con el nombre del usuario
+      .replace('{{emailUser}}', createdUser.email); // Reemplaza con el email del usuario
+
+  // send mail with defined transport object
+  const info = await transporter.sendMail({
+    from: `'"🖥️No_Reply 👻💻" <${process.env.EMAIL_SEND}>'`, // sender address
+    to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
+    subject: "Hello Signup successfully ✔", // Subject line
+    text: "Hello world?", // plain text body
+    // html: "<b>Hello world?</b>", // html body
+    html: filledHtml,
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  //
+  // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
+  //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
+  //       <https://github.com/forwardemail/preview-email>
+  //
+
+
 
     return {
       success: true,
