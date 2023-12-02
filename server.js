@@ -8,18 +8,18 @@ const app = require('./app')
 
 // ----------------
 
-const DB_HOST = "mongodb+srv://Valentin:Suemz3HTR4lctpBw@cluster0.rektj99.mongodb.net/db-contacts?retryWrites=true&w=majority"
+// const DB_HOST = "mongodb+srv://Valentin:Suemz3HTR4lctpBw@cluster0.rektj99.mongodb.net/db-contacts?retryWrites=true&w=majority"
 
-// const dotenv = require("dotenv");
-// dotenv.config();
+const dotenv = require("dotenv");
+dotenv.config();
 
-// const { DB_HOST, PORT = 3000 } = process.env;
+const { DB_HOST, PORT = 3000 } = process.env;
 
 
 mongoose.connect(DB_HOST)
     
   .then(() => {
-    app.listen(3000)
+    app.listen(PORT)
   })                       // console.log("Database connection successful"));
     .catch((error) => {
         console.log(error.message);
