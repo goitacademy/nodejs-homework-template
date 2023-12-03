@@ -23,8 +23,8 @@
         text-align: center;
         padding: 20px;
         background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 25px;
+          box-shadow: 0 0 10px rgb(0 0 0 / 32%);
       "
     >
       <h1 style="color: #333333">Activación Exitosa</h1>
@@ -34,16 +34,26 @@
 
       <!-- Datos del usuario -->
       <p style="margin-top: 20px">Registered User:</p>
-      <p style="margin-bottom: 5px">
-        <strong> Name: </strong>
-        {{NameUser}}
-      </p>
+      <div
+        style="
+          text-align: left;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 25px;
+          box-shadow: 0 0 10px rgb(0 0 0 / 32%);
+        "
+      >
+        <p style="margin-bottom: 5px">
+          <strong> Name: </strong>
+          {{NameUser}}
+        </p>
 
-      <p style="margin-bottom: 5px"><strong>Email:</strong> {{emailUser}}</p>
+        <p style="margin-bottom: 5px"><strong>Email:</strong> {{emailUser}}</p>
 
-      <p style="margin-bottom: 5px">
-        <strong>Date of verification:</strong> {{DateUsers}}
-      </p>
+        <p style="margin-bottom: 5px">
+          <strong>Date of verification:</strong> {{DateUsers}}
+        </p>
+      </div>
     </div>
   </body>
 </html>
