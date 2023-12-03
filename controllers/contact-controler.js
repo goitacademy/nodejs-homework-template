@@ -33,6 +33,7 @@ const getContactId = async (req, res, next) => {
 
 const addContact = async (req, res, next) => {
   const { _id: owner } = req.user;
+
   try {
     const { error } = contactsAddSchema.validate(req.body);
     if (error) {

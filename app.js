@@ -14,7 +14,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-
+app.use(express.static("public"));
 app.use("/users", authRouter);
 app.use("/api/contacts", contactsRouter); // Вказуємо шлях куди потрібно звертатись якщо прийшов запит на /api/contacts
 
