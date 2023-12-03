@@ -3,6 +3,7 @@ import {
   listContacts,
   addContact,
   updateContactById,
+  removeContact
 } from "../models/contacts.js";
 import { HttpError } from "../helpers/index.js";
 import {
@@ -47,7 +48,19 @@ const add = async (req, res, next) => {
   }
 };
 
-const removeById = async (req, res, next) => {};
+const removeById = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await removeContact(contactId)
+    if (!result) {
+      throw HttpError(404, "Not found")
+    }
+    res.json({message: "contact deleted"})
+
+  } catch (error) {
+    next(error)
+  }
+};
 
 const updateById = async (req, res, next) => {
   try {
