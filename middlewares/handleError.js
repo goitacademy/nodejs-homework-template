@@ -1,4 +1,4 @@
-const HttpError = require("../common/HttpError")
+const HttpError = require("../common/models/HttpError")
 
 const handleError = (err, req, res, next) => {
   if (err instanceof HttpError) {

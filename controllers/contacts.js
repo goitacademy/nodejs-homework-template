@@ -1,58 +1,86 @@
-const contactsService = require("../services/contactsService");
+const contactsService = require('../services/contactsService');
 
 class ContactController {
-  constructor(contactsService) {
-    this.contactsService = contactsService;
-  }
+	constructor(contactsService) {
+		this.contactsService = contactsService;
+	}
 
-  listContacts = async (req, res) => {
-    const contacts = await this.contactsService.getAll();
-    res.json({
-      status: 200,
-      message: 'All contacts successfully received!',
-      data: contacts,
-    });
-  }
+	listContacts = async (req, res) => {
+		const { limit = 5, page = 1, favorite } = req.query;
+		const config = {
+			limit: parseInt(limit),
+			page: parseInt(page),
+		};
 
-  getContactById = async (req, res) => {
-    const { contactId } = req.params;
-    const contact = await this.contactsService.getOneById(contactId);
-    res.json({
-      status: 200,
-      message: 'Contact received successfully!',
-      data: contact,
-    });    
-  }
+		if (favorite) {
+			config.favorite = Boolean(parseInt(favorite));
+		}
 
-  createContact = async (req, res) => {
-    console.log(req.body)
-    const contact = await this.contactsService.create(req.body)
-    res.json({
-      status: 201,
-      message: 'Contact created successfully!',
-      data: contact, });
-  }
+		const { contacts, count } = await this.contactsService.getAll(config);
 
-  updateContact = async (req, res) => {
-    const { contactId } = req.params;
-    const { body } = req;
-    const contact = await this.contactsService.updateById(contactId, body);
-    res.json({
-      status: 200,
-      message: `Update contact with id ${contactId}`,
-      data: contact,
-    });
-  };
+		res.json({
+			status: 200,
+			message: 'All contacts successfully received!',
+			data: { contacts, count, page: parseInt(page), limit: parseInt(limit) },
+		});
+	};
 
-  deleteContact = async (req, res) => {
-    const { contactId } = req.params;
-    const contact = await this.contactsService.deleteById(contactId);
-    res.json({
-      status: 200,
-      message: 'Contact deleted successfully!',
-      data: contact,
-    });
-  }
+	getContactById = async (req, res) => {
+		const { contactId } = req.params;
+		const contact = await this.contactsService.getOneById(contactId);
+		res.json({
+			status: 200,
+			message: 'Contact received successfully!',
+			data: contact,
+		});
+	};
+
+	createContact = async (req, res) => {
+		console.log(req.body);
+		const contact = await this.contactsService.create(req.body);
+		res.json({
+			status: 201,
+			message: 'Contact created successfully!',
+			data: contact,
+		});
+	};
+
+	updateContact = async (req, res) => {
+		const { contactId } = req.params;
+		const { body } = req;
+
+		const contact = await this.contactsService.updateById(contactId, body);
+		res.json({
+			status: 200,
+			message: `Update contact with id ${contactId}`,
+			data: contact,
+		});
+	};
+
+	updateStatusContact = async (req, res) => {
+		const { contactId } = req.params;
+		const contact = await this.contactsService.getOneById(contactId);
+		const updateContact = await this.contactsService.updateStatusContact(
+			contactId,
+			{ favorite: !contact.favorite }
+		);
+		res.json({
+			status: 200,
+			message: `Update contact status with id ${contactId}`,
+			data: updateContact,
+		});
+	};
+
+	deleteContact = async (req, res) => {
+		const { contactId } = req.params;
+
+		const contact = await this.contactsService.deleteById(contactId);
+		res.json({
+			status: 200,
+			message: 'Contact deleted successfully!',
+			data: contact,
+		});
+	};
 }
 
 const contactController = new ContactController(contactsService);
