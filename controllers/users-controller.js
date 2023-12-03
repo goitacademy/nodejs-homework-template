@@ -12,28 +12,8 @@ import { HttpError } from "../helpers/index.js";
 import "dotenv/config";
 const { JWT_SECRET } = process.env;
 
-const avatarsPath = path.resolve("public", "avatar");
-// var gravatar = require("gravatar");
-
-// var url = gravatar.url('emerleite@gmail.com', {s: '200', r: 'pg', d: '404'});
-// //returns //www.gravatar.com/avatar/93e9084aa289b7f1f5e4ab6716a56c3b?s=200&r=pg&d=404
-
-// var unsecureUrl = gravatar.url('emerleite@gmail.com', {s: '100', r: 'x', d: 'retro'}, false);
-// //returns http://www.gravatar.com/avatar/93e9084aa289b7f1f5e4ab6716a56c3b?s=100&r=x&d=retro
-
-// var secureUrl = gravatar.url('emerleite@gmail.com', {s: '100', r: 'x', d: 'retro'}, true);
-// //returns https://s.gravatar.com/avatar/93e9084aa289b7f1f5e4ab6716a56c3b?s=100&r=x&d=retro
-
-// var httpUrl = gravatar.url('emerleite@gmail.com', {protocol: 'http', s: '100'});
-// //returns http://www.gravatar.com/avatar/93e9084aa289b7f1f5e4ab6716a56c3b?s=100
-
-// var httpsUrl = gravatar.url('emerleite@gmail.com', {protocol: 'https', s: '100'});
-// //returns https://s.gravatar.com/avatar/93e9084aa289b7f1f5e4ab6716a56c3b?s=100
-
-//returns https://secure.gravatar.com/93e9084aa289b7f1f5e4ab6716a56c3b.json
-
-// var profile2 = gravatar.profile_url('emerleite@gmail.com', {protocol: 'http', format:'qr'});
-//returns http://www.gravatar.com/93e9084aa289b7f1f5e4ab6716a56c3b.qr
+// const avatarsPath = path.resolve("public", "avatar");
+const avatarsPath = path.resolve("tmp");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -41,12 +21,7 @@ const register = async (req, res, next) => {
   // const newPath = path.join(avatarsPath, filename);
   // await fs.rename(oldPath, newPath);
 
-  const avatar = gravatar.profile_url(
-    email
-    //   {
-    //   format: "jpg",
-    // }
-  );
+  const avatar = gravatar.url(email, { s: "200", r: "pg", d: "retro" });
   // const avatar = path.join("avatars", filename);
   // const result = await Movie.create({ ...req.body, avatar, owner });
 
@@ -100,18 +75,12 @@ const login = async (req, res, next) => {
 };
 
 const getCurrent = async (req, res, next) => {
-  const { email, subscription } = req.user;
-  // const { _id } = req.user;
-  // // const user = await User.findByIdAndUpdate(_id, { token: "" },);
-  // const user = await User.findOne( {token: "" });
-  // if (!user || !token) {
-  //   return res.status(401).json({
-  //     message: "Not authorized",
-  //   });
-  // }
+  const { email, subscription, avatarURL } = req.user;
+
   res.json({
     email,
     subscription,
+    avatarURL,
   });
 };
 
@@ -127,9 +96,55 @@ const logout = async (req, res, next) => {
   res.status(204).end();
 };
 
+const changeAvatar = async (req, res, next) => {
+  // console.log(req.user);
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarsPath, filename);
+  // console.log(
+  //   `newPath :${newPath}, avatarsPath: ${avatarsPath}, filename:${filename}`
+  // );
+  await fs.rename(oldPath, newPath);
+
+  // const avatar = path.join("avatars", filename);
+  // console.log(`avatar: ${avatar}`);
+  // if()
+  const result = await User.findByIdAndUpdate(_id, {
+    // ...req.body,
+    avatarURL: newPath,
+    // owner,
+  });
+
+  res.status(201).json(result);
+  // # Запит
+  // PATCH /users/avatars
+  // Content-Type: multipart/form-data
+  // Authorization: "Bearer {{token}}"
+  // RequestBody: завантажений файл
+
+  // # Успішна відповідь
+  // Status: 200 OK
+  // Content-Type: application/json
+  // ResponseBody: {
+  //   "avatarURL": "тут буде посилання на зображення"
+  // }
+  // const { avatar } = req.body;
+  // console.log(req.body);
+  // res.json({
+  //   avatarURL: newPath,
+  // });
+  // # Неуспішна відповідь
+  // Status: 401 Unauthorized
+  // Content-Type: application/json
+  // ResponseBody: {
+  //   "message": "Not authorized"
+  // }
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  changeAvatar: ctrlWrapper(changeAvatar),
 };
