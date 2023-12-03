@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import path from "path";
 import fs from "fs/promises";
 import "dotenv/config";
+import Jimp from "jimp";
 
 const { JWT_SECRET } = process.env;
 const avatarsPath = path.resolve("public", "avatars");
@@ -76,9 +77,11 @@ export const updateAvatar = async (req, res, next) => {
   const id = req.user._id;
   const { path: tempPath, filename } = req.file;
   const newPath = path.join(avatarsPath, filename);
+  const photo = await Jimp.read(tempPath);
+  photo.resize(250, 250).write(newPath);
+  fs.unlink(tempPath);
 
   const avatarURL = path.join("avatars", filename);
-  fs.rename(tempPath, newPath);
   await User.findByIdAndUpdate(id, { avatarURL });
 
   res.status(200).json({ avatarURL });
