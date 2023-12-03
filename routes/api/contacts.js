@@ -9,7 +9,11 @@ module.exports = () => {
   // contactRouter.get("/", ensureAuthenticated, controller.listContacts)
 
   // All list
-  contactRouter.get("/list", ensureAuthenticated, controller.listContacts);
+  contactRouter.get(
+    "/list",
+    ensureAuthenticated,
+    controller.listContacts
+  );
 
   // list owner
   contactRouter.get("/", ensureAuthenticated, controller.getContactOwner);

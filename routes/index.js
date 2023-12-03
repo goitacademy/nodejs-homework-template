@@ -8,7 +8,7 @@ const routerIndex = express.Router();
 module.exports = () => {
   routerIndex.use("/api/auth", routerAuth());
   routerIndex.use("/api/contacts", routerContacts());
-  routerIndex.use("/users/avatars", routerUsers());
+  routerIndex.use("/users/", routerUsers());
 
   return routerIndex;
 };

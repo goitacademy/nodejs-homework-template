@@ -162,6 +162,7 @@ const addContact = async (Data) => {
         message: `contact is already registered with this email: ${contact.email} *-* ${contact.name} `,
       };
     }
+    
     const contactRegistered = await Contact.create(Data);
     console.log(contactRegistered);
     //     const newId = crypto.randomUUID();

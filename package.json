@@ -24,9 +24,11 @@
     "mongoose": "^8.0.0",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nanoid": "^5.0.4",
     "nodemailer": "^6.9.7",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "dotenv": "^16.3.1",

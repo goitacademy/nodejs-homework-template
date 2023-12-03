@@ -185,7 +185,6 @@ const updateAvatar = async (req, res) => {
   const { file } = req;
   const { Id } = req.user;
   try {
-
     // Verifica si existe un archivo
     if (!file) {
       return res.status(400).json({
@@ -226,6 +225,38 @@ const updateAvatar = async (req, res) => {
   }
 };
 
+const verifyUser = async (req, res) => {
+  try {
+    // const owner = req.user.Id;
+    // console.log('ids', req.params);
+
+    const id = req.params.verificationToken;
+    // console.log('id', id);
+
+    // if (!id) {
+    //   id = owner;
+    // }
+
+    const { success, result, message } = await service.verifyUser(id);
+
+    if (!success) {
+      return res.status(404).json({
+        result,
+        message,
+      });
+    }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
 module.exports = {
   signup,
   login,
@@ -233,4 +264,5 @@ module.exports = {
   logout,
   updateContactSubscription,
   updateAvatar,
+  verifyUser,
 };

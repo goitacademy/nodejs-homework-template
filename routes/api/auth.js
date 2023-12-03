@@ -10,6 +10,8 @@ const authRouter = express.Router();
 module.exports = () => {
   authRouter.get("/current", ensureAuthenticated, controller.current);
 
+  authRouter.get("/verify/:verificationToken", controller.verifyUser);
+
   authRouter.post(
     "/signup",
     validateSchemas(schemasJoi.registerUserSchema, "body"),

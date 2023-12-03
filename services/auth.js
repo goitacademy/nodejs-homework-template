@@ -1,14 +1,16 @@
 // services\auth.js
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const {User} = require("../models/contacts");
+const { User } = require("../models/contacts");
 const moment = require("moment");
-const gravatar = require('gravatar');
-const Jimp = require('jimp');
-const path = require('path');
-const { transporter } = require('../utils/nodemailer');
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
+const path = require("path");
+const { transporter } = require("../utils/nodemailer");
 const fs = require("fs").promises;
-const { SECRET_KEY } = require("../utils/variables");
+const { SECRET_KEY, PORT } = require("../utils/variables");
+// const nanoid = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
 
 const signup = async (Data) => {
   try {
@@ -19,7 +21,7 @@ const signup = async (Data) => {
       email,
     });
     // console.log(user);
-    
+
     if (user) {
       return {
         success: false,
@@ -36,39 +38,60 @@ const signup = async (Data) => {
       Data.active = true;
     }
 
+    Data.verificationToken = uuidv4();
+    const now = new Date();
+    const fecha = now.toISOString().split("T")[0];
+    const hora = now.toLocaleTimeString();
+
+    // Construye la URL de verificación
+    const verificationURL = `http://localhost:${PORT || 3000}/users/verify/${
+      Data.verificationToken
+    }`;
+    // `Server is running on http://localhost:${PORT || 3000}`;
+
+    console.log("Fecha:", fecha);
+    console.log("Hora:", hora);
+    console.log("dat", Data);
+
     const createdUser = await User.create({
       ...Data,
-      avatarURL: gravatar.url(Data.email, { s: '250', d: 'identicon', r: 'pg' })
+      avatarURL: gravatar.url(Data.email, {
+        s: "250",
+        d: "identicon",
+        r: "pg",
+      }),
     });
 
-// Lee el contenido del archivo HTML de bienvenida
-    const htmlTemplate = (await fs.readFile(path.join(__dirname, '../static/html/welcone.html'))).toString();
+    // Lee el contenido del archivo HTML de bienvenida
+    const htmlTemplate = (
+      await fs.readFile(path.join(__dirname, "../static/html/welcone.html"))
+    ).toString();
 
-// Llena los marcadores de posición con los datos del usuario
+    // Llena los marcadores de posición con los datos del usuario
     const filledHtml = htmlTemplate
-      .replace('{{NameUser}}', createdUser.name) // Reemplaza con el nombre del usuario
-      .replace('{{emailUser}}', createdUser.email); // Reemplaza con el email del usuario
+      .replace("{{NameUser}}", createdUser.name) // Reemplaza con el nombre del usuario
+      .replace("{{emailUser}}", createdUser.email) // Reemplaza con el email del usuario
+      .replace("{{DateUsers}}", `${fecha} ${hora}`) // Reemplaza con el email del usuario
+      .replace("{{verifyUser}}", verificationURL); // Reemplaza con el email del usuario
 
-  // send mail with defined transport object
-  const info = await transporter.sendMail({
-    from: `'"🖥️No_Reply 👻💻" <${process.env.EMAIL_SEND}>'`, // sender address
-    to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
-    subject: "Hello Signup successfully ✔", // Subject line
-    text: "Hello world?", // plain text body
-    // html: "<b>Hello world?</b>", // html body
-    html: filledHtml,
-  });
+    // send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: `'"🖥️No_Reply 👻💻" <${process.env.EMAIL_SEND}>'`, // sender address
+      to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
+      subject: "👋🏻Hello, Signup successfully ✔", // Subject line
+      text: "Welcome, registration completed", // plain text body
+      // html: "<b>Hello world?</b>", // html body
+      html: filledHtml,
+    });
 
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-  //
-  // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
-  //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
-  //       <https://github.com/forwardemail/preview-email>
-  //
-
-
+    //
+    // NOTE: You can go to https://forwardemail.net/my-account/emails to see your email delivery status and preview
+    //       Or you can use the "preview-email" npm package to preview emails locally in browsers and iOS Simulator
+    //       <https://github.com/forwardemail/preview-email>
+    //
 
     return {
       success: true,
@@ -95,7 +118,7 @@ const login = async (email, password) => {
       return {
         success: false,
         result: null,
-        message: "Email or password is wrong",
+        message: "Email or password is wrong1",
       };
     }
 
@@ -103,7 +126,15 @@ const login = async (email, password) => {
       return {
         success: false,
         result: null,
-        message: "Email or password is wrong",
+        message: "Email or password is wrong2",
+      };
+    }
+
+    if (!isUserExist.verify) {
+      return {
+        success: false,
+        result: null,
+        message: "Email or password is wrong3",
       };
     }
 
@@ -335,11 +366,85 @@ const updateAvatar = async (userId, file) => {
   }
 };
 
+const verifyUser = async (id) => {
+  try {
+    const verificationToken = id;
+    const user = await User.findOne({ verificationToken });
+    // console.log("user", user);
+
+    if (!user) {
+      return {
+        success: false,
+        result: null,
+        message: `User not found`,
+      };
+    }
+
+    await User.updateOne(
+      {
+        verificationToken,
+      },
+      {
+        $set: {
+          verificationToken: null,
+          verify: true,
+        },
+      },
+      { upsert: true }
+    );
+    const { email, subscription } = user;
+
+    // send email
+    const now = new Date();
+    const fecha = now.toISOString().split("T")[0];
+    const hora = now.toLocaleTimeString();
+
+    // Lee el contenido del archivo HTML de bienvenida
+    const htmlTemplate = (
+      await fs.readFile(path.join(__dirname, "../static/html/verifyUser.html"))
+    ).toString();
+
+    // Llena los marcadores de posición con los datos del usuario
+    const filledHtml = htmlTemplate
+      .replace("{{NameUser}}", user.name) // Reemplaza con el nombre del usuario
+      .replace("{{emailUser}}", user.email) // Reemplaza con el email del usuario
+      .replace("{{DateUsers}}", `${fecha} ${hora}`); // Reemplaza con el email del usuario
+
+    // send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: `'"🖥️No_Reply 👻💻" <${process.env.EMAIL_SEND}>'`, // sender address
+      to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
+      subject: "👋🏻Hello, Verify successfully ✔", // Subject line
+      text: "Welcome, you can now enter", // plain text body
+      // html: "<b>Hello world?</b>", // html body
+      html: filledHtml,
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    return {
+      success: true,
+      result: {
+        email,
+        subscription,
+      },
+      message: `Verification successful`,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
 module.exports = {
   signup,
   login,
   current,
   logout,
   updateContactSubscription,
-  updateAvatar
+  updateAvatar,
+  verifyUser,
 };

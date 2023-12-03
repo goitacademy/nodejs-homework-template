@@ -9,8 +9,12 @@ const { upload } = require("../../middlewares/multerMiddleware");
 const userRouter = express.Router();
 
 module.exports = () => {
+  // userRouter.get("/verify", ensureAuthenticated, controller.current);
+
+  userRouter.get("/verify/:verificationToken", controller.verifyUser);
+  
   userRouter.patch(
-    "/",
+    "/avatars/",
     ensureAuthenticated,
     upload.single("avatar"),
     controller.updateAvatar

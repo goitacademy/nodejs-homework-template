@@ -32,6 +32,8 @@ const startServer = async () => {
     console.log("Database connection successful");
     app.listen(PORT || 3000, () => {
       console.log(`Server running. Use our API on Port:${PORT || 3000}`);
+
+      //   console.log(`Server is running on http://localhost:${PORT || 3000}`);
     });
   } catch (error) {
     console.error("Error connecting to the database:", error);
