@@ -48,13 +48,14 @@ async function register(req, res, next) {
 
     // создаём уникальное поле при регистрации для верификации пользователя
     const verificationToken = crypto.randomUUID();
+    const httpServer = "http://localhost:3000";
 
     //  отправка письма для подтвержения верификации пользователя
     await sendEmail({
       to: email,
       subject: "Welcome to the Contacts App!",
-      html: `To confirm your email, please click <a href="http://localhost:3000/api/users/verify/${verificationToken}">Link</a>`,
-      text: `To confirm your email, please open http://localhost:3000/api/users/verify/${verificationToken}`,
+      html: `To confirm your email, please click <a href="${httpServer}/api/users/verify/${verificationToken}">Link</a>`,
+      text: `To confirm your email, please open ${httpServer}/api/users/verify/${verificationToken}`,
     });
 
     const addUser = await User.create({
