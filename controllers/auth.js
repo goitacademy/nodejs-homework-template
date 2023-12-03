@@ -257,6 +257,39 @@ const verifyUser = async (req, res) => {
     });
   }
 };
+
+const verifyUserEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const { success, result, message } = await service.verifyUserEmail(email);
+
+    if (!success) {
+      if (message === "Verification has already been passed") {
+        return res.status(404).json({
+          result,
+          message,
+        });
+      } else {
+        return res.status(400).json({
+          result,
+          message,
+        });
+      }
+    }
+
+    return res.status(200).json({
+      result,
+      message,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      result: null,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -265,4 +298,5 @@ module.exports = {
   updateContactSubscription,
   updateAvatar,
   verifyUser,
+  verifyUserEmail,
 };

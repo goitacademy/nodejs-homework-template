@@ -8,7 +8,7 @@ const Jimp = require("jimp");
 const path = require("path");
 const { transporter } = require("../utils/nodemailer");
 const fs = require("fs").promises;
-const { SECRET_KEY, PORT } = require("../utils/variables");
+const { SECRET_KEY, PORT, EMAIL_SEND } = require("../utils/variables");
 // const nanoid = require("nanoid");
 const { v4: uuidv4 } = require("uuid");
 
@@ -49,9 +49,9 @@ const signup = async (Data) => {
     }`;
     // `Server is running on http://localhost:${PORT || 3000}`;
 
-    console.log("Fecha:", fecha);
-    console.log("Hora:", hora);
-    console.log("dat", Data);
+    // console.log("Fecha:", fecha);
+    // console.log("Hora:", hora);
+    // console.log("dat", Data);
 
     const createdUser = await User.create({
       ...Data,
@@ -62,21 +62,21 @@ const signup = async (Data) => {
       }),
     });
 
-    // Lee el contenido del archivo HTML de bienvenida
+    // HTML
     const htmlTemplate = (
       await fs.readFile(path.join(__dirname, "../static/html/welcone.html"))
     ).toString();
 
-    // Llena los marcadores de posición con los datos del usuario
+    // db
     const filledHtml = htmlTemplate
-      .replace("{{NameUser}}", createdUser.name) // Reemplaza con el nombre del usuario
-      .replace("{{emailUser}}", createdUser.email) // Reemplaza con el email del usuario
-      .replace("{{DateUsers}}", `${fecha} ${hora}`) // Reemplaza con el email del usuario
-      .replace("{{verifyUser}}", verificationURL); // Reemplaza con el email del usuario
+      .replace("{{NameUser}}", createdUser.name)
+      .replace("{{emailUser}}", createdUser.email)
+      .replace("{{DateUsers}}", `${fecha} ${hora}`)
+      .replace("{{verifyUser}}", verificationURL);
 
     // send mail with defined transport object
     const info = await transporter.sendMail({
-      from: `'"🖥️No_Reply 👻💻" <${process.env.EMAIL_SEND}>'`, // sender address
+      from: `'"🖥️No_Reply 👻💻" <${EMAIL_SEND}>'`, // sender address
       to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
       subject: "👋🏻Hello, Signup successfully ✔", // Subject line
       text: "Welcome, registration completed", // plain text body
@@ -118,7 +118,7 @@ const login = async (email, password) => {
       return {
         success: false,
         result: null,
-        message: "Email or password is wrong1",
+        message: "Email or password is wrong",
       };
     }
 
@@ -126,7 +126,7 @@ const login = async (email, password) => {
       return {
         success: false,
         result: null,
-        message: "Email or password is wrong2",
+        message: "Email or password is wrong",
       };
     }
 
@@ -134,7 +134,7 @@ const login = async (email, password) => {
       return {
         success: false,
         result: null,
-        message: "Email or password is wrong3",
+        message: "Email or password is wrong",
       };
     }
 
@@ -399,20 +399,20 @@ const verifyUser = async (id) => {
     const fecha = now.toISOString().split("T")[0];
     const hora = now.toLocaleTimeString();
 
-    // Lee el contenido del archivo HTML de bienvenida
+    // html
     const htmlTemplate = (
       await fs.readFile(path.join(__dirname, "../static/html/verifyUser.html"))
     ).toString();
 
-    // Llena los marcadores de posición con los datos del usuario
+    // BD
     const filledHtml = htmlTemplate
-      .replace("{{NameUser}}", user.name) // Reemplaza con el nombre del usuario
-      .replace("{{emailUser}}", user.email) // Reemplaza con el email del usuario
-      .replace("{{DateUsers}}", `${fecha} ${hora}`); // Reemplaza con el email del usuario
+      .replace("{{NameUser}}", user.name)
+      .replace("{{emailUser}}", user.email)
+      .replace("{{DateUsers}}", `${fecha} ${hora}`);
 
     // send mail with defined transport object
     const info = await transporter.sendMail({
-      from: `'"🖥️No_Reply 👻💻" <${process.env.EMAIL_SEND}>'`, // sender address
+      from: `'"🖥️No_Reply 👻💻" <${EMAIL_SEND}>'`, // sender address
       to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
       subject: "👋🏻Hello, Verify successfully ✔", // Subject line
       text: "Welcome, you can now enter", // plain text body
@@ -439,6 +439,96 @@ const verifyUser = async (id) => {
   }
 };
 
+const verifyUserEmail = async (email) => {
+  try {
+    if (!email) {
+      return {
+        success: false,
+        result: null,
+        message: "missing required field email",
+      };
+    }
+    const isUserExist = await User.findOne({
+      email,
+    });
+
+    if (!isUserExist) {
+      return {
+        success: false,
+        result: null,
+        message: "User not found",
+      };
+    }
+
+    if (!isUserExist.active) {
+      return {
+        success: false,
+        result: null,
+        message: "User not found",
+      };
+    }
+
+    if (isUserExist.verify) {
+      return {
+        success: false,
+        result: null,
+        message: "Verification has already been passed",
+      };
+    }
+
+    // Date
+    const now = new Date();
+    const fecha = now.toISOString().split("T")[0];
+    const hora = now.toLocaleTimeString();
+
+    // Construye la URL de verificación
+    const verificationURL = `http://localhost:${PORT || 3000}/users/verify/${
+      isUserExist.verificationToken
+    }`;
+
+    // HTML
+    const htmlTemplate = (
+      await fs.readFile(path.join(__dirname, "../static/html/welcone.html"))
+    ).toString();
+
+    // db
+    const filledHtml = htmlTemplate
+      .replace("{{NameUser}}", isUserExist.name)
+      .replace("{{emailUser}}", isUserExist.email)
+      .replace("{{DateUsers}}", `${fecha} ${hora}`)
+      .replace("{{verifyUser}}", verificationURL);
+
+    // send mail with defined transport object
+    const info = await transporter.sendMail({
+      from: `'"🖥️No_Reply 👻💻" <${EMAIL_SEND}>'`, // sender address
+      to: "codekapp5+No_Reply1@gmail.com, codekapp5+No_Reply2@gmail.com", // list of receivers
+      subject: "👋🏻Hello, Confirmation email resend ✔", // Subject line
+      text: "Welcome, registration completed, Confirmation email resend", // plain text body
+      // html: "<b>Hello world?</b>", // html body
+      html: filledHtml,
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    return {
+      success: true,
+      result: {
+        User: {
+          email: isUserExist.email,
+          subscription: isUserExist.subscription,
+        },
+      },
+      message: "Verification email sent",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      result: null,
+      message: error,
+    };
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -447,4 +537,5 @@ module.exports = {
   updateContactSubscription,
   updateAvatar,
   verifyUser,
+  verifyUserEmail,
 };
