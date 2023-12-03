@@ -254,7 +254,6 @@ async function updateStatusUser(req, res, next) {
   }
 }
 
-
 async function updateAvatar(req, res, next) {
   const { _id } = req.user;
 
