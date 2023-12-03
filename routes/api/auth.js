@@ -16,4 +16,8 @@ router.get("/users/current", authenticate, ctrl.currentUser)
 
 router.patch("/users/avatars", authenticate, upload.single("avatar"), ctrl.updateAvatar)
 
+router.get("/verify/:token", ctrl.verify)
+
+router.post("verify", validateBody(schemas.emailSchema), ctrl.verifyEmail)
+
 module.exports = router
