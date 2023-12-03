@@ -36,20 +36,15 @@ export const updateById = async (req, res, next) => {
 export const updateStatusContact = async (req, res, next) => {
     const id = req.params.contactId;
     const body = req.body;
-
-    if (typeof body.favorite === 'undefined') {
-        return res.status(400).json({ message: 'Missing field favorite' });
-    }
-
     const result = await Contact.findByIdAndUpdate(id, body, {
         new: true,
-        select: '-createdAt',
+        select: "-createdAt",
     });
     if (!result) {
-        return next(HttpError(404, 'Not found'))
-    }
-    res.status(200).json(result)
-}
+        return next(HttpError(404, "Not found"));
+  }
+  res.status(200).json(result);
+};
 
 export const deleteById = async (req, res, next) => {
         const id = req.params.contactId;
