@@ -22,7 +22,7 @@ module.exports = () => {
 
   return userRouter;
 };
-
+    
 /**
  * @swagger
  * /api/auth/signup:
