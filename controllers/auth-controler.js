@@ -106,14 +106,10 @@ const signout = async (req, res, next) => {
 const changeAvatar = async (req, res, next) => {
   try {
     const { path: oldPath, filename } = req.file; // Деструктуризуємо req.file шлях до файлу і змінюємо назву oldPath тако деструктуризуємо імя файлу
-    const aa = await Jimp.read(oldPath)
-      .then((image) => {
-        return image.resize(200, 200).write(`small${filename}`);
-      })
-      .catch((err) => {
-        // Handle an exception.
-      });
-    console.log(aa);
+    await Jimp.read(oldPath).then((image) => {
+      // За допомогою бібліотеки Jimp обробляємо розміри фото 250 х 250
+      image.resize(250, 250).write(oldPath);
+    });
     const newPath = path.join(avatarsPath, filename); // Обєднуємо шлях до папки куди перемістити з іменем файлу
     const { _id } = req.user;
     await fs.rename(oldPath, newPath);
@@ -128,6 +124,7 @@ const changeAvatar = async (req, res, next) => {
     next();
   }
 };
+
 export default {
   signup,
   signin,
