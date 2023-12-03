@@ -1,3 +1,7 @@
+tmp/*
+!tmp/.gitkeep
+public/avatars/*
+!public/avatars/.gitkeep
 node_modules/
 .env
 .idea
