@@ -6,23 +6,15 @@ const gravatar = require("gravatar");
 const path = require("node:path");
 const fs = require("node:fs/promises");
 const Jimp = require("jimp");
-const ElasticEmail = require("@elasticemail/elasticemail-client");
 
+const { sendEmail } = require("../middlewares/emailService");
 const User = require("../models/user");
 
 const { authSchema, subscriptionSchema, verifySchema } = require("../routes/schemas/user");
 
 const SECRET_KEY = process.env.SECRET_KEY;
-const FROM_EMAIL = process.env.USER_EMAIL;
-
-const defaultClient = ElasticEmail.ApiClient.instance;
-const { apikey } = defaultClient.authentications;
-apikey.apiKey = process.env.ELASTIC_API_KEY;
-const api = new ElasticEmail.EmailsApi();
 
 const avatarsDir = path.join(__dirname, "../public/avatars");
-
-
 
 async function register(req, res, next) {
   const body = authSchema.validate(req.body);
@@ -40,19 +32,11 @@ async function register(req, res, next) {
 
   const verificationToken = crypto.randomUUID();
   
-  const verifyEmail = ElasticEmail.EmailMessageData.constructFromObject({
-    Recipients: [new ElasticEmail.EmailRecipient(email)],
-    Content: {
-      Body: [
-        ElasticEmail.BodyPart.constructFromObject({
-          ContentType: "HTML",
-          Content: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${verificationToken}">link</a>`,
-        }),
-      ],
-      Subject: "Welcome to your contact book",
-      From: FROM_EMAIL,
-    },
-  });
+  const verifyEmail = {
+    to: email,
+    subject: "Welcome to your contact book",
+    html: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${verificationToken}">link</a>`,
+  };
 
   try {
     const newUser = await User.create({
@@ -62,7 +46,7 @@ async function register(req, res, next) {
       verificationToken,
     });
 
-    api.emailsPost(verifyEmail);
+    await sendEmail(verifyEmail);
 
     res.status(201).json({
       user: { email: newUser.email, subscription: newUser.subscription },
@@ -75,7 +59,6 @@ async function register(req, res, next) {
     next(err);
   }
 }
-
 
 async function login(req, res, next) {
   const body = authSchema.validate(req.body);
@@ -164,9 +147,8 @@ async function verify(req, res, next) {
   }
 }
 
-
 async function resendVerify(req, res, next) {
- const body = verifySchema.validate(req.body);
+  const body = verifySchema.validate(req.body);
 
   if (typeof body.error !== "undefined") {
     return res.status(400).json({
@@ -177,38 +159,75 @@ async function resendVerify(req, res, next) {
   const { email } = req.body;
 
   try {
-    const user = await User.findOne({email}).exec();
+    const user = await User.findOne({ email }).exec();
 
     if (user === null) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (user.verify === true) {
-      return res.status(400).json({ message: "Verification has already been passed" });
+      return res
+        .status(400)
+        .json({ message: "Verification has already been passed" });
     }
 
-      const verifyEmail = ElasticEmail.EmailMessageData.constructFromObject({
-    Recipients: [new ElasticEmail.EmailRecipient(email)],
-    Content: {
-      Body: [
-        ElasticEmail.BodyPart.constructFromObject({
-          ContentType: "HTML",
-          Content: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
-        }),
-      ],
-      Subject: "Welcome to your contact book",
-      From: FROM_EMAIL,
-    },
-      });
-    
-    api.emailsPost(verifyEmail);
+    const verifyEmail = {
+      to: email,
+      subject: "Welcome to your contact book",
+      html: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
+    };
+
+    await sendEmail(verifyEmail);
 
     res.json({ message: "Verification email sent" });
-    
   } catch (error) {
     next(error);
   }
 }
+// async function resendVerify(req, res, next) {
+//  const body = verifySchema.validate(req.body);
+
+//   if (typeof body.error !== "undefined") {
+//     return res.status(400).json({
+//       message: "Missing required field email",
+//     });
+//   }
+
+//   const { email } = req.body;
+
+//   try {
+//     const user = await User.findOne({email}).exec();
+
+//     if (user === null) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     if (user.verify === true) {
+//       return res.status(400).json({ message: "Verification has already been passed" });
+//     }
+
+//       const verifyEmail = ElasticEmail.EmailMessageData.constructFromObject({
+//     Recipients: [new ElasticEmail.EmailRecipient(email)],
+//     Content: {
+//       Body: [
+//         ElasticEmail.BodyPart.constructFromObject({
+//           ContentType: "HTML",
+//           Content: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
+//         }),
+//       ],
+//       Subject: "Welcome to your contact book",
+//       From: FROM_EMAIL,
+//     },
+//       });
+    
+//     api.emailsPost(verifyEmail);
+
+//     res.json({ message: "Verification email sent" });
+    
+//   } catch (error) {
+//     next(error);
+//   }
+// }
 
 
 async function updateStatusUser(req, res, next) {
