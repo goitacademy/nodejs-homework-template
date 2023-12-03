@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activación Exitosa</title>
+  </head>
+
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    "
+  >
+    <div
+      style="
+        text-align: center;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 25px;
+          box-shadow: 0 0 10px rgb(0 0 0 / 32%);
+      "
+    >
+      <h1 style="color: #333333">Activación Exitosa</h1>
+      <p style="color: #28a745; font-weight: bold">
+        ¡Tu cuenta ha sido activada con éxito!
+      </p>
+
+      <!-- Datos del usuario -->
+      <p style="margin-top: 20px">Registered User:</p>
+      <div
+        style="
+          text-align: left;
+          padding: 20px;
+          background-color: #ffffff;
+          border-radius: 25px;
+          box-shadow: 0 0 10px rgb(0 0 0 / 32%);
+        "
+      >
+        <p style="margin-bottom: 5px">
+          <strong> Name: </strong>
+          {{NameUser}}
+        </p>
+
+        <p style="margin-bottom: 5px"><strong>Email:</strong> {{emailUser}}</p>
+
+        <p style="margin-bottom: 5px">
+          <strong>Date of verification:</strong> {{DateUsers}}
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

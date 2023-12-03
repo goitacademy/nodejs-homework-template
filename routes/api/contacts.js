@@ -1,25 +1,45 @@
-const express = require('express')
+// routes\api\contacts.js
+const express = require("express");
+const controller = require("../../controllers/contacts");
+const { ensureAuthenticated } = require("../../middlewares/validateJWT");
+const contactRouter = express.Router();
 
-const router = express.Router()
+module.exports = () => {
+  // ensureAuthenticated is auth
+  // contactRouter.get("/", ensureAuthenticated, controller.listContacts)
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  // All list
+  contactRouter.get(
+    "/list",
+    ensureAuthenticated,
+    controller.listContacts
+  );
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  // list owner
+  contactRouter.get("/", ensureAuthenticated, controller.getContactOwner);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  // list owner Id
+  contactRouter.get(
+    "/:id",
+    ensureAuthenticated,
+    controller.getContactOwnerById
+  );
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  contactRouter.post("/", ensureAuthenticated, controller.addContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+  contactRouter.patch(
+    "/:id/favorite/",
+    ensureAuthenticated,
+    controller.updateFavoriteContact
+  );
 
-module.exports = router
+  contactRouter.delete("/:id", ensureAuthenticated, controller.removeContact);
+
+  // contactRouter.get('/:id', controller.getContactById)
+
+  // contactRouter.put('/:id', controller.updateContact)
+
+  // contactRouter.delete('/:id', controller.removeContact)
+
+  return contactRouter;
+};
