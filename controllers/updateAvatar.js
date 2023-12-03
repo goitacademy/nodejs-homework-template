@@ -22,9 +22,9 @@ const updateAvatar = async (req, res) => {
     await image.resize(250, 250).write(req.file.path);
 
     // Генерация уникального имени файла
-    console.log("User ID:", req.user._id);
+    console.log("User ID:", req.user.id); // здесь изменил _id на id
     console.log("File path:", req.file.path);
-    const uniqueFileName = `${Date.now()}-${req.user.id.toString()}${path.extname(  // здесь исправил _id на id
+    const uniqueFileName = `${Date.now()}-${req.user.id.toString()}${path.extname( // здесь изменил _id на id
       req.file.originalname
     )}`;
 
