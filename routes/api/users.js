@@ -1,38 +1,24 @@
-// routes\api\auth.js
+// routes\api\users.js
 const express = require("express");
 const controller = require("../../controllers/auth");
-const validateSchemas = require("../../middlewares/validateSchemas");
+// const validateSchemas = require('../../middlewares/validateSchemas')
 const { ensureAuthenticated } = require("../../middlewares/validateJWT");
-const schemasJoi = require("../../models/schemas");
+// const schemasJoi = require('../../models/schemas')
+const { upload } = require("../../middlewares/multerMiddleware");
 
-const authRouter = express.Router();
+const userRouter = express.Router();
 
 module.exports = () => {
-  authRouter.get("/current", ensureAuthenticated, controller.current);
-
-  authRouter.post(
-    "/signup",
-    validateSchemas(schemasJoi.registerUserSchema, "body"),
-    controller.signup
-  );
-
-  authRouter.post(
-    "/log-in",
-    validateSchemas(schemasJoi.loginSchema, "body"),
-    controller.login
-  );
-
-  authRouter.patch("/logout/:id?", ensureAuthenticated, controller.logout);
-
-  // auth cambai
-  authRouter.patch(
-    "/:id/subscription",
+  userRouter.patch(
+    "/",
     ensureAuthenticated,
-    controller.updateContactSubscription
+    upload.single("avatar"),
+    controller.updateAvatar
   );
 
-  return authRouter;
+  return userRouter;
 };
+
 /**
  * @swagger
  * /api/auth/signup:

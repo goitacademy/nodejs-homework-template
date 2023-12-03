@@ -1,12 +1,14 @@
 // router/index.js
 const express = require("express");
 const routerContacts = require("./api/contacts");
+const routerUsers = require("./api/users");
 const routerAuth = require("./api/auth");
 const routerIndex = express.Router();
 
 module.exports = () => {
-  routerIndex.use("/auth",  routerAuth());
-  routerIndex.use("/contacts", routerContacts());
+  routerIndex.use("/api/auth", routerAuth());
+  routerIndex.use("/api/contacts", routerContacts());
+  routerIndex.use("/users/avatars", routerUsers());
 
   return routerIndex;
 };

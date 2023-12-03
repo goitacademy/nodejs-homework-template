@@ -2,7 +2,8 @@
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
 const { StatusCodes } = require("http-status-codes");
-const { User} = require("../models/contacts");
+const { User } = require("../models/contacts");
+const { SECRET_KEY } = require("../utils/variables");
 
 // Remove Token Not authorized
 const updateToken = async (_id, tokenRemove) => {
@@ -30,7 +31,7 @@ const ensureAuthenticated = async (req, res, next) => {
   const _id = decodedToken.Id;
 
   try {
-    const payload = jwt.verify(token, process.env.SECRET_KEY);
+    const payload = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(payload.Id);
 
     if (payload.exp <= moment().unix()) {

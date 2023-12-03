@@ -52,8 +52,6 @@ const getContactOwnerById = async (_id, owner) => {
   }
 };
 
-
-
 const removeContact = async (_id, owner) => {
   try {
     if (!_id) {
@@ -86,8 +84,6 @@ const removeContact = async (_id, owner) => {
     };
   }
 };
-
-
 
 const updateFavoriteContact = async (_id, favorite, owner) => {
   try {
@@ -129,7 +125,6 @@ const updateFavoriteContact = async (_id, favorite, owner) => {
   }
 };
 
-
 // list contact
 const listContacts = async () => {
   try {
@@ -152,21 +147,20 @@ const listContacts = async () => {
 const addContact = async (Data) => {
   try {
     // console.log('dT', Data);
-    
+
     const email = Data.email;
-     const contact = await Contact.insertMany({
-    // const contact = await Contact.findOne({
+    const contact = await Contact.insertMany({
+      // const contact = await Contact.findOne({
       email,
     });
-// console.log(contact);
+    // console.log(contact);
     if (contact) {
       return {
         success: false,
         result: null,
         // message:  `Contact is already registered:\n${util.inspect(contact, { depth: null, colors: true })}`,
         message: `contact is already registered with this email: ${contact.email} *-* ${contact.name} `,
-
-};
+      };
     }
     const contactRegistered = await Contact.create(Data);
     console.log(contactRegistered);
@@ -195,9 +189,6 @@ const addContact = async (Data) => {
   }
 };
 
-
-
-
 module.exports = {
   // Contact
   listContacts,
@@ -206,7 +197,5 @@ module.exports = {
   getContactOwner,
   getContactOwnerById,
   removeContact,
-  
   updateFavoriteContact,
-  
 };

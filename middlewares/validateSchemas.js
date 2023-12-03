@@ -1,5 +1,4 @@
 // middelewares/validateSchemas.js
-
 // const Joi = require("joi");
 
 const validateSchemas = (schema, property) => {

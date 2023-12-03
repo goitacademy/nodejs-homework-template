@@ -8,6 +8,7 @@ const Jimp = require('jimp');
 const path = require('path');
 const { transporter } = require('../utils/nodemailer');
 const fs = require("fs").promises;
+const { SECRET_KEY } = require("../utils/variables");
 
 const signup = async (Data) => {
   try {
@@ -87,8 +88,8 @@ const signup = async (Data) => {
 const login = async (email, password) => {
   try {
     const isUserExist = await User.findOne({
-  email,
-});
+      email,
+    });
 
     if (!isUserExist) {
       return {
@@ -125,12 +126,12 @@ const login = async (email, password) => {
         exp: moment().add(2, "hours").unix(),
         // exp: moment().add(3, "minutes").unix(),
       },
-      process.env.SECRET_KEY
+      SECRET_KEY
     );
 
     // const addToken = await User.updateOne(
     // const _ = await User.updateOne(
-    
+
     await User.updateOne(
       {
         email: isUserExist.email,
@@ -177,7 +178,7 @@ const current = async (_id, owner) => {
     }
 
     const { email, subscription } = user;
-    
+
     return {
       success: true,
       result: {
@@ -266,7 +267,7 @@ const updateContactSubscription = async (_id, subscription, owner) => {
       };
     }
 
-  const { _id: Id, name, subscription: Subscription } = contactUpdate;
+    const { _id: Id, name, subscription: Subscription } = contactUpdate;
 
     return {
       success: true,
@@ -285,33 +286,47 @@ const updateContactSubscription = async (_id, subscription, owner) => {
 const updateAvatar = async (userId, file) => {
   try {
     // Process the avatar with Jimp
+
     const image = await Jimp.read(file.path);
     await image.resize(250, 250).writeAsync(file.path);
 
     // Move the avatar to the public/avatars folder with a unique name
-    const avatarFileName = `avatar_${userId}_${Date.now()}${path.extname(file.originalname)}`;
-    const avatarPath = path.join(__dirname, '../public/avatars', avatarFileName);
+    const { name: nameFile } = path.parse(file.originalname);
+
+    const avatarFileName = `${nameFile}_${userId}_${Date.now()}${path.extname(
+      file.originalname
+    )}`;
+    const avatarPath = path.join(
+      __dirname,
+      "../public/avatars",
+      avatarFileName
+    );
     await image.writeAsync(avatarPath);
 
     // Update the avatar URL in the database
-    const avatarUrlUpdate = await User.findByIdAndUpdate(userId, { avatarURL: `/avatars/${avatarFileName}` });
+    const avatarUrlUpdate = await User.findByIdAndUpdate(userId, {
+      avatarURL: `/avatars/${avatarFileName}`,
+      // avatarName: nameFile,
+    });
 
     // Delete the temporary file
-    require('fs').unlinkSync(file.path);
+    require("fs").unlinkSync(file.path);
 
     // console.log('u', avatarUrlUpdate.avatarURL);
     // console.log('r', data:{ avatarURL });
-    
+
     const { email, avatarURL } = avatarUrlUpdate;
-    
+
     return {
       success: true,
-      result: {email, avatarURL},
+      result: { email, avatarURL },
       // data: { avatarURL: `/avatars/${avatarFileName}` },
       message: "Avatar updated successfully.",
     };
   } catch (error) {
     // console.error('Error updating avatar:', error);
+    require("fs").unlinkSync(file.path);
+
     return {
       success: false,
       result: null,
@@ -319,7 +334,6 @@ const updateAvatar = async (userId, file) => {
     };
   }
 };
-
 
 module.exports = {
   signup,

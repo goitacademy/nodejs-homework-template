@@ -1,12 +1,12 @@
 // service/auth.js
 const service = require("../services/auth");
-const Jimp = require('jimp');
+const Jimp = require("jimp");
+// const {SECRET_KEY} = require('../utils/variables')
 
 const signup = async (req, res) => {
   try {
-
     // const token = req.headers.authorization.split(" ")[1];
-    // const payload = jwt.verify(token, process.env.SECRET_KEY);
+    // const payload = jwt.verify(token, SECRET_KEY);
     // req.body.owner = payload.Id;
 
     const { success, result, message } = await service.signup(req.body);
@@ -114,11 +114,7 @@ const logout = async (req, res) => {
 
     const token = null;
 
-    const { success, result, message } = await service.logout(
-      id,
-      token,
-      owner
-    );
+    const { success, result, message } = await service.logout(id, token, owner);
 
     // console.log(result);
 
@@ -150,7 +146,6 @@ const logout = async (req, res) => {
 
 const updateContactSubscription = async (req, res) => {
   try {
-
     const owner = req.user.Id;
     const { id } = req.params;
     const { subscription } = req.body;
@@ -187,15 +182,15 @@ const updateContactSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  const { file } = req;
+  const { Id } = req.user;
   try {
-    const { file } = req;
-    const { Id } = req.user;
 
     // Verifica si existe un archivo
     if (!file) {
       return res.status(400).json({
         result: null,
-        message: 'No file provided'
+        message: "No file provided",
       });
     }
 
@@ -205,22 +200,25 @@ const updateAvatar = async (req, res) => {
     await image.resize(250, 250).writeAsync(file.path);
 
     // Update the avatar URL in the database
-     const { success, result, message } = await service.updateAvatar(Id, file);
+    const { success, result, message } = await service.updateAvatar(Id, file);
 
-     if (!success) {
-        return res.status(401).json({
-          result,
-          message,
-        });
+    if (!success) {
+      return res.status(401).json({
+        result,
+        message,
+      });
     }
 
     return res.status(200).json({
       result,
       message,
-    }
-      );
+    });
   } catch (error) {
     // console.error('Error updating avatar:', error);
+    // Delete the temporary file in case of an error
+    if (file && file.path) {
+      require("fs").unlinkSync(file.path);
+    }
     return res.status(500).json({
       result: null,
       message: error,
@@ -234,5 +232,5 @@ module.exports = {
   current,
   logout,
   updateContactSubscription,
-  updateAvatar
+  updateAvatar,
 };

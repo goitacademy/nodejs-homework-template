@@ -1,4 +1,6 @@
+// /nodemailer.js
 const nodemailer = require('nodemailer')
+const { PASSWORD_SEND, EMAIL_SEND } = require("./variables");
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -6,8 +8,8 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     // TODO: replace `user` and `pass` values from <https://forwardemail.net>
-    user: process.env.EMAIL_SEND,
-    pass: process.env.PASSWORD_SEND
+    user: EMAIL_SEND,
+    pass: PASSWORD_SEND
   }
 })
 

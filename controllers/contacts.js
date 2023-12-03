@@ -1,12 +1,11 @@
 // controllers\contacts.js
 const service = require("../services/contacts");
 
-
 const getContactOwner = async (req, res) => {
   try {
     const owner = req.user.Id;
     const { skip, limit, favorite } = req.query;
-    
+
     const query = { owner };
     if (favorite !== undefined) {
       query.favorite = favorite;
@@ -91,8 +90,6 @@ const removeContact = async (req, res) => {
     });
   }
 };
-
-
 
 const updateFavoriteContact = async (req, res) => {
   try {
@@ -209,8 +206,6 @@ const addContact = async (req, res) => {
     });
   }
 };
-
-
 
 module.exports = {
   // contact
