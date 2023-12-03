@@ -1,5 +1,4 @@
 const HttpError = require('../common/models/HttpError');
-const Contact = require('../models/contact');
 const contactRepository = require('../repositories/contactsRepository');
 
 class ContactsService {
@@ -7,8 +6,8 @@ class ContactsService {
     this.contactRepository = contactRepository;
   }
 
-  async getAll() {
-    return await this.contactRepository.findAll();
+  async getAll(config) {
+    return await this.contactRepository.findAll(config);
   }
 
   async getOneById(id) {
@@ -20,17 +19,30 @@ class ContactsService {
   }
 
     async create(payload) {
-    const contact = new Contact(payload);
-    return await this.contactRepository.create(contact);
+    return await this.contactRepository.create(payload);
   }
 
+  // async deleteById(id) {
+  //   return await this.contactRepository.deleteById(id);
+  // }
   async deleteById(id) {
-    return await this.contactRepository.deleteById(id);
+    const contact = await this.contactRepository.deleteById(id);
+    if (!contact) {
+      throw new HttpError(404, 'Contact is not found');
+    }
+    return { id };
   }
-
+  
   async updateById(id, payload) {
-    return await this.contactRepository.updateById(id, payload);
+    const contact = await this.contactRepository.updateById(id, payload);
+    if (!contact) {
+      throw new HttpError(404, 'Contact is not found');
+    }
+    return contact;
   }
+  // async updateById(id, payload) {
+  //   return await this.contactRepository.updateById(id, payload);
+  // }
 }
 
 const contactsService = new ContactsService(contactRepository);

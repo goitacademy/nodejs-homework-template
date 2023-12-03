@@ -12,7 +12,7 @@ const setupMongoConnection = async () => {
     await mongoose.connect(
       `mongodb+srv://${DB_MONGO_USER}:${DB_MONGO_PASSWORD}@${DB_MONGO_HOST}/${DB_MONGO_DATABASE}`,
     );
-    console.log('Mongo connection is established!')
+    console.log('Database connection successful!')
   } catch (err) {
     console.log(err);
     process.exit(1)

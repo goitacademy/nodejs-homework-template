@@ -6,11 +6,22 @@ class ContactController {
   }
 
   listContacts = async (req, res) => {
-    const contacts = await this.contactsService.getAll();
+    const { limit = 5, page = 1, favorite } = req.query;
+    const config = {
+      limit: parseInt(limit),
+      page: parseInt(page),
+    }
+
+    if (favorite) {
+      config.favorite = Boolean(parseInt(favorite));
+    }
+    
+    const { contacts, count } = await this.contactsService.getAll(config);
+
     res.json({
       status: 200,
       message: 'All contacts successfully received!',
-      data: contacts,
+      data: { contacts, count, page: parseInt(page), limit: parseInt(limit) },
     });
   }
 
@@ -36,6 +47,7 @@ class ContactController {
   updateContact = async (req, res) => {
     const { contactId } = req.params;
     const { body } = req;
+    
     const contact = await this.contactsService.updateById(contactId, body);
     res.json({
       status: 200,
@@ -46,6 +58,7 @@ class ContactController {
 
   deleteContact = async (req, res) => {
     const { contactId } = req.params;
+
     const contact = await this.contactsService.deleteById(contactId);
     res.json({
       status: 200,

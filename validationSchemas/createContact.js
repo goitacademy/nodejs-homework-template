@@ -9,6 +9,7 @@ const createContactSchema = Joi.object({
       .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
       .required(),
     phone: Joi.string().regex(/^[0-9]{10}$/).required(),
+    favorite: Joi.bool(),
   }),
 });
 
