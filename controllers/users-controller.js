@@ -4,7 +4,6 @@ import fs from "fs/promises";
 import path from "path";
 import gravatar from "gravatar";
 import Jimp from "jimp";
-// import { avatarsPath } from "../middlewares/upload.js";
 import User from "../models/User.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
@@ -14,18 +13,11 @@ import "dotenv/config";
 const { JWT_SECRET } = process.env;
 
 const avatarsPath = path.resolve("public", "avatars");
-const tmpPath = path.resolve("tmp");
-// const avatarsPath = path.resolve("tmp");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
-  // const { path: oldPath, filename } = req.file;
-  // const newPath = path.join(avatarsPath, filename);
-  // await fs.rename(oldPath, newPath);
 
   const avatar = gravatar.url(email, { s: "200", r: "pg", d: "retro" });
-  // const avatar = path.join("avatars", filename);
-  // const result = await Movie.create({ ...req.body, avatar, owner });
 
   const user = await User.findOne({ email });
   if (user) {
@@ -98,22 +90,31 @@ const logout = async (req, res, next) => {
   res.status(204).end();
 };
 
+const resizingImage = async (
+  inputPath,
+  outputPath,
+  width,
+  height = Jimp.AUTO,
+  next
+) => {
+  try {
+    const image = await Jimp.read(inputPath);
+    await image.resize(width, height);
+    await image.writeAsync(outputPath);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const changeAvatar = async (req, res, next) => {
   const { _id } = req.user;
-  const { path: tmpPath, filename } = req.file;
-
-  Jimp.read(tmpPath)
-    .then((image) => {
-      console.log(image);
-      image.resize(250, 250);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const { path: oldPath, filename } = req.file;
 
   const newPath = path.join(avatarsPath, filename);
 
-  await fs.rename(tmpPath, newPath);
+  await fs.rename(oldPath, newPath);
+
+  await resizingImage(newPath, newPath, 250);
 
   const result = await User.findByIdAndUpdate(_id, {
     avatarURL: `/avatars/${filename}`,

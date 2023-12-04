@@ -30,8 +30,8 @@ usersRouter.post("/logout", authenticate, usersController.logout);
 
 usersRouter.patch(
   "/avatars",
-  authenticate,
   upload.single("avatar"),
+  authenticate,
   usersController.changeAvatar
 );
 
