@@ -61,8 +61,14 @@
   },
   {
     "id": "HbWrObrgZi4YJv1M_Pm3l",
-    "name": "Oleh Khv",
-    "email": "oleh@gmail.com",
-    "phone": "(777) 777-7777"
+    "name": "Admin Admin",
+    "phone": "(000) 000-0000",
+    "email": "admin@gmail.com"
+  },
+  {
+    "id": "rCpW6Oe7UOX_ZjzZkgRSW",
+    "name": "Super Mario",
+    "phone": "(777) 777-7777",
+    "email": "mario@mail.co"
   }
 ]

@@ -1,6 +1,5 @@
 const contacts = require('../models/contacts');
 const { HttpError, ctrlWrapper } = require('../helpers');
-const { addSchema } = require('../schemas/contacts');
 
 const getAllContacts = async (_, res) => {
     const result = await contacts.listContacts();
@@ -14,11 +13,6 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-    const { error } = addSchema.validate(req.body);
-    if (error) {
-        const [details] = error.details;
-        throw HttpError(400, `Missing required ${details.context.key} field!`);
-    }
     const result = await contacts.addContact(req.body);
     if (!result)
         throw HttpError(400, `${req.body.name} is already in contacts!`);
@@ -32,8 +26,6 @@ const removeContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-    const { error } = addSchema.validate(req.body);
-    if (error) throw HttpError(400, 'Missing fields!');
     const result = await contacts.updateContact(req.params.contactId, req.body);
     if (!result) throw HttpError(404, 'Not Found!');
     res.json(result);
