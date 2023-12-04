@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import fs from "fs/promises";
 import path from "path";
 import gravatar from "gravatar";
-
+import Jimp from "jimp";
+// import { avatarsPath } from "../middlewares/upload.js";
 import User from "../models/User.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
@@ -12,8 +13,9 @@ import { HttpError } from "../helpers/index.js";
 import "dotenv/config";
 const { JWT_SECRET } = process.env;
 
-// const avatarsPath = path.resolve("public", "avatar");
-const avatarsPath = path.resolve("tmp");
+const avatarsPath = path.resolve("public", "avatars");
+const tmpPath = path.resolve("tmp");
+// const avatarsPath = path.resolve("tmp");
 
 const register = async (req, res, next) => {
   const { email, password } = req.body;
@@ -97,48 +99,29 @@ const logout = async (req, res, next) => {
 };
 
 const changeAvatar = async (req, res, next) => {
-  // console.log(req.user);
   const { _id } = req.user;
-  const { path: oldPath, filename } = req.file;
-  const newPath = path.join(avatarsPath, filename);
-  // console.log(
-  //   `newPath :${newPath}, avatarsPath: ${avatarsPath}, filename:${filename}`
-  // );
-  await fs.rename(oldPath, newPath);
+  const { path: tmpPath, filename } = req.file;
 
-  // const avatar = path.join("avatars", filename);
-  // console.log(`avatar: ${avatar}`);
-  // if()
+  Jimp.read(tmpPath)
+    .then((image) => {
+      console.log(image);
+      image.resize(250, 250);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  const newPath = path.join(avatarsPath, filename);
+
+  await fs.rename(tmpPath, newPath);
+
   const result = await User.findByIdAndUpdate(_id, {
-    // ...req.body,
-    avatarURL: newPath,
-    // owner,
+    avatarURL: `/avatars/${filename}`,
   });
 
-  res.status(201).json(result);
-  // # Запит
-  // PATCH /users/avatars
-  // Content-Type: multipart/form-data
-  // Authorization: "Bearer {{token}}"
-  // RequestBody: завантажений файл
-
-  // # Успішна відповідь
-  // Status: 200 OK
-  // Content-Type: application/json
-  // ResponseBody: {
-  //   "avatarURL": "тут буде посилання на зображення"
-  // }
-  // const { avatar } = req.body;
-  // console.log(req.body);
-  // res.json({
-  //   avatarURL: newPath,
-  // });
-  // # Неуспішна відповідь
-  // Status: 401 Unauthorized
-  // Content-Type: application/json
-  // ResponseBody: {
-  //   "message": "Not authorized"
-  // }
+  res.status(201).json({
+    avatarURL: `/avatars/${filename}`,
+  });
 };
 
 export default {
