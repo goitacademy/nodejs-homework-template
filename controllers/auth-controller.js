@@ -8,16 +8,17 @@ import {HttpError} from "../helpers/HttpError.js";
 const { JWT_SECRET } = process.env;
 
 export const signup = async (req, res, next) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-        throw HttpError(409, "Email in use")
-    }
-    const hashPassword = await bcryptjs.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
-    res
-        .status(201)
-        .json({ email: newUser.email, subscription: newUser.subscription });
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (user) {
+    throw HttpError(409, "Email in use");
+  }
+  const hashPassword = await bcryptjs.hash(password, 10);
+
+  const newUser = await User.create({ ...req.body, password: hashPassword });
+  res
+    .status(201)
+    .json({ email: newUser.email, subscription: newUser.subscription });
 };
 
 export const signin = async (req, res, next) => {
@@ -42,7 +43,7 @@ export const signin = async (req, res, next) => {
 };
 
 export const signout = async (req, res, next) => {
-    const user = req.user;
+    const { _id } = req.user;
     const result = await User.findByIdAndUpdate(_id, { token: "" });
     if (!result) {
         return next(HttpError(401, "Not authorized"))

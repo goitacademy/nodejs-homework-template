@@ -2,11 +2,9 @@ import express from 'express';
 
 import {getAll, add, getById, deleteById, updateById, updateStatusContact} from '../../controllers/contacts-controller.js'
 
-import { isEmptyBody } from '../../middlewares/isEmptyBody.js';
-import {isValidId} from '../../middlewares/isValidId.js'
+import {isEmptyBody, isValidId} from '../../middlewares/index.js'
 
-import { ctrlWrapper } from '../../decorators/ctrlWrapper.js';
-import {validateBody} from '../../decorators/validateBody.js'
+import { ctrlWrapper, validateBody } from '../../decorators/index.js';
 
 import { contactAddSchema, contactUpdateSchema, contactPatchFavorite } from '../../schemas/contact-schemas.js';
 
