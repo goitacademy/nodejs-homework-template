@@ -1,61 +1,115 @@
 const fs = require('fs/promises');
-const path = require("path");
-const nanoid = require('nanoid');
-const Joi = require('joi');
+const mongo = require('./mongo')
 
 
-const contactsPath = path.join(__dirname, "contacts.json");
-
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  return JSON.parse(data);
-};
-
-const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  const res = contacts.find((item) => item.id === contactId.toString());
-  return res || null;
-};
-
-const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const idx = contacts.find((item) => item.id === contactId.toString());
-
-  if(idx === -1) return null;
-  const [res] = contacts.splice(idx,1);
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return res; 
+const createContact = async (Data) => {
+  try{
+    console.log(Data);
+    const contactregister = await mongo.create(Data);
+    console.log(contactregister);
+    if(!contactregister) {
+      return {
+        success: false,
+        result: null,
+        message: "There is an error try creating contact"
+      }
+    }
+    return {
+      success: false,
+        result: null,
+        message: "Contact registered successfully"
+    }
+    
+    
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+        result: null,
+        message: error,
+    }
+  }
 }
 
-const addContact = async (body) => {
-  const {name, email, phone} = body;
-  const contacts = await listContacts();
-  const newContact = {id: nanoid(), name, email, phone};
+const findContact =  async () => {
+  try {
+    
+    const contact = await mongo.find();
+    console.log(contact);
+    return {
+      success: true,
+      result: contact,
+      message: "List of contacts"
+    }
+  } catch (error) {
+    return {
+      success: false,
+        result: null,
+        message: error,
+    }
+  }
 
-  contacts.push(newContact);
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
 }
 
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const {name, email, phone} = body;
-  const newContact = {id: nanoid(), name, email, phone};
-  const idx = contacts.find((item) => item.id === contactId.toString());
-  
-  if(idx === -1) return null;
-  const [res] = contacts.splice(idx,1);
-  contacts.push(newContact);
+const findByIdContact =  async (id) => {
+  try {
+ 
+    const contact = await mongo.findById(id);
+    console.log(contact);
 
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    if(!contact) {
+      return {
+        success: false,
+        result: null,
+        message: "Not found contact with byId"
+      }
+    }
+    return {
+      success: true,
+      result: contact,
+      message: "contact byID"
+    }
+  } catch (error) {
+    return {
+      success: false,
+        result: null,
+        message: error,
+    }
+  }
+
+}
+
+const updateContact = async (id, data) =>{
+try {
+  const contact = await mongo.findByIdAndUpdate(id, data);
+
+  console.log(contact);
+  if(!contact){
+    return {
+      success: false,
+      result: null,
+      message: "There was an error to update contact"
+    }
+  }
+
+  return{
+    success: true,
+    result: contact,
+    message: "The was update successfully"
+  }
+} catch (error) {
+  return {
+    success: false,
+      result: null,
+      message: error,
+  }
+}
 }
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
+  createContact,
+  findContact,
+  findByIdContact,
   updateContact,
+  
 }

@@ -5,14 +5,12 @@ const router = express.Router()
 const ctrl = require("../../controllers/contacts");
 
 
-router.get("", ctrl.getAll);
+router.get("/", ctrl.findContact);
 
-router.get('/:contactId', ctrl.getById);
+router.get('/:id', ctrl.findByIdContact);
 
-router.post("", ctrl.addContact);
+router.post("/", ctrl.createConctact);
 
-router.delete('/:contactId', ctrl.removeContact);
-
-router.put('/:contactId', ctrl.updateContact);
+router.put('/:Id', ctrl.updateContact);
 
 module.exports = router;
