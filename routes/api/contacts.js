@@ -2,19 +2,17 @@ import express from 'express';
 
 import {getAll, add, getById, deleteById, updateById, updateStatusContact} from '../../controllers/contacts-controller.js'
 
-import { isEmptyBody, isValidId, authenticate } from '../../middlewares/index.js';
+import { isEmptyBody } from '../../middlewares/isEmptyBody.js';
+import {isValidId} from '../../middlewares/isValidId.js'
 
-import { ctrlWrapper, validateBody, validateQueryParam } from '../../decorators/index.js';
+import { ctrlWrapper } from '../../decorators/ctrlWrapper.js';
+import {validateBody} from '../../decorators/validateBody.js'
 
 import { contactAddSchema, contactUpdateSchema, contactPatchFavorite } from '../../schemas/contact-schemas.js';
 
-import {queryGetContactsSchema} from '../../schemas/query-schemas.js'
-
 const contactsRouter = express.Router();
 
-contactsRouter.use(ctrlWrapper(authenticate))
-
-contactsRouter.get('/', validateQueryParam(queryGetContactsSchema), ctrlWrapper(getAll));
+contactsRouter.get('/', ctrlWrapper(getAll));
 
 contactsRouter.get('/:contactId', isValidId, ctrlWrapper(getById));
 
