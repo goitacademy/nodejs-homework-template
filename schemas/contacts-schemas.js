@@ -10,7 +10,7 @@ const contactSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": "Phone is required",
   }),
-}).unknown(false); // Добавлен этот параметр
+}).unknown(false);
 
 module.exports = {
   contactSchema,

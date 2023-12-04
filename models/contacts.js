@@ -2,22 +2,23 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const HttpError = require("../helpers/HttpError");
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Phone is required"],
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { versionKey: false }
+);
 
 const Contact = mongoose.model("Contact", contactSchema);
 
