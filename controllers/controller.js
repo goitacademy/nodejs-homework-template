@@ -23,10 +23,11 @@ const getContact = async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const contact = await getContactById(contactId);
+
     if (contact) {
-      res.json(contact);
+      res.json(contact.toObject({ versionKey: false }));
     } else {
-      next(new HttpError(404, "Not found"));
+      next(new HttpError(404, "Not Found"));
     }
   } catch (error) {
     if (error instanceof HttpError && error.statusCode === 404) {
@@ -36,15 +37,17 @@ const getContact = async (req, res, next) => {
     }
   }
 };
+
 const createContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
-  if (!name || !email || !phone) {
-    return next(
-      new HttpError(400, "Missing required fields: name, email, phone")
-    );
-  }
 
   try {
+    if (!name || !email || !phone) {
+      return next(
+        new HttpError(400, "Missing required fields: name, email, phone")
+      );
+    }
+
     const newContact = await addContact({ name, email, phone });
     res.status(201).json(newContact);
   } catch (error) {
@@ -59,7 +62,7 @@ const deleteContact = async (req, res, next) => {
     if (result) {
       res.json({ message: "Contact deleted" });
     } else {
-      next(new HttpError(404, "Not found"));
+      next(new HttpError(404, "Not Found"));
     }
   } catch (error) {
     next(new HttpError(500, "Internal Server Error"));
@@ -70,11 +73,11 @@ const updateContactData = async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
 
-  if (!name && !email && !phone) {
-    return next(new HttpError(400, "Missing fields"));
-  }
-
   try {
+    if (!name && !email && !phone) {
+      return next(new HttpError(400, "Missing fields"));
+    }
+
     const updatedContact = await updateContact(contactId, {
       name,
       email,

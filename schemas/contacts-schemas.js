@@ -1,10 +1,16 @@
 const Joi = require("joi");
 
 const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
+  name: Joi.string().required().messages({
+    "any.required": "Name is required",
+  }),
+  email: Joi.string().email().required().messages({
+    "any.required": "Email is required",
+  }),
+  phone: Joi.string().required().messages({
+    "any.required": "Phone is required",
+  }),
+}).unknown(false); // Добавлен этот параметр
 
 module.exports = {
   contactSchema,

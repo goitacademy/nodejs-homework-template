@@ -31,7 +31,8 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    return await Contact.findById(contactId);
+    const contact = await Contact.findById(contactId);
+    return contact;
   } catch (error) {
     throw new HttpError(500, "Error fetching contact from the database");
   }

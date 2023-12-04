@@ -9,7 +9,7 @@ const {
   updateContactFavorite,
 } = require("../../controllers/controller");
 
-const { isEmptyBody } = require("../../middlewares");
+const { isEmptyBody, isValidId } = require("../../middlewares");
 const { contactSchema } = require("../../schemas/contacts-schemas");
 const { controlWrapper } = require("../../decorators");
 const {
@@ -19,25 +19,24 @@ const {
 const router = express.Router();
 
 router.get("/", controlWrapper(getAllContacts));
-
-router.get("/:contactId", controlWrapper(getContact));
-
+router.get("/:contactId", isValidId, controlWrapper(getContact));
 router.post(
   "/",
-  isEmptyBody,
-  bodyValidator(contactSchema),
+  bodyValidator(contactSchema, ["name", "email", "phone"]),
   controlWrapper(createContact)
 );
-
-router.delete("/:contactId", controlWrapper(deleteContact));
-
+router.delete("/:contactId", isValidId, controlWrapper(deleteContact));
 router.put(
   "/:contactId",
-  isEmptyBody,
-  bodyValidator(contactUpdateSchema),
+  isValidId,
+  bodyValidator(contactUpdateSchema, ["name", "email", "phone"]),
   controlWrapper(updateContactData)
 );
 
-router.patch("/:contactId/favorite", controlWrapper(updateContactFavorite));
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  controlWrapper(updateContactFavorite)
+);
 
 module.exports = router;
