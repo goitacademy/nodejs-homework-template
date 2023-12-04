@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import fs from "fs/promises";
+// import fs from "fs/promises";
+import fs from "fs-extra";
 import path from "path";
 import gravatar from "gravatar";
 import Jimp from "jimp";
@@ -94,15 +95,14 @@ const resizingImage = async (
   inputPath,
   outputPath,
   width,
-  height = Jimp.AUTO,
-  next
+  height = Jimp.AUTO
 ) => {
   try {
     const image = await Jimp.read(inputPath);
     await image.resize(width, height);
     await image.writeAsync(outputPath);
   } catch (error) {
-    next(error);
+    console.log(error);
   }
 };
 
@@ -112,9 +112,8 @@ const changeAvatar = async (req, res, next) => {
 
   const newPath = path.join(avatarsPath, filename);
 
-  await fs.rename(oldPath, newPath);
-
-  await resizingImage(newPath, newPath, 250);
+  await fs.copy(oldPath, newPath);
+  await resizingImage(oldPath, newPath, 250, 250);
 
   const result = await User.findByIdAndUpdate(_id, {
     avatarURL: `/avatars/${filename}`,
