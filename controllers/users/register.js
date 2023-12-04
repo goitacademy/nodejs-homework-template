@@ -18,7 +18,7 @@ const register = async (req, res, next) => {
     to: email,
     subject: "Welcome to contact",
     html: `To confirm your registration please click on the <a href="http://localhost:3000/api/users/verify/${verificationToken}">Link</a>`,
-    text: `To confirm your registration please open the link http://localhost:8080/api/users/verify/${verificationToken}`,
+    text: `To confirm your registration please open the link http://localhost:3000/api/users/verify/${verificationToken}`,
   });
   await User.create({
     email,
