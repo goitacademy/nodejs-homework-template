@@ -6,11 +6,10 @@ const {
   removeContact,
   updateContact,
   updateContactStatus,
-} = require("../../controllers/contacts");
-const ctrlWrapper = require("../../helpers/ctrlWrapper");
+} = require("../../controllers");
+const { ctrlWrapper, validateBody } = require("../../helpers");
 const router = express.Router();
-const { contactJoiSchema } = require("../../models/contact");
-const validateBody = require("../../helpers/validateBody");
+const { contactJoiSchema } = require("../../models");
 
 router.get("/", ctrlWrapper(listContacts));
 
