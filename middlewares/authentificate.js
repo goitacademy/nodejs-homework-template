@@ -36,6 +36,12 @@ const authenticate = async (req, res, next) => {
         console.log("Error: User not found");
         return res.status(401).send({ message: "User not found" });
       }
+
+      if (!user._id) {
+        console.log("Error: User ID not found");
+        return res.status(401).send({ message: "User ID not found" });
+      }
+
       console.log("Received token:", token);
       console.log("User token:", user.token);
 
@@ -46,7 +52,8 @@ const authenticate = async (req, res, next) => {
           .send({ message: "Несоответствие токенов при сравнении" });
       }
 
-      req.user = { id: user._id, name: user.name };
+        // req.user = { id: user._id.toString(), name: user.name };ТЕПЕРЬ РАБОТАЕТ!
+        req.user = user;
 
       next();
     } catch (error) {

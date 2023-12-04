@@ -1,6 +1,9 @@
+// controllers\users.js
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User, validateUser } = require("../service/schemas/userSchema");
+const updateAvatar = require('./updateAvatar');
 
 async function registerUser(req, res, next) {
   try {
@@ -167,4 +170,5 @@ module.exports = {
   loginUser,
   logoutUser,
   getCurrentUser,
+  updateAvatar
 };

@@ -1,6 +1,9 @@
+// service\schemas\userSchema.js
+
 const Joi = require("joi");
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const gravatar = require('gravatar');
 
 const userSchema = new mongoose.Schema({
   password: {
@@ -12,6 +15,9 @@ const userSchema = new mongoose.Schema({
     required: [true, "Email is required"],
     unique: true,
   },
+  avatarURL: {
+    type: String,
+  },
   subscription: {
     type: String,
     enum: ["starter", "pro", "business"],
@@ -22,6 +28,13 @@ const userSchema = new mongoose.Schema({
     ref: "user",
   },
   token: String,
+});
+userSchema.pre('save', function (next) {
+  // Генерація аватара при реєстрації
+  if (!this.avatarURL) {
+    this.avatarURL = gravatar.url(this.email, { s: '200', r: 'pg', d: 'mm' });
+  }
+  next();
 });
 
 const validateUser = (user) => {
