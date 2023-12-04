@@ -16,7 +16,7 @@ const {
 const { User } = require("../models/user");
 const { SECRET_KEY, PORT, BASE_URL } = process.env;
 const { nanoid } = require("nanoid");
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const avatarsDir = path.resolve(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { password, email } = req.body;
