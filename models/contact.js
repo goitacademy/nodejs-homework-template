@@ -3,19 +3,17 @@ const { Schema, model } = require("mongoose");
 const contactSchema = new Schema({
   name: {
     type: String,
-    require: true,
+    require: [true, "Set name for contact"],
   },
   email: {
     type: String,
-    require: true,
   },
   phone: {
     type: String,
-    require: true,
   },
   favorite: {
     type: Boolean,
-    require: true,
+    default: false,
   },
 });
 

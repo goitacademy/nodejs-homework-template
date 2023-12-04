@@ -42,6 +42,15 @@ const getAll = async (req, res, next) => {
 //   res.json(result);
 // };
 
+// const updateFavorite = async (req, res, next) => {
+//   const { contactId } = req.params;
+//   const result = await updateContact(contactId, req.body);
+//   if (!result) {
+//     res.status(404).json({"message": "missing field favorite"});
+//   }
+//   res.json(result);
+// };
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   // getById: ctrlWrapper(getById),
