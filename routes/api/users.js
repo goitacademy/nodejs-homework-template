@@ -1,14 +1,30 @@
 const express = require("express");
 
-const AuthController = require("../../controllers/users");
-const auth = require("../../middleware/users");
+const logger = require("morgan");
+const cors = require("cors");
+require("dotenv").config();
 
+const authRouter = require("./routes/api/users");
+const contactsRouter = require("./routes/api/contacts");
 
-const router = express.Router();
-const jsonParser = express.json();
+const app = express();
 
-router.post("/register", jsonParser, AuthController.register);
-router.post("/login", jsonParser, AuthController.login);
-router.get("/logout", auth, AuthController.logout);
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-module.exports = router;
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+app.use(express.static("public"));
+
+app.use("/api/users", authRouter);
+app.use("/api/contacts", contactsRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).json({ message: err.message });
+});
+
+module.exports = app;
