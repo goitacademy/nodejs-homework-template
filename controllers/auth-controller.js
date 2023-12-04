@@ -17,7 +17,7 @@ export const signup = async (req, res, next) => {
     const newUser = await User.create({ ...req.body, password: hashPassword });
     res
         .status(201)
-        .json({ email: newUser.email, subscription: newUser.subscription })
+        .json({ email: newUser.email, subscription: newUser.subscription });
 };
 
 export const signin = async (req, res, next) => {
