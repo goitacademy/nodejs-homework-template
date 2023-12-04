@@ -1,106 +1,80 @@
-const contacts = require("../models/contacts");
-const {HttpError} = require("../helpers/index");
-const contactSchema = require("../schemas/contact");
+const { Contact } = require("../models/contact");
+const {HttpError, ctrlWrapper} = require("../helpers/index");
 
 
 
-const getAll = async (req, res, next) => {
-    try{
-      const result = await contacts.listContacts();
-      res.send(result);
-    }
-    catch(error){
-      next(error);
-    }
+const getAll = async (req, res) => {
+  const result = await Contact.find();
+  res.send(result);
 };
 
 
-const getById = async (req, res, next) => {
-    try{
-      const {contactId} = req.params;
-      const result = await contacts.getContactById(contactId);
-  
-      if(!result) {
-        throw HttpError(404, "Not found");
-      }
-  
-      res.status(200).send(result);
-    }
-    catch(error){
-      next(error);
-    }
+const getById = async (req, res) => {
+  const {contactId} = req.params;
+  const result = await Contact.findById(contactId);
+
+  if(!result) {
+    throw HttpError(404, "Not found");
+  }
+
+  res.status(200).send(result);
 };
 
 
-const addNewContact =  async (req, res, next) => {
-    try{
-      if (!Object.keys(req.body).length) {
-        throw HttpError(400, "All fields are empty");
-      };
-  
-      const { error } = contactSchema.validate(req.body);
-  
-      if (error) {
-        throw HttpError(400, error.message);
-      };
-  
-      const result = await contacts.addContact(req.body);
-      res.status(201).send(result);
-    }
-    catch(error){
-      next(error)
-    }
+const addNewContact =  async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).send(result);
 };
 
 
-const deleteById = async (req, res, next) => {
-    try {
-      const { contactId } = req.params;
-      const result = await contacts.removeContact(contactId);
-  
-      if (!result) {
-        throw HttpError(404, "Contact was not found");
-      };
-  
-      res.status(200).send({message: "contact deleted"});
-    } 
-    catch (error) {
-        next(error);
-    }
+const deleteById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndDelete(contactId);
+
+  if (!result) {
+    throw HttpError(404, "Contact was not found");
+  };
+
+  res.status(200).send({message: "contact deleted"});
 };
 
 
-const updateById = async (req, res, next) => {
-    try{
-      if (!Object.keys(req.body).length) {
-        throw HttpError(400, "All fields are empty");
-      };
+const updateById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
+
+  if (!result) {
+    throw HttpError(404, "Contact was not found");
+  };
+
+  res.status(200).send(result);
+};
+
+
+const updateFavoriteById = async (req, res) => {
+  const { contactId } = req.params;
+
+  const existingContact = await Contact.findById(contactId);
+
+  if (!existingContact) {
+    throw HttpError(404, "Contact was not found");
+  }
+
+  if (!req.body.favorite) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
   
-      const { error } = contactSchema.validate(req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
   
-      if (error) {
-        throw HttpError(400, error.message);
-      };
-  
-      const {contactId} = req.params;
-      const result = await contacts.updateContact(contactId, req.body);
-  
-      if (!result) {
-        throw HttpError(404, "Contact was not found");
-      };
-  
-      res.status(200).send(result);
-    }
-    catch(error){
-      next(error)
-    }
+  res.status(200).send(result);
 };
 
 
 module.exports = { 
-    getAll, 
-    getById, 
-    addNewContact, 
-    deleteById, 
-    updateById
+  getAll: ctrlWrapper(getAll), 
+  getById: ctrlWrapper(getById), 
+  addNewContact: ctrlWrapper(addNewContact), 
+  deleteById: ctrlWrapper(deleteById), 
+  updateById: ctrlWrapper(updateById),
+  updateFavoriteById: ctrlWrapper(updateFavoriteById),
 };
