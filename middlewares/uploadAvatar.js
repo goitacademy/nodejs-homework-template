@@ -8,10 +8,12 @@ const multerConfig = multer.diskStorage({
     cb(null, tempDir);
   },
   filename: (req, file, cb) => {
-    const { _id } = req.user;
+    if (!req.user || !req.user._id) {
+      return cb(new Error("Not authorized or user ID not available"));
+    }
 
     const extname = path.extname(file.originalname);
-    const filename = `${_id}${extname}`;
+    const filename = `${req.user._id}${extname}`;
 
     cb(null, filename);
   },
