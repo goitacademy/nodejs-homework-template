@@ -1,7 +1,6 @@
 import * as contactsService from "../models/contacts.js";
 import { HttpError } from "../helpers/index.js";
-
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { ctrlWrapper } from "../decorators/index.js";
 
 const getAll = async (req, res) => {
   const result = await contactsService.listContacts();
@@ -9,10 +8,10 @@ const getAll = async (req, res) => {
 };
 
 const getById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsService.getContactById(id);
+  const { contactId } = req.params;
+  const result = await contactsService.getContactById(contactId);
   if (!result) {
-    throw HttpError(404, `Contact with id= ${id} not found`);
+    throw HttpError(404, `Contact with id= ${contactId} not found`);
   }
   res.json(result);
 };
@@ -23,17 +22,17 @@ const add = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsService.updateContactsById(id, req.body);
+  const { contactId } = req.params;
+  const result = await contactsService.updateContactsById(contactId, req.body);
   if (!result) {
-    throw HttpError(404, `Contact with id= ${id} not found`);
+    throw HttpError(404, `Contact with id= ${contactId} not found`);
   }
   res.json(result);
 };
 
 const deleteById = async (req, res) => {
-  const { id } = req.params;
-  const result = await contactsService.deleteContact(id);
+  const { contactId } = req.params;
+  const result = await contactsService.deleteContact(contactId);
   if (!result) {
     throw HttpError(404, `Contact with id= ${id} not found`);
   }

@@ -14,7 +14,13 @@ export const listContacts = async () => {
 
 export const getContactById = async (id) => {
   const contacts = await listContacts();
+
   const result = contacts.find((contact) => contact.id === id);
+  contacts.forEach((contact) =>
+    console.log(contact.id, "-", id, contact.id.length, id.length)
+  );
+  console.log(id);
+  console.log(result);
   return result || null;
 };
 
@@ -29,15 +35,15 @@ export const addContact = async (data) => {
   return newContact;
 };
 
-export const updateContactsById = async (id, data) => {
-  const movies = await listContacts();
-  const index = movies.findIndex((item) => item.id === id);
+export const updateContactById = async (id, data) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === id);
   if (index === -1) {
     return null;
   }
-  movies[index] = { ...movies[index], ...data };
-  await updateContacts(movies);
-  return movies[index];
+  contacts[index] = { ...contacts[index], ...data };
+  await updateContacts(contacts);
+  return contacts[index];
 };
 
 export const deleteContact = async (id) => {
