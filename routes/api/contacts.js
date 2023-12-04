@@ -10,18 +10,18 @@ import {validateBody} from '../../decorators/validateBody.js'
 
 import { contactAddSchema, contactUpdateSchema, contactPatchFavorite } from '../../schemas/contact-schemas.js';
 
-const router = express.Router();
+const contactsRouter = express.Router();
 
-router.get('/', ctrlWrapper(getAll));
+contactsRouter.get('/', ctrlWrapper(getAll));
 
-router.get('/:contactId', isValidId, ctrlWrapper(getById));
+contactsRouter.get('/:contactId', isValidId, ctrlWrapper(getById));
 
-router.post('/', isEmptyBody, validateBody(contactAddSchema), ctrlWrapper(add));
+contactsRouter.post('/', isEmptyBody, validateBody(contactAddSchema), ctrlWrapper(add));
 
-router.delete('/:contactId', isValidId, ctrlWrapper(deleteById))
+contactsRouter.delete('/:contactId', isValidId, ctrlWrapper(deleteById))
 
-router.put('/:contactId', isValidId, isEmptyBody, validateBody(contactUpdateSchema), ctrlWrapper(updateById));
+contactsRouter.put('/:contactId', isValidId, isEmptyBody, validateBody(contactUpdateSchema), ctrlWrapper(updateById));
 
-router.patch('/:contactId/favorite', isValidId, isEmptyBody, validateBody(contactPatchFavorite), ctrlWrapper(updateStatusContact))
+contactsRouter.patch('/:contactId/favorite', isValidId, isEmptyBody, validateBody(contactPatchFavorite), ctrlWrapper(updateStatusContact))
 
-export default router;
+export default contactsRouter;
