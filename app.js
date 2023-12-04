@@ -22,6 +22,11 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   const { status = 500, message = "Server error" } = err;
+
+  if (req.body) {
+    res.status(400).json({ message: "missing field favorite" });
+  }
+
   res.status(status).json(message);
 });
 
