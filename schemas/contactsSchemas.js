@@ -12,3 +12,7 @@ export const updateContactSchema = Joi.object({
     phone: Joi.string().regex(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/).messages({ 'string.pattern.base': 'Phone number must be in (xxx) xxx-xxxx format.' })
 
 })
+export const addToFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required().messages({ 'string.pattern.base': 'Missing field favorite.' })
+
+})
