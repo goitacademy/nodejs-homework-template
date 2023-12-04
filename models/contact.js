@@ -1,4 +1,3 @@
-const { string } = require("joi");
 const { Schema, model } = require("mongoose");
 
 const contactSchema = new Schema({
