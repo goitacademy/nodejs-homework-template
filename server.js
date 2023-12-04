@@ -2,8 +2,7 @@ const app = require("./app");
 
 const mongoose = require("mongoose");
 
-const DB_HOST =
-  "mongodb+srv://Golik:0xBQsZQURjCKx8JS@cluster0.3xl6qn2.mongodb.net/contacts_reader";
+const { DB_HOST } = require("./config");
 
 mongoose
   .connect(DB_HOST)
