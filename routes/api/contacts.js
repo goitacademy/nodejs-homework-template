@@ -7,7 +7,7 @@ const {
   updateContactData,
   updateContactStatus,
   updateContactFavorite,
-} = require("../../controllers/controller");
+} = require("../../controllers/contacts");
 
 const { isEmptyBody, isValidId } = require("../../middlewares");
 const { contactSchema } = require("../../schemas/contacts-schemas");
