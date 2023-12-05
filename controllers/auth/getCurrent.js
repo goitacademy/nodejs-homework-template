@@ -3,9 +3,9 @@ const {ctrlWrapper} = require("../../helpers/index");
 
 
 const getCurrent = async(req, res) => {
-    const {username, email} = req.user;
+    const {username, email, subscription} = req.user;
 
-    res.send({username, email});
+    res.send({username, email, subscription});
 };
 
 
