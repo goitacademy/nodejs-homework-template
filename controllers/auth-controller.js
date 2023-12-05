@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
+import gravatar from 'gravatar'; 
 import User from "../models/User.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
@@ -13,18 +13,22 @@ const signup = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user) {
-        throw HttpError(409, "Email already exist");
+        throw HttpError(409, "Email already exists");
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email, { s: '200', r: 'pg', d: 'identicon' });
+
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
     res.status(201).json({
         username: newUser.username,
         email: newUser.email,
-    })
+        avatarURL: newUser.avatarURL,
+    });
 }
+
 
 const signin = async (req, res) => {
     const { email, password } = req.body;
