@@ -1,8 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import app from "../app";
 
-const app = require("./app");
+dotenv.config();
 
-const { DB_HOST } = process.env;
+const { DB_HOST }: any = process.env;
 
 mongoose.set("strictQuery", true);
 

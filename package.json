@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start": "cross-env NODE_ENV=production node ./src/server.ts",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./src/server.ts",
+    "lint": "eslint **/*.ts",
+    "lint:fix": "eslint --fix **/*.ts"
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
@@ -26,6 +26,7 @@
     "nodemailer": "^6.9.3"
   },
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
