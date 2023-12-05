@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
 import { HttpError } from "../helpers/HttpError.js";
 import { User } from "../models/user.js";
+import { ctrlWrapper } from "../decorators/ctrlWrapper.js";
 
 const { SECRET_KEY } = process.env;
 
-export const authenticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
 
   const [bearer, token] = authorization.split(" ");
@@ -24,3 +25,5 @@ export const authenticate = async (req, res, next) => {
     next(HttpError(401));
   }
 };
+
+export default ctrlWrapper(authenticate);
