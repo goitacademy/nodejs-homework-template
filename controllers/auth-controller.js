@@ -14,11 +14,14 @@ export const signup = async (req, res, next) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcryptjs.hash(password, 10);
-
   const newUser = await User.create({ ...req.body, password: hashPassword });
-  res
-    .status(201)
-    .json({ email: newUser.email, subscription: newUser.subscription });
+  
+    res.status(201).json({
+        user: {
+            email: newUser.email,
+            subscription: newUser.subscription
+        }  
+    });
 };
 
 export const signin = async (req, res, next) => {
@@ -36,9 +39,10 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "23h" });
 
     await User.findByIdAndUpdate(user._id, { token });
+    
     res.status(200).json({
-        token,
         user: { email: user.email, subscription: user.subscription },
+        token,
     });
 };
 
@@ -61,14 +65,19 @@ export const current = async (req, res, next) => {
 } 
 
 export const updateSubscription = async (req, res, next) => {
-    const subscription = req.body.subscription;
+    const { subscription } = req.body;
     const { _id } = req.user;
+    
     const result = await User.findByIdAndUpdate(
         _id,
         { subscription },
         { new: true }
     );
-    res
-        .status(200)
-        .json({ email: result.email, subscription: result.subscription });
+    res.status(200).json({
+        user: {
+            email: result.email,
+            subscription: result.subscription
+        }
+        
+    });
 };
