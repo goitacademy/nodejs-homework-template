@@ -23,7 +23,7 @@ authRouter.patch(
   "/subscription",
   auth,
   validateBody(subscriptionJoiSchema),
-  ctrl.changeSubscription
+  ctrl.subscription
 );
 
 module.exports = authRouter;
