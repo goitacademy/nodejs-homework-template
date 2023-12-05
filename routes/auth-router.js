@@ -4,8 +4,9 @@ import {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  userEmailSchema,
 } from "../models/user.js";
-import { authenticate, upload } from "../middlewares/index.js";
+import { authenticate, isEmptyBody, upload } from "../middlewares/index.js";
 import authController from "../controllers/auth-controller.js";
 
 const authRouter = express.Router();
@@ -17,6 +18,15 @@ authRouter.post(
 );
 
 authRouter.post("/login", validateBody(loginSchema), authController.login);
+
+authRouter.get("/users/verify/:verificationCode", authController.verify);
+
+authRouter.post(
+  "/users/verify",
+  isEmptyBody,
+  validateBody(userEmailSchema),
+  authController.resendVerify
+);
 
 authRouter.get("/current", authenticate, authController.getCurrent);
 
