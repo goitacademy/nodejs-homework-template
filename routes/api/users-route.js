@@ -1,10 +1,5 @@
 import express from "express";
-import {
-  authenticate,
-  isEmptyBody,
-  isValidId,
-  upload,
-} from "../../middlewares/index.js";
+import { authenticate, isEmptyBody, upload } from "../../middlewares/index.js";
 import ctrlWrapper from "../../decorators/ctrlWrapper.js";
 import {
   current,
@@ -16,7 +11,6 @@ import {
 } from "../../controllers/user-controller.js";
 import validateBody from "../../decorators/validateBody.js";
 import { authSchema, patchSubscription } from "../../schemas/users-schema.js";
-import processPhoto from "../../decorators/processPhoto.js";
 
 const usersRouter = express.Router();
 
@@ -49,7 +43,6 @@ usersRouter.patch(
 usersRouter.patch(
   "/avatar",
   upload.single("avatar"),
-  // ctrlWrapper(processPhoto),
   ctrlWrapper(authenticate),
   ctrlWrapper(updateAvatar)
 );
