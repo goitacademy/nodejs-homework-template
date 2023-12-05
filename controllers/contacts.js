@@ -1,10 +1,18 @@
-const contact = require("../models/contacts");
-const notFoundMiddleware = require("../middlewares/notFound");
 
+const contact = require("../service/contacts");
+const validationContact = require("../schemas/joi");
 
-const createConctact = (req, res)=>{
+const createConctact = async (req, res)=>{
+
+    const {error} = validationContact.validate(req.body);
+    if(error) {
+        return res.status(400).json({
+            result,
+            message
+        })
+    }
     try{
-        const {success, result, message} = contact.createContact(req.body);
+        const {success, result, message} = await contact.createContact(req.body);
         console.log(result);
         if(!success) {
             return res.status(400).json({
@@ -48,6 +56,13 @@ const findContact = async (req, res)=>{
 }
 
 const findByIdContact = async (req, res)=>{
+    const {error} = validationContact.validate(req.params.id);
+    if(error) {
+        return res.status(400).json({
+            result,
+            message
+        })
+    }
     try{
         const {success, result, message} = await contact.findByIdContact(req.params.id);
         console.log(result);
@@ -95,10 +110,6 @@ const updateContact = async (req, res)=>{
 
 
 module.exports = {
-    getAll,
-    getById,
-    addContact,
-    removeContact,
     updateContact,
     createConctact,
     findContact,
