@@ -4,6 +4,8 @@ const contactsPath = path.join(__dirname, "./contacts.json");
 const { nanoid } = require("nanoid");
 // const { log } = require('console');
 
+// ф-ції для зчитування з файла jsom
+
 const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
