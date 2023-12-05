@@ -25,6 +25,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+    },
   },
 
   {
@@ -52,6 +59,10 @@ export const updateSubscriptionSchema = Joi.object({
     .valid("starter", "pro", "business")
     .required()
     .messages({ "any.required": "Missing field subscription" }),
+});
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
 });
 
 const User = model("user", userSchema);
