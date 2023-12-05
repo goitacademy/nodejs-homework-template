@@ -1,9 +1,9 @@
 import express from 'express'
 import contactsController from "../../controllers/contacts-controller.js";
-import { isEmptyBody,isValidId,isEmptyFavorite } from "../../middlewares/index.js"
+import { isEmptyBody,isValidId,isEmptyFavorite,authenticate } from "../../middlewares/index.js"
 
 const router = express.Router()
-
+router.use(authenticate)
 router.get("/", contactsController.listContacts);
 
 router.get("/:id", isValidId, contactsController.getContactById);

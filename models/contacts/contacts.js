@@ -14,12 +14,12 @@ export const contactAddSchema = Joi.object({
     "any.required": "Missing required phone field",
   }),
   favorite: Joi.boolean(),
+  
 });
 export const contactUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-  favorite: Joi.boolean(),
 });
 
 export const contactFavoriteSchema = Joi.object({
@@ -28,13 +28,42 @@ export const contactFavoriteSchema = Joi.object({
     .messages({ "any.required": "Missing required favorite field" }),
 });
 
-const contactsSchema = new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  favorite: { type: Boolean,default:false},
-  
-}, { versionKey: false, timestamps: true });
+const phoneRegex = /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/;
+
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      minlength: 3,
+      maxlength: 30,
+      unique: true,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, "Email is required"],
+    },
+    phone: {
+      type: String,
+      min: [6, "Must be at least 6, got {VALUE}"],
+      max: [12, "Too long phone number"],
+      match: phoneRegex, //* formats (123) 456-7890
+      unique: true,
+      required: [true, " Phone is required"],
+    },
+
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+  },
+  { versionKey: false, timestamps: true } //*налаштування схеми
+);
 contactsSchema.post("save", (error, data, next) => {
   error.status = 400;
   next();
@@ -45,5 +74,5 @@ contactsSchema.post("findOneAndUpdate", (error, data, next) => {
   next();
 }
 )
-const Contact = model("contact", contactsSchema);
-export default Contact
+export const Contact = model("contact", contactsSchema);
+
