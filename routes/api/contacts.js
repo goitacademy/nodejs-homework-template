@@ -26,7 +26,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
-  isValidId,
+  isEmptyBody,
   validataBody(schemas.updateFavoriteSchema),
   controllers.updateStatusContact
 );
