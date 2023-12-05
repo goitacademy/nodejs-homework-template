@@ -1,7 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-// import fs from "fs/promises";
-import fs from "fs-extra";
+import fs from "fs/promises";
 import path from "path";
 import gravatar from "gravatar";
 import Jimp from "jimp";
@@ -108,12 +107,16 @@ const resizingImage = async (
 
 const changeAvatar = async (req, res, next) => {
   const { _id } = req.user;
+
+  if (!req.file || !req) {
+    throw HttpError(400, "Missing new avatar file");
+  }
   const { path: oldPath, filename } = req.file;
 
   const newPath = path.join(avatarsPath, filename);
 
-  await fs.copy(oldPath, newPath);
-  await resizingImage(oldPath, newPath, 250, 250);
+  await fs.rename(oldPath, newPath);
+  await resizingImage(newPath, newPath, 250, 250);
 
   const result = await User.findByIdAndUpdate(_id, {
     avatarURL: `/avatars/${filename}`,
