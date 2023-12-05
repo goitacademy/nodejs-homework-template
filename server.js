@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");                    // імпортуємо mongoose для підключення до баз даних
 
 const app = require("./app");
-console.log('перевірка');
-console.log(process.env.DB_HOST);
-const { DB_HOST } = process.env;                          // беремо секретну змінну (строку підключення до бд) зі змінних оточення
 
+const { DB_HOST } = process.env;                          // беремо секретну змінну (строку підключення до бд) зі змінних оточення
+console.log(process.env.DB_HOST);
 mongoose.set('strictQuery', true);                       // підключаємося
 
 
