@@ -16,6 +16,10 @@ const contactSchema = new Schema(
       type: String,
       required: [true, "Phone is required"],
     },
+    favorite: {
+      type: Boolean,
+      required: [true, "Favorite is required"],
+    },
   },
   { versionKey: false }
 );
@@ -66,7 +70,11 @@ const updateContact = async (contactId, body) => {
 
 const updateStatusContact = async (contactId, body) => {
   try {
-    return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+    return await Contact.findByIdAndUpdate(
+      contactId,
+      { $set: body },
+      { new: true }
+    );
   } catch (error) {
     throw new HttpError(500, "Error updating contact status in the database");
   }

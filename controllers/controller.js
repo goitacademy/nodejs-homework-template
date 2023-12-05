@@ -37,9 +37,8 @@ const getContact = async (req, res, next) => {
     }
   }
 };
-
 const createContact = async (req, res, next) => {
-  const { name, email, phone } = req.body;
+  const { name, email, phone, favorite } = req.body;
 
   try {
     if (!name || !email || !phone) {
@@ -48,7 +47,11 @@ const createContact = async (req, res, next) => {
       );
     }
 
-    const newContact = await addContact({ name, email, phone });
+    if (favorite === undefined) {
+      return next(new HttpError(400, "Missing required field: favorite"));
+    }
+
+    const newContact = await addContact({ name, email, phone, favorite });
     res.status(201).json(newContact);
   } catch (error) {
     next(new HttpError(500, "Internal Server Error"));
@@ -98,7 +101,7 @@ const updateContactStatus = async (req, res, next) => {
   const { favorite } = req.body;
 
   if (favorite === undefined && Object.keys(req.body).length === 0) {
-    return res.status(400).json({ message: "Missing field favorite" });
+    return res.status(400).json({ message: "Missing fields" });
   }
 
   try {
@@ -117,7 +120,7 @@ const updateContactFavorite = async (req, res, next) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
 
-  if (favorite === undefined && Object.keys(req.body).length === 0) {
+  if (favorite === undefined) {
     return res.status(400).json({ message: "Missing field favorite" });
   }
 
