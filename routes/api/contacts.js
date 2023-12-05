@@ -28,4 +28,5 @@ router.put("/:contactId", isValid, validateBody(updateScheme), contactController
 router.patch("/:contactId/favorite", isEmptyBody, isValid, validateBody(movieFavoriteScheme), contactController.updateById );
 
 
+
 export default router;
