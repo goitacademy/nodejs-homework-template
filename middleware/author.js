@@ -8,6 +8,15 @@ function author(req, res, next) {
   if (typeof authorHeader === "undefined") {
     return sendUnauthorized(res);
   }
+
+  function verifyRequestBody(req, res, next) {
+    if (Object.keys(req.body).lenght === 0) {
+      return
+      res.status(400).send('Request body cannot be empty');
+    }
+    next();
+  }
+
   const [bearer, token] = authorHeader.split(" ", 2);
   if (token === null) {
     return sendUnauthorized(res);
