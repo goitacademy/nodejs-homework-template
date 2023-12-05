@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");                    // імпортуємо mongoose для підключення до баз даних
 
 const app = require("./app");
-
+console.log('перевірка');
+console.log(process.env.DB_HOST);
 const { DB_HOST } = process.env;                          // беремо секретну змінну (строку підключення до бд) зі змінних оточення
 
 mongoose.set('strictQuery', true);                       // підключаємося
@@ -10,10 +11,12 @@ mongoose.set('strictQuery', true);                       // підключаєм
 mongoose
   .connect(DB_HOST)
   .then(() => {
+    console.log('все добре');
     app.listen(3000);                                    // запускаємо сервер
     console.log("Database connection successful");
   })
   .catch((error) => { 
+    console.log('ошибочка');
     console.log(error.message);
     process.exit(1);                          // команда закриває запущені процеси (якщо щось запущене)
   })
