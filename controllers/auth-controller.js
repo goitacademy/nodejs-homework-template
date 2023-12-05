@@ -1,3 +1,4 @@
+//import fs from "fs/promises";
 import User from "../models/User.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError } from "../helpers/index.js";
@@ -5,9 +6,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import gravatar from "gravatar";
-import path from "path";
+//import path from "path";
 
-const avatarsPath = path.resolve("public", "avatars");
+//const avatarsPath = path.resolve("public", "avatars");
 
 dotenv.config();
  
@@ -15,30 +16,25 @@ dotenv.config();
 const { JWT_SECRET } = process.env;
 
 const signup = async (req, res) => {
-    const { email, password } = req.body;
+    const { email, password} = req.body;
     const user = await User.findOne({ email });
     if (user) {
         throw HttpError(409, "This email is already exists");
     }
     const hashPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({ ...req.body, password: hashPassword });
-/////////////////////////
-    const { url: poster } = await gravatar.url("email", { s: '200', r: 'pg', d: '404' })
-    const fileUrlAvatar = await urlAvatar.upload(req.file.path, {
-        folder:"avatars",
-    })
+    
+    const url = gravatar.url(email)
 
-    console.log(fileUrlAvatar);
-//////////////////////
     res.status(201).json({
         user: {
             email: newUser.email,
             subscription: newUser.subscription,
-            avatarURL: fileUrlAvatar.avatarURL, ///////////
+            avatarURL: url, 
         }
     })
 };
-
+ 
 
 const signin = async (req, res) => {
     const { email, password } = req.body;
