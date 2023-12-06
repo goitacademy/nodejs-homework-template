@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const User = require("../models/user");
 
+const sendEmail = require("../helpers/sendEmail");
+
 async function register(req, res, next) {
   const { email, password } = req.body;
   // Joi
@@ -22,6 +24,14 @@ async function register(req, res, next) {
         return res.status(409).send({message: "Email in use"});
     }
     const passwordHash = await bcrypt.hash(password, 10);
+
+    await sendEmail({
+       to: email,
+       subject: "Good russians - Deed russians",
+       html: 'To confirm your registration please click on <a href="">link</a>',
+       text: "To confirm your registration please open the link ..."
+    })
+
     const newUser = await User.create({ email, password: passwordHash, subscription: 'starter' });
 
     res.status(201).json({
