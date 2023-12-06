@@ -12,6 +12,8 @@ authRouter.post("/signup", isEmptyBody, validateBody(userSignupSchema), authCont
 authRouter.post("/signin", isEmptyBody, validateBody(userSigninSchema), authController.signin);
 
 authRouter.get("/current", authenticate, authController.getCurrent);
+
+authRouter.patch("/avatars", isEmptyBody, validateBody(userSigninSchema), authController.signin);
 //logout
 authRouter.post("/signout", authenticate, authController.signout);
 

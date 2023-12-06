@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import gravatar from "gravatar";
+
 //import path from "path";
 
 //const avatarsPath = path.resolve("public", "avatars");
@@ -63,6 +64,37 @@ const signin = async (req, res) => {
     })
 };
 
+
+const avatars = async (req, res) => {
+    const { token } = req.body;
+    const user = await User.findOne({ token });
+    if (!user) {
+        throw HttpError(401, "Not authorized");
+    }
+
+    res.status(200).json({
+            avatarURL: url,
+    })
+};
+
+
+
+/*
+const add = async (req, res) => {
+    const {_id: owner} = req.user;
+    const {path: oldPath, filename} = req.file;
+    const newPath = path.join(postersPath, filename);
+    await fs.rename(oldPath, newPath);
+
+    const poster = path.join("posters", filename);
+    const result = await Movie.create({...req.body, poster, owner});
+
+    res.status(201).json(result);
+
+   
+
+}*/
+
 const getCurrent = async (req, res) => {
     const { email, subscription } = req.user;
 
@@ -87,4 +119,5 @@ export default {
     signin: ctrlWrapper(signin),
     getCurrent: ctrlWrapper(getCurrent),
     signout: ctrlWrapper(signout),
+    avatars: ctrlWrapper(avatars),
 };
