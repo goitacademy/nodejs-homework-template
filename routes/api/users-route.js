@@ -41,7 +41,7 @@ usersRouter.patch(
 );
 
 usersRouter.patch(
-  "/avatar",
+  "/avatars",
   upload.single("avatar"),
   ctrlWrapper(authenticate),
   ctrlWrapper(updateAvatar)
