@@ -5,44 +5,38 @@ const {
   createContact,
   deleteContact,
   updateContactData,
-} = require("../../controllers/controller");
-const { isEmptyBody } = require("../../middlewares");
-const { contactSchema } = require("../../schemas/contacts-schemas");
+  updateContactStatus,
+  updateContactFavorite,
+} = require("../../controllers/contacts");
 
+const { isEmptyBody, isValidId } = require("../../middlewares");
+const { contactSchema } = require("../../schemas/contacts-schemas");
+const { controlWrapper } = require("../../decorators");
+const {
+  bodyValidator,
+  contactUpdateSchema,
+} = require("../../decorators/bodyValidator");
 const router = express.Router();
 
-router.get("/", getAllContacts);
-
-router.get("/:contactId", getContact);
-
+router.get("/", controlWrapper(getAllContacts));
+router.get("/:contactId", isValidId, controlWrapper(getContact));
 router.post(
   "/",
-  isEmptyBody,
-  async (req, res, next) => {
-    try {
-      await contactSchema.validateAsync(req.body);
-      next();
-    } catch (error) {
-      next(new HttpError(400, error.details[0].message));
-    }
-  },
-  createContact
+  bodyValidator(contactSchema, ["name", "email", "phone"]),
+  controlWrapper(createContact)
 );
-
-router.delete("/:contactId", deleteContact);
-
+router.delete("/:contactId", isValidId, controlWrapper(deleteContact));
 router.put(
   "/:contactId",
-  isEmptyBody,
-  async (req, res, next) => {
-    try {
-      await contactSchema.validateAsync(req.body);
-      next();
-    } catch (error) {
-      next(new HttpError(400, error.details[0].message));
-    }
-  },
-  updateContactData
+  isValidId,
+  bodyValidator(contactUpdateSchema, ["name", "email", "phone"]),
+  controlWrapper(updateContactData)
+);
+
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  controlWrapper(updateContactFavorite)
 );
 
 module.exports = router;
