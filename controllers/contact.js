@@ -26,7 +26,6 @@ async function getContact(req, res, next) {
     next(err);
   }
 }
-
 async function createContact(req, res, next) {
   const contact = {
     name: req.body.name,
