@@ -49,10 +49,12 @@ export const signin = async (req, res, next) => {
 export const signout = async (req, res, next) => {
     const { _id } = req.user;
     const result = await User.findByIdAndUpdate(_id, { token: "" });
+
     if (!result) {
-        return next(HttpError(401, "Not authorized"))
+        return next(HttpError(401, "Not authorized"));
     }
-    res.status(204)
+
+    res.status(204).end();
 };
 
 export const current = async (req, res, next) => {
