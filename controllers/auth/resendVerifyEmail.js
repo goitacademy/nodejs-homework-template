@@ -1,6 +1,6 @@
-const { User } = require("../../models/user/user");
+import { User } from "../../models/user/user.js";
 
-const { emailSender, HttpError } = require("../../helpers");
+import { HttpError, emailSender } from "../../helpers/index.js";
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
@@ -26,6 +26,4 @@ const resendVerifyEmail = async (req, res) => {
   });
 };
 
-module.exports = {
-  resendVerifyEmail,
-};
+export default resendVerifyEmail

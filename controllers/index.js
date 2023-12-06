@@ -1,9 +1,3 @@
-const contactsControllers = require("./contacts");
-const authControllers = require("./auth");
-const userControllers = require("./user");
-
-module.exports = {
-  contactsControllers,
-  authControllers,
-  userControllers,
-};
+export { default as contactsControllers } from "./contacts/index.js";
+export { default as authControllers } from "./auth/index.js";
+export { default as userControllers } from "./user/index.js";

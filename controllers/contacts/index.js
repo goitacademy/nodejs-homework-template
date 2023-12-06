@@ -1,13 +1,13 @@
-const { listContacts } = require("./listContacts");
-const { getContactById } = require("./getContactById");
-const { addContact } = require("./addContact");
-const { removeContact } = require("./removeContact");
-const { updateContact } = require("./updateContact");
-const { updateFavorite } = require("./updateFavorite");
+import { ctrlWrapper } from "../../helpers/index.js";
 
-const { ctrlWrapper } = require("../../helpers");
+import listContacts from "./listContacts.js";
+import getContactById from "./getContactById.js";
+import addContact from "./addContact.js";
+import removeContact from "./removeContact.js";
+import updateContact from "./updateContact.js";
+import updateFavorite from "./updateFavorite.js";
 
-module.exports = {
+export default {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),

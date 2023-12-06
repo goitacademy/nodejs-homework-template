@@ -1,6 +1,6 @@
-const { META_PASSWORD } = process.env;
+import nodemailer from "nodemailer";
 
-const nodemailer = require("nodemailer");
+const { META_PASSWORD } = process.env;
 
 const nodemailerConfig = {
   host: "smtp.meta.ua",
@@ -28,4 +28,4 @@ function emailSender({ email, authKey }) {
     .catch((error) => console.log(error.message));
 }
 
-module.exports = emailSender;
+export default emailSender;

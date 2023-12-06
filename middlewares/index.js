@@ -1,11 +1,4 @@
-const validateBody = require("./validateBody");
-const isValidId = require("./validateIdCheck");
-const authenticate = require("./authenticate");
-const upload = require("./upload");
-
-module.exports = {
-  validateBody,
-  isValidId,
-  authenticate,
-  upload,
-};
+export { default as validateBody } from "./validateBody.js";
+export { default as isValidId } from "./validateIdCheck.js";
+export { default as authenticate } from "./authenticate.js";
+export { default as upload } from "./upload.js";

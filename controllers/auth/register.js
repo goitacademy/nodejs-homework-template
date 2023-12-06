@@ -1,9 +1,9 @@
-const gravatar = require("gravatar");
-const bcrypt = require("bcrypt");
-const { nanoid } = require("nanoid");
+import gravatar from "gravatar";
+import bcrypt from "bcrypt";
+import { nanoid } from "nanoid";
 
-const { User } = require("../../models/user/user");
-const { HttpError, emailSender } = require("../../helpers");
+import { User } from "../../models/user/user.js";
+import { HttpError, emailSender } from "../../helpers/index.js";
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -37,6 +37,4 @@ const register = async (req, res) => {
   });
 };
 
-module.exports = {
-  register,
-};
+export default register;

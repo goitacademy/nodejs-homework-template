@@ -1,7 +1,7 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+import { Schema, model } from "mongoose";
+import Joi from "joi";
 
-const { handleMongooseError } = require("../../helpers");
+import { handleMongooseError } from "../../helpers/index.js";
 
 const contactSchema = new Schema(
   {
@@ -41,7 +41,4 @@ const addSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-module.exports = {
-  Contact,
-  addSchema,
-};
+export { Contact, addSchema };

@@ -1,11 +1,13 @@
-const path = require("path");
-const fs = require("fs/promises");
+import path from "path";
+import fs from "fs/promises";
+import Jimp from "jimp";
+import { fileURLToPath } from "url";
+import { User } from "../../models/user/user.js";
 
-const Jimp = require("jimp");
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
-const { User } = require("../../models/user/user");
-
-const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
+const avatarsDir = path.join(dirname, "../../", "public", "avatars");
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
@@ -31,6 +33,4 @@ const updateAvatar = async (req, res) => {
   });
 };
 
-module.exports = {
-  updateAvatar,
-};
+export default updateAvatar;

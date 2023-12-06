@@ -1,6 +1,6 @@
-const { Contact } = require("../../models/contact/contact");
+import { Contact } from "../../models/contact/contact.js";
 
-const { HttpError } = require("../../helpers");
+import { HttpError } from "../../helpers/index.js";
 
 const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
@@ -13,6 +13,4 @@ const updateContact = async (req, res, next) => {
   res.json(result);
 };
 
-module.exports = {
-  updateContact,
-};
+export default updateContact;

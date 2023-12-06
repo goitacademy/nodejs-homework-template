@@ -1,6 +1,6 @@
-const { User } = require("../../models/user/user");
+import { User } from "../../models/user/user.js";
 
-const { HttpError } = require("../../helpers");
+import { HttpError } from "../../helpers/index.js";
 
 const subscription = async (req, res) => {
   const { _id } = req.user;
@@ -22,6 +22,4 @@ const subscription = async (req, res) => {
   res.json(result);
 };
 
-module.exports = {
-  subscription,
-};
+export default subscription;

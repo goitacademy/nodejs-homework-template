@@ -1,4 +1,4 @@
-const { User } = require("../../models/user/user");
+import { User } from "../../models/user/user.js";
 
 const logout = async (req, res) => {
   const { _id } = req.user;
@@ -9,6 +9,4 @@ const logout = async (req, res) => {
   });
 };
 
-module.exports = {
-  logout,
-};
+export default logout;

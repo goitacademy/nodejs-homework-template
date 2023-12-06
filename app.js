@@ -1,11 +1,10 @@
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
-require("dotenv").config();
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
 
-const authRouter = require("./routes/api/authRouter");
-const userRouter = require("./routes/api/userRouter");
-const contactsRouter = require("./routes/api/contactsRouter");
+import authRouter from "./routes/api/authRouter.js";
+import userRouter from "./routes/api/userRouter.js";
+import contactsRouter from "./routes/api/contactsRouter.js";
 
 const app = express();
 
@@ -16,9 +15,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-app.use("/api/auth", authRouter);
-app.use("/api/users", userRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/auth", authRouter);
+app.use("/users", userRouter);
+app.use("/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
@@ -28,4 +27,4 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message });
 });
 
-module.exports = app;
+export default app;

@@ -1,4 +1,4 @@
-const { Contact } = require("../../models/contact/contact");
+import { Contact } from "../../models/contact/contact.js";
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
@@ -23,6 +23,4 @@ const listContacts = async (req, res) => {
   res.json(result);
 };
 
-module.exports = {
-  listContacts,
-};
+export default listContacts;

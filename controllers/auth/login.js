@@ -1,9 +1,8 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-const { User } = require("../../models/user/user");
-
-const { HttpError } = require("../../helpers");
+import { User } from "../../models/user/user.js";
+import { HttpError } from "../../helpers/index.js";
 
 const { SECRET_KEY } = process.env;
 
@@ -33,6 +32,4 @@ const login = async (req, res) => {
   });
 };
 
-module.exports = {
-  login,
-};
+export default login;

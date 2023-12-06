@@ -1,7 +1,7 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+import { Schema, model } from "mongoose";
+import Joi from "joi";
 
-const { handleMongooseError } = require("../../helpers");
+import { handleMongooseError } from "../../helpers/index.js";
 
 // eslint-disable-next-line no-useless-escape
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -68,7 +68,4 @@ const schemas = {
 
 const User = model("user", userSchema);
 
-module.exports = {
-  User,
-  schemas,
-};
+export { User, schemas };

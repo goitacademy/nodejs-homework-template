@@ -1,41 +1,48 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
 
-const { validateBody, isValidId, authenticate } = require("../../middlewares");
+import {
+  validateBody,
+  isValidId,
+  authenticate,
+} from "../../middlewares/index.js";
+import { contactsControllers } from "../../controllers/index.js";
+import { addSchema } from "../../models/contact/contact.js";
 
-const { contactsControllers } = require("../../controllers");
+const contactsRouter = express.Router();
 
-const { addSchema } = require("../../models/contact/contact");
+contactsRouter.get("/", authenticate, contactsControllers.listContacts);
 
-router.get("/", authenticate, contactsControllers.listContacts);
-
-router.get(
+contactsRouter.get(
   "/:contactId",
   authenticate,
   isValidId,
   contactsControllers.getContactById
 );
 
-router.post(
+contactsRouter.post(
   "/",
   authenticate,
   validateBody(addSchema),
   contactsControllers.addContact
 );
 
-router.delete("/:contactId", authenticate, contactsControllers.removeContact);
+contactsRouter.delete(
+  "/:contactId",
+  authenticate,
+  contactsControllers.removeContact
+);
 
-router.put(
+contactsRouter.put(
   "/:contactId",
   isValidId,
   validateBody(addSchema),
   contactsControllers.updateContact
 );
 
-router.patch(
+contactsRouter.patch(
   "/:contactId/favorite",
   isValidId,
   contactsControllers.updateFavorite
 );
 
-module.exports = router;
+export default contactsRouter;

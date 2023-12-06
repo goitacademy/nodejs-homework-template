@@ -1,16 +1,15 @@
-const express = require("express");
+import express from "express";
 
-const { userControllers } = require("../../controllers");
+import { userControllers } from "../../controllers/index.js";
+import { authenticate, upload } from "../../middlewares/index.js";
 
-const { authenticate, upload } = require("../../middlewares");
+const userRouter = express.Router();
 
-const router = express.Router();
-
-router.patch(
+userRouter.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
   userControllers.updateAvatar
 );
 
-module.exports = router;
+export default userRouter;

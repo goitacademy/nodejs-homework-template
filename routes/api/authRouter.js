@@ -1,33 +1,35 @@
-const express = require("express");
+import express from "express";
 
-const { authControllers } = require("../../controllers");
+import { validateBody, authenticate } from "../../middlewares/index.js";
+import { authControllers } from "../../controllers/index.js";
+import { schemas } from "../../models/user/user.js";
 
-const { validateBody, authenticate } = require("../../middlewares");
+const authRouter = express.Router();
 
-const { schemas } = require("../../models/user/user");
-
-const router = express.Router();
-
-router.post(
+authRouter.post(
   "/register",
   validateBody(schemas.registerSchema),
   authControllers.register
 );
 
-router.get("/verify/:verificationCode", authControllers.verifyEmail);
+authRouter.get("/verify/:verificationCode", authControllers.verifyEmail);
 
-router.post(
+authRouter.post(
   "/verify",
   validateBody(schemas.emailSchema),
   authControllers.resendVerifyEmail
 );
 
-router.post("/login", validateBody(schemas.loginSchema), authControllers.login);
+authRouter.post(
+  "/login",
+  validateBody(schemas.loginSchema),
+  authControllers.login
+);
 
-router.post("/logout", authenticate, authControllers.logout);
+authRouter.post("/logout", authenticate, authControllers.logout);
 
-router.get("/current", authenticate, authControllers.getCurrent);
+authRouter.get("/current", authenticate, authControllers.getCurrent);
 
-router.patch("/subscription", authenticate, authControllers.subscription);
+authRouter.patch("/subscription", authenticate, authControllers.subscription);
 
-module.exports = router;
+export default authRouter;

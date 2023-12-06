@@ -1,6 +1,6 @@
-const { Contact } = require("../../models/contact/contact");
+import { Contact } from "../../models/contact/contact.js";
 
-const { HttpError } = require("../../helpers");
+import { HttpError } from "../../helpers/index.js";
 
 const updateFavorite = async (req, res) => {
   const { contactId } = req.params;
@@ -21,6 +21,4 @@ const updateFavorite = async (req, res) => {
   res.json(result);
 };
 
-module.exports = {
-  updateFavorite,
-};
+export default updateFavorite;

@@ -1,6 +1,5 @@
-const { User } = require("../../models/user/user");
-
-const { HttpError } = require("../../helpers");
+import { User } from "../../models/user/user.js";
+import { HttpError } from "../../helpers/index.js";
 
 const verifyEmail = async (req, res, next) => {
   const { verificationCode } = req.params;
@@ -21,6 +20,4 @@ const verifyEmail = async (req, res, next) => {
   });
 };
 
-module.exports = {
-  verifyEmail,
-};
+export default verifyEmail;
