@@ -54,9 +54,32 @@ const login = async (req, res) => {
   });
 };
 
-const current = (req, res) => {};
+const current = async (req, res) => {
+  const { id } = req.user;
+  const user = await User.findById(id);
 
-const logout = (req, res) => {};
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
+
+  res.status(200).json({
+    email: user.email,
+    subscription: user.subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { id } = req.user;
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
+
+  await User.findByIdAndUpdate(id, { $unset: { token: 1 } });
+
+  res.status(204).json();
+};
 
 module.exports = {
   register: ctrlWrapper(register),
