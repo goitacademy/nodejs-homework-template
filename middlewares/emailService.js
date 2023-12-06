@@ -25,7 +25,7 @@ const sendEmail = async ({ to, subject, html }) => {
   });
 
   try {
-    const result = await api.emailsPost(email);
+    const result = api.emailsPost(email);
     console.log("Email sent successfully:", result);
     return true;
   } catch (error) {

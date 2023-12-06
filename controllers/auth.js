@@ -46,7 +46,12 @@ async function register(req, res, next) {
       verificationToken,
     });
 
-    await sendEmail(verifyEmail);
+      // await sendEmail(verifyEmail);
+      try {
+        await sendEmail(verifyEmail);
+      } catch (error) {
+        console.error("Помилка при відправленні листа:", error);
+      }
 
     res.status(201).json({
       user: { email: newUser.email, subscription: newUser.subscription },
@@ -79,7 +84,7 @@ async function login(req, res, next) {
     });
   }
 
-    const passwordCompare = await bcrypt.compare(password, user.password);
+  const passwordCompare = await bcrypt.compare(password, user.password);
 
   if (!passwordCompare) {
     return res.status(401).json({
@@ -119,14 +124,12 @@ async function current(req, res) {
 }
 
 
- 
 async function logout(req, res) {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
   res.status(204).end();
 }
-
 
 
 async function verify(req, res, next) {
@@ -283,7 +286,7 @@ async function updateAvatar(req, res, next) {
   try {
     await fs.rename(tmpUpload, resultUpload);
 
-    await User.findByIdAndUpdate(_id, { avatarURL }, { new: true }).exec();
+await User.findByIdAndUpdate(_id, { avatarURL }, { new: true }).exec();
 
     res.json({
       avatarURL,
