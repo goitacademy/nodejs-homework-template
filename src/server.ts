@@ -4,7 +4,7 @@ import app from "../app.js";
 
 dotenv.config();
 
-const { DB_HOST } = process.env;
+const { DB_HOST }: any = process.env;
 
 mongoose.set("strictQuery", true);
 
