@@ -3,7 +3,6 @@ const Joi = require("joi");
 const { handleMongooseError } = require("../helpers/index");
 
 
-// const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
@@ -33,6 +32,10 @@ const userSchema = new Schema ({
         type: String,
         default: null,
     },
+    avatarURL: {
+        type: String,
+        required: true,
+    }
 
 }, {versionKey:false, timestamps: true});
 
