@@ -82,6 +82,10 @@ async function login(req, res, next) {
             .send({ message: "Email or password is wrong" });
         }
 
+        if(user.verify === false){
+          return res.status(401).send({ message: "Your account is not verified"});
+        }
+
         const token = jwt.sign({id: user._id }, process.env.JWT_SECRET, {expiresIn: "1d"});
         await User.findByIdAndUpdate(user._id, {token}).exec();
         
@@ -130,4 +134,21 @@ async function getCurrent(req, res, next) {
     }
   };
 
-module.exports = { register, login, logout, getCurrent };
+  async function verify(req, res, next) {
+    const {token} = req.params;
+
+    try {
+      const user = await User.findOne({verifyToken: token}).exec(); 
+
+      if(user===null) {
+        return res.status(404).send({message:"User not found"});
+      }
+      await User.findByIdAndUpdate(user._id, {verify: true, verifyToken: null});
+      res.send({message:"User updated successfully"});
+       
+    } catch (error) {
+      next(error);
+    }
+  }
+
+module.exports = { register, login, logout, getCurrent, verify };
