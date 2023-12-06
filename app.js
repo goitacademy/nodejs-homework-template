@@ -1,35 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const dotnev = require("dotenv");
-dotnev.config();
-
-const nodemailer = require("nodemailer");
-
-const { GMAIL_PASSWORD } = process.env;
-
-const nodemailerConfig = {
-  host: "smtp.ukr.net",
-  port: 2525,
-  secure: true,
-  auth: {
-    user: "lera.maiorova@ukr.net",
-    pass: GMAIL_PASSWORD,
-  },
-};
-
-const transport = nodemailer.createTransport(nodemailerConfig);
-
-const email = {
-  to: "maliv65188@jalunaki.com",
-  from: "lera.maiorova@ukr.net",
-  subject: "Test email",
-  html: "<p>from localhost:3000</p>",
-};
-transport
-  .sendMail(email)
-  .then(() => console.log("email send success"))
-  .catch((err) => console.log(err.message));
+require("dotenv").config();
 
 const { contactsRouter } = require("./routes/api");
 const { authRouter } = require("./routes/api");

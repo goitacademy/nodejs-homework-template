@@ -4,7 +4,12 @@ const router = express.Router();
 
 const ctrl = require("../../controllers");
 
-const { authenticate, validateUsers, upload } = require("../../middlewares");
+const {
+  authenticate,
+  validateUsers,
+  upload,
+  validateBody,
+} = require("../../middlewares");
 
 const schemas = require("../../schemas");
 
@@ -13,6 +18,15 @@ router.post(
   validateUsers(schemas.registerAndLoginSchema),
   ctrl.users.register
 );
+
+router.get("/verify/:verificationToken", ctrl.users.verifyEmail);
+
+router.post(
+  "/verify",
+  validateBody(schemas.emailSchema),
+  ctrl.users.resendVerifyEmail
+);
+
 router.post(
   "/login",
   validateUsers(schemas.registerAndLoginSchema),
