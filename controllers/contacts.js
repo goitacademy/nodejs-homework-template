@@ -2,7 +2,11 @@ const { ctrlWrapper, HttpError } = require("../helpers");
 const Contact = require("../models/contact");
 
 const get = async (req, res) => {
-  const data = await Contact.find({}, "-createdAt -updatedAt");
+  const { _id: owner } = req.user;
+  const data = await Contact.find({ owner }, "-createdAt -updatedAt").populate(
+    "owner",
+    "email subscription"
+  );
   res.status(200).json(data);
 };
 
@@ -18,7 +22,8 @@ const getByID = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const data = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const data = await Contact.create({ ...req.body, owner });
   res.status(201).json(data);
 };
 
@@ -46,9 +51,9 @@ const updateFavorite = async (req, res) => {
 
 const remove = async (req, res) => {
   const { contactId } = req.params;
-  const deletedContact = await Contact.findByIdAndDelete(contactId);
+  const data = await Contact.findByIdAndDelete(contactId);
 
-  if (!deletedContact) {
+  if (!data) {
     throw HttpError(404);
   }
 

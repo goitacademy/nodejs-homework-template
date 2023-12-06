@@ -55,27 +55,16 @@ const login = async (req, res) => {
 };
 
 const current = async (req, res) => {
-  const { id } = req.user;
-  const user = await User.findById(id);
-
-  if (!user) {
-    throw HttpError(401, "Not authorized");
-  }
+  const { email, subscription } = req.user;
 
   res.status(200).json({
-    email: user.email,
-    subscription: user.subscription,
+    email,
+    subscription,
   });
 };
 
 const logout = async (req, res) => {
   const { id } = req.user;
-  const user = await User.findById(id);
-
-  if (!user) {
-    throw HttpError(401, "Not authorized");
-  }
-
   await User.findByIdAndUpdate(id, { $unset: { token: 1 } });
 
   res.status(204).json();
