@@ -1,3 +1,4 @@
+const crypto = require('node:crypto');
 const bcrypt = require('bcrypt'); 
 const jwt = require('jsonwebtoken');
 const Joi = require('joi');
@@ -25,14 +26,15 @@ async function register(req, res, next) {
     }
     const passwordHash = await bcrypt.hash(password, 10);
 
+    const verifyToken = crypto.randomUUID();
     await sendEmail({
        to: email,
        subject: "Good russians - Deed russians",
-       html: 'To confirm your registration please click on <a href="">link</a>',
-       text: "To confirm your registration please open the link ..."
-    })
+       html: `To confirm your registration please click on <a href="https://localhost:3000/auth/verify/${verifyToken} ">link</a>`,
+       text: `To confirm your registration please open the link https://localhost:3000/auth/verify/${verifyToken}`
+    }) 
 
-    const newUser = await User.create({ email, password: passwordHash, subscription: 'starter' });
+    const newUser = await User.create({ email, verifyToken, password: passwordHash, subscription: 'starter' });
 
     res.status(201).json({
         message: "Registration successful",

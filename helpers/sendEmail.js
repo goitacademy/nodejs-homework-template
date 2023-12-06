@@ -1,4 +1,3 @@
-
 const nodemailer = require('nodemailer');
 
 const  transport = nodemailer.createTransport({
@@ -12,7 +11,7 @@ const  transport = nodemailer.createTransport({
 
  function sendEmail(message){
   message.from = "dema_dc@meta.ua";
-  
+
   return  transport.sendMail(message)
 
  }
