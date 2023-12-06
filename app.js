@@ -27,4 +27,8 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+app.use((req, res) => {
+  res.status(401).json({ message: "Unauthtorized" });
+});
 export default app ; 

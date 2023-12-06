@@ -7,7 +7,7 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     email: {
       type: String,
@@ -33,10 +33,14 @@ const userSchema = new Schema(
 );
 
 userSchema.post("save", handleSaveError);
-
+userSchema.pre("findOneAndUpdate", function (next) {
+  this.options.new = true;
+  this.options.runValidators = true;
+  next();
+});
 userSchema.post("findOneAndUpdate", handleSaveError);
+
 export const userSignupSchema = Joi.object({
-    name: Joi.string().required(),
     email: Joi.string().pattern(emailRegexp).required(),
     password:Joi.string().min(6).required(),
 

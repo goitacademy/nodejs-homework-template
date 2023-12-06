@@ -21,6 +21,7 @@ export const signup = async (req, res, next) => {
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
+
       },
     });
     }
@@ -60,23 +61,23 @@ export const signin = async (req, res, next) => {
 }
 
 export const getCurrent = async (req, res, next) => {
-  try {
+  
       const { email, subscription } = req.user;
 
     res.json({
       email,
       subscription,
     });
-  } catch (error) {
-    next(error);
-  }
+ 
 };
 export const signout = async (req,res,next) => {
-    try {
-      
-        const { _id } = req.user
-        await User.findByIdAndUpdate(_id, { token: "" })
-            res.status(204).json()
+  try {
+
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: " " });
+        res.json({
+          message: "Signout success",
+        });
     }
     catch (error) {
         next(error)
