@@ -63,6 +63,18 @@ const current = async (req, res) => {
   });
 };
 
+const updateSubscription = async (req, res) => {
+  const { subscription } = req.body;
+  const { id, email } = req.user;
+
+  await User.findByIdAndUpdate(id, { subscription });
+
+  res.status(200).json({
+    email,
+    subscription,
+  });
+};
+
 const logout = async (req, res) => {
   const { id } = req.user;
   await User.findByIdAndUpdate(id, { $unset: { token: 1 } });
@@ -74,5 +86,6 @@ module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
+  updateSubscription: ctrlWrapper(updateSubscription),
   logout: ctrlWrapper(logout),
 };

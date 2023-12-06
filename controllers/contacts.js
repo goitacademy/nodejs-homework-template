@@ -14,7 +14,7 @@ const get = async (req, res) => {
   const data = await Contact.find(query, "-createdAt -updatedAt", {
     skip,
     limit,
-  }).populate("owner", "email subscription");
+  });
   res.status(200).json(data);
 };
 
