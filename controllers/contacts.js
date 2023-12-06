@@ -3,7 +3,7 @@ const Contact = require("../models/contact");
 
 const get = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 5, favorite } = req.query;
+  const { page = 1, limit = 10, favorite } = req.query;
   const skip = (page - 1) * limit;
 
   const query = { owner };
@@ -11,11 +11,20 @@ const get = async (req, res) => {
     query.favorite = favorite;
   }
 
+  const total = await Contact.countDocuments();
+
   const data = await Contact.find(query, "-createdAt -updatedAt", {
     skip,
     limit,
   });
-  res.status(200).json(data);
+
+  res.status(200).json({
+    total,
+    favorite: favorite || "all",
+    page: Number(page),
+    limit: Number(limit),
+    data,
+  });
 };
 
 const getByID = async (req, res) => {

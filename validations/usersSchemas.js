@@ -40,7 +40,11 @@ const loginSchema = Joi.object({
 });
 
 const updateUserSubscription = Joi.object({
-  subscription: Joi.string().valid("starter", "pro", "business").required(),
+  subscription: Joi.string().valid("starter", "pro", "business").required().messages({
+    "string.base": "Subscription field should be a string",
+    "string.empty": "Subscription field cannot be empty",
+    "any.required": "Subscription field is required",
+  }),
 });
 
 module.exports = {
