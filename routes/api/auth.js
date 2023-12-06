@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { registerValid, loginValid, updateSubscriptionValid }  = require("../../middlewares/authValidation");
+const { registerValid, loginValid, emailValid, updateSubscriptionValid }  = require("../../middlewares/authValidation");
 const { updateAvatarValid }  = require("../../middlewares/avatarValidation");
 const  authCtrl  = require("../../controllers/auth");
 const authenticate = require("../../middlewares/authenticate");
@@ -12,6 +12,14 @@ router.post(
   "/register",
   registerValid,
   authCtrl.register
+);
+
+router.get("/verify/:verificationToken", authCtrl.verify);
+
+router.post(
+  "/verify",
+  emailValid,
+  authCtrl.resendVerifyEmail
 );
 
 router.post("/login", loginValid, authCtrl.login);

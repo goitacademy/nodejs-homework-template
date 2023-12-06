@@ -10,6 +10,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@elasticemail/elasticemail-client": "^4.0.23",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "cross-env": "7.0.3",
@@ -20,10 +21,13 @@
     "jimp": "^0.22.10",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
+    "mailtrap": "^3.2.0",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
