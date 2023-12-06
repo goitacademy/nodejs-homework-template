@@ -1,8 +1,11 @@
 const Joi = require("joi");
 
-const validateBody = require('../helpers/validateBody');
+const validateBody = require("../helpers/validateBody");
 
-const emailRegexp = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+const emailRegexp =
+  /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+
+const validSubscriptionValues = ["starter", "pro", "business"];
 
 const registerValid = validateBody(
   Joi.object({
@@ -20,7 +23,13 @@ const loginValid = validateBody(
   "missing required email or password field"
 );
 
-const validSubscriptionValues = ["starter", "pro", "business"];
+const emailValid = validateBody(
+  Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+  }),
+  "Verification has already been passed"
+);
+
 const updateSubscriptionValid = validateBody(
   Joi.object({
     subscription: Joi.string()
@@ -30,6 +39,9 @@ const updateSubscriptionValid = validateBody(
   "Invalid subscription data"
 );
 
-
-
-module.exports = { registerValid, loginValid, updateSubscriptionValid,};
+module.exports = {
+  registerValid,
+  loginValid,
+  updateSubscriptionValid,
+  emailValid,
+};
