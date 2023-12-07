@@ -106,13 +106,14 @@ const signout = async (req, res, next) => {
 const changeAvatar = async (req, res, next) => {
   try {
     const { path: oldPath, filename } = req.file; // Деструктуризуємо req.file шлях до файлу і змінюємо назву oldPath тако деструктуризуємо імя файлу
+    const newPath = path.join(avatarsPath, filename);
     await Jimp.read(oldPath).then((image) => {
       // За допомогою бібліотеки Jimp обробляємо розміри фото 250 х 250
-      image.resize(250, 250).write(oldPath);
+      image.resize(250, 250).write(newPath);
     });
-    const newPath = path.join(avatarsPath, filename); // Обєднуємо шлях до папки куди перемістити з іменем файлу
+    // Обєднуємо шлях до папки куди перемістити з іменем файлу
     const { _id } = req.user;
-    await fs.rename(oldPath, newPath);
+    await fs.unlink(oldPath);
     const avatarNewUrl = path.join("avatars", filename);
     await User.findByIdAndUpdate(_id, { avatarURL: avatarNewUrl });
     res.status(200).json({
@@ -121,7 +122,7 @@ const changeAvatar = async (req, res, next) => {
       },
     });
   } catch (error) {
-    next();
+    next(HttpError(500, "Not found file"));
   }
 };
 
