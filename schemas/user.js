@@ -26,4 +26,13 @@ const subscriptionJoiSchema = Joi.object({
   "string.empty": "The {{#label}} field can't be empty!",
 });
 
-module.exports = { registerJoiSchema, loginJoiSchema, subscriptionJoiSchema };
+const emailSchema = Joi.object({
+  email: Joi.string().email().pattern(emailRegexp).required(),
+});
+
+module.exports = {
+  registerJoiSchema,
+  loginJoiSchema,
+  subscriptionJoiSchema,
+  emailSchema,
+};

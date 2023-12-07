@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const gravatar = require("gravatar"); // Import gravatar
+const gravatar = require("gravatar");
 const { handleSaveError } = require("./hooks");
 
 const emailRegexp = /^\w+(\.-?\w+)*@\w+(\.-?\w+)*(\.\w{2,3})+$/;
@@ -22,12 +22,20 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: { type: String, default: null },
-    avatarURL: {
+    token: { type: String, default: "" },
+    avatarURL: { type: String, required: true },
+    avatarImage: {
       type: String,
-      default: function () {
-        return gravatar.url(this.email, { s: "250", r: "pg", d: "mm" }, true);
-      },
+      default: null,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+      default: null,
     },
   },
   {
