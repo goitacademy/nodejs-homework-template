@@ -1,88 +1,62 @@
-const contactsService = require('../services/contactsService');
+const { Contact } = require('../models/contact');
 
-class ContactController {
-	constructor(contactsService) {
-		this.contactsService = contactsService;
+const { HttpError, ctrlWrapper } = require('../helpers');
+
+const getAll = async (req, res) => {
+	// const result = await Contact.find({}, "-createdAt -updatedAt");
+	const result = await Contact.find();
+	res.json(result);
+};
+
+const getById = async (req, res) => {
+	const { id } = req.params;
+	// const result = await Contact.findOne({_id: id})
+	const result = await Contact.findById(id);
+	if (!result) {
+		throw HttpError(404, 'Not found');
 	}
+	res.json(result);
+};
 
-	listContacts = async (req, res) => {
-		const { limit = 5, page = 1, favorite } = req.query;
-		const config = {
-			limit: parseInt(limit),
-			page: parseInt(page),
-		};
+const add = async (req, res) => {
+	const result = await Contact.create(req.body);
+	res.status(201).json(result);
+};
 
-		if (favorite) {
-			config.favorite = Boolean(parseInt(favorite));
-		}
+const updateById = async (req, res) => {
+	const { id } = req.params;
+	const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+	if (!result) {
+		throw HttpError(404, 'Not found');
+	}
+	res.json(result);
+};
 
-		const { contacts, count } = await this.contactsService.getAll(config);
+const updateFavorite = async (req, res) => {
+	const { id } = req.params;
+	const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+	if (!result) {
+		throw HttpError(404, 'Not found');
+	}
+	res.json(result);
+};
 
-		res.json({
-			status: 200,
-			message: 'All contacts successfully received!',
-			data: { contacts, count, page: parseInt(page), limit: parseInt(limit) },
-		});
-	};
+const deleteById = async (req, res) => {
+	const { id } = req.params;
+	const result = await Contact.findByIdAndRemove(id);
+	if (!result) {
+		throw HttpError(404, 'Not found');
+	}
+	res.json({
+		message: 'Delete success',
+	});
+};
 
-	getContactById = async (req, res) => {
-		const { contactId } = req.params;
-		const contact = await this.contactsService.getOneById(contactId);
-		res.json({
-			status: 200,
-			message: 'Contact received successfully!',
-			data: contact,
-		});
-	};
-
-	createContact = async (req, res) => {
-		console.log(req.body);
-		const contact = await this.contactsService.create(req.body);
-		res.json({
-			status: 201,
-			message: 'Contact created successfully!',
-			data: contact,
-		});
-	};
-
-	updateContact = async (req, res) => {
-		const { contactId } = req.params;
-		const { body } = req;
-
-		const contact = await this.contactsService.updateById(contactId, body);
-		res.json({
-			status: 200,
-			message: `Update contact with id ${contactId}`,
-			data: contact,
-		});
-	};
-
-	updateStatusContact = async (req, res) => {
-		const { contactId } = req.params;
-		const contact = await this.contactsService.getOneById(contactId);
-		const updateContact = await this.contactsService.updateStatusContact(
-			contactId,
-			{ favorite: !contact.favorite }
-		);
-		res.json({
-			status: 200,
-			message: `Update contact status with id ${contactId}`,
-			data: updateContact,
-		});
-	};
-
-	deleteContact = async (req, res) => {
-		const { contactId } = req.params;
-
-		const contact = await this.contactsService.deleteById(contactId);
-		res.json({
-			status: 200,
-			message: 'Contact deleted successfully!',
-			data: contact,
-		});
-	};
-}
-
-const contactController = new ContactController(contactsService);
-
-module.exports = contactController;
+module.exports = {
+	getAll: ctrlWrapper(getAll),
+	getById: ctrlWrapper(getById),
+	add: ctrlWrapper(add),
+	updateById: ctrlWrapper(updateById),
+	updateFavorite: ctrlWrapper(updateFavorite),
+	deleteById: ctrlWrapper(deleteById),
+};
