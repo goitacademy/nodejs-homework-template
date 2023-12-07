@@ -4,13 +4,13 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
-    skip,
-    limit,
-  }).populate("owner", "name email");
-  res.json(result);
+  if (favorite && !["false", "true"].includes(favorite)) {
+    throw HttpError(404, "Invalid filter falue");
+  }
+  const paramsObject = favorite ? { owner, favorite } : { owner };
+  res.json(await Contact.find(paramsObject, "", { skip, limit }));
 };
 
 const getById = async (req, res) => {

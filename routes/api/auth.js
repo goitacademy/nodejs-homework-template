@@ -1,12 +1,12 @@
 const express = require("express");
 
-const router = express.Router();
+const ctrl = require("../../controllers/user");
 
 const { validateBody, authenticate } = require("../../middlewares");
 
-const ctrl = require("../../controllers/auth");
-
 const schemas = require("../../schemas/user");
+
+const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
