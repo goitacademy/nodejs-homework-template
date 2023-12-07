@@ -11,20 +11,12 @@ const get = async (req, res) => {
     query.favorite = favorite;
   }
 
-  const total = await Contact.countDocuments();
-
   const data = await Contact.find(query, "-createdAt -updatedAt", {
     skip,
     limit,
   });
 
-  res.status(200).json({
-    total,
-    favorite: favorite || "all",
-    page: Number(page),
-    limit: Number(limit),
-    data,
-  });
+  res.status(200).json(data);
 };
 
 const getByID = async (req, res) => {
