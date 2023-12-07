@@ -3,22 +3,27 @@ import Joi from "joi";
 
 // Mongoose Schemes
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    versionKey: false,
+  }
+);
 
 contactSchema.post("save", (error, data, next) => {
   error.status = 400;
@@ -58,8 +63,8 @@ export const contactUpdateScheme = Joi.object({
 
 export const contactFavoteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({
-    "any.required": ` "missing field "favorite"`,
-    "boolean.base": `"favorite" must be boolean`,
+    "any.required": `missing field favorite`,
+    "boolean.base": `favorite" must be boolean`,
   }),
 });
 

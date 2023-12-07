@@ -48,6 +48,7 @@ const updateStatusContact = async (req, res, next) => {
     new: true,
     runValidators: true,
   });
+
   if (!result) {
     throw HttpError(404, `Not found`);
   }

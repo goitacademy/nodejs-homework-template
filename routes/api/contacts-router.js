@@ -28,7 +28,6 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,
-  isEmptyBody,
   validateBody(contactFavoteSchema),
   contactsController.updateStatusContact
 );
