@@ -1,3 +1,5 @@
+// middlewares\validator.js
+
 const { body, validationResult } = require("express-validator");
 
 const validateBody = (schema) => {

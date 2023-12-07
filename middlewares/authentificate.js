@@ -52,8 +52,8 @@ const authenticate = async (req, res, next) => {
           .send({ message: "Несоответствие токенов при сравнении" });
       }
 
-        // req.user = { id: user._id.toString(), name: user.name };ТЕПЕРЬ РАБОТАЕТ!
-        req.user = user;
+        // req.user = { id: user._id.toString(), name: user.name };
+        req.user = user;  // ТЕПЕРЬ РАБОТАЕТ!
 
       next();
     } catch (error) {

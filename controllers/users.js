@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User, validateUser } = require("../service/schemas/userSchema");
 const updateAvatar = require('./updateAvatar');
+const nodemailer = require('nodemailer');
 
 async function registerUser(req, res, next) {
   try {
@@ -23,11 +24,19 @@ async function registerUser(req, res, next) {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
+    // Генерація токену підтвердження
+    const verificationToken = jwt.sign(
+      { email: req.body.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" } // призначте термін дії токена, який вважається придатним для використання
+    );
+
     // Создание нового пользователя
     const newUser = new User({
       email: req.body.email,
       password: hashedPassword,
       subscription: "starter", // или другое значение по умолчанию
+      verificationToken, // додаємо токен підтвердження
     });
 
     // Сохранение пользователя в базе данных
@@ -165,10 +174,53 @@ async function getCurrentUser(req, res, next) {
     res.status(401).json({ message: "Not authorized" });
   }
 }
+
+async function verificationToken(req, res) {
+  const { verificationToken } = req.params;
+
+  try {
+    const user = await User.findOneAndUpdate(
+      { verificationToken },
+      { $set: { verify: true, verificationToken: null } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Код для відправлення листа
+    const transporter = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+
+    const message = {
+      to: user.email,
+      from: 'm.chukhrai@gmail.com',  // Замініть на свою електронну адресу
+      subject: 'Email Verification',
+      html: '<p>Click the following link to verify your email: ' + verificationToken + '</p>',
+    };
+
+    await transporter.sendMail(message);
+
+    // Кінець коду для відправлення листа
+
+    return res.status(200).json({ message: 'Verification successful' });
+  } catch (error) {
+    console.error('Error verifying email:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   getCurrentUser,
+  verificationToken,
   updateAvatar
 };

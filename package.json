@@ -4,12 +4,13 @@
   "private": true,
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "npm run kp && node app.js",
+    "kp": "kill-port 8080",
     "dev": "nodemon app.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint \"**/*.js\"",
-    "lint:fix": "eslint --fix \"**/*.js\"",
-    "kp": "npx kill-port 8080"
+    "lint:fix": "eslint --fix \"**/*.js\""
+ 
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -24,7 +25,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "morgan": "1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.7"
   },
   "devDependencies": {
     "eslint": "^7.19.0",
