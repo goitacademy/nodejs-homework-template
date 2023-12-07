@@ -18,7 +18,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       minlenth: 6,
-      required: true,
+      required: [true, "Set password for user"],
     },
     subscription: {
       type: String,
@@ -41,10 +41,15 @@ userSchema.pre("findOneAndUpdate", function (next) {
 userSchema.post("findOneAndUpdate", handleSaveError);
 
 export const userSignupSchema = Joi.object({
-    email: Joi.string().pattern(emailRegexp).required(),
-    password:Joi.string().min(6).required(),
-
-})
+  name: Joi.string().alphanum().min(3).max(30),
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .messages({ "any.required": `"email" is a required field` }),
+  password: Joi.string()
+    .required()
+    .messages({ "any.required": `"password" is a required field` }),
+});
 
 export const userSigninSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp).required(),
