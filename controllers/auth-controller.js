@@ -23,19 +23,19 @@ const register = async (req, res) => {
     throw HttpError(409, `${email} already in use`);
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const verificationCode = nanoid();
+  const verificationToken = nanoid();
   const avatarUrl = gravatar.url(email);
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarUrl,
-    verificationCode,
+    verificationToken,
   });
 
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationCode}">Click to verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click to verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -49,17 +49,17 @@ const register = async (req, res) => {
 };
 
 const verify = async (req, res) => {
-  const { verificationCode } = req.params;
-  const user = await User.findOne({ verificationCode });
+  const { verificationToken } = req.params;
+  const user = await User.findOne({ verificationToken });
   if (!user) {
     throw HttpError(401, "Email not found");
   }
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationCode: "",
+    verificationToken: null,
   });
   res.json({
-    message: "Email verified successfully",
+    message: "Verification successful",
   });
 };
 
@@ -71,17 +71,19 @@ const resendVerify = async (req, res) => {
   }
 
   if (user.verify) {
-    throw HttpError(400, "Email has already been verified");
+    throw HttpError(400, {
+      message: "Verification has already been passed",
+    });
   }
 
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationCode}">Click to verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click to verify email</a>`,
   };
   await sendEmail(verifyEmail);
 
-  res.json("Email sent successfully");
+  res.json({ message: "Verification email sent" });
 };
 
 const login = async (req, res) => {

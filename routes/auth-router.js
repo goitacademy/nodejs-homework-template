@@ -17,16 +17,16 @@ authRouter.post(
   authController.register
 );
 
-authRouter.post("/login", validateBody(loginSchema), authController.login);
-
-authRouter.get("/users/verify/:verificationCode", authController.verify);
+authRouter.get("/verify/:verificationToken", authController.verify);
 
 authRouter.post(
-  "/users/verify",
+  "/verify",
   isEmptyBody,
   validateBody(userEmailSchema),
   authController.resendVerify
 );
+
+authRouter.post("/login", validateBody(loginSchema), authController.login);
 
 authRouter.get("/current", authenticate, authController.getCurrent);
 
