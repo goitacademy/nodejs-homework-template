@@ -13,6 +13,7 @@ const User = require("../models/user");
 const { authSchema, subscriptionSchema, verifySchema } = require("../routes/schemas/user");
 
 const SECRET_KEY = process.env.SECRET_KEY;
+const BASE_URL = process.env.BASE_URL;
 
 const avatarsDir = path.join(__dirname, "../public/avatars");
 
@@ -35,7 +36,7 @@ async function register(req, res, next) {
   const verifyEmail = {
     to: email,
     subject: "Welcome to your contact book",
-    html: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${verificationToken}">link</a>`,
+    html: `To confirm your registration, follow the <a href="${BASE_URL}/users/verify/${verificationToken}">link</a>`,
   };
 
   try {
@@ -46,12 +47,7 @@ async function register(req, res, next) {
       verificationToken,
     });
 
-      // await sendEmail(verifyEmail);
-      try {
-        await sendEmail(verifyEmail);
-      } catch (error) {
-        console.error("Помилка при відправленні листа:", error);
-      }
+      await sendEmail(verifyEmail);
 
     res.status(201).json({
       user: { email: newUser.email, subscription: newUser.subscription },
@@ -177,7 +173,7 @@ async function resendVerify(req, res, next) {
     const verifyEmail = {
       to: email,
       subject: "Welcome to your contact book",
-      html: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
+      html: `To confirm your registration, follow the <a href="${BASE_URL}/users/verify/${user.verificationToken}">link</a>`,
     };
 
     await sendEmail(verifyEmail);
@@ -187,51 +183,6 @@ async function resendVerify(req, res, next) {
     next(error);
   }
 }
-// async function resendVerify(req, res, next) {
-//  const body = verifySchema.validate(req.body);
-
-//   if (typeof body.error !== "undefined") {
-//     return res.status(400).json({
-//       message: "Missing required field email",
-//     });
-//   }
-
-//   const { email } = req.body;
-
-//   try {
-//     const user = await User.findOne({email}).exec();
-
-//     if (user === null) {
-//       return res.status(404).json({ message: "User not found" });
-//     }
-
-//     if (user.verify === true) {
-//       return res.status(400).json({ message: "Verification has already been passed" });
-//     }
-
-//       const verifyEmail = ElasticEmail.EmailMessageData.constructFromObject({
-//     Recipients: [new ElasticEmail.EmailRecipient(email)],
-//     Content: {
-//       Body: [
-//         ElasticEmail.BodyPart.constructFromObject({
-//           ContentType: "HTML",
-//           Content: `To confirm your registration, follow the <a href="http://localhost:3000/users/verify/${user.verificationToken}">link</a>`,
-//         }),
-//       ],
-//       Subject: "Welcome to your contact book",
-//       From: FROM_EMAIL,
-//     },
-//       });
-    
-//     api.emailsPost(verifyEmail);
-
-//     res.json({ message: "Verification email sent" });
-    
-//   } catch (error) {
-//     next(error);
-//   }
-// }
-
 
 async function updateStatusUser(req, res, next) {
   const body = subscriptionSchema.validate(req.body);
