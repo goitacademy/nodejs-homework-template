@@ -1,6 +1,10 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const {
+  listContacts,
+  
+}
+const router = express.Router();
 
 router.get('/', async (req, res, next) => {
   res.json({ message: 'template message' })
