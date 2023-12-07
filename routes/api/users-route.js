@@ -1,15 +1,12 @@
 import express from "express";
-import {
-  authenticate,
-  isEmptyBody,
-  isValidId,
-} from "../../middlewares/index.js";
+import { authenticate, isEmptyBody, upload } from "../../middlewares/index.js";
 import ctrlWrapper from "../../decorators/ctrlWrapper.js";
 import {
   current,
   signin,
   signout,
   signup,
+  updateAvatar,
   updateSubscription,
 } from "../../controllers/user-controller.js";
 import validateBody from "../../decorators/validateBody.js";
@@ -41,6 +38,13 @@ usersRouter.patch(
   isEmptyBody,
   validateBody(patchSubscription),
   ctrlWrapper(updateSubscription)
+);
+
+usersRouter.patch(
+  "/avatars",
+  upload.single("avatar"),
+  ctrlWrapper(authenticate),
+  ctrlWrapper(updateAvatar)
 );
 
 export default usersRouter;
