@@ -1,14 +1,15 @@
 const express = require("express");
 const controllers = require("../../controllers/contacts");
-const { validataBody } = require("../../middlewars");
+const { validataBody, isValidId, isEmptyBody } = require("../../middlewars");
 const schemas = require("../../schemas/contacts");
-const { isEmptyBody } = require("../../middlewars");
+
+const { isEmptyFavoriteUpdate } = require("../../middlewars/isEmptyBody");
 
 const router = express.Router();
 
 router.get("/", controllers.getAll);
 
-router.get("/:contactId", controllers.getById);
+router.get("/:contactId", isValidId, controllers.getById);
 
 router.post(
   "/",
@@ -19,6 +20,7 @@ router.post(
 
 router.put(
   "/:contactId",
+  isValidId,
   isEmptyBody,
   validataBody(schemas.addSchema),
   controllers.updateContact
@@ -26,11 +28,12 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
-  isEmptyBody,
+  isValidId,
+  isEmptyFavoriteUpdate,
   validataBody(schemas.updateFavoriteSchema),
   controllers.updateStatusContact
 );
 
-router.delete("/:contactId", controllers.deleteContact);
+router.delete("/:contactId", isValidId, controllers.deleteContact);
 
 module.exports = router;
