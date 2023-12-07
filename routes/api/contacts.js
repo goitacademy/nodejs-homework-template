@@ -27,26 +27,7 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-// const validateFields = (req, res, next) => {
-//   const { name, email, phone } = req.body;
-//   if (!name) {
-//     return res.status(400).json({ message: 'missing required name field' });
-//   }
-
-//   if (!email) {
-//     return res
-//       .status(400)
-//       .json({ message: 'missing required email field' });
-//   }
-
-//   if (!phone) {
-//     return res
-//       .status(400)
-//       .json({ message: 'missing required phone field' });
-//   }
-//   next();
-// };
-router.post('/', validateFields, async (req, res, next) => {
+router.post('/', validateFields, async (req, res) => {
   try {
     const results = await contacts.addContact(req.body);
     res.status(201).json(results);
@@ -55,12 +36,12 @@ router.post('/', validateFields, async (req, res, next) => {
   }
 });
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
-});
+// router.delete('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' });
+// });
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' });
-});
+// router.put('/:contactId', async (req, res, next) => {
+//   res.json({ message: 'template message' });
+// });
 
 module.exports = router;
