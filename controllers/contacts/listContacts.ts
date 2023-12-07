@@ -1,26 +1,36 @@
-import { Contact } from "../../models/contact/contact";
+import { Request, Response } from "express";
 
-const listContacts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 20, favorite } = req.query;
+import { Contact, IContact } from "../../models/contact/contact";
+import { IUser } from "../../models/user/user";
+
+interface QueryParams {
+  page?: number;
+  limit?: number;
+  favorite?: boolean;
+}
+
+const listContacts = async (req: Request, res: Response) => {
+  const { _id }: IUser = req.user as IUser;
+  const { page = 1, limit = 20, favorite }: QueryParams = req.query;
   const skip = (page - 1) * limit;
 
-  // let result = null;
+  let result: IContact[] | null = null;
 
-  // if (favorite === "true") {
-  //   result = await Contact.find(
-  //     { owner, favorite: true },
-  //     "-createdAt -updatedAt"
-  //   );
+  if (favorite === true) {
+    result = await Contact.find(
+      { _id, favorite: true },
+      "-createdAt -updatedAt"
+    );
 
-  //   return res.json(result);
-  // }
+    res.json(result);
+    return;
+  }
 
-  // result = await Contact.find({ owner }, "-createdAt -updatedAt", {
-  //   skip,
-  //   limit,
-  // });
-  // res.json(result);
+  result = await Contact.find({ _id }, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  });
+  res.json(result);
 };
 
 export default listContacts;

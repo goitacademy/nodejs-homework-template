@@ -1,7 +1,10 @@
-import { Contact } from "../../models/contact/contact";
+import { Request, Response } from "express";
 
-const addContact = async (req, res, next) => {
-  const { _id: owner } = req.user;
+import { Contact } from "../../models/contact/contact";
+import { IUser } from "../../models/user/user";
+
+const addContact = async (req: Request, res: Response) => {
+  const { _id: owner }: IUser = req.user as IUser;
   const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };

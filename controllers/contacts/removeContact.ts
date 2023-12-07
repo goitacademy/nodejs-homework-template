@@ -1,8 +1,9 @@
-import { Contact } from "../../models/contact/contact";
+import { Request, Response } from "express";
 
+import { Contact } from "../../models/contact/contact";
 import { HttpError } from "../../helpers";
 
-const removeContact = async (req, res, next) => {
+const removeContact = async (req: Request, res: Response) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndRemove(contactId);
   if (!result) {

@@ -1,8 +1,9 @@
-import { Contact } from "../../models/contact/contact";
+import { Request, Response } from "express";
 
+import { Contact } from "../../models/contact/contact";
 import { HttpError } from "../../helpers";
 
-const updateFavorite = async (req, res) => {
+const updateFavorite = async (req: Request, res: Response) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
 

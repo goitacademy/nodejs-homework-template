@@ -1,7 +1,23 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import Joi from "joi";
 
 import { handleMongooseError } from "../../helpers";
+
+export interface IContact extends Document {
+  name: string;
+  email: string;
+  phone: string;
+  favorite: string;
+  owner: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      contact?: IContact;
+    }
+  }
+}
 
 const contactSchema = new Schema(
   {
@@ -22,8 +38,7 @@ const contactSchema = new Schema(
       default: false,
     },
     owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
+      type: String,
       required: true,
     },
   },
@@ -39,6 +54,6 @@ const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const Contact = model("contact", contactSchema);
+const Contact = model<IContact>("contact", contactSchema);
 
 export { Contact, addSchema };
