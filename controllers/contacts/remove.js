@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 const { Contact } = require("../../models/contact");
+=======
+const Contact = require("../../models/contact");
+>>>>>>> f897728d66c7cfeaa230c21584b96a891cbf5b99
 
 const remove = async (req, res) => {
   const { contactId } = req.params;

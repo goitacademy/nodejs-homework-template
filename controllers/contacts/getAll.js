@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const { Contact } = require("../../models/contact");
 
 const getAll = async (req, res) => {
@@ -15,6 +16,12 @@ const getAll = async (req, res) => {
     skip,
     limit,
   });
+=======
+const Contact = require("../../models/contact");
+
+const getAll = async (req, res) => {
+  const contacts = await Contact.find();
+>>>>>>> f897728d66c7cfeaa230c21584b96a891cbf5b99
   res.json({
     status: "success",
     code: "200",
