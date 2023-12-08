@@ -9,20 +9,20 @@ const authenticate = async (req, _, next) => {
     const [bearer, token] = authorization.split(' ', 2);
 
     if (bearer !== 'Bearer') {
-      return next(new HttpError(401, 'Invalid authorization header.'));
+      return next(new HttpError(401, 'Invalid authorization header!'));
     }
 
     const { id } = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findById(id);
 
     if (!user || !user.token || user.token !== token) {
-      return next(new HttpError(401, 'User not authenticated.'));
+      return next(new HttpError(401, 'User not authenticated!'));
     }
 
     req.user = user;
     next();
-  } catch (error) {
-    next(error);
+  } catch {
+    next(HttpError(401, 'Not authorized!'));
   }
 };
 

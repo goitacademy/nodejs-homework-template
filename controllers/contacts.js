@@ -1,10 +1,10 @@
-const HttpError = require('../httpErrors/errors')
+const HttpError = require('../httpErrors/errors');
 const { Contact } = require('../models/contactsSchema');
 
 async function listContacts(_, res, next) {
   try {
-    const getContacts = await Contact.find().exec();
-    res.send(getContacts);
+    const getContacts = await Contact.find();
+    res.json(getContacts);
   } catch (error) {
     next(error);
   }
@@ -13,13 +13,13 @@ async function listContacts(_, res, next) {
 async function getContactById(req, res, next) {
   const { contactId } = req.params;
   try {
-    const contact = await Contact.findById(contactId).exec();
+    const contact = await Contact.findById(contactId);
 
     if (!contact) {
       throw HttpError(404, `Contact with ID ${contactId} not found`);
     }
 
-    res.send(contact);
+    res.json(contact);
   } catch (error) {
     if (error.name === 'CastError') {
       return res
@@ -35,7 +35,7 @@ async function removeContact(req, res, next) {
   try {
     const result = await Contact.findByIdAndDelete(contactId);
 
-    if (result === null) {
+    if (!result) {
       return res.status(404).send(`Contact with ID ${contactId} not found`);
     }
 
@@ -51,17 +51,12 @@ async function removeContact(req, res, next) {
 }
 
 async function addContact(req, res, next) {
-  const contact = {
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    favorite: req.body.favorite,
-  };
+  const { name, email, phone, favorite } = req.body;
+  const contact = { name, email, phone, favorite };
 
   try {
     const newContact = await Contact.create(contact);
-
-    res.status(201).send(newContact);
+    res.status(201).json(newContact);
   } catch (error) {
     next(error);
   }
@@ -69,24 +64,19 @@ async function addContact(req, res, next) {
 
 async function updateContact(req, res, next) {
   const { contactId } = req.params;
-
-  const contact = {
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    favorite: req.body.favorite,
-  };
+  const { name, email, phone, favorite } = req.body;
+  const contact = { name, email, phone, favorite };
 
   try {
     const result = await Contact.findByIdAndUpdate(contactId, contact, {
       new: true,
     });
 
-    if (result === null) {
+    if (!result) {
       return res.status(404).send(`Contact with ID ${contactId} not found`);
     }
 
-    res.send(result);
+    res.json(result);
   } catch (err) {
     if (err.name === 'CastError') {
       return res
@@ -145,5 +135,4 @@ module.exports = {
   addContact,
   updateContact,
   addToFavorites,
-  updateStatusContact,
 };
