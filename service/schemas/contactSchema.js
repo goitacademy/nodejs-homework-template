@@ -1,5 +1,3 @@
-// service\schemas\contactSchema.js
-
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
@@ -55,6 +53,6 @@ const updateFavoriteSchema = Joi.object({
 module.exports = {
   Contact: mongoose.model("Contact", contactSchema),
   validateContact,
-  addSchema, 
+  addSchema,
   updateFavoriteSchema,
 };

@@ -1,4 +1,4 @@
-// service\schemas\userSchema.js
+
 
 const Joi = require("joi");
 const mongoose = require("mongoose");
@@ -35,11 +35,13 @@ const userSchema = new mongoose.Schema({
   },
   verificationToken: {
     type: String,
-    required: [true, 'Verify token is required'],
+    required: function () {
+      return !this.verify; 
+    }
   },
 });
 userSchema.pre('save', function (next) {
-  // Генерація аватара при реєстрації
+
   if (!this.avatarURL) {
     this.avatarURL = gravatar.url(this.email, { s: '200', r: 'pg', d: 'mm' });
   }

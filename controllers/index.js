@@ -1,13 +1,9 @@
-// controllers\index.js
-
 const {
   Contact,
   validateContact,
 } = require("../service/schemas/contactSchema");
 
 async function getContacts(req, res, next) {
-  console.log({ user: req.user });
-
   try {
     const contacts = await Contact.find({ userId: req.user.id }).exec();
     res.send(contacts);
@@ -37,11 +33,10 @@ async function createContact(req, res, next) {
     name: req.body.name,
     email: req.body.email,
     phone: req.body.phone,
-    userId: req.user.id, // змінив _id на id
+    userId: req.user.id,
   };
 
   try {
-    console.log("Creating contact:", contact);
     const result = await Contact.create(contact);
     res.status(201).json(result);
   } catch (err) {
@@ -95,7 +90,6 @@ const updateStatusContact = async (req, res, next) => {
   const { favorite } = req.body;
 
   try {
-    console.log("Received favorite:", favorite);
     if (favorite === undefined) {
       return res.status(400).json({ message: "missing field favorite" });
     }

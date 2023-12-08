@@ -1,10 +1,8 @@
-// middlewares\userToken.js
 const jwt = require("jsonwebtoken");
 const { User } = require("../service/schemas/userSchema");
 
 const userToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log("Auth Header:", authHeader);
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res
@@ -16,10 +14,7 @@ const userToken = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId); // виправив id на userId
-
-    console.log("Decoded:", decoded);
-    console.log("User:", user);
+    const user = await User.findById(decoded.userId);
 
     if (!user || token !== user.token.toString()) {
       return res

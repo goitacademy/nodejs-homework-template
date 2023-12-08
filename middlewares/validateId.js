@@ -1,5 +1,3 @@
-// middlewares\validateId.js
-
 const Joi = require("joi");
 
 const validateId = (req, res, next) => {
