@@ -2,13 +2,19 @@ import Joi from "joi";
 import { Schema, model } from "mongoose";
 import { hooks } from "../helpers/index.js";
 
+const emailRegexp =
+  /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+
 const contactsSchema = new Schema(
   {
     name: {
       type: String,
       required: [true, "Set name for contact"],
     },
-    email: String,
+    email: {
+      type: String,
+      match: emailRegexp,
+    },
     phone: String,
     favorite: {
       type: Boolean,
@@ -25,7 +31,7 @@ const contactsSchema = new Schema(
 
 export const contactCheck = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string().required().pattern(emailRegexp),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });
