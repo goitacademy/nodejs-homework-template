@@ -1,37 +1,16 @@
 const {HttpError} = require('../helpers/HttpError')
 
 const validateBody = (schema) => {
-  const func = (req, res, next) => {
-      if (!Object.keys(req.body).length) {
-       return next(HttpError(400, 'missing fields'));
-      }
+  const func = (req, _, next) => {
+
     const {error} = schema.validate(req.body)
     
-      if (error && Object.keys(req.body).length < 3) {
-        const nameField = error.details[0].path[0];
-      return next(HttpError(400,  `missing required ${nameField} field` ));
-    }
-    if (error && Object.keys(req.body).length === 3) {
-      const nameField = error.details[0].path[0];
-      let message;
-      switch (nameField) {
-        case "name":
-          message = "The name should only contain letters, spaces, hyphens, and apostrophes, and should not exceed 25 characters."
-          break
-        case "email":
-          message = "Please enter a valid email address."
-          break
-        case "phone":
-          message = "The phone number should be in the format (XXX) XXX-XXXX."
-          break
-        
-      }
-      return next(HttpError(400,  `Invalid ${nameField} field format. ${message}` ))
+    if (error) {
+      return next(HttpError(400, `${error.message}` ))
     }
       next()
     }
     return func
 }
 
-
-module.exports = {validateBody};
+module.exports = validateBody;
