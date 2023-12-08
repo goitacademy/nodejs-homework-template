@@ -2,8 +2,8 @@ import { Schema, model } from "mongoose";
 import Joi from "joi";
 import { preUpdate, saveError } from "./hooks.js";
 
-// монгуз схема - опис того, що ми зберігаємо у файлі
-const contactSchema = new Schema( {
+const contactSchema = new Schema(
+  {
     name: {
       type: String,
     },
@@ -17,12 +17,11 @@ const contactSchema = new Schema( {
       type: Boolean,
       default: false,
     },
-  })
+  },
+  { versionKey: false }
+);
 
-
-const Contact = model("contact", contactSchema)
-
-
+const Contact = model("contact", contactSchema);
 
 export const contactAddSchema = Joi.object({
   name: Joi.string()
@@ -44,16 +43,13 @@ export const updateScheme = Joi.object({
   favorite: Joi.boolean(),
 });
 
-
 export const movieFavoriteScheme = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+contactSchema.post("save", saveError);
+contactSchema.pre("findOneAndUpdate", preUpdate);
+contactSchema.post("findOneAndUpdate", saveError);
 
-contactSchema.post("save", saveError)
-contactSchema.pre("findOneAndUpdate", preUpdate)
-contactSchema.post("findOneAndUpdate", saveError)
-
-// хук, який додає статус до запиту
 
 export default Contact;
