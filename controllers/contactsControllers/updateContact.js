@@ -1,5 +1,5 @@
-const { Contact } = require("../models/contact");
-const { ctrlWrapper } = require("../helpers");
+const { Contact } = require("../../models/contact");
+const { ctrlWrapper } = require("../../helpers");
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
