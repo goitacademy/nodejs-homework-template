@@ -31,7 +31,7 @@ router.patch(
   isValidId,
   isEmptyFavoriteUpdate,
   validataBody(schemas.updateFavoriteSchema),
-  controllers.updateStatusContact
+  controllers.updateContact
 );
 
 router.delete("/:contactId", isValidId, controllers.deleteContact);
