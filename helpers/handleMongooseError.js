@@ -4,7 +4,6 @@ const handleMongooseError = (error, _, next) => {
 
   if (name === "MongoServerError" && code === 11000) {
     error.status = 409;
-    // error.message = "Email in use";
   } else {
     error.status = 400;
   }
