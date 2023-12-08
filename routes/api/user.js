@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const UsersController = require('../../controllers/user');
 const { createBodyValidator, authenticate } = require('../../middleware/middleware');
 const { schemas } = require('../../models/userSchema');
@@ -18,6 +17,7 @@ router.post(
 );
 
 router.post('/logout', authenticate, UsersController.logout);
+
 router.get('/current', authenticate, UsersController.current);
 
 module.exports = router;
