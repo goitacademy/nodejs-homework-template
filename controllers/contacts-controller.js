@@ -1,13 +1,8 @@
 // import * as contactService from "../models/index.js"; =======удален=========
-
-import { HttpError } from "../helpers/index.js";
-import {
-  contactAddScheme,
-  contactUpdateScheme,
-  contactFavoteSchema,
-} from "../models/Contact.js";
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import Contact from "../models/Contact.js";
+
+import { ctrlWrapper } from "../decorators/index.js";
+import { HttpError } from "../helpers/index.js";
 
 const allContacts = async (req, res, next) => {
   const result = await Contact.find();
@@ -16,9 +11,9 @@ const allContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
+  // const result = await Contact.findOne({ _id: id });
   const result = await Contact.findById(id);
   if (!result) {
-    // const result = await Contact.findOne({ _id: id });
     throw HttpError(404, `Not found`);
   }
 
@@ -48,7 +43,6 @@ const updateStatusContact = async (req, res, next) => {
     new: true,
     runValidators: true,
   });
-
   if (!result) {
     throw HttpError(404, `Not found`);
   }

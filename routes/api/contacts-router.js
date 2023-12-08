@@ -11,7 +11,9 @@ import {
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.allContacts);
+
 contactsRouter.get("/:id", isValidId, contactsController.getContactById);
+
 contactsRouter.post(
   "/",
   isEmptyBody,
@@ -28,6 +30,7 @@ contactsRouter.put(
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,
+  // isEmptyBody,
   validateBody(contactFavoteSchema),
   contactsController.updateStatusContact
 );

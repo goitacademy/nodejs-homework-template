@@ -4,6 +4,7 @@ import app from "./app.js";
 // Kostiantyn;
 // aBbkYOZ9ViiUCJnW;
 const { DB_HOST, PORT } = process.env;
+
 mongoose
   .connect(DB_HOST)
   .then(() => {
