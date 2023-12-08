@@ -19,7 +19,7 @@ const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user) {
+  if (user) {
     throw HttpError(409, `${email} is already in use`);
   }
 
@@ -67,7 +67,7 @@ const verify = async (req, res) => {
 };
 
 const resendVerify = async (req, res) => {
-  const { email } = req.body;
+  const { email, verificationToken } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(400, "Email not found");
@@ -82,7 +82,7 @@ const resendVerify = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${user.verificationToken}">Click to verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click to verify email</a>`,
   };
   await sendEmail(verifyEmail);
 
