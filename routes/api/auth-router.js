@@ -20,5 +20,10 @@ authRouter.patch(
   authenticate,
   authController.subscription
 );
-
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+  authController.updateAvatar
+);
 export default authRouter;
