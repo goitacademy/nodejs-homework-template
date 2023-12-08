@@ -1,3 +1,4 @@
-const bodyValidator = require('./index');
+const createBodyValidator = require('./validateBody');
+const authenticate = require('./auth');
 
-module.exports = { bodyValidator };
+module.exports = { createBodyValidator, authenticate };
