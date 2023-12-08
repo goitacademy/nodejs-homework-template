@@ -4,12 +4,9 @@ const gravatar = require('gravatar');
 const Jimp = require('jimp');
 const fs = require('node:fs/promises');
 const path = require('node:path');
-
 const HttpError = require('../httpErrors/errors');
 const { User } = require('../models/userSchema');
-
 const secret = process.env.SECRET_KEY;
-// console.log('Current value of SECRET_KEY:', secret);
 
 async function register(req, res, next) {
   const { email, password } = req.body;
