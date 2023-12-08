@@ -1,33 +1,54 @@
-const app = require("./app");
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
+
+require("dotenv").config();
+
+const app = express();
+
+// parse application/json
+app.use(express.json());
+// cors
+app.use(cors());
+
+const contactsRouter = require("./api/index");
+app.use("/api/contacts", contactsRouter);
+
+app.use((_, res, __) => {
+  res.status(404).json({
+    status: "error",
+    code: 404,
+    message: "Use api on routes: /api/",
+    data: "Not found",
+  });
 });
 
-const argv = require("yargs").argv;
-const contacts = require("./models/contacts");
+app.use((err, _, res, __) => {
+  console.log(err.stack);
+  res.status(500).json({
+    status: "fail",
+    code: 500,
+    message: err.message,
+    data: "Internal Server Error",
+  });
+});
 
-function invokeAction({ action, id, name, email, phone }) {
-  switch (action) {
-    case "list":
-      contacts.listContacts();
-      break;
+const PORT = process.env.PORT || 3002;
+const uriDb = process.env.DB_HOST;
 
-    case "get":
-      contacts.getContactById(id);
-      break;
-
-    case "add":
-      contacts.addContact(name, email, phone);
-      break;
-
-    case "remove":
-      contacts.removeContact(id);
-      break;
-
-    default:
-      console.warn("\x1B[31m Unknown action type!");
-  }
-}
-
-invokeAction(argv);
+const connection = mongoose.connect(uriDb, {
+  
+  dbName: "db-contacts",
+});
+console.log(uriDb);
+connection
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log("Database connection successful");
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
+  })
+  .catch((err) =>
+    console.log(`Server not running. Error message: ${err.message}`)
+  );
