@@ -13,21 +13,17 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
         const filename = `${uniquePrefix}_${file.originalname}`;
-        const filenameResized = Jimp.read("temp", (err, filename) => {
-            if (err) throw err;
-            filename.resize(250, 250)
-        });
         cb(null, filename);
     }
 });
 
-/*
-Jimp.read("lenna.png", (err, lenna) => {
-  if (err) throw err;
-  lenna
-    .resize(256, 256) // resize
-
-});*/
+const fileJimp = Jimp.read("temp") 
+    .then((image) => {
+        image.resize(250, 250)
+    })
+    .catch((err) => {
+        HttpError(400, "Invalid file extention")
+    });
 
 
 const limits = {
@@ -46,6 +42,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage,
     limits,
+   // fileJimp,
     //fileFilter,
 });
 

@@ -7,9 +7,9 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import gravatar from "gravatar";
 
-//import path from "path";
+import path from "path";
 
-//const avatarsPath = path.resolve("public", "avatars");
+const avatarsPath = path.resolve("public", "avatars");
 
 dotenv.config();
  
@@ -66,34 +66,28 @@ const signin = async (req, res) => {
 
 
 const avatars = async (req, res) => {
-    const { token } = req.body;
-    const user = await User.findOne({ token });
-    if (!user) {
-        throw HttpError(401, "Not authorized");
-    }
+    //const { _id } = req.user;
+    const {_id: owner} = req.user;
+    const {path: oldPath, filename} = req.file;
+    const newPath = path.join(avatarsPath, filename);
+    await fs.rename(oldPath, newPath);
+
+    const avatarURL = path.join("avatars", filename);
+    const result = await User.create({...req.body, avatarURL, owner});
+  
+    //const user = await User.findOne(_id, { token });
+    
+   // if (!user) {
+  //      throw HttpError(401, "Not authorized");
+  //  }
+
+   // const newAva = avatarsPath;
 
     res.status(200).json({
-            avatarURL: url,
+            avatarURL: newAva,
     })
 };
 
-
-
-/*
-const add = async (req, res) => {
-    const {_id: owner} = req.user;
-    const {path: oldPath, filename} = req.file;
-    const newPath = path.join(postersPath, filename);
-    await fs.rename(oldPath, newPath);
-
-    const poster = path.join("posters", filename);
-    const result = await Movie.create({...req.body, poster, owner});
-
-    res.status(201).json(result);
-
-   
-
-}*/
 
 const getCurrent = async (req, res) => {
     const { email, subscription } = req.user;
