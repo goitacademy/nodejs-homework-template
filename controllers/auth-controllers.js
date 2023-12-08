@@ -1,10 +1,11 @@
 import User from '../models/auth-users.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { HttpError } from '../helpers/index.js';
+import { nanoid } from 'nanoid';
+import { HttpError, sendEmail } from '../helpers/index.js';
 import { ctrlWrapper } from '../decorators/index.js';
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, BASE_URL } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -14,10 +15,42 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  verificationToken = nanoid();
+
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    verificationToken,
+  });
+
+  const verifyEmail = {
+    to: email,
+    subject: 'Verify email',
+    html: `<p>For complite registration </p></p></p><a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">click this link</a>`,
+  };
+
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     email: newUser.email,
     subscription: newUser.subscription,
+  });
+};
+
+const verify = async (req, res) => {
+  const { verificationCode } = req.params;
+  const user = await User.findOne({ verificationCode });
+  if (!user) {
+    throw HttpError(404, 'User not found');
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationCode: '',
+  });
+
+  res.json({
+    message: 'Verification successful',
   });
 };
 
@@ -71,6 +104,7 @@ const logout = async (req, res) => {
 
 export default {
   register: ctrlWrapper(register),
+  verify: ctrlWrapper(verify),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
