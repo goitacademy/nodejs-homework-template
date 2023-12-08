@@ -1,5 +1,5 @@
 const express = require("express");
-const { validation } = require("../../middlerwares");
+const { validation, authenticate } = require("../../middlerwares");
 const { schemas } = require("../../models/user");
 const { authController: ctrl } = require("../../controllers");
 const { ctrlWrapper } = require("../../helpers");
@@ -16,4 +16,5 @@ router.post(
 router.post("/login", validation(schemas.loginSchema), ctrlWrapper(ctrl.login));
 // roter.post('/singin')
 
+router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 module.exports = router;
