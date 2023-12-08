@@ -30,7 +30,7 @@ const authenticate = async (req, res, next) => {
     try {
       req.user = decode;
 
-      const user = await User.findById(decode.userId).exec(); // Виправив id на userId
+      const user = await User.findById(decode.userId).exec();
 
       if (user === null) {
         console.log("Error: User not found");
@@ -52,8 +52,7 @@ const authenticate = async (req, res, next) => {
           .send({ message: "Несоответствие токенов при сравнении" });
       }
 
-        // req.user = { id: user._id.toString(), name: user.name };
-        req.user = user;  // ТЕПЕРЬ РАБОТАЕТ!
+      req.user = user;
 
       next();
     } catch (error) {

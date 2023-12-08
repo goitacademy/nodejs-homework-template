@@ -24,7 +24,8 @@ const updateAvatar = async (req, res) => {
     // Генерация уникального имени файла
     console.log("User ID:", req.user.id); // здесь изменил _id на id
     console.log("File path:", req.file.path);
-    const uniqueFileName = `${Date.now()}-${req.user.id.toString()}${path.extname( // здесь изменил _id на id
+    const uniqueFileName = `${Date.now()}-${req.user.id.toString()}${path.extname(
+      // здесь изменил _id на id
       req.file.originalname
     )}`;
 

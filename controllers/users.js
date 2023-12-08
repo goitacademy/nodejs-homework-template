@@ -1,10 +1,50 @@
-// controllers\users.js
-
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User, validateUser } = require("../service/schemas/userSchema");
-const updateAvatar = require('./updateAvatar');
-const nodemailer = require('nodemailer');
+const updateAvatar = require("./updateAvatar");
+const nodemailer = require("nodemailer");
+const { v4: uuidv4 } = require("uuid");
+const Joi = require("joi");
+
+async function sendVerificationEmail(user) {
+  try {
+    const verificationToken = user.verificationToken;
+    const verificationLink = `${process.env.HOST}/api/users/verify/${verificationToken}`;
+    console.log("Verification link:", verificationLink);
+
+    const transporter = nodemailer.createTransport({
+      host: "sandbox.smtp.mailtrap.io",
+      port: 2525,
+      auth: {
+        user: process.env.MAILTRAP_USER,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+
+    // Дополнительная проверка подключения к почтовому серверу
+    await transporter.verify();
+    console.log("Server is ready to take our messages");
+
+    const message = {
+      to: user.email,
+      from: "m.chukhrai@gmail.com",
+      subject: "Email Verification",
+      html: `<p>Click the following link to verify your email: ${verificationLink}</p>`,
+    };
+
+    // Дополнительная информация перед отправкой письма
+    console.log("Sending verification email to:", user.email);
+
+    await transporter.sendMail(message);
+
+    // Дополнительная информация после успешной отправки
+    console.log("Verification email sent successfully to:", user.email);
+  } catch (error) {
+    // Логирование ошибок, если они возникают
+    console.error("Error sending verification email:", error);
+    throw error; 
+  }
+}
 
 async function registerUser(req, res, next) {
   try {
@@ -25,22 +65,21 @@ async function registerUser(req, res, next) {
     const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
 
     // Генерація токену підтвердження
-    const verificationToken = jwt.sign(
-      { email: req.body.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" } // призначте термін дії токена, який вважається придатним для використання
-    );
+    const verificationToken = uuidv4();
 
     // Создание нового пользователя
     const newUser = new User({
       email: req.body.email,
       password: hashedPassword,
-      subscription: "starter", // или другое значение по умолчанию
-      verificationToken, // додаємо токен підтвердження
+      subscription: "starter",
+      verificationToken,
     });
 
     // Сохранение пользователя в базе данных
     await newUser.save();
+
+    // Отправка email з посиланням для верифікації
+    await sendVerificationEmail(newUser);
 
     // Отправка успешного ответа
     res.status(201).json({
@@ -50,14 +89,12 @@ async function registerUser(req, res, next) {
       },
     });
   } catch (error) {
-    // Обработка ошибок
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
 async function loginUser(req, res, next) {
-  // Реализация входа пользователя
   try {
     // Валидация запроса
     const { error } = validateUser(req.body);
@@ -84,7 +121,6 @@ async function loginUser(req, res, next) {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "12h",
     });
-    console.log(token);
 
     // Сохранение токена в пользователе
     user.token = token;
@@ -99,14 +135,12 @@ async function loginUser(req, res, next) {
       },
     });
   } catch (error) {
-    // Обработка ошибок
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
 
 async function logoutUser(req, res, next) {
-  // Реализация выхода пользователя
   try {
     // Получаем ID пользователя из токена
     const userId = req.user.id;
@@ -127,6 +161,7 @@ async function logoutUser(req, res, next) {
         .status(401)
         .json({ message: "Not authorized: Token mismatch" });
     }
+
     // Выводим данные о пользователе и токене перед удалением
     console.log("User before logout:", user);
 
@@ -136,7 +171,7 @@ async function logoutUser(req, res, next) {
     // Сохраняем изменения в базе данных
     await user.save();
 
-    // Отправляем успешный ответ .
+    // Отправляем успешный ответ
     res.status(204).end();
 
     // Выводим данные о пользователе после удаления токена
@@ -148,7 +183,6 @@ async function logoutUser(req, res, next) {
 }
 
 async function getCurrentUser(req, res, next) {
-  // Реализация получения данных текущего пользователя
   try {
     const authHeader = req.headers.authorization;
 
@@ -176,6 +210,7 @@ async function getCurrentUser(req, res, next) {
 }
 
 async function verificationToken(req, res) {
+  console.log("Verification route hit");
   const { verificationToken } = req.params;
 
   try {
@@ -186,34 +221,51 @@ async function verificationToken(req, res) {
     );
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Код для відправлення листа
-    const transporter = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      auth: {
-        user: process.env.MAILTRAP_USER,
-        pass: process.env.MAILTRAP_PASSWORD,
-      },
-    });
+    // Отправка листа для верифікації email типу "вдячність"
+    // await sendVerificationEmail(user);
 
-    const message = {
-      to: user.email,
-      from: 'm.chukhrai@gmail.com',  // Замініть на свою електронну адресу
-      subject: 'Email Verification',
-      html: '<p>Click the following link to verify your email: ' + verificationToken + '</p>',
-    };
-
-    await transporter.sendMail(message);
-
-    // Кінець коду для відправлення листа
-
-    return res.status(200).json({ message: 'Verification successful' });
+    return res.status(200).json({ message: "Verification successful" });
   } catch (error) {
-    console.error('Error verifying email:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error verifying email:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+async function resendVerificationEmail(req, res) {
+  try {
+    const { email } = req.body;
+
+    // Валідація email
+    const { error } = Joi.string().email().required().validate(email);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
+    // Знайти користувача за email
+    const user = await User.findOne({ email });
+
+    // Перевірити, чи користувач існує
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Перевірити, чи користувач вже пройшов верифікацію
+    if (user.verify) {
+      return res
+        .status(400)
+        .json({ message: "Verification has already been passed" });
+    }
+
+    // Повторно відправити лист для верифікації
+    await sendVerificationEmail(user);
+
+    return res.status(200).json({ message: "Verification email sent" });
+  } catch (error) {
+    console.error("Error resending verification email:", error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }
 module.exports = {
@@ -222,5 +274,6 @@ module.exports = {
   logoutUser,
   getCurrentUser,
   verificationToken,
-  updateAvatar
+  resendVerificationEmail,
+  updateAvatar,
 };

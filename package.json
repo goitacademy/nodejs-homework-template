@@ -10,7 +10,6 @@
     "start:dev": "cross-env NODE_ENV=development nodemon ./app.js",
     "lint": "eslint \"**/*.js\"",
     "lint:fix": "eslint --fix \"**/*.js\""
- 
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -26,7 +25,8 @@
     "mongoose": "^8.0.0",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "^7.19.0",

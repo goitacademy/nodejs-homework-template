@@ -1,9 +1,9 @@
-const multer = require('multer');
+const multer = require("multer");
 // const path = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'tmp'); // Зберігаємо файл у папці tmp
+    cb(null, "tmp"); // Зберігаємо файл у папці tmp
   },
   filename: function (req, file, cb) {
     const uniqueFileName = `${Date.now()}-${file.originalname}`;
@@ -18,13 +18,12 @@ const uploadAvatar = multer({
   },
   fileFilter: (req, file, cb) => {
     // Перевірка типу файлу (зображення)
-    if (file.mimetype.startsWith('image/')) {
+    if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new Error('Invalid file type. Only images are allowed.'), false);
+      cb(new Error("Invalid file type. Only images are allowed."), false);
     }
   },
 });
 
 module.exports = uploadAvatar;
-
