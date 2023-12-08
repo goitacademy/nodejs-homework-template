@@ -1,21 +1,24 @@
-import * as contactService from "../models/index.js";
+// import * as contactService from "../models/index.js"; =======удален=========
 
 import { HttpError } from "../helpers/index.js";
 import {
   contactAddScheme,
   contactUpdateScheme,
-} from "../schemas/contact-schemas.js";
+  contactFavoteSchema,
+} from "../models/Contact.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import Contact from "../models/Contact.js";
 
 const allContacts = async (req, res, next) => {
-  const result = await contactService.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await contactService.getContactById(id);
+  const result = await Contact.findById(id);
   if (!result) {
+    // const result = await Contact.findOne({ _id: id });
     throw HttpError(404, `Not found`);
   }
 
@@ -23,21 +26,29 @@ const getContactById = async (req, res, next) => {
 };
 
 const add = async (req, res, next) => {
-  const { error } = contactAddScheme.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
-  const result = await contactService.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
 const updateById = async (req, res, next) => {
-  const { error } = contactUpdateScheme.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
   const { id } = req.params;
-  const result = await contactService.updateContact(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
+
+const updateStatusContact = async (req, res, next) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
   if (!result) {
     throw HttpError(404, `Not found`);
   }
@@ -46,7 +57,7 @@ const updateById = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
   const { id } = req.params;
-  const result = await contactService.removeContact(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw HttpError(404, `Not found`);
   }
@@ -59,4 +70,5 @@ export default {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   removeContact: ctrlWrapper(removeContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
