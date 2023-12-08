@@ -1,36 +1,37 @@
 const express = require('express');
-
-const queries = require('../../models/contacts');
-
-const { bodyValidator } = require('../../middleware/middleware');
-
+const queries = require('../../controllers/contacts');
+const { createBodyValidator, authenticate } = require('../../middleware/middleware');
 const { joiSchema, addToFavorites } = require('../../models/joi');
-
 const router = express.Router();
 
 const CONTACTS_PATH = '/';
-
 const CONTACT_ID_PATH = '/:contactId';
-
 const FAVORITE_PATH = '/:contactId/favorite';
 
-router.get(CONTACTS_PATH, queries.listContacts);
+router.get(CONTACTS_PATH, authenticate, queries.listContacts);
 
-router.get(CONTACT_ID_PATH, queries.getContactById);
+router.get(CONTACT_ID_PATH, authenticate, queries.getContactById);
 
-router.post(CONTACTS_PATH, bodyValidator(joiSchema), queries.addContact);
+router.post(
+  CONTACTS_PATH,
+  authenticate,
+  createBodyValidator(joiSchema),
+  queries.addContact
+);
 
-router.delete(CONTACT_ID_PATH, queries.removeContact);
+router.delete(CONTACT_ID_PATH, authenticate, queries.removeContact);
 
 router.put(
   CONTACT_ID_PATH,
-  bodyValidator(joiSchema),
+  authenticate,
+  createBodyValidator(joiSchema),
   queries.updateContact
 );
 
 router.patch(
   FAVORITE_PATH,
-  bodyValidator(addToFavorites),
+  authenticate,
+  createBodyValidator(addToFavorites),
   queries.addToFavorites
 );
 
