@@ -24,13 +24,13 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const avatarUrl = gravatar.url(email);
+  const avatarURL = gravatar.url(email);
   const verificationToken = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarUrl,
+    avatarURL,
     verificationToken,
   });
 
@@ -51,7 +51,7 @@ const register = async (req, res) => {
 
 const verify = async (req, res) => {
   const { verificationToken } = req.params;
-  console.log(verificationToken);
+
   const user = await User.findOne({ verificationToken });
   if (!user) {
     throw HttpError(404, "User not found");
@@ -162,11 +162,11 @@ const updateAvatar = async (req, res) => {
   const resultUpload = path.join(avatarDir, filename);
   await fs.rename(tempUpload, resultUpload);
 
-  const avatarUrl = path.join("avatars", filename);
-  await User.findByIdAndUpdate(_id, { avatarUrl });
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({
-    avatarUrl,
+    avatarURL,
   });
 };
 
