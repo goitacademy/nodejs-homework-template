@@ -1,6 +1,17 @@
+
+// UU0G4CjEzKPXA3iO password user mongo Mia4321
+
+const mongoose = require('mongoose')
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+
+
+const DB_HOST = "mongodb+srv://Mia4321:UU0G4CjEzKPXA3iO@cluster0.tcaohb6.mongodb.net/db-contacts?retryWrites=true&w=majority"
+
+mongoose.connect(DB_HOST)
+.then(()=>console.log("Database connection successful"))
+.catch(error => console.log(error.message))
 
 const contactsRouter = require('./routes/api/contacts')
 
