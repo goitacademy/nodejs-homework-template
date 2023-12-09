@@ -1,5 +1,5 @@
 const express = require('express');
-const contacts = require('../../contacts');
+const contacts = require('../api/contacts');
 const Joi = require('joi');
 
 
