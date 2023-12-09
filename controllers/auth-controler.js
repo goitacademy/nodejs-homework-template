@@ -105,6 +105,9 @@ const signout = async (req, res, next) => {
 
 const changeAvatar = async (req, res, next) => {
   try {
+    if (!req.file) {
+      next(HttpError(400, "Not found file"));
+    }
     const { path: oldPath, filename } = req.file; // Деструктуризуємо req.file шлях до файлу і змінюємо назву oldPath тако деструктуризуємо імя файлу
     const newPath = path.join(avatarsPath, filename);
     await Jimp.read(oldPath).then((image) => {
@@ -117,12 +120,10 @@ const changeAvatar = async (req, res, next) => {
     const avatarNewUrl = path.join("avatars", filename);
     await User.findByIdAndUpdate(_id, { avatarURL: avatarNewUrl });
     res.status(200).json({
-      ResponseBody: {
-        avatarURL: avatarNewUrl,
-      },
+      avatarURL: avatarNewUrl,
     });
   } catch (error) {
-    next(HttpError(500, "Not found file"));
+    next();
   }
 };
 
