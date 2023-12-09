@@ -77,6 +77,9 @@ const updateSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  if (!req.file) {
+    throw HttpError(400, "No file");
+  }
   const { path: oldPath, filename } = req.file;
   const newPath = path.join(avatarsPath, filename);
   //await fs.rename(oldPath, newPath);
