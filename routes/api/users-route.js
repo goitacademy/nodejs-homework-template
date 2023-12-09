@@ -1,16 +1,27 @@
 import express from "express";
-import { authenticate, isEmptyBody, upload } from "../../middlewares/index.js";
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+  upload,
+} from "../../middlewares/index.js";
 import ctrlWrapper from "../../decorators/ctrlWrapper.js";
 import {
   current,
+  resendVerifyMail,
   signin,
   signout,
   signup,
   updateAvatar,
   updateSubscription,
+  verifyEmail,
 } from "../../controllers/user-controller.js";
 import validateBody from "../../decorators/validateBody.js";
-import { authSchema, patchSubscription } from "../../schemas/users-schema.js";
+import {
+  authSchema,
+  patchSubscriptionSchema,
+  resendVerifyMailSchema,
+} from "../../schemas/users-schema.js";
 
 const usersRouter = express.Router();
 
@@ -36,7 +47,7 @@ usersRouter.patch(
   "/",
   ctrlWrapper(authenticate),
   isEmptyBody,
-  validateBody(patchSubscription),
+  validateBody(patchSubscriptionSchema),
   ctrlWrapper(updateSubscription)
 );
 
@@ -45,6 +56,14 @@ usersRouter.patch(
   upload.single("avatar"),
   ctrlWrapper(authenticate),
   ctrlWrapper(updateAvatar)
+);
+
+usersRouter.get("/verify/:verificationToken", ctrlWrapper(verifyEmail));
+
+usersRouter.post(
+  "/verify",
+  validateBody(resendVerifyMailSchema),
+  ctrlWrapper(resendVerifyMail)
 );
 
 export default usersRouter;
