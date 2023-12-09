@@ -17,10 +17,6 @@ const contactSchema = new Schema({
       type: Boolean,
       default: false,
     },
-    poster: {
-      type: String,
-      required: true,
-    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -40,7 +36,6 @@ export const contactAddSchema = Joi.object({
     email: Joi.string(),
     phone: Joi.string(), 
     favorite: Joi.boolean(),
-    //poster: Joi.string().required(),
 });
 
 
@@ -48,7 +43,6 @@ export const contactUpdateSchema = Joi.object({
     name: Joi.string(),
     email: Joi.string(),
     phone: Joi.string(),
-    //poster: Joi.string().required(),
     favorite: Joi.boolean().messages({
         "string.base": `missing field favorite`,
     }),

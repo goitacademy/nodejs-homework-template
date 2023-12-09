@@ -1,4 +1,4 @@
-//import fs from "fs/promises";
+import fs from "fs/promises";
 import User from "../models/User.js";
 import { ctrlWrapper } from "../decorators/index.js";
 import { HttpError } from "../helpers/index.js";
@@ -66,26 +66,23 @@ const signin = async (req, res) => {
 
 
 const avatars = async (req, res) => {
-    //const { _id } = req.user;
-    const {_id: owner} = req.user;
-    const {path: oldPath, filename} = req.file;
+    const { _id: owner } = req.user;
+    const { path: oldPath, filename } = req.file;
     const newPath = path.join(avatarsPath, filename);
     await fs.rename(oldPath, newPath);
-
-    const avatarURL = path.join("avatars", filename);
-    const result = await User.create({...req.body, avatarURL, owner});
-  
-    //const user = await User.findOne(_id, { token });
     
-   // if (!user) {
-  //      throw HttpError(401, "Not authorized");
-  //  }
-
-   // const newAva = avatarsPath;
+    const avatar = path.join("public", "avatars", filename);
+    //const result = await User.create({...req.body, avatar, owner});
 
     res.status(200).json({
-            avatarURL: newAva,
+            avatarURL: avatar,
     })
+    /* 
+    
+    if (!user) {
+        throw HttpError(401, "Not authorized");
+    }
+    */
 };
 
 

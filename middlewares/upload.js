@@ -22,7 +22,7 @@ const fileJimp = Jimp.read("temp")
         image.resize(250, 250)
     })
     .catch((err) => {
-        HttpError(400, "Invalid file extention")
+        HttpError(400, "Oops, something went wrong")
     });
 
 

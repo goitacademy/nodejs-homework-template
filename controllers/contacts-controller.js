@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const postersPath = path.resolve("public", "avatars");
+//const postersPath = path.resolve("public", "avatars");
 
 const getListContacts = async (req, res) => {
     const { _id: owner } = req.user;
