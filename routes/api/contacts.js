@@ -1,83 +1,90 @@
-const express = require('express');
-const contacts = require('../api/contacts');
-const Joi = require('joi');
-
-
+const express = require("express");
+const Joi = require("joi");
+const contacts = require("../../models/contacts");
 const router = express.Router();
+const HttpError = require("../../helpers/HttpError");
 
-router.get('/', async (req, res) => {
-  const allContacts = await contacts.listContacts();
-  res.json(allContacts);
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
 });
 
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const contact = await contacts.getContactById(id);
-
-  if (contact) {
-    res.json(contact);
-  } else {
-    res.status(404).json({ message: 'Not found' });
-  }
+const updateSchema = Joi.object().keys({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
 });
 
-router.post('/', async (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().email().required(),
-    phone: Joi.string().required(),
-  });
-
-  const validationResult = schema.validate(req.body);
-
-  if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.message });
-  }
-
-  const { name, email, phone } = req.body;
-  const newContact = await contacts.addContact(name, email, phone);
-  res.status(201).json(newContact);
-});
-
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  const deletedCont = await contacts.removeContact(id);
-
-  if (deletedCont) {
-    res.json({ message: 'Contact deleted' });
-  } else {
-    res.status(404).json({ message: 'Not found' });
+router.get("/", async (req, res, next) => {
+  try {
+    const result = await contacts.listContacts();
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
 });
 
-router.put('/:id', async (req, res) => {
-  const schema = Joi.object({
-    name: Joi.string(),
-    email: Joi.string().email(),
-    phone: Joi.string(),
-  });
-
-  const validationResult = schema.validate(req.body);
-
-  if (validationResult.error) {
-    return res.status(400).json({ message: validationResult.error.message });
-  }
-
-  const { id } = req.params;
-  const updatedFields = req.body;
-
-  if (!Object.keys(updatedFields).length) {
-    return res.status(400).json({ message: 'Missing fields' });
-  }
-
-  const updatedCont = await contacts.updateContact(id, updatedFields);
-
-  if (updatedCont) {
-    res.json(updatedCont);
-  } else {
-    res.status(404).json({ message: 'Not found' });
+router.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contacts.getContactById(id);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
 });
 
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = addSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, "missing required name field");
+    }
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json({
+      message: "contact deleted",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:id", async (req, res, next) => {
+  try {
+    const keys = Object.keys(req.body);
+    if (keys.length === 0) {
+      throw HttpError(400, "missing fields");
+    }
+    const { error } = updateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await contacts.updateContact(id, req.body);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
 module.exports = router;
