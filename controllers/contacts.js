@@ -1,5 +1,6 @@
 const Contact = require("../models/contacts");
 const { contactSchema } = require("../shemas/contactsShemas");
+const httpError = require("../helpers/httpError");
 
 const getContacts = async (req, res, next) => {
   try {
@@ -17,7 +18,7 @@ const getContactById = async (req, res, next) => {
     if (data) {
       res.status(200).json(data);
     } else {
-      res.status(404).json({ message: "Not found" });
+      throw httpError(404, `id ${contactId} Not found`);
     }
   } catch (error) {
     next(error);
@@ -44,7 +45,8 @@ const deleteContact = async (req, res, next) => {
     if (data) {
       res.status(200).json({ message: "Contact deleted" });
     } else {
-      res.status(404).json({ message: `id ${contactId} Not found` });
+      //   res.status(404).json({ message: `id ${contactId} Not found` });
+      throw httpError(404, `id ${contactId} Not found`);
     }
   } catch (error) {
     next(error);
@@ -67,7 +69,7 @@ const updateContact = async (req, res, next) => {
     if (updatedContact) {
       res.status(200).json(updatedContact);
     } else {
-      res.status(404).json({ message: "Not found" });
+      throw httpError(404, `id ${contactId} Not found`);
     }
   } catch (error) {
     next(error);
@@ -89,11 +91,10 @@ const updateStatusContact = async (req, res, next) => {
     if (updatedContact) {
       return res.status(200).json(updatedContact);
     } else {
-      return res.status(404).json({ message: "Not found" });
+      throw httpError(404, `id ${contactId} Not found`);
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 };
 
