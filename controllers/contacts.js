@@ -6,7 +6,14 @@ const {
 } = require('../helpers');
 
 const getAllContacts = async(req, res) => {
-    const result = await Contact.find();
+    const {_id: owner} = req.user;
+    const { page = 1, limit = 20, favorite = false } = req.query;
+	const skip = (page - 1) * limit;
+	console.log(req.query, favorite);
+    const result = favorite
+    ? await Contact.find({ owner, favorite: true }, "", { skip, limit })
+    : await Contact.find({ owner }, "", { skip, limit });
+res.json(result);
     res.json(result);
 };
 
@@ -20,7 +27,8 @@ const getContactById = async(req, res) => {
 }
 
 const addNewContact = async(req, res) => {
-    const result = await Contact.create(req.body);
+    const {_id: owner} = req.user;
+    const result = await Contact.create({...req.body, owner});
     res.status(201).json(result);
 }
 
