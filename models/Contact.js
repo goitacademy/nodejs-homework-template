@@ -47,6 +47,7 @@ export const movieFavoriteScheme = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+
 contactSchema.post("save", saveError);
 contactSchema.pre("findOneAndUpdate", preUpdate);
 contactSchema.post("findOneAndUpdate", saveError);
