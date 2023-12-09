@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
@@ -18,10 +19,12 @@ const register = async (req, res) => {
   const avatarURL = gravatar.url(email);
   const verificationToken = nanoid();
 
+
   const newUser = await User.create({
     ...req.body,
     password: hashPass,
     avatarURL,
+
     verificationToken,
   });
 
@@ -30,8 +33,8 @@ const register = async (req, res) => {
     subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verufy emil</a>`,
   };
-
   await sendEmail(verifyEmail);
+  });
 
   res.status(201).json({
     user: {
