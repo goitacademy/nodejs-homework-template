@@ -1,6 +1,6 @@
 const express = require('express');
 const validateBody = require('../../middelewares/validateBody');
-const ctrl = require('../../controllers/auth');
+const ctrl = require('../../controllers/users');
 const {schema} = require('../../models/user');
 const authenticate = require('../../middelewares/authenticate');
 
