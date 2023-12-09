@@ -2,7 +2,9 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import router from './routes/api/contacts-router.js';
+import detenv from 'dotenv';
 
+detenv.config()
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
