@@ -1,10 +1,5 @@
 import express from "express";
-import {
-  authenticate,
-  isEmptyBody,
-  isValidId,
-  upload,
-} from "../../middlewares/index.js";
+import { authenticate, isEmptyBody, upload } from "../../middlewares/index.js";
 import ctrlWrapper from "../../decorators/ctrlWrapper.js";
 import {
   current,
