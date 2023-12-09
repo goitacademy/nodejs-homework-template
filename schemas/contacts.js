@@ -1,30 +1,19 @@
 const Joi = require("joi");
 
-const addShema = Joi.object({
-  name: Joi.string().required().messages({
-    "any.required": `Missing required name field`,
-  }),
-
-  email: Joi.string().required().messages({
-    "any.required": `Missing required email field`,
-  }),
-
-  phone: Joi.string().required().messages({
-    "any.required": `Missing required phone field`,
-  }),
-
-  favorite: Joi.boolean().optional(),
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
+    .required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
-const addShemaPut = Joi.object({
-  name: Joi.string(),
 
-  email: Joi.string(),
-
-  phone: Joi.string(),
-
-  favorite: Joi.boolean().optional(),
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
 });
+
 module.exports = {
-  addShema,
-  addShemaPut,
+  addSchema,
+  updateFavoriteSchema,
 };
