@@ -1,21 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
-// const contacts = require("./models/contacts.json");
-
 const app = express();
-
-// app.use((req, res, next) => {
-//   console.log("First middleware");
-//   next();
-// });
-
-// app.get("/contacts", (req, res) => {
-//   res.json(contacts);
-// });
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
