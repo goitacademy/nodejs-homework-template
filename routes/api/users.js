@@ -1,30 +1,39 @@
 const express = require("express");
 
-const logger = require("morgan");
-const cors = require("cors");
-require("dotenv").config();
+const ctrl = require("../../controllers/users");
+const { validateBody, authenticate, upload } = require("../../middlewares");
+const { userSchemas } = require("../../models");
+const router = express.Router();
 
-const authRouter = require("./routes/api/users");
-const contactsRouter = require("./routes/api/contacts");
+router.post(
+  "/register",
+  validateBody(userSchemas.registerSchema),
+  ctrl.register
+);
 
-const app = express();
+router.post("/login", validateBody(userSchemas.loginSchema), ctrl.login);
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+router.post("/logout", authenticate, ctrl.logout);
 
-app.use(logger(formatsLogger));
-app.use(cors());
-app.use(express.json());
-app.use(express.static("public"));
+router.get("/current", authenticate, ctrl.getCurrent);
 
-app.use("/api/users", authRouter);
-app.use("/api/contacts", contactsRouter);
+router.get("/verify/:verificationToken", ctrl.verifyEmail);
 
-app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
-});
+router.post(
+  "/verify",
+  validateBody(userSchemas.emailSchema),
+  ctrl.resendVerifyEmail
+);
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
+router.patch(
+  "/",
+  authenticate,
+  validateBody(userSchemas.updSubscriptionSchema),
+  ctrl.updateSubscription
+);
 
-module.exports = app;
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updAvatar);
+
+module.exports = router;
+
+

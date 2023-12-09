@@ -47,5 +47,5 @@ const schemas = {
   updFavoriteSchema,
 };
 
-module.exports = { Contact, schemas };
+module.exports = { Contact, schemas }
 
