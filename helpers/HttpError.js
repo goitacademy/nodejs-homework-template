@@ -1,5 +1,3 @@
-
-
 const errorMessageList = {
   400: 'Bad request',
   401: 'Unauthrized',

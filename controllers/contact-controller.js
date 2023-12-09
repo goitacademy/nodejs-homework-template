@@ -1,9 +1,7 @@
 
-import { HttpError } from '../helpers/index.js'
-// import { contactAddSchema, contactUpdateSchema } from '../models/contacts.js'
-// import contactUpdateFavoritesSchema from '../models/contacts.js';
-import Contact from '../models/contacts.js';
 import { ctrlWrapper } from '../decorators/index.js'
+import { HttpError } from '../helpers/index.js'
+import Contact from '../models/contacts.js';
 
 
 const getAll = async (req, res) => {
@@ -20,19 +18,11 @@ const getById = async (req, res) => {
 }
 
 const add = async (req, res) => {
-  // const { error } = contactAddSchema.validate(req.body);
-  // if (error) {
-  //   throw HttpError(400);
-  // }
   const result = await Contact.create(req.body);
   res.status(201).json(result);
 }
 
 const updateById = async (req, res) => {
-  // const { error } = contactUpdateSchema.validate(req.body);
-  // if (error) {
-  //   throw HttpError(400);
-  // }
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, req.body);
   if (error) {
@@ -42,10 +32,6 @@ const updateById = async (req, res) => {
 }
 
 const updateFavoriteById = async (req, res) => {
-  // const { error } = contactUpdateFavoritesSchema.validate(req.body);
-  // if (error) {
-  //   throw HttpError(400, { message: "missing field favorite" });
-  // }
   const { id } = req.params;
   const result = await Contact.findByIdAndUpdate(id, { favorite: req.body.favorite }, { new: true });
   if (!result) {
