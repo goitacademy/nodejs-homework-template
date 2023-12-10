@@ -5,6 +5,7 @@ import gravatar from 'gravatar';
 import fs from 'fs/promises';
 import path from 'path';
 import Jimp from 'jimp';
+//avatar branch
 
 import { HttpError } from '../helpers/index.js';
 import { ctrlWrapper } from '../decorators/index.js';
