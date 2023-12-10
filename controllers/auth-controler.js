@@ -4,7 +4,13 @@ import { userSignupSchema } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import gravatar from "gravatar";
+import fs from "fs/promises";
+import path from "path";
+import Jimp from "jimp";
 dotenv.config();
+
+const avatarsPath = path.resolve("public", "avatars"); // Створюємо абсолютний шлях куди будемо переміщати файл
 
 const { JWT_SECRET } = process.env;
 
@@ -21,11 +27,26 @@ const signup = async (req, res, next) => {
       throw HttpError(409, "Email in use");
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+
+    const newUser = await User.create({
+      ...req.body,
+      password: hashPassword,
+      avatarURL: gravatar.url(
+        req.body.email,
+        {
+          s: "200",
+          r: "g",
+          d: "wavatar",
+        },
+        false
+      ),
+    });
+
     res.status(201).json({
       user: {
         email: newUser.email,
         subscription: newUser.subscription,
+        avatarURL: newUser.avatarURL,
       },
     });
   } catch (error) {
@@ -59,6 +80,7 @@ const signin = async (req, res, next) => {
       user: {
         email: user.email,
         subscription: user.subscription,
+        avatarURL: user.avatarURL,
       },
     });
   } catch (error) {
@@ -68,7 +90,7 @@ const signin = async (req, res, next) => {
 
 const getCurrent = async (req, res) => {
   const { subscription, email } = req.user;
-  console.log("Hi");
+
   res.json({
     email,
     subscription,
@@ -80,9 +102,35 @@ const signout = async (req, res, next) => {
   await User.findByIdAndUpdate(_id, { token: "" });
   res.status(204).json();
 };
+
+const changeAvatar = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      next(HttpError(400, "Not found file"));
+    }
+    const { path: oldPath, filename } = req.file; // Деструктуризуємо req.file шлях до файлу і змінюємо назву oldPath тако деструктуризуємо імя файлу
+    const newPath = path.join(avatarsPath, filename);
+    await Jimp.read(oldPath).then((image) => {
+      // За допомогою бібліотеки Jimp обробляємо розміри фото 250 х 250
+      image.resize(250, 250).write(newPath);
+    });
+    // Обєднуємо шлях до папки куди перемістити з іменем файлу
+    const { _id } = req.user;
+    await fs.unlink(oldPath);
+    const avatarNewUrl = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL: avatarNewUrl });
+    res.status(200).json({
+      avatarURL: avatarNewUrl,
+    });
+  } catch (error) {
+    next();
+  }
+};
+
 export default {
   signup,
   signin,
   signout,
   getCurrent,
+  changeAvatar,
 };

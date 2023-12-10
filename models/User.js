@@ -23,6 +23,7 @@ const userSchema = new Schema(
       required: [true, "Email is required"],
     },
     token: String,
+    avatarURL: String,
   },
   { versionKey: false, timestamps: true }
 );
