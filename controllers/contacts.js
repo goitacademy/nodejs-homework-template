@@ -1,87 +1,67 @@
-const Contact = require("../models/contact.js");
-const { ctrlWrapper, HttpError } = require("../helpers");
+const Contacts = require("../models/contact");
+const { HttpError, ctrlWrapper } = require("../helpers/index");
 
-const listContacts = async (req, res, next) => {
-  const { _id: ownero } = req.user;
-  const owner = ownero.toString();
-  const favorite = req.query.favorite;
-  const { page = 1, limit = 20, ...query } = req.query;
+async function listContacts(req, res) {
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
-  if (favorite) {
-    await Contact.find({ favorite: true, owner }, { skip, limit });
-  }
-  console.log(owner);
-  const result = await Contact.find(
-    { owner, ...query },
-    "-createdAt -updatedAt",
-    { skip, limit }
-  );
-  res.json(result);
-};
-
-const getContactById = async (req, res, next) => {
-  const { contactId } = req.params;
-
-  const result = await Contact.findById(contactId);
-  if (!result) {
-    throw HttpError(404, "not found contacts");
-  }
-  res.status(200).json({ data: result });
-};
-const addContact = async (req, res, next) => {
-  console.log(req.body);
-  try {
-    const { _id: ownero } = req.user;
-
-    const owner = ownero.toString();
-    console.log(owner);
-    const result = await Contact.create({ ...req.body, owner });
-    res.status(201).json({ data: result });
-  } catch (error) {
-    next(error);
-  }
-};
-
-const removeContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
-  if (!result) {
-    HttpError(404, "Not found");
-  }
-  res.status(200).json({
-    message: "contact deleted",
+  const data = await Contacts.find({ owner }, "-createdAt -updatedAt", {
+    skip,
+    limit,
   });
-};
+  res.json(data);
+}
 
-const updateContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
-  if (!result) {
-    HttpError(404, "Not found");
+async function getContactById(req, res) {
+  const id = req.params.contactId;
+  const data = await Contacts.findOne({ _id: id });
+  if (!data) {
+    throw HttpError(404, "Not found!");
   }
-  res.status(200).json(result);
-};
+  res.json(data);
+}
 
-const updateStatusContact = async (req, res, next) => {
-  const { contactId } = req.params;
-  const { favorite } = req.body;
-  if (!favorite) {
-    res.status(400).json({ message: "missing field favorite" });
+async function addContact(req, res) {
+  const { _id: owner } = req.user;
+  const data = await Contacts.create({ ...req.body, owner });
+  res.json(data);
+}
+
+async function removeContact(req, res) {
+  const id = req.params.contactId;
+  const data = await Contacts.findByIdAndDelete(id);
+  console.log(data);
+  if (!data) {
+    throw HttpError(404, "Not found!");
   }
-  const result = await Contact.findByIdAndUpdate(contactId, { favorite });
-  if (!result) {
-    throw HttpError(404, "not found contacts");
+  res.json({ message: "contact deleted" });
+}
+
+async function updateContact(req, res) {
+  const id = req.params.contactId;
+  const data = await Contacts.findByIdAndUpdate(id, req.body, { new: true });
+  if (!data) {
+    throw HttpError(404, "Not found!");
   }
-  res.status(200).json({ data: result });
-};
+
+  res.json(data);
+}
+
+async function updateFavorite(req, res) {
+  const id = req.params.contactId;
+  const data = await Contacts.findByIdAndUpdate(id, req.body, { new: true });
+  if (!data) {
+    throw HttpError(404, "Not found!");
+  }
+
+  res.json(data);
+}
 
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
-  addContact: ctrlWrapper(addContact),
   getContactById: ctrlWrapper(getContactById),
   removeContact: ctrlWrapper(removeContact),
+  addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
-  updateStatusContact: ctrlWrapper(updateStatusContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
