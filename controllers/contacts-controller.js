@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-//const postersPath = path.resolve("public", "avatars");
+const postersPath = path.resolve("public", "avatars");
 
 const getListContacts = async (req, res) => {
     const { _id: owner } = req.user;
@@ -44,7 +44,7 @@ const addContact = async (req, res) => {
 
 const updateById = async (req, res) => {
     const { id } = req.params;
-     const { _id: owner } = req.user;
+    const { _id: owner } = req.user;
     const result = await Contact.findOneAndUpdate({ _id: id, owner}, req.body);
         if (!result) {
             throw HttpError(404, `Contact with id=${id} was not found`);

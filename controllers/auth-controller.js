@@ -6,8 +6,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import gravatar from "gravatar";
-
 import path from "path";
+import Jimp from "jimp";
 
 const avatarsPath = path.resolve("public", "avatars");
 
@@ -22,10 +22,10 @@ const signup = async (req, res) => {
     if (user) {
         throw HttpError(409, "This email is already exists");
     }
-    const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
     
     const url = gravatar.url(email)
+    const hashPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL: url });   
 
     res.status(201).json({
         user: {
@@ -66,23 +66,30 @@ const signin = async (req, res) => {
 
 
 const avatars = async (req, res) => {
-    const { _id: owner } = req.user;
+    const { _id, avatarURL } = req.user;
     const { path: oldPath, filename } = req.file;
     const newPath = path.join(avatarsPath, filename);
     await fs.rename(oldPath, newPath);
-    
-    const avatar = path.join("public", "avatars", filename);
-    //const result = await User.create({...req.body, avatar, owner});
+    const avatar = path.join("avatars", filename);
 
-    res.status(200).json({
+       Jimp.read(newPath)
+        .then((image) => {
+            image.resize(250, 250);
+            image.write(newPath);
+            console.log("successful")
+        })
+        .catch((err) => {
+            console.log(err)
+            HttpError(400, "Oops, something went wrong")
+        });
+
+    const result = await User.findByIdAndUpdate(_id, {avatarURL: avatar })
+     if (!result) {
+            throw HttpError(401, `Not authorized`);
+        }
+        res.status(200).json({
             avatarURL: avatar,
     })
-    /* 
-    
-    if (!user) {
-        throw HttpError(401, "Not authorized");
-    }
-    */
 };
 
 

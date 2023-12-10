@@ -2,28 +2,21 @@ import multer from "multer";
 import path from "path";
 import { HttpError } from "../helpers/index.js";
 import dotenv from "dotenv";
-import Jimp from "jimp";
+//import Jimp from "jimp";
 
 dotenv.config();
 
 const destination = path.resolve("temp");
+
 
 const storage = multer.diskStorage({
     destination,
     filename: (req, file, cb) => {
         const uniquePrefix = `${Date.now()}_${Math.round(Math.random() * 1E9)}`;
         const filename = `${uniquePrefix}_${file.originalname}`;
-        cb(null, filename);
+        cb(null, filename); 
     }
 });
-
-const fileJimp = Jimp.read("temp") 
-    .then((image) => {
-        image.resize(250, 250)
-    })
-    .catch((err) => {
-        HttpError(400, "Oops, something went wrong")
-    });
 
 
 const limits = {
@@ -39,11 +32,13 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
 };
 
+
+
 const upload = multer({
     storage,
     limits,
    // fileJimp,
-    //fileFilter,
+    fileFilter,
 });
 
 export default upload;
