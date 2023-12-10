@@ -1,25 +1,23 @@
 const express = require('express')
 
+const isValidId = require('../../helpers/isValidObjectId')
+
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const jsonParser = express.json()
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ContactController = require('../../controllers/contact')
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', ContactController.getContacts)  
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', isValidId, ContactController.getContactById)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', jsonParser, ContactController.createContact)
+
+router.delete('/:id', isValidId, jsonParser, ContactController.deleteContact)
+
+router.put('/:id', isValidId, ContactController.updateContact)
+
+router.patch('/:id', isValidId, jsonParser, ContactController.patchFavorites)
 
 module.exports = router
