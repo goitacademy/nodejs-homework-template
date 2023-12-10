@@ -4,6 +4,7 @@ const isValidId = require("./isValidId");
 const authenticate = require("./authenticate");
 const upload = require("./upload");
 const jimp = require("./jimp");
+const sendEmail = require("./sendEmail");
 
 module.exports = {
   validateBody,
@@ -12,4 +13,5 @@ module.exports = {
   authenticate,
   upload,
   jimp,
+  sendEmail,
 };

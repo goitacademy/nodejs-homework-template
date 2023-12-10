@@ -16,6 +16,13 @@ router.post(
   validateBody(schemas.registerSchema),
   ctrl.register
 );
+router.get("/verify/:verificationToken", ctrl.verify);
+router.post(
+  "/verify",
+  emptyBody("missing required field email"),
+  validateBody(schemas.emailSchema),
+  ctrl.resendVerifyEmail
+);
 router.post(
   "/login",
   emptyBody(),
