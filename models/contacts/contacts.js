@@ -48,7 +48,7 @@ const contactsSchema = new Schema(
       type: String,
       min: [6, "Must be at least 6, got {VALUE}"],
       max: [12, "Too long phone number"],
-      match: phoneRegex, //* formats (123) 456-7890
+      match: phoneRegex, 
       unique: true,
       required: [true, " Phone is required"],
     },
@@ -62,7 +62,7 @@ const contactsSchema = new Schema(
       ref: "user",
     },
   },
-  { versionKey: false, timestamps: true } //*налаштування схеми
+  { versionKey: false, timestamps: true } 
 );
 contactsSchema.post("save", (error, data, next) => {
   error.status = 400;

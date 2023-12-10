@@ -5,10 +5,12 @@ import {
   getCurrent,
   signout,
   updateSubscription,
+  updateAvatar
 } from "../../controllers/auth-controller.js";
 import authenticate from "../../middlewares/authenticate.js";
 import isEmptyBody from "../../middlewares/isEmptyBody.js";
-import { userSignupSchema,userSigninSchema } from "../../models/User.js";
+import { userSignupSchema, userSigninSchema } from "../../models/User.js";
+import upload from "../../middlewares/upload.js";
 const authRouter = express.Router()
 authRouter.post(
   "/register",
@@ -21,7 +23,13 @@ authRouter.post("/login", isEmptyBody, validateBody(userSigninSchema), signin);
 
 authRouter.get("/current", authenticate, getCurrent)
 
-authRouter.post("/logout", authenticate,signout);
+authRouter.post("/logout", authenticate, signout);
 
+authRouter.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatarURL"),
+  updateAvatar
+);
 authRouter.patch("/", isEmptyBody, authenticate, updateSubscription);
 export default  authRouter
