@@ -1,8 +1,8 @@
-const fs = require("fs/promises");
-const { uuid } = require("uuid").v4;
-const path = require("path");
+const fs = require('fs/promises');
 
-const contactsPath = path.join("models", "contacts.json");
+const path = require('path');
+
+const contactsPath = path.join('models', 'contacts.json');
 
 const listContacts = async () => {
   // Возвращает массив контактов.
@@ -16,13 +16,24 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   // Возвращает объект контакта с таким id. Возвращает null, если объект с таким id не найден.
   try {
-    console.log(contactId);
     const contacts = await listContacts();
-    const contact = contacts.filter((contact) => contact.id === contactId);
-    if (contact.length > 0) return contact;
+    const contact = contacts.filter((item) => item.id === contactId);
+    if (contact.length > 0) return contact[0];
     return null;
   } catch (err) {
     console.log(err);
+  }
+};
+
+const addContact = async (body) => {
+  // Возвращает объект добавленного контакта.
+  try {
+    const contacts = await listContacts();
+    contacts.push(body);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    return body;
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -30,11 +41,9 @@ const removeContact = async (contactId) => {
   // Возвращает объект удаленного контакта. Возвращает null, если объект с таким id не найден.
   try {
     const contacts = await listContacts();
-    const contact = getContactById(contactId);
+    const contact = await getContactById(contactId);
     if (contact) {
-      const filteredContacts = contacts.filter(
-        (contact) => contact.id !== contactId
-      );
+      const filteredContacts = contacts.filter((item) => item.id !== contactId);
       await fs.writeFile(contactsPath, JSON.stringify(filteredContacts));
     }
     return contact;
@@ -43,21 +52,25 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async ({ id, name, email, phone }) => {
-  // Возвращает объект добавленного контакта.
+const updateContact = async (contactId, body) => {
+  // Возвращает объект измененного контакта.
   try {
-    const id = uuid();
-    const newContact = { id, name, email, phone };
     const contacts = await listContacts();
-    contacts.push(newContact);
-    await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    return getContactById(id);
+    const contact = await getContactById(contactId);
+    if (!contact) return null;
+    const updatedContact = { ...contact, ...body };
+    const newContacts = contacts.map((item) => {
+      if (item.id === contactId) {
+        item = updatedContact;
+      }
+      return item;
+    });
+    await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+    return updatedContact;
   } catch (error) {
     console.log(error);
   }
 };
-
-const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
