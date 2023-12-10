@@ -16,7 +16,7 @@ const allContacts = async (req, res, next) => {
     skip,
     limit,
   }).populate("owner", "email");
-  res.json({ result, total: 4 });
+  res.json(result);
 };
 
 const getContactById = async (req, res, next) => {
