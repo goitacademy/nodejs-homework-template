@@ -7,19 +7,19 @@ const {
   update,
 } = require("../../controllers/contacts");
 
-const validateBody = require("../../middleware/validateBody");
+const { validateBody } = require("../../middleware/validateBody");
 const { schema } = require("../../schema/schema");
 
 const router = express.Router();
 
-router.get("/", getAllContacts());
+router.get("/", getAllContacts);
 
-router.get("/:contactId", getById());
+router.get("/:id", getById);
 
-router.post("/", validateBody(schema), add());
+router.post("/", validateBody(schema), add);
 
-router.delete("/:contactId", deleteById());
+router.delete("/:id", deleteById);
 
-router.put("/:contactId", validateBody(schema), update());
+router.put("/:id", validateBody(schema), update);
 
 module.exports = router;
