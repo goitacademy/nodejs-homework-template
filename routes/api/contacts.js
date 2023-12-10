@@ -10,7 +10,9 @@ router.get("/", contactsController.listContacts);
 router.get("/:id", isValidId, contactsController.getContactById);
 
 router.post(
-  "/",upload.single("avatar"),  isEmptyBody,
+  "/",
+  upload.single("avatar"),
+  isEmptyBody,
   validateBody(contactAddSchema),
   contactsController.addContact
 );
