@@ -1,5 +1,4 @@
-const httpError = require("../helpers/httpError");
-const tryCatch = require("../helpers/tryCatch");
+const { httpError, tryCatch } = require("../helpers");
 
 const {
   listContacts,
