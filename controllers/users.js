@@ -52,9 +52,9 @@ res.json({
 }
 
 const getCurrent = async (req, res, next) =>{
-    try {
         const user = req.user;
-        if (!user) {
+        const {token}  = req.params;
+        if (user.token !== token) {
             throw HttpError(401, "Not authorized");
         }
 
@@ -62,9 +62,7 @@ const getCurrent = async (req, res, next) =>{
             email: user.email,
             subscription: user.subscription
         })
-    } catch (error) {
-        next(error);
-    }
+   
 }
 
 // const logout = async (req, res, _next) => {
@@ -74,8 +72,8 @@ const getCurrent = async (req, res, next) =>{
 //   };
 
 const logout = async (req, res) => {
-    const{_id} = req.user;
-   await User.findByIdAndUpdate(_id, {token:" "});
+    const{id} = req.user;
+   await User.findByIdAndUpdate(id, {token:" "});
      
     res.status(204).json(
         {message: 'Logout success'}
