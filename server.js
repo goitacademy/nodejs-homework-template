@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import app from "./app.js";
 import { DB_HOST } from "./config.js";
 
-
+const { DB_HOST } = process.env;
 mongoose
   .connect(DB_HOST)
   .then(() => {
