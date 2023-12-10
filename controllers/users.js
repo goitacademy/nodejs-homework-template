@@ -33,7 +33,7 @@ const login = async (req, res) => {
 }
 const passwordCompare = await bcrypt.compare(password, user.password);
   
-if(!user || !passwordCompare){
+if(!passwordCompare){
     throw HttpError (401, "Email or password is wrong");
 }
 
@@ -51,15 +51,27 @@ res.json({
 })
 }
 
-const getCurrent = async (req, res) =>{
-    const {email, name, subscription} = req.user;
+const getCurrent = async (req, res, next) =>{
+    try {
+        const user = req.user;
+        if (!user) {
+            throw HttpError(401, "Not authorized");
+        }
 
-    res.json({
-        email,
-        name,
-        subscription,
-    })
+        res.json({
+            email: user.email,
+            subscription: user.subscription
+        })
+    } catch (error) {
+        next(error);
+    }
 }
+
+// const logout = async (req, res, _next) => {
+//     const userId = req.user.id;
+//     await User.updateToken(userId, null);
+//     return res.status(HttpCode.NO_CONTENT).json();
+//   };
 
 const logout = async (req, res) => {
     const{_id} = req.user;
