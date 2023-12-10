@@ -7,6 +7,7 @@ import {
   userRegisterSchema,
   userLoginSchema,
   updateSubsctiptionSchema,
+  userEmailSchema,
 } from '../../models/auth-users.js';
 
 authRouter.post(
@@ -14,6 +15,15 @@ authRouter.post(
   isEmptyBody,
   validateBody(userRegisterSchema),
   authControllers.register
+);
+
+authRouter.get('/verify/:verificationToken', authControllers.verify);
+
+authRouter.post(
+  '/verify',
+  isEmptyBody,
+  validateBody(userEmailSchema),
+  authControllers.resendVerify
 );
 
 authRouter.get('/current', authenticate, authControllers.current);
