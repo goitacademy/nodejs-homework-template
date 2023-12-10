@@ -5,7 +5,7 @@ const remove = async (req, res, next) => {
         const { contactId } = req.params;
         const result = await contactsOperations.removeContact(contactId);
         if (!result) {
-            throw createError(404, `Contact with id=${contacctId} not found`);
+            throw createError(404, `Contact with id=${contactId} not found`);
         }
         res.json({
             status: 'success',
