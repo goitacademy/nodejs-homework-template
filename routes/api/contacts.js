@@ -5,7 +5,6 @@ import isEmptyBody from "../../middlewares/isEmptyBody.js";
 
 export const router = express.Router();
 
-
 router.get("/", contactsController.getAll);
 
 router.get("/:contactId", contactsController.getById);
