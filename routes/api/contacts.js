@@ -8,7 +8,7 @@ export const router = express.Router();
 
 router.get("/", contactsController.getAll);
 
-router.get("/:contactId", contactsController.getById);
+// router.get("/:contactId", contactsController.getById);
 
 router.post(
   "/",
@@ -17,11 +17,11 @@ router.post(
   contactsController.add
 );
 
-router.delete("/:contactId", contactsController.removeById);
+// router.delete("/:contactId", contactsController.removeById);
 
-router.put(
-  "/:contactId",
-  isEmptyBody,
-  validateBody(contactsUpdateSchema),
-  contactsController.updateById
-);
+// router.put(
+//   "/:contactId",
+//   isEmptyBody,
+//   validateBody(contactsUpdateSchema),
+//   contactsController.updateById
+// );
