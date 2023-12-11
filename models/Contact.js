@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import { handleSaveError } from "./hooks.js";
+import { addUpdateSetting, handleSaveError } from "./hooks.js";
 
 const emailRegExp =
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
@@ -29,11 +29,8 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleSaveError);
 //.post не метод запиту, а вказівка що потрібно виконати дію після
 
-contactSchema.pre("findOneAndUpdate", function(next) {
-  this.options.new= true;
-  this.options.runValidators = true;
-  next()
-})
+contactSchema.pre("findOneAndUpdate", addUpdateSetting)
+contactSchema.post("findOneAndUpdate", handleSaveError)
 
 export const contactsAddSchema = Joi.object({
   name: Joi.string().required(),

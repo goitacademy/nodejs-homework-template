@@ -22,7 +22,7 @@ router.post(
   contactsController.add
 );
 
-// router.delete("/:contactId", isValidId, contactsController.removeById);
+router.delete("/:contactId", isValidId, contactsController.removeById);
 
 router.put(
   "/:contactId",
