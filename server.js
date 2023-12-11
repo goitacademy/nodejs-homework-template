@@ -3,6 +3,7 @@ const mongoose = require("mongoose");                    // імпортуємо
 const app = require("./app");
 
 const { DB_HOST, PORT } = process.env;                          // беремо секретну змінну (строку підключення до бд) зі змінних оточення
+console.log("dddddddddd");
 console.log(process.env.DB_HOST);
 mongoose.set('strictQuery', true);                       // підключаємося
 
@@ -13,7 +14,7 @@ mongoose
     console.log('все добре');
     app.listen(PORT, () => {
       console.log("Database connection successful");
-    });                                    // запускаємо сервер
+    });                                    // запускаємо сервер на порту PORT
     
   })
   .catch((error) => { 

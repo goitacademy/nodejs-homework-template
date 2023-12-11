@@ -1,6 +1,6 @@
 const Contact = require("../models/contact");
 
-// const { HttpError } = require("../helpers/HttpError"); // імпортуємо помилку для прокидування
+const { HttpError, ctrlWrapper} = require("../helpers"); // імпортуємо помилку для прокидування
 
 
 // ф-ції, які підключаються до необхідних ф-цій з models і повертають необхідні дані:
@@ -9,7 +9,8 @@ const Contact = require("../models/contact");
 const getAll = async (req, res, next) => {
   try {
     console.log('сюда зашли');
-    const result = await Contact.find();
+    const result = await Contact.find({});
+    console.log('результат');
     res.status(200).json(result);
   } catch (error) {
     next(error);

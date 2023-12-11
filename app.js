@@ -13,9 +13,9 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));                                       // викликаємо morgan
 app.use(cors());                                                      // всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)
-app.use(express.json());                                              // парсер для отримання данних у форматі json
+app.use(express.json());                                              // парсер (мідлвара) для отримання данних у форматі json
 
-app.use("/api/contacts", contactsRouter)
+app.use('/api/contacts', contactsRouter)
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
