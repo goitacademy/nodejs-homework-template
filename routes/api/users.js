@@ -4,9 +4,9 @@ const {
   loginUser,
   logoutUser,
   getCurrentUser,
+  updateAvatar,
 } = require("../../controllers/users");
 const { checkToken } = require("../../middlewares/index");
-
 const { bodyValidator } = require("../../decorators/bodyValidator");
 const {
   userRegisterSchema,
@@ -31,5 +31,5 @@ router.post(
 router.post("/logout", checkToken, controlWrapper(logoutUser));
 
 router.get("/current", checkToken, controlWrapper(getCurrentUser));
-
+router.patch("/avatars", checkToken, controlWrapper(updateAvatar));
 module.exports = router;
