@@ -1,17 +1,47 @@
-import contactService from "../../models/contacts.js";
 import contactController from "../../controllers/contact-controller.js";
 import express from "express";
-import { isEmptyBody } from "../../middlewares/index.js";
+import { isEmptyBody, isEmptyFavoriteBody, isValid } from "../../middlewares/index.js";
+import { validateBody } from "../../decorators/index.js";
+import {
+  contactAddSchema,
+  updateScheme,
+  movieFavoriteScheme,
+} from "../../models/Contact.js";
+
 const router = express.Router();
 
 router.get("/", contactController.getAllContacts);
+router.get("/:contactId", isValid, contactController.getByID);
+router.post(
+  "/",
+  isEmptyBody,
+  validateBody(contactAddSchema),
+  contactController.addNewContact
+);
 
-router.get("/:contactId", contactController.getByID);
 
-router.post("/", isEmptyBody, contactController.addNewContact);
+router.put(
+  "/:contactId",
+  isValid,
+  isEmptyBody,
+  validateBody(updateScheme),
+  contactController.updateById
+);
 
-router.delete("/:contactId", contactController.deleteById);
 
-router.put("/:contactId", isEmptyBody, contactController.updateById);
+router.patch(
+  "/:contactId/favorite",
+  isValid,
+  isEmptyFavoriteBody,
+  validateBody(movieFavoriteScheme),
+  contactController.updateStatusContact
+);
+
+router.delete("/:contactId", isValid, contactController.deleteById);
 
 export default router;
+
+
+
+
+
