@@ -1,16 +1,22 @@
+
 const express = require('express');
+const isValidId = require('../../middlewares/isValidId'); 
 
 const router = express.Router();
 const Joi = require('joi');
 
-const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../../models/contacts');
+const { listContacts, getBuId, addContact, removeContact, updateContact, updateStatusContact } = require('../../models/contacts');
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(), 
 
 })
+
+router.use('/:contactId', isValidId);
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -24,7 +30,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-    const contact = await getContactById(req.params.id);
+    const contact = await getBuId(req.params.id);
     if (contact) {
     res.status(200).json(contact);
 
@@ -78,4 +84,22 @@ router.put('/:contactId', async (req, res, next) => {
 
 })
 
-module.exports = router
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const { favorite } = req.body;
+  if (favorite === undefined) {
+    return res.status(400).json({ message: 'missing field favorite' });
+  }
+  try {
+    const updatedContact = await updateStatusContact(contactId, {favorite});
+    if (updatedContact) {
+    return res.status(200).json(updatedContact)
+    } else {
+      return res.status(404).json({ message: 'Not found' });
+  }
+  } catch (error) {
+    next(error);
+  }
+})
+
+module.exports = router;
