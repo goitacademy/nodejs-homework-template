@@ -23,7 +23,7 @@ router.get('/:contactId', async (req, res, next) => {
     }
     res.json(result);
   } catch (error) {
-    next({ message: 'Not found' });
+    res.json({ message: 'Not found' });
   }
 });
 
@@ -32,7 +32,7 @@ router.post('/', validateFields, async (req, res) => {
     const results = await contacts.addContact(req.body);
     res.status(201).json(results);
   } catch (error) {
-    res.sendStatus(400);
+    res.status(400).json({ message: 'missing require name field' });
   }
 });
 
