@@ -3,7 +3,6 @@ import fs from "fs/promises";
 import path from "path";
 
 const contactsPath = path.resolve("models", "contacts.json");
-console.log(contactsPath);
 
 const contactsService = (contacts) =>
   fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
@@ -56,9 +55,22 @@ async function addContact(name, email, phone) {
   }
 }
 
+async function updateById(id, data) {
+  const contacts = await listContacts();
+
+  const index = contacts.findIndex((contact) => contact.id === id);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = { id, ...data };
+  await contactsService(contacts);
+  return contacts[index];
+}
+
 export default {
   listContacts,
   getContactById,
   removeContact,
   addContact,
+  updateById,
 };
