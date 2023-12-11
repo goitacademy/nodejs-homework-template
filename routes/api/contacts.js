@@ -10,7 +10,7 @@ router.get('/', async (req, res, next) => {
     // res.status(200).json({ msg: 'Success', data });
     return res.status(200).json(data);
   } catch (error) {
-    next(error.message);
+    next(error);
   }
 });
 
@@ -19,35 +19,41 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
-      throw new Error(404);
+      res.status(404).json({ message: 'Not found' });
     }
     res.status(200).json(result);
   } catch (error) {
-    res.json({ message: 'Not found' });
+    next(error);
   }
 });
 
-router.post('/', validateFields, async (req, res) => {
+router.post('/', validateFields, async (req, res, next) => {
   try {
     const results = await contacts.addContact(req.body);
+
     res.status(201).json(results);
   } catch (error) {
-    res.status(400).json({ message: 'missing require name field' });
+    next(error);
   }
 });
 
-router.delete('/:contactId', async (req, res) => {
+router.delete('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
+
     const contact = await contacts.removeContact(contactId);
+
+    if (!contact) {
+      res.status(404).json({ message: 'Not found' });
+    }
 
     res.status(200).json({ message: 'contact deleted' });
   } catch (error) {
-    res.status(404).json({ message: 'Not found' });
+    next(error);
   }
 });
 
-router.put('/:contactId', validateFields, async (req, res) => {
+router.put('/:contactId', validateFields, async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
@@ -59,11 +65,12 @@ router.put('/:contactId', validateFields, async (req, res) => {
     });
 
     if (!updatedContact) {
-      return res.status(400).json({ message: 'missing fields' });
+      return res.status(404).json({ message: 'Not found' });
     }
+
     res.status(200).json(updatedContact);
   } catch (error) {
-    res.status(404).json({ message: 'Not found' });
+    next(error);
   }
 });
 
