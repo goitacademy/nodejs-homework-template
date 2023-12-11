@@ -29,13 +29,23 @@ const contactSchema = new Schema ({
     favorite : Joi.boolean()
   })
 
+  const updateSchema = Joi.object({
+    name: Joi.string().required().min(3).max(30),
+    email: Joi.string().required().email(),
+    phone: Joi.string().required().min(5).max(15),
+    favorite: Joi.boolean(),
+  })
+    .min(1)
+    .messages({ 'object.min': 'missing fields' });
+
   const updateFavoriteSchema = Joi.object({
     favorite : Joi.boolean().required().messages({ "any.required": "missing field favorite" }),
   })
 
   const schemas = {
     addSchema,
-    updateFavoriteSchema
+    updateFavoriteSchema,
+    updateSchema
   }
 const Contact = model('contact', contactSchema);
 
