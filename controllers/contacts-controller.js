@@ -1,4 +1,3 @@
-// import * as contactService from "../models/index.js"; =======удален=========
 import Contact from "../models/Contact.js";
 
 import { ctrlWrapper } from "../decorators/index.js";
@@ -23,7 +22,6 @@ const getContactById = async (req, res, next) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
   const result = await Contact.findOne({ _id: id, owner });
-  // const result = await Contact.findById(id);
   if (!result) {
     throw HttpError(404, `Not found`);
   }
@@ -33,7 +31,11 @@ const getContactById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   const { _id: owner } = req.user;
-  const result = await Contact.create({ ...req.body, owner });
+  const result = await Contact.create({
+    ...req.body,
+    // poster,
+    owner,
+  });
   res.status(201).json(result);
 };
 

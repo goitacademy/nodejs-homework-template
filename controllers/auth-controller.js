@@ -2,6 +2,14 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config.js";
+import Jimp from "jimp";
+
+import gravatar from "gravatar";
+
+import fs from "fs/promises";
+import path from "path";
+
+const avatarPath = path.resolve("public", "avatars");
 
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
@@ -16,9 +24,19 @@ const signup = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarUrl = gravatar.url(email);
+
+  const newUser = await User.create({
+    ...req.body,
+    avatarUrl,
+    password: hashPassword,
+  });
   res.status(201).json({
-    user: { email: newUser.email, subscription: newUser.subscription },
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+      avatarUrl: newUser.avatarUrl,
+    },
   });
 };
 
@@ -62,7 +80,26 @@ const signout = async (req, res) => {
   });
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newPath = path.join(avatarPath, filename);
+
+  await fs.rename(oldPath, newPath);
+  const avatarUrl = path.join("public/avatars", filename);
+
+  Jimp.read(avatarUrl, (error, filename) => {
+    if (error) throw error;
+    filename.resize(250, 250).write(avatarUrl);
+  });
+  await User.findByIdAndUpdate(_id, { avatarUrl });
+  res.json({
+    avatarUrl,
+  });
+};
+
 export default {
+  updateAvatar: ctrlWrapper(updateAvatar),
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
