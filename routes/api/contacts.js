@@ -32,10 +32,4 @@ router.put(
   contactsController.updateById
 );
 
-// contactsRouter.patch(
-//   "/:contactId/favorites",
-//   isValidID,
-//   isEmptyBody,
-//   validateBody(updateFavoriteSchema),
-//   ctrl.addToFavorites
-// );
+router.patch("/:contactId/favorite", isEmptyBody, isValidId, contactsController.updateFavorites);

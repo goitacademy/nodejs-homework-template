@@ -41,19 +41,18 @@ const updateById = async (req, res, next) => {
   res.json(result);
 };
 
-// const addToFavorites = wrapperAsync(async (req, res) => {
-//   const { contactId } = req.params;
-//   const { body } = req;
-//   const result = await updateContact(contactId, body);
-//   if (!result) {
-//     return res.status(400).json({ message: "Missing field favorite" });
-//   }
-//   if (result) {
-//     return res.status(200).json(result);
-//   } else {
-//     return res.status(404).json({ message: "Not found" });
-//   }
-// });
+const updateFavorites = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await updateContact(contactId, req.body);
+  if (!result) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  if (result) {
+    return res.status(200).json(result);
+  } else {
+    return res.status(404).json({ message: "Not found" });
+  }
+};
 
 export default {
   getAll: ctrlWrapper(getAll),
@@ -61,4 +60,5 @@ export default {
   add: ctrlWrapper(add),
   removeById: ctrlWrapper(removeById),
   updateById: ctrlWrapper(updateById),
+  updateFavorites: ctrlWrapper(updateFavorites)
 };
