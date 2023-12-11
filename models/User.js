@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 import Joi from "joi";
-import { handleSaveError } from './hooks.js'
+import { handleSaveError } from "./hooks.js";
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 const userSchema = new Schema(
   {
@@ -28,6 +28,10 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
+    avatarURL: {
+      type: String,
+      required: [true, "set avatarURL"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -52,10 +56,9 @@ export const userSignupSchema = Joi.object({
 });
 
 export const userSigninSchema = Joi.object({
-    email: Joi.string().pattern(emailRegexp).required(),
-    password:Joi.string().min(6).required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
 
-})
-
-const User = model("user", userSchema)
-export default User
+const User = model("user", userSchema);
+export default User;

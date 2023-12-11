@@ -1,5 +1,5 @@
 
-import { Schema, model } from 'mongoose'
+import { Schema, model } from "mongoose";
 
 import Joi from "joi";
 
@@ -14,7 +14,6 @@ export const contactAddSchema = Joi.object({
     "any.required": "Missing required phone field",
   }),
   favorite: Joi.boolean(),
-  
 });
 export const contactUpdateSchema = Joi.object({
   name: Joi.string(),
@@ -48,7 +47,7 @@ const contactsSchema = new Schema(
       type: String,
       min: [6, "Must be at least 6, got {VALUE}"],
       max: [12, "Too long phone number"],
-      match: phoneRegex, //* formats (123) 456-7890
+      match: phoneRegex,
       unique: true,
       required: [true, " Phone is required"],
     },
@@ -62,17 +61,14 @@ const contactsSchema = new Schema(
       ref: "user",
     },
   },
-  { versionKey: false, timestamps: true } //*налаштування схеми
+  { versionKey: false, timestamps: true }
 );
 contactsSchema.post("save", (error, data, next) => {
   error.status = 400;
   next();
-}
-)
+});
 contactsSchema.post("findOneAndUpdate", (error, data, next) => {
   error.status = 400;
   next();
-}
-)
+});
 export const Contact = model("contact", contactsSchema);
-
