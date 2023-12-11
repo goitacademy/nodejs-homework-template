@@ -22,6 +22,14 @@ const userSchema = new Schema(
       unique: true, // Вказуємо що поле має бути унікальне (e-maill)
       required: [true, "Email is required"],
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
     token: String,
     avatarURL: String,
   },
@@ -51,4 +59,10 @@ export const userSigninSchema = Joi.object({
     "any.required": "missing required email field",
   }),
   password: Joi.string().min(6).required(),
+});
+
+export const userVerifySchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    "any.required": "missing required email field",
+  }),
 });

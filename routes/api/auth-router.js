@@ -5,6 +5,8 @@ import { authenticate, isEmptyBody, upload } from "../../middlewares/index.js";
 const authRouter = express.Router(); // Створюємо обєкт Router куди будуть записані маршрути
 
 authRouter.post("/register", isEmptyBody, authController.signup);
+authRouter.get("/verify/:verificationToken", authController.verify);
+authRouter.post("/verify", isEmptyBody, authController.resendVerify);
 authRouter.post("/login", isEmptyBody, authController.signin);
 authRouter.patch(
   "/avatars",
