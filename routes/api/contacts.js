@@ -9,9 +9,15 @@ const { HttpError } = require("../../helpers");
 const router = express.Router();
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required name field" }),
+  email: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required email field" }),
+  phone: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required phone field" }),
 });
 
 router.get("/", async (req, res, next) => {
@@ -49,35 +55,33 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-
-
 router.put("/:contactId", async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      throw HttpError(400, "missing fields");
+      throw HttpError(400, "missing required name field");
     }
     const { error } = addSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
     const { contactId } = req.params;
-    
+
     const result = await contacts.updateContact(contactId, req.body);
-      if (!result) {
-        throw HttpError(404, "Not found");
-      }
-      res.json(result);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
   } catch (error) {
     next(error);
   }
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete("/:contactId", async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await contacts.removeContact(contactId);
-     if (!result) {
-       throw HttpError(404, "Not found");
+    const { id } = req.params;
+    const result = await contacts.removeContact(id);
+    if (!result) {
+      throw HttpError(404, "Not found");
     }
     res.json({
       message: "contact deleted",
@@ -85,6 +89,6 @@ router.delete('/:contactId', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-})
+});
 
 module.exports = router;
