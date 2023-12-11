@@ -17,7 +17,7 @@ const getAll = async (req, res) => {
 // };
 
 const add = async (req, res, next) => {
-  const result = await addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 
