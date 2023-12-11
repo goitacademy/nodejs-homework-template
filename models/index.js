@@ -53,7 +53,6 @@ const updateContact = async (contactId, body) => {
   if (contactsIndex === -1) {
     return null; // Contact not found
   }
-  // const updatedContact = { ...allContacts[contactsIndex], ...body };
   allContacts[contactsIndex] = { ...allContacts[contactsIndex], ...body };
 
   await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));

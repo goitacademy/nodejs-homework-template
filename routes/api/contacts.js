@@ -7,7 +7,6 @@ const validateFields = require('../../middleware');
 router.get('/', async (req, res, next) => {
   try {
     const data = await contacts.listContacts();
-    // res.status(200).json({ msg: 'Success', data });
     return res.status(200).json(data);
   } catch (error) {
     next(error);
