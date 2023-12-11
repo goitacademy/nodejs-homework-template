@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const contacts = require('../../models/contacts');
+const contacts = require('../../models');
 const validateFields = require('../../middleware');
 
 router.get('/', async (req, res, next) => {
@@ -30,7 +30,9 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', validateFields, async (req, res, next) => {
   try {
     const results = await contacts.addContact(req.body);
-
+    if (!results) {
+      res.status(400).json({ message: 'missing required name field' });
+    }
     res.status(201).json(results);
   } catch (error) {
     next(error);
