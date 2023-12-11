@@ -14,7 +14,6 @@ authRouter.post(
   validateBody(userSignupShema),
   authController.signup
 );
-// post - для реєстрації
 
 authRouter.post(
   "/login",
@@ -22,12 +21,6 @@ authRouter.post(
   validateBody(userSigninShema),
   authController.signin
 );
-// post - для реєстрації)
 
 authRouter.get("/current", authenticate, authController.getCurrent);
 authRouter.post("/logout", authenticate, authController.signout);
-
-// 1. Не працює карент коли не валідний токен
-// 2. Не парвильний запит, є аус і юзер
-// 3. Не має лог аут
-// 4. Спробувати додати контакти, коли ти залогінений

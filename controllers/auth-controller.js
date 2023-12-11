@@ -8,12 +8,7 @@ import { get } from "http";
 
 const { JWT_SECRET } = process.env;
 
-// провірити маршрути
-// тут логыка реэстрацыъ користувача, метод
-// Створення нового завдання. Викликаємо у моделі метод create
-
 const signup = async (req, res) => {
-  // провірка чи такий користувач вже існує по пошті
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (user) {
@@ -31,9 +26,6 @@ const signup = async (req, res) => {
   });
 };
 
-// це залишити на кінець, щоб спочатку запрацював регіст
-//а потім вже це, щоб перевірити токен
-
 const signin = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -45,7 +37,6 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
-  ////////////// do token ////////
   const payload = {
     id: user._id,
   };
@@ -81,17 +72,3 @@ export default {
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
 };
-
-///////////////////////////////// done //////////////////////
-// папка hooks
-
-// export const saveError = (error, data, next) => {
-//   const { name, code } = error;
-//   error.status = name === "MongoServerError" && code === 11000 ? 409 : 400;
-//   error.status = 400;
-//   next();
-// };
-
-//(name === "MongoServerError" && code === 11000) - перевіряє, чи пошта другий раз юзається - 1 відео 37хв
-//  але фронтенду треба норм повідомлення - що такий емейл вже занятий, тому це треба прописати в
-//  контролері сайн ап
