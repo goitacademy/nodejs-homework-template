@@ -1,10 +1,12 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
+
 const { validateBody } = require("../../middlewares/index");
 const schemas = require("../../schemas/contacts");
+
 const ctrl = require("../../controllers/contacts");
 
-router.get("/", ctrl.listContacts);
+router.get("/", ctrl.getAllContacts);
 
 router.get("/:contactId", ctrl.getContactById);
 
