@@ -1,9 +1,17 @@
-const app = require('./app');
-const setupMongoConnection = require('./common/utils/setupMongoConnection');
+const mongoose = require('mongoose');
 
-const PORT = 3000;
-setupMongoConnection().then(() =>
-  app.listen(PORT, async () => {
-    console.log(`Server is running on port ${PORT}`);
-  }),
-);
+const app = require('./app');
+
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.set('strictQuery', true);
+
+mongoose
+	.connect(DB_HOST)
+	.then(() => {
+		app.listen(PORT);
+	})
+	.catch((error) => {
+		console.log(error.message);
+		process.exit(1);
+	});
