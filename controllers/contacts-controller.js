@@ -1,4 +1,4 @@
-import Contact from '../models/Contact.js'
+import Contact from "../models/Contact.js";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
@@ -7,14 +7,15 @@ const getAll = async (req, res) => {
   res.json(result);
 };
 
-// const getById = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const result = await getContactById(contactId);
-//   if (!result) {
-//     HttpError(404, `Not found`);
-//   }
-//   res.json(result);
-// };
+const getById = async (req, res, next) => {
+  const { contactId } = req.params;
+  // const result = await Contact.findOne({_id: contactId});
+  const result = await Contact.findById(contactId);
+  if (!result) {
+    HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
 
 const add = async (req, res, next) => {
   const result = await Contact.create(req.body);
@@ -30,20 +31,34 @@ const add = async (req, res, next) => {
 //   res.status(200).json({ message: "contact deleted" });
 // };
 
-// const updateById = async (req, res, next) => {
+const updateById = async (req, res, next) => {
+  const { contactId } = req.params;
+  console.log(contactId)
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  if (!result) {
+    throw HttpError(404, `Not found`);
+  }
+  res.json(result);
+};
+
+// const addToFavorites = wrapperAsync(async (req, res) => {
 //   const { contactId } = req.params;
-//   const result = await updateContactById(contactId, req.body);
+//   const { body } = req;
+//   const result = await updateContact(contactId, body);
 //   if (!result) {
-//     throw HttpError(404, `Not found`);
+//     return res.status(400).json({ message: "Missing field favorite" });
 //   }
-//   res.json(result);
-// };
+//   if (result) {
+//     return res.status(200).json(result);
+//   } else {
+//     return res.status(404).json({ message: "Not found" });
+//   }
+// });
 
 export default {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
+  getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   // removeById: ctrlWrapper(removeById),
-  // updateById: ctrlWrapper(updateById),
+  updateById: ctrlWrapper(updateById),
 };
-

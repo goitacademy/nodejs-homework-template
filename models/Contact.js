@@ -29,14 +29,20 @@ const contactSchema = new Schema(
 contactSchema.post("save", handleSaveError);
 //.post не метод запиту, а вказівка що потрібно виконати дію після
 
-const contactsAddSchema = Joi.object({
+contactSchema.pre("findOneAndUpdate", function(next) {
+  this.options.new= true;
+  this.options.runValidators = true;
+  next()
+})
+
+export const contactsAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required().pattern(emailRegExp),
   phone: Joi.string().required(),
   favorite: Joi.boolean(),
 });
 
-const contactsUpdateSchema = Joi.object({
+export const contactsUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().pattern(emailRegExp),
   phone: Joi.string(),
