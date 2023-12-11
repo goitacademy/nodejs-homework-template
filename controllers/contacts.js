@@ -4,7 +4,6 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const contacts = await Contact.find({}, "-createdAt -updatedAt");
-  console.log(req.params);
   res.json(contacts);
 };
 
