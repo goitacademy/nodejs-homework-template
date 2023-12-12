@@ -32,18 +32,21 @@ async function addContact(body) {
     id: nanoid(),
     ...body,
   };
-  const newArray = [newContact, ...allContacts];
-  await fs.writeFile(contactsPath, JSON.stringify(newArray));
+  allContacts.push(newContact);
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
   return newContact;
 }
 
 async function updateContact(contactId, body) {
   const allContacts = await listContacts();
-  const index = allContacts.findIndex((contact) => contact.id === contactId);
-  if (index === -1) return null;
-  allContacts[index] = { id: contactId, ...body };
-  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
-  return allContacts[index];
+  const contactIdSrt = String(contactId);
+  const contactIdx = allContacts.findIndex(
+    (contact) => contact.id === contactIdSrt
+  );
+  if (contactIdx === -1) return null;
+  allContacts[contactIdx] = { id: contactId, ...body };
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+  return allContacts[contactIdx];
 }
 
 module.exports = {
