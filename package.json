@@ -2,17 +2,29 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.10",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nanoid": "^5.0.3",
+    "nodemailer": "^6.9.7"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -22,5 +34,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Realice un fork de este repositorio para realizar las tareas (2-6).El fork creará un repositorio en su",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yaroslav-Hryshenko/nodejs-hw-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yaroslav-Hryshenko/nodejs-hw-rest-api/issues"
+  },
+  "homepage": "https://github.com/Yaroslav-Hryshenko/nodejs-hw-rest-api#readme"
 }

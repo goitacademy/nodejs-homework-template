@@ -1,19 +1,51 @@
-// const fs = require('fs/promises')
+import Joi from "joi";
+import { Schema, model } from "mongoose";
+import { hooks } from "../helpers/index.js";
 
-const listContacts = async () => {}
+const emailRegexp =
+  /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 
-const getContactById = async (contactId) => {}
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      match: emailRegexp,
+    },
+    phone: String,
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false }
+);
 
-const removeContact = async (contactId) => {}
+export const contactCheck = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required().pattern(emailRegexp),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
+});
 
-const addContact = async (body) => {}
+export const favoriteValid = Joi.object({
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": "missing field favorite" }),
+});
 
-const updateContact = async (contactId, body) => {}
+contactsSchema.post("save", hooks.handelSaveError);
+contactsSchema.pre("findOneAndUpdate", hooks.runValidators);
+contactsSchema.post("findOneAndUpdate", hooks.handelSaveError);
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+const Contact = model("contact", contactsSchema);
+
+export default Contact;
