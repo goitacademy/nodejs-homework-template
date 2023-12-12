@@ -6,7 +6,7 @@ const isValidId = require('../../middlewares/isValidId');
 const router = express.Router();
 const Joi = require('joi');
 
-const { listContacts, getBuId, addContact, removeContact, updateContact, updateStatusContact } = require('../../models/contacts');
+const { listContacts, getById, addContact, removeContact, updateContact, updateStatusContact } = require('../../models/contacts');
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -31,9 +31,7 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-
-    const contact = await getBuId(req.params.id);
-
+    const contact = await getById(req.params.id);
     if (contact) {
     res.status(200).json(contact);
 
