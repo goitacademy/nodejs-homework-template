@@ -1,4 +1,5 @@
 
+
 const express = require('express');
 const isValidId = require('../../middlewares/isValidId'); 
 
@@ -11,12 +12,12 @@ const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
+
   favorite: Joi.boolean(), 
 
 })
 
 router.use('/:contactId', isValidId);
-
 
 router.get('/', async (req, res, next) => {
   try {
@@ -30,7 +31,9 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:contactId', async (req, res, next) => {
   try {
+
     const contact = await getBuId(req.params.id);
+
     if (contact) {
     res.status(200).json(contact);
 
@@ -81,7 +84,6 @@ router.put('/:contactId', async (req, res, next) => {
   res.status(404).json({message: "Not found"});
  
   }
-
 })
 
 router.patch('/:contactId/favorite', async (req, res, next) => {
