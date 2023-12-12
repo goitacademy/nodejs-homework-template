@@ -94,7 +94,7 @@ export const updateSubscription = async (req, res, next) => {
 
 export const updateAvatar = async (req, res, next) => {
   try {
-    console.log(res);
+ 
     if (!req.file) {
       return res.status(401).json({ error: "you are not authtorized" });
 }
