@@ -25,7 +25,7 @@ const updateContact = async (contactId, body) => {
 };
 
 
-async function getBuId(contactId) {
+async function getById(contactId) {
   return await Contact.findById(contactId);
 
 };
@@ -47,6 +47,6 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-  getBuId,
+  getById,
   updateStatusContact,
 };
