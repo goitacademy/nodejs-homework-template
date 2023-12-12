@@ -20,7 +20,7 @@ export const signup = async (req, res, next) => {
     if (user) {
       throw HttpError(409, "Such email is exist");
     }
-    const hashPassword = await bcryptоы.hash(password, 10);
+    const hashPassword = await bcryptjs.hash(password, 10);
     const newUser = await User.create({
       ...req.body,
       password: hashPassword,
@@ -94,9 +94,12 @@ export const updateSubscription = async (req, res, next) => {
 
 export const updateAvatar = async (req, res, next) => {
   try {
+    console.log(res);
+    if (!req.file) {
+      return res.status(401).json({ error: "you are not authtorized" });
+}
     const { _id } = req.user;
     const { path: oldPath, filename } = req.file;
-
     const newPath = path.join(avatarsPath, filename);
 
     (await jimp.read(oldPath)).resize(250, 250).write(oldPath);
@@ -108,7 +111,9 @@ export const updateAvatar = async (req, res, next) => {
     await User.findByIdAndUpdate(_id, { avatarURL });
 
     res.status(200).json({ avatarURL });
-  } catch (error) {}
+  } catch (error) {
+    next(error)
+  }
 };
 export const getCurrent = async (req, res, next) => {
   const { email, subscription } = req.user;
