@@ -10,7 +10,7 @@ const User = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
 const { userSubscription } = require("../subscription");
 
-const avatarsDir = path.resolve("public", "avatars");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -108,21 +108,30 @@ const updateUserSubscription = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const { _id } = req.user;
-  const { path: tempUpload, originalname } = req.file;
-  const filename = `${_id}_${originalname}`;
-  const resultUpload = path.join(avatarsDir, filename);
+  try {
+    const { _id } = req.user;
 
-  const originalAvatar = await Jimp.read(tempUpload);
-  await originalAvatar.resize(250, 250).writeAsync(tempUpload);
+    if (!req.file) {
+      throw HttpError(400, "No avatar file provided");
+    }
 
-  await fs.rename(tempUpload, resultUpload);
-  const avatarURL = path.join("avatars", filename);
-  await User.findByIdAndUpdate(_id, { avatarURL });
+    const { path: tempUpload, filename } = req.file;
+    const resultUpload = path.join(avatarsDir, filename);
 
-  res.status(200).json({
-    avatarURL,
-  });
+    const image = await Jimp.read(tempUpload);
+    await image.cover(250, 250).writeAsync(resultUpload);
+
+    await fs.promises.unlink(tempUpload);
+
+    const avatarURL = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+      avatarURL,
+    });
+  } catch (error) {
+    res.status(error.status || 500).json({ error: error.message });
+  }
 };
 
 module.exports = {
