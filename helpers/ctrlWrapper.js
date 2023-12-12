@@ -10,3 +10,5 @@ const ctrlWrapper = (ctrl) => {
 };
 
 module.exports = ctrlWrapper;
+
+// эта строка создана для нового пуша на гит, потому что чловил глук

@@ -27,3 +27,5 @@ contactSchema.post("save", handleMongooseErr);
 const Contact = model("contact", contactSchema);
 
 module.exports = Contact;
+
+// эта строка создана для нового пуша на гит, потому что чловил глук
