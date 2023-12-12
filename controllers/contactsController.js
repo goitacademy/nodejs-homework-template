@@ -5,7 +5,15 @@ const {
   removeContact,
   updateContact,
 } = require("../models/contacts");
-const contactSchema = require("../schemas/contactSchema");
+const middleware = require("./middleware");
+
+const tryCatchWrapper = async (handler, req, res) => {
+  try {
+    await handler(req, res);
+  } catch (error) {
+    middleware.handleNotFoundError(res);
+  }
+};
 
 const getContacts = async (req, res) => {
   const contacts = await listContacts();
@@ -13,51 +21,51 @@ const getContacts = async (req, res) => {
 };
 
 const getContactById = async (req, res) => {
-  const contact = await getById(req.params.id);
-
-  if (contact) {
-    res.status(200).json(contact);
-  } else {
-    res.status(404).json({ message: "Not found" });
-  }
+  tryCatchWrapper(
+    async () => {
+      const contact = await getById(req.params.id);
+      res
+        .status(contact ? 200 : 404)
+        .json(contact || middleware.handleNotFoundError(res));
+    },
+    req,
+    res
+  );
 };
 
 const createContact = async (req, res) => {
-  try {
-    await contactSchema.validateAsync(req.body);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-    return;
-  }
-
-  const newContact = await addContact(req.body);
-  res.status(201).json(newContact);
+  tryCatchWrapper(
+    async () => {
+      await middleware.validateContact(req, res, async () => {
+        const newContact = await addContact(req.body);
+        res.status(201).json(newContact);
+      });
+    },
+    req,
+    res
+  );
 };
 
 const deleteContact = async (req, res) => {
-  const result = await removeContact(req.params.id);
-
-  if (result.message === "contact deleted") {
-    res.status(200).json(result);
-  } else {
-    res.status(404).json({ message: "Not found" });
-  }
+  tryCatchWrapper(
+    async () => {
+      const result = await removeContact(req.params.id);
+      res.status(result.message === "contact deleted" ? 200 : 404).json(result);
+    },
+    req,
+    res
+  );
 };
 
 const updateContactInfo = async (req, res) => {
-  try {
-    await contactSchema.validateAsync(req.body);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-    return;
-  }
-
-  try {
-    const updatedContact = await updateContact(req.params.id, req.body);
-    res.status(200).json(updatedContact);
-  } catch (error) {
-    res.status(404).json({ message: "Not found" });
-  }
+  tryCatchWrapper(
+    async () => {
+      const updatedContact = await updateContact(req.params.id, req.body);
+      res.status(200).json(updatedContact);
+    },
+    req,
+    res
+  );
 };
 
 module.exports = {
