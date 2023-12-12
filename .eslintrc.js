@@ -71,7 +71,7 @@ module.exports = {
       },
     ],
     'no-magic-numbers': ['off', { ignoreArrayIndexes: true }],
-    'no-multi-spaces': 'error',
+    'no-multi-spaces': 'true',
     'no-multi-str': 'error',
     'no-multiple-empty-lines': 'error',
     'no-new': 'error',
