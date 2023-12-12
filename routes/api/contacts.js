@@ -1,7 +1,7 @@
 import express from "express";
 import contacts from "../../models/contacts.js";
 import Joi from "joi";
-import HttpError from "../../helpers/index.js";
+import helpers from "../../helpers/index.js";
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, "Not found");
+      throw helpers.HttpError(404, "Not found");
     }
     res.json(result);
   } catch (error) {
@@ -37,7 +37,7 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, { message: "missing required name field" });
+      throw helpers.HttpError(400, { message: "missing required name field" });
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -51,7 +51,7 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, "Not found");
+      throw helpers.HttpError(404, "Not found");
     }
     res.status(200).json({ message: "Contact deleted" });
   } catch (error) {
@@ -63,12 +63,12 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, { message: "missing fields" });
+      throw helpers.HttpError(400, { message: "missing fields" });
     }
     const { contactId } = req.params;
     const result = await contacts.updateById(contactId, req.body);
     if (!result) {
-      throw HttpError(404, { message: "Not found" });
+      throw helpers.HttpError(404, { message: "Not found" });
     }
     res.json(result);
   } catch (error) {
