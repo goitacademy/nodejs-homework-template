@@ -25,6 +25,7 @@ router.delete("/:contactId", authenticate, isValidId, contacts.removeContact);
 
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validateBody(Schemas.bodySchema),
   contacts.updateContact
@@ -32,6 +33,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   validateFavorite(Schemas.favoriteSchema),
   contacts.updateStatusContact
