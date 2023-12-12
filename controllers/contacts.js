@@ -58,5 +58,3 @@ module.exports = {
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
 };
-
-// эта строка создана для нового пуша на гит, потому что чловил глук

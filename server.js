@@ -15,5 +15,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-// эта строка создана для нового пуша на гит, потому что чловил глук

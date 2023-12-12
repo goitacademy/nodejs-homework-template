@@ -23,5 +23,3 @@ const validateBodyForPatch = (schema) => {
 };
 
 module.exports = { validateBodyForPost, validateBodyForPatch };
-
-// эта строка создана для нового пуша на гит, потому что чловил глук

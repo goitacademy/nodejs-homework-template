@@ -17,3 +17,5 @@ module.exports = {
   addSchema,
   updateFavoriteSchema,
 };
+
+// эта строка создана для нового пуша на гит, потому что чловил глук
