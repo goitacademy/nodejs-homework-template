@@ -8,10 +8,7 @@ const { HttpError, ctrlWrapper} = require("../helpers"); // імпортуємо
 
 const getAll = async (req, res) => {
   try {
-    console.log('сюда зашли');
     const result = await Contact.find();
-    console.log('результат');
-
     res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -31,19 +28,10 @@ const getAll = async (req, res) => {
 //   }
 // };
 
-// const add = async (req, res, next) => {
-//   try {
-//     const { error } = addSchema.validate(req.body);
-//     if (error) {
-//       throw HttpError(400, { message: "missing required name field" });
-//     }
-
-//     const result = await contacts.addContact(req.body);
-//     res.status(201).json(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+const add = async (req, res) => {    
+    const result = await Contact.create(req.body);
+    res.status(201).json(result);  
+};
 
 // const updateById = async (req, res, next) => {
 //   try {
@@ -80,7 +68,7 @@ const getAll = async (req, res) => {
 module.exports = {
   getAll,
   //   getById,
-  //   add,
+  add,
   //   updateById,
   //   deleteById,
 };

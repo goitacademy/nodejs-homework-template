@@ -11,7 +11,7 @@ router.get("/", ctrl.getAll);
 // router.get("/:contactId", ctrl.getById);
 
 // викликаємо ф-цію, яка у базу данних (файл json з даними добавить новий запис).
-// router.post("/", ctrl.add);
+router.post("/", ctrl.add);
 
 // викликаємо ф-цію, яка видалить у базі данних запис з таким id
 // router.delete("/:contactId", ctrl.deleteById);
