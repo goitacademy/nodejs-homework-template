@@ -1,9 +1,7 @@
-const catchAsync = require('./catchAsync');
-const HttpError = require('./httpError');
-const contactsValidation = require('./contactsValidation');
+const catchAsync = require("./catchAsync");
+const httpError = require("./httpError");
 
 module.exports = {
   catchAsync,
-  HttpError,
-  contactsValidation,
+  httpError,
 };

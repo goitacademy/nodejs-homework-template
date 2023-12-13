@@ -1,10 +1,11 @@
-const { HttpError } = require("../units");
+const { httpError } = require("../units");
 
 const validateFields = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
     if (error) {
-      next(HttpError(404, error.message));
+      next(httpError(400, error.message));
+      return;
     }
     next();
   };
