@@ -22,7 +22,6 @@ exports.deleteContact = catchAsync(async (req, res) => {
 });
 
 exports.updateContact = catchAsync(async (req, res) => {
-    if(Object.keys(req.body).length === 0) throw new HttpError(400, 'missing fields');
     const contact = await contactsDB.updateContact(req.params.contactId, req.body);
     if (!contact) throw new HttpError(404, 'Not found');
     res.json(contact);
