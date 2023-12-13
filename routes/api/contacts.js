@@ -6,8 +6,10 @@ const authenticate = require("../../middlewares/authenticate");
 const router = express.Router();
 const Joi = require('joi');
 
+
 const { listContacts, getById, addContact, removeContact, updateContact, updateStatusContact, listFilteredContacts } = require('../../models/contacts');
 const { schemas } = require('../../models/user');
+
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -32,7 +34,9 @@ router.get('/', authenticate, async (req, res, next) => {
 
 router.get('/:contactId', authenticate, isValidId, async (req, res, next) => {
   try {
+    
     const contact = await getById(req.params.contactId);
+
     if (contact) {
     res.status(200).json(contact);
 
