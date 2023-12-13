@@ -35,8 +35,11 @@ const updateById = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res, next) => {
+
+
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+  const { _id: owner } = req.user;
+  const result = await Contact.findByIdAndUpdate({_id: contactId, owner}, req.body, {
     new: true,
   });
   if (!result) {
