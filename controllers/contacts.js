@@ -1,14 +1,15 @@
-const contacts = require("../models/contacts");
+// const contacts = require("../models/contacts");
+const Contact = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContact = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  const result = await Contact.findOne({ _id: contactId });
 
   if (!result) {
     throw HttpError(404, "Contact not found");
@@ -16,12 +17,20 @@ const getContactById = async (req, res) => {
   res.json(result);
 };
 const addContact = async (req, res) => {
-  const result = await contacts.addContact(req.body);
+  const result = await Contact.create(req.body);
   res.status(201).json(result);
 };
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.updateContact(id, req.body);
+  const result = await Contact.findByIdUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, "Contact not found");
+  }
+  res.json(result);
+};
+const updateFavorite = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdUpdate(id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
@@ -29,7 +38,7 @@ const updateContact = async (req, res) => {
 };
 const removeContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.removeContact(id);
+  const result = await Contact.findByIdAndRemove(id);
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
@@ -40,5 +49,6 @@ module.exports = {
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
   removeContact: ctrlWrapper(removeContact),
 };
