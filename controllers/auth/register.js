@@ -1,5 +1,5 @@
 const { HttpError } = require("../../helpers");
-const { User } = require("../../models/user");
+const User = require("../../models/user");
 const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {

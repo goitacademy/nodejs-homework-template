@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const { User } = require("../models/user");
-const { HttpError } = require("../helpers");
+const User = require("../models/user");
+const { HttpError, controllerWraper } = require("../helpers");
 const { JWT_SECRET } = process.env;
 
 const authenticate = async (req, res, next) => {
@@ -25,4 +25,4 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticate };
+module.exports = controllerWraper(authenticate);
