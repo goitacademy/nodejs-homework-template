@@ -4,7 +4,9 @@ const path = require("path");
 
 const contactsPath = path.join(__dirname, "../models/contacts.json");
 
-const { catchAsync, HttpError, contactsValidation } = require("../units");
+const { catchAsync, httpError } = require("../units");
+const { validateFields } = require("../middleware");
+const schema = require("../validation/schema");
 
 exports.getAllContacts = catchAsync(async (req, res) => {
   const contactsDB = await fs.readFile(contactsPath);
@@ -15,14 +17,17 @@ exports.getAllContacts = catchAsync(async (req, res) => {
 });
 
 exports.createContact = catchAsync(async (req, res) => {
-  // const { value, error } = contactsValidation.checkContact(req.body);
-  // if (error) {
-  //   throw new HttpError(400, "missing required name field");
-  // }
+  const { error } = schema.validate(req.body);
+
+  if (error)
+   return res.status(400).json({ message: error.message });
+
   // const { name, email, phone } = value;
+
+ 
   const newContact = {
     id: uuid(),
-    ...req.body,
+   ...req.body,
   };
 
   const contactsDB = await fs.readFile(contactsPath);
@@ -74,7 +79,7 @@ exports.updateContact = catchAsync(async (req, res) => {
   const { name, email, phone } = req.body;
   
    if (!name && !email && !phone) {
-     return res.status(400).json({ message: "missing fields" });
+     throw new httpError(400, "missing fields" );
    }
 
   const contactsDB = await fs.readFile(contactsPath);
@@ -84,7 +89,7 @@ exports.updateContact = catchAsync(async (req, res) => {
     (contact) => contact.id === contactId
   );
   if (contactIndex === -1) {
-    throw Error(404, "Not found");
+    throw new Error(404, "Not found");
   }
   allContacts[contactIndex] = { ...allContacts[contactIndex], ...req.body };
 
