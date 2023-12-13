@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const schema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -6,4 +6,4 @@ const schema = Joi.object({
   phone: Joi.string().required(),
 });
 
-// module.exports = schema;
+module.exports = schema;
