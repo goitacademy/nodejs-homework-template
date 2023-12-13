@@ -1,5 +1,5 @@
-const contactsMiddleware = require('./contactsMiddleware');
+const validateFields = require("./validateFields");
 
 module.exports = {
-  contactsMiddleware,
+  validateFields,
 };
