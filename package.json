@@ -14,6 +14,7 @@
     "dotenv": "^16.3.1",
     "express": "4.17.1",
     "fs.promises": "^0.1.2",
+    "mongodb": "^6.3.0",
     "morgan": "^1.10.0",
     "nanoid": "^3.3.4",
     "uuid": "^9.0.1"
