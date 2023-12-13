@@ -13,7 +13,6 @@ const register = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
   res.status(201).json({
-    password: newUser.password,
     user: {
       email: newUser.email,
       subscription: "starter",
