@@ -96,7 +96,7 @@ export const updateAvatar = async (req, res, next) => {
   try {
  
     if (!req.file) {
-      return res.status(401).json({ error: "you are not authtorized" });
+      return res.status(400).json({ "something went wrong" });
 }
     const { _id } = req.user;
     const { path: oldPath, filename } = req.file;
