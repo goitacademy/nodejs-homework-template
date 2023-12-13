@@ -37,6 +37,22 @@ const getAllContacts = async (req, res, next) => {
   }
 };
 
+const getContactById = async (req, res, next) => {
+  try {
+    const result = await contactsService.getContactById(req.params.contactId);
+    if (!result) {
+      const error = new Error(
+        `Contact with id=${req.params.contactId} not found!`
+      );
+      error.status = 404;
+      throw error;
+    }
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const addContact = async (req, res, next) => {
   try {
     const contactValidate = contactAddScheme.validate(req.body);
@@ -93,6 +109,7 @@ const updateContact = async (req, res, next) => {
 
 export default {
   getAllContacts,
+  getContactById,
   addContact,
   deleteContact,
   updateContact,
