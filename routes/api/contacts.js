@@ -38,7 +38,6 @@ router.post("/", async (req, res, next) => {
   try {
     const { error } = contactValidationSchema.validate(req.body);
     if (error) {
-      console.log(error);
       return res
         .status(400)
         .json({ message: `missing required name field ${error.message}` });
@@ -70,7 +69,6 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = contactValidationSchema.validate(req.body);
     if (error) {
-      console.log(error);
       return res
         .status(400)
         .json({ message: `missing fields ${error.message}` });
