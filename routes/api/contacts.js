@@ -1,25 +1,47 @@
-const express = require('express')
+import contactController from "../../controllers/contact-controller.js";
+import express from "express";
+import {
+  isEmptyBody,
+  isEmptyFavoriteBody,
+  isValid,
+  authenticate,
+} from "../../middlewares/index.js";
+import { validateBody } from "../../decorators/index.js";
+import {
+  contactAddSchema,
+  updateScheme,
+  movieFavoriteScheme,
+} from "../../models/Contact.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use(authenticate);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", contactController.getAllContacts);
+router.get("/:contactId", isValid, contactController.getByID);
+router.post(
+  "/",
+  isEmptyBody,
+  validateBody(contactAddSchema),
+  contactController.addNewContact
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  isValid,
+  isEmptyBody,
+  validateBody(updateScheme),
+  contactController.updateById
+);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch(
+  "/:contactId/favorite",
+  isValid,
+  isEmptyFavoriteBody,
+  validateBody(movieFavoriteScheme),
+  contactController.updateStatusContact
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", isValid, contactController.deleteById);
 
-module.exports = router
+export default router;
