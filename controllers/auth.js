@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const gravatar = require('gravatar');
 const path = require('path');
 const fs = require('fs/promises');
+const Jimp = require('jimp');
 
 const { User } = require('../models/user');
 
@@ -61,17 +62,30 @@ const getCurrent = async (req, res) => {
 
 const logout = async (req, res) => {
 	const { _id } = req.user;
-	await User.findByIdAndUpdate(_id, { token: '' });
+	const result = await User.findByIdAndUpdate(_id, { token: '' });
 
+	if (!result) {
+		throw HttpError(404, 'Not found');
+	}
 	res.status(204).json({});
 };
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
+	if (!req.file) {
+		next(HttpError(400, 'Please upload a file'));
+	}
 	const { _id } = req.user;
-	const { path: tmpUpload, originalname } = req.file;
+	const { path: tempUpload, originalname } = req.file;
+
+	const img = await Jimp.read(tempUpload);
+	await img
+		.autocrop()
+		.cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER | Jimp.VERTICAL_ALIGN_MIDDLE)
+		.writeAsync(tempUpload);
+
 	const filename = `${_id}_${originalname}`;
 	const resultUpload = path.join(avatarsDir, filename);
-	await fs.rename(tmpUpload, resultUpload);
+	await fs.rename(tempUpload, resultUpload);
 	const avatarURL = path.join('avatars', filename);
 	await User.findByIdAndUpdate(_id, { avatarURL });
 
