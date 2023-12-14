@@ -3,12 +3,13 @@ const express = require("express");
 const ctrl = require("../../controllers/contacts");
 const { isEmptyBody, validateBody } = require("../../middlewars");
 const { schemas } = require("../../models/contact");
+const isValidId = require("../../middlewars/isValidId");
 
 const router = express.Router();
 
 router.get("/", ctrl.listContact);
 
-router.get("/:contactId", ctrl.getContactById);
+router.get("/:contactId", isValidId, ctrl.getContactById);
 
 router.patch(
   "/:contactId/favorite",
@@ -19,10 +20,11 @@ router.patch(
 router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 
 router.put(
-  "/:id",
+  "/:contactId",
   isEmptyBody,
+  isValidId,
   validateBody(schemas.addSchema),
   ctrl.updateContact
 );
-router.delete("/:id", ctrl.removeContact);
+router.delete("/:contactId", isValidId, ctrl.removeContact);
 module.exports = router;

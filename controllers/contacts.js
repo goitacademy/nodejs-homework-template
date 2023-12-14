@@ -21,24 +21,28 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 const updateContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
   res.json(result);
 };
 const updateFavorite = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
   res.json(result);
 };
 const removeContact = async (req, res) => {
-  const { id } = req.params;
-  const result = await Contact.findOneAndDelete(id);
+  const { contactId } = req.params;
+  const result = await Contact.findOneAndDelete({ _id: contactId });
   if (!result) {
     throw HttpError(404, "Contact not found");
   }
