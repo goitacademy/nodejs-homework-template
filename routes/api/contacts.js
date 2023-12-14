@@ -1,25 +1,29 @@
-const express = require('express')
+import express from 'express';
 
-const router = express.Router()
+import {getAll, add, getById, deleteById, updateById, updateStatusContact} from '../../controllers/contacts-controller.js'
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import {isEmptyBody, isValidId, authenticate} from '../../middlewares/index.js'
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { ctrlWrapper, validateBody, validateQueryParam } from '../../decorators/index.js';
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { contactAddSchema, contactUpdateSchema, contactPatchFavorite } from '../../schemas/contact-schemas.js';
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { queryGetContactsSchema } from '../../schemas/query-schemas.js';
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsRouter = express.Router();
 
-module.exports = router
+contactsRouter.use(ctrlWrapper(authenticate))
+
+contactsRouter.get('/', validateQueryParam(queryGetContactsSchema), ctrlWrapper(getAll));
+
+contactsRouter.get('/:contactId', isValidId, ctrlWrapper(getById));
+
+contactsRouter.post('/', isEmptyBody, validateBody(contactAddSchema), ctrlWrapper(add));
+
+contactsRouter.delete('/:contactId', isValidId, ctrlWrapper(deleteById))
+
+contactsRouter.put('/:contactId', isValidId, isEmptyBody, validateBody(contactUpdateSchema), ctrlWrapper(updateById));
+
+contactsRouter.patch('/:contactId/favorite', isValidId, isEmptyBody, validateBody(contactPatchFavorite), ctrlWrapper(updateStatusContact))
+
+export default contactsRouter;
