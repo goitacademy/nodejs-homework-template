@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
-
 require("dotenv").config();
 
 const app = express();
@@ -38,17 +37,30 @@ const PORT = process.env.PORT || 3002;
 const uriDb = process.env.DB_HOST;
 
 const connection = mongoose.connect(uriDb, {
-  
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
   dbName: "db-contacts",
 });
-console.log(uriDb);
+
+
+mongoose.connection.on("connected", () => {
+  console.log("Database connected successfully");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.error(`Database connection error: ${err}`);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("Database disconnected");
+});
+
 connection
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Database connection successful");
       console.log(`Server running. Use our API on port: ${PORT}`);
     });
   })
-  .catch((err) =>
-    console.log(`Server not running. Error message: ${err.message}`)
-  );
+  .catch((err) => {
+    console.log(`Server not running. Error message: ${err.message}`);
+  });

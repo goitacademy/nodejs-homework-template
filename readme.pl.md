@@ -1,29 +1,33 @@
-## GoIT Node.js Course Template Homework
+# console app
 
-Wykonaj forka tego repozytorium, aby wykonywać zadania domowe (2-6). Fork utworzy repozytorium na Twoim koncie na http://github.com
+## how to install
 
-Dodaj mentora jako collaboratora.
+```shell
+npm install
+```
 
-Dla każdego zadania domowego utwórz nową gałąź (branch).
+## how to use
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+### list
 
-Każda nowa gałąź dla zadania powinna być tworzona z gałęzi master.
+![List](https://i.imgur.com/6wjcpQ5.png)
 
-Po zakończeniu wykonania zadania domowego na swojej gałęzi, należy zrobić pull request (PR). Następnie dodaj mentora do przeglądu kodu. Dopiero po zatwierdzeniu PR przez mentora możesz scalić gałąź z zadaniem domowym do gałęzi master.
+```shell
+npm run start -- -a list
+```
 
-Uważnie czytaj komentarze mentora. Popraw uwagi i zrób commit na gałęzi z zadaniem domowym. Zmiany automatycznie pojawią się w PR po wysłaniu commitu z poprawkami na GitHub. Po poprawkach ponownie dodaj mentora do przeglądu kodu.
+---
 
-- Podczas oddawania zadania domowego podaj link do PR.
-- Kod JS jest czytelny i zrozumiały, do formatowania używany jest Prettier.
+### get
 
-### Komendy:
+![Get by ID](https://i.imgur.com/pduMILf.png)
 
-- `npm start` &mdash;  uruchamia serwer w trybie produkcyjnym
-- `npm run start:dev` &mdash; uruchamia serwer w trybie deweloperskim (development)
-- `npm run lint` &mdash; uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
-- `npm lint:fix` &mdash; to samo co powyższe, ale również automatycznie poprawia proste błędy.
+```shell
+npm run -- -a get -id
+```
+
+---
+
+### add
+
+![Add, delete, list](https://i.imgur.com/DU6oJ7f.png)
