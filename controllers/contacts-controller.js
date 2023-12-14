@@ -7,19 +7,19 @@ const getAll = async (req, res) => {
   res.json(result);
 };
 
-// const getById = async (req, res) => {
-//   const { contactId } = req.params;
-//   const result = await contactsService.getContactById(contactId);
-//   if (!result) {
-//     throw HttpError(404, `Contact with id= ${contactId} not found`);
-//   }
-//   res.json(result);
-// };
+const getById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findById(contactId);
+  if (!result) {
+    throw HttpError(404, `Contact with id= ${contactId} not found`);
+  }
+  res.json(result);
+};
 
-// const add = async (req, res) => {
-//   const result = await contactsService.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const add = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
 // const updateById = async (req, res) => {
 //   const { contactId } = req.params;
@@ -41,8 +41,8 @@ const getAll = async (req, res) => {
 
 export default {
   getAll: ctrlWrapper(getAll),
-  // getById: ctrlWrapper(getById),
-  // add: ctrlWrapper(add),
+  getById: ctrlWrapper(getById),
+  add: ctrlWrapper(add),
   // updateById: ctrlWrapper(updateById),
   // deleteById: ctrlWrapper(deleteById),
 };
