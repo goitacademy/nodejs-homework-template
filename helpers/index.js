@@ -1,5 +1,11 @@
 const HttpError = require("./HttpError");
+const ctrlWrapper = require("./ctrlWrapper");
+const catchAsync = require("./catchAsync");
+const contactValidators = require("./contactValidators");
 
 module.exports = {
-    HttpError,
-}
+  catchAsync,
+  ctrlWrapper,
+  HttpError,
+  contactValidators,
+};
