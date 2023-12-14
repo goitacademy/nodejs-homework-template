@@ -17,13 +17,20 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  console.log(req.body);
   const result = await Contact.create(req.body);
-
   res.status(201).json(result);
 };
 
 const updateById = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  if (!result) {
+    throw HttpError(404, `Contact with id= ${contactId} not found`);
+  }
+  res.json(result);
+};
+
+const updateContactFavorite = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body);
   if (!result) {
@@ -46,5 +53,6 @@ export default {
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
+  updateContactFavorite: ctrlWrapper(updateContactFavorite),
   deleteById: ctrlWrapper(deleteById),
 };

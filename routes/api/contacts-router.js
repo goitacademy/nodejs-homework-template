@@ -1,6 +1,10 @@
 import express from "express";
 import contactsController from "../../controllers/contacts-controller.js";
-import { isEmptyBody, isValidId } from "../../middlewares/index.js";
+import {
+  isEmptyBody,
+  isValidId,
+  isEmptyBodyForFavorites,
+} from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
 
 import { contactAddSchema, contactUpdateSchema } from "../../models/Contact.js";
@@ -26,6 +30,14 @@ contactsRouter.put(
   isEmptyBody,
   validateBody(contactUpdateSchema),
   contactsController.updateById
+);
+
+contactsRouter.patch(
+  "/:contactId/favorite",
+  isValidId,
+  isEmptyBodyForFavorites,
+  validateBody(contactUpdateSchema),
+  contactsController.updateContactFavorite
 );
 
 export default contactsRouter;
