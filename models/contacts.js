@@ -1,14 +1,67 @@
 // const fs = require('fs/promises')
 
-const listContacts = async () => {}
+const fs = require("fs/promises");
+const path = require("path");
 
-const getContactById = async (contactId) => {}
+const contactsPath = path.join(__dirname, "contacts.json");
 
-const removeContact = async (contactId) => {}
+const listContacts = async () => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    return JSON.parse(data);
+  } catch (error) {
+    throw error;
+  }
+};
 
-const addContact = async (body) => {}
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    return contacts.find(
+      (contact) => contact.id.toString() === contactId.toString()
+    );
+  } catch (error) {
+    throw error;
+  }
+};
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await listContacts();
+    const updatedContacts = contacts.filter(
+      (contact) => contact.id !== contactId
+    );
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const addContact = async (body) => {
+  try {
+    const contacts = await listContacts();
+    const newContact = { id: Date.now(), ...body };
+    contacts.push(newContact);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return newContact;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const contacts = await listContacts();
+    const updatedContacts = contacts.map((contact) =>
+      contact.id === contactId ? { ...contact, ...body } : contact
+    );
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+    return updatedContacts.find((contact) => contact.id === contactId);
+  } catch (error) {
+    throw error;
+  }
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +69,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
