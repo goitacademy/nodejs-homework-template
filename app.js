@@ -1,19 +1,14 @@
 const express = require("express");
-// const uuid = require("uuid").v4;
+
 const logger = require("morgan");
 const cors = require("cors");
-// const fs = require("fs").promises;
+
+require('dotenv').config();
  
 const contactsRouter = require("./routes/api/contacts");
 
 
-// const mongoose = require('mongoose');
-// const DB_HOST =
-//   "mongodb+srv://Maryna:ifyvOFOOpxcCKNcu@cluster0.sb6iuxx.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
-// mongoose.connect(DB_HOST)
-//   .then(() => console.log("Database connection successful"))
-// .catch(error => console.log(error.message))
 
 const app = express();
 
