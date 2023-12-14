@@ -1,33 +1,32 @@
-import * as contactServive from "../models/contacts.js";
-
 import { HttpError } from '../helpers/index.js'
 
 import controllerWrapper from '../decorators/controllerWrapper.js';
+import Contact from '../models/contacts.js';
 
 const getAll = async (req, res) => {
-		const result = await contactServive.listContacts();
-		res.json(result);
+		const result = await Contact.find()
+		res.json(result)
 };
 
 const getContactById = async (req, res) => {
 		const { contactId } = req.params;
-		const result = await contactServive.getContactById(contactId);
+		const result = await Contact.findById(contactId);
 		if (!result) {
 			throw HttpError(404, "Not found");
 		}
 
-		res.json(result).status(200);
+		res.json(result)
 };
 
 const addContact = async (req, res) => {
 
-		const result = await contactServive.addContact(req.body);
+		const result = await Contact.create(req.body);
 		res.status(201).json(result);
 };
 
 const deleteContact = async (req, res) => {
 		const { contactId } = req.params;
-		const result = await contactServive.deleteContact(contactId);
+		const result = await Contact.findByIdAndDelete(contactId)
 		if (!result) {
 			throw HttpError(404, "Not found");
 		}
@@ -39,11 +38,11 @@ const deleteContact = async (req, res) => {
 const updateContactById = async (req, res) => {
 
 		const { contactId } = req.params;
-		const result = await contactServive.updateContact(contactId, req.body);
+		const result = await Contact.findByIdAndUpdate(contactId, req.body);
 		if (!result) {
 			throw HttpError(400, "Not found");
 		}
-		res.status(200).json(result);
+		res.json(result);
 };
 
 export default {

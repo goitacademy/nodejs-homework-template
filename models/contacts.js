@@ -1,64 +1,50 @@
-import fs from "fs/promises";
-import path from "path";
+import { Schema, model } from "mongoose";
 
-import { nanoid } from "nanoid";
+import Joi from 'joi'
 
-const contactsPath = path.resolve("models", "contacts.json");
+import { handleSaveError, preUpdate } from "./hooks.js";
 
-const updateContacts = (contacts) => fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+const constactScheme = new Schema({
+	name: {
+		type: String,
+		required: [true, "Set name for contact"],
+	},
+	email: {
+		type: String,
+	},
+	phone: {
+		type: String,
+	},
+	favorite: {
+		type: Boolean,
+		default: false,
+	},
+}, {versionKey: false, timestamps: true} );
+
+constactScheme.post('save', handleSaveError)
+
+constactScheme.post('save', handleSaveError)
+.pre("findOneAndUpdate", preUpdate);
+
+constactScheme.post('save', handleSaveError)
+.post("findOneAndUpdate", handleSaveError);
 
 
-export const listContacts = async () => {
-	const result = await fs.readFile(contactsPath);
-	console.log(result)
-	return JSON.parse(result);
-};
+export const addContactScheme = Joi.object({
+    name: Joi.string().required(),
+    email: Joi.string(),
+    phone: Joi.string(),
+	favorite: Joi.boolean()
+})
 
-export const getContactById = async (contactId) => {
-	const contacts = await listContacts();
-	const result = contacts.find((contact) => contact.id === contactId);
-	return result || null;
-};
+export const updateContactScheme = Joi.object({
+    name: Joi.string(),
+    email: Joi.string(),
+    phone: Joi.string(),
+	favorite: Joi.boolean()
+})
 
-export const removeContact = async (contactId) => {
-	const contacts = await listContacts();
-	const index = contacts.findIndex((contact) => contact.id === contactId);
-	if (index === -1) {
-		return null;
-	}
-	const [result] = contacts.splice(index, 1);
-	await updateContacts(contacts);
-	return result;
-};
 
-export const updateContact = async (contactId, data) => {
-	const contacts = await listContacts();
-	const index = contacts.findIndex((item) => item.id === contactId);
-	if (index === -1) {
-		return null;
-	}
-	contacts[index] = { ...contacts[index], ...data };
-	await updateContacts(contacts);
-	return contacts[index];
-};
+const Contact = model('contact', constactScheme)
 
-export const addContact = async ({ name, email, phone }) => {
-	const contacts = await listContacts();
-	const newContact = {
-		id: nanoid(),
-		name,
-		email,
-		phone,
-	};
-	contacts.push(newContact);
-	await updateContacts(contacts);
-	return newContact;
-};
-
-export default {
-	listContacts,
-	getContactById,
-	removeContact,
-	addContact,
-	updateContact,
-};
+export default Contact
