@@ -18,14 +18,14 @@ contactsRouter.post(
   contactsController.add
 );
 
-// contactsRouter.delete("/:contactId", isValidId, contactsController.deleteById);
+contactsRouter.delete("/:contactId", isValidId, contactsController.deleteById);
 
-// contactsRouter.put(
-//   "/:contactId",
-//   isValidId,
-//   isEmptyBody,
-//   validateBody(contactUpdateSchema),
-//   contactsController.updateById
-// );
+contactsRouter.put(
+  "/:contactId",
+  isValidId,
+  isEmptyBody,
+  validateBody(contactUpdateSchema),
+  contactsController.updateById
+);
 
 export default contactsRouter;
