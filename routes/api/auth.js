@@ -1,6 +1,6 @@
 const express = require("express");
 const { ctrlWrapper } = require("../../helpers");
-const { validateBody } = require("../../middlewares");
+const { validateBody, authenticate } = require("../../middlewares");
 const { userSchemas } = require("../../models");
 
 const router = express.Router();
@@ -19,5 +19,9 @@ router.post(
   validateBody(userSchemas.loginSchema),
   ctrlWrapper(ctrl.login)
 );
+
+router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
+
+router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
 module.exports = router;
