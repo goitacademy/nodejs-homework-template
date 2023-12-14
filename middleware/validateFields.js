@@ -1,16 +1,15 @@
 const { httpError } = require("../units");
 
 const validateFields = (schema) => {
-  const func = (req, res, next) => {
-    const { error } = schema.validate(req.body);
+  return (req, res, next) => {
+    const { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
-       console.error("Validation error:----------------=====>", error);
-      next(httpError(400, error.message));
-      return;
+      const errorMessages = error.details.map((detail) => detail.message);
+      return res
+        .status(400)
+        .json({ errorMessages });
     }
     next();
   };
-  return func;
 };
-
 module.exports = validateFields;
