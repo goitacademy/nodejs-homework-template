@@ -1,7 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 
-const contactsPath = path.join(__dirname, "./", "models", "contacts.json");
+const contactsPath = path.join(__dirname, "contacts.json");
 
 const readContacts = async () => {
   try {
@@ -30,7 +30,7 @@ const listContacts = async () => {
 };
 
 const getById = async (id) => {
-  const contacts = await readContacts(id);
+  const contacts = await readContacts();
   return contacts.find((contact) => contact.id === id);
 };
 
