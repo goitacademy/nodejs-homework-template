@@ -4,9 +4,20 @@ const joi = require("joi");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 const contactBodySchema = joi.object({
-  name: joi.string().min(3).required(),
-  phone: joi.string().required(),
-  email: joi.string().email().required(),
+  name: joi
+    .string()
+    .min(3)
+    .required()
+    .messages({ "any.required": "missing required name field " }),
+  phone: joi
+    .string()
+    .required()
+    .messages({ "any.required": "missing required phone field " }),
+  email: joi
+    .string()
+    .email()
+    .required()
+    .messages({ "any.required": "missing required email field " }),
 });
 async function listContacts() {
   try {
