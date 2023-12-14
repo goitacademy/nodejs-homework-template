@@ -2,13 +2,9 @@ import contacts from "../models/contacts.js";
 import HttpError from "../helpers/index.js";
 import decorators from "../decorators/index.js";
 
-const getAll = async (_, res, next) => {
-  try {
-    const result = await contacts.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+const getAll = async (__, res) => {
+  const result = await contacts.listContacts();
+  res.json(result);
 };
 
 const getById = async (req, res) => {
