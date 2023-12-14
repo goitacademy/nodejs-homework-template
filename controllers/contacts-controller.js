@@ -15,7 +15,7 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   try {
-    const { id } = reg.params;
+    const { id } = req.params;
     const result = await contactsService.getContactById(id);
     if (!result) {
       throw HttpError(404, `Contact with id=${id} not found`);
