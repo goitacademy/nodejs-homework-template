@@ -22,3 +22,15 @@ export const patchSubscription = Joi.object({
     "any.only": "Subscription must be one of: starter, pro, business",
   }),
 });
+
+export const resendVerifyMailSchema = Joi.object({
+  email: Joi.string()
+    .required()
+    .pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+    .messages({
+      "any.required": "Field is required",
+      "string.base": "Must be a string",
+      "string.pattern.base":
+        "Does not match the required format: test@mail.com",
+    }),
+});

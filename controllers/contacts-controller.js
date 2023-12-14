@@ -1,5 +1,5 @@
 import { Contact } from '../models/Contact.js';
-import { HttpError } from '../helpers/HttpError.js';
+import { HttpError } from '../helpers/index.js';
 
 export const getAll = async (req, res, next) => {
     const { page = "1", limit = "10", ...query } = req.query;

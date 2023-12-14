@@ -1,4 +1,4 @@
-import { HttpError } from '../helpers/HttpError.js';
+import  {HttpError}  from '../helpers/index.js';
 
 const isEmptyBody = async (req, res, next) => {
     const keys = Object.keys(req.body);
