@@ -30,7 +30,7 @@ router.post("/", async (req, res, next) => {
   const { error } = contactBodySchema.validate(body);
 
   if (error) {
-    res.status(400).json({ message: "missing required name field" });
+    res.status(400).json(error.message);
     return;
   }
   const { name, email, phone } = body;
