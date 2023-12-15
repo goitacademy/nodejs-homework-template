@@ -1,24 +1,32 @@
 import express from "express";
-import * as contactsService from "../../models/contacts.js";
+import contactsController from "../../controllers/contacts-controller.js";
+import { isEmptyBody } from "../../middlewares/index.js";
+import validateBody from "../../decorators/validateBody.js";
+import {
+  contactAddScheme,
+  contactUpdateScheme,
+} from "../../schemas/contacts-schemas.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/");
+contactsRouter.get("/", contactsController.getAll);
 
-contactsRouter.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+contactsRouter.get("/:contactId", contactsController.getById);
 
-contactsRouter.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+contactsRouter.post(
+  "/",
+  isEmptyBody,
+  validateBody(contactAddScheme),
+  contactsController.add
+);
 
-contactsRouter.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+contactsRouter.delete("/:contactId", contactsController.deleteById);
 
-contactsRouter.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+contactsRouter.put(
+  "/:contactId",
+  isEmptyBody,
+  validateBody(contactUpdateScheme),
+  contactsController.updateById
+);
 
 export default contactsRouter;
