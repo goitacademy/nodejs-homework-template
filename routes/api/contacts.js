@@ -1,6 +1,4 @@
 const express = require("express");
-// const Joi = require("joi");
-// const contactsController = require("../../models/contactsFuns");
 
 const router = express.Router();
 const {
@@ -9,6 +7,7 @@ const {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 } = require("../../models/contactsFuns");
 const contactSchema = require("./validationSchemas");
 
@@ -89,6 +88,29 @@ router.put("/:contactId", async (req, res) => {
   }
 
   const updatedContact = await updateContact(contactId, { name, email, phone });
+
+  if (updatedContact) {
+    return res.status(200).json(updatedContact);
+  } else {
+    return res.status(404).json({ message: "Not found" });
+  }
+});
+
+router.patch("/api/contacts/:contactId/favorite", async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (Object.keys(req.body).length === 0) {
+    return res.status(400).json({ message: "Missing fields" });
+  }
+
+  const { error } = contactSchema.validate(req.body, { abortEarly: false });
+
+  if (error) {
+    return res.status(400).json({ message: error.message });
+  }
+
+  const updatedContact = await updateStatusContact(contactId, { favorite });
 
   if (updatedContact) {
     return res.status(200).json(updatedContact);
