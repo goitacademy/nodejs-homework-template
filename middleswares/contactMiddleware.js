@@ -4,17 +4,13 @@ const { Contact } = require("../models/contact");
 
 const { catchAsync, HttpError, contactValidators } = require("../helpers");
 
+const { contactServices } = require("../services");
+
+// визиває ф-цію, яка перевіряє чи є контакт з таким id
 const checkContactId = catchAsync(async (req, res, next) => {
+  // await contactServices.checkUserExistsById(req.params.id);
   const { contactId } = req.params;
-
-  const idIsValid = Types.ObjectId.isValid(contactId);
-
-  if (!idIsValid) throw new HttpError(404, "Contact not found..");
-
-  // const contactExists = await Contact.exists({ _contactId: contactId }); // чи існує контакт
-  const contactExists = await Contact.findById(contactId).exec();   // чи існує контакт
-
-  if (!contactExists) throw new HttpError(404, " message: Not found ");
+  await contactServices.checkContactExistsById(contactId);
 
   next();
 });

@@ -2,60 +2,75 @@ const { Contact } = require("../models/contact");
 
 const { catchAsync, ctrlWrapper } = require("../helpers"); // імпортуємо помилку для прокидування
 
-// const { schemas } = require("../../models/contact");
+const { contactServices } = require("../services");
 
-// ф-ції, які підключаються до необхідних ф-цій з models і повертають необхідні дані:
-// усі контакти, або контакт по id, або заміняють, видаляють, додають контакт
 
-// витягуємо усі контакти
+// ************ витягуємо усі контакти ************
 const getAll = catchAsync(async (req, res) => {
-  const contacts = await Contact.find();
-  res.status(200).json(contacts);
+  // const users = await User.find().select('+password');
+  // const users = await User.find().select('-email');
+  // const users = await User.find().select('name year');
+  // const users = await User.find();
+
+   const contacts = await contactServices.getAllContacts();
+
+   res.status(200).json({
+     msg: "Success!",
+     contacts,
+   });
+
 });
 
-// витягуємо контакт по id
+// ************ витягуємо контакт по id ************
 const getById = catchAsync(async (req, res) => {
-  const { contactId } = req.params;
-  const contact = await Contact.findById(contactId);
+  const contact = await contactServices.getOneContact(req.params.contactId);
 
-  res.status(200).json(contact);
+  res.status(200).json({
+     msg: "Success!",
+     contact,
+ });
+
 });
 
-// добавляємо контакт
+// ************ добавляємо контакт ************
 const add = async (req, res, next) => {
-  const result = await Contact.create(req.body);
-  res.status(201).json(result);
+  const newContact = await contactServices.createContact(req.body);
+
+   res.status(201).json({
+     msg: "Success!",
+     user: newContact,
+   });
+
 };
 
-// поновити контакт по id
+// ************ поновити контакт по id ************
 const updateById = catchAsync(async (req, res) => {
-  const { contactId } = req.params;
+  // const updatedContact = await Contact.findByIdAndUpdate(id, { name, year, role }, { new: true });
+  const updatedContact = await contactServices.updateContact(req.params.contactId, req.body);
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
+  res.status(200).json({
+    msg: "Success!",
+    contact: updatedContact,
   });
-  2;
-
-  res.status(200).json(result);
 });
 
-// видалити контакт по id
+// ************ видалити контакт по id ************
 const deleteById = catchAsync(async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
-  res.sendStatus(204);
+  await contactServices.deleteContact(req.params.contactId);
+
+   res.sendStatus(204);
 });
 
-const updateStatusContact = async(req, res) => {
- 
-  const { contactId } = req.params;
+// зміна значення поля favorite з true на false і навпаки
+const updateStatusContact = async (req, res) => {
+  const updatedContact = await contactServices.updateStatus(req.params.contactId);
+  
+  res.status(200).json({
+    msg: "Success!",
+    contact: updatedContact,
+  })
+};  
 
-  const contact = await Contact.findById(contactId);
-
-  const result = await Contact.findByIdAndUpdate(contactId, { favorite: !contact.favorite }, { new: true });
- 
-  res.status(200).json({ data: req.body, message: `${contactId}` });
-};
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
