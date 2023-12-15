@@ -44,6 +44,10 @@ export const updateContactScheme = Joi.object({
 	favorite: Joi.boolean()
 })
 
+export const contactFavoriteScheme = Joi.object({
+	favorite: Joi.string()
+})
+
 
 const Contact = model('contact', constactScheme)
 
