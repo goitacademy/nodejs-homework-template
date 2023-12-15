@@ -5,6 +5,7 @@ import {
   isEmptyBody,
   isValidId,
   isEmptyBodyFavorite,
+  authenticate
 } from "../../middleware/index.js";
 import {
   contactAddSchema,
@@ -13,6 +14,8 @@ import {
 } from "../../models/contacts.js";
 
 const router = express.Router();
+
+router.use(authenticate);
 
 router.get("/", contactController.getAll);
 
