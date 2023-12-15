@@ -4,6 +4,7 @@ const ctrl = require('../../controllers/contacts');
 
 const { validateBody, isValidId } = require('../../middleware');
 const { schemas } = require('../../models/contacts');
+const isBodyEmpty = require('../../middleware/IsBodyEmpty');
 
 router.get('/', ctrl.getAllContacts);
 
@@ -14,6 +15,7 @@ router.post('/', validateBody(schemas.addSchema), ctrl.addContact);
 router.put(
   '/:id',
   isValidId,
+  isBodyEmpty,
   validateBody(schemas.addSchema),
   ctrl.updateContact
 );
