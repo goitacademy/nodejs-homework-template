@@ -18,7 +18,14 @@ const userLoginSchema = Joi.object({
   }),
 }).unknown(false);
 
+const uploadAvatarSchema = Joi.object({
+  avatar: Joi.object().required().messages({
+    "any.required": "Avatar is required",
+  }),
+}).unknown(false);
+
 module.exports = {
   userRegisterSchema,
   userLoginSchema,
+  uploadAvatarSchema,
 };
