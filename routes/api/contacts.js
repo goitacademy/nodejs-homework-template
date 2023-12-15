@@ -8,8 +8,9 @@ const {
   updateContactStatus,
 } = require("../../controllers");
 const { ctrlWrapper, validateBody } = require("../../helpers");
-const router = express.Router();
 const { contactJoiSchema } = require("../../models");
+
+const router = express.Router();
 
 router.get("/", ctrlWrapper(listContacts));
 
