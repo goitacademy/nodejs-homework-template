@@ -30,13 +30,14 @@ const updateById = async (req, res) => {
   res.json(result);
 };
 
-const deleteById = (req, res) => {
+const deleteById = async (req, res) => {
   const { contactId } = req.params;
-  const result = contactsService.removeContact(contactId);
+  const result = await contactsService.removeContact(contactId);
+  console.log(result);
   if (!result) {
     throw HttpError(404);
   }
-  res.json(result);
+  res.json({ message: "contact deleted" });
 };
 
 export default {
