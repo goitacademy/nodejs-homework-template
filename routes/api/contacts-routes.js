@@ -1,12 +1,9 @@
 import express from 'express';
-
-import {
-    getAll
-} from '../../controllers/contact-controllers.js'
+import { getAll, getById } from '../../controllers/contact-controllers.js';
 
 const router = express.Router()
 
-router.get('/', getAll() )
+router.get('/', getAll());
 
 router.get('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
