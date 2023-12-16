@@ -9,7 +9,6 @@ const contactsPath = path.resolve('models', 'contacts.json');
    return JSON.parse(data);
  };
 
-
 const getContactById = async (id) => {
   const contacts = await listContacts();
   const result = contacts.find((item) => item.id === id);

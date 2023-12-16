@@ -8,8 +8,13 @@ import {
 
 
 const getAll = async (req, res) => {
-  const result = await listContacts();
-  res.json(result);
+    try {
+        const result = await listContacts();
+        res.json(result);
+    }
+    catch (error){
+            res.status(500).json({message:error.message})
+        }
 };
 
 
