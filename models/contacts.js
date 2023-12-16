@@ -31,9 +31,9 @@ constactScheme.pre("findOneAndUpdate", preUpdate);
 constactScheme.post("findOneAndUpdate", handleSaveError)
 
 export const addContactScheme = Joi.object({
-	name: Joi.string().required(),
-	email: Joi.string().required(),
-	phone: Joi.string().required(),
+	name: Joi.string().required().message("missing required name field"),
+	email: Joi.string().required().message("missing required email field"),
+	phone: Joi.string().required().message("missing required phone field"),
 	favorite: Joi.boolean(),
 });
 
@@ -45,7 +45,7 @@ export const updateContactScheme = Joi.object({
 });
 
 export const contactFavoriteScheme = Joi.object({
-	favorite: Joi.string(),
+	favorite: Joi.boolean().message("missing field favorite")
 });
 
 const Contact = model("contact", constactScheme);
