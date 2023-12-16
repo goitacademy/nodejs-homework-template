@@ -2,6 +2,7 @@
 
 // const fs = require('fs/promises')
 import fs from "fs/promises";
+import {nanoid} from "nanoid";
 import path from "path";
 
 const contactsPath = path.resolve("models", "contacts.json");
@@ -32,22 +33,40 @@ const removeContact = async (contactId) => {
   return result;
 };
 
-// Росписать body вместо объекта newContact
 const addContact = async (body) => {
   const contacts = await listContacts();
   const newContact = {
     id: nanoid(),
-    name: name,
-    email: email,
-    phone: phone,
+    ...body,
   };
   contacts.push(newContact);
   await writeContacts(contacts);
   return newContact;
 };
 
-// Росписать body вместо объекта newContact
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex((item) => item.id === contactId);
+  console.log(index);
+  if (index === -1) {
+    return null;
+  }
+  contacts[index] = {...contacts[index], ...body};
+  await writeContacts(contacts);
+  console.log(contacts[index]);
+  return contacts[index];
+};
+
+// export const updateMovieById = async (id, data) => {
+//   const movies = await getAllMovies();
+//   const index = movies.findIndex((item) => item.id === id);
+//   if (index === -1) {
+//     return null;
+//   }
+//   movies[index] = {...movies[index], ...data};
+//   await updateMovies(movies);
+//   return movies[index];
+// };
 
 export default {
   listContacts,

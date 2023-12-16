@@ -7,40 +7,29 @@ import express from "express";
 // import contacts from "../../models/contacts.json";
 
 import contactsService from "../../models/contacts.js";
+import contactsController from "../../controllers/contacts-controller.js";
+import {isEmptyBody} from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
 
-contactsRouter.get("/", async (req, res, next) => {
-  const result = await contactsService.listContacts();
-  res.json(result);
-  // res.json({
-  //   message: "template message",
-  // });
-});
+contactsRouter.get("/", contactsController.listContacts);
 
-contactsRouter.get("/:contactId", async (req, res, next) => {
-  const result = await contactsService.getContactById();
-  res.json(result);
-  // res.json({message: "template message"});
-});
+contactsRouter.get("/:contactId", contactsController.contactById);
 
-contactsRouter.post("/", async (req, res, next) => {
-  const result = await contactsService.addContact(body);
-  res.json(result);
-  // res.json({message: "template message"});
-});
+contactsRouter.post("/", isEmptyBody, contactsController.addContact);
 
-contactsRouter.delete("/:contactId", async (req, res, next) => {
-  const result = await contactsService.removeContact();
-  res.json(result);
-  // res.json({message: "template message"});
-});
+contactsRouter.delete("/:contactId", contactsController.removeContact);
 
-contactsRouter.put("/:contactId", async (req, res, next) => {
-  const result = await contactsService.removeContact(contactId, body);
-  res.json(result);
-  // res.json({message: "template message"});
-});
+contactsRouter.put(
+  "/:contactId",
+  isEmptyBody,
+  contactsController.updateContact
+);
+// async (req,res,next) => {
+// const result = await contactsService.removeContact(contactId, body);
+//   res.json(result);
+// res.json({message: "template message"});}
+// );
 
 // module.exports = router
 export default contactsRouter;
