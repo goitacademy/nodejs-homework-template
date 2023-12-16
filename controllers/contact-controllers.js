@@ -6,6 +6,8 @@ import {
     updateContact,
 } from '../models/contacts.js';
 
+import { HttpError } from '../helpers/index.js';
+
 
 const getAll = async (req, res) => {
     try {
@@ -22,9 +24,7 @@ const getById = async (req, res) => {
       const { contactId } = req.params;
       const result = await getContactById(contactId);
       if (!result) {
-          const error = new Error(`Contact is not found`);
-          error.status = 404;
-          throw error;
+          throw HttpError(404, `Contact is not found`);
       }
       res.json(result);
   } catch (error) {

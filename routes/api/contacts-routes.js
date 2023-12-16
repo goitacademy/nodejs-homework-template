@@ -5,9 +5,7 @@ const router = express.Router()
 
 router.get('/', getAll());
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId',getById)
 
 router.post('/', async (req, res, next) => {
   res.json({ message: 'template message' })
