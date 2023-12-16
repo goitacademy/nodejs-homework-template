@@ -1,5 +1,6 @@
 const app = require("./app");
 
+
 const mongoose = require("mongoose");
 
 const { DB_HOST } = process.env;
@@ -15,3 +16,8 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
+
+app.listen(3000, () => {
+  console.log("Server Running. Use our API on port: 3000");
+});
+
