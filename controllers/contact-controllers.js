@@ -1,17 +1,10 @@
-import {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact,
-    updateContact,
-} from '../models/contacts.js';
-
+import * as contactsService from '../models/contacts.js';
 import { HttpError } from '../helpers/index.js';
 
 
-const getAll = async (req, res) => {
+export const getAll = async (req, res) => {
     try {
-        const result = await listContacts();
+        const result = await contactsService.listContacts();
         res.json(result);
     }
     catch (error){
@@ -19,10 +12,10 @@ const getAll = async (req, res) => {
         }
 };
 
-const getById = async (req, res) => {
+export const getById = async (req, res) => {
   try {
       const { contactId } = req.params;
-      const result = await getContactById(contactId);
+      const result = await contactsService.getContactById(contactId);
       if (!result) {
           throw HttpError(404, `Contact is not found`);
       }
@@ -33,8 +26,3 @@ const getById = async (req, res) => {
   }
 };
 
-
-export default {
-  getAll,
-  getById,
-};

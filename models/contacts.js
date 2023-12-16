@@ -4,7 +4,7 @@ import { nanoid } from 'nanoid';
 
 const contactsPath = path.resolve('models', 'contacts.json');
 
- const listContacts = async () => {
+const listContacts = async () => {
    const data = await fs.readFile(contactsPath);
    return JSON.parse(data);
  };
@@ -50,7 +50,7 @@ const updateContact = async (contactId, body) => {
   return contacts[index];
 };
 
-module.exports = {
+export default{
   listContacts,
   getContactById,
   removeContact,
