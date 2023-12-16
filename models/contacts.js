@@ -82,11 +82,11 @@ const updateContact = async (contactId, body) => {
       console.warn("Contact not found");
       return null;
     }
-    contacts.splice(index, 1, { id: contactId, ...body });
-    const updatedContacts = contacts.filter((c) => c.id !== contactId);
+    contacts[index] = { id: contactId, ...body };
+    // const updatedContacts = contacts.filter((c) => c.id !== contactId);
     await fs.writeFile(
       contactsPath,
-      JSON.stringify(updatedContacts, null, 2),
+      JSON.stringify(contacts, null, 2),
       "utf-8"
     );
     return contacts[index];
