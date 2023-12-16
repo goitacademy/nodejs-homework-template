@@ -47,7 +47,7 @@ export const updateContactScheme = Joi.object({
 });
 
 export const contactFavoriteScheme = Joi.object({
-	favorite: Joi.boolean().message("missing field favorite")
+	favorite: Joi.boolean().required()
 });
 
 const Contact = model("contact", constactScheme);
