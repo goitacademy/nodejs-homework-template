@@ -15,10 +15,23 @@ export const addContactSchema = Joi.object({
     "string.base": `"phone" should be a type of 'text'`,
     "string.min": `"name" should have a minimum length of {#limit}`,
   }),
-});
+  favorite: Joi.boolean()
+    .required()
+    .messages({ "any.required": `missing required "favorite" field` }),
+}).or("name", "email", "phone", "favorite");
 
-export const updateContactSchema = Joi.object({
-  name: Joi.string().min(3).max(30),
-  email: Joi.string().email(),
-  phone: Joi.string().min(14).max(14),
-});
+
+export const updateContactSchema = Joi.object()
+  .keys({
+    name: addContactSchema.extract("name").optional(),
+    email: addContactSchema.extract("email").optional(),
+    phone: addContactSchema.extract("phone"),
+    favorite: addContactSchema.extract("favorite"),
+  })
+  .or("name", "email", "phone", "favorite");
+
+export const contactFavoriteSchema = Joi.object()
+  .keys({
+    favorite: addContactSchema.extract("favorite"),
+  })
+  .or("favorite");
