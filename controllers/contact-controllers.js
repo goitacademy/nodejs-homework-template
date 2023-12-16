@@ -41,7 +41,7 @@ export const addNewContact = async (req, res, next) => {
     try {
         const {error} = contactAddSchema.validate(req.body);
         if (error) {
-            throw HttpError(400, "missing required name field");
+            throw HttpError(400, "missing required fields");
         }    
     const result = await contactsService.addContact(req.body) 
     res.status(201).json(result)    
