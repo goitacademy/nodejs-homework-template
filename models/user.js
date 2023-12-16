@@ -4,30 +4,30 @@ const { handleMongooseError } = require("../helpers");
 
 // crete object schema (keyword 'new' for ES6): 1st argument - object decription
 // 2nd - 
-const contactSchema = new Schema({
+const userSchema = new Schema({
     name: {
         type: String,
-        required: [true, 'Set name for contact'],
+        required: true,
     },
     email: {
         type: String,
+        match: /\w{0}[a-zA-Zа-яА-Я]+\@\w{0}[a-zA-Zа-яА-Я]+\.\w{0}[a-zA-Zа-яА-Я]/,
+        unique: true,
         required: true,
     },
-    phone: {
+    password: {
         type: String,
+        minLength: 8,
         required: true,
     },
-    favorite: {
-        type: Boolean,
-        required: false,
-    }
+    
 },{
     versionKey: false // You should be aware of the outcome after set to false
 });
 
-contactSchema.post("save", handleMongooseError);
+userSchema.post("save", handleMongooseError);
 
 // create model : 1st argument - collection name
-const Contact = model('contact', contactSchema);
+const User = model('user', userSchema);
 
-module.exports = Contact;
+module.exports = User;
