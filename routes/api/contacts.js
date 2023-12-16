@@ -8,13 +8,13 @@ const router = express.Router()
 
 router.get('/', userController.getUsers)
 
-router.post('/', userController.newUser)
+router.post('/', userMiddlewares.checkCreateUserData, userController.newUser)
 
 router.get('/:contactId', userMiddlewares.checkUserId, userController.getUser)
 
 router.delete('/:contactId', userMiddlewares.checkUserId, userController.deleteUser)
 
-router.put('/:contactId', userMiddlewares.checkUserId, userController.removeUser)
+router.patch('/:contactId', userMiddlewares.checkUserId, userController.updateUser)
 
 
 module.exports = router

@@ -7,7 +7,8 @@ exports.createUserDataValidator = (data) =>
 		.keys({
 			name: Joi.string().min(3).max(12).required(),
 			email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-			phone: Joi.number().min(6).required(),
+			phone: Joi.string().min(6).required(),
+			favorite: Joi.boolean(),
 		})
 		.validate(data);
 
@@ -18,5 +19,6 @@ exports.updateUserDataValidator = (data) =>
 			name: Joi.string().min(3).max(12).required(),
 			email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
 			phone: Joi.number().min(6).required(),
+			favorite: Joi.boolean(),
 		})
 		.validate(data);
