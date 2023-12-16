@@ -36,7 +36,7 @@ export const updateContact = async (id, body) => {
         return null;
     }
     contacts[index] = { ...contacts[index], ...body };
-    await updateMovies(contacts);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
     return contacts[index];
 }
 

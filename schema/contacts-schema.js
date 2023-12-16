@@ -7,7 +7,7 @@ export const contactAddSchema = Joi.object({
      email: Joi.string().email().required().messages({
         "any.required": `"email" must be exist`
      }),
-        phone: Joi.number().min(1).max(12).integer().required().rule({ message: 'Phone number consists 6 to 12 digits' }),  
+    phone: Joi.string().min(1).required() 
 })
 
 export const contactUpdateSchema = Joi.object({
