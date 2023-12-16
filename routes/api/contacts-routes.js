@@ -1,22 +1,22 @@
 import express from 'express';
-import { getAll, getById } from '../../controllers/contact-controllers.js';
+import {
+  getAll,
+  getById,
+  addNewContact,
+  updateById,
+  deleteById,
+} from '../../controllers/contact-controllers.js';
 
 const router = express.Router()
 
-router.get('/', getAll());
+router.get('/', getAll);
 
 router.get('/:contactId',getById)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', addNewContact)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', deleteById)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:contactId', updateById);
 
 export default router;
