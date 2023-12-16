@@ -1,10 +1,6 @@
 /** @format */
 
-// const express = require('express')
 import express from "express";
-
-// import {listContacts} from "../../models/contacts.js";
-// import contacts from "../../models/contacts.json";
 
 import contactsService from "../../models/contacts.js";
 import contactsController from "../../controllers/contacts-controller.js";
@@ -25,11 +21,4 @@ contactsRouter.put(
   isEmptyBody,
   contactsController.updateContact
 );
-// async (req,res,next) => {
-// const result = await contactsService.removeContact(contactId, body);
-//   res.json(result);
-// res.json({message: "template message"});}
-// );
-
-// module.exports = router
 export default contactsRouter;

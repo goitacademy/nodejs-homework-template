@@ -1,6 +1,4 @@
 /** @format */
-
-// const fs = require('fs/promises')
 import fs from "fs/promises";
 import {nanoid} from "nanoid";
 import path from "path";
@@ -47,26 +45,13 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   const contacts = await listContacts();
   const index = contacts.findIndex((item) => item.id === contactId);
-  console.log(index);
   if (index === -1) {
     return null;
   }
   contacts[index] = {...contacts[index], ...body};
   await writeContacts(contacts);
-  console.log(contacts[index]);
   return contacts[index];
 };
-
-// export const updateMovieById = async (id, data) => {
-//   const movies = await getAllMovies();
-//   const index = movies.findIndex((item) => item.id === id);
-//   if (index === -1) {
-//     return null;
-//   }
-//   movies[index] = {...movies[index], ...data};
-//   await updateMovies(movies);
-//   return movies[index];
-// };
 
 export default {
   listContacts,
