@@ -1,15 +1,14 @@
 const fs = require("fs/promises");
 const path = require("path");
-const uuid = require("uuid");
-const Joi = require('joi')
+const uuid = require("uuid").v4;
+const Joi = require('joi');
 
 const contactSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.number().required()
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
 });
 const contactsPath = path.join(__dirname, "contacts.json");
-
 
 const listContacts = async () => {
   try {
