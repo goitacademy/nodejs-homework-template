@@ -14,6 +14,17 @@ app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
 
+import  express  from 'express';
+import logger from 'morgan';
+import cors from 'cors';
+
+import { router } from './routes/api/contacts.js';
+import app from './server.js';
+
+const app = express();
+
+app.use('/api/contacts', router);
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
