@@ -1,25 +1,22 @@
-const express = require('express')
+import express from "express";
 
-const router = express.Router()
+import contactsControllers from '../../controllers/contactsControllers.js';
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import {isEmptyBody} from "../../middlewares/index.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsRouter = express.Router();
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get('/', contactsControllers.getAll);
 
-module.exports = router
+contactsRouter.get('/:contactId', contactsControllers.getById);
+
+contactsRouter.post('/',isEmptyBody, contactsControllers.postContacts);
+
+contactsRouter.delete('/:contactId', contactsControllers.deleteById);
+
+contactsRouter.put('/:contactId',isEmptyBody, contactsControllers.updateById);
+
+
+export default contactsRouter;
