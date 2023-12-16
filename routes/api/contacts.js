@@ -1,20 +1,12 @@
 import express from 'express';
 
 import {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-} from '../../models/contacts.js'
+    getAll
+} from '../../controllers/contact-controllers.js'
 
-const express = require('express')
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  const result = await listContacts();
-  res.json(result);
-})
+router.get('/', getAll() )
 
 router.get('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
