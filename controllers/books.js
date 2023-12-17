@@ -1,6 +1,5 @@
 import { HttpError } from "../helpers/index.js";
 import contacts from "../models/contacts.js";
-import { contactAddSchema, contactUpdateSchema } from "../schemas/contact-schemas.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 
 const getAllContact = async (req, res) => {
