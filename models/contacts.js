@@ -1,59 +1,43 @@
-const fs = require('fs/promises');
+const Contact = require('./schemas/contacts')
+const { ObjectID } = require('mongodb');
 
-const path = require("path");
-const { nanoid } = require("nanoid");
-const contactsPath = path.join(__dirname, "contacts.json");
 
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath);
-  return JSON.parse(data);
+const getList = async () => {
+   const results = await Contact.find({})
+//    console.log(results);
+    return results
 }
 
-const getContactById = async (id) => {
-  const contactsId = String(id);
-  const contacts = await listContacts();
-  const result = contacts.find(item => item.id === contactsId);
-  return result || null;
+const getById = async (id) => {
+    const result = await Contact.findOne({_id:id})
+    return result
 }
 
-const removeContact = async (id) => {
-  const contactsId = String(id);
-  const contacts = await listContacts();
-  const index = contacts.findIndex(item => item.id === contactsId);
-  if (index === -1) { 
-    return null;
-  }
-  const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return result;
+const create = async (body) => {
+    const result = await Contact.create(body)
+    return result
 }
 
-const addContact = async (data) => {
-  const contacts = await listContacts();
-    const newContact = {
-      id: nanoid(),
-      ...data,
-  }
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
+const update = async (id, body) => {
+   
+    const result = await Contact.findByIdAndUpdate(
+        {_id:id},
+        {$set: body},
+        {new: true}
+    )
+    return result
 }
 
-const updateContact = async (id, data) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(item => item.id === id);
-  if (index === -1) { 
-    return null;
-  }
-  contacts[index] = { ...contacts[index], ...data };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
+const remove = async (id) => {
+
+    const result = await Contact.findByIdAndDelete({_id:id})
+    return result
 }
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+    getList,
+    getById,
+    remove,
+    create,
+    update,
 }
