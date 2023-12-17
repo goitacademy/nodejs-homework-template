@@ -83,10 +83,15 @@ const logout = async (req, res, next) => {
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
+  if (!req.file) {
+    throw HTTPError(400, "File not found");
+  }
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
 
   const resultUpload = path.join(avatarDir, filename);
+  console.log(tempUpload);
+  console.log(resultUpload);
   await fs.rename(tempUpload, resultUpload).catch(() => {
     // deleted tempUpload file
   });
