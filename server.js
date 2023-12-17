@@ -1,21 +1,17 @@
-import connect from './database.js';
-import 'dotenv/config';
-import app from './app.js';
-import { AVATARS_DIR, PUBLIC_DIR, TMP_DIR } from './helpers/globalVariables.js';
-import { createDirIfNotExist } from './helpers/createDir.js';
+const mongoose = require('mongoose');
 
-const PORT = process.env.PORT || 4000;
+const app = require('./app');
 
-connect()
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.set('strictQuery', true);
+
+mongoose
+  .connect(DB_HOST)
   .then(() => {
-    app.listen(PORT, async () => {
-      await createDirIfNotExist(PUBLIC_DIR);
-      await createDirIfNotExist(AVATARS_DIR);
-      await createDirIfNotExist(TMP_DIR);
-      console.log(`Server running. Use our API on port: ${PORT}`);
-    });
+    app.listen(PORT);
   })
-  .catch((err) => {
-    console.log(`Server not running. Error message: ${err.message}`);
+  .catch((error) => {
+    console.log(error.message);
     process.exit(1);
   });

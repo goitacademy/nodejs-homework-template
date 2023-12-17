@@ -1,34 +1,31 @@
-import express from 'express';
-import cors from 'cors';
-import './config/passport.config.js';
-import usersRouter from './routes/users.routes.js';
-const contactsRouter = require('./routes/api/contacts.route.js');
+const express = require('express');
+const logger = require('morgan');
+const cors = require('cors');
+require('dotenv').config();
+
+const authRouter = require('./routes/api/auth');
+const contactsRouter = require('./routes/api/contacts');
+const { default: mongoose } = require('mongoose');
 
 const app = express();
 
-app.use(express.json());
-app.use(cors());
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use('/api/users', usersRouter);
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+
+app.use('/api/auth', authRouter);
 app.use('/api/contacts', contactsRouter);
 
-app.use((_, res, __) => {
-  res.status(404).json({
-    status: 'error',
-    code: 404,
-    message: `The given endpoint does not exist`,
-    data: 'Not found',
-  });
+app.use((req, res) => {
+  res.status(404).json({ message: 'Not found' });
 });
 
-app.use((err, _, res, __) => {
-  console.log(err.stack);
-  res.status(500).json({
-    status: 'fail',
-    code: 500,
-    message: err.message,
-    data: 'Internal Server Error',
-  });
+app.use((err, req, res, next) => {
+  const { status = 500, message = 'Server error' } = err;
+  res.status(status).json({ message });
 });
 
-export default app;
+module.exports = app;
