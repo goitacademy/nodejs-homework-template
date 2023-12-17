@@ -10,9 +10,9 @@ const User = require("../models/user");
 
 const checkRegister = Joi.object({
 
-    name: Joi.string().required(),
     email: Joi.string().pattern(/\w{0}[a-zA-Zа-яА-Я]+\@\w{0}[a-zA-Zа-яА-Я]+\.\w{0}[a-zA-Zа-яА-Я]/).required(),
     password: Joi.string().min(8).required(),
+    subscription: Joi.string().valid("starter", "pro", "business"),
 
 });
 
@@ -32,7 +32,7 @@ const register = async (req, res) => {
     // for create unique 409 message
     const user = await User.findOne({email});
 
-    if(user) throw HttpError(409, "User already in use");
+    if(user) throw HttpError(409, "Email in use");
 
     // ather error message
     if (error) {
@@ -53,8 +53,10 @@ const register = async (req, res) => {
     const newUser = await User.create({...body, password: hashPassword});
 
     res.status(201).json({
-        email: newUser.email,
-        name: newUser.name,
+        user:{
+            email: newUser.email,
+            subscription: newUser.subscription
+        }
     });
    
 };

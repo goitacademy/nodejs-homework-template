@@ -20,7 +20,12 @@ const contactSchema = new Schema({
     favorite: {
         type: Boolean,
         required: false,
-    }
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        require: true,
+    },
 },{
     versionKey: false // You should be aware of the outcome after set to false
 });

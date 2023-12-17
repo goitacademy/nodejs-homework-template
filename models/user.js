@@ -5,10 +5,7 @@ const { handleMongooseError } = require("../helpers");
 // crete object schema (keyword 'new' for ES6): 1st argument - object decription
 // 2nd - 
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required: true,
-    },
+    
     email: {
         type: String,
         match: /\w{0}[a-zA-Zа-яА-Я]+\@\w{0}[a-zA-Zа-яА-Я]+\.\w{0}[a-zA-Zа-яА-Я]/,
@@ -20,7 +17,12 @@ const userSchema = new Schema({
         minLength: 8,
         required: true,
     },
-    
+    subscription: {
+        type: String,
+        enum: ["starter", "pro", "business"],
+        default: "starter"
+    },
+    token: String
 },{
     versionKey: false // You should be aware of the outcome after set to false
 });
