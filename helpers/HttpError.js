@@ -1,6 +1,7 @@
  const HttpError =(status, message)=>{
+    console.log(message);
     const error = new Error(message);
-    error.status=status
+    error.status = status
     return error
 }
 
