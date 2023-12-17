@@ -24,10 +24,6 @@ const addContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
-  //   const {error} = contactUpdateShema.validate(req.body);
-  //   if (error) {
-  //     throw HttpError(400, "missing fields");
-  //   }
   const {contactId} = req.params;
   const result = await contactsService.updateContact(contactId, req.body);
   if (!result) {
