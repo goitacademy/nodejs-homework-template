@@ -1,12 +1,12 @@
 import Contact from "../models/Contact.js";
 import { HttpError } from "../utils/HttpError.js";
 
-const listContacts = async () => {
-  return await Contact.find();
+const listContacts = async ({ owner }) => {
+  return await Contact.find( {owner});
 };
 
-const getContactById = async (contactId) => {
-  const contact = await Contact.findById(contactId);
+const getContactById = async ({_id: contactId, owner}) => {
+  const contact = await Contact.findById({_id: contactId, owner});
   if (!contact) {
     throw new HttpError(404, "Not found");
   }
@@ -14,8 +14,11 @@ const getContactById = async (contactId) => {
   return contact;
 };
 
-const removeContact = async (contactId) => {
-  const deletedContact = await Contact.findByIdAndDelete(contactId);
+const removeContact = async ({_id: contactId, owner}) => {
+  const deletedContact = await Contact.findByIdAndDelete({
+    _id: contactId,
+    owner,
+  });
   if (!deletedContact) {
     throw new HttpError(404, "Not found");
   }
@@ -23,12 +26,15 @@ const removeContact = async (contactId) => {
   return deletedContact;
 };
 
-const addContact = async (body) => {
-  return await Contact.create(body);
+const addContact = async ({body, owner }) => {
+  return await Contact.create({...body, owner});
 };
 
-const updateContact = async (contactId, body) => {
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, body);
+const updateContact = async ({_id: contactId, owner}, body) => {
+  const updatedContact = await Contact.findByIdAndUpdate(
+    { _id: contactId, owner },
+    body
+  );
   if (!updatedContact) {
     throw new HttpError(404, "Not found");
   }
