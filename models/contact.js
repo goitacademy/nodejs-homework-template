@@ -35,6 +35,7 @@ export const contactUpdateScheme = Joi.object({
   name: Joi.string(),
   email: Joi.string().email(),
   phone: Joi.string(),
+  favorite: Joi.boolean(),
 });
 
 export const contactUpdateFavoriteScheme = Joi.object({
