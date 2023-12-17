@@ -7,16 +7,18 @@ import {
   deleteById,
 } from '../../controllers/contact-controllers.js';
 
+import isEmptyBody from '../../middlewares/isEmptyBody.js';
+
 const router = express.Router()
 
 router.get('/', getAll);
 
 router.get('/:contactId',getById)
 
-router.post('/', addNewContact)
+router.post('/', isEmptyBody, addNewContact);
 
 router.delete('/:contactId', deleteById)
 
-router.put('/:contactId', updateById);
+router.put('/:contactId', isEmptyBody, updateById);
 
 export default router;
