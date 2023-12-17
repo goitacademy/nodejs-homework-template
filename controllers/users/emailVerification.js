@@ -19,12 +19,14 @@ const verifyUser = async (req, res, next) => {
 
     user.verificationToken = null;
     user.isVerified = true;
+
     await user.save();
 
     res.status(200).json({
       message: "Verification successful",
     });
   } catch (error) {
+    console.error("Error during user verification:", error);
     next(new HttpError(500, "Internal Server Error"));
   }
 };

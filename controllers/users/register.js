@@ -35,7 +35,7 @@ const registerUser = async (req, res, next) => {
       expiresIn: "1h",
     });
 
-    await sendVerificationEmail(email, verificationToken);
+    await sendVerificationEmail(verificationToken);
 
     res.status(201).json({
       user: {

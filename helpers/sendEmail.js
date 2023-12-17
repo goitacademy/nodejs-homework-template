@@ -1,23 +1,23 @@
 const nodemailer = require("nodemailer");
 
-const sendVerificationEmail = async (to, verificationToken) => {
+const sendVerificationEmail = async (verificationToken) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.ukr.net",
+    host: "smtp.meta.ua",
     port: 465,
     secure: true,
     auth: {
-      user: process.env.MAIL,
+      user: "makunka44@meta.ua",
       pass: process.env.PASSWORD,
     },
   });
 
   const mailOptions = {
-    from: "makunka44@ukr.net",
-    to,
+    from: "makunka44@meta.ua",
+    to: "makunka44@gmail.com",
     subject: "Email Verification",
     html: `
       <p>Click the following link to verify your email:</p>
-      <a href="${process.env.BASE_URL}/users/verify/${verificationToken}">Verify Email</a>
+      <a href="http://localhost:3001/users/verify/${verificationToken}">Verify Email</a>
     `,
   };
 
