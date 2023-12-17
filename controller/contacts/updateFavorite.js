@@ -1,10 +1,10 @@
 const createError = require('http-errors');
-const { Contact } = require('../../models/contact');
-const { schemas } = require('../../schemas/schemas');
+const { Contact } = require("../../models/contact");
+const { schemas } = require("../../schemas/schemas");
 
-const update = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
     try {
-        const { error } = schemas.addSchema.validate(req.body);
+        const { error } = schemas.updateFavoriteSchema.validate(req.body);
         if (error) {
             error.status = 400;
             throw error;
@@ -14,11 +14,11 @@ const update = async (req, res, next) => {
             new: true,
         });
         if (!result) {
-            throw createError(404, `Contact with id=${contactId} not found`);
+            throw createError(404, 'missing field favorite');
         }
         res.json({
             status: 'success',
-            code: 201,
+            code: 200,
             data: {
                 result,
             },
@@ -28,4 +28,4 @@ const update = async (req, res, next) => {
     }
 };
 
-module.exports = update;
+module.exports = updateFavorite;
