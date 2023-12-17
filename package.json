@@ -23,7 +23,10 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.2",
     "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.7",
+    "uuid": "^9.0.1",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "eslint": "7.19.0",

@@ -24,8 +24,19 @@ const uploadAvatarSchema = Joi.object({
   }),
 }).unknown(false);
 
+const registerSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
+});
+
+const resendEmailSchema = Joi.object({
+  email: Joi.string().email().required(),
+});
+
 module.exports = {
   userRegisterSchema,
   userLoginSchema,
   uploadAvatarSchema,
+  registerSchema,
+  resendEmailSchema,
 };

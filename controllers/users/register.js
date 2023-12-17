@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const User = require("../../models/users");
 const HttpError = require("../../helpers/HttpError");
+const sendVerificationEmail = require("../../helpers/sendVerificationEmail");
 
 const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
@@ -16,6 +17,8 @@ const registerUser = async (req, res, next) => {
       });
     }
 
+    const verificationToken = uuid();
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const avatarURL = gravatar.url(email, { s: "250", d: "retro" }, true);
@@ -24,11 +27,14 @@ const registerUser = async (req, res, next) => {
       email,
       password: hashedPassword,
       avatarURL,
+      verificationToken,
     });
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
+
+    await sendVerificationEmail(email, verificationToken);
 
     res.status(201).json({
       user: {
