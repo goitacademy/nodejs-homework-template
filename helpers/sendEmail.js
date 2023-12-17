@@ -6,16 +6,19 @@ const sendVerificationEmail = async (to, verificationToken) => {
     port: 465,
     secure: true,
     auth: {
-      user: "makunka44@ukr.net",
-      pass: "02095makK",
+      user: process.env.MAIL,
+      pass: process.env.PASSWORD,
     },
   });
 
   const mailOptions = {
     from: "makunka44@ukr.net",
-    to: "makunka44@gmail.com",
+    to,
     subject: "Email Verification",
-    text: `Click the following link to verify your email: /users/verify/${verificationToken}`,
+    html: `
+      <p>Click the following link to verify your email:</p>
+      <a href="${process.env.BASE_URL}/users/verify/${verificationToken}">Verify Email</a>
+    `,
   };
 
   try {
