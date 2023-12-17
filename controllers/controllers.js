@@ -59,3 +59,18 @@ exports.updateUser = catchAsync(async (req, res) => {
 	})
 
 })
+
+
+exports.favorite = catchAsync(async (req, res) => {
+	const { contactId } = req.params;
+	const { favorite } = req.body;
+
+	console.log(favorite);
+
+	const updateFavorite = await Contacts.findByIdAndUpdate(contactId, { favorite }, { new: true });
+
+	res.status(200).json({
+		mes: 'Success',
+		updateFavorite,
+	})
+})

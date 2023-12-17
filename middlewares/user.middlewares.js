@@ -17,6 +17,20 @@ exports.checkUserId = catchAsync(async (req, res, next) => {
 	next();
 });
 
+exports.checkupdateUserDatafavorite = catchAsync(async (req, res, next) => {
+	const { value, error } = userValidator.updateUserDataValidatorfavorite(req.body);
+
+	if (error) throw new HttpError(400, 'missing field favorite');
+
+	const userExists = await contacts.exists({ favorite: value.favorite });
+
+	if (!userExists) throw new HttpError(404, 'User not found');
+
+	req.body = value;
+
+	next();
+});
+
 exports.checkCreateUserData = catchAsync(async (req, res, next) => {
 	const { value, error } = userValidator.createUserDataValidator(req.body);
 

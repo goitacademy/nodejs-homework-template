@@ -17,8 +17,19 @@ exports.updateUserDataValidator = (data) =>
 		.object()
 		.keys({
 			name: Joi.string().min(3).max(12).required(),
-			email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+			email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }),
 			phone: Joi.number().min(6).required(),
 			favorite: Joi.boolean(),
 		})
 		.validate(data);
+
+exports.updateUserDataValidatorfavorite = (data) =>
+	Joi
+		.object()
+		.keys({
+			favorite: Joi.boolean().required().messages({ 'any.required': 'Missing field favorite' }),
+		})
+		.validate(data);
+
+
+
