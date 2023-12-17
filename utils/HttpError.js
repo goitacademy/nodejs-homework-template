@@ -1,8 +1,11 @@
-const HttpError = (status, message) => {
-  const error = new Error(message);
-  error.status = status;
+import { errorMessages } from "../const/HttpErrorMessages.js";
 
-  return error;
-};
-
-export default HttpError;
+export class HttpError extends Error {
+  constructor(
+    statusCode = 500,
+    message = errorMessages[statusCode] || errorMessages.default
+  ) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
