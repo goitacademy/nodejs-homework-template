@@ -1,5 +1,19 @@
 import app from "./app.js";
+import mongoose from "mongoose";
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000");
-});
+const { DB_HOST, DB_NAME, PORT = 3000 } = process.env;
+
+const connection = mongoose.connect(
+  `${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`
+);
+
+connection
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Database connection successful`);
+    });
+  })
+  .catch((err) => {
+    console.log(`Server not running. Error message: ${err.message}`);
+    process.exit(1);
+  });

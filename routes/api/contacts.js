@@ -1,32 +1,42 @@
 import express from "express";
 import contactsController from "../../controllers/contacts-controller.js";
-import { isEmptyBody } from "../../middlewares/index.js";
+import { isEmptyBody, isValidId } from "../../middlewares/index.js";
 import validateBody from "../../decorators/validateBody.js";
 import {
   contactAddScheme,
   contactUpdateScheme,
-} from "../../schemas/contacts-schemas.js";
+  contactUpdateFavoriteScheme,
+} from "../../models/contact.js";
 
 const contactsRouter = express.Router();
 
 contactsRouter.get("/", contactsController.getAll);
 
-contactsRouter.get("/:contactId", contactsController.getById);
+contactsRouter.get("/:contactId", isValidId, contactsController.getById);
 
 contactsRouter.post(
   "/",
-  isEmptyBody,
+  isEmptyBody(),
   validateBody(contactAddScheme),
   contactsController.add
 );
 
-contactsRouter.delete("/:contactId", contactsController.deleteById);
+contactsRouter.delete("/:contactId", isValidId, contactsController.deleteById);
 
 contactsRouter.put(
   "/:contactId",
-  isEmptyBody,
+  isValidId,
+  isEmptyBody(),
   validateBody(contactUpdateScheme),
   contactsController.updateById
+);
+
+contactsRouter.patch(
+  "/:contactId/favorite",
+  isEmptyBody("missing field favorite"),
+  isValidId,
+  validateBody(contactUpdateFavoriteScheme),
+  contactsController.updateStatusContact
 );
 
 export default contactsRouter;
