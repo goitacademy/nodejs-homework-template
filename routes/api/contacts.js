@@ -13,6 +13,7 @@ router.get("/:contactId", isValidId, ctrl.getContactById);
 
 router.patch(
   "/:contactId/favorite",
+  isValidId,
   validateBody(schemas.updateFavoriteSchema),
   ctrl.updateFavorite
 );
