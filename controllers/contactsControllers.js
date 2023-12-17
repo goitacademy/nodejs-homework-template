@@ -4,14 +4,9 @@ import { contactAddSchema } from "../schemas/contactschema.js";
 import { contactUpdateSchema } from "../schemas/contactschema.js"; 
 import { controllerWrapper } from "../decorators/index.js";
 
- async function getAll (req, res, next)  {
-  try {
+ async function getAll (req, res){
     const result = await contactService.listContacts();
-    res.json(result);
-    
-  } catch (error) {
-    next(error)
-  }   
+    res.json(result); 
 }
 
 async function getById  (req, res ) { 
