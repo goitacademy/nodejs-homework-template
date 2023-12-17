@@ -3,7 +3,6 @@ import cors from 'cors';
 import './config/passport.config.js';
 import usersRouter from './routes/users.routes.js';
 const contactsRouter = require('./routes/api/contacts.route.js');
-import { AVATARS_DIR } from './helpers/globalVariables.js';
 
 const app = express();
 
@@ -12,8 +11,6 @@ app.use(cors());
 
 app.use('/api/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
-
-app.use('/api/avatars', express.static(AVATARS_DIR));
 
 app.use((_, res, __) => {
   res.status(404).json({
