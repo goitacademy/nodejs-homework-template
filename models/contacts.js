@@ -5,14 +5,14 @@ import { nanoid } from "nanoid";
 const contactsMath = path.resolve("models", "contacts.json");
 
 const listContacts = async () => {
-  const result = await fs.readFile(contactsMath);
-  return JSON.parse(result);
+  const data = await fs.readFile(contactsMath);
+  return JSON.parse(data);
 };
 
 const getContactById = async (contactId) => {
   const contacts = await listContacts();
   const result = contacts.find((contact) => contact.id === contactId);
-  return result || null;
+  return result;
 };
 
 const removeContact = async (contactId) => {};
