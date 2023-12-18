@@ -69,12 +69,12 @@ const deleteContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     const { error } = updateContactSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const result = await contactsService.updateContact(req.params.id, req.body);
     if (!result) {
       throw HttpError(404);
-    }
-    if (error) {
-      throw HttpError(400, error.message);
     }
 
     res.json(result);
