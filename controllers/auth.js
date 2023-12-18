@@ -61,7 +61,9 @@ const updateSubscriptionUser = async (req, res) => {
         new: true,
     });
     if (!result) throw HttpError(404, 'Not Found!');
-    res.json(result);
+    res.json({
+        message: `Your subscription changed to ${req.body.subscription}!`,
+    });
 };
 
 module.exports = {
