@@ -79,7 +79,7 @@ export const deleteById = async (req, res, next) => {
       const { contactId } = req.params;
     const result = await contactsService.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, `Contact deleted`);
+      throw HttpError(404, `not found`);
         }
         res.json({ message: 'contact deleted' });
   } catch (error) {
