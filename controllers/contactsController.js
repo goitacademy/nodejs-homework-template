@@ -39,8 +39,8 @@ exports.postContact = async (req, res, next) => {
 
 exports.deleteContacts = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await contactModules.removeContact(id);
+    const { contactId } = req.params;
+    const result = await contactModules.removeContact(contactId);
     if (!result) {
       return HttpError(res, 404, "Not found");
     }
@@ -52,9 +52,9 @@ exports.deleteContacts = async (req, res, next) => {
 
 exports.updateContact = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { contactId } = req.params;
     const { name, email, phone } = req.body;
-    const result = await contactModules.updateContact(id, { name, email, phone });
+    const result = await contactModules.updateContact(contactId, { name, email, phone });
     if (!result) {
       return HttpError(res, 404, "Not found");
     }

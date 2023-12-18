@@ -5,7 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
-const { contactValidation } = require("./middlewares/validateContacts");
+const { addSchema, updateSchema, updateStatusSchema } = require("./middlewares/validateContacts");
 
 const app = express();
 
@@ -15,6 +15,21 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  if (req.method === "POST") {
+    const validateResult = addSchema.validate(req.body);
+    if (validateResult.error) {
+      return res.status(400).json({ message: validateResult.error });
+    }
+  } else if (req.method === "PUT") {
+    const validateResult = updateSchema.validate(req.body);
+    if (validateResult.error) {
+      return res.status(400).json({ message: validateResult.error });
+    }
+  }
+  next();
+});
+
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
@@ -23,11 +38,6 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
-});
-
-app.use((req, res, next) => {
-  if (req.method === "POST" || req.method === "PUT") {
-  }
 });
 
 module.exports = app;
