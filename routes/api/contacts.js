@@ -6,6 +6,7 @@ const {
   addContact,
   updateContact,
   contactBodySchema,
+  putContactsSchema,
 } = require("../../models/contacts");
 const router = express.Router();
 
@@ -54,7 +55,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
   const body = req.body;
-  const { error } = contactBodySchema.validate(body);
+  const { error } = putContactsSchema.validate(body);
   if (Object.keys(body).length === 0) {
     res.status(400).json({ message: "missing fields" });
   }

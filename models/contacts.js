@@ -19,6 +19,11 @@ const contactBodySchema = joi.object({
     .required()
     .messages({ "any.required": "missing required email field " }),
 });
+const putContactsSchema = joi.object({
+  name: joi.string().min(3),
+  phone: joi.string(),
+  email: joi.string().email(),
+});
 async function listContacts() {
   try {
     const data = await fs.readFile(contactsPath, "utf-8");
@@ -98,4 +103,5 @@ module.exports = {
   addContact,
   updateContact,
   contactBodySchema,
+  putContactsSchema,
 };
