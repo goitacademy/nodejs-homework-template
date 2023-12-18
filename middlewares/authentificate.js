@@ -16,15 +16,15 @@ const authentificate = async (req, res, next) => {
     try{
         
         // check that token was crypt SECRET_KEY
-        // verify retur payload with id only in our case
+        // verify retur payload with 'id' only in our case
         const {id} = jwt.verify(token, SECRET_KEY);
         
         // user with such id exist?
         const user = await User.findById(id);
        
-        // no
-        if(!user) {
-            next(HttpError(401, "User not found"));
+        // no user || no 'token' in DB || 'toke' value is not equal to 'token' in DB
+        if(!user || !user.token || user.token !== token) {
+            next(HttpError(401, "Not authorized"));
         }
 
         // add user to req information

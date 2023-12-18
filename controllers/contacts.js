@@ -19,6 +19,14 @@ const getAll = async (req, res) => {
     
     const { _id } = req.user; 
 
+    // for pagination
+    // const { page = 2, limit = 2 } = req.query;
+
+    // const skip = (page - 1) * limit;
+
+    // skip - how many elements skip, limit - how many return.
+    // const result = await Contact.find({owner: _id}, {skip, limit});
+    
     const result = await Contact.find({owner: _id});
     res.status(200).json(result);
    

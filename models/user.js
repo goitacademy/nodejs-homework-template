@@ -10,21 +10,24 @@ const userSchema = new Schema({
         type: String,
         match: /\w{0}[a-zA-Zа-яА-Я]+\@\w{0}[a-zA-Zа-яА-Я]+\.\w{0}[a-zA-Zа-яА-Я]/,
         unique: true,
-        required: true,
+        required: [true, 'Email is required'],
     },
     password: {
         type: String,
         minLength: 8,
-        required: true,
+        required: [true, 'Set password for user'],
     },
     subscription: {
         type: String,
         enum: ["starter", "pro", "business"],
         default: "starter"
     },
-    token: String
+    token:{ 
+        type: String,
+        default: ""
+    }
 },{
-    versionKey: false // You should be aware of the outcome after set to false
+    versionKey: false // Disable version stamp
 });
 
 userSchema.post("save", handleMongooseError);
