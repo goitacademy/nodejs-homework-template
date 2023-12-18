@@ -1,13 +1,37 @@
 const app = require('../app')
-const db = require('../model/db')
+const db = ('mongodb+srv://Mikky:mikkypassword@cluster0.lwo3hql.mongodb.net/db-contacts?retryWrites=true&w=majority')
+const PORT = process.env.PORT || 3005
 
-const PORT = process.env.PORT || 3000
+const gracefulShutdown = async () => {
+  console.log('Server is gracefully shutting down...')
 
-db.then(()=>{
-  app.listen(PORT, () => {
-    console.log(`Server running. Use our API on port: ${PORT}`)
+  try {
+    await db.close()
+    console.error('Database connection closed.')
+  } catch (err) {
+    console.error('Error closing database connection:', err.message)
+  }
+
+  process.exitCode = 0 // Успішний вихід
+}
+
+// Обробка помилок при запуску сервера
+try {
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
   })
-}).catch((err)=>{
-  console.log(`Server not runnig/ Error message: ${err.message}`)
-  process.exit(1);
-})
+
+  // Обробка завершення роботи сервера
+  server.on('close', () => {
+    console.log('Server closed')
+    // Тут ви також можете викликати додаткові дії перед закриттям програми
+    process.exit()
+  })
+
+  // Обробка сигналів завершення роботи
+  process.on('SIGINT', gracefulShutdown)
+  process.on('SIGTERM', gracefulShutdown)
+} catch (err) {
+  console.error('Error starting the server:', err.message)
+  process.exitCode = 1 // Невдалений вихід
+}

@@ -1,36 +1,38 @@
-const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const mongoose = require('mongoose')
+const { Schema, model } = mongoose
 
-const contactsSchema = new Schema({
-    name:{
-        type:String,
-        required:[true, 'Set name'],
-        unique:true
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name'],
+      unique: true,
     },
-    email:{
-        type:String,
-        required:[true, 'Set email']
+    email: {
+      type: String,
+      required: [true, 'Set email'],
     },
-    phone:{
-        type:String
+    phone: {
+      type: String,
     },
-    features:{
-        type:Array,
-        set:(data) => (data ? data : [])
+    features: {
+      type: Array,
+      set: (data) => (data || []),
     },
     // date: { type: Date, default: Date.now },
-    owner:{
-        name:String,
-        email:String,
-        phone:String
-    }
-},
-{versionKey:false, timestamps: true});
+    owner: {
+      name: String,
+      email: String,
+      phone: String,
+    },
+  },
+  { versionKey: false, timestamps: true }
+)
 
-contactsSchema.virtual('id').get(()=>{
-    return this._id
+contactsSchema.virtual('id').get(() => {
+  return this._id
 })
 
-const Contact = model('contacts', contactsSchema);
+const Contact = model('contacts', contactsSchema)
 
-module.exports = Contact;
+module.exports = Contact
