@@ -1,9 +1,12 @@
 const validateBody = require('../middlewares/validateBody');
 const isValidId = require('./isValidId');
-const isEmptyBody = require('./isEmptyBody')
+const isEmptyBody = require('./isEmptyBody');
+const authenticate = require('./authenticate');
+
 
 module.exports={
     validateBody,
     isValidId,
-    isEmptyBody
+    isEmptyBody,
+    authenticate
 }
