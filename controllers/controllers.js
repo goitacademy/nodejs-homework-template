@@ -1,76 +1,15 @@
 
-const { catchAsync } = require('../utils');
-const Contacts = require('../models/contactsModel');
+const contactControllers = require('./contactControllers')
 
 
-exports.getUsers = catchAsync(async (req, res, next) => {
-	const contacts = await Contacts.find();
-	res.status(200).json({
-		contacts,
-	})
-})
+exports.getContacts = contactControllers.listContacts;
 
+exports.getContact = contactControllers.getContactById;
 
-exports.getUser = catchAsync(async (req, res) => {
-	const { contactId } = req.params;
-	const contact = await Contacts.findById(contactId);
+exports.newContact = contactControllers.addContact;
 
-	res.status(200).json({
-		contact,
-	})
-}
-)
+exports.deleteContact = contactControllers.removeContact;
 
+exports.updateContact = contactControllers.updateContact;
 
-exports.newUser = catchAsync(async (req, res) => {
-
-	const newContact = await Contacts.create(req.body);
-
-	res.status(201).json({
-		mes: 'Success',
-		newContact,
-	})
-})
-
-
-exports.deleteUser = catchAsync(async (req, res) => {
-
-	const { contactId } = req.params;
-	const delContact = await Contacts.findByIdAndDelete(contactId);
-
-
-	return res.status(200).json({
-		"message": "contact deleted",
-		delContact,
-	});
-})
-
-
-exports.updateUser = catchAsync(async (req, res) => {
-	const { contactId } = req.params;
-	const { name, email, phone, favorite, role } = req.body;
-
-	const updatedUser = await Contacts.findByIdAndUpdate(contactId, { name, email, phone, favorite, role }, { new: true });
-
-
-	res.status(200).json({
-		mes: 'Success',
-		updatedUser,
-	})
-
-})
-
-
-exports.favorite = catchAsync(async (req, res) => {
-	const { contactId } = req.params;
-	const { favorite } = req.body;
-
-	console.log(favorite);
-
-	const updateFavorite = await Contacts.findByIdAndUpdate(contactId, { favorite }, { new: true });
-
-	res.status(200).json({
-		mes: 'Success',
-		updateFavorite,
-	})
-})
+exports.updatefavorite = contactControllers.updateContactFavorite;

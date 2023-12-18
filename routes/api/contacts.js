@@ -6,17 +6,17 @@ const { userController } = require('../../controllers');
 const router = express.Router()
 
 
-router.get('/', userController.getUsers)
+router.get('/', userController.getContacts)
 
-router.post('/', userMiddlewares.checkCreateUserData, userController.newUser)
+router.post('/', userMiddlewares.checkCreateUserData, userController.newContact)
 
-router.get('/:contactId', userMiddlewares.checkUserId, userController.getUser)
+router.get('/:contactId', userMiddlewares.checkUserId, userController.getContact)
 
-router.delete('/:contactId', userMiddlewares.checkUserId, userController.deleteUser)
+router.delete('/:contactId', userMiddlewares.checkUserId, userController.deleteContact)
 
-router.patch('/:contactId', userMiddlewares.checkUserId, userMiddlewares.checkCreateUserData, userController.updateUser)
+router.put('/:contactId', userMiddlewares.checkUserId, userMiddlewares.checkCreateUserData, userController.updateContact)
 
-router.patch('/:contactId/favorite', userMiddlewares.checkUserId, userMiddlewares.checkupdateUserDatafavorite, userController.favorite)
+router.patch('/:contactId/favorite', userMiddlewares.checkUserId, userMiddlewares.checkupdateUserDatafavorite, userController.updateContact)
 
 
 module.exports = router
