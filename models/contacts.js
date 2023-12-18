@@ -41,19 +41,22 @@ const addContact = async (data) => {
   };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
+  // await updateContact(contacts);
   return newContact;
 };
 
-const updateContact = async (id, data) => {
+const updateContactById = async (id, data) => {
   const contactId = String(id);
   const contacts = await listContacts();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index === -1) {
     return null;
   }
-  contacts[index] = { id, ...data };
+  // contacts[index] = { id, ...data };
+  contacts[index] = { ...contacts[index], ...data };
+
   await fs.writeFile(contactsPath, JSON.stringify(contacts));
-  return contacts;
+  return contacts[index];
 };
 
 export default {
@@ -61,5 +64,5 @@ export default {
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  updateContactById,
 };
