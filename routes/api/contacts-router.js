@@ -3,6 +3,7 @@ import contactsControllers from "../../controllers/contacts-controllers.js";
 import { validateBody } from "../../decorators/validateBody.js";
 import { authenticate } from "../../middlewares/authenticate.js";
 import { isValidId } from "../../middlewares/isValidId.js";
+import { upload } from "../../middlewares/upload.js";
 import {
   addContactSchema,
   contactFavoriteSchema,

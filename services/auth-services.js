@@ -15,9 +15,11 @@ const signUpService = async (body) => {
   }
 
   const hashpassword = await bcrypt.hash(body.password, 10);
+  const avatarURL = gravatar.url(body.email);
   const newUser = await User.create({
     ...body,
     password: hashpassword,
+     avatarURL,
   });
 
   return newUser;
