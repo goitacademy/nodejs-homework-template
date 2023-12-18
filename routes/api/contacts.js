@@ -32,7 +32,7 @@ router.post("/", async (req, res, next) => {
 
   const { error } = contactBodySchema.validate(body);
   if (error) {
-    res.status(400).json(error);
+    res.status(400).json({ message: "missing required name field" });
     return;
   }
   const newContact = await addContact(body);
@@ -43,6 +43,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:contactId", async (req, res, next) => {
   const contactIdParam = req.params.contactId;
   const removedContact = await removeContact(contactIdParam);
+  // res.status(200).json({ message: "contact deleted" });
   if (!removedContact) {
     res.status(404).json({ message: "Not Found" });
     return;
@@ -56,7 +57,7 @@ router.put("/:contactId", async (req, res, next) => {
 
   const { error } = contactBodySchema.validate(body);
   if (error) {
-    res.status(400).json(error);
+    res.status(400).json({ message: "missing fields" });
     return;
   }
   const updatedContact = await updateContact(contactIdParam, body);
