@@ -1,7 +1,3 @@
-const { Types } = require("mongoose");
-
-const { Contact } = require("../models/contact");
-
 const { catchAsync, HttpError, contactValidators } = require("../helpers");
 
 const { contactServices } = require("../services");
@@ -16,12 +12,11 @@ const checkContactId = catchAsync(async (req, res, next) => {
 });
 
 const checkCreateContactData = catchAsync(async (req, res, next) => {
-  
   const { value, error } = contactValidators.createContactDataValidator(req.body);
 
   if (error) throw new HttpError(400, "Invalid contact data!");
  
-  const contactExists = await Contact.exists({ email: value.email });
+  await contactServices.checkContactExists({ email: value.email });
 
   if (contactExists)
     throw new HttpError(409, "Contact with this email already exists..");

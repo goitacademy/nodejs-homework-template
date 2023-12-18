@@ -1,5 +1,3 @@
-const { Contact } = require("../models/contact");
-
 const { catchAsync, ctrlWrapper } = require("../helpers"); // імпортуємо помилку для прокидування
 
 const { contactServices } = require("../services");
