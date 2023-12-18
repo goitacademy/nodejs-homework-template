@@ -2,7 +2,14 @@ const {HttpError, ctrlWrapper} = require('../helpers')
 const { Contact } = require("../models/Contact")
 
 const getAll = async (req, res, next) => {
-  const data = await Contact.find();
+  const { page = 1, limit = 20, favorite } = req.query
+  const { _id: owner } = req.user
+  const skip = (page-1)*limit
+  const data = await Contact.find({ owner }, "-createdAt -updatedAt", { skip, limit });
+  if (favorite) {
+    const data = await Contact.find({favorite, owner }, "-createdAt -updatedAt", { skip, limit }).exec();
+    return data.length? res.json(data) : res.status(300).json("the list is empty")  
+  }
   res.json(data);
 }
 
@@ -16,7 +23,9 @@ const getById = async (req, res, next) => {
 }
 
 const add = async (req, res, next) => {
-    const result = await Contact.create(req.body)
+  const {_id: owner } = req.user
+  const result = await Contact.create({ ...req.body, owner })
+  console.log({ ...req.body, owner })
     res.status(201).json(result)
 }
 

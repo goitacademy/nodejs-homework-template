@@ -16,7 +16,11 @@ const contactSchema = new Schema({
     favorite: {
       type: Boolean,
       default: false,
-    },
+  },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    }
   }, 
   {versionKey: false}
 )
@@ -37,7 +41,7 @@ const joiAddSchema = Joi.object({
     email: Joi.string().email().required()
       .messages({
         "any.required": "Missing required email field.",
-          "string.email": "Invalid email format. Please enter a valid phone number"
+          "string.email": "Invalid email format. Please enter a valid email"
     }),
     phone: Joi.string().required().pattern(/^[0-9+()\\-]*$/)
       .messages({
