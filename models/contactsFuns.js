@@ -1,5 +1,4 @@
 const Contact = require("./contact");
-const mongoose = require("mongoose");
 
 const listContacts = async () => {
   try {
@@ -49,29 +48,19 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, body) => {
+async function updateStatusContact(contactId, body) {
   try {
-    const objectIdContactId = mongoose.Types.ObjectId(contactId);
-
-    console.log("Updating contact with ID:", contactId);
-    console.log("Converted ObjectId:", objectIdContactId);
-    console.log("Update body:", body);
-
     const updatedContact = await Contact.findByIdAndUpdate(
       contactId,
-      { $set: body },
+      { favorite: body.favorite },
       { new: true }
     );
 
-    console.log("Updated contact:", updatedContact);
-
     return updatedContact;
   } catch (error) {
-    console.error("Error updating contact status:", error);
-    return null;
+    throw new Error("Contact not found");
   }
-};
-
+}
 module.exports = {
   listContacts,
   getContactById,

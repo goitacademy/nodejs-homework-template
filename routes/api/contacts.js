@@ -74,9 +74,6 @@ router.put("/:contactId", async (req, res) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
 
-  console.log("Updating contact with ID:", contactId);
-  console.log("Request Body:", req.body);
-
   if (Object.keys(req.body).length === 0) {
     return res.status(400).json({ message: "Missing fields" });
   }
@@ -96,15 +93,12 @@ router.put("/:contactId", async (req, res) => {
   }
 });
 
-router.patch("/api/contacts/:contactId/favorite", async (req, res) => {
+router.patch("/:contactId/favorite", async (req, res) => {
   try {
     const { contactId } = req.params;
     const { favorite } = req.body;
 
-    console.log("Received PATCH request for contact ID:", contactId);
-    console.log("Request body:", req.body);
-
-    if (Object.keys(req.body).length === 0) {
+    if (favorite === undefined) {
       return res.status(400).json({ message: "missing field favorite" });
     }
 
