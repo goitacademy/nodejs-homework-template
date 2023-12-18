@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const path = require("path");
 const joi = require("joi");
+const { model, Schema } = require("mongoose");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 const contactBodySchema = joi.object({
@@ -18,12 +19,48 @@ const contactBodySchema = joi.object({
     .email()
     .required()
     .messages({ "any.required": "missing required email field " }),
+  favorite: joi.boolean(),
 });
+
 const putContactsSchema = joi.object({
   name: joi.string().min(3),
   phone: joi.string(),
   email: joi.string().email(),
+  favorite: joi.boolean(),
 });
+
+const updateFavoriteSchema = joi.object({
+  favorite: joi
+    .boolean()
+    .required()
+    .messages({ "any.required": "missing required favorite field " }),
+});
+
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
+
+const Contact = model("contact", contactsSchema);
+
 async function listContacts() {
   try {
     const data = await fs.readFile(contactsPath, "utf-8");
@@ -104,4 +141,6 @@ module.exports = {
   updateContact,
   contactBodySchema,
   putContactsSchema,
+  updateFavoriteSchema,
+  Contact,
 };
