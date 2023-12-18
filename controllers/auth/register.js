@@ -1,25 +1,23 @@
-const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
-
+const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 
 const register = async (req, res) => {
-  const { email, password, subscription } = req.body;
+  const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user) throw HttpError(409, `Email ${email} is already in use`);
+  const hashPassword = bcrypt.hash(password, 8);
 
-  const hashPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-  await User.create({ ...req.body, password: hashPassword });
+  const createdUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+  });
 
-  res.status(201).json({
-    code: 201,
-    status: "User added",
-    data: {
-      user: {
-        email,
-        subscription,
-      },
+  res.status(200).json({
+    user: {
+      email: createdUser.email,
+      subscription: createdUser.subscription,
     },
   });
 };

@@ -17,7 +17,7 @@ router.post("/register", validateBody(authSchema), ctrlWrapper(register));
 
 router.post("/login", validateBody(authSchema), ctrlWrapper(login));
 
-router.get("/currentUser", userAuth, ctrlWrapper(getCurrentUser));
+router.get("/current", userAuth, ctrlWrapper(getCurrentUser));
 
 router.get("/logout", userAuth, ctrlWrapper(logout));
 

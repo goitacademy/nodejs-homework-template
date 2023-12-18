@@ -1,29 +1,24 @@
+const jwt = require("jsonwebtoken");
 const { User } = require("../models");
 const { HttpError } = require("../helpers");
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
-const path = require("path");
-
-const configPath = path.join(__dirname, "../", "config", ".env");
-dotenv.config({ path: configPath });
 const { SECRET_KEY } = process.env;
 
 const userAuth = async (req, res, next) => {
-  const { authorization = "" } = req.headers;
-  const [bearer, token] = authorization.split(" ");
+  const { auth = "" } = req.headers;
+  const [bearer, token] = auth.split(" ");
+
+  if (bearer !== "Bearer") next(HttpError(401));
 
   try {
-    if (bearer !== "Bearer") throw HttpError(401, "Not authorized");
-
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
-    if (!user || !user.token || user.token !== token)
-      throw HttpError(401, "Not authorized");
+
+    if (!user || !user.token || user.token !== token) next(HttpError(401));
 
     req.user = user;
+    next();
   } catch (error) {
-    if (error.message === "Invalid signature") error.status = 401;
-    next(error);
+    next(HttpError(401));
   }
 };
 

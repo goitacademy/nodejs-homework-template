@@ -1,19 +1,23 @@
-const { User } = require("../../models");
 const { HttpError } = require("../../helpers");
+const { User } = require("../../models");
 
 const updateUserStatus = async (req, res) => {
-  const { id } = req.params;
+  const { _id: userId } = req.user;
   const { subscription } = req.body;
-  const response = await User.findByIdAndUpdate(id, req.body, {
-    new: subscription,
-  });
 
-  if (!response) throw HttpError(404, "Not found");
+  const subscriptions = ["starter", "pro", "business"];
 
-  res.status(200).json({
-    code: 200,
-    status: "Subscription updated",
-    data: response,
+  if (!subscriptions.includes(subscription)) throw HttpError(400);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { subscription },
+    { new: true }
+  );
+
+  res.json({
+    email: updatedUser?.email,
+    subscription: updatedUser?.subscription,
   });
 };
 
