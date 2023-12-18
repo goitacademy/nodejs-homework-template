@@ -4,8 +4,8 @@ const { HttpError } = require("../helpers");
 const { SECRET_KEY } = process.env;
 
 const userAuth = async (req, res, next) => {
-  const { auth = "" } = req.headers;
-  const [bearer, token] = auth.split(" ");
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
 
   if (bearer !== "Bearer") next(HttpError(401));
 
