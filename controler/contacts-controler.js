@@ -20,6 +20,7 @@ const getById = async (req, res, next) => {
         if (!result) {
             throw HttpError(404, `Contact with id=${id} not found`);
         }
+        console.log(result)
       res.json(result)  
     }
      catch (error) {
