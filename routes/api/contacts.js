@@ -97,25 +97,27 @@ router.put("/:contactId", async (req, res) => {
 });
 
 router.patch("/api/contacts/:contactId/favorite", async (req, res) => {
-  const { contactId } = req.params;
-  const { favorite } = req.body;
+  try {
+    const { contactId } = req.params;
+    const { favorite } = req.body;
 
-  if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({ message: "Missing fields" });
-  }
+    console.log("Received PATCH request for contact ID:", contactId);
+    console.log("Request body:", req.body);
 
-  const { error } = contactSchema.validate(req.body, { abortEarly: false });
+    if (Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: "missing field favorite" });
+    }
 
-  if (error) {
-    return res.status(400).json({ message: error.message });
-  }
+    const updatedContact = await updateStatusContact(contactId, { favorite });
 
-  const updatedContact = await updateStatusContact(contactId, { favorite });
-
-  if (updatedContact) {
-    return res.status(200).json(updatedContact);
-  } else {
-    return res.status(404).json({ message: "Not found" });
+    if (updatedContact) {
+      return res.status(200).json(updatedContact);
+    } else {
+      return res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    console.error("Error in PATCH /api/contacts/:contactId/favorite:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

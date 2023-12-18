@@ -1,20 +1,23 @@
+const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
-const {
-  DB_MONGO_USER,
-  DB_MONGO_PASSWORD,
-  DB_MONGO_HOST,
-  DB_MONGO_DATABASE,
-} = require("./env.js");
+dotenv.config();
+
+const { DB_HOST } = process.env;
 
 const setupMongoConnection = async () => {
   try {
-    await mongoose.connect(
-      `mongodb+srv://${DB_MONGO_USER}:${DB_MONGO_PASSWORD}@${DB_MONGO_HOST}/${DB_MONGO_DATABASE}`
-    );
+    if (!DB_HOST) {
+      throw new Error("DB_HOST is not defined in the environment variables");
+    }
+
+    await mongoose.connect(DB_HOST, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Database connection successful");
   } catch (err) {
-    console.log(err);
+    console.error(err);
     process.exit(1);
   }
 };
