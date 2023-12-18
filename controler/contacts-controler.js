@@ -16,11 +16,10 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const result = contactsService.getContactById(id);
+        const result = await contactsService.getContactById(id);
         if (!result) {
             throw HttpError(404, `Contact with id=${id} not found`);
         }
-        console.log(result)
       res.json(result)  
     }
      catch (error) {
