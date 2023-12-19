@@ -29,7 +29,6 @@ const getById = async (req, res, next) => {
 const add = async (req, res, next) => {
     try {
         const { error } = contactsAddSchema.validate(req.body);
-        console.log(error)
         if (error) {
             throw HttpError(404, 'missing required name field');
         }
