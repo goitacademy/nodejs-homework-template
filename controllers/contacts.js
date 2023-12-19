@@ -1,8 +1,25 @@
 const { Contact } = require('../models/contact');
 const { HttpError, ctrlWrapper } = require('../helpers');
 
-const getAllContacts = async (_, res) => {
-    const result = await Contact.find();
+const getAllContacts = async (req, res) => {
+    const { page = 1, limit = 20, favorite = null } = req.query;
+    const skip = (page - 1) * limit;
+
+    if (favorite) {
+        const result = await Contact.find(
+            { owner: req.user._id, favorite },
+            '-createdAt -updatedAt -owner -_id',
+            { skip, limit }
+        );
+        res.json(result);
+        return;
+    }
+
+    const result = await Contact.find(
+        { owner: req.user._id },
+        '-createdAt -updatedAt -owner -_id',
+        { skip, limit }
+    );
     res.json(result);
 };
 
@@ -13,7 +30,7 @@ const getContactById = async (req, res) => {
 };
 
 const addContact = async (req, res) => {
-    const result = await Contact.create(req.body);
+    const result = await Contact.create({ ...req.body, owner: req.user._id });
     if (!result)
         throw HttpError(400, `${req.body.name} is already in contacts!`);
     res.status(201).json(result);
