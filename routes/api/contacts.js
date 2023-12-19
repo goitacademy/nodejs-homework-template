@@ -1,20 +1,20 @@
 import { Router } from 'express';
 import controller from '../../controller.js';
 
+import { isEmptyBody } from "../../middlewares/index.js";
+
 const router = Router();
 
 router.get('/', controller.getAll);
 
 router.get('/:contactId', controller.getById);
 
-router.post('/', controller.add);
+router.post('/', isEmptyBody, controller.add);
 
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// });
+router.put('/:contactId', isEmptyBody, controller.updateById);
 
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// });
+router.delete('/:contactId', controller.removeContact );
+
+
 
 export default router;
