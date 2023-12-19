@@ -8,22 +8,22 @@ const router = express.Router();
 
 router.get("/", controllers.getAll);
 
-router.get("/:contactId", controllers.getById);
+// router.get("/:contactId", controllers.getById);
 
-router.post(
-  "/",
-  isEmptyBody,
-  decorators.validateBody(addSchema),
-  controllers.addContact
-);
+// router.post(
+//   "/",
+//   isEmptyBody,
+//   decorators.validateBody(addSchema),
+//   controllers.addContact
+// );
 
-router.delete("/:contactId", controllers.deleteContact);
+// router.delete("/:contactId", controllers.deleteContact);
 
-router.put(
-  "/:contactId",
-  isEmptyBody,
-  decorators.validateBody(addSchema),
-  controllers.updateContact
-);
+// router.put(
+//   "/:contactId",
+//   isEmptyBody,
+//   decorators.validateBody(addSchema),
+//   controllers.updateContact
+// );
 
 export default router;
