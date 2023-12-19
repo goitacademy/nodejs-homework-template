@@ -3,6 +3,9 @@ import { HttpError } from "../utils/HttpError.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import "dotenv/config";
+import gravatar from "gravatar";
+
 
 const { JWT_SECRET } = process.env;
 
@@ -33,6 +36,10 @@ const logInService = async (body) => {
     throw new HttpError(401, "Email or password is wrong");
   }
 
+  if (!user.verify) {
+    throw HttpError(401, "Email is not verified");
+  }
+  
   const isPasswordCorrect = await bcrypt.compare(body.password, user.password);
   if (!isPasswordCorrect) {
     throw new HttpError(401, "Email or password is wrong");
