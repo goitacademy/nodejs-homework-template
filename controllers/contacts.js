@@ -44,6 +44,7 @@ const updateFavorite = async (req, res) => {
   }
   res.json(result);
 };
+
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
