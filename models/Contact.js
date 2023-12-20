@@ -1,50 +1,42 @@
 import { Schema, model } from "mongoose";
+import helpers from "../helpers/index.js";
+import Joi from "joi";
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
+  { versionKey: false, timestamps: true }
+);
+
+contactSchema.post("save", helpers.handleMongooseError);
+
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
-// const contactSchema = new Schema({
-//   name: {
-//     type: String,
-//     required: true,
-//   },
-//   email: {
-//     type: String,
-//     required: true,
-//     trim: true,
-//     lowercase: true,
-//     unique: true,
-//     validate: [validateEmail, "Please fill a valid email address"],
-//     match: [
-//       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-//       "Please fill a valid email address",
-//     ],
-//   },
-//   phone: {
-//     type: String,
-//     required: true,
-//     match: /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/,
-//   },
-//   favorite: {
-//     type: Boolean,
-//     default: false,
-//   },
-// });
+const addFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 const Contact = model("contact", contactSchema);
 
-export default Contact;
+const schemas = { addSchema, addFavoriteSchema };
+
+export default { Contact, schemas };
