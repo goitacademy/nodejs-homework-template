@@ -10,10 +10,11 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minlenth: 6,
+      minlength: 6,
     },
     email: {
       type: String,
+      unique: true,
       match: emailRegexp,
       required: [true, "Email is required"],
       unique: true,
@@ -32,7 +33,7 @@ const userSchema = new Schema(
 );
 
 export const userSignupSchema = Joi.object({
-  username: { type: String, required: true },
+  username: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
   // subscription: Joi.string(),
@@ -40,7 +41,7 @@ export const userSignupSchema = Joi.object({
 });
 
 export const userSigninSchema = Joi.object({
-  username: { type: String, required: true },
+  username: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 });
