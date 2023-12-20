@@ -32,7 +32,7 @@ const addSchema = Joi.object({
 });
 
 const addFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required().message("missing field favorite"),
 });
 
 const Contact = model("contact", contactSchema);
