@@ -1,25 +1,26 @@
-const express = require('express')
+const express = require("express"); // створюємо веб-сервер
 
-const router = express.Router()
+const router = express.Router(); // створюємо router (це як записна книга, де по шляху можна побачити, що потрібно робити)
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers/contacts");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { contactMiddleware }  = require("../../middleswares");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// по шляху '/' викликаємо ф-цію, яка повертає усі контакти
+router.get("/", ctrl.getAll);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// по шляху '/:contactId' викликаємо ф-цію, яка повертає контакт з id, який можна витягнути з req.params - параметри запиту
+router.get("/:contactId", contactMiddleware.checkContactId, ctrl.getById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// викликаємо ф-цію, яка у базу данних (файл json з даними добавить новий запис).
+router.post("/", contactMiddleware.checkCreateContactData, ctrl.add); // contactMiddleware.checkCreateContactData,
+
+// викликаємо ф-цію, яка видалить у базі данних запис з таким id
+router.delete("/:contactId", contactMiddleware.checkContactId, ctrl.deleteById);
+
+// викликаємо ф-цію, яка запис по id замінить на новий запис
+router.put("/:contactId", contactMiddleware.checkContactId ,ctrl.updateById);
+
+router.patch("/:contactId/favorite", contactMiddleware.checkContactId, ctrl.updateStatusContact);
 
 module.exports = router;
