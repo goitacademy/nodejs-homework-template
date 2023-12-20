@@ -10,9 +10,9 @@ contactsRouter.get('/:id', contactsControllers.getById);
 
 contactsRouter.post('/', isEmptyBody, contactsControllers.addContact);
 
-contactsRouter.put('/:contactId', isEmptyBody, contactsControllers.updateContactsById);
+contactsRouter.put('/:id', isEmptyBody, contactsControllers.updateContactsById);
 
-contactsRouter.delete('/:contactId', contactsControllers.deleteContact);
+contactsRouter.delete('/:id', contactsControllers.deleteContact);
 
 
 
