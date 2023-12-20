@@ -1,5 +1,5 @@
 import * as serviceContacts from "./models/contacts.js";
-import HttpError from "./helpers/HttpError.js";
+import { HttpError } from "./helpers/index.js";
 import { contactsAddSchema, contactUpdateSchema } from "./schemas/contacts-schemas.js";
 
 
@@ -16,13 +16,16 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const result = await serviceContacts.getContactById(contactId); 
+        const result = await serviceContacts.getContactById(contactId);
+        
         if (!result) {
-            throw HttpError(404, `Contact with id=${contactId} is not found`)
+            throw HttpError(404, `Contact with id=${contactId} is not found`);
         };
+
         res.json(result);
+
     } catch (error) {
-        next();
+        next(error);
     }
 };
 
@@ -30,7 +33,7 @@ const add = async (req, res, next) => {
     try {
         const { error } = contactsAddSchema.validate(req.body);
         if (error) {
-            throw HttpError(404, 'missing required name field');
+            throw HttpError(400, `missing field ${error.message}`);
         }
         const result = await serviceContacts.addContact(req.body);
         res.status(201).json(result);
@@ -50,21 +53,23 @@ const removeContact = async (req, res, next) => {
         res.json({ message: "contact deleted" });
     
     } catch (error) {
-        next();
+        next(error);
     }
 };
 
 const updateById = async (req, res, next) => { 
     try {
-        const { error } = contactUpdateSchema.validate(req.body);
-        if (error) { 
-            throw HttpError(400, error.message);
-        }
         const { contactId } = req.params;
         const result = await serviceContacts.updateContact(contactId, req.body);
         if (!result) {
             throw HttpError(404, `Contact with id=${contactId} is not found`);
+        };
+        
+        const { error } = contactUpdateSchema.validate(req.body);
+        if (error) { 
+            throw HttpError(400, error.message);
         }
+        
         res.json(result);
         
     } catch (error) {
