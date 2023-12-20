@@ -36,6 +36,11 @@ const addSchema = Joi.object({
     .required()
     .min(6)
     .messages({ "any.required": "missing required phone field" }),
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
 });
 
 const updateFavoriteSchema = Joi.object({
