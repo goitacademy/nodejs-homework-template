@@ -1,4 +1,3 @@
-/** @format */
 import Joi from "joi";
 
 export const contactAddShema = Joi.object({

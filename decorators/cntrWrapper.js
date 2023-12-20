@@ -1,5 +1,3 @@
-/** @format */
-
 const ctrlWrapper = (ctrl) => {
   const func = async (req, res, next) => {
     try {
