@@ -2,27 +2,26 @@ import { Schema, model } from "mongoose";
 import helpers from "../helpers/index.js";
 import Joi from "joi";
 
-const contactSchema = new Schema(
-  {
-    name: {
-      type: String,
-      required: [true, "Set name for contact"],
-    },
-    email: {
-      type: String,
-    },
-    phone: {
-      type: String,
-    },
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, "Set name for contact"],
   },
-  { versionKey: false, timestamps: true }
-);
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 contactSchema.post("save", helpers.handleMongooseError);
+contactSchema.pre("findOneAndUpdate", helpers.handleUpdateSchema);
+contactSchema.post("findOneAndUpdate", helpers.handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -32,7 +31,9 @@ const addSchema = Joi.object({
 });
 
 const addFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required().message("missing field favorite"),
+  favorite: Joi.boolean().required().messages({
+    "any.required": "missing field favorite",
+  }),
 });
 
 const Contact = model("contact", contactSchema);
