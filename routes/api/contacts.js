@@ -37,18 +37,18 @@ router.post("/", async (req, res, next) => {
   }
   const newContact = await addContact(body);
 
-  res.json(newContact);
+  res.status(201).json(newContact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
   const contactIdParam = req.params.contactId;
   const removedContact = await removeContact(contactIdParam);
-  // res.status(200).json({ message: "contact deleted" });
+
   if (!removedContact) {
     res.status(404).json({ message: "Not Found" });
     return;
   }
-  res.json(removedContact);
+  res.status(200).json({ message: "contact deleted" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
