@@ -1,16 +1,16 @@
-const express = require('express');                                    // створюємо веб-сервер
-const logger = require('morgan');                                      // для протоколювання запитів з можливістю налаштування формату виведення. Дозволить обробити свої журнали аналітичними застосунками, що генерують корисну статистику                
-const cors = require('cors');                                          // cors - всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)                                     
+const express = require('express')
+const logger = require('morgan')
+const cors = require('cors')
 
-const contactsRouter = require('./routes/api/contacts');               // підключаємо роутери з контактами (сторінку про контакти до книги)
- 
-const app = express()                                                  // запускаємо сервер
+const contactsRouter = require('./routes/api/contacts')
+
+const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'; 
 
-app.use(logger(formatsLogger));                                       // викликаємо morgan
-app.use(cors());                                                      // всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)
-app.use(express.json());                                              // парсер для отримання данних у форматі json
+app.use(logger(formatsLogger))
+app.use(cors())
+app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
 
@@ -19,7 +19,7 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  res.status(500).json({ message: err.message })
 })
 
 
