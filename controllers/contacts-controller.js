@@ -1,6 +1,9 @@
 import * as contactService from "../models/contactsModel.js";
 import HttpError from "../helpers/HttpError.js";
-import contactAddSchema from "../schema/contacts-schema.js";
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+} from "../schema/contacts-schema.js";
 
 const getAllContacts = async (req, res) => {
   try {
@@ -10,20 +13,18 @@ const getAllContacts = async (req, res) => {
     next(error);
   }
 };
-
 const getContactById = async (req, res, next) => {
   try {
-    const { contactId } = req.params;
-    const result = await contactService.getContactById(contactId);
+    const { id } = req.params;
+    const result = await contactService.getContactById(id);
     if (!result) {
-      throw HttpError(404, `Contact with id=${contactId} not found `);
+      throw HttpError(404, `Contact with id=${id} not found `);
     }
     res.json(result);
   } catch (error) {
     next(error);
   }
 };
-
 const addContacts = async (req, res, next) => {
   try {
     const { error } = contactAddSchema.validate(req.body);
@@ -36,9 +37,39 @@ const addContacts = async (req, res, next) => {
     next(error);
   }
 };
+const updateContactsById = async (req, res, next) => {
+  try {
+    const { error } = contactUpdateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await contactService.updateContact(id, req.body);
+    res.status(201).json(result);
+    if (!result) {
+      throw HttpError(404, `Contact with id=${id} not found `);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+const delContactsById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactService.removeContact(id);
+    if (!result) {
+      throw HttpError(404, `Movie with ${id} not found`);
+    }
+    res.status(204).json({ message: "Delete success" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export default {
   getAllContacts,
   getContactById,
   addContacts,
+  updateContactsById,
+  delContactsById,
 };
