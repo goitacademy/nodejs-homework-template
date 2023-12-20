@@ -13,4 +13,9 @@ const checkUpdate = schema => (req, res, next) => {
     next()
 }
 
-module.exports = {checkCreate, checkUpdate};
+const checkUpdateFavorite = (req, res, next) => {
+    if (Object.keys(req.body).length === 0) throw new HttpError(400, 'missing field favorite');
+    next()
+}
+
+module.exports = {checkCreate, checkUpdate, checkUpdateFavorite};
