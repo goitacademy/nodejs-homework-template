@@ -1,6 +1,6 @@
 import express from "express";
 import Joi from "joi";
-import * as contactsModel from "../../models/contacts";
+import * as contactsModel from "../../models/contacts.js";
 
 const router = express.Router();
 
