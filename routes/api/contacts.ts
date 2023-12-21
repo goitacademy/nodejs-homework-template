@@ -15,10 +15,9 @@ contactsRouter.get('/', async (_, res, next) => {
 })
 
 contactsRouter.get('/:id', async (req, res, next) => {
-  const { id } = req.params
-  const contact = await getContactById(id)
+  const contact = await getContactById(req.params.id)
   if (!contact) {
-    return next(createHttpError(404, `Movie with id=${id} not found`))
+    return next(new createHttpError.NotFound())
   }
   res.json(contact)
 })
@@ -26,17 +25,16 @@ contactsRouter.get('/:id', async (req, res, next) => {
 contactsRouter.post('/', async (req, res, next) => {
   const parsedData = contactsSchema.safeParse(req.body)
   if (!parsedData.success) {
-    return next(createHttpError(400, 'Bad request'))
+    return next(new createHttpError.BadRequest('Missing fields'))
   }
   const contact = await addContact(parsedData.data)
   res.status(201).json(contact)
 })
 
 contactsRouter.delete('/:id', async (req, res, next) => {
-  const { id } = req.params
-  const contact = await removeContact(id)
+  const contact = await removeContact(req.params.id)
   if (!contact) {
-    return next(createHttpError(404, `Movie with id=${id} not found`))
+    return next(new createHttpError.NotFound())
   }
   res.json({ message: 'Deleted successfully' })
 })
@@ -44,12 +42,12 @@ contactsRouter.delete('/:id', async (req, res, next) => {
 contactsRouter.put('/:id', async (req, res, next) => {
   const parsedData = contactsSchema.safeParse(req.body)
   if (!parsedData.success) {
-    return next(createHttpError(400, 'Bad request'))
+    return next(new createHttpError.BadRequest('Missing fields'))
   }
   const { id } = req.params
   const contact = await updateContact(id, req.body)
   if (!contact) {
-    return next(createHttpError(404, `Movie with id=${id} not found`))
+    return next(new createHttpError.NotFound())
   }
   res.json(contact)
 })
