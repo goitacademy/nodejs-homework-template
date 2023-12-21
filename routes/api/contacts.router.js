@@ -1,6 +1,6 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/contacts");
+const ctrl = require("../../controllers/contacts.controllers");
 
 const { validateBody, isValidId, isEmptyBody } = require("../../middlewares");
 
