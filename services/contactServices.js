@@ -1,7 +1,11 @@
 const { Types } = require("mongoose");
 const { Contact } = require("../models/contact");
+const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
+const { SECRET_KEY } = process.env;
 
 // створення нового контакта
 exports.createContact = async (userData) => {
@@ -13,10 +17,18 @@ exports.createContact = async (userData) => {
 };
 
 // отримання усіх контактів
-exports.getAllContacts = () => Contact.find().select("+password"); // .lean() - щоб поубирати лишні прототипи
-
+// exports.getAllContacts = () => Contact.find().select("+password"); // .lean() - щоб поубирати лишні прототипи
+exports.getAllContacts = () => Contact.find({}, "-createdAt -updatedAt");
+ 
 // отримання одного контакту
-exports.getOneContact = (id) => Contact.findById(id);
+exports.getOneContact = (id) => {
+  const result = Contact.findById(id);
+
+  if (!result) {
+     throw HttpError(404, "Not found");
+  }
+  return result;
+}
 
 // поновлення контакта по id
 exports.updateContact = async (id, contactData) => {
@@ -57,4 +69,18 @@ exports.checkContactExistsById = async (id) => {
   const contactExists = await Contact.findById(id);
 
   if (!contactExists) throw new HttpError(404, "Contact not found..");
+};
+
+exports.signup = async (userdata) => {
+  const { email, password } = userdata;
+  const user = await User.findOne({ email });
+  
+   if (user) {
+     throw HttpError(409, "Email already in use");
+   }
+  
+  const hashPassword = await bcrypt.hash(password, 10);
+  const newUser = await User.create({ ...req.body, password: hashPassword });
+
+  return newUser;
 };

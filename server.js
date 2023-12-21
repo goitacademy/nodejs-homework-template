@@ -3,8 +3,7 @@ const mongoose = require("mongoose");                    // імпортуємо
 const app = require("./app");
 
 const { DB_HOST } = process.env;                          // беремо секретну змінну (строку підключення до бд) зі змінних оточення
-console.log('проверка');
-console.log(DB_HOST);
+
 mongoose.set('strictQuery', true);                       // підключаємося
 
 
