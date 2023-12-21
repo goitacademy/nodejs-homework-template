@@ -1,8 +1,10 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid");
+import path from "path";
 
-const contactsPath = path.join(__dirname, "contacts.json");
+import { v4 as uuidv4 } from "uuid";
+
+import fs from "fs/promises";
+
+const contactsPath = path.join(process.cwd(), "contacts.json");
 
 const listContacts = async () => {
 	const data = await fs.readFile(contactsPath, "utf-8");
@@ -42,7 +44,7 @@ const updateContact = async (contactId, body) => {
 	}
 };
 
-module.exports = {
+export {
 	listContacts,
 	getContactById,
 	removeContact,
