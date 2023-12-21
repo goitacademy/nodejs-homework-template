@@ -10,4 +10,5 @@ const isEmptyBody = async(req, res, next) => {
     next();
 }
 
+
 export default isEmptyBody
