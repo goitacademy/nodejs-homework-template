@@ -1,25 +1,23 @@
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const contactsRouter = require("./routes/api/contactsRoutes");
-const PORT = process.env.PORT || 4000;
-
+const express = require("express");
 const app = express();
+const contactRoutes = require("./routes/api/contacts.routes");
+const authRoutes = require("./routes/api/user.routes");
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-
-app.use(logger(formatsLogger));
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 4000;
 
 const connection = mongoose.connect(process.env.DATABASE_URL, {
   dbName: "db-contacts",
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+app.use(express.json());
+require("./config/passport");
+app.use("/api", contactRoutes);
+app.use("/api/auth", authRoutes);
 
 connection
   .then(() => {
@@ -32,8 +30,7 @@ connection
     console.error(`Error while establishing connection: [${error}]`);
     process.exit(1);
   });
-
-app.use("/api/contacts", contactsRouter);
+app.use("/api/contacts", contactRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
