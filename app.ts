@@ -18,7 +18,6 @@ app.use(() => {
   createHttpError(400, 'Not found')
 })
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
+app.use((err: Error, _req: Request, res: Response, _next: NextFunction): void => {
   res.status(500).json({ message: err.message })
 })
