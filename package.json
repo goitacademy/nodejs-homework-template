@@ -9,6 +9,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "add": "^2.0.6",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "express": "^4.17.1",
@@ -17,7 +18,8 @@
     "mongoose": "^8.0.3",
     "morgan": "1.10.0",
     "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "process-env": "^2.0.2"
   },
   "devDependencies": {
     "eslint": "7.19.0",

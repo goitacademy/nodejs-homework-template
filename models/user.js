@@ -49,8 +49,6 @@ const subscriptionSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-const User = model("user", userSchema);
-
 const schema = {
     registerSchema,
     loginSchema,
