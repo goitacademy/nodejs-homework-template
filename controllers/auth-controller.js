@@ -68,9 +68,19 @@ const signout = async (req, res) => {
   });
 };
 
+const updateUserSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const result = await User.findByIdAndUpdate(_id, req.body);
+  if (!result) {
+    throw HttpError(404, `User with id= ${_id} not found`);
+  }
+  res.json(result);
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
+  updateUserSubscription: ctrlWrapper(updateUserSubscription),
 };
