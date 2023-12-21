@@ -24,6 +24,10 @@ const userScheme = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
+      },
+      avatarURL: {
+        type: String,
+        required: true,
       }
 }, {versionKey: false, timestamps: true});
 
