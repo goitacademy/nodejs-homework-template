@@ -4,17 +4,17 @@ import { nanoid } from "nanoid";
 
 const contactsPath = path.resolve("models", "contacts.json");
 
-const listContacts = async () => {
+export const listContacts = async () => {
   const data = await fs.readFile(contactsPath);
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+export const getContactById = async (contactId) => {
   const contactsList = await listContacts();
   return contactsList.find((item) => item.id === contactId) || null;
 };
 
-const removeContact = async (contactId) => {
+export const removeContact = async (contactId) => {
   const contactsList = await listContacts();
   const index = contactsList.findIndex((item) => item.id === contactId);
   if (index === -1) {
@@ -25,7 +25,7 @@ const removeContact = async (contactId) => {
   return result;
 };
 
-const addContact = async (body) => {
+export const addContact = async (body) => {
   const contactsList = await listContacts();
   const newContact = {
     id: nanoid(),
@@ -36,7 +36,7 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+export const updateContact = async (contactId, body) => {
   const contactsList = await listContacts();
   const index = contactsList.findIndex((item) => item.id === contactId);
   if (index === -1) {
@@ -48,12 +48,4 @@ const updateContact = async (contactId, body) => {
   };
   await fs.writeFile(contactsPath, JSON.stringify(contactsList, null, 2));
   return contactsList[index];
-};
-
-export default {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
 };
