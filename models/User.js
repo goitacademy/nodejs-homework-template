@@ -43,6 +43,10 @@ export const userSigninSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+export const userSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 userSchema.post("save", handleSaveError);
 userSchema.pre("findOneAndUpdate", addUpdateSettings);
 userSchema.post("findOneAndUpdate", handleSaveError);
