@@ -5,10 +5,10 @@ const {
   logout,
   updateUserStatus,
   getCurrentUser,
+  updateAvatar,
 } = require("../../controllers");
-const { ctrlWrapper } = require("../../helpers");
-const { validateBody } = require("../../helpers");
-const { userAuth } = require("../../middlewares");
+const { ctrlWrapper, validateBody } = require("../../helpers");
+const { userAuth, upload } = require("../../middlewares");
 const { authSchema } = require("../../models");
 
 const router = express.Router();
@@ -22,5 +22,12 @@ router.get("/current", userAuth, ctrlWrapper(getCurrentUser));
 router.get("/logout", userAuth, ctrlWrapper(logout));
 
 router.patch("/:id/subscription", userAuth, ctrlWrapper(updateUserStatus));
+
+router.patch(
+  "/avatars",
+  userAuth,
+  upload.single("avatar"),
+  ctrlWrapper(updateAvatar)
+);
 
 module.exports = router;
