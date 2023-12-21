@@ -18,6 +18,7 @@ app.use(() => {
   createHttpError(400, 'Not found')
 })
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  res.status(500).json({ message: 'Internal Server Error' })
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
+  res.status(500).json({ message: err.message })
 })
