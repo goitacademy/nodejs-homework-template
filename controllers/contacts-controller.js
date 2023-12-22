@@ -1,11 +1,10 @@
 import * as contactService from "../models/contactsModel.js";
 import HttpError from "../helpers/HttpError.js";
-import {
+
+import Contact, {
   contactAddSchema,
   contactUpdateSchema,
-} from "../schema/contacts-schema.js";
-
-import Contact from "../models/Contact.js";
+} from "../models/Contact.js";
 
 const getAllContacts = async (req, res) => {
   const result = await Contact.find();
