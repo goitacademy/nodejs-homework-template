@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const { regexp } = require('../vars');
 
 exports.bodySchemaCreate = Joi.object({
     name: Joi.string()
@@ -9,12 +10,13 @@ exports.bodySchemaCreate = Joi.object({
         .messages({ 'any.required': 'missing required name field' }),
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .pattern(regexp.email)
         .required()
         .messages({ 'any.required': 'missing required email field' }),
     phone: Joi.string()
         .min(14)
         .max(14)
-        .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+        .pattern(regexp.phone)
         .required()
         .messages({
             'string.pattern.base': 'phone mast be (***) ***-**** format',
@@ -32,11 +34,12 @@ exports.bodySchemaUpdate = Joi.object({
         .messages({ 'any.required': 'missing required name field' }),
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .pattern(regexp.email)
         .messages({ 'any.required': 'missing required email field' }),
     phone: Joi.string()
         .min(14)
         .max(14)
-        .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+        .pattern(regexp.phone)
         .required()
         .messages({
             'string.pattern.base': 'phone mast be (***) ***-**** format',

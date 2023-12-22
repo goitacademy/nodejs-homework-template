@@ -1,4 +1,5 @@
-const {Schema, model} = require('mongoose')
+const {Schema, model} = require('mongoose');
+const { regexp } = require('../../vars');
 
 const contactSchema = new Schema(
     {
@@ -8,12 +9,12 @@ const contactSchema = new Schema(
         },
         email: {
             type: String,
-            match: /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
+            match: regexp.email,
         },
         phone: {
             type: String,
             require: true,
-            match: /^\(\d{3}\) \d{3}-\d{4}$/,
+            match: regexp.phone,
         },
         favorite: {
             type: Boolean,

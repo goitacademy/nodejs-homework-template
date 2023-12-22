@@ -16,9 +16,9 @@ const updateStatusContact = (contactId, body) => ContactModel.findByIdAndUpdate(
 
 const checkContactExistById = async id => {
   const idIsValid = Types.ObjectId.isValid(id);
-  if(!idIsValid) throw new HttpError(404, 'Not found')
+  if(!idIsValid) throw new HttpError(404)
   const isContactExist = await ContactModel.exists({ _id: id });
-  if(!isContactExist) throw new HttpError(404, 'Not found')
+  if(!isContactExist) throw new HttpError(404)
 }
 
 module.exports = {
