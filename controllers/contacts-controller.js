@@ -5,13 +5,11 @@ import {
   contactUpdateSchema,
 } from "../schema/contacts-schema.js";
 
+import Contact from "../models/Contact.js";
+
 const getAllContacts = async (req, res) => {
-  try {
-    const result = await contactService.listContacts();
-    res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  const result = await Contact.find();
+  res.json(result);
 };
 const getContactById = async (req, res, next) => {
   try {
