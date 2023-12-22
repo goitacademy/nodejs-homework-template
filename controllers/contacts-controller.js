@@ -3,7 +3,7 @@ import HttpError from "../helpers/HttpError.js";
 import { Contact } from "../models/Contact.js";
 
 const getAllContacts = async (req, res) => {
-  const result = await Contact.find();
+  const result = await Contact.find({}, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -23,16 +23,26 @@ const addContacts = async (req, res, next) => {
 
 const updateContactsById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndUpdate(id, req.body);
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
   if (!result) {
     throw HttpError(404, `Contact with id=${id} not found`);
   }
   res.json(result);
 };
 
+const updateStatusContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+  if (!result) {
+    throw HttpError(404, `Contact with id=${id} not found`);
+  }
+
+  res.json(result);
+};
+
 const delContactsById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await Contact.removeContact(id);
+  const result = await Contact.findByIdAndDelete(id);
   if (!result) {
     throw HttpError(404, `Movie with id=${id} not found`);
   }
@@ -45,4 +55,5 @@ export default {
   add: ctrlWrapper(addContacts),
   updateById: ctrlWrapper(updateContactsById),
   deleteById: ctrlWrapper(delContactsById),
+  updateStatus: ctrlWrapper(updateStatusContact),
 };
