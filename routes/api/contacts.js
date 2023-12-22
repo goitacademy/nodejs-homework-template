@@ -9,7 +9,9 @@ router.get("/", async (req, res, next) => {
     console.log(allContacts);
     res.status(200).json(allContacts);
   } catch (error) {
-    console.log(error);
+    res.status(404).json({
+      message: "Not found",
+    });
   }
 });
 //========================getID========================
@@ -24,18 +26,16 @@ router.get("/:contactId", async (req, res, next) => {
       message: "Not found",
     });
   }
-  res.json({ message: "template message" });
 });
 //=======================post=========================
 router.post("/", async (req, res, next) => {
   const { error, value } = contactSchema.validate(req.body);
   if (error) {
-    // Отправка ошибки в случае невалидных данных
     return res.status(400).json({ message: "it is error" });
   }
-  console.log("it works");
   const newContact = await contacts.addContact(req.body);
-  res.status(200).json(newContact);
+  console.log(newContact);
+  res.status(201).json(newContact);
 });
 //=======================delete=========================
 router.delete("/:contactId", async (req, res, next) => {
@@ -43,26 +43,21 @@ router.delete("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     const func = await contacts.removeContact(contactId);
     if (func) {
-      res.json({ message: "contact is removed" });
+      res.status(200).json({ message: "contact deleted" });
     }
   } catch (error) {
-    console.log(error);
+    res.status(404).json({ message: "not found" });
   }
 });
 //========================put========================
 router.put("/:contactId", async (req, res, next) => {
-  const { error, value } = contactSchema.validate(req.body);
-  if (error) {
-    // Отправка ошибки в случае невалидных данных
-    return res.status(400).json({ message: "it is error" });
-  }
   try {
+    const { error, value } = contactSchema.validate(req.body);
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
-    res.json(result);
-    console.log("it works");
+    res.status(200).json(result);
   } catch (error) {
-    console.log(error);
+    res.status(404).json({ message: "not found" });
   }
 });
 
