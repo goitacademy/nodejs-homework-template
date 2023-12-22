@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import controller from '../../controller.js';
+import controller from '../../controllers/controller.js';
 import { isEmptyBody } from "../../middlewares/index.js";
 
 const router = Router();

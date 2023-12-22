@@ -1,6 +1,6 @@
-import * as serviceContacts from "./models/contacts.js";
-import { HttpError } from "./helpers/index.js";
-import { contactsAddSchema, contactUpdateSchema } from "./schemas/contacts-schemas.js";
+import * as serviceContacts from "../models/contacts.js";
+import { HttpError } from "../helpers/index.js";
+import { contactsAddSchema, contactUpdateSchema } from "../schemas/contacts-schemas.js";
 
 
 
