@@ -1,25 +1,40 @@
-const express = require('express')
+import express from "express";
+import controllers from "../../controllers/functions.js";
+import mdw from "../../middlewares/index.js";
+import model from "../../models/Contact.js";
+import decorators from "../../decorators/index.js";
 
-const router = express.Router()
+const { schemas } = model;
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", controllers.getAll);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", mdw.isValidId, controllers.getById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post(
+  "/",
+  mdw.isEmptyBody,
+  decorators.validateBody(schemas.addSchema),
+  controllers.addContact
+);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put(
+  "/:contactId",
+  mdw.isValidId,
+  mdw.isEmptyBody,
+  decorators.validateBody(schemas.addSchema),
+  controllers.updateContact
+);
 
-module.exports = router
+router.patch(
+  "/:contactId/favorite",
+  mdw.isValidId,
+  mdw.isEmptyBody,
+  decorators.validateBody(schemas.addFavoriteSchema),
+  controllers.updateStatusContact
+);
+
+router.delete("/:contactId", mdw.isValidId, controllers.deleteContact);
+
+export default router;
