@@ -45,7 +45,7 @@ router.post("/", async (req, res, next) => {
       const missingFields = error.details
         .map((detail) => detail.path[0])
         .join(", ");
-      throw HttpError(400, `Missing required field(s): ${missingFields}`);
+      throw HttpError(400, `Missing required ${missingFields} field`);
     }
 
     const data = await contacts.addContact(req.body);
@@ -79,7 +79,7 @@ router.put("/:contactId", async (req, res, next) => {
       const missingFields = error.details
         .map((detail) => detail.path[0])
         .join(", ");
-      throw HttpError(400, `Missing required field(s): ${missingFields}`);
+      throw HttpError(400, `Missing required ${missingFields} field`);
     }
 
     const id = req.params.contactId;
