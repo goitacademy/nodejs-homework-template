@@ -3,8 +3,21 @@ import { ctrlWrapper } from "../decorators/index.js";
 import Contact from "../models/Contact.js";
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
-  res.json(result);
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 20, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  const filter = { owner };
+  if (favorite !== undefined) {
+    filter.favorite = favorite === "true";
+  }
+
+  const result = await Contact.find(filter, "-createdAt -updatedAt", {
+    skip,
+    limit,
+  });
+  const total = await Contact.countDocuments({ owner });
+  res.json({ result, total });
 };
 
 const getById = async (req, res) => {
@@ -17,7 +30,8 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
