@@ -11,7 +11,11 @@ const getAll = async (req, res) => {
     skip,
     limit,
   }).populate("owner", "email");
-  res.status(200).json(allContacts);
+  res.status(200).json({
+    page,
+    limit,
+    contacts : allContacts
+  });
 };
 
 const getById = async (req, res) => {
