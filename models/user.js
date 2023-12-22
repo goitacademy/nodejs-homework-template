@@ -3,6 +3,12 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
+const subscrENUM = {
+  STARTER: "starter",
+  PRO: "pro",
+  BUSINESS: "business"
+};
+
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema(
@@ -20,8 +26,8 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
-      default: "starter",
+      enum: Object.values(subscrENUM),
+      default: subscrENUM.STARTER,
     },
     token: {
       type: String,
@@ -31,13 +37,17 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userSchema.post("save", handleMongooseError);
+// коли при записі сталася помилка, нехай спрацює ця мідлвара
+userSchema.post("save", (error, data, next) => {
+  error.status = 400;
+  next();
+});
 
 // дані, які приходять з фронтенду для регістрації
 const registerSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(8).required(),
-  subscription: Joi.string(),
+  subscription: Joi.string().valid(...Object.values(subscrENUM)),
   token: Joi.string(),
 });
 

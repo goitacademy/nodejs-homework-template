@@ -5,12 +5,13 @@ const { contactServices } = require("../services");
 
 // ************ витягуємо усі контакти ************
 const getAll = (async (req, res) => {
+
   // const users = await User.find().select('+password');
   // const users = await User.find().select('-email');
   // const users = await User.find().select('name year');
   // const users = await User.find();
 
-   const contacts = await contactServices.getAllContacts();
+   const contacts = await contactServices.getAllContacts(req.user, req.query);
 
    res.status(200).json({
      msg: "Success!",
@@ -32,7 +33,7 @@ const getById = (async (req, res) => {
 
 // ************ добавляємо контакт ************
 const add = async (req, res, next) => {
-  const newContact = await contactServices.createContact(req.body);
+  const newContact = await contactServices.createContact(req.body, req.user);
 
    res.status(201).json({
      msg: "Success!",

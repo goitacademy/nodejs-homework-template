@@ -18,8 +18,13 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
-  { versionKey: false, timestamps: true });  // для того, щоб показувало не версію документа, а дату створення обьекта
+  { versionKey: false, timestamps: true }
+);  // для того, щоб показувало не версію документа, а дату створення обьекта
 
 // коли при записі сталася помилка, нехай спрацює ця мідлвара
 contactSchema.post("save", (error, data, next) => {

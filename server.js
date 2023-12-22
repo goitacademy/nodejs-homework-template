@@ -11,6 +11,7 @@ mongoose
   .connect(DB_HOST)
   .then(() => {
     app.listen(3000, () => {
+      console.log('все добре');
       console.log("Database connection successful");
     });                                    // запускаємо сервер на порту PORT
     
