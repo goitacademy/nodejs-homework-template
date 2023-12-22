@@ -7,7 +7,7 @@ const Joi = require("joi");
 const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 // validate user's fields
-const loginSchema = Joi.object({
+const registerSchema = Joi.object({
   email: Joi.string()
     .min(6)
     .required()
@@ -19,6 +19,17 @@ const loginSchema = Joi.object({
     .messages({ "any.required": "missing required password field" }),
 });
 
+const loginSchema = Joi.object({
+  email: Joi.string()
+    .min(6)
+    .required()
+    .pattern(emailRegExp)
+    .messages({ "any.required": "missing required email field" }),
+  password: Joi.string()
+    .required()
+    .min(6)
+    .messages({ "any.required": "missing required password field" }),
+});
 
 // mongoose user model validate
 const userSchema = new Schema(
@@ -38,14 +49,16 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: String,
+    token: {
+      type: String,
+      default: "",
+    },
   },
   { versionKey: false, timestamps: false }
 );
 
-
-
 const schemas = {
+  registerSchema,
   loginSchema,
 };
 
