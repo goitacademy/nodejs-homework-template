@@ -49,10 +49,10 @@ const subscriptionSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-const schema = {
+const schemas = {
     registerSchema,
     loginSchema,
     subscriptionSchema,
 };
 
-model.exports = { schema, User };
+model.exports = { schemas, User };
