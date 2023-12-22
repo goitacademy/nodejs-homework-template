@@ -3,13 +3,14 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const contactsRouter = require("./routes/contacts");
+require("dotenv").config();
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-mongoose.connect(
-  "mongodb+srv://warlenromero:AzOXVQJkVQuTCQ56@basegoit.1wn7yh4.mongodb.net/?retryWrites=true&w=majority"
-);
+const dbUrl = process.env.DB_URL;
+
+mongoose.connect(dbUrl);
 
 mongoose.connection.on("connected", () => {
   console.log("Database connection successful");
