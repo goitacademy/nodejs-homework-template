@@ -1,8 +1,9 @@
 import * as contactService from "../models/contacts.js";
 
-import { HttpError } from "../helpers/HttpError.js";
-
-// import { contactAddSchema } from "../schemas/contacts-schema.js";
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+} from "../schemas/contacts-schemas.js";
 
 const getAll = async (req, res, next) => {
   try {
@@ -18,7 +19,7 @@ const getById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactService.getContactById(contactId);
     if (!result) {
-      throw HttpError(404);
+      return res.status(404).json({ message: "Not found" });
     }
     res.json(result);
   } catch (error) {
@@ -31,7 +32,7 @@ const removeById = async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contactService.removeContact(contactId);
     if (!result) {
-      throw HttpError(404, "Not found");
+      return res.status(404).json({ message: "Not found" });
     }
     res.json({
       message: "contact deleted",
@@ -43,6 +44,10 @@ const removeById = async (req, res, next) => {
 
 const addNew = async (req, res, next) => {
   try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
     const result = await contactService.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
@@ -53,9 +58,17 @@ const addNew = async (req, res, next) => {
 const updateById = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contactService.addContact(contactId, req.body);
+    const arr = Object.keys(req.body);
+    if (arr.length === 0) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    const { error } = contactUpdateSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.message });
+    }
+    const result = await contactService.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, "Not found");
+      return res.status(404).json({ message: "Not found" });
     }
     res.json(result);
   } catch (error) {
