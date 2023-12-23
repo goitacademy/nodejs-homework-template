@@ -1,41 +1,33 @@
-const contacts = require("../models/contacts");
+const { Contact } = require("../models/contact");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const Joi = require("joi");
-
-const addShema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .max(30)
-    .required()
-    .messages({ "any.required": "missing required name field" }),
-  email: Joi.string()
-    .email()
-    .required()
-    .messages({ "any.required": "missing required email field" }),
-  phone: Joi.string()
-    .min(5)
-    .max(15)
-    .required()
-    .messages({ "any.required": "missing required phone field" }),
-});
-
-const updateShema = Joi.object({
-  name: Joi.string().min(3).max(30),
-  email: Joi.string().email(),
-  phone: Joi.string().min(5).max(15),
-})
-  .min(1)
-  .messages({ "object.min": "missing fields" });
+// ============================== Get All
 
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
-  res.json(result);
+  const { _id: owner } = req.user;
+  const { page = 1, limit = 10, favorite } = req.query;
+  const skip = (page - 1) * limit;
+
+  const contacts =
+    favorite === undefined
+      ? await Contact.find({ owner }, "-createdAt -updatedAt", {
+          skip,
+          limit,
+        })
+      : await Contact.find({ owner, favorite }, "-createdAt -updatedAt", {
+          skip,
+          limit,
+        });
+
+  res.json(contacts);
 };
+
+// ============================== Get by ID
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOne({ _id: contactId, owner });
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -44,20 +36,21 @@ const getContactById = async (req, res) => {
   res.json(result);
 };
 
-const addContact = async (req, res) => {
-  const { error } = addShema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
+// ============================== Add
 
-  const result = await contacts.addContact(req.body);
+const addContact = async (req, res) => {
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
 
   res.status(201).json(result);
 };
 
+// ============================== Delete
+
 const removeContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndDelete({ _id: contactId, owner });
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -66,14 +59,39 @@ const removeContact = async (req, res) => {
   res.json({ message: "contact deleted" });
 };
 
+// ============================== Update
+
 const updateContact = async (req, res) => {
-  const { error } = updateShema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
+  const { contactId } = req.params;
+  const { _id: owner } = req.user;
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  if (!result) {
+    throw HttpError(404, "Not found");
   }
 
+  res.json(result);
+};
+
+// ============================== Update status
+
+const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
+  const { _id: owner } = req.user;
+  console.log(owner);
+  const result = await Contact.findOneAndUpdate(
+    { _id: contactId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   if (!result) {
     throw HttpError(404, "Not found");
@@ -88,4 +106,5 @@ module.exports = {
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
