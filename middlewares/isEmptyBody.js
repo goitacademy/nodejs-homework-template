@@ -7,7 +7,8 @@ const isEmptyBody = async(req, res, next) => {
         return next(HttpError(400, 'missing fields'))
     }
 
-    next()
+    next();
 }
+
 
 export default isEmptyBody
