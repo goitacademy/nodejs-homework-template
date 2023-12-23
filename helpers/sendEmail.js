@@ -1,21 +1,21 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-const { META_PASSWORD } = process.env;
+const { META_PASSWORD, EMAIL_FROM } = process.env;
 
 const nodemailerConfig = {
   host: 'smtp.meta.ua',
   port: 465,
   secure: true,
-  user: {
-    user: 'anna.petrushko@meta.ua',
+  users: {
+    user: EMAIL_FROM,
     pass: META_PASSWORD,
   },
 };
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
-  const email = { ...data, from: 'anna.petrushko@meta.ua' };
+  const email = { ...data, from: EMAIL_FROM };
 
   await transport
     .sendMail(email)
@@ -39,11 +39,10 @@ module.exports = sendEmail;
  
 // const api = new ElasticEmail.EmailsApi();
  
-// const sendEmail = () => {
-//     // const { to, subject, html} = data;
+// const sendEmail = (data) => {
 //     const email = ElasticEmail.EmailMessageData.constructFromObject({
 //         Recipients: [
-//           new ElasticEmail.EmailRecipient("ditateg912@vasteron.com")
+//           new ElasticEmail.EmailRecipient("tajowi8122@visignal.com")
 //         ],
 //         Content: {
 //           Body: [
