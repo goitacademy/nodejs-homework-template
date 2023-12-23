@@ -1,5 +1,3 @@
 const Contact = require("./modelsContacts");
 
-module.exports = {
-  Contact,
-};
+module.exports = { Contact };
