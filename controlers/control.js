@@ -19,10 +19,6 @@ const getID = async (req, res, next) => {
 
 //=======================post=========================
 const post = async (req, res, next) => {
-  const { error } = contactSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
   const newContact = await contacts.addContact(req.body);
   res.status(201).json(newContact);
 };
@@ -38,10 +34,6 @@ const delet = async (req, res, next) => {
 
 //========================put========================
 const put = async (req, res, next) => {
-  const { error, value } = contactSchema.validate(req.body);
-  if (error) {
-    throw HttpError(400, error.message);
-  }
   const { contactId } = req.params;
   const result = await contacts.updateContact(contactId, req.body);
   res.status(200).json(result);

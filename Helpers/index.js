@@ -1,6 +1,6 @@
 const HttpError = require("./HttpError");
-const decorarot = require("./decorator ");
+const decorator = require("./decorator");
 module.exports = {
   HttpError,
-  decorarot,
+  decorator,
 };
