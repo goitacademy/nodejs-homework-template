@@ -6,6 +6,7 @@ const validation = (schema, message, status) => {
     if (error) {
       throw HttpError(status || 400, message || error.message);
     }
+
     next();
   };
 };

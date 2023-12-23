@@ -3,6 +3,7 @@ const { validation, authenticate, upload } = require("../../middlerwares");
 const { schemas } = require("../../models/user");
 const { authController: ctrl } = require("../../controllers");
 const { ctrlWrapper } = require("../../helpers");
+const { errMsg4 } = require("../../messages/messagesError");
 
 const router = express.Router();
 
@@ -20,6 +21,13 @@ router.get("/current", authenticate, ctrlWrapper(ctrl.getCurrent));
 
 router.post("/logout", authenticate, ctrlWrapper(ctrl.logout));
 
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verifyEmail));
+
+router.post(
+  "/verify",
+  validation(schemas.resendVerifyEmailSchema, errMsg4),
+  ctrlWrapper(ctrl.resendVerifyEmail)
+);
 router.patch(
   "/",
   authenticate,
