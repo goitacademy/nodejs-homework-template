@@ -1,10 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
+const path = require('node:path');
+const fs = require('node:fs/promises');
+const { handleResizeAvatar } = require('../helpers');
 
 const { User } = require('../models/user');
 const { HttpError, ctrlWrapper } = require('../helpers');
 
 const { SECRET_KEY } = process.env;
+const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const register = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
@@ -12,8 +17,13 @@ const register = async (req, res) => {
     if (user) throw HttpError(409, 'Email in use');
 
     const hashPassword = await bcrypt.hash(req.body.password, 12);
+    const avatarURL = gravatar.url(req.body.email);
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({
+        ...req.body,
+        password: hashPassword,
+        avatarURL,
+    });
 
     res.status(201).json({
         user: { email: newUser.email, subscription: newUser.subscription },
@@ -66,11 +76,29 @@ const updateSubscriptionUser = async (req, res) => {
     });
 };
 
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const avatarURL = path.join('avatars', filename);
+    const resultUpload = path.join(avatarDir, filename);
+
+    // await handleResizeAvatar(tempUpload);
+
+    await fs.rename(tempUpload, resultUpload);
+
+    await User.findByIdAndUpdate(_id, { avatarURL }, { new: true });
+
+    res.json({
+        avatarURL,
+    });
+};
+
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser),
+    updateAvatar: ctrlWrapper(updateAvatar),
 };
-// Оновлення підписки (subscription) користувача через ендпоінт PATCH /users. Підписка повинна мати одне з наступних значень ['starter', 'pro', 'business']
