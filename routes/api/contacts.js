@@ -1,14 +1,11 @@
 const express = require("express");
 const {
-  removeContact,
-  addContact,
-  updateContact,
   contactBodySchema,
   putContactsSchema,
   updateFavoriteSchema,
   Contact,
 } = require("../../models/contacts");
-
+const { isValidObjectId } = require("mongoose");
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -18,6 +15,11 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
+  const isValid = isValidObjectId(contactId);
+  if (!isValid) {
+    res.status(400).json({ message: `${contactId} isn't a valid id!` });
+    return;
+  }
   const contact = await Contact.findById(contactId);
   if (!contact) {
     res.status(404).json({ message: "Not found" });
@@ -42,6 +44,12 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
+  const isValid = isValidObjectId(contactId);
+  if (!isValid) {
+    res.status(400).json({ message: `${contactId} isn't a valid id!` });
+    return;
+  }
+
   const removedContact = await Contact.findByIdAndDelete(contactId);
   console.log(removedContact);
   if (!removedContact) {
@@ -54,6 +62,13 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
+
+  const isValid = isValidObjectId(contactId);
+  if (!isValid) {
+    res.status(400).json({ message: `${contactId} isn't a valid id!` });
+    return;
+  }
+
   const body = req.body;
   const { error } = putContactsSchema.validate(body);
   if (Object.keys(body).length === 0) {
@@ -76,10 +91,18 @@ router.put("/:contactId", async (req, res, next) => {
 
 router.patch("/:contactId/favorite", async (req, res, next) => {
   const contactId = req.params.contactId;
+
+  const isValid = isValidObjectId(contactId);
+  if (!isValid) {
+    res.status(400).json({ message: `${contactId} isn't a valid id!` });
+    return;
+  }
+
   const body = req.body;
   const { error } = updateFavoriteSchema.validate(body);
   if (Object.keys(body).length === 0) {
-    res.status(400).json({ message: "missing fields" });
+    res.status(400).json({ message: "missing field favorite" });
+    return;
   }
   if (error) {
     res.status(400).json({ message: error.details[0].message });
