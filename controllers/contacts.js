@@ -34,9 +34,10 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
     
+      const { _id } = req.user; 
       const { contactId } = req.params;
-      const result = await Contact.findById(contactId);
-      if (result === null) {
+      const result = await Contact.find({owner: _id, _id: contactId});
+      if (result === null || result.length === 0) {
         // first variant
         //return res.status(404).json({ message: "Not found" });
         // second variant
@@ -80,9 +81,12 @@ const addContact = async (req, res) => {
 
   const deleteContact = async (req, res) => {
     
+      const { _id } = req.user; 
+      
       const { contactId } = req.params;
-  
-      const result = await Contact.findByIdAndDelete(contactId);
+
+      // find by owner and id and delete
+      const result = await Contact.findOneAndDelete({owner: _id, _id: contactId});
   
       if (result === null) {
         throw HttpError(404, "Not found");
@@ -94,6 +98,7 @@ const addContact = async (req, res) => {
 
   const updateContact = async (req, res) => {
    
+      const { _id } = req.user;
       const { contactId } = req.params;
   
       const { body } = req;
@@ -111,7 +116,8 @@ const addContact = async (req, res) => {
         );
       }
   
-      const result = await Contact.findByIdAndUpdate(contactId, body, {new: true});
+      // find by owner and id and update
+      const result = await Contact.findOneAndUpdate({owner: _id, _id: contactId}, body, {new: true});
   
       if (result === null) {
         throw HttpError(404, "Not found");
@@ -122,6 +128,7 @@ const addContact = async (req, res) => {
 
   const updateStatusContact  = async (req, res) => {
    
+    const { _id } = req.user; 
     const { contactId } = req.params;
 
     const { body } = req;
@@ -140,7 +147,8 @@ const addContact = async (req, res) => {
     }
 
     // Replace the value of the "favorite" ($set operator) field or add it if it does not exist
-    const result = await Contact.updateOne({_id: contactId},{$set:{favorite: body.favorite}});
+    // oneUpdate()
+    const result = await Contact.findOneAndUpdate({owner: _id, _id: contactId},{$set:{favorite: body.favorite}});
 
     if (result === null) {
       throw HttpError(404, "Not found");
