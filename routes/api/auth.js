@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { validateBody, aunthenticate } = require("../../middlewares");
 const { schemas } = require("../../models/user");
-const ctrl = require("../../controllers/auth");
+const ctrl = require("../../controllers/auths");
 
 //  Sign up the user
 
