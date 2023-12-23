@@ -3,8 +3,9 @@ const logger = require('morgan')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-const contactsRouter = require('./routes/api/contacts')
-const dotenv = require('dotenv')
+const contactsRouter = require('./routes/api/contacts');
+const userRouter = require('./routes/api/user');
+const dotenv = require('dotenv');
 
 
 const app = express()
@@ -30,14 +31,16 @@ mongoose
     process.exit(1);
   });
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
 
-app.use('/api/contacts', contactsRouter)
+app.use('/api/user', userRouter);
+app.use('/api/contacts', contactsRouter);
 
 app.use((err, req, res, next) => {
-  res.status(err.status ?? 500).json({ message: err.message })
+  res.status(err.status ?? 500).json({ message: err.message });
+  console.log(err);
 })
 
 app.all('*', (req, res) => {

@@ -21,6 +21,10 @@ const contactsSchema = new Schema({
 		enum: Object.values(userRolesEnum),
 		default: userRolesEnum.USER,
 	},
+	owner: {
+		type: Schema.Types.ObjectId,
+		ref: 'users',
+	}
 },
 	{
 		versionKey: false,
