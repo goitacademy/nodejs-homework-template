@@ -49,10 +49,15 @@ const updateSubscriptionSchema = Joi.object({
   subscription: Joi.string().required().valid("starter", "pro", "business"),
 });
 
+const resendVerifyEmailSchema = Joi.object({
+  email: Joi.string().required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  resendVerifyEmailSchema,
 };
 
 userSchema.post("save", handleMongooseError);
