@@ -41,8 +41,8 @@ const singin = async (req, res) => {
 	const payload = {
 		id: user._id,
 	};
+    
 
-    console.log(payload)
 
 	const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
 
