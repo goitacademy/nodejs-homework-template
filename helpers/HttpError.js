@@ -1,6 +1,6 @@
 const errorMessage = {
   400: 'Bad request',
-  401: 'Email or password is wrong',
+  401: 'Not authorized',
   403: 'Forbidden',
   404: 'Not Found',
   409: 'Email in use',
