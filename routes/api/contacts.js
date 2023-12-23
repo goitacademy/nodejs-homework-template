@@ -1,22 +1,22 @@
 const express = require('express');
 
-const { userMiddlewares } = require('../../middlewares/index');
+const { contactMiddlewares } = require('../../middlewares');
 const { contactControllers } = require('../../controllers');
 
 const router = express.Router()
 
 
-router.get('/', contactControllers.getContacts)
+router.get('/', contactControllers.listContacts);
 
-router.post('/', userMiddlewares.checkCreateUserData, contactControllers.newContact)
+router.post('/', contactMiddlewares.checkCreateUserData, contactControllers.addContact)
 
-router.get('/:contactId', userMiddlewares.checkUserId, contactControllers.getContact)
+router.get('/:contactId', contactMiddlewares.checkUserId, contactControllers.getContactById)
 
-router.delete('/:contactId', userMiddlewares.checkUserId, contactControllers.deleteContact)
+router.delete('/:contactId', contactMiddlewares.checkUserId, contactControllers.removeContact)
 
-router.put('/:contactId', userMiddlewares.checkUserId, userMiddlewares.checkCreateUserData, contactControllers.updateContact)
+router.put('/:contactId', contactMiddlewares.checkUserId, contactMiddlewares.checkUpdateUserData, contactControllers.updateContact)
 
-router.patch('/:contactId/favorite', userMiddlewares.checkUserId, userMiddlewares.checkupdateUserDatafavorite, contactControllers.updateContact)
+router.patch('/:contactId/favorite', contactMiddlewares.checkUserId, contactMiddlewares.checkupdateUserDatafavorite, contactControllers.updateContactFavorite)
 
 
 module.exports = router

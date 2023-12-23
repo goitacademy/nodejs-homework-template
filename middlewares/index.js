@@ -1,6 +1,6 @@
-const userMiddlewares = require('./user.middlewares');
+const contactMiddlewares = require('./contact.middlewares');
 const userAuthMiddlewares = require('./user.auth.middlewares');
 module.exports = {
-	userMiddlewares,
+	contactMiddlewares,
 	userAuthMiddlewares,
 }

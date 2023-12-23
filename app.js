@@ -8,6 +8,7 @@ const userRouter = require('./routes/api/user');
 const dotenv = require('dotenv');
 
 
+
 const app = express()
 
 
@@ -17,8 +18,9 @@ dotenv.config({
   path: process.env.NODE_ENV === 'production' ? './envs/production.env' : './envs/developer.env',
 });
 
-
 const { serverConfig } = require('./config');
+const { globalError } = require('./controllers');
+
 
 
 mongoose

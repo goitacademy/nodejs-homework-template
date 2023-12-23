@@ -5,7 +5,7 @@ const { userController } = require('../../controllers');
 
 const router = express.Router();
 
-router.post('/register', userAuthMiddlewares.checkRegistrations, userController.RegistrUser);
-router.post('/login', userAuthMiddlewares.checkRegistrations, userController.LoginUser);
+router.post('/register', userAuthMiddlewares.checkRegistrations, userController.registerUser);
+// router.post('/login', userAuthMiddlewares.checkRegistrations, userController.LoginUser);
 
 module.exports = router

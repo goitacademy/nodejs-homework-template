@@ -1,14 +1,78 @@
+const { contactServise } = require('../servises');
+const { catchAsync } = require('../utils');
 
-const contactControllers = require('../servises');
 
-exports.getContacts = contactControllers.contactServise.listContacts;
+const listContacts = catchAsync(async (req, res, next) => {
+	const contacts = await contactServise.listContactsinDataBase();
+	res.status(200).json({
+		contacts,
+	})
+});
 
-exports.getContact = contactControllers.contactServise.getContactById;
 
-exports.newContact = contactControllers.contactServise.addContact;
+const getContactById = catchAsync(async (req, res) => {
+	const { contactId } = req.params;
 
-exports.deleteContact = contactControllers.contactServise.removeContact;
+	const contact = await contactServise.getContactByIdinDataBase(contactId);
 
-exports.updateContact = contactControllers.contactServise.updateContact;
+	res.status(200).json({
+		contact,
+	})
+});
 
-exports.updatefavorite = contactControllers.contactServise.updateContactFavorite;
+
+const removeContact = catchAsync(async (req, res) => {
+
+	const { contactId } = req.params;
+	await contactServise.removeContact(contactId);
+
+
+	return res.status(200).json({
+		"message": "contact deleted"
+	});
+})
+
+
+const addContact = catchAsync(async (req, res) => {
+
+	const newContact = await contactServise.addContact(req.body);
+
+	res.status(201).json({
+		mes: 'Success',
+		newContact,
+	})
+})
+
+
+const updateContact = catchAsync(async (req, res) => {
+	const { contactId } = req.params;
+	const update = req.body;
+
+	const updatedUser = await contactServise.updateContact(contactId, update);
+	res.status(200).json({
+		mes: 'Success',
+		updatedUser,
+	})
+})
+
+const updateContactFavorite = catchAsync(async (req, res) => {
+	const { contactId } = req.params;
+	const { favorite } = req.body;
+
+	const updateFavorite = await contactServise.updateContactFavorite(contactId, favorite);
+
+	res.status(200).json({
+		mes: 'Success',
+		updateFavorite,
+	})
+})
+
+
+module.exports = {
+	listContacts,
+	getContactById,
+	removeContact,
+	addContact,
+	updateContact,
+	updateContactFavorite,
+}

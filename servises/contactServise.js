@@ -1,81 +1,66 @@
+
 const Contacts = require('../models/contactsModel');
-const { catchAsync } = require('../utils');
+const { HttpError } = require('../utils');
+const { Types } = require('mongoose');
 
 
-const listContacts = catchAsync(async (req, res, next) => {
-	const contacts = await Contacts.find();
-	res.status(200).json({
-		contacts,
+
+exports.listContactsinDataBase = () => Contacts.find();
+
+exports.getContactByIdinDataBase = (contactId) => Contacts.findById(contactId);
+
+exports.removeContact = async (contactId) => {
+	const removeContact = await Contacts.findByIdAndDelete(contactId);
+	return removeContact;
+
+}
+
+
+exports.addContact = async (dataContact) => {
+	const newContact = await Contacts.create(dataContact);
+	return newContact;
+}
+
+
+exports.updateContact = async (contactId, updateContact) => {
+	const updatedUser = await Contacts.findById(contactId);
+
+	Object.keys(updateContact).forEach(key => {
+		updatedUser[key] = updateContact[key];
 	})
-});
+
+	return updatedUser.save();
+
+}
 
 
-const getContactById = catchAsync(async (req, res) => {
-	const { contactId } = req.params;
-	const contact = await Contacts.findById(contactId);
-
-	res.status(200).json({
-		contact,
-	})
-});
-
-
-const removeContact = catchAsync(async (req, res) => {
-
-	const { contactId } = req.params;
-	await Contacts.findByIdAndDelete(contactId);
-
-
-	return res.status(200).json({
-		"message": "contact deleted"
-	});
-})
-
-
-const addContact = catchAsync(async (req, res) => {
-
-	const newContact = await Contacts.create(req.body);
-
-	res.status(201).json({
-		mes: 'Success',
-		newContact,
-	})
-})
-
-
-const updateContact = catchAsync(async (req, res) => {
-	const { contactId } = req.params;
-	const { name, email, phone, favorite, role } = req.body;
-
-	const updatedUser = await Contacts.findByIdAndUpdate(contactId, { name, email, phone, favorite, role }, { new: true });
-
-
-	res.status(200).json({
-		mes: 'Success',
-		updatedUser,
-	})
-})
-
-const updateContactFavorite = catchAsync(async (req, res) => {
-	const { contactId } = req.params;
-	const { favorite } = req.body;
-
-	console.log(favorite);
+exports.updateContactFavorite = async (contactId, favorite) => {
 
 	const updateFavorite = await Contacts.findByIdAndUpdate(contactId, { favorite }, { new: true });
 
-	res.status(200).json({
-		mes: 'Success',
-		updateFavorite,
-	})
-})
+	return updateFavorite;
+}
 
 
-module.exports = {
-	listContacts,
-	getContactById,
-	removeContact,
-	addContact,
-	updateContact,
-	updateContactFavorite,
+exports.userFavorite = async (filter) => {
+	const favorite = await Contacts.exists(filter);
+	if (!favorite) throw new HttpError(404, 'User not found');
+}
+
+
+exports.checkContactExist = async (status) => {
+	const userExists = await Contacts.exists(status);
+
+	if (userExists) throw new HttpError(409, 'User Exists');
+}
+
+
+exports.checkUserbyId = async (id) => {
+	const idIsValid = Types.ObjectId.isValid(id);
+
+	if (!idIsValid) throw new HttpError(404, 'User not found..');
+
+	const userExists = await Contacts.exists({ _id: id });
+
+	if (!userExists) throw new HttpError(404, 'User not found..');
 }

@@ -1,61 +1,60 @@
 const Users = require('../models/userModel');
-const { catchAsync } = require('../utils');
-const bcrypt = require('bcrypt');
+const { HttpError } = require('../utils');
+// const { catchAsync } = require('../utils');
+// const bcrypt = require('bcrypt');
 
 
-const registerUser = catchAsync(async (req, res) => {
-	const { password, email, subscription } = req.body;
-	// const salt = bcrypt.genSalt(10);
-	// const passwordHash = bcrypt.hash(password, salt);
-	await Users.create({
-		password,
-		// password: passwordHash,
-		email,
-		subscription,
-	})
-	// console.log(passwordHash);
-	res.status(201).json({
-		mes: 'Created',
-		user: {
-			email,
-			subscription: 'started',
-		},
-	})
-});
+exports.registerUser = async (userData) => {
+	const newUser = await Users.create(userData);
+	newUser.password = undefined;
 
-const addContact = catchAsync(async (req, res) => {
-
-	const newContact = await Users.create(req.body);
-
-	res.status(201).json({
-		mes: 'Success',
-		newContact,
-	})
-})
-
-
-const LogInUser = catchAsync(async (req, res, next) => {
-	const { password, email, ...all } = req.body;
-	const salt = bcrypt.genSalt(10);
-	const passwordHash = bcrypt.hash(password, salt);
-	await Users.create({
-		password: passwordHash,
-		email,
-		...all,
-	})
-	console.log(passwordHash);
-	res.status(201).json({
-		mes: 'Created',
-		user: {
-			email,
-			subscription: 'started',
-		},
-	})
-})
-
-
-module.exports = {
-	registerUser,
-	LogInUser,
-	addContact,
+	return newUser;
 }
+
+
+exports.checkContactExist = async (status) => {
+	const userExists = await Users.exists(status);
+
+	if (userExists) throw new HttpError(409, 'User Exists');
+}
+// 	const { password, email, subscription, ...body } = req.body;
+// 	const passwordHash = await bcrypt.hash(password, 10);
+
+// 	await Users.create({
+// 		password: passwordHash,
+// 		email,
+// 		subscription,
+// 		...body,
+// 	})
+
+// 	res.status(201).json({
+// 		mes: 'Created',
+// 		user: {
+// 			email,
+// 			subscription: subscription,
+// 		},
+// 	})
+// };
+
+
+
+
+// const LogInUser = catchAsync(async (req, res, next) => {
+// 	const { password, email, ...all } = req.body;
+// 	const salt = bcrypt.genSalt(10);
+// 	const passwordHash = bcrypt.hash(password, salt);
+// 	await Users.create({
+// 		password: passwordHash,
+// 		email,
+// 		...all,
+// 	})
+// 	console.log(passwordHash);
+// 	res.status(201).json({
+// 		mes: 'Created',
+// 		user: {
+// 			email,
+// 			subscription: 'started',
+// 		},
+// 	})
+// })
+
