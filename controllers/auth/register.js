@@ -3,8 +3,7 @@ const gravatar = require("gravatar");
 const { HttpError, sendEmail } = require("../../helpers");
 const { User } = require("../../models/user");
 const { nanoid } = require("nanoid");
-
-const { BASE_URL } = process.env;
+const { templateHTML } = require("../../messages");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -24,10 +23,15 @@ const register = async (req, res) => {
     verificationToken,
   });
 
+  const data = {
+    email,
+    verificationToken,
+  };
+
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">verify you email</a>`,
+    html: templateHTML.messageVerify(data),
   };
   await sendEmail(verifyEmail);
 

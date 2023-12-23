@@ -1,14 +1,13 @@
 const { sendEmail, HttpError } = require("../../helpers");
+const { templateHTML } = require("../../messages");
 const { User } = require("../../models/user");
-
-const { BASE_URL } = process.env;
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw HttpError(400, "not valid emaiN");
+    throw HttpError(400, "Not valid email");
   }
 
   const { verificationToken, verify } = user;
@@ -16,10 +15,15 @@ const resendVerifyEmail = async (req, res) => {
     throw HttpError(400, "Verification has already been passed");
   }
 
+  const data = {
+    email,
+    verificationToken,
+  };
+
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">verify you email</a>`,
+    html: templateHTML.messageVerify(data),
   };
 
   await sendEmail(verifyEmail);
