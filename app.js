@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import logger from "morgan";
+import "dotenv/config";
 
 import contactsRouter from "./routes/api/contacts-router.js";
 
