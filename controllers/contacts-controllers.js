@@ -1,10 +1,7 @@
 import { controllerWrapper } from "../decorators/controllerWrapper.js";
 import contactsService from "../models/contacts.js";
 import HttpError from "../utils/HttpError.js";
-import {
-  addContactSchema,
-  updateContactSchema,
-} from "../validation-schemas/contacts-schemas.js";
+
 
 const getAllContacts = async (req, res, next) => {
   const contacts = await contactsService.listContacts();

@@ -13,7 +13,7 @@ export const addContactSchema = Joi.object({
   phone: Joi.string().min(14).max(14).required().messages({
     "any.required": `missing required "phone" field`,
     "string.base": `"phone" should be a type of 'text'`,
-    "string.min": `"name" should have a minimum length of {#limit}`,
+    "string.min": `"phone" should have a minimum length of {#limit}`,
   }),
 });
 
