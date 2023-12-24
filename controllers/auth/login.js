@@ -23,12 +23,10 @@ const login = async (req, res) => {
     res.json({
         status: "success",
         code: 200,
-        date: {
-            token,
-            user: {
-                email: user.email,
-                subscription: user.subscription,
-            },
+        token: token,
+        user: {
+            email: user.email,
+            subscription: user.subscription,
         },
     });
 };
