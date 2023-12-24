@@ -32,7 +32,7 @@ contactSchema.post("save", handleSaveErrors);
 const Contact = model("contact", contactSchema);
 
 const addSchema = Joi.object({
-    name: Joi.string().min(2).alphanum().required(),
+    name: Joi.string().min(2).required(),
     email: Joi.string().pattern(emailRegexp).required(),
     phone: Joi.number().integer().required(),
     favorite: Joi.boolean(),
