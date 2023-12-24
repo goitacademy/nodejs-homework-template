@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const handleSaveErrors = require("../helpers/handleSaveErrors");
+const {handleSaveErrors} = require("../helpers");
 const emailRegexp = require("./emailRegexp");
 
 const typeSubscription = ["starter", "pro", "business"];
@@ -49,10 +49,10 @@ const subscriptionSchema = Joi.object({
 
 const User = model("user", userSchema);
 
-const schemas = {
+const  userSchemas = {
     registerSchema,
     loginSchema,
     subscriptionSchema,
 };
 
-model.exports = { schemas, User };
+model.exports = { userSchemas, User };
