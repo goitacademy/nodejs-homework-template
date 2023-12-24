@@ -1,0 +1,4 @@
+DB_HOST = link
+SECRET_KEY =
+BASE_URL = 
+META_PASSWORD =
