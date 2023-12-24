@@ -1,39 +1,32 @@
-const Contact = require('./schemas/contacts')
+const { Schema, model } = require("mongoose");
 
-const getList = async () => {
-  const results = await Contact.find({})
-  // console.log(results)
-  return results
-}
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { versionKey: false, 
+    timestamps: true,
+  }
+);
 
-const getById = async (id) => {
-  const result = await Contact.findOne({ _id: id })
-  return result
-}
+const Contact = model("contact", contactSchema);
 
-const create = async (body) => {
-  const result = await Contact.create(body)
-  return result
-}
-
-const update = async (id, body) => {
-  const result = await Contact.findByIdAndUpdate(
-    { _id: id },
-    { $set: body },
-    { new: true }
-  )
-  return result
-}
-
-const remove = async (id) => {
-  const result = await Contact.findByIdAndDelete({ _id: id })
-  return result
-}
-
-module.exports = {
-  getList,
-  getById,
-  remove,
-  create,
-  update
-}
+module.exports = {Contact};

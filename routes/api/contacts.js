@@ -1,15 +1,46 @@
-const express = require('express')
-const router = express.Router()
-const contactsController = require('./../../controllers/contacts')
-const validate = require('./validation')
+const express = require("express");
+const contactsCtrl = require("../../controllers/contacts");
+const {
+  addValid,
+  updateValid,
+  updateFavoriteValid,
+} = require("../../middlewares/contactsValidation");
+const isValidId = require("../../middlewares/isValidId");
+const authenticate = require("../../middlewares/authenticate");
+const userVerification = require("../../middlewares/userVerification");
 
-router
-  .get('/', contactsController.get)
-  .post('/', validate.createContact, contactsController.create)
+const router = express.Router();
 
-router
-  .get('/:id', contactsController.getById)
-  .delete('/:id', contactsController.remove)
-  .put('/:id', validate.updateContact, contactsController.update)
+router.get("/", authenticate, contactsCtrl.listContacts);
 
-module.exports = router
+router.get("/:contactId", authenticate, isValidId, contactsCtrl.getContactById);
+
+router.post("/", authenticate, addValid, contactsCtrl.addContact);
+
+router.delete(
+  "/:contactId",
+  authenticate,
+  userVerification,
+  isValidId,
+  contactsCtrl.removeContact
+);
+
+router.put(
+  "/:contactId",
+  authenticate,
+  userVerification,
+  isValidId,
+  updateValid,
+  contactsCtrl.updateContact
+);
+
+router.patch(
+  "/:contactId/favorite",
+  authenticate,
+  userVerification,
+  isValidId,
+  updateFavoriteValid,
+  contactsCtrl.updateStatusContact
+);
+
+module.exports = router;

@@ -1,111 +1,108 @@
-const Contacts = require('../models/contact')
+const { NotFound } = require("http-errors");
+const  { Contact }  = require("../models/contact");
 
-const get = async (req, res, next) => {
+const listContacts = async (req, res, next) => {
   try {
-    const contacts = await Contacts.getList()
-    return res.json({
-      status: 'success test',
-      code: 200,
-      data: {
-        contacts,
-      },
-    })
-  } catch (e) {
-    next(e)
-  }
-}
+    const { _id: owner } = req.user;
 
-const getById = async (req, res, next) => {
-  try {
-    const contact = await Contacts.getById(req.params.id)
+    const { page = 1, limit = 20, favorite } = req.query;
+    const skip = (page - 1) * limit;
 
-    if (contact) {
-      return res.json({
-        status: 'success',
-        code: 200,
-        data: {
-          contact,
-        },
-      })
-    } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
-        data: 'Not found',
-      })
+    const contactsQuery = { owner };
+
+   
+    if (favorite === 'true') {
+      contactsQuery.favorite = true;
     }
-  } catch (e) {
-    next(e)
+
+    const result = await Contact.find(contactsQuery)
+      .skip(skip)
+      .limit(limit);
+
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
-}
+};
 
-const create = async (req, res, next) => {
+const getContactById = async (req, res, next) => {
   try {
-    const contact = await Contacts.create(req.body)
-    return res.status(201).json({
-      status: 'success',
-      code: 201,
-      data: {
-        contact,
-      },
-    })
-  } catch (e) {
-    next(e)
-  }
-}
+    const { contactId } = req.params;
+    const contact = await Contact.findById(contactId);
 
-const remove = async (req, res, next) => {
-  try {
-    const contact = await Contacts.remove(req.params.id)
-
-    if (contact) {
-      return res.json({
-        status: 'success',
-        code: 200,
-        data: {
-          contact,
-        },
-      })
-    } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
-        data: 'Not found',
-      })
+    if (!contact) {
+      throw new NotFound(`Not found`);
     }
-  } catch (e) {
-    next(e)
-  }
-}
 
-const update = async (req, res, next) => {
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeContact = async (req, res, next) => {
   try {
-    const contact = await Contacts.update(req.params.id, req.body)
-
-    if (contact) {
-      return res.json({
-        status: 'success',
-        code: 200,
-        data: {
-          contact,
-        },
-      })
-    } else {
-      return res.status(404).json({
-        status: 'error',
-        code: 404,
-        data: 'Not found',
-      })
+    const { contactId } = req.params;
+    const deletedContact = await Contact.findByIdAndDelete(contactId);
+    if (!deletedContact) {
+      throw new NotFound(`Not found`);
     }
-  } catch (e) {
-    next(e)
+    res.json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
   }
-}
+};
+
+const addContact = async (req, res, next) => {
+  try {
+    const { _id: owner } = req.user;
+    const result = await Contact.create({ ...req.body, owner });
+
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+
+    if (!result) {
+      throw new NotFound("Not found");
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateStatusContact = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+
+    if (!result) {
+      throw new NotFound("Not found");
+    }
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
-  get,
-  getById,
-  create,
-  update,
-  remove,
-}
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+  updateStatusContact,
+};
