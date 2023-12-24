@@ -1,8 +1,8 @@
 const { Contact } = require("../../models");
-const { HttpError } require("../../helpers");
+const { HttpError } = require("../../helpers");
 
-const updateContact = async(req, res, next) => {
-   try {
+const updateContact = async(req, res) => {
+  
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req,body, {
         new: true,
@@ -11,9 +11,7 @@ const updateContact = async(req, res, next) => {
         throw HttpError(404, "Not found");
     };
     res.status(201).json(result);
-   } catch (error) {
-        next(error);
-   }
+
 };
 
 module.exports = updateContact;
