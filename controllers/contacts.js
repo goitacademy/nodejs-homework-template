@@ -116,7 +116,7 @@ const addContact = async (req, res) => {
         );
       }
   
-      // find by owner and id and update
+      // find by 'owner' and id and update
       const result = await Contact.findOneAndUpdate({owner: _id, _id: contactId}, body, {new: true});
   
       if (result === null) {

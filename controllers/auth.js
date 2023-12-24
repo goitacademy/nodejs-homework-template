@@ -1,6 +1,8 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
-const jwt=require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
@@ -46,10 +48,13 @@ const register = async (req, res) => {
         );
     }
 
+    // get url for temp user avatar
+    const avatarURL = gravatar.url(email);
+
     // hash password
     const hashPassword = await bcrypt.hash(password, 10);
   
-    const newUser = await User.create({...body, password: hashPassword});
+    const newUser = await User.create({...body, password: hashPassword, avatarURL});
 
     res.status(201).json({
         user:{

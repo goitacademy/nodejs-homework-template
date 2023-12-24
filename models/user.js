@@ -25,7 +25,8 @@ const userSchema = new Schema({
     token:{ 
         type: String,
         default: ""
-    }
+    },
+    avatarURL: String,
 },{
     versionKey: false // Disable version stamp
 });

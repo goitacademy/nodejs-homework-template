@@ -1,6 +1,6 @@
 const express = require('express');
 
-const authentificate  = require('../../middlewares');
+const {authentificate, upload}  = require('../../middlewares');
 
 const ctrl = require("../../controllers/auth");
 

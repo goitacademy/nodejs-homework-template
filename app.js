@@ -6,6 +6,7 @@ require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 const registerRouter = require("./routes/api/auth");
+const usersAvatar = require("./routes/api/users");
 
 const app = express();
 
@@ -14,9 +15,11 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/auth", registerRouter);
+app.use("/api/users", usersAvatar);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
