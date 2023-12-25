@@ -1,11 +1,17 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
+const Jimp = require("jimp")
 
 const { User } = require("../models/user");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
+
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body; // берем email и пароль из req.body
@@ -15,8 +21,9 @@ const register = async (req, res) => {
   }
   
   const hashPassword = await bcrypt.hash(password, 10); // хешируем пароль
+  const avatarURL = gravatar.url(email);
 
-  const newUser = await User.create({...req.body, password: hashPassword}); // сохраняем пользователя в базе
+  const newUser = await User.create({...req.body, password: hashPassword, avatarURL}); // сохраняем пользователя в базе
 
   res.status(201).json({
     user: {
@@ -70,10 +77,36 @@ const logout = async (req, res) => {
   res.status(204).json({})
 }
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tmpUpload, originalname } = req.file;
+  await resize(tmpUpload); // оброблюємо зображення
+  const filename = `${_id}_${originalname}`;  // додаємо id до імені файлу щоб зробити його унікальним
+  const resultUpload = path.join(avatarsDir, filename);
+  await fs.rename(tmpUpload, resultUpload); // переміщуємо файл з тимчасової папки tmp в publik/avatars
+  const avatarURL = path.join("avatars", filename);   // шлях записуємо в базу
+  await User.findByIdAndUpdate(_id, { avatarURL });  // знаючи id перезаписуємо avatarURL
+
+  res.json({
+    avatarURL,
+  })
+}
+
+async function resize(tmpUpload) {
+  const image = await Jimp.read(tmpUpload);
+  await image.resize(250, 250, function (err) {
+    if (err) throw err;
+  });
+  await image.writeAsync(tmpUpload);
+}
+
+
+
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

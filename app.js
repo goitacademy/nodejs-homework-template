@@ -14,6 +14,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())  // перевіряє тіло запиту та тип
+app.use(express.static("public"))
 
 // app.use("/api/auth", authRouter) // указываем экспрессу что любой запрос на апи аусф обрабатывается роутом аусРоут
 app.use("/users", authRouter);
