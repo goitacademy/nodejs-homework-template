@@ -9,7 +9,11 @@ import {
 } from "../../middlewares/index.js";
 import { validateBody } from "../../decorators/index.js";
 
-import { contactAddSchema, contactUpdateSchema } from "../../models/Contact.js";
+import {
+  contactAddSchema,
+  contactUpdateSchema,
+  contactAvatarSchema,
+} from "../../models/Contact.js";
 
 const contactsRouter = express.Router();
 
@@ -44,6 +48,13 @@ contactsRouter.patch(
   isEmptyBodyForFavorites,
   validateBody(contactUpdateSchema),
   contactsController.updateContactFavorite
+);
+
+contactsRouter.patch(
+  "/:contactId/contactAvatars",
+  upload.single("avatarContactURL"),
+  validateBody(contactAvatarSchema),
+  contactsController.updateContactAvatar
 );
 
 export default contactsRouter;

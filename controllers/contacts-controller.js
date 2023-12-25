@@ -6,7 +6,6 @@ import Contact from "../models/Contact.js";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
-const avatarsPath = path.resolve("public", "avatars");
 const contactAvatarsPath = path.resolve("public", "contact-avatars");
 
 const getAll = async (req, res) => {
@@ -94,6 +93,43 @@ const updateContactFavorite = async (req, res) => {
   res.json(result);
 };
 
+const updateContactAvatar = async (req, res) => {
+  const { contactId } = req.params;
+
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+
+  const { path: oldPath, filename } = req.file;
+  const newFilename = filename;
+  const newPath = path.join(contactAvatarsPath, newFilename);
+  const tempPath = path.join("temp", filename);
+
+  try {
+    const image = await Jimp.read(oldPath);
+    await image
+      .autocrop()
+      .resize(150, 150, Jimp.RESIZE_BEZIER)
+      .circle()
+      .write(newPath);
+  } catch (err) {
+    throw HttpError(500, "Error processing image");
+  }
+
+  const newContactAvatarURL = path.join("contact-avatars", newFilename);
+
+  const result = await Contact.findByIdAndUpdate(contactId, {
+    avatarContactURL: newContactAvatarURL,
+  });
+
+  if (!result) {
+    throw HttpError(404, `Contact with id=${contactId} not found`);
+  }
+
+  await fs.unlink(tempPath);
+  res.json(result);
+};
+
 const deleteById = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndDelete(contactId);
@@ -109,5 +145,6 @@ export default {
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   updateContactFavorite: ctrlWrapper(updateContactFavorite),
+  updateContactAvatar: ctrlWrapper(updateContactAvatar),
   deleteById: ctrlWrapper(deleteById),
 };

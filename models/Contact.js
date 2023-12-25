@@ -46,6 +46,10 @@ export const contactUpdateSchema = Joi.object({
   avatarContactURL: Joi.string(),
 });
 
+export const contactAvatarSchema = Joi.object({
+  avatarContactURL: Joi.string(),
+});
+
 contactSchema.post("save", handleSaveError);
 contactSchema.pre("findOneAndUpdate", addUpdateSettings);
 contactSchema.post("findOneAndUpdate", handleSaveError);
