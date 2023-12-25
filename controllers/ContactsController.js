@@ -1,7 +1,12 @@
+const ContactsService = require("../services/ContactsService");
 const HTTPError = require("../helpers/HTTPError");
 const HTTPResponse = require("../helpers/HTTPResponse");
 
 class ContactsController {
+  constructor() {
+    this.service = ContactsService;
+  }
+
   getAllContacts = async (req, res) => {
     const { id: owner } = res.locals.user;
 
@@ -16,13 +21,94 @@ class ContactsController {
       filter.favorite = favorite;
     }
 
-    const contacts = await ContactsService.getContacts(filter, skip, limit);
+    const contacts = await this.service.getContacts(filter, skip, limit);
 
     if (!contacts) {
       throw HTTPError(400);
     }
 
     HTTPResponse(res, 200, contacts);
+  };
+
+  getOneContact = async (req, res) => {
+    const id = req.params.contactId;
+    const contact = await this.service.getContact(id);
+
+    if (!contact) {
+      throw HTTPError(400);
+    }
+
+    HTTPResponse(res, 200, contact);
+  };
+
+  deleteContact = async (req, res) => {
+    const id = req.params.contactId;
+    const contact = await this.service.deleteContact(id);
+
+    if (!contact) {
+      throw HTTPError(404);
+    }
+
+    HTTPResponse(res, 200, contact, `Contact with ID ${id} deleted`);
+  };
+
+  createContact = async (req, res) => {
+    const { id: owner } = res.locals.user;
+    const contact = await this.service.createContact({ ...req.body, owner });
+
+    if (!contact) {
+      HTTPError(400, "Provide all fields");
+    }
+
+    HTTPResponse(res, 201, contact);
+  };
+
+  updateContact = async (req, res) => {
+    const {
+      params: { contactId },
+      body,
+    } = req;
+
+    const updatedContact = await this.service.updateContact(contactId, body);
+
+    if (!updatedContact) {
+      HTTPError(404);
+    }
+
+    HTTPResponse(
+      res,
+      200,
+      updatedContact,
+      `User With ID: ${contactId} successfully updated`
+    );
+  };
+
+  updateStatusContact = async (req, res) => {
+    const {
+      params: { contactId },
+      body,
+    } = req;
+
+    if (!body.favorite) {
+      res.status(400);
+      throw new Error("Missing field favorite");
+    }
+
+    const updatedStatusContact = await this.service.updateStatusContact(
+      contactId,
+      body
+    );
+
+    if (!updatedStatusContact) {
+      HTTPError(404);
+    }
+
+    HTTPResponse(
+      res,
+      200,
+      updatedStatusContact,
+      "field 'favorite' updated successfully"
+    );
   };
 }
 
