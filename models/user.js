@@ -1,9 +1,6 @@
 const { Schema, model } = require("mongoose");
-
-
-const handleMongooseError = require("../helpers/handleMongooseError");
-
-
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new Schema(
   {
@@ -21,20 +18,26 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: {
-      type: String,
-      default: null,
-    },
+    token: String,
   },
   { versionKey: false }
 );
 
-userSchema.post("save", handleMongooseError);
+// Додаємо метод для хешування пароля перед збереженням користувача
+userSchema.pre("save", async function (next) {
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
 
-
-
-
+// Додаємо метод для створення JWT токену
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ _id: this._id }, SECRET_KEY);
+  this.token = token;
+  return token;
+};
 
 const User = model("user", userSchema);
 
-module.exports = { User};
+module.exports = User;

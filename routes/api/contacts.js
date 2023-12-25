@@ -1,5 +1,5 @@
 const express = require("express");
-const contactsCtrl = require("../../controllers/contacts");
+const contactsCtrl = require("../../controllers/contacts.js");
 const {
   addValid,
   updateValid,
@@ -11,36 +11,22 @@ const userVerification = require("../../middlewares/userVerification");
 
 const router = express.Router();
 
-router.get("/", authenticate, contactsCtrl.listContacts);
+// Перевірте, що contactsCtrl.listContactsForUser визначено правильно
+router.get("/", authenticate, contactsCtrl.listContactsForUser);
 
+// Перевірте, що contactsCtrl.getContactById визначено правильно
 router.get("/:contactId", authenticate, isValidId, contactsCtrl.getContactById);
 
+// Перевірте, що contactsCtrl.addContact визначено правильно
 router.post("/", authenticate, addValid, contactsCtrl.addContact);
 
-router.delete(
-  "/:contactId",
-  authenticate,
-  userVerification,
-  isValidId,
-  contactsCtrl.removeContact
-);
+// Перевірте, що contactsCtrl.removeContact визначено правильно
+router.delete("/:contactId", authenticate, userVerification, isValidId, contactsCtrl.removeContact);
 
-router.put(
-  "/:contactId",
-  authenticate,
-  userVerification,
-  isValidId,
-  updateValid,
-  contactsCtrl.updateContact
-);
+// Перевірте, що contactsCtrl.updateContact визначено правильно
+router.put("/:contactId", authenticate, userVerification, isValidId, updateValid, contactsCtrl.updateContact);
 
-router.patch(
-  "/:contactId/favorite",
-  authenticate,
-  userVerification,
-  isValidId,
-  updateFavoriteValid,
-  contactsCtrl.updateStatusContact
-);
+// Перевірте, що contactsCtrl.updateStatusContact визначено правильно
+router.patch("/:contactId/favorite", authenticate, userVerification, isValidId, updateFavoriteValid, contactsCtrl.updateStatusContact);
 
 module.exports = router;

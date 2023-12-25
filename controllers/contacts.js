@@ -1,7 +1,9 @@
-const { NotFound } = require("http-errors");
-const  { Contact }  = require("../models/contact");
+// controllers/contacts.js
 
-const listContacts = async (req, res, next) => {
+const { NotFound } = require("http-errors");
+const { Contact } = require("../models/contact");
+
+const listContactsForUser = async (req, res, next) => {
   try {
     const { _id: owner } = req.user;
 
@@ -10,7 +12,6 @@ const listContacts = async (req, res, next) => {
 
     const contactsQuery = { owner };
 
-   
     if (favorite === 'true') {
       contactsQuery.favorite = true;
     }
@@ -99,7 +100,7 @@ const updateStatusContact = async (req, res, next) => {
 };
 
 module.exports = {
-  listContacts,
+  listContactsForUser,
   getContactById,
   removeContact,
   addContact,
