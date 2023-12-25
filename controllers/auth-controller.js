@@ -1,15 +1,24 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import fs from "fs/promises";
+import path from "path";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
-
+  const avatarURL = gravatar.url(email, {
+    s: 400,
+    r: "pg",
+    d: "mm",
+  });
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, "Email already used");
@@ -17,7 +26,11 @@ const signup = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     username: newUser.username,
@@ -79,10 +92,40 @@ const updateUserSubscription = async (req, res) => {
   res.json(result);
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id, username } = req.user;
+  const { path: oldPath, filename } = req.file;
+  const newFilename = `${username}_${filename}`;
+  const newPath = path.join(avatarsPath, newFilename);
+  const tempPath = path.join("temp", filename);
+
+  try {
+    const image = await Jimp.read(oldPath);
+    await image
+      .autocrop()
+      .resize(250, 250, Jimp.RESIZE_BEZIER)
+      .circle()
+      .write(newPath);
+  } catch (err) {
+    throw HttpError(500, "Error processing image");
+  }
+  const newAvatarURL = path.join("avatars", newFilename);
+  const result = await User.findByIdAndUpdate(_id, {
+    avatarURL: newAvatarURL,
+  });
+  if (!result) {
+    throw HttpError(404, `User with id= ${_id} not found`);
+  }
+  await fs.unlink(tempPath);
+
+  res.json(result);
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
   updateUserSubscription: ctrlWrapper(updateUserSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };
