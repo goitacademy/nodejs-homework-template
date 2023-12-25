@@ -34,14 +34,14 @@ export const contactAddShema = Joi.object({
   phone: Joi.string()
     .required()
     .messages({"any.required": "missing required 'phone' field"}),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 });
 
 export const contactUpdateShema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
   phone: Joi.string(),
-  favorite: Joi.bool(),
+  favorite: Joi.boolean(),
 });
 
 const Contact = model("contact", contactSchema);

@@ -1,6 +1,6 @@
 // import contactsService from "../models/Contact.js";
 import {HttpError} from "../helpers/index.js";
-import {contactAddShema, contactUpdateShema} from "../models/Contact.js";
+// import {contactAddShema, contactUpdateShema} from "../models/Contact.js";
 import {ctrlWrapper} from "../decorators/index.js";
 
 import Contact from "../models/Contact.js";
@@ -14,7 +14,7 @@ const listContacts = async (req, res) => {
 const contactById = async (req, res) => {
   const {contactId} = req.params;
   // const result = await contactsService.getContactById(contactId);
-  const result = await Contact.find(contactId);
+  const result = await Contact.findById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
