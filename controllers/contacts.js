@@ -1,16 +1,17 @@
-const { catchAsync, ctrlWrapper } = require("../helpers"); // імпортуємо помилку для прокидування
+const { ctrlWrapper } = require("../helpers"); // імпортуємо помилку для прокидування
 
 const { contactServices } = require("../services");
 
 
 // ************ витягуємо усі контакти ************
-const getAll = catchAsync(async (req, res) => {
+const getAll = (async (req, res) => {
+
   // const users = await User.find().select('+password');
   // const users = await User.find().select('-email');
   // const users = await User.find().select('name year');
   // const users = await User.find();
 
-   const contacts = await contactServices.getAllContacts();
+   const contacts = await contactServices.getAllContacts(req.user, req.query);
 
    res.status(200).json({
      msg: "Success!",
@@ -20,7 +21,7 @@ const getAll = catchAsync(async (req, res) => {
 });
 
 // ************ витягуємо контакт по id ************
-const getById = catchAsync(async (req, res) => {
+const getById = (async (req, res) => {
   const contact = await contactServices.getOneContact(req.params.contactId);
 
   res.status(200).json({
@@ -32,7 +33,7 @@ const getById = catchAsync(async (req, res) => {
 
 // ************ добавляємо контакт ************
 const add = async (req, res, next) => {
-  const newContact = await contactServices.createContact(req.body);
+  const newContact = await contactServices.createContact(req.body, req.user);
 
    res.status(201).json({
      msg: "Success!",
@@ -42,7 +43,7 @@ const add = async (req, res, next) => {
 };
 
 // ************ поновити контакт по id ************
-const updateById = catchAsync(async (req, res) => {
+const updateById = (async (req, res) => {
   // const updatedContact = await Contact.findByIdAndUpdate(id, { name, year, role }, { new: true });
   const updatedContact = await contactServices.updateContact(req.params.contactId, req.body);
 
@@ -53,7 +54,7 @@ const updateById = catchAsync(async (req, res) => {
 });
 
 // ************ видалити контакт по id ************
-const deleteById = catchAsync(async (req, res) => {
+const deleteById = (async (req, res) => {
   await contactServices.deleteContact(req.params.contactId);
 
    res.sendStatus(204);

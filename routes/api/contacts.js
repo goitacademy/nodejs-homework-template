@@ -4,23 +4,26 @@ const router = express.Router(); // створюємо router (це як зап�
 
 const ctrl = require("../../controllers/contacts");
 
-const { contactMiddleware }  = require("../../middleswares");
+const { validateBody, isValidId, authenticate } = require("../../middleswares");
+
+const { schemas } = require("../../models/contact");
 
 // по шляху '/' викликаємо ф-цію, яка повертає усі контакти
-router.get("/", ctrl.getAll);
+router.get("/", authenticate, ctrl.getAll);
 
 // по шляху '/:contactId' викликаємо ф-цію, яка повертає контакт з id, який можна витягнути з req.params - параметри запиту
-router.get("/:contactId", contactMiddleware.checkContactId, ctrl.getById);
+router.get("/:contactId", authenticate, isValidId, ctrl.getById);
 
 // викликаємо ф-цію, яка у базу данних (файл json з даними добавить новий запис).
-router.post("/", contactMiddleware.checkCreateContactData, ctrl.add); // contactMiddleware.checkCreateContactData,
+router.post("/", authenticate, validateBody(schemas.addSchema), ctrl.add); // contactMiddleware.checkCreateContactData,
 
 // викликаємо ф-цію, яка видалить у базі данних запис з таким id
-router.delete("/:contactId", contactMiddleware.checkContactId, ctrl.deleteById);
+router.delete("/:contactId", authenticate, isValidId, ctrl.deleteById);
 
 // викликаємо ф-цію, яка запис по id замінить на новий запис
-router.put("/:contactId", contactMiddleware.checkContactId ,ctrl.updateById);
+router.put("/:contactId", authenticate, isValidId, validateBody(schemas.addSchema), ctrl.updateById);
 
-router.patch("/:contactId/favorite", contactMiddleware.checkContactId, ctrl.updateStatusContact);
+// зміна поля favorite
+router.patch("/:contactId/favorite", authenticate, isValidId, ctrl.updateStatusContact);
 
 module.exports = router;
