@@ -6,6 +6,12 @@ const authCtrl = require("../../controllers/auth");
 
 const router = express.Router();
 
-router.post("/register", registerValid, authCtrl.register);
+router.post("/register", registerValid, async (req, res, next) => {
+  try {
+    await authCtrl.register(req, res);
+  } catch (error) {
+    next(error); // Передаємо помилку обробнику помилок Express
+  }
+});
 
 module.exports = router;
