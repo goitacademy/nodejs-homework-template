@@ -1,6 +1,6 @@
 // import contactsService from "../models/Contact.js";
 import {HttpError} from "../helpers/index.js";
-// import {contactAddShema, contactUpdateShema} from "../models/Contact.js";
+import {contactAddShema, contactUpdateShema} from "../models/Contact.js";
 import {ctrlWrapper} from "../decorators/index.js";
 
 import Contact from "../models/Contact.js";
@@ -15,8 +15,9 @@ const contactById = async (req, res) => {
   const {contactId} = req.params;
   // const result = await contactsService.getContactById(contactId);
   const result = await Contact.findById(contactId);
+  console.log(result);
   if (!result) {
-    throw HttpError(404, "Not found");
+    throw (404, "Not found");
   }
   res.json(result);
 };
@@ -27,28 +28,30 @@ const addContact = async (req, res) => {
   res.status(201).json(result);
 };
 
-// const updateContact = async (req, res) => {
-//   const {contactId} = req.params;
-//   const result = await contactsService.updateContact(contactId, req.body);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json(result);
-// };
+const updateContact = async (req, res) => {
+  const {contactId} = req.params;
+  // const result = await contactsService.updateContact(contactId,req.body);
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
 
-// const removeContact = async (req, res) => {
-//   const {contactId} = req.params;
-//   const result = await contactsService.removeContact(contactId);
-//   if (!result) {
-//     throw HttpError(404, "Not found");
-//   }
-//   res.json({message: "contact deleted"});
-// };
+const removeContact = async (req, res) => {
+  const {contactId} = req.params;
+  // const result = await contactsService.removeContact(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json({message: "contact deleted"});
+};
 
 export default {
   listContacts: ctrlWrapper(listContacts),
   contactById: ctrlWrapper(contactById),
   addContact: ctrlWrapper(addContact),
-  //   updateContact: ctrlWrapper(updateContact),
-  //   removeContact: ctrlWrapper(removeContact),
+  updateContact: ctrlWrapper(updateContact),
+  removeContact: ctrlWrapper(removeContact),
 };
