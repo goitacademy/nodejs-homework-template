@@ -6,24 +6,28 @@ const userSchema = new Schema(
   {
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: [true, 'Set password for user'],
     },
     email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
     },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
-      default: "starter",
+      default: "starter"
     },
     token: String,
-  },
-  { versionKey: false }
+  }
 );
 
-// Додаємо метод для хешування пароля перед збереженням користувача
+userSchema.virtual("contacts", {
+  ref: "contact",
+  localField: "_id",
+  foreignField: "owner",
+});
+
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
@@ -31,7 +35,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// Додаємо метод для створення JWT токену
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, SECRET_KEY);
   this.token = token;
