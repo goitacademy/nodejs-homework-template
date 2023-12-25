@@ -35,6 +35,9 @@ const delet = async (req, res, next) => {
   const func = await contacts.removeContact(contactId);
   if (func) {
     res.status(200).json({ message: "contact deleted" });
+  } else !func;
+  {
+    res.status(404).json({ message: "not found" });
   }
 };
 
@@ -43,7 +46,7 @@ const put = async (req, res, next) => {
   const { contactId } = req.params;
   const result = await contacts.updateContact(contactId, req.body);
   if (result === null) {
-    new Error(status, message);
+    res.status(404).json({ message: "not valid ID" });
   }
   res.status(200).json(result);
 };

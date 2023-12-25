@@ -12,7 +12,7 @@ router.post("/", validateBody(schemas.contactSchema), control.post);
 //=======================delete=========================
 router.delete(
   "/:contactId",
-  validateBody(schemas.contactSchema),
+
   control.delet
 );
 //========================put========================
