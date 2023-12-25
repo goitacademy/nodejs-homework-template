@@ -6,6 +6,9 @@ const { userController } = require('../../controllers');
 const router = express.Router();
 
 router.post('/register', userAuthMiddlewares.checkRegistrations, userController.registerUser);
-// router.post('/login', userAuthMiddlewares.checkRegistrations, userController.LoginUser);
+router.post('/login', userAuthMiddlewares.checkLoginUserData, userController.loginUser);
+router.post('/logout', userAuthMiddlewares.protect, userController.logOut);
+router.get('/current', userAuthMiddlewares.protect, userController.getMy);
+router.patch('/', userAuthMiddlewares.protect, userController.updateSub);
 
 module.exports = router

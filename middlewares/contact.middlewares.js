@@ -1,6 +1,7 @@
 
-const { catchAsync, HttpError, contactValidator } = require('../utils');
+const { catchAsync, HttpError } = require('../utils');
 const { contactServise } = require('../servises');
+const { contactValidator } = require('../utils/validators');
 
 
 
@@ -15,7 +16,7 @@ exports.checkUserId = catchAsync(async (req, res, next) => {
 exports.checkupdateUserDatafavorite = catchAsync(async (req, res, next) => {
 	const { value, error } = contactValidator.updateUserDataValidatorfavorite(req.body);
 
-	if (error) throw new HttpError(400, 'missing field favorite');
+	if (error) throw new HttpError(400, 'missing field favorite', error);
 
 	await contactServise.userFavorite({ favorite: value.favorite });
 
@@ -28,7 +29,7 @@ exports.checkupdateUserDatafavorite = catchAsync(async (req, res, next) => {
 exports.checkCreateUserData = catchAsync(async (req, res, next) => {
 	const { value, error } = contactValidator.createUserDataValidator(req.body);
 
-	if (error) throw new HttpError(400, 'Invalid user data!');
+	if (error) throw new HttpError(400, 'Invalid user data!', error);
 
 	await contactServise.checkContactExist({ email: value.email });
 
@@ -41,7 +42,7 @@ exports.checkCreateUserData = catchAsync(async (req, res, next) => {
 exports.checkUpdateUserData = catchAsync(async (req, res, next) => {
 	const { value, error } = contactValidator.updateUserDataValidator(req.body);
 
-	if (error) throw new HttpError(400, 'Invalid user data!');
+	if (error) throw new HttpError(400, 'Invalid user data!', error);
 
 	await contactServise.checkContactExist({ email: value.email, _id: { $ne: req.params.id } });
 

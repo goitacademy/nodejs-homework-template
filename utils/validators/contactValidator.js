@@ -1,6 +1,7 @@
 const Joi = require('joi');
+const joiValidator = require('./joiValidator');
 
-exports.createUserDataValidator = (data) =>
+exports.createUserDataValidator = joiValidator((data) =>
 	Joi
 		.object()
 		.options({ abortEarly: false })
@@ -10,10 +11,10 @@ exports.createUserDataValidator = (data) =>
 			phone: Joi.string().min(6).required(),
 			favorite: Joi.boolean(),
 		})
-		.validate(data);
+		.validate(data));
 
 
-exports.updateUserDataValidator = (data) =>
+exports.updateUserDataValidator = joiValidator((data) =>
 	Joi
 		.object()
 		.keys({
@@ -22,16 +23,16 @@ exports.updateUserDataValidator = (data) =>
 			phone: Joi.string().min(6),
 			favorite: Joi.boolean(),
 		})
-		.validate(data);
+		.validate(data));
 
 
-exports.updateUserDataValidatorfavorite = (data) =>
+exports.updateUserDataValidatorfavorite = joiValidator((data) =>
 	Joi
 		.object()
 		.keys({
 			favorite: Joi.boolean().required().messages({ 'any.required': 'Missing field favorite' }),
 		})
-		.validate(data);
+		.validate(data));
 
 
 

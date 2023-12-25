@@ -1,4 +1,4 @@
-const { model, Schema } = require('mongoose');
+const { model, Schema, Types } = require('mongoose');
 const { userRolesEnum } = require('../constants');
 
 const contactsSchema = new Schema({
@@ -22,8 +22,9 @@ const contactsSchema = new Schema({
 		default: userRolesEnum.USER,
 	},
 	owner: {
-		type: Schema.Types.ObjectId,
+		type: Types.ObjectId,
 		ref: 'users',
+		required: true,
 	}
 },
 	{

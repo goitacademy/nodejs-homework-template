@@ -1,7 +1,7 @@
 const catchAsync = require('./catchAsync');
 const HttpError = require('./HttpError');
-const contactValidator = require('./contactValidator');
-const userValidator = require('./userValidator');
+const contactValidator = require('./validators/contactValidator');
+const userValidator = require('./validators/userValidator');
 
 module.exports = {
 	catchAsync,

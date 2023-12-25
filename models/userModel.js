@@ -20,7 +20,12 @@ const userSchema = new Schema({
 		type: String,
 		default: '',
 	},
-})
+},
+	{
+		versionKey: false,
+		timestamps: true,
+	}
+)
 
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) return next();
