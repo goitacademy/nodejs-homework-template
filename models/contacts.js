@@ -29,8 +29,8 @@ const contactsPath = path.join(__dirname, "./contacts.json"); //*     "contacts.
 
 async function listContacts() {
   const data = await fs.readFile(contactsPath);
-  console.log(data); //  виведе буфер в 16-му форматі
-  console.log(data.toString()); //  перетворить його у рядок
+  // console.log(data); //  виведе буфер в 16-му форматі
+  // console.log(data.toString()); //  перетворить його у рядок
   return JSON.parse(data);
 }
 

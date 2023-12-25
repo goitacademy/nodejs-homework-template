@@ -4,13 +4,36 @@ const contacts = require("../../models/contacts"); // імпортуємо фа�
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const result = await contacts.listContacts();
-  res.json(result);
+router.get("/", async (req, res) => {
+  try {
+    const result = await contacts.listContacts();
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
 });
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+router.get("/:contactId", async (req, res) => {
+  // console.log(req.params.contactId);
+  // console.log(req.params);
+  try {
+    const { contactId } = req.params; // Зчитуємо цей Id
+    const result = await contacts.getContactById(contactId);
+    // Якщо база даних відправила null, значить id неправильний:
+    if (!result) {
+      // Перервали виконання return-ом, бо `res.json()` не перериває
+      return res.status(404).json({
+        message: "Not found",
+      });
+    }
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+    });
+  }
 });
 
 router.post("/", async (req, res, next) => {
