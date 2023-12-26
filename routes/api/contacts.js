@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 const control = require("../../controlers/control");
 const { validateBody } = require("../../middlewares/validateBody");
-const { checkCreateUserData } = require("../../middlewares/validateBody");
+const {
+  checkCreateUserData,
+  checkId,
+} = require("../../middlewares/validateBody");
 const schemas = require("../../Shema/shema");
 //======================getAll==========================
 router.get("/", control.getAll);
@@ -16,12 +19,13 @@ router.post(
   control.post
 );
 //=======================delete=========================
-router.delete(
-  "/:contactId",
-
-  control.delet
-);
+router.delete("/:contactId", checkId, control.delet);
 //========================put========================
-router.put("/:contactId", validateBody(schemas.contactSchema), control.put);
+router.put(
+  "/:contactId",
+  checkId,
+  validateBody(schemas.contactSchema),
+  control.put
+);
 
 module.exports = router;

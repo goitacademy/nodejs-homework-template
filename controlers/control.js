@@ -14,7 +14,7 @@ const getAll = async (req, res, next) => {
 //========================getID========================
 const getID = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.contactId);
 
     console.log(user);
 
@@ -37,23 +37,24 @@ const post = async (req, res, next) => {
 //=======================delete=========================
 const delet = async (req, res, next) => {
   const { contactId } = req.params;
-  const func = await contacts.removeContact(contactId);
-  if (func) {
-    res.status(200).json({ message: "contact deleted" });
-  } else !func;
-  {
-    res.status(404).json({ message: "not found" });
-  }
+  await User.findByIdAndDelete(contactId);
+  res.sendStatus(204);
 };
 
 //========================put========================
 const put = async (req, res, next) => {
-  const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
-  if (result === null) {
+  try {
+    const { contactId } = req.params;
+    const { name, email, phone } = req.body;
+    const updateUser = await User.findByIdAndUpdate(contactId, {
+      name,
+      email,
+      phone,
+    });
+    res.status(200).json({ msg: "change", updateUser });
+  } catch (error) {
     res.status(404).json({ message: "not valid ID" });
   }
-  res.status(200).json(result);
 };
 
 module.exports = {

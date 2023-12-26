@@ -4,19 +4,22 @@ const contactSchema = require("../Shema/shema");
 const User = require("../modelUser/userModel");
 
 const checkId = async (req, res, next) => {
-  const { id } = req.params;
-  const idIsValid = Types.ObjectId.isValid(id);
-  if (!idIsValid) throw new HttpError(404, "Invalid");
-  const userExists = await User.findById(id);
-  if (!userExists) throw new HttpError(404, "User not found");
+  const { contactId } = req.params;
+  const idIsValid = Types.ObjectId.isValid(contactId);
+  console.log(idIsValid);
+
+  // if (!idIsValid) throw new HttpError(404, "Invalid");
+  const userExists = await User.findById(contactId);
+  console.log(userExists);
+
+  // if (!userExists) throw new HttpError(404, "User not found");
   next();
 };
-
 const validateBody = (shema) => {
   const func = (req, res, next) => {
     const { error } = shema.validate(req.body);
     if (error) {
-      next(HttpError(400, error.message));
+      next(new HttpError(400, error.message));
     }
     next();
   };
