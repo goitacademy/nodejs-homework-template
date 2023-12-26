@@ -18,7 +18,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 
 // Використання вбудованого парсера JSON для обробки JSON-даних у тілі запиту
-app.use(express.json());
+app.use(express.json()); // Щоб Експрес перетворив рядок-запит на JSON-об'єкт
 
 // Використання маршруту /api/contacts для обробки запитів, що стосуються контактів
 app.use("/api/contacts", contactsRouter);
@@ -30,7 +30,11 @@ app.use((req, res) => {
 
 // Обробник помилок, які виникають під час обробки запитів
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  //! ------   ВАРІАНТ-2  ------
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
+  //! ------   ВАРІАНТ-1  ------
+  // res.status(500).json({ message: err.message });
 });
 
 // Експорт об'єкту додатка Express для використання в інших частинах програми

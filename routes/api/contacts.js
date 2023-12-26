@@ -58,7 +58,15 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    // console.log(req.body);
+    const result = await contacts.addContact(req.body);
+    res.status(201).json(result);
+    // res.status(result.status).json(result); //! буде помилка:  "message": "Invalid status code: undefined"
+  } catch (error) {
+    next(error);
+  }
+  // res.json({ message: "template message" });
 });
 
 router.delete("/:contactId", async (req, res, next) => {
