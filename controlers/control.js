@@ -5,20 +5,23 @@ const decorarot = require("../Helpers/decorator");
 const User = require("../modelUser/userModel");
 //======================getAll==========================
 const getAll = async (req, res, next) => {
-  const allContacts = await contacts.listContacts();
-  console.log(allContacts);
-  res.status(200).json(allContacts);
+  // select   const user = await User.find().select("-email");
+  const user = await User.find();
+
+  res.status(200).json({ user });
 };
 
 //========================getID========================
 const getID = async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await contacts.getContactById(contactId);
-  if (contact === null) {
-    new Error(status, message);
+  try {
+    const user = await User.findById(req.params.id);
+
+    console.log(user);
+
+    res.status(200).json({ msg: "Succsess!", user });
+  } catch (error) {
+    res.status(404).json({ msg: "problem!" });
   }
-  res.status(200).json(contact);
-  console.log(contact);
 };
 
 //=======================post=========================
