@@ -26,6 +26,7 @@ const { nanoid } = require("nanoid");
 
 const contactsPath = path.join(__dirname, "./contacts.json"); //*     "contacts.json" - теж можна записати
 // console.log(contactsPath);
+//! ПЕРЕВІРКА НА ПОМИЛКУ СЕРВЕРА (вводячи невірну назва файлу):    const contactsPath = path.join(__dirname, "./contacts2.json");
 
 async function listContacts() {
   const data = await fs.readFile(contactsPath);
@@ -73,6 +74,7 @@ async function addContact(data) {
   return newContact;
 }
 
+//! -------------   ВАРІАНТ-1 без пояснення   -------------------
 // async function updateContact(contactId, data) {
 //   const people = await listContacts();
 //   const index = people.findIndex((contact) => contact.id === contactId);
@@ -82,6 +84,7 @@ async function addContact(data) {
 //   return people[index];
 // }
 
+//! -------------   ВАРІАНТ-1 з поясненням   -------------------
 // Асинхронна ф-ція для оновлення контакту за його ідентифікатором та новими даними
 async function updateContact(contactId, data) {
   // Отримати список контактів
