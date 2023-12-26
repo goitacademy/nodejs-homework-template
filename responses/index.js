@@ -6,4 +6,5 @@ module.exports = {
   401: "Unauthorized",
   404: "Not Found",
   409: "Conflict",
+  500: "Internal Server Error"
 };

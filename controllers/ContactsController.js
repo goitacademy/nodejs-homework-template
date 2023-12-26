@@ -78,15 +78,9 @@ class ContactsController {
     );
   };
 
-  updateStatusContact = async (req, res) => {
-    const {
-      params: { contactId },
-      body,
-    } = req;
-
+  updateStatusContact = async ({ params: { contactId }, body }, res) => {
     if (!body.favorite) {
-      res.status(400);
-      throw new Error("Missing field favorite");
+      HTTPError(400, "Missing field favorite");
     }
 
     const updatedStatusContact = await this.service.updateStatusContact(

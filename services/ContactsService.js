@@ -36,7 +36,7 @@ class ContactsService {
     return updatedContact || null;
   };
 
-  updateStatusContact = async (contactId) => {
+  updateStatusContact = async (contactId, body) => {
     const updatedStatusContact = await this.model.findByIdAndUpdate(
       contactId,
       { ...body },

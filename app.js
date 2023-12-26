@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.use("/api/contacts", require("./routes/api/contacts"));
+app.use("/users", require("./routes/api/users"));
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
