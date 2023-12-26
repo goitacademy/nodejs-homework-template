@@ -2,6 +2,7 @@ const contacts = require("../models/contacts");
 const { contactSchema } = require("../Shema/shema");
 const { HttpError } = require("../Helpers/HttpError");
 const decorarot = require("../Helpers/decorator");
+const User = require("../modelUser/userModel");
 //======================getAll==========================
 const getAll = async (req, res, next) => {
   const allContacts = await contacts.listContacts();
@@ -22,10 +23,11 @@ const getID = async (req, res, next) => {
 
 //=======================post=========================
 const post = async (req, res, next) => {
-  const newContact = await contacts.addContact(req.body);
-  if (newContact === null) {
-    new Error(status, message);
-  }
+  // const newContact = await contacts.addContact(req.body);
+  // if (newContact === null) {
+  //   new Error(status, message);
+  // }
+  const newContact = await User.create(req.body);
   res.status(201).json(newContact);
 };
 

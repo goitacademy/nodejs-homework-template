@@ -18,14 +18,14 @@ require("dotenv").config();
 app.use("/api/contacts", contactsRouter);
 
 //========================mongo========================================
-// mongoose.connect(process.env.MONGO_URL).then(() => {
-//   try {
-//     console.log("mongo db connection");
-//   } catch (error) {
-//     process.exit(1);
-//     console.log(error);
-//   }
-// });
+mongoose.connect(process.env.MONGODB_URL).then(() => {
+  try {
+    console.log("mongo db connection");
+  } catch (error) {
+    process.exit(1);
+    console.log(error);
+  }
+});
 //================================================================
 
 app.use((req, res) => {
