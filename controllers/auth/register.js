@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 const { HttpError, sendEmail } = require("../../helpers");
 const { User } = require("../../models/user");
