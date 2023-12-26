@@ -1,5 +1,5 @@
 const UserModel = require("../models/user");
-
+const bcrypt = require("bcrypt")
 class UserService {
   constructor() {
     this.model = UserModel;
@@ -18,6 +18,9 @@ class UserService {
     })
     return createUser || null
   }
+
+
+  loginUser = async () => {}
 }
 
 module.exports = new UserService();

@@ -5,9 +5,11 @@ const {
   registerSchema,
   loginSchema,
   updateSubsSchema,
+  updateAvatarSchema,
 } = require("../../schemas/usersJoiSchema");
 const authenticate = require("../../middlewares/authenticate");
 const UserController = require("../../controllers/UserController");
+const upload = require("../../middlewares/upload");
 
 router.post(
   "/register",
@@ -15,4 +17,13 @@ router.post(
   UserController.createUser
 );
 
+router.post("/login", validateBody(loginSchema), UserController.loginUser);
+
+router.patch(
+  "/avatars",
+  authenticate,
+  validateBody(updateAvatarSchema),
+  upload.single("avatarURL"),
+  UserController.changeAvatar
+);
 module.exports = router;
