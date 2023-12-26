@@ -95,7 +95,10 @@ const updateUserSubscription = async (req, res) => {
 const updateAvatar = async (req, res) => {
   const { _id, username } = req.user;
   const { path: oldPath, filename } = req.file;
-  const newFilename = `${username}_${_id}_${filename}`;
+  const newFilename = `${username
+    .split(" ")
+    .join("_")
+    .toLowerCase()}_${_id}.${filename.split(".").pop()}`;
   const newPath = path.join(avatarsPath, newFilename);
   const tempPath = path.join("temp", filename);
 

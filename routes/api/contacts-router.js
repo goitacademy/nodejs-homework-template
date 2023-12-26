@@ -35,7 +35,6 @@ contactsRouter.delete("/:contactId", isValidId, contactsController.deleteById);
 
 contactsRouter.put(
   "/:contactId",
-  upload.single("avatarURL"),
   isValidId,
   isEmptyBody,
   validateBody(contactUpdateSchema),

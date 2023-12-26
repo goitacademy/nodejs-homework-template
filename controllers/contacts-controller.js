@@ -37,6 +37,7 @@ const getById = async (req, res) => {
 
 const add = async (req, res) => {
   const { _id: owner } = req.user;
+
   const { name, email } = req.body;
   let avatarContactURL;
 
@@ -45,7 +46,7 @@ const add = async (req, res) => {
     const newFilename = `${name
       .split(" ")
       .join("_")
-      .toLowerCase()}_${filename}`;
+      .toLowerCase()}_${owner}.${filename.split(".").pop()}`;
     const newPath = path.join(contactAvatarsPath, newFilename);
     const tempPath = path.join("temp", filename);
 
@@ -95,13 +96,17 @@ const updateContactFavorite = async (req, res) => {
 
 const updateContactAvatar = async (req, res) => {
   const { contactId } = req.params;
-
+  const { name } = await Contact.findById(contactId);
+  const { _id: owner } = req.user;
   if (!req.file) {
     return res.status(400).json({ error: "No file uploaded" });
   }
 
   const { path: oldPath, filename } = req.file;
-  const newFilename = filename;
+  const newFilename = `${name
+    .split(" ")
+    .join("_")
+    .toLowerCase()}_${owner}.${filename.split(".").pop()}`;
   const newPath = path.join(contactAvatarsPath, newFilename);
   const tempPath = path.join("temp", filename);
 
