@@ -1,5 +1,3 @@
-/** @format */
-
 import {HttpError} from "../helpers/index.js";
 
 const isEmptyBody = (req, res, next) => {

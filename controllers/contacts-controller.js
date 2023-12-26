@@ -1,6 +1,6 @@
 // import contactsService from "../models/Contact.js";
 import {HttpError} from "../helpers/index.js";
-import {contactAddShema, contactUpdateShema} from "../models/Contact.js";
+// import {contactAddShema, contactUpdateShema} from "../models/Contact.js";
 import {ctrlWrapper} from "../decorators/index.js";
 
 import Contact from "../models/Contact.js";
@@ -48,10 +48,20 @@ const removeContact = async (req, res) => {
   res.json({message: "contact deleted"});
 };
 
+const updateStatusContact = async (req, res) => {
+  const {contactId} = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json(result);
+};
+
 export default {
   listContacts: ctrlWrapper(listContacts),
   contactById: ctrlWrapper(contactById),
   addContact: ctrlWrapper(addContact),
   updateContact: ctrlWrapper(updateContact),
   removeContact: ctrlWrapper(removeContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
