@@ -4,6 +4,7 @@ const User = require("../models/user");
 
 const register = async (req, res, next) => {
   try {
+    console.log("Request body:", req.body);
     const { email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -17,6 +18,13 @@ const register = async (req, res, next) => {
     const token = user.generateAuthToken();
     res.status(201).json({ user: { email: user.email, subscription: user.subscription }, token });
   } catch (error) {
+    console.error("Error in register controller:", error);
+
+    // Додайте виведення в консоль для подробиць про помилку валідації
+    if (error.details) {
+      console.error("Validation error details:", error.details);
+    }
+
     next(error);
   }
 };
@@ -24,3 +32,4 @@ const register = async (req, res, next) => {
 module.exports = {
   register,
 };
+
