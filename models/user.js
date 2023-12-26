@@ -1,5 +1,5 @@
 const { Schema, model } = require("mongoose");
-const { handleMongooseError } = require("../middlewares");
+const handleMongooseError = require("../middlewares/handleMongooseError");
 const Joi = require("joi");
 
 const emailRegexp =
@@ -13,13 +13,12 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      minlength: 7,
+      minlength: 6,
       required: [true, "Set password for user"],
     },
     email: {
       type: String,
       required: [true, "Email is required"],
-      match: emailRegexp,
       unique: true,
     },
     subscription: {
@@ -27,10 +26,14 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: String,
+    token: {
+      type: String,
+      default: "",
+    },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: true }
 );
+
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
