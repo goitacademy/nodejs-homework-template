@@ -36,6 +36,7 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateAuthToken = function () {
+  // eslint-disable-next-line no-undef
   const token = jwt.sign({ _id: this._id }, SECRET_KEY);
   this.token = token;
   return token;

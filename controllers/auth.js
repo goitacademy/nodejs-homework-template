@@ -16,13 +16,20 @@ const register = async (req, res, next) => {
     await user.save();
 
     const token = user.generateAuthToken();
-    res.status(201).json({ user: { email: user.email, subscription: user.subscription }, token });
+    res
+      .status(201)
+      .json({
+        user: { email: user.email, subscription: user.subscription },
+        token,
+      });
   } catch (error) {
     console.error("Error in register controller:", error);
 
     // Додайте виведення в консоль для подробиць про помилку валідації
     if (error.details) {
       console.error("Validation error details:", error.details);
+    } else {
+      console.error("Full validation error:", error);
     }
 
     next(error);
@@ -32,4 +39,3 @@ const register = async (req, res, next) => {
 module.exports = {
   register,
 };
-
