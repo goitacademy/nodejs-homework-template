@@ -1,7 +1,11 @@
+// import dotenv from "dotenv"
+
 import { HttpError } from "../helpers/index.js";
 
 import controllerWrapper from "../decorators/controllerWrapper.js";
 import Contact from "../models/contacts.js";
+
+// dotenv.config()
 
 const getAll = async (req, res) => {
 	const { _id: owner } = req.user;

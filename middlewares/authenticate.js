@@ -6,6 +6,7 @@ import controllerWrapper from "../decorators/controllerWrapper.js";
 import User from "../models/user.js";
 
 dotenv.config()
+
 const { JWT_SECRET } = process.env;
 
 
