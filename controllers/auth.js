@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
-const Jimp = require("jimp")
+// const Jimp = require("jimp");
 
 const { User } = require("../models/user");
 
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper, resize } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 
@@ -91,17 +91,6 @@ const updateAvatar = async (req, res) => {
     avatarURL,
   })
 }
-
-async function resize(tmpUpload) {
-  const image = await Jimp.read(tmpUpload);
-  await image.resize(250, 250, function (err) {
-    if (err) throw err;
-  });
-  await image.writeAsync(tmpUpload);
-}
-
-
-
 
 module.exports = {
   register: ctrlWrapper(register),
