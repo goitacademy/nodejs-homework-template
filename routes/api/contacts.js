@@ -23,16 +23,23 @@ router.get("/:contactId", async (req, res) => {
     const result = await contacts.getContactById(contactId);
     // Якщо база даних відправила null, значить id неправильний:
     if (!result) {
-      // Перервали виконання return-ом, бо `res.json()` не перериває
-      return res.status(404).json({
-        message: "Not found",
-      });
+      const error = new Error("Not found");
+      error.status = 404;
+      throw error;
+      //* Перервали виконання return-ом, бо `res.json()` не перериває:
+      // return res.status(404).json({
+      //   message: "Not found",
+      // });
     }
     res.json(result);
   } catch (error) {
-    res.status(500).json({
-      message: "Server error",
+    const { status = 500, message = "Server error" } = error;
+    res.status(status).json({
+      message,
     });
+    // res.status(500).json({
+    //   message: "Server error",
+    // });
   }
 });
 
