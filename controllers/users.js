@@ -5,6 +5,8 @@ const { ctrlWrapper } = require("../helpers");
 
 const User = require("../models/user");
 
+const {avatarMan} = require("../middlewares");
+
 // path to avatars dir
 const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 
@@ -21,6 +23,8 @@ const updateAvatar = async (req, res) => {
     const newUpload = path.join(avatarsDir, filename);
 
     await fs.rename(tempUpload, newUpload);
+
+    avatarMan(newUpload);
 
     const avatarURL = path.join("avatars", filename);
 
