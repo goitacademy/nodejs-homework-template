@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+// import dotenv from 'dotenv';
 
 import { HttpError } from "../helpers/index.js";
 import controllerWrapper from "../decorators/controllerWrapper.js";
@@ -6,12 +7,11 @@ import User from "../models/user.js";
 
 const { JWT_SECRET } = process.env;
 
+
 const authenticate = async (req, res, next) => {
-	const { authorization } = req.headers;
-    if (!authorization) {
-        throw HttpError(401, "Authorization header not found");
-    }
-	const { bearer, token } = authorization.split(" ");
+	const { authorization = ""} = req.headers;
+
+	const [ bearer, token ] = authorization.split(" ");
 	if (bearer !== "Bearer") {
 		throw HttpError(401, "Not authorized");
 	}
