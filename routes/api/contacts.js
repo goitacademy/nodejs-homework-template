@@ -2,6 +2,10 @@ const express = require("express");
 
 const contacts = require("../../models/contacts"); // імпортуємо файл-інтерфейс для роботи із списком контактів
 
+const { HttpError } = require("../../helpers");
+//! НЕВІРНИЙ ЗАПИС:
+//! const HttpError = require("../../helpers");  // отримаємо: "message": "HttpError is not a function"
+
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -23,9 +27,12 @@ router.get("/:contactId", async (req, res) => {
     const result = await contacts.getContactById(contactId);
     // Якщо база даних відправила null, значить id неправильний:
     if (!result) {
-      const error = new Error("Not found");
-      error.status = 404;
-      throw error;
+      throw HttpError(404, "Not found WHAT"); //! Перевіряємо в Постман, вводячи невірний ID
+      //! ------   ВАРІАНТ-2  ------
+      // const error = new Error("Not found");
+      // error.status = 404;
+      // throw error;
+      //! ------   ВАРІАНТ-1  ------
       //* Перервали виконання return-ом, бо `res.json()` не перериває:
       // return res.status(404).json({
       //   message: "Not found",
