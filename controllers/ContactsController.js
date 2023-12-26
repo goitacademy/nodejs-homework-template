@@ -63,12 +63,7 @@ class ContactsController {
     HTTPResponse(res, 201, contact);
   };
 
-  updateContact = async (req, res) => {
-    const {
-      params: { contactId },
-      body,
-    } = req;
-
+  updateContact = async ({ params: { contactId }, body }, res) => {
     const updatedContact = await this.service.updateContact(contactId, body);
 
     if (!updatedContact) {
