@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 
@@ -8,6 +9,16 @@ const contactsRouter = require("./routes/api/contacts");
 const { addSchema, updateSchema, updateStatusSchema } = require("./middlewares/validateContacts");
 
 const app = express();
+
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("Database connection successful");
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1); //should refactoring code to async/awate
+  });
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -23,6 +34,16 @@ app.use((req, res, next) => {
     }
   } else if (req.method === "PUT") {
     const validateResult = updateSchema.validate(req.body);
+    if (validateResult.error) {
+      return res.status(400).json({ message: validateResult.error });
+    }
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  if (req.method === "PATCH") {
+    const validateResult = updateStatusSchema.validate(req.body);
     if (validateResult.error) {
       return res.status(400).json({ message: validateResult.error });
     }
