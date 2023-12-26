@@ -23,11 +23,6 @@ const userSchema = new Schema(
 			enum: subscriptionType,
 			default: "starter",
 		},
-        owner: {
-            type: Schema.Types.ObjectId,
-            ref: 'user',
-          },
-
 		token: String,
 	},
 	{ versionKey: false, timestamps: true }
@@ -48,6 +43,10 @@ export const userSignupScheme = Joi.object({
 export const userSigninScheme = Joi.object({
     password: Joi.string().required(),
     email: Joi.string().pattern(emailPattern).required()
+})
+
+export const userUpdateSubscriptionScheme = Joi.object({
+	subscription: Joi.string().required()
 })
 
 const User = model('user', userSchema)
