@@ -14,7 +14,7 @@ const getID = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await contacts.getContactById(contactId);
   if (contact === null) {
-    new Error(status, message);
+    new Error(404, message);
   }
   res.status(200).json(contact);
   console.log(contact);
@@ -24,7 +24,7 @@ const getID = async (req, res, next) => {
 const post = async (req, res, next) => {
   const newContact = await contacts.addContact(req.body);
   if (newContact === null) {
-    new Error(status, message);
+    new Error(400, message);
   }
   res.status(201).json(newContact);
 };
