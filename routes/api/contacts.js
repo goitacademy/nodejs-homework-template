@@ -6,14 +6,19 @@ const {
   Contact,
 } = require("../../models/contacts");
 const { isValidObjectId } = require("mongoose");
+const { authenticate } = require("../../middlewares/authenticate");
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const contacts = await Contact.find();
+router.get("/", authenticate, async (req, res, next) => {
+  const user = req.user;
+  const contacts = await Contact.find({ owner: user._id }).populate(
+    "owner",
+    "email subscription"
+  );
   res.json(contacts);
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
   const isValid = isValidObjectId(contactId);
   if (!isValid) {
@@ -29,20 +34,21 @@ router.get("/:contactId", async (req, res, next) => {
   res.json(contact);
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", authenticate, async (req, res, next) => {
   const body = req.body;
+  const user = req.user;
   const { error } = contactBodySchema.validate(body);
 
   if (error) {
     res.status(400).json({ message: error.details[0].message });
     return;
   }
-  const newContact = await Contact.create(body);
+  const newContact = await Contact.create({ ...body, owner: user._id });
 
   res.status(201).json(newContact);
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
   const isValid = isValidObjectId(contactId);
   if (!isValid) {
@@ -60,7 +66,7 @@ router.delete("/:contactId", async (req, res, next) => {
   res.status(200).json({ message: "contact deleted" });
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
 
   const isValid = isValidObjectId(contactId);
@@ -89,7 +95,7 @@ router.put("/:contactId", async (req, res, next) => {
   res.json(updatedContact);
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
 
   const isValid = isValidObjectId(contactId);
