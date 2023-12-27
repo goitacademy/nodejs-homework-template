@@ -1,26 +1,21 @@
 const express = require("express");
 
-const ctrl = require("../../controllers/users");
-const { validateBody, authenticate } = require("../../middlewares");
+const ctrl = require('../../controllers/users');
 
-const { userSchemas } = require("../../models");
+const { validateBody, authenticate } = require('../../middlewares');
+
+const { schemas } = require('../../models/user');
 
 const router = express.Router();
 
-router.post("5000/users/register", validateBody(userSchemas.registerSchema), ctrl.register);
+router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 
-router.post("5000/users/login", validateBody(userSchemas.loginSchema), ctrl.login);
+router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 
-router.post("5000/users/logout", authenticate, ctrl.logout);
+router.get("/current", authenticate, ctrl.getCurrent);
 
-router.get("5000/users/current", authenticate, ctrl.getCurrent);
+router.post('/logout', authenticate, ctrl.logout);
 
-router.patch(
-  "/",
-  authenticate,
-  validateBody(userSchemas.updSubscriptionSchema),
-  ctrl.updateSubscription
-);
-
+router.patch('/:id', authenticate, ctrl.updateSubscription);
 
 module.exports = router;
