@@ -1,25 +1,61 @@
-const express = require('express')
+const express = require("express");
+const Joi = require("joi");
+const contactsController = require("../../controllers/contactsController");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Definiujemy schemat walidacyjny dla kontaktu
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Middleware do walidacji danych wejściowych
+const validateContact = (req, res, next) => {
+  const { error } = contactSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  next();
+};
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// Routes
+router.get("/", async (req, res, next) => {
+  // ...
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", async (req, res, next) => {
+  // ...
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", validateContact, async (req, res, next) => {
+  try {
+    const newContact = await contactsController.addContact(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+router.delete("/:contactId", async (req, res, next) => {
+  // ...
+});
+
+router.put("/:contactId", validateContact, async (req, res, next) => {
+  try {
+    const updatedContact = await contactsController.updateContact(
+      req.params.contactId,
+      req.body
+    );
+    if (updatedContact) {
+      res.status(200).json(updatedContact);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = router;
