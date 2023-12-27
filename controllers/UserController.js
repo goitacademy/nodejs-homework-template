@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const fs = require("fs/promises");
 const { join } = require("path");
 const gravatar = require("gravatar");
+const { use } = require("../routes/api/users.js");
 
 class UserController {
   constructor() {
@@ -16,7 +17,7 @@ class UserController {
     const user = await this.service.findUser(body.email, "email");
 
     if (user) {
-      HTTPError(409, "Email in use");
+      throw HTTPError(409, "Email in use");
     }
 
     const avatar = gravatar.url(body.email);
@@ -25,17 +26,14 @@ class UserController {
       avatarURL: avatar,
     });
 
-    HTTPResponse(res, 201, {
-      email: createdUser.email,
-      subscription: createdUser.subscription,
-      avatarURL: createdUser.avatarURL,
-    });
+    HTTPResponse(res, 201, createdUser);
   };
 
   loginUser = async ({ body: { email, password } }, res) => {
     const user = await this.service.findUser(email, "email");
+
     if (!user || !bcrypt.compare(password, user.password)) {
-      HTTPError(401);
+      throw HTTPError(401);
     }
 
     const payload = {
@@ -49,22 +47,60 @@ class UserController {
     user.token = token;
     await user.save();
 
-    HTTPResponse(res, 200, {
-      email: user.email,
-      subscription: user.subscription,
-      token: user.token,
-    });
+    HTTPResponse(res, 200, user);
+  };
+
+  logout = async (_, res) => {
+    const user = await this.service.findUser(res.locals.user.id, "_id");
+
+    if (!user) {
+      throw HTTPError(401);
+    }
+
+    user.token = null;
+    await user.save();
+    HTTPResponse(res, 204);
+  };
+
+  updateSubscription = async ({ body }, res) => {
+    const user = await this.service.findUser(res.locals.user.id, "_id");
+
+    if (!user) {
+      throw HTTPError(401);
+    }
+
+    user.subscription = body.subscription;
+    await user.save();
+
+    HTTPResponse(res, 200, user);
+  };
+
+  currentUser = async (_, res) => {
+    const user = await this.service.findUser(res.locals.user.id, "_id");
+
+    console.log(user);
+
+    if (!user) {
+      throw HTTPError(401);
+    }
+
+    HTTPResponse(res, 200, user);
   };
 
   changeAvatar = async ({ file }, res) => {
-    const { id } = res.locals;
-    const user = await this.service.findUser(id, "id");
+    const user = await this.service.findUser(res.locals.user.id, "_id");
 
+    if (!user) {
+      HTTPError(401);
+    }
 
     const { path: tempUpload, originalname } = file;
     const imageNameWithId = `${user._id}_${originalname}`;
+
     const resultUpload = join("public", "avatars", imageNameWithId);
+
     await fs.rename(tempUpload, resultUpload);
+
     user.avatarURL = resultUpload;
     await user.save();
 
