@@ -1,19 +1,23 @@
 const { model, Schema } = require("mongoose");
 
 const userShema = new Schema({
-  name: {
+  password: {
     type: String,
-    required: [true, "Set name for contact"],
+    required: [true, "Password is required"],
   },
   email: {
     type: String,
+    required: [true, "Email is required"],
+    unique: true,
   },
-  phone: {
+  subscription: {
     type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter",
   },
-  favorite: {
-    type: Boolean,
-    default: false,
+  token: {
+    type: String,
+    default: null,
   },
 });
 
