@@ -7,7 +7,14 @@ const listContacts = async () => {
   return JSON.parse(contacts);
 };
 
-const getContactById = async (contactId) => {};
+const getContactById = async (contactId) => {
+  const allContacts = await listContacts();
+  const contact = allContacts.find((contact) => contact.id === contactId);
+  if (!contact) {
+    throw new Error(`There is no contact with id: ${contactId}`);
+  }
+  return contact;
+};
 
 const removeContact = async (contactId) => {};
 
