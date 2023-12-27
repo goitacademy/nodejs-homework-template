@@ -31,6 +31,8 @@ const post = async (req, res, next) => {
   //   new Error(status, message);
   // }
   const newContact = await User.create(req.body);
+  console.log(newContact);
+
   res.status(201).json(newContact);
 };
 
