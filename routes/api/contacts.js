@@ -30,6 +30,16 @@ router.put(
 
 //========================favorite============/api/contacts/:contactId/============
 
-router.patch("/:contactId", control.get);
+router.patch("/:contactId", async (req, res) => {
+  const { contactId } = req.body;
+  const { body } = req;
+
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  if (result) {
+    res.json({ contact: result });
+  } else {
+    HttpError(404, "Not found");
+  }
+});
 
 module.exports = router;
