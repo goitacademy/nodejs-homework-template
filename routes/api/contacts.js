@@ -27,9 +27,9 @@ next(error) //Express ищет не простo следующий обрабо�
 
 router.get('/:contactId', async (req, res, next) => {
   try {
-const {id} = req.params;
+const {contactId} = req.params;
 console.log(req.params)
-const result = await contacts.getContactById(id)
+const result = await contacts.getContactById(contactId)
 if(!result){
   throw HttpError(404,"Not Found");
 }
@@ -48,18 +48,15 @@ const {error} = addSchema.validate(req.body) //проверяем на соот�
 console.log("error:", error)
 
 if(error){ // если по схеме ошибка в получаемых данных, то выбрасываем ошибку
-  throw HttpError(404,error.message)
+  throw HttpError(400,error.message)
 }
     // console.log(req.body)
     const result = await contacts.addContact(req.body)
-    res.status(200).json(result)
+    res.status(201).json(result)
   } catch (error) {
     next(error)  
   }
 })
-
-
-
 
 router.delete('/:contactId', async (req, res, next) => {
   try {
