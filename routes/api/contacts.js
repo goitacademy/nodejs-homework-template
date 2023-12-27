@@ -28,4 +28,8 @@ router.put(
   control.put
 );
 
+//========================favorite============/api/contacts/:contactId/============
+
+router.patch("/:contactId", control.get);
+
 module.exports = router;

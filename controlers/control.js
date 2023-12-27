@@ -3,6 +3,7 @@ const { contactSchema } = require("../Shema/shema");
 const { HttpError } = require("../Helpers/HttpError");
 const decorarot = require("../Helpers/decorator");
 const User = require("../modelUser/userModel");
+const Contact = require("../modelUser/contactModel");
 //======================getAll==========================
 const getAll = async (req, res, next) => {
   // select   const user = await User.find().select("-email");
@@ -58,6 +59,21 @@ const put = async (req, res, next) => {
     res.status(404).json({ message: "not valid ID" });
   }
 };
+
+//========================/api/contacts/:contactId/favorite========================
+
+const favorite = (req, res, next) => {
+  const { contactId } = req.body;
+   const { body } = req;
+
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  if (result) {
+    res.json({ contact: result });
+  } else {
+    HttpError(404, "Not found");
+  }
+};
+//==================================================================================
 
 module.exports = {
   getAll: decorarot(getAll),
