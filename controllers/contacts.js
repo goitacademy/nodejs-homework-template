@@ -1,7 +1,7 @@
-const Joi = require("joi");
-
 const contacts = require("../models/contacts");
-const { HttpError } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
+
+const Joi = require("joi");
 
 const addShema = Joi.object({
   name: Joi.string()
@@ -83,9 +83,9 @@ const updateContact = async (req, res) => {
 };
 
 module.exports = {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
+  listContacts: ctrlWrapper(listContacts),
+  getContactById: ctrlWrapper(getContactById),
+  addContact: ctrlWrapper(addContact),
+  removeContact: ctrlWrapper(removeContact),
+  updateContact: ctrlWrapper(updateContact),
 };
