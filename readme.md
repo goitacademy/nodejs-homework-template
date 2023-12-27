@@ -62,3 +62,11 @@ const { nanoid } = require('nanoid');
 - `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
 - `http://localhost:3000/`
 - `http://localhost:3000/api/contacts`
+
+### Joi
+
+Встановимо бібліотеку для перевірки тіла запиту:
+
+```js
+$ npm install joi
+```

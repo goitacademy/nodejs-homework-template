@@ -1,4 +1,5 @@
 const express = require("express");
+const Joi = require("joi");
 
 const contacts = require("../../models/contacts"); // імпортуємо файл-інтерфейс для роботи із списком контактів
 
@@ -7,6 +8,14 @@ const { HttpError } = require("../../helpers");
 //! const HttpError = require("../../helpers");  // отримаємо: "message": "HttpError is not a function"
 
 const router = express.Router();
+
+//! ------   Schema.validate  ------
+//! -----  Joi-схема:  ----- (опис вимог до об'єкта)
+// викликаємо метод'.object' якщо це для об'єкта:
+const addSchema = Joi.object({
+  title: Joi.string().required(), // title - це строка і він обов'язковий
+  author: Joi.string().required(), // author - це строка і він обов'язковий
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -59,9 +68,20 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    // console.log(req.body);
+    //! ------   Schema.validate  ------
+    // в Схемі викликаємо метод '.validate' і перевіряємо тіло об'єкта:
+    // отримаємо об'єкт, де один з полів буде 'error':
+    const { error } = addSchema.validate(req.body);
+    // console.log(error);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
+    //! ------   ЕТАП-1  ------
+    // console.log(req.body);
+    // const result = await contacts.addContact(req.body); //******/
+    // res.status(201).json(result);  //******/
     // res.status(result.status).json(result); //! буде помилка:  "message": "Invalid status code: undefined"
   } catch (error) {
     next(error);
