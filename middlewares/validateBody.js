@@ -36,4 +36,13 @@ const checkCreateUserData = async (req, res, next) => {
   next();
 };
 
-module.exports = { validateBody, checkCreateUserData, checkId };
+const checkUpdateUserData = async (req, res, next) => { 
+  const {value, error}
+}
+  
+  
+  module.exports = {
+  validateBody,
+  checkCreateUserData,
+  checkId,
+});

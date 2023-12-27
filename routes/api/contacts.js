@@ -42,4 +42,7 @@ router.patch("/:contactId", async (req, res) => {
   }
 });
 
+//========================get all users========================
+router.get("/users", control.getAllUser);
+
 module.exports = router;
