@@ -7,13 +7,13 @@ const { userSchemas } = require("../../models");
 
 const router = express.Router();
 
-router.post("/register", validateBody(userSchemas.registerSchema), ctrl.register);
+router.post("5000/users/register", validateBody(userSchemas.registerSchema), ctrl.register);
 
-router.post("/login", validateBody(userSchemas.loginSchema), ctrl.login);
+router.post("5000/users/login", validateBody(userSchemas.loginSchema), ctrl.login);
 
-router.post("/logout", authenticate, ctrl.logout);
+router.post("5000/users/logout", authenticate, ctrl.logout);
 
-router.get("/current", authenticate, ctrl.getCurrent);
+router.get("5000/users/current", authenticate, ctrl.getCurrent);
 
 router.patch(
   "/",
@@ -21,5 +21,6 @@ router.patch(
   validateBody(userSchemas.updSubscriptionSchema),
   ctrl.updateSubscription
 );
+
 
 module.exports = router;
