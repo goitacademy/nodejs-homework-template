@@ -1,6 +1,6 @@
 const { model, Shema } = require("mongoose");
 
-const userShema = new Shema({
+const contactShema = new Shema({
   name: {
     type: String,
     required: [true, "Set name for contact"],
@@ -17,6 +17,6 @@ const userShema = new Shema({
   },
 });
 
-const User = model("User", userShema);
+const Contact = model("Contact", contactShema);
 
-module.exports = User;
+module.exports = Contact;
