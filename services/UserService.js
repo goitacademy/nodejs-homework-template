@@ -7,8 +7,7 @@ class UserService {
 
   findUser = async (req, option) => {
     const user = await this.model.findOne(
-      { [option]: req },
-      "name email subscription token avatarURL"
+      { [option]: req }
     );
     return user || null;
   };

@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const fs = require("fs/promises");
 const { join } = require("path");
 const gravatar = require("gravatar");
-const { use } = require("../routes/api/users.js");
+const Jimp = require("jimp");
 
 class UserController {
   constructor() {
@@ -47,7 +47,7 @@ class UserController {
     user.token = token;
     await user.save();
 
-    HTTPResponse(res, 200, user);
+    HTTPResponse(res, 200, { email: user.email, token: user.token });
   };
 
   logout = async (_, res) => {
@@ -72,7 +72,10 @@ class UserController {
     user.subscription = body.subscription;
     await user.save();
 
-    HTTPResponse(res, 200, user);
+    HTTPResponse(res, 200, {
+      email: user.email,
+      subscription: user.subscription,
+    });
   };
 
   currentUser = async (_, res) => {
@@ -84,7 +87,7 @@ class UserController {
       throw HTTPError(401);
     }
 
-    HTTPResponse(res, 200, user);
+    HTTPResponse(res, 200, { ...user, password: "000" });
   };
 
   changeAvatar = async ({ file }, res) => {
@@ -95,13 +98,18 @@ class UserController {
     }
 
     const { path: tempUpload, originalname } = file;
-    const imageNameWithId = `${user._id}_${originalname}`;
+    const imageNameWithId = `${user.name}_${originalname}`;
 
-    const resultUpload = join("public", "avatars", imageNameWithId);
+    const absolutPath = join("public", "avatars", imageNameWithId);
+    const serverPath = join("avatars", imageNameWithId);
 
-    await fs.rename(tempUpload, resultUpload);
+    const image = await Jimp.read(tempUpload);
+    image.resize(250, 250);
 
-    user.avatarURL = resultUpload;
+    image.write(absolutPath);
+    await fs.rm(tempUpload);
+
+    user.avatarURL = serverPath;
     await user.save();
 
     HTTPResponse(res, 200, { email: user.email, avatarURL: user.avatarURL });
