@@ -1,5 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
+const { v4: uuidv4 } = require("uuid"); //ID generator (instead of nanoid)
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
@@ -18,7 +19,27 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {};
 
-const addContact = async (body) => {};
+const addContact = async ({ name, email, phone }) => {
+  const allContacts = await listContacts();
+  const newContact = {
+    id: uuidv4(),
+    name,
+    email,
+    phone,
+  };
+
+  const existingContact = allContacts.find(
+    (contact) => contact.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if (existingContact) {
+    throw new Error(`${newContact.name} is already in contacts list.`);
+    return;
+  }
+  allContacts.push(newContact);
+  fs.writeFile(contactsPath, JSON.stringify(allContacts));
+  return newContact;
+};
 
 const updateContact = async (contactId, body) => {};
 
