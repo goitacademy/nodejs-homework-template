@@ -13,8 +13,10 @@ const router = express.Router();
 //! -----  Joi-схема:  ----- (опис вимог до об'єкта)
 // викликаємо метод'.object' якщо це для об'єкта:
 const addSchema = Joi.object({
-  title: Joi.string().required(), // title - це строка і він обов'язковий
-  author: Joi.string().required(), // author - це строка і він обов'язковий
+  name: Joi.string().required(), // name - це строка і він обов'язковий
+  email: Joi.string().email().required(), // email - це строка і він обов'язковий
+  phone: Joi.string().required(), // через наявність '+'   або Joi.number().required(), залежно від мого вибору
+  // phone: Joi.string().pattern(/^\+\d{2} \(\d{3}\) \d{3}-\d{2}-\d{2}$/).required(),  //  патерн відповідає формату "+ХХ (ХХХ) XXX-XX-XX".
 });
 
 router.get("/", async (req, res, next) => {
