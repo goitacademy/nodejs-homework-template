@@ -6,7 +6,7 @@ const contactsController = require("../../models/contacts.js");
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await contactsController.listContacts();
+    const contacts = await contactsController.readContacts();
     res.status(200).json(contacts);
   } catch (error) {
     console.error(error.message);
@@ -33,7 +33,7 @@ router.post("/", async (req, res, next) => {
         .status(400)
         .json({ message: validationResult.error.details[0].message });
     }
-    const newContact = await contactsController.addContact({
+    const newContact = await contactsController.writeContacts({
       name,
       email,
       phone,

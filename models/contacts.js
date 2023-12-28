@@ -17,10 +17,6 @@ const writeContacts = async (contacts) => {
   }
 };
 
-// const listContacts = async () => {
-//   return await readContacts();
-// };
-
 const getById = async (id) => {
   try {
     return await Contact.findById(id);
