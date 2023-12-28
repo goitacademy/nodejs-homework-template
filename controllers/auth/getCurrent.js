@@ -3,6 +3,7 @@ const getCurrent = async (req, res) => {
 
   res.json({
     email,
+    subscription: "starter",
   });
 };
 
