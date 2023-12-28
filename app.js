@@ -2,7 +2,7 @@ const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
 // const uuid = require('uuid')
-const morgan = require('morgan')
+// const morgan = require('morgan')
 const dotenv = require('dotenv')
 
 dotenv.config({
@@ -13,7 +13,7 @@ const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
 
-if(process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+if(process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
