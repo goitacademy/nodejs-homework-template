@@ -23,7 +23,7 @@ console.log(decodeToken);
 // try {
 //     const {id} = jwt.verify(token, SECRET_KEY);
 //     console.log(id);
-//     const invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmU0YTVhNjhiMjdjOTQ3ZTI4NDk1YiIsImlhdCI6MTcwMTE4OTg4OCwiZXhwIjoxNzAxMjcyNjg4fQ.T3k1tEd5vjo4LtaO93_kqOJTXu7uN19gI0wEHU4Ae8w";
+//     const invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1OGRjMTg0NjkzMGQ2NWMwODU2ZTA4OCIsImlhdCI6MTcwMzc5MzUwNCwiZXhwIjoxNzAzODc2MzA0fQ.T3aLm5MP1bM6GAsctEHyem0XBgg2-qKq3ypzH3vDg0w";
 //     const result = jwt.verify(invalidToken, SECRET_KEY);
 //     console.log(result);
 // } catch (error) {
