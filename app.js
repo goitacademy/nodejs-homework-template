@@ -21,7 +21,10 @@ app.use(cors({ // разрешает запросы только с "http://loca
 }))
 
 
-app.use(express.json())
+app.use(express.json()) //позволяет Express обрабатывать входящие запросы в формате JSON, преобразуя их тело в объект JavaScript для дальнейшей обработки. Действует глобально, что не всегда хорошо  если нужно локально, то смотри пример дальше
+// !Для локального использования
+// const jsonParser = express.json() //и теперь используем как второй аргумент по такому примеру:
+// router.post('/', jsonParser, ctrl.addContact)
 
 app.use('/api', contactsRouter) //все запросы, начинающиеся с /api/contacts, будут передаваться в contactsRouter для обработки
 

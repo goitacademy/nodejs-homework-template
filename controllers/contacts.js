@@ -1,16 +1,8 @@
 const express = require('express')
-const Joi = require('joi');//библиотека для проверки и валидации входных данных (например при добоавлении нового контакта чтобы был номер и имя, а не только имя)
 const contacts= require("../models/contacts")
-
+const addSchema = require("../schemas/contactSchema")
 
 const {HttpError} = require("../helpers/index")
-
-
-const addSchema = Joi.object({
-    name: Joi.string().required(),
-    email:Joi.string().required(),
-    phone:Joi.string().required(),
-  })
 
   const getAll = async (req, res, next) => {
     try {
@@ -20,8 +12,6 @@ const addSchema = Joi.object({
     } catch (error) {
     next(error) //Express ищет не простo следующий обработчик, а именнo обработчик ошибок. В нашем случае это хранщаяся в файле app.js последняя middleware  
     } }
-
-
 
     const getContactById = async (req, res, next) => {
         try {
@@ -48,7 +38,10 @@ const addContact= async (req, res, next) => {
   if(error){ // если по схеме ошибка в получаемых данных, то выбрасываем ошибку
     throw HttpError(400,error.message)
   }
-      // console.log(req.body)
+      console.log(req.body)
+      console.log(req.params)
+  // console.log(req.)
+
       const result = await contacts.addContact(req.body)
       res.status(201).json(result)
     } catch (error) {
