@@ -3,14 +3,14 @@ const { HttpError } = require("../helpers");
 const validateBody = (schema) => {
  
   const func = (req, res, next) => {
-     console.log("блинчик");
+     console.log("валідація даних, які прийшли");
     const { error } = schema.validate(req.body);
     if (error) {
-      console.log("помикла");
+      console.log("не пройшла валідацію joi");
       console.log(error.message);
       next(HttpError(400, error.message));
     }
-    
+    console.log("пройшла валідацію joi");
     next();
   };
 

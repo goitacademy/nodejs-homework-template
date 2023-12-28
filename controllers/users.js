@@ -1,9 +1,8 @@
-const { ctrlWrapper } = require("../helpers"); // імпортуємо помилку для прокидування
+const { ctrlWrapper, HttpError } = require("../helpers"); // імпортуємо помилку для прокидування
 
 const { contactServices } = require("../services");
 
 const { SECRET_KEY } = process.env;
-
 
 /**
  * @призначення для регістриції користувача
@@ -24,7 +23,7 @@ const registerUser = async (req, res, next) => {
  * @призначення для авторизації користувача
  */
 const loginUser = async (req, res, next) => {
-  const { user, token } = await contactServices.login(req.body);
+  const { user, token } = await contactServices.login(req.body.email, req.body.password);
 
   res.status(200).json({
     ResponseBody: {
@@ -55,22 +54,32 @@ const getCurrentUser = async (req, res, next) => {
     });
 };
 
-// const updateUserSubscription = async (req, res, next) => {
-//   console.log('юзер');
-//   console.log(req.user);
-//   const { user } = await contactServices.updateSubscription(req.user, req.body);
+const updateUserSubscription = async (req, res, next) => {
+  const { email, subscription } = await contactServices.updateSubscription(req.user, req.body);
  
-//   res.json({
-//     user: user,
-//   });
-// };
+  res.status(200).json({
+    email: email,
+    subscription: subscription,
+  });
+};
 
 
-;
+const updateUserAvatar = async (req, res, next) => {
+  if (!req.file) throw HttpError(400);
+
+    const { avatarURL } = await contactServices.updateAvatar(req.user, req.file);
+
+  res.status(200).json({
+    avatarURL: avatarURL,
+  });
+};
+
+
 module.exports = {
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),
   logoutUser: ctrlWrapper(logoutUser),
   getCurrentUser: ctrlWrapper(getCurrentUser),
-  // updateUserSubscription: ctrlWrapper(updateUserSubscription),
+  updateUserSubscription: ctrlWrapper(updateUserSubscription),
+  updateUserAvatar: ctrlWrapper(updateUserAvatar),
 };

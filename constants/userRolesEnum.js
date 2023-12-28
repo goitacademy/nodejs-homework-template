@@ -4,4 +4,9 @@ const subscrENUM = {
   BUSINESS: "business",
 };
 
-module.exports = subscrENUM;
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+module.exports = {
+  subscrENUM: subscrENUM,
+  emailRegexp: emailRegexp,
+};

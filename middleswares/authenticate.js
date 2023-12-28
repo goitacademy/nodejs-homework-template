@@ -24,6 +24,7 @@ const authenticate = async (req, res, next) => {
   } catch {
     next(HttpError(401, "Not authorized"));
   }
+  console.log('аутентифікацію пройшли');
 };
 
 module.exports = authenticate;

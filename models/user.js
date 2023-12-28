@@ -1,13 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../helpers");
-
-const subscrENUM = {
-  STARTER: "starter",
-  PRO: "pro",
-  BUSINESS: "business"
-};
+const handleMongooseError = require("../middleswares/handleMongooseError");
+const { subscrENUM } = require("../constants");
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -33,15 +28,14 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    avatarURL: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-// коли при записі сталася помилка, нехай спрацює ця мідлвара
-userSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+userSchema.post("save", handleMongooseError);
 
 // дані, які приходять з фронтенду для регістрації
 const registerSchema = Joi.object({

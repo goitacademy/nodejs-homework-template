@@ -4,10 +4,16 @@ const { User } = require("../models/user");
 const { HttpError } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");                                      // пакет для генерації аватара по емейл
+const path = require("path");           
+const fs = require("fs/promises");                                         // відмовідає за всі операції з файлами
+const Jimp = require("jimp");                                                // пакет для обробки зображення (якщо, напр. користувач буде присилати велике зобр) 
 
 const { SECRET_KEY } = process.env;
 
-const { subscrENUM } = require("../constants");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");        // створюємо шлях ...public/avatars
+
+const { subscrENUM } = require("../constants/userRolesEnum");
 
 // створення нового контакта
 exports.createContact = async (userData, user) => {
@@ -98,8 +104,15 @@ exports.signup = async (userdata) => {
    }
   
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...userdata, password: hashPassword });
-
+  const avatarURL = gravatar.url(email);                                     // створюємо аватарку автоматично
+  
+  const newUser = await User.create({
+    ...userdata,
+    password: hashPassword,
+    avatarURL,
+  });
+  
+  
   return newUser;
 };
 
@@ -109,9 +122,7 @@ exports.signup = async (userdata) => {
  * @робить авторизує користувача
  * @вертає користувача, якщо такий є і новий токен для нього
  */
-exports.login = async (userData) => {
-
-  const { email, password } = userData;
+exports.login = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) {
@@ -151,14 +162,50 @@ exports.getCurrent = (user) => {
   return { email, subscription };
 }
 
-// exports.updateSubscription = (user, dataUser) => {
-//   console.log('ffffffffffff');
-//   console.log(user.subscription);
-//   console.log(subscrENUM.valueOf(dataUser.subscription));
-  
-//   const keys = Object.keys(subscrENUM);
-//   console.log(keys);
+exports.updateSubscription = (user, newData) => {
+  const isSubscription = newData.subscription ? true : false;
 
-//   console.log();
-//   return "ddd"
-// };
+  if (!isSubscription) {
+    throw HttpError(401, "the subscription field is not selected");
+  }
+
+  const a = Object.values(subscrENUM).find((i) => i === newData.subscription);
+  
+  if (a === undefined) {
+    throw HttpError(401, "there is no such thing in the list");
+  }
+
+  user.subscription = newData.subscription;
+
+  return user.save()
+
+}
+
+exports.updateAvatar = async (user, file) => {
+  const { _id } = user;
+
+  const { path: tempUpload, originalname } = file; // витягуємо старий шлях та старе імя файла
+
+  const filename = `${_id}_${originalname}`; // створюємо для файла нове імя
+  const resultUpload = path.join(avatarsDir, filename); // створюємо новий шлях + назва нового файлу
+
+ // змінюємо розмір файла
+   Jimp.read(tempUpload)
+     .then((avatarka) => {
+       avatarka.resize(250, 250).write(resultUpload); // resize
+     })
+     .catch((err) => {
+       console.error(err);
+     });
+  
+
+
+
+   await fs.rename(tempUpload, resultUpload); // переміщуємо файл зі старого шляху в новий
+  const avatarURL = path.join("avatars", filename); // створюємо новий шлях для картинки
+
+  await User.findByIdAndUpdate(_id, { avatarURL }); // для користувача з id перезаписуємо на новий шлях аватар
+
+  return user.save();
+};
+

@@ -4,7 +4,7 @@ const router = express.Router(); // створюємо router (це як зап�
 
 const ctrl = require("../../controllers/users");
 
-const { validateBody, authenticate } = require("../../middleswares");
+const { validateBody, authenticate, upload } = require("../../middleswares");
 
 const { schemas } = require("../../models/user");
 
@@ -13,6 +13,9 @@ router.post("/register", validateBody(schemas.registerSchema), ctrl.registerUser
 router.post("/login",  validateBody(schemas.registerSchema),  ctrl.loginUser);
 router.post("/logout", authenticate, ctrl.logoutUser);
 router.get("/current", authenticate, ctrl.getCurrentUser);
-// router.patch("/:userId/subscription", authenticate, ctrl.updateUserSubscription); // дороблю на вихідних
+router.patch("/:userId/subscription", authenticate, ctrl.updateUserSubscription);
+// upload.fields([{name: "cover", maxCount:1}, {name: "subcover", maxCount:2}]) // очікуємо в двух полях файли (назва поля, максимальна кі-сть файлів)
+// upload.array("avatar", 8); // очікуємо кілька файлів (до 8 шт) в полі avatar 
+router.patch("/avatars", authenticate, upload.single("avatar"), ctrl.updateUserAvatar);  // в полі avatar очікуємо один файл
 
 module.exports = router;

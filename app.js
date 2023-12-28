@@ -15,6 +15,7 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 app.use(logger(formatsLogger));                                       // викликаємо morgan
 app.use(cors());                                                      // всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)
 app.use(express.json());                                              // парсер (мідлвара) для отримання данних у форматі json
+app.use(express.static("public"));                                    // якщо прийде запит на файли, бере його з  папки Public. Налаштування express на роздачу статичних файлів з папки public (тобто, щоб файли з папки public було видно в браузеры, а інші ні, бо можна побачити код файлів)
 
 app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);

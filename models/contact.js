@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi"); // joi - для перевірки даних, які приходять із фронтенда
 
+const handleMongooseError = require("../middleswares/handleMongooseError");
+
 const contactSchema = new Schema(
   {
     // для перевірки даних, які відправляємо на бекенд
@@ -26,11 +28,7 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );  // для того, щоб показувало не версію документа, а дату створення обьекта
 
-// коли при записі сталася помилка, нехай спрацює ця мідлвара
-contactSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+contactSchema.post("save", handleMongooseError);
 
 // joi - схема для перевірки даних, які приходять із фронтенда
 const addSchema = Joi.object({
