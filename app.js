@@ -1,10 +1,19 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+// const uuid = require('uuid')
+const morgan = require('morgan')
+const dotenv = require('dotenv')
+
+dotenv.config({
+  path: process.env.NODE_ENV === 'production' ? '.envs/production.env' : './envs/development.env'
+});
 
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
+
+if(process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
