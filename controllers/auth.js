@@ -63,8 +63,9 @@ const resendVerifyEmail = async(req, res)=>{
     if(!user){
         throw HttpError (404, 'Email not found');        
     }
+    
     if(user.verify){
-        throw HttpError(400, 'Verification has already been passed');
+        throw HttpError(400, 'Verification has already been passed');    
     }
 
     const verifyEmail = {
@@ -89,13 +90,13 @@ const login = async (req, res)=>{
     }
 
     if(!user.verify){
-        throw HttpError(401, "Email or password is wrong");
+        throw HttpError(401, "Email not verified");
     }
 
     const passwordCompare = await bcrypt.compare(password, user.password);
     
     if(!passwordCompare){
-        throw HttpError(401, 'Email not verified');
+        throw HttpError(401, 'Email or password is wrong');
     }
      const payload = {
          id : user._id,
