@@ -3,6 +3,7 @@ const {
   addContact,
   removeContact,
   updateContact,
+  updateStatusContact,
 } = require("../models/contacts");
 const { catchAsync, userValidators } = require("../utils");
 
@@ -44,6 +45,15 @@ const updateContactById = async (req, res) => {
   res.status(200).json(updateData);
 };
 
+const updateFavoriteStatus = async (req, res) => {
+  const { body } = req;
+  const { id } = req.params;
+
+  const updatedContact = await updateStatusContact(id, body);
+
+  res.status(200).json(updatedContact);
+};
+
 const deleteContact = catchAsync(async (req, res) => {
   await removeContact(req.params.id);
 
@@ -55,5 +65,6 @@ module.exports = {
   getContactById,
   createContact,
   updateContactById,
+  updateFavoriteStatus,
   deleteContact,
 };
