@@ -3,7 +3,7 @@ const logger = require('morgan'); // Middleware для вывода в конс�
 const cors = require('cors'); // Middleware для обработки CORS (Cross-Origin Resource Sharing) в Express
 
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require('./routes/api/index')
 
 const app = express() // app - наш веб-сервер  //Вызываем его как функцию
 
@@ -14,10 +14,16 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 // !app.use() в Express используется middleware. Эти функции могут обрабатывать запросы, модифицировать объекты запросов и ответов или выполнять аутентификацию. Они принимают три аргумента: req (запрос), res (ответ) и next (следующая функция middleware).
 app.use(logger(formatsLogger))
-app.use(cors())
+
+app.use(cors({ // разрешает запросы только с "http://localhost:3000"
+  origin:"http://localhost:3000",
+  optionsSuccessStatus: 200
+}))
+
+
 app.use(express.json())
 
-app.use('/api/contacts', contactsRouter) //все запросы, начинающиеся с /api/contacts, будут передаваться в contactsRouter для обработки
+app.use('/api', contactsRouter) //все запросы, начинающиеся с /api/contacts, будут передаваться в contactsRouter для обработки
 
 
 // !обрабатывает запросы, попавшие на несуществующие страницы или маршруты в вашем Express-приложении.
