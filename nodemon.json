@@ -1,6 +1,6 @@
 {
   "ignore": ["node_modules", "models/contacts.json"],
   "env": {
-    "SECRET_KEY": "kdfkke040"
+    "SECRET_KEY": "cvghnjksdfggh"
   }
 }
