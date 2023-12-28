@@ -12,7 +12,7 @@ dotenv.config({
 });
 
 const contactsRouter = require('./routes/api/contacts')
-const favoritesRouter = require('./routes/api/contacts')
+const favoritesRouter = require('./routes/api/favorites');
 const app = express()
 
 mongoose
@@ -34,7 +34,7 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/api/contacts', contactsRouter)
-app.use('/api/contacts/contactId/favorites', favoritesRouter)
+app.use('/api/contacts/favorites', favoritesRouter);
 
 
 app.use((req, res) => {
