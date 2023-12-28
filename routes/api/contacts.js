@@ -9,6 +9,8 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
+const validation = require("../../validation/validation");
+
 router.get("/", async (req, res, next) => {
   try {
     const allContacts = await listContacts();
@@ -28,9 +30,14 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
-  //TO DO -> add validation (name, email, phone as required in body request)
+router.post("/", validation, async (req, res, next) => {
   const body = req.body;
+
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
+
   try {
     const contact = await addContact(body);
     return res.status(201).json(contact);
@@ -49,7 +56,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", validation, async (req, res, next) => {
   const { contactId } = req.params;
   const body = req.body;
 
