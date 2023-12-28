@@ -1,31 +1,119 @@
-## GoIT Node.js Course Template Homework
+# REST API
+Custom REST API created with Node.js to work with contacts. It uses basic REST methods like: GET, POST, DELETE and PUT.
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+>This REST API is a basis for bigger project. The repository will be developed in the future.
 
-Додайте ментора до колаборації
+## Scripts
 
-Для кожної домашньої роботи створюйте свою гілку.
+- `npm start`: starts the server in production mode
+- `npm run start:dev`: starts the server in development mode using the nodemon tool, which enables automatic reloading of the application when changes are made in the code
+- `npm run lint` — runs code checking with ESLint
+- `npm lint:fix` — same as the above, but it also automatically fixes simple errors
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+## Usage
 
-Кожна нова гілка для др повинна робитися з master
+#### 1. Contacts list
+Get a list of all the contacts.
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+- **Endpoint:** `/api/contacts`
+- **Method:** GET
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+**Example response:**
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+```json
+[
+ {
+    "id": "AeHIrLTr6JkxGE6SN-0Rw",
+    "name": "Allen Raymond",
+    "email": "nulla.ante@vestibul.co.uk",
+    "phone": "(992) 914-3792"
+  },
+  {
+    "id": "qdggE76Jtbfd9eWJHrssH",
+    "name": "Chaim Lewis",
+    "email": "dui.in@egetlacus.ca",
+    "phone": "(294) 840-6685"
+  },
+  {
+    "id": "drsAJ4SHPYqZeG-83QTVW",
+    "name": "Kennedy Lane",
+    "email": "mattis.Cras@nonenimMauris.net",
+    "phone": "(542) 451-7038"
+  }
+]
+```
 
-### Команди:
+### 2. Get Contact by ID
+Get details of a specific contact based on its ID.
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+- **Endpoint:** `/api/contacts/:contactId`
+- **Method:** GET
+
+**Example response:**
+
+```json
+{
+  "id": "rsKkOQUi80UsgVPCcLZZW",
+  "name": "Alec Howard",
+  "email": "Donec.elementum@scelerisquescelerisquedui.net",
+  "phone": "(748) 206-2688"
+}
+```
+
+### 3. Add New Contact
+Add a new contact to the list.
+
+- **Endpoint:** `/api/contacts/`
+- **Method:** POST
+
+**Example Request Body:**
+
+```json
+{
+  "name": "test",
+  "email": "test@example.com",
+  "phone": "123456789"
+}
+```
+
+### 4. Remove Contact
+Delete a specific contact based on its ID.
+
+- **Endpoint:** `/api/contacts/:contactId`
+- **Method:** DELETE
+
+**Example response:**
+
+message: `contact deleted`
+
+### 5. Update Contact
+It gives us 2 options: update existing contact based on ID or create a new one.
+
+1. `create new contact` - if ID won't be provided in endpoint, it will create new contact
+- **Endpoint:** `/api/contacts/`
+- **Method:** PUT
+
+```json
+{
+  "id": "fFas123jvh141G2CG9HVj",
+  "name": "new test1",
+  "email": "newtest1@example.com",
+  "phone": "123456789"
+}
+```
+
+2. `update contact` - first, please provide ID. Then provide updated contact name, email or phone number. It will change contact data without changing ID.
+- **Endpoint:** `/api/contacts/:contactId`
+- **Method:** PUT
+
+```json
+{
+  "id": "fFas123jvh141G2CG9HVj",
+  "name": "new test1v2",
+  "email": "newtest1v2@example.com",
+  "phone": "123456789"
+}
+```
+
+
+
