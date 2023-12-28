@@ -16,19 +16,15 @@ const contactsRouter = require('./routes/api/contacts')
 const app = express()
 
 mongoose
-  .connect( process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect( process.env.MONGO_URL)
   .then((con) => {
     console.log("Database connection successful");
-    console.log(con)
   })
   .catch((err) => {
     console.log(err);
     process.exit(1);
   });
-
+  
 if(process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
