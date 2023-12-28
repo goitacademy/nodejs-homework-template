@@ -2,11 +2,8 @@
 const Contact = require("../models/cont.js");
 
 
-async function listContacts(req, res) {
-  const { _id, owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
-  const skip = (page - 1) * limit;
- return await Contact.find({ owner }, {skip, limit}).populate("owner", "name email");
+async function listContacts() {
+  return await Contact.find();
 }
 
 async function getContactById(contactId) {
@@ -19,6 +16,7 @@ async function removeContact(contactId) {
 }
 
 async function addContact(name, email, phone) {
+  
   return await Contact.create({name, email, phone});
 }
 
@@ -28,7 +26,7 @@ const updateContact = async (contactId, body) => {
 };
 
 
-async function getBuId(contactId) {
+async function getById(contactId) {
   return await Contact.findById(contactId);
 
 };
@@ -44,23 +42,12 @@ async function updateStatusContact (contactId, body) {
   return updatedContact;
 }
 
-const listFilteredContacts = async (favorite) => {
-  const contacts = await listContacts();
-
-  if (favorite !== undefined) {
-    return contacts.filter(contact => contact.favorite === (favorite === 'true'));
-  } else {
-    return contacts;
-  }
-};
-
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-  getBuId,
+  getById,
   updateStatusContact,
-  listFilteredContacts, 
 };
