@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const newsSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
+  enTitle: { type: String, required: true },
+  enDescription: { type: String, required: true },
   date: { type: Date, default: Date.now },
   category: {
     type: String,
