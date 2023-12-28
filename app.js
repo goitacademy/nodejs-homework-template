@@ -1,8 +1,11 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const { connectToDatabase } = require("./service/index");
 
 const contactsRouter = require("./routes/api/contacts");
+
+connectToDatabase();
 
 const app = express();
 
