@@ -16,9 +16,6 @@ const addContact = async (contactData) => {
       }
  
 
-
-
-
 const updateContact = async (id, contactData) => {
   const updatedContact = await Contact.findById(id).lean();
 
@@ -29,6 +26,7 @@ const updateContact = async (id, contactData) => {
   return updatedContact.save();
 
   }
+  
 
   const updateStatusContact = async (id, contactData) => {
     const { favorite } = contactData;
