@@ -29,9 +29,11 @@ const updateContact = async (contactId, { name, email, phone }) => {
 
 const updateStatusContact = async (contactId, { favorite }) => {
   const updatedContact = await Contact.findOneAndUpdate(
-    { _id: contactId },
-    favorite,
-    { new: true }
+    contactId,
+    { favorite },
+    {
+      new: true,
+    }
   );
 
   return updatedContact;

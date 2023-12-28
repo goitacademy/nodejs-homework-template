@@ -49,7 +49,15 @@ const updateFavoriteStatus = async (req, res) => {
   const { body } = req;
   const { id } = req.params;
 
+  if (!body || Object.keys(body).length === 0) {
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+
   const updatedContact = await updateStatusContact(id, body);
+
+  if (!updatedContact) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
   res.status(200).json(updatedContact);
 };
