@@ -6,7 +6,6 @@ const User = require("../modelUser/userModel");
 const Contact = require("../modelUser/contactModel");
 const bcrypt = require("bcrypt");
 const { userServices } = require("../services");
-
 //======================getAll==========================
 const getAll = async (req, res, next) => {
   // select   const user = await User.find().select("-email");

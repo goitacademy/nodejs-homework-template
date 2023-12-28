@@ -3,18 +3,19 @@ const { HttpError } = require("../Helpers");
 const contactSchema = require("../Shema/shema");
 const User = require("../modelUser/userModel");
 
+//==
 const checkId = async (req, res, next) => {
   const { contactId } = req.params;
   const idIsValid = Types.ObjectId.isValid(contactId);
   console.log(idIsValid);
-
   // if (!idIsValid) throw new HttpError(404, "Invalid");
   const userExists = await User.findById(contactId);
   console.log(userExists);
-
   // if (!userExists) throw new HttpError(404, "User not found");
   next();
 };
+
+//==
 const validateBody = (shema) => {
   const func = (req, res, next) => {
     const { error } = shema.validate(req.body);
@@ -26,6 +27,7 @@ const validateBody = (shema) => {
   return func;
 };
 
+//==
 const checkCreateUserData = async (req, res, next) => {
   const { value } = contactSchema.validate(req.body);
   const userExists = await User.exists({ email: value.email });
@@ -36,13 +38,11 @@ const checkCreateUserData = async (req, res, next) => {
   next();
 };
 
-const checkUpdateUserData = async (req, res, next) => { 
-  const {value, error}
-}
-  
-  
-  module.exports = {
+//==
+const checkUpdateUserData = async (req, res, next) => {};
+
+module.exports = {
   validateBody,
   checkCreateUserData,
   checkId,
-});
+};

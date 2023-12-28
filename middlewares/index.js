@@ -1,3 +1,7 @@
 const validateBody = require("./validateBody");
+const authMiddleware = require("./authMiddleware");
 
-module.exports = validateBody;
+module.exports = {
+  validateBody,
+  authMiddleware,
+};
