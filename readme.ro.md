@@ -14,9 +14,9 @@ Pentru fiecare temă, creează un branch separat.
 
 Fiecare branch nou pentru fiecare temă trebuie să fie derivat din branch-ul principal (master).
 
-După ce ai terminat lucrul la tema de acasă în branch-ul tău, trebuie să creezi un pull request (PR). Apoi, adaugă mentorul pentru revizuirea codului. Abia după ce mentorul aprobă PR-ul, poți face "merge" a branch-ului cu tema de acasă în branch-ul master.
+După ce ai terminat lucrul la tema de acasă în branch-ul tău, trebuie să creezi un pull request (PR). Apoi, adaugă mentorul pentru revizuirea codului. Abia după ce mentorul aprobă PR-ul, poți face 'merge' a branch-ului cu tema de acasă în branch-ul master.
 
-Citește cu atenție comentariile mentorului. Corectează observațiile și fă un "commit" în branch-ul cu tema de acasă. Modificările se vor reflecta automat în PR după ce trimiți "commit"-ul cu corecțiile pe GitHub. După corectare, adaugă din nou mentorul pentru revizuirea codului.
+Citește cu atenție comentariile mentorului. Corectează observațiile și fă un 'commit' în branch-ul cu tema de acasă. Modificările se vor reflecta automat în PR după ce trimiți 'commit'-ul cu corecțiile pe GitHub. După corectare, adaugă din nou mentorul pentru revizuirea codului.
 
 - La predarea temei de acasă, este furnizat un link către PR.
 - Codul JavaScript este curat și ușor de înțeles, iar pentru formatare se folosește Prettier.
