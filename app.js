@@ -4,6 +4,8 @@ const cors = require('cors')
 // const uuid = require('uuid')
 // const morgan = require('morgan')
 const dotenv = require('dotenv')
+const mongoose = require("mongoose");
+
 
 dotenv.config({
   path: process.env.NODE_ENV === 'production' ? '.envs/production.env' : './envs/development.env'
@@ -12,6 +14,20 @@ dotenv.config({
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
+
+mongoose
+  .connect( process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then((con) => {
+    console.log("Database connection successful");
+    console.log(con)
+  })
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
 
 if(process.env.NODE_ENV === 'development') app.use(logger('dev'));
 
