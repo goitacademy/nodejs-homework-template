@@ -24,8 +24,7 @@ router.use('/:contactId', isValidId);
 
 router.get('/', authenticate, async (req, res, next) => {
   try {
-    const { _id: owner } = req.user;
-    const contacts = await listContacts({ ...req.body, owner });
+    const contacts = await listContacts();
     res.status(200).json(contacts);
   }
   catch (error) {
