@@ -14,7 +14,6 @@
     "express": "4.17.1",
     "joi": "^17.11.0",
     "morgan": "1.10.0",
-    "nanoid": "^5.0.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
