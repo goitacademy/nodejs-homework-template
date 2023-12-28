@@ -47,7 +47,23 @@ const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, { name, email, phone }) => {
+  const allContacts = await listContacts();
+  const existingContact = allContacts.find(
+    (contact) => contact.id === contactId
+  );
+
+  if (existingContact) {
+    existingContact.name = name;
+    existingContact.email = email;
+    existingContact.phone = phone;
+    await fs.writeFile(contactsPath, JSON.stringify(allContacts));
+    return existingContact;
+  } else {
+    const newContact = await addContact({ name, email, phone });
+    return newContact;
+  }
+};
 
 module.exports = {
   listContacts,
