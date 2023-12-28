@@ -83,15 +83,18 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, favorite) => {
+const updateStatusContact = async (contactId, { favorite }) => {
   try {
-    const updatedContact = Contact.findByIdAndUpdate(contactId, 
-      {favorite},
-      {new: true});
-      // if(!updatedContact) {
-      //   console.warn("Contact not found");
-      //   return null;
-      // }
+    // const { contactId } = req.params;
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { $set: { favorite } },
+      { new: true }
+    );
+      if(!updatedContact) {
+        console.warn("Contact not found");
+        return null;
+      }
       return updatedContact;
   } catch (err) {
     console.error(err.massage);
