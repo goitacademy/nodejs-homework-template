@@ -34,17 +34,14 @@ userSchema.post("save", (error, data, next)=> {
    
 
 const registerSchema = Joi.object({
-name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min().required(),
-  subscription: Joi.string().required(), 
+  password: Joi.string().min(6).required(),
 })
 
 
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
-  subscription: Joi.string().required(), 
 })
 
 

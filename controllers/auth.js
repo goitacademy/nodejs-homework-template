@@ -20,15 +20,15 @@ console.log(token);
 const decodeToken = jwt.decode(token);
 console.log(decodeToken);
 
-try {
-    const {id} = jwt.verify(token, SECRET_KEY);
-    console.log(id);
-    const invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmU0YTVhNjhiMjdjOTQ3ZTI4NDk1YiIsImlhdCI6MTcwMTE4OTg4OCwiZXhwIjoxNzAxMjcyNjg4fQ.T3k1tEd5vjo4LtaO93_kqOJTXu7uN19gI0wEHU4Ae8w";
-    const result = jwt.verify(invalidToken, SECRET_KEY);
-    console.log(result);
-} catch (error) {
-    console.log(error.message);  
-}
+// try {
+//     const {id} = jwt.verify(token, SECRET_KEY);
+//     console.log(id);
+//     const invalidToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmU0YTVhNjhiMjdjOTQ3ZTI4NDk1YiIsImlhdCI6MTcwMTE4OTg4OCwiZXhwIjoxNzAxMjcyNjg4fQ.T3k1tEd5vjo4LtaO93_kqOJTXu7uN19gI0wEHU4Ae8w";
+//     const result = jwt.verify(invalidToken, SECRET_KEY);
+//     console.log(result);
+// } catch (error) {
+//     console.log(error.message);  
+// }
 
 const register = async (req, res) => {
     const { email, password } = req.body;
@@ -37,7 +37,7 @@ const register = async (req, res) => {
         throw HttpError(409, "Email in use");
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 6);
     const newUser = await User.create( {...req.body, password: hashPassword} );
     
     res.status(201).json({
@@ -56,7 +56,7 @@ const login = async (req, res) => {
     if (!passwordCompare) {
              throw HttpError(401, "Email or password is wrong");   
     }
-
+    
 
     const payload = {
         id: user._id,
