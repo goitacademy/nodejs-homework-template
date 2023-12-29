@@ -1,5 +1,6 @@
-const contactSchema = require("./shema");
+const { contactSchema, loginSchemaValidation } = require("./shema");
 
 module.exports = {
   contactSchema,
+  loginSchemaValidation,
 };

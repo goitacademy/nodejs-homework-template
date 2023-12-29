@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const contactsRouter = require("./routes/api/contactsRout");
-const { userRouter, contacts, authRout } = require("./routes/api");
+const { userRouter, authRout, contactsRout } = require("./routes/api");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -17,7 +17,7 @@ require("dotenv").config();
 
 app.use("/api/contacts", contactsRouter);
 app.use("/api/users", userRouter);
-
+app.use("/api/auth", authRout);
 //========================mongo========================================
 mongoose.connect(process.env.MONGODB_URL).then(() => {
   try {

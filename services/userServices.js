@@ -1,6 +1,6 @@
 const User = require("../modelUser/userModel");
 const HttpError = require("../Helpers/HttpError");
-
+const { singToken } = require("./jwtService");
 //============================================================================
 exports.createUser = async (userData) => {
   const newUser = await User.create(userData);
@@ -15,7 +15,7 @@ exports.getUserAll = async () => {
 //============================================================================
 exports.getOneUser = (id) => User.findById(id);
 
-//============================================================================
+//===============================================// проверяем есть ли пользователь в базе=============================
 exports.checkUserExites = async (filters) => {
   const userExites = await User.exists(filters);
   if (userExites) throw new HttpError(409, "User exists");
@@ -32,3 +32,16 @@ exports.updateUser = async (id, userData) => {
 
 //==============================delete user==================================
 exports.deletUser = async (id) => User.findByIdAndDelete(id);
+
+//==================singup====================================
+
+exports.signup = async (data) => {
+  const newUserData = {
+    ...data,
+  };
+  const newUser = await User.create(newUserData);
+  newUser.password = undefined;
+
+  const token = singToken(newUser.id);
+  return { user: newUser, token };
+};

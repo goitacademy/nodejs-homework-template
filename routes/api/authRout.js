@@ -2,15 +2,22 @@ const { Router } = require("express");
 const router = Router();
 // const { authMiddleware } = require("../../middlewares");
 const middlewares = require("../../middlewares");
+const authController = require("../../controlers/authController");
 
-router.post("/signup", middlewares.authMiddleware.checkSing);
-router.post("/login");
+console.log(typeof authController.signup);
+
+router.post(
+  "/signup",
+  middlewares.authMiddleware.checkSing,
+  authController.signup
+);
+router.post("/login", authController.login);
 // password restore
 
 // password send instruction in mail , restore password
-router.post("/forgot-password");
+// router.post("/forgot-password");
 // password update
-router.post("/restore-password");
+// router.post("/restore-password");
 
 //================================================================
 module.exports = router;
