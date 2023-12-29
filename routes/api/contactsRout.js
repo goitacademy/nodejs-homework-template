@@ -30,7 +30,7 @@ router.put(
 
 //========================favorite============/api/contacts/:contactId/============
 
-router.patch("/:contactId", async (req, res) => {
+router.patch("/:contactId/favorite", async (req, res) => {
   const { contactId } = req.body;
   const { body } = req;
   const result = await Contact.findByIdAndUpdate(contactId, body);

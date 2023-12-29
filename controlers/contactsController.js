@@ -59,17 +59,17 @@ const put = async (req, res, next) => {
 };
 //========================/api/contacts/:contactId/favorite========================
 
-// const favorite = async (req, res, next) => {
-//   const { contactId } = req.body;
-//   const { body } = req;
+const favorite = async (req, res, next) => {
+  const { contactId } = req.body;
+  const { body } = req;
 
-//   const result = await Contact.findByIdAndUpdate(contactId, body);
-//   if (result) {
-//     res.json({ contact: result });
-//   } else {
-//     HttpError(404, "Not found");
-//   }
-// };
+  const result = await Contact.findByIdAndUpdate(contactId, body);
+  if (result) {
+    res.json({ contact: result });
+  } else {
+    HttpError(404, "Not found");
+  }
+};
 //======================================================================================
 //====================================user==============================================
 //======================================================================================
