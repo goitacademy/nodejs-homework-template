@@ -1,15 +1,16 @@
 const { User } = require("../models/users");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
+const { nanoid } = require("nanoid");
 
 require("dotenv").config();
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, BASE_URL } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
@@ -27,19 +28,36 @@ const signup = async (req, res) => {
     r: "pg",
     d: "monsterid",
   });
+  const verificationToken = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationToken,
   });
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target='_blank' href='${BASE_URL}/api/users/verify/${verificationToken}'>Click to verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,
+      avatarURL: newUser.avatar,
     },
   });
+  // my
+  // res.status(201).json({
+  //   user: {
+  //     email: newUser.email,
+  //     subscription: newUser.subscription,
+  //   },
+  // });
 };
 
 const signin = async (req, res) => {
