@@ -39,7 +39,7 @@ router.post("/", async (req, res, next) => {
       phone,
     });
 
-    res.status(201).json(newContact);
+    res.status(201).json({ message: "contact created", contact: newContact });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -61,7 +61,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.patch("/:contactId", async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const { name, email, phone } = req.body;
@@ -78,7 +78,9 @@ router.put("/:contactId", async (req, res, next) => {
     });
 
     if (updatedContact) {
-      res.status(200).json(updatedContact);
+      res
+        .status(201)
+        .json({ message: "contact updated", contact: updatedContact });
     } else {
       res.status(404).json({ message: "Not found" });
     }

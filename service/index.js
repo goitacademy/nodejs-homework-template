@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const MONGODB_URI =
-  "mongodb+srv://ykcyc13:ykcyc1313@cluster0.v4nr4ft.mongodb.net/";
+  "mongodb+srv://ykcyc13:ykcyc1313@cluster0.v4nr4ft.mongodb.net/db-contacts?retryWrites=true&w=majority";
 
 const connectToDatabase = async () => {
   try {

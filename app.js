@@ -4,6 +4,7 @@ const cors = require("cors");
 const { connectToDatabase } = require("./service/index");
 
 const contactsRouter = require("./routes/api/contacts");
+connectToDatabase();
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -25,7 +26,5 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
-
-connectToDatabase();
 
 module.exports = app;
