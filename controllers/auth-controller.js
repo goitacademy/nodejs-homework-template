@@ -31,12 +31,13 @@ const singup = async (req, res) => {
 		r: "pg",
 		d: "avatar",
 	});
-	console.log(avatarURL)
-
-	const { path: oldPath, filename } = req.file;
-	const newPath = path.join(avatarPath, filename);
-	await fs.rename(oldPath, newPath);
-	avatarURL = path.join("avatars", filename);
+	console.log(avatarURL);
+	if (req.file) {
+		const { path: oldPath, filename } = req.file;
+		const newPath = path.join(avatarPath, filename);
+		await fs.rename(oldPath, newPath);
+		avatarURL = path.join("avatars", filename);
+	}
 
 	const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
@@ -44,7 +45,7 @@ const singup = async (req, res) => {
 		user: {
 			email: newUser.email,
 			subscription: newUser.subscription,
-			avatarURL: newUser.avatarURL
+			avatarURL: newUser.avatarURL,
 		},
 	});
 };
@@ -72,7 +73,7 @@ const singin = async (req, res) => {
 		token,
 		user: {
 			email: user.email,
-			subscription: user.subscription
+			subscription: user.subscription,
 		},
 	});
 };
@@ -103,24 +104,26 @@ const updateSubscription = async (req, res) => {
 
 const updateAvatar = async (req, res) => {
 	const { token } = req.user;
-	let avatarURL = req.user.avatarURL
-	const { path: oldPath, filename } = req.file;
-	const newPath = path.join(avatarPath, filename);
-	await fs.rename(oldPath, newPath);
-	avatarURL = path.join("avatars", filename);
+	let avatarURL = req.user.avatarURL;
+	if (req.file) {
+		const { path: oldPath, filename } = req.file;
+		const newPath = path.join(avatarPath, filename);
+		await fs.rename(oldPath, newPath);
+		avatarURL = path.join("avatars", filename);
+	}
 
 	const result = await User.findOneAndUpdate({ token }, { avatarURL }, { new: true });
-	if(!result) {
-		throw HttpError(404, "User not found")
+	if (!result) {
+		throw HttpError(404, "User not found");
 	}
-	if(req.user.avatarURL) {
-		const oldAvatarPath = path.join(path.resolve("public", req.user.avatarURL))
-		await fs.unlink(oldAvatarPath)
+	if (req.user.avatarURL) {
+		const oldAvatarPath = path.join(path.resolve("public", req.user.avatarURL));
+		await fs.unlink(oldAvatarPath);
 	}
 
 	res.json({
-		avatarURL: result.avatarURL
-	})
+		avatarURL: result.avatarURL,
+	});
 };
 
 export default {
@@ -129,5 +132,5 @@ export default {
 	signout: controllerWrapper(signout),
 	getCurrent: controllerWrapper(getCurrent),
 	updateSubscription: controllerWrapper(updateSubscription),
-	updateAvatar: controllerWrapper(updateAvatar)
+	updateAvatar: controllerWrapper(updateAvatar),
 };
