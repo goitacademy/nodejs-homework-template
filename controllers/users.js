@@ -22,6 +22,7 @@ const registerUser = async (req, res, next) => {
 /**
  * @призначення для авторизації користувача
  */
+
 const loginUser = async (req, res, next) => {
   const { user, token } = await contactServices.login(req.body.email, req.body.password);
 

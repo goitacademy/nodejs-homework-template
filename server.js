@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");                    // імпортуємо mongoose для підключення до баз даних
 
-const app = require("./app");
+module.exports =  app = require("./app");
 
 const { DB_HOST } = process.env;                          // беремо секретну змінну (строку підключення до бд) зі змінних оточення
 
