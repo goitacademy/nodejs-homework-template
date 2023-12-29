@@ -1,3 +1,4 @@
+const { writeFile } = require("fs");
 const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 const path = require("path");
@@ -37,7 +38,16 @@ async function addContact(newContact) {
   return addedContact;
 }
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  const contacts = await listContacts();
+  const updatedIndex = contacts.findIndex((el) => el.id === contactId);
+  if (updatedIndex === -1) {
+    return null;
+  }
+  contacts[updatedIndex] = { contactId, ...body };
+  await writeFile(contacts);
+  return contacts[updatedIndex];
+};
 
 module.exports = {
   listContacts,
