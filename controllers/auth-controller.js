@@ -24,8 +24,10 @@ const singup = async (req, res) => {
 	const newUser = await User.create({ ...req.body, password: hashPassword });
 
 	res.status(201).json({
-		email: newUser.email,
-		subscription: newUser.subscription,
+		user: {
+			email: newUser.email,
+			subscription: newUser.subscription,
+		},
 	});
 };
 
@@ -46,12 +48,14 @@ const singin = async (req, res) => {
 	};
 
 	const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
-	await User.findByIdAndUpdate(user._id, {token})
+	await User.findByIdAndUpdate(user._id, { token });
 
 	res.json({
 		token,
-		email: user.email,
-		subscription: user.subscription,
+		user: {
+			email: user.email,
+			subscription: user.subscription
+		},
 	});
 };
 
