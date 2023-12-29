@@ -20,6 +20,10 @@ const constactScheme = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		owner: {
+			type: Schema.Types.ObjectId,
+			ref: "user"
+		}
 	},
 	{ versionKey: false, timestamps: true }
 );
@@ -28,13 +32,13 @@ constactScheme.post("save", handleSaveError);
 
 constactScheme.pre("findOneAndUpdate", preUpdate);
 
-constactScheme.post("findOneAndUpdate", handleSaveError)
+constactScheme.post("findOneAndUpdate", handleSaveError);
 
 export const addContactScheme = Joi.object({
-	name: Joi.string().required().messages({"any.required": `missing required field name`}),
-	email: Joi.string().required().messages({"any.required": `missing required field email`}),
+	name: Joi.string().required().messages({ "any.required": `missing required field name` }),
+	email: Joi.string().required().messages({ "any.required": `missing required field email` }),
 	phone: Joi.string().required().messages({
-		"any.required": `missing required field phone`
+		"any.required": `missing required field phone`,
 	}),
 	favorite: Joi.boolean(),
 });
@@ -47,7 +51,7 @@ export const updateContactScheme = Joi.object({
 });
 
 export const contactFavoriteScheme = Joi.object({
-	favorite: Joi.boolean().required()
+	favorite: Joi.boolean().required(),
 });
 
 const Contact = model("contact", constactScheme);
