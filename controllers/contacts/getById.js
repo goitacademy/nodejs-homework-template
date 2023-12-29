@@ -3,9 +3,10 @@ const { Contact } = require("../../models/contacts");
 
 const getById = async (req, res) => {
   const { contactId } = req.params;
+  const { _id: owner } = req.user;
   console.log(contactId);
   console.log(req.params);
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById({ _id: contactId, owner });
   console.log(result);
   if (!result) {
     throw HttpError(404, "Not found");
