@@ -13,7 +13,7 @@ import resizeAvatar from "../middlewares/reseizeAvatar.js";
 const authRouter = express.Router();
 
 authRouter.post(
-	"/users/register",
+	"/register",
 	upload.single("avatarURL"),
 	isEmptyBody,
 	validateBody(userSignupScheme),
@@ -21,20 +21,20 @@ authRouter.post(
 	authController.singup
 );
 
-authRouter.post("/users/login", isEmptyBody, validateBody(userSigninScheme), authController.singin);
+authRouter.post("/login", isEmptyBody, validateBody(userSigninScheme), authController.singin);
 
-authRouter.post("/users/logout", authenticate, authController.signout);
+authRouter.post("/logout", authenticate, authController.signout);
 
-authRouter.get("/users/current", authenticate, authController.getCurrent);
+authRouter.get("/current", authenticate, authController.getCurrent);
 
 authRouter.patch(
-	"/users",
+	"/",
 	isEmptyBody,
 	authenticate,
 	validateBody(userUpdateSubscriptionScheme),
 	authController.updateSubscription
 );
 
-authRouter.patch("/users/avatar", upload.single("avatarURL"), resizeAvatar, authenticate, authController.updateAvatar)
+authRouter.patch("/avatar", upload.single("avatarURL"), resizeAvatar, authenticate, authController.updateAvatar)
 
 export default authRouter;

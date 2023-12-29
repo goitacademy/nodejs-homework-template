@@ -41,9 +41,11 @@ const singup = async (req, res) => {
 	const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
 	res.status(201).json({
-		email: newUser.email,
-		subscription: newUser.subscription,
-		avatarURL,
+		user: {
+			email: newUser.email,
+			subscription: newUser.subscription,
+			avatarURL: newUser.avatarURL
+		},
 	});
 };
 
@@ -68,8 +70,10 @@ const singin = async (req, res) => {
 
 	res.json({
 		token,
-		email: user.email,
-		subscription: user.subscription,
+		user: {
+			email: user.email,
+			subscription: user.subscription
+		},
 	});
 };
 
