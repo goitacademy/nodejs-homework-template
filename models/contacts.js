@@ -61,6 +61,29 @@ const updateContact = async (id, { name, email, phone }) => {
   }
 };
 
+const updateStatusContact = async (contactId, favorite) => {
+  try {
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
+      return null;
+    }
+
+    if (favorite !== undefined) {
+      contact.favorite = favorite;
+    } else {
+      return { message: "missing field favorite" };
+    }
+
+    await contact.save();
+
+    return contact;
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  }
+};
+
 module.exports = {
   readContacts,
   writeContacts,
@@ -68,4 +91,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
