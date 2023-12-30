@@ -1,9 +1,9 @@
 import createHttpError from 'http-errors'
-import { addContact, deleteContact, getContactById, getContacts, updateContactById } from '../models/index.js'
+import { Contact } from '../models/Contact.js'
 
 const getAll = async (_, res, next) => {
   try {
-    const result = await getContacts()
+    const result = await Contact.find({}, '-createdAt -updatedAt')
     res.json(result)
   } catch (error) {
     next(error)
@@ -12,7 +12,7 @@ const getAll = async (_, res, next) => {
 
 const getById = async (req, res, next) => {
   const { id } = req.params
-  const result = await getContactById(id)
+  const result = await Contact.findById(id)
   if (!result) {
     return next(new createHttpError.NotFound(`Contact with id=${id} not found`))
   }
@@ -20,13 +20,13 @@ const getById = async (req, res, next) => {
 }
 
 const add = async (req, res) => {
-  const result = await addContact(req.body)
+  const result = await Contact.create(req.body)
   res.status(201).json(result)
 }
 
 const updateById = async (req, res, next) => {
   const { id } = req.params
-  const result = await updateContactById(id, req.body)
+  const result = await Contact.findByIdAndUpdate(id, req.body)
   if (!result) {
     return next(new createHttpError.BadRequest(`Contact with id=${id} not found`))
   }
@@ -35,7 +35,7 @@ const updateById = async (req, res, next) => {
 
 const deleteById = async (req, res, next) => {
   const { id } = req.params
-  const result = await deleteContact(id)
+  const result = await Contact.findByIdAndDelete(id)
   if (!result) {
     return next(new createHttpError.NotFound(`Contact with id=${id} not found`))
   }
