@@ -1,23 +1,17 @@
 import { Router } from 'express'
+import contactsController from '../../controllers/contactsController.js'
+import { validateBody } from '../../decorators/validateBody.js'
+import { isEmptyBody } from '../../middlewares/isEmptyBody.js'
+import { contactAddSchema, contactUpdateSchema } from '../../schemas/contactsSchema.js'
 
 export const contactsRouter = Router()
 
-contactsRouter.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get('/', contactsController.getAll)
 
-contactsRouter.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get('/:id', contactsController.getById)
 
-contactsRouter.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.post('/', isEmptyBody, validateBody(contactAddSchema), contactsController.add)
 
-contactsRouter.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.put('/:id', isEmptyBody, validateBody(contactUpdateSchema), contactsController.updateById)
 
-contactsRouter.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.delete('/:id', contactsController.deleteById)
