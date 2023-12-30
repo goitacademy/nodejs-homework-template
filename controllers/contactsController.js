@@ -13,7 +13,7 @@ const getById = async (req, res) => {
   const result = await ContactsOperations.getContactById(contactId);
 
   if (!result) {
-    throw HttpError(404, `Contact with id=${contactId} not found`);
+    throw HttpError(404, `Not found`);
   }
 
   res.status(200).json(result);
