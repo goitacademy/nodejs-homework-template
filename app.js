@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import logger from 'morgan'
-import { contactsRouter } from './routes/api/contacts'
+import { contactsRouter } from './routes/api/contacts.js'
 
 export const app = express()
 
@@ -18,5 +18,6 @@ app.use((_, res) => {
 })
 
 app.use((err, _, res, __) => {
-  res.status(500).json({ message: err.message })
+  const { status = 500, message = 'Server error' } = err
+  res.status(status).json({ message })
 })
