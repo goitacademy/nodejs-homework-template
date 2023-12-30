@@ -12,15 +12,20 @@ const {
 } = require('../../models/contacts.js');
 
 
-// validation
-const Joi = require('joi');
-
 // validation schema
-const schema = Joi.object({
-  name: Joi.string().trim().alphanum().min(2).max(16).required(),
-  email: Joi.string().trim().email({minDomainSegments: 2}).required(),
-  phone: Joi.string().trim().min(14).max(14).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
-});
+const {
+  contactValidationSchema
+} = require('../../schemas/contacts.js');
+
+// // validation
+// const Joi = require('joi');
+
+// // validation schema
+// const schema = Joi.object({
+//   name: Joi.string().trim().alphanum().min(2).max(16).required(),
+//   email: Joi.string().trim().email({minDomainSegments: 2}).required(),
+//   phone: Joi.string().trim().min(14).max(14).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
+// });
 
 
 router.get('/', async (req, res, next) => {
@@ -55,7 +60,7 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     // validation
   try {
-    await schema.validateAsync({ ...req.body });
+    await contactValidationSchema.validateAsync({ ...req.body });
   } catch (error) {
     res.json({
       status: 'error',
@@ -107,7 +112,7 @@ router.put('/:id', async (req, res, next) => {
     };
     
     // validating request body
-    await schema.validateAsync({ ...req.body });
+    await contactValidationSchema.validateAsync({ ...req.body });
   } catch (error) {
     res.json({
       status: 'error',
