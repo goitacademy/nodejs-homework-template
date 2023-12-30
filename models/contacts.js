@@ -4,14 +4,14 @@ const crypto = require("node:crypto");
 
 const contactsPath = path.resolve("models", "contacts.json");
 
-async function readFile() {
+const readFile = async () => {
   const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
   return JSON.parse(data);
-}
+};
 
-async function writeFile(contacts) {
+const writeFile = async (contacts) => {
   await fs.writeFile(contactsPath, JSON.stringify(contacts, undefined, 2));
-}
+};
 
 const listContacts = async () => {
   const contacts = await readFile();
@@ -22,7 +22,7 @@ const getContactById = async (contactId) => {
   const contacts = await readFile();
   const contact = contacts.find((contact) => contact.id === contactId);
 
-  return contact;
+  return contact ?? null;
 };
 
 const removeContact = async (contactId) => {
