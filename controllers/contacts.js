@@ -10,11 +10,17 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
-  res.json({ message: "template message" });
+  const contact = await contactsFunctions.getContactById(id);
+  if (!contact) {
+    throw httpError(404, `Contact with ID ${id} not found`);
+  }
+  res.json(contact);
 };
 
 const addContact = async (req, res, next) => {
-  res.json({ message: "template message" });
+  const body = req.body;
+  const createdContact = await contactsFunctions.addContact(body);
+  res.status(201).json(createdContact);
 };
 
 const removeContact = async (req, res, next) => {
