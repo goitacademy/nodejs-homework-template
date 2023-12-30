@@ -50,9 +50,6 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
-
-
-  // main logic
   try {
     const data = await listContacts();
     const contact = {

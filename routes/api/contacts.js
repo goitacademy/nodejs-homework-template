@@ -55,19 +55,16 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
     // validation
   try {
-    await schema.validateAsync({ ...body });
+    await schema.validateAsync({ ...req.body });
   } catch (error) {
-    return error
-  }
-  const data = await addContact(req.body);
-  if (data.message) {
     res.json({
       status: 'error',
       code: 400,
-      message: data.message
+      message: error.message
     })
     return;
   }
+  const data = await addContact(req.body);
   res.json({
     status: 'success',
     code: 201,
@@ -102,12 +99,13 @@ router.put('/:id', async (req, res, next) => {
     switch (id.trim()) {
       case '':
       case ':id':
-      case undefined:
-      case null:
+      case 'undefined':
+      case 'null':
         throw new Error('Contact id is required');
       default:
         break;
     };
+    
     // validating request body
     await schema.validateAsync({ ...req.body });
   } catch (error) {
@@ -119,7 +117,7 @@ router.put('/:id', async (req, res, next) => {
     return;
   }
 
-  // request data from db
+  // send updated contact data and wait response from db
   const updatedContact = await updateContact(id, req.body);
   // checking if contact exists and sending if it does not
   if (updatedContact === null) {
