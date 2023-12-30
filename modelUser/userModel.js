@@ -27,6 +27,8 @@ userShema.pre("save", async function (next) {
   next();
 });
 
+userShema.methods.checkPassword = (candidate, passwordHash) =>
+  compare(candidate, passwordHash);
 const User = model("User", userShema);
 
 module.exports = User;

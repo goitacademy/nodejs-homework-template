@@ -1,9 +1,9 @@
 const { Router } = require("express");
 const router = Router();
-// const { authMiddleware } = require("../../middlewares");
+const { authMiddleware } = require("../../middlewares");
 const middlewares = require("../../middlewares");
 const authController = require("../../controlers/authController");
-
+const { loginSchemaValidation } = require("../../Shema");
 console.log(typeof authController.signup);
 
 router.post(
@@ -11,7 +11,12 @@ router.post(
   middlewares.authMiddleware.checkSing,
   authController.signup
 );
-router.post("/login", authController.login);
+router.post(
+  "/login",
+  authController.login,
+  authMiddleware.checkLogin,
+  authController.login
+);
 // password restore
 
 // password send instruction in mail , restore password

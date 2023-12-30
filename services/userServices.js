@@ -45,3 +45,13 @@ exports.signup = async (data) => {
   const token = singToken(newUser.id);
   return { user: newUser, token };
 };
+
+exports.login = async (data) => {
+  const user = await User.findOne({ email: data.email }).select("+password");
+  if (!user) throw new HttpError(401, "Not Found");
+  const passwordIsValued = await user.checkPassword(password, user.password);
+  if (!passwordIsValued) throw new HttpError(401, "dont work");
+  user.password = undefined;
+  const token = singToken(user.id);
+  return { user: token };
+};

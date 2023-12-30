@@ -8,4 +8,12 @@ exports.signup = async (req, res) => {
     token,
   });
 };
-exports.login = async (req, res) => {};
+
+exports.login = async (req, res) => {
+  const { user, token } = userServices.login(req.body);
+  res.status(200).json({
+    msg: "Success",
+    user,
+    token,
+  });
+};
