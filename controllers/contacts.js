@@ -24,11 +24,23 @@ const addContact = async (req, res, next) => {
 };
 
 const removeContact = async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { id } = req.params;
+  const deletedContact = await contactsFunctions.removeContact(id);
+  if (!deletedContact) {
+    throw httpError(404, `Book with ID ${id} not found`);
+  }
+  res.json(deletedContact);
+  res.status(204);
 };
 
 const updateContact = async (req, res, next) => {
-  res.json({ message: "template message" });
+  const { id } = req.params;
+  const body = req.body;
+  const updatedContact = await contactsFunctions.updateContact(id, body);
+  if (!updatedContact) {
+    throw httpError(404, `Book with ID ${id} not found`);
+  }
+  res.json(updatedContact);
 };
 
 module.exports = {
