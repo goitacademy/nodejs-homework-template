@@ -1,16 +1,12 @@
 const express = require("express");
 
-const contactsService = require("../../models/contacts");
 const contactsControllers = require("../../controllers/contacts");
 const { validateBody } = require("../../decorators");
 const { contactsSchema } = require("../../validators");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
-  const data = await contactsService.listContacts();
-  res.json(data);
-});
+router.get("/", contactsControllers.listContacts);
 router.post(
   "/",
   validateBody(contactsSchema.createContactsSchema),
