@@ -50,14 +50,14 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (id, body) => {
   const contacts = await readFile();
-  const index = contacts.findIndex((contact) => contact.id === contactId);
+  const index = contacts.findIndex((contact) => contact.id === id);
 
   if (index === -1) {
     return undefined;
   }
-  const newContact = { ...body, contactId };
+  const newContact = { ...body, id };
   contacts[index] = newContact;
 
   await writeFile(contacts);
