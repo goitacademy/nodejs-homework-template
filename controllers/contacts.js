@@ -1,7 +1,14 @@
-const contacts = require("../models/contacts.json");
 const Joi = require("joi");
 const { ctrlWrapper } = require("../helpers");
 const { HttpError } = require("../helpers");
+
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+  updateContact,
+} = require("../models/contacts");
 
 const addSchema = Joi.object({
   name: Joi.string().required().required(),
@@ -10,14 +17,13 @@ const addSchema = Joi.object({
 });
 
 const getAll = async (req, res, next) => {
-  const result = await contacts.listContacts();
-  console.log(contacts.listContacts());
+  const result = await listContacts();
   res.status(200).json(result);
 };
 
 const getOne = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
+  const result = await getContactById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -29,13 +35,13 @@ const add = async (req, res, next) => {
   if (error) {
     throw HttpError(400, { message: "missing required name field" });
   }
-  const result = await contacts.addContact(req.body);
+  const result = await addContact(req.body);
   res.status(201).json(result);
 };
 
 const removeById = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
+  const result = await removeContact(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -48,7 +54,7 @@ const updateById = async (req, res, next) => {
     throw HttpError(400, { message: "missing fields" });
   }
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
+  const result = await updateContact(contactId, req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
