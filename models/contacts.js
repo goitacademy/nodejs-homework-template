@@ -51,8 +51,13 @@ const removeContact = async (contactId) => {
 
 const addContact = async (body) => {
   // validation
-  await schema.validateAsync({ ...body });
+  try {
+    await schema.validateAsync({ ...body });
+  } catch (error) {
+    return error
+  }
 
+  // main logic
   try {
     const data = await listContacts();
     const contact = {

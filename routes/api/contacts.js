@@ -41,22 +41,21 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  if (name === '' || email === '' || phone === '') {
+  const data = await addContact(req.body);
+  if (data.message) {
     res.json({
       status: 'error',
       code: 400,
-      message: "missing required fields"
+      message: data.message
     })
-  } else {
-    const data = await addContact(req.body);
-      res.json({
-        status: 'success',
-        code: 201,
-        message: 'contact created',
-        data: data
-      })
-  };
+    return;
+  }
+  res.json({
+    status: 'success',
+    code: 201,
+    message: 'contact created',
+    data: data
+  })
 });
 
 router.delete('/:contactId', async (req, res, next) => {
