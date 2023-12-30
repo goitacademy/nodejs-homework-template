@@ -2,15 +2,6 @@ const fs = require('fs/promises')
 const path = require('path');
 const crypto = require('crypto');
 
-// // validation
-// const Joi = require('joi');
-
-// // validation schema
-// const schema = Joi.object({
-//   name: Joi.string().trim().alphanum().min(2).max(16).required(),
-//   email: Joi.string().trim().email({minDomainSegments: 2}).required(),
-//   phone: Joi.string().trim().min(14).max(14).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
-// });
 
 const contactsPath = path.join(__dirname, 'contacts.json');
 
@@ -25,14 +16,10 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
-  try {
-    const data = await listContacts();
-    const contact = data.find(contact => contact.id === contactId);
-    return contact
-  } catch (err) {
-    console.error(err.message)
-  }
-}
+  const data = await listContacts();
+  const contact = data.find(contact => contact.id === contactId);
+  return contact
+};
 
 const removeContact = async (contactId) => {
   try {
