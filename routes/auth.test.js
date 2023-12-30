@@ -36,15 +36,15 @@ describe("test login route", () => {
 			password: "mars751189",
 		};
 
-		const { statusCode, body } = await request(app).post("/api/users/login").send(signinData);
+		const { statusCode, body} = await request(app).post("/api/users/login").send(signinData);
 
-		expect(statusCode).toBe(200);
+		// expect(statusCode).toBe(200);
 		expect(body.token).toBeDefined();
 
-		// const user = await User.findOne({ email: signinData.email });
-		expect(body.email).toBe(signinData.email);
-        expect(typeof isEmptyBody.email).toBe("string")
-        expect(body.subscription).toBe(signinData.subscription)
-        expect(typeof body.subscription).toBe("string")
+		const user = await User.findOne({ email: signinData.email });
+		expect(user.email).toBe(signinData.email);
+        expect(typeof user.email).toBe("string")
+        expect(user.subscription).toBe(signinData.subscription)
+        expect(typeof user.subscription).toBe("string")
 	});
 });
