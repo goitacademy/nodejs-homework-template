@@ -2,6 +2,16 @@ const fs = require('fs/promises')
 const path = require('path');
 const crypto = require('crypto');
 
+// validation
+const Joi = require('joi');
+
+// validation schema
+const schema = Joi.object({
+  name: Joi.string().trim().alphanum().min(2).max(16).required(),
+  email: Joi.string().trim().email({minDomainSegments: 2}).required(),
+  phone: Joi.string().trim().min(14).max(14).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
+});
+
 const contactsPath = path.join(__dirname, 'contacts.json');
 
 const listContacts = async () => {
@@ -40,6 +50,9 @@ const removeContact = async (contactId) => {
 }
 
 const addContact = async (body) => {
+  // validation
+  await schema.validateAsync({ ...body });
+
   try {
     const data = await listContacts();
     const contact = {
@@ -55,6 +68,14 @@ const addContact = async (body) => {
 }
 
 const updateContact = async (contactId, body) => {
+  // validation
+  try {
+    await schema.validateAsync({ ...body });
+  } catch (error) {
+    return error
+  }
+
+  // main logic
   try {
     const data = await listContacts();
     const indexOfContact = data.findIndex(contact => contact.id === contactId);
@@ -70,7 +91,7 @@ const updateContact = async (contactId, body) => {
     };
 
     data[indexOfContact] = updatedContact;
-    
+
     await fs.writeFile(contactsPath, JSON.stringify(data, null, 2));
     return data[indexOfContact];
   } catch (err) {

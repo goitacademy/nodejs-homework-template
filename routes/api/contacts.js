@@ -96,8 +96,14 @@ router.put('/:contactId', async (req, res, next) => {
       message: "Not found",
     })
     return;
+  } else if (updatedContact.message) {
+    res.json({
+      status: 'error',
+      code: 400,
+      message: updatedContact.message
+    })
+    return;
   }
-
     res.json({
       status: 'success',
       code: 200,
