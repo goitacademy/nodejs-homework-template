@@ -26,23 +26,18 @@ const removeContact = async (contactId) => {
   return deletedContact;
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (body) => {
   const contacts = await listContacts();
-  const isExist = contacts.find(
-    (contact) =>
-      contact.name === name &&
-      contact.email === email &&
-      contact.phone === phone
+  const isExist = contacts.some(
+    (contact) => contact.name === body.name || contact.email === body.email
   );
   if (isExist) {
-    console.warn("Contact with such credentials already exists");
+    console.warn("Contact with such information already exists");
     return;
   }
   const newContacts = {
     id: nanoid(),
-    name,
-    email,
-    phone,
+    ...body,
   };
 
   contacts.push(newContacts);
