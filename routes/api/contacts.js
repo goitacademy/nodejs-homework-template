@@ -11,6 +11,18 @@ const {
   updateContact,
 } = require('../../models/contacts.js');
 
+
+// validation
+const Joi = require('joi');
+
+// validation schema
+const schema = Joi.object({
+  name: Joi.string().trim().alphanum().min(2).max(16).required(),
+  email: Joi.string().trim().email({minDomainSegments: 2}).required(),
+  phone: Joi.string().trim().min(14).max(14).pattern(/^\(\d{3}\) \d{3}-\d{4}$/).required(),
+});
+
+
 router.get('/', async (req, res, next) => {
   const data = await listContacts();
   res.json({
@@ -41,6 +53,12 @@ router.get('/:contactId', async (req, res, next) => {
 });
 
 router.post('/', async (req, res, next) => {
+    // validation
+  try {
+    await schema.validateAsync({ ...body });
+  } catch (error) {
+    return error
+  }
   const data = await addContact(req.body);
   if (data.message) {
     res.json({
@@ -76,39 +94,49 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
-  const id = req.params.contactId;
-  const { name, email, phone } = req.body;
-  if (name === '' || email === '' || phone === '' || id === '') {
+router.put('/:id', async (req, res, next) => {
+  const id = String(req.params.id);
+  // validation
+  try {
+    // checking if contact id is provided and if it not throws error
+    switch (id.trim()) {
+      case '':
+      case ':id':
+      case undefined:
+      case null:
+        throw new Error('Contact id is required');
+      default:
+        break;
+    };
+    // validating request body
+    await schema.validateAsync({ ...req.body });
+  } catch (error) {
     res.json({
       status: 'error',
       code: 400,
-      message: "missing required fields"
+      message: error.message
     })
     return;
-  } 
+  }
+
+  // request data from db
   const updatedContact = await updateContact(id, req.body);
-  if (updatedContact === false) {
+  // checking if contact exists and sending if it does not
+  if (updatedContact === null) {
     res.json({
       status: 'error',
       code: 404,
       message: "Not found",
     })
     return;
-  } else if (updatedContact.message) {
-    res.json({
-      status: 'error',
-      code: 400,
-      message: updatedContact.message
-    })
-    return;
   }
-    res.json({
-      status: 'success',
-      code: 200,
-      message: 'Contact updated',
-      data: updatedContact
-    })
-})
+  // sending if success result
+  res.json({
+    status: 'success',
+    code: 200,
+    message: 'Contact updated',
+    data: updatedContact
+  })
+});
 
 module.exports = router
