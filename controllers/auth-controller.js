@@ -25,8 +25,11 @@ const signup = async (req, res, next) => {
         
         const newUser = await User.create({ ...req.body, password: hashPassword });
         res.json({
-            email: newUser.email,
+            user: ({
+                email: newUser.email,
             subscription: newUser.subscription
+            })
+            
         })
     }
     catch (error) {
@@ -58,6 +61,7 @@ const signin = async (req, res, next) => {
         };
 
          const token =jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
+        await User.findByIdAndUpdate(contactId, { token });
         
         res.json({
             token,
@@ -73,7 +77,32 @@ const signin = async (req, res, next) => {
     }
 }
 
+const getCurrent = async (req, res)=>{
+    
+        const { email, subscription } = req.user;
+    
+    res.json({
+        email,
+        subscription
+    });
+    
+}
+
+const signout = async (req, res) => {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" });
+
+    res.json({
+        email,
+        subscription
+    })
+}
+    
+
+
 export default {
     signup,
-    signin
+    signin, 
+    getCurrent,
+    signout
 }
