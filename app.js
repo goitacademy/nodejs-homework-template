@@ -15,10 +15,13 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 // !app.use() в Express используется middleware. Эти функции могут обрабатывать запросы, модифицировать объекты запросов и ответов или выполнять аутентификацию. Они принимают три аргумента: req (запрос), res (ответ) и next (следующая функция middleware).
 app.use(logger(formatsLogger))
 
-app.use(cors({ // разрешает запросы только с "http://localhost:3000"
+app.use(cors()); //позволяет запросы с любого источника
+
+/* app.use(cors({ // разрешает запросы только с "http://localhost:3000"
   origin:"http://localhost:3000",
   optionsSuccessStatus: 200
-}))
+})) */
+
 
 
 app.use(express.json()) //позволяет Express обрабатывать входящие запросы в формате JSON, преобразуя их тело в объект JavaScript для дальнейшей обработки. Действует глобально, что не всегда хорошо  если нужно локально, то смотри пример дальше
