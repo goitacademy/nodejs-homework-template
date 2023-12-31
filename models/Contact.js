@@ -5,9 +5,9 @@ import { addUpdateSettings, handleSaveError } from './hooks.js'
 
 const contactsSchema = new Schema(
   {
-    name: { type: String },
-    email: { type: String },
-    phone: { type: String },
+    name: { type: String, required: true, minlength: 5, maxlength: 20 },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
     favorite: { type: Boolean, default: false },
   },
   { versionKey: false, timestamps: true }
@@ -20,7 +20,7 @@ contactsSchema.pre('findOneAndUpdate', addUpdateSettings)
 contactsSchema.post('findOneAndUpdate', handleSaveError)
 
 export const contactAddSchema = Joi.object({
-  name: Joi.string().required().messages({ 'any.required': `missing required name field` }),
+  name: Joi.string().required().messages({ 'any.required': `missing required name field` }).min(5).max(20),
   email: Joi.string().required().email().messages({
     'any.required': 'missing required email field',
   }),
@@ -36,7 +36,7 @@ export const contactAddSchema = Joi.object({
 })
 
 export const contactUpdateSchema = Joi.object({
-  name: Joi.string(),
+  name: Joi.string().min(5).max(20),
   email: Joi.string().email(),
   phone: Joi.string().custom((value, helper) => {
     if (!validator.isMobilePhone(value)) {
