@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import contactsController from '../../controllers/contactsController.js'
+import { add, deleteById, getAll, getById, updateById } from '../../controllers/contactsController.js'
 import { validateBody } from '../../decorators/validateBody.js'
 import { isEmptyBody } from '../../middlewares/isEmptyBody.js'
 import { isValidId } from '../../middlewares/isValidId.js'
@@ -7,20 +7,14 @@ import { contactAddSchema, contactUpdateFavoriteSchema, contactUpdateSchema } fr
 
 export const contactsRouter = Router()
 
-contactsRouter.get('/', contactsController.getAll)
+contactsRouter.get('/', getAll)
 
-contactsRouter.get('/:id', isValidId, contactsController.getById)
+contactsRouter.get('/:id', isValidId, getById)
 
-contactsRouter.post('/', isEmptyBody, validateBody(contactAddSchema), contactsController.add)
+contactsRouter.post('/', isEmptyBody, validateBody(contactAddSchema), add)
 
-contactsRouter.put('/:id', isValidId, isEmptyBody, validateBody(contactUpdateSchema), contactsController.updateById)
+contactsRouter.put('/:id', isValidId, isEmptyBody, validateBody(contactUpdateSchema), updateById)
 
-contactsRouter.patch(
-  '/:id/favorite',
-  isValidId,
-  isEmptyBody,
-  validateBody(contactUpdateFavoriteSchema),
-  contactsController.updateById
-)
+contactsRouter.patch('/:id/favorite', isValidId, isEmptyBody, validateBody(contactUpdateFavoriteSchema), updateById)
 
-contactsRouter.delete('/:id', isValidId, contactsController.deleteById)
+contactsRouter.delete('/:id', isValidId, deleteById)

@@ -1,10 +1,10 @@
-import createHttpError from 'http-errors'
 import { isValidObjectId } from 'mongoose'
+import { notFoundHttpError } from '../helpers/notFoundHttpError.js'
 
 export const isValidId = (req, _, next) => {
   const { id } = req.params
   if (!isValidObjectId(id)) {
-    return next(new createHttpError.NotFound(`${id} not valid id`))
+    return next(notFoundHttpError(`${id} not valid id`))
   }
   next()
 }
