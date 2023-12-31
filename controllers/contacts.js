@@ -12,7 +12,7 @@ const getContactById = async (req, res, next) => {
   const getContact = await contacts.getContactById(contactId);
 
   if (!getContact) {
-    throw HttpError(404, "Not found!");
+    throw HttpError(400, "Not found!");
   }
   res.status(200).json(getContact);
 };
@@ -25,10 +25,7 @@ const addContact = async (req, res, next) => {
       message: `missing required ${missingFields.join(", ")} field(s)`,
     });
   }
-  //   const { error } = addSchema.validate(req.body);
-  //   if (error) {
-  //     throw HttpError(400, error.message);
-  //   }
+
   const addedContact = await contacts.addContact(req.body);
   res.status(201).json(addedContact);
 };
@@ -38,7 +35,7 @@ const removeContact = async (req, res, next) => {
   const deletedContact = await contacts.removeContact(contactId);
   console.log(deletedContact);
   if (!deletedContact) {
-    throw HttpError(400, "Not found!");
+    throw HttpError(404, "Not found!");
   }
   res.json({ message: "contact deleted" });
 };
@@ -51,16 +48,13 @@ const updateContact = async (req, res, next) => {
       message: `missing ${missingFields.join(", ")} field(s)`,
     });
   }
-  //   const { error } = addSchema.validate(req.body);
-  //   if (error) {
-  //     throw HttpError(400, error.message);
-  //   }
+
   const { contactId } = req.params;
   const updatedContact = await contacts.updateContact(contactId, req.body);
   if (!updatedContact) {
     throw HttpError(400, "Not found!");
   }
-  res.status(201).json(updatedContact);
+  res.status(200).json(updatedContact);
 };
 
 module.exports = {
