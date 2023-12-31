@@ -35,6 +35,6 @@ authRouter.patch(
 	authController.updateSubscription
 );
 
-authRouter.patch("/avatars", upload.single("avatarURL"), resizeAvatar, authenticate, authController.updateAvatar)
+authRouter.patch("/avatars", upload.single("avatarURL"), isEmptyBody, resizeAvatar, authenticate, authController.updateAvatar)
 
 export default authRouter;
