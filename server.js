@@ -1,5 +1,14 @@
-const app = require('./app')
+const app = require("./app");
+require("colors");
+const { join } = require("path");
+const connectDb = require("./config/connectDb");
+const configPath = join(__dirname, "config", ".env");
+require("dotenv").config({ path: configPath });
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+connectDb();
+
+const { PORT } = process.env;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`.magenta.italic);
+});
