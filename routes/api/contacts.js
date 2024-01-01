@@ -1,11 +1,17 @@
 const express = require("express");
 const controllers = require("../../controllers/contacts");
-const { validataBody, isValidId, isEmptyBody } = require("../../middlewars");
+const {
+  validataBody,
+  isValidId,
+  isEmptyBody,
+  authenticate,
+} = require("../../middlewars");
 const schemas = require("../../schemas/contacts");
 
 const { isEmptyFavoriteUpdate } = require("../../middlewars/isEmptyBody");
 
 const router = express.Router();
+router.use(authenticate);
 
 router.get("/", controllers.getAll);
 
