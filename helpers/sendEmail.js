@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport(nodemailerConfig);
 
 const emailOptions = {
     from: 'solomiia.lutska@meta.ua',
-    to: 'solomia.lutska@gmail.com',
+    to: 'padolos662@vasteron.com',
     subject: 'Nodemailer test',
     html: '<p>Привіт. Як справи?</p>',
 };

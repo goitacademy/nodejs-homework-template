@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('@hapi/joi');
 
-const emailRegexp = /^[a-zA-Z0-9]+\.[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+const emailRegexp = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/; 
 
 const userSchema = new Schema({
     password: {

@@ -10,13 +10,14 @@ const fs = require("fs/promises");
 const { json } = require("express");
 const Jimp = require("jimp");
 const { v4: uuid } = require('uuid');
+const sendEmail = require("../helpers/sendEmail");
 
 require("dotenv").config();
 
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars")
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BASE_URL} = process.env;
 
 const payload = {
     id: "63fe4a5a68b27c947e28495b"
