@@ -6,44 +6,31 @@ const path = require('node:path');
 const contactsPath = path.resolve(__dirname, 'contacts.json');
 
 const listContacts = async () => {
-  try {
-    const data = await fs.readFile(contactsPath);
-    return JSON.parse(data);
-  } catch (err) {
-    return [];
-  }
+  const data = await fs.readFile(contactsPath);
+  return JSON.parse(data);
 };
 
 const getContactById = async contactId => {
-  try {
-    const data = await listContacts();
-    const contactById = data.find(contact => contact.id === contactId);
-    return contactById;
-  } catch (error) {
-    return [];
-  }
+  const data = await listContacts();
+  const contactById = data.find(contact => contact.id === contactId);
+  return contactById;
 };
 
 const removeContact = async contactId => {
-  try {
-    const data = await listContacts();
-    const removedContactById = data.findIndex(
-      contact => contact.id === contactId
-    );
+  const data = await listContacts();
+  const removedContactById = data.findIndex(
+    contact => contact.id === contactId
+  );
 
-    if (removedContactById === -1) {
-      // throw new Error('Contact not found');
-      return null;
-    }
-
-    const removedContact = data.splice(removedContactById, 1)[0];
-
-    await fs.writeFile(contactsPath, JSON.stringify(data));
-
-    return removedContact;
-  } catch (error) {
-    return [];
+  if (removedContactById === -1) {
+    return null;
   }
+
+  const removedContact = data.splice(removedContactById, 1)[0];
+
+  await fs.writeFile(contactsPath, JSON.stringify(data));
+
+  return removedContact;
 };
 
 const addContact = async body => {
