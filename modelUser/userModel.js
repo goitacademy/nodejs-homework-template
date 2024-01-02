@@ -1,5 +1,6 @@
 const { model, Schema } = require("mongoose");
 const { genSalt, hash, compare } = require("bcrypt");
+
 const userShema = new Schema({
   password: {
     type: String,

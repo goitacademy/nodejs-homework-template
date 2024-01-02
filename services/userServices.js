@@ -1,5 +1,5 @@
 const User = require("../modelUser/userModel");
-const HttpError = require("../Helpers/HttpError");
+const { HttpError } = require("../Helpers/HttpError");
 const { singToken } = require("./jwtService");
 //============================================================================
 exports.createUser = async (userData) => {
@@ -18,7 +18,7 @@ exports.getOneUser = (id) => User.findById(id);
 //===============================================// проверяем есть ли пользователь в базе=============================
 exports.checkUserExites = async (filters) => {
   const userExites = await User.exists(filters);
-  if (userExites) throw new HttpError(409, "User exists");
+  if (userExites) throw HttpError(409, "User exists");
 };
 
 //=============================================================================
@@ -34,7 +34,6 @@ exports.updateUser = async (id, userData) => {
 exports.deletUser = async (id) => User.findByIdAndDelete(id);
 
 //==================singup====================================
-
 exports.signup = async (data) => {
   const newUserData = {
     ...data,
@@ -46,12 +45,16 @@ exports.signup = async (data) => {
   return { user: newUser, token };
 };
 
-exports.login = async (data) => {
-  const user = await User.findOne({ email: data.email }).select("+password");
+exports.login = async ({ email, password }) => {
+  const user = await User.findOne({ email }).select("+password");
+
   if (!user) throw new HttpError(401, "Not Found");
+
   const passwordIsValued = await user.checkPassword(password, user.password);
+
   if (!passwordIsValued) throw new HttpError(401, "dont work");
-  user.password = undefined;
+
+  user.password = undefined; // delete password
   const token = singToken(user.id);
   return { user: token };
 };
