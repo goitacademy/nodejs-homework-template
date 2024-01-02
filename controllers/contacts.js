@@ -52,7 +52,7 @@ const updateContact = async (req, res, next) => {
   const { contactId } = req.params;
   const updatedContact = await contacts.updateContact(contactId, req.body);
   if (!updatedContact) {
-    throw HttpError(400, "Not found!");
+    throw HttpError(404, "Not found!");
   }
   res.status(200).json(updatedContact);
 };
