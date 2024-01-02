@@ -81,16 +81,20 @@ const updateSubscription = async (req, res) => {
   res.json(result);
 };
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
+  if (!req.file) {
+    next(HttpError(400, 'missing fields'));
+  }
   const { _id } = req.user;
   const { path: tmpUpload, originalname } = req.file;
+
   const avatarName = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarDir, avatarName);
 
   await fs.rename(tmpUpload, resultUpload);
 
   const image = await Jimp.read(resultUpload);
-  image.resize(250, 250);
+  image.resize(250, 250).write(resultUpload);
 
   const avatarURL = path.join('avatars', avatarName);
   await User.findByIdAndUpdate(_id, { avatarURL });
