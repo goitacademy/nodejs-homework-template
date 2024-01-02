@@ -28,6 +28,12 @@ const checkLogin = async (req, res, next) => {
   req.body = value;
   next();
 };
+//----------------------------------------------------------------
+const protect = async (req, res, next) => {
+  const tokem =
+    req.headers.authorization?.startsWith("Bear") &&
+    req.headers.authorization.split(" ")[1];
+};
 
 //----------------------------------------------------------------
 module.exports = {
