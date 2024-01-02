@@ -12,7 +12,7 @@ const getContactById = async (req, res, next) => {
   const getContact = await contacts.getContactById(contactId);
 
   if (!getContact) {
-    throw HttpError(400, "Not found!");
+    throw HttpError(404, "Not found!");
   }
   res.status(200).json(getContact);
 };
@@ -44,7 +44,7 @@ const updateContact = async (req, res, next) => {
   const requiredFields = ["name", "email", "phone"];
   const missingFields = requiredFields.filter((field) => !(field in req.body));
   if (missingFields.length > 0) {
-    return res.status(400).send({
+    return res.status(404).send({
       message: `missing ${missingFields.join(", ")} field(s)`,
     });
   }
