@@ -32,7 +32,6 @@ router.get("/", async (_req, res, next) => {
     const contacts = await contactsOpt.listContacts();
     res.status(200).json(contacts);
   } catch (error) {
-    console.log("error here");
     next(error);
   }
 });
@@ -42,6 +41,10 @@ router.get("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
 
     const result = await contactsOpt.getContactById(contactId);
+
+    if (result === null) {
+      return res.status(404).json({ message: "Not found" });
+    }
 
     res.status(200).json(result);
   } catch (error) {
