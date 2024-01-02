@@ -8,9 +8,9 @@ const { HttpError } = require("../../helpers");
 const router = express.Router();
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+  name: Joi.string().required().messages({ "any.required": "missing required name field"}),
+  email: Joi.string().required().messages({ "any.required": "missing required email field"}),
+  phone: Joi.string().required().messages({ "any.required": "missing required phone field"}),
 });
 
 router.get("/", async (req, res, next) => {
@@ -67,10 +67,10 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(400, error.message);
+      throw HttpError(400, "missing fields");
     }
     const { contactId } = req.params;
-    const result = await contacts.updateContact(contactId, req.body);
+    const result = await contacts.updateContact( contactId, req.body);
     if (!result) {
       throw HttpError(404, "Not found");
     }
