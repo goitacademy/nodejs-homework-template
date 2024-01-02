@@ -1,25 +1,39 @@
 const { Types } = require('mongoose');
-const { ContactModel } = require('./models/contactModel');
+const { Contact } = require('./models/contactModel');
 const { HttpError } = require('../helpers');
 
-const listContacts = () => ContactModel.find();
+const listContacts = async(query, owner) => {
+    const findQuery = {owner};
+    if (query.favorite) findQuery.favorite = query.favorite;
+    if (query.search) findQuery[`${query.field || 'name'}`] = { $regex: query.search, $options: 'i' };
 
-const addContact = body => ContactModel.create(body);
+    const paginationLimit = Number(query.limit) ?? 10;
+    const paginationPage = Number(query.page) ?? 1;
 
-const getContactById = contactId => ContactModel.findById(contactId);
+    const contacts = await Contact.find(findQuery)
+        .sort(`${query.order === 'DESC' ? '-' : ''}${query.sort || 'name'}`)
+        .limit(paginationLimit)
+        .skip((paginationPage - 1) * paginationLimit);
+        const total = await Contact.countDocuments(findQuery);
+    return { contacts, total };
+};
 
-const removeContact = contactId => ContactModel.findByIdAndDelete(contactId);
+const addContact = (body, owner) => Contact.create({...body,owner});
+
+const getContactById = contactId => Contact.findById(contactId);
+
+const removeContact = contactId => Contact.findByIdAndDelete(contactId);
 
 const updateContact = (contactId, body) =>
-    ContactModel.findByIdAndUpdate(contactId, body, { new: true });
+    Contact.findByIdAndUpdate(contactId, body, { new: true });
 
 const updateStatusContact = (contactId, body) =>
-    ContactModel.findByIdAndUpdate(contactId, body, { new: true });
+    Contact.findByIdAndUpdate(contactId, body, { new: true });
 
 const checkContactExistById = async id => {
     const idIsValid = Types.ObjectId.isValid(id);
     if (!idIsValid) throw new HttpError(404);
-    const isContactExist = await ContactModel.exists({ _id: id });
+    const isContactExist = await Contact.exists({ _id: id });
     if (!isContactExist) throw new HttpError(404);
 };
 

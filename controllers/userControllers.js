@@ -1,24 +1,38 @@
 const { catchAsync } = require('../helpers');
 const { userService } = require('../service');
 
-exports.registerUser = catchAsync(async (req, res) => {
-    const user = await userService.register(req.body);
+exports.register = catchAsync(async (req, res) => {
+    const { email, subscription } = await userService.register(req.body);
     res.status(201).json({
         user: {
-            email: user.email,
-            subscription: user.subscription,
+            email,
+            subscription,
         },
     });
 });
 
-exports.loginUser = catchAsync(async (req, res) => {
-    const { user } = req;
-    const token = await userService.login(user)
+exports.login = catchAsync(async (req, res) => {
+    const { email, subscription, token } = await userService.login(req.user);
     res.json({
         user: {
-            email: user.email,
-            subscription: user.subscription,
+            email,
+            subscription,
         },
-        token
+        token,
     });
 });
+
+exports.logout = catchAsync(async (req, res) => {
+    await userService.logout(req.user);
+    res.sendStatus(204);
+});
+
+exports.current = (req, res) => {
+    const { email, subscription } = req.user;
+    res.json({email, subscription})
+};
+
+exports.updateSubscription = catchAsync(async(req, res) => {
+    const user = await userService.updateSubscription(req.user.id, req.body)
+    res.json({user})
+})

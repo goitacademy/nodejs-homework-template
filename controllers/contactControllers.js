@@ -1,12 +1,16 @@
 const {catchAsync, HttpError} = require('../helpers');
 const {contactService} = require('../service')
 
-exports.getContacts = catchAsync(async (_, res) => {
-    res.json(await contactService.listContacts());
+exports.getContacts = catchAsync(async (req, res) => {
+    const {contacts, total} = await contactService.listContacts(req.query, req.user);
+    res.json({
+        contacts,
+        total,
+    });
 });
 
 exports.addContacts = catchAsync(async (req, res) => {
-    res.status(201).json(await contactService.addContact(req.body));
+    res.status(201).json(await contactService.addContact(req.body, req.user));
 });
 
 exports.getContactById = catchAsync(async (req, res) => {

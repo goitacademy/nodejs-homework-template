@@ -17,8 +17,8 @@ const userSchema = new Schema({
     },
     subscription: {
         type: String,
-        enum: Object.values(constants.descrUser),
-        default: constants.descrUser.STARTER,
+        enum: Object.values(constants.subscrUser),
+        default: constants.subscrUser.STARTER,
     },
     token: {
         type: String,

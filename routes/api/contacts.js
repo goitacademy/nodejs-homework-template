@@ -1,13 +1,15 @@
 const express = require('express');
 const { contactsController } = require('../../controllers');
 const { bodySchemaCreate, bodySchemaUpdate } = require('../../schemas/contactSchema');
-const { validateBody, checkValidId } = require('../../middlewares');
+const { validateBody, checkValidId, checkUserByToken, validateQuery } = require('../../middlewares');
+const querySchema = require('../../schemas/querySchema');
 
 const router = express.Router();
 
+router.use(checkUserByToken)
 router
     .route('/')
-    .get(contactsController.getContacts)
+    .get(validateQuery(querySchema), contactsController.getContacts)
     .post(validateBody.checkCreate(bodySchemaCreate), contactsController.addContacts);
 router.use('/:contactId', checkValidId);
 router

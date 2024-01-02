@@ -1,4 +1,4 @@
-const { jwtService } = require('.');
+const jwtService = require('./jwtService');
 const { HttpError } = require('../helpers');
 const { User } = require('./models/userModel');
 
@@ -10,13 +10,17 @@ exports.register = async body => {
     return user;
 };
 
-exports.login = async userData => {
-    const { id } = userData;
-    const candidate = await User.findById(id);
+exports.login = async user => {
+    const { id } = user;
     const token = jwtService.signToken({ id });
-    candidate.token = token;
-    candidate.save();
-    return token;
+    user.token = token;
+    return user.save();
 };
+exports.logout = async user => {
+    user.token = null;
+    return user.save();
+}
 
 exports.findUserByFilter = (filter = {}) => User.findOne(filter);
+
+exports.updateSubscription = (id, subscription) => User.findByIdAndUpdate(id, subscription, {new: true});
