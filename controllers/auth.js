@@ -9,6 +9,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const { json } = require("express");
 const Jimp = require("jimp");
+const { v4: uuid } = require('uuid');
 
 require("dotenv").config();
 
@@ -47,12 +48,58 @@ const register = async (req, res) => {
     const hashPassword = await bcrypt.hash(password, 6);
     const avatarURL = gravatar.url(email);
 
-    const newUser = await User.create( {...req.body, password: hashPassword, avatarURL} );
+    const verificationToken = uuid();
+
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL, verificationToken });
+    
+    const verifyEmail = {
+        to: email,
+        subject: "Verify email",
+        html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`
+    };
+
+    await sendEmail(verifyEmail);
     
     res.status(201).json({
         email: newUser.email,
     })
 }
+
+
+const verifyEmail = async (req, res) => {
+    const { verificationToken } = req.params;
+    const user = await User.findOne({ verificationToken });
+    if (!user) {
+        throw HttpError(401, "Email not found");
+
+    }
+    await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: "" });
+    res.json({
+        message: "Email verify success"
+    })
+}
+
+const resendVerifyEmail = async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw HttpError(401, "Email not found");  
+    }
+    if (user.verify) {
+        throw HttpError(401, "Email already verify");      
+    }
+     const verifyEmail = {
+        to: email,
+        subject: "Verify email",
+        html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click verify email</a>`
+    }
+    await sendEmail(verifyEmail);
+    
+    res.json({
+        message: "Verify email send success",
+    })
+}
+
 
 
 const login = async (req, res) => {
@@ -118,4 +165,6 @@ module.exports = {
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
     updateAvatar: ctrlWrapper(updateAvatar),
+    verifyEmail: ctrlWrapper(verifyEmail),
+    resendVerifyEmail: ctrlWrapper(resendVerifyEmail), 
 }

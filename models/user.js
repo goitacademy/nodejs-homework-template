@@ -1,7 +1,7 @@
 const { Schema, model } = require('mongoose');
 const Joi = require('@hapi/joi');
 
-const emailRegexp = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+const emailRegexp = /^[a-zA-Z0-9]+\.[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
 
 const userSchema = new Schema({
     password: {
@@ -27,8 +27,18 @@ const userSchema = new Schema({
     avatarURL: {
     type: String,
     required: true,
-  }
+    },
+    verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
+    
 }, { versionKey: false, timestamps: true });
+
 
 
 userSchema.post("save", (error, data, next)=> {
@@ -42,6 +52,11 @@ const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
 })
 
+const emailSchema = Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+
+})
+
 
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
@@ -52,6 +67,7 @@ const loginSchema = Joi.object({
 const schemas = {
     registerSchema,
     loginSchema,
+    emailSchema,
 }
 
 const User = model("user", userSchema);
