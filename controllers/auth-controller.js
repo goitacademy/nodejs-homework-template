@@ -1,9 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import User from "../models/User.js";
+import User, { userUpdateSubscriptionSchema, userSignupSchema, userSigninSchema } from "../models/User.js";
 import { HttpError } from "../helpers/index.js";
-import { userSignupSchema, userSigninSchema } from "../models/User.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 const { JWT_SECRET } = process.env;
@@ -78,10 +77,26 @@ const signOut = async (req, res) => {
     res.status(204).json();
 };
 
+const updateSubs = async (req, res) => {
+    const { error } = userUpdateSubscriptionSchema.validate(req.body);
+    if (error) {
+        throw HttpError(400, error.message);
+    };
+
+    const { _id } = req.user;
+    const { subscription } = req.body;
+    await User.findByIdAndUpdate(_id, { subscription })
+
+    res.json({
+        message: "Subscription updated"
+    });
+};
+
 
 export default {
     signUp: ctrlWrapper(signUp),
     signIn: ctrlWrapper(signIn),
     getCurrent: ctrlWrapper(getCurrent),
     signOut: ctrlWrapper(signOut),
+    updateSubs: ctrlWrapper(updateSubs),
 };
