@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { validateBody } = require('../../middleware');
+const {
+  validateBody,
+  isBodyEmpty,
+  authenticate,
+  upload,
+} = require('../../middleware');
 const { schemas } = require('../../models/user');
 const ctrl = require('../../controllers/auth');
-const isBodyEmpty = require('../../middleware/IsBodyEmpty');
-const authenticate = require('../../middleware/authenticate');
 
 router.post(
   '/register',
@@ -25,5 +28,12 @@ router.get('/current', authenticate, ctrl.getCurrent);
 router.post('/logout', authenticate, ctrl.logout);
 
 router.patch('/', authenticate, ctrl.updateSubscription);
+
+router.patch(
+  '/avatars',
+  authenticate,
+  upload.single('avatar'),
+  ctrl.updateAvatar
+);
 
 module.exports = router;

@@ -2,7 +2,13 @@ const { HttpError, ctrlWrapper } = require('../helpers');
 const { User } = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const gravatar = require('gravatar');
+const path = require('path');
+const fs = require('fs/promises');
+const Jimp = require('jimp');
+
 const { SECRET_KEY } = process.env;
+const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -12,7 +18,12 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
@@ -70,10 +81,31 @@ const updateSubscription = async (req, res) => {
   res.json(result);
 };
 
+const updateAvatar = async (req, res, next) => {
+  if (!req.file) {
+    next(HttpError(400, 'missing fields'));
+  }
+  const { _id } = req.user;
+  const { path: tmpUpload, originalname } = req.file;
+
+  const avatarName = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarDir, avatarName);
+
+  await fs.rename(tmpUpload, resultUpload);
+
+  const image = await Jimp.read(resultUpload);
+  image.resize(250, 250).write(resultUpload);
+
+  const avatarURL = path.join('avatars', avatarName);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+  res.status(200).json({ avatarURL });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

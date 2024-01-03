@@ -2,10 +2,13 @@ const express = require('express');
 const router = express.Router();
 const ctrl = require('../../controllers/contacts');
 
-const { validateBody, isValidId } = require('../../middleware');
+const {
+  validateBody,
+  isValidId,
+  authenticate,
+  isBodyEmpty,
+} = require('../../middleware');
 const { schemas } = require('../../models/contacts');
-const isBodyEmpty = require('../../middleware/IsBodyEmpty');
-const authenticate = require('../../middleware/authenticate');
 
 router.get('/', authenticate, ctrl.getAllContacts);
 
