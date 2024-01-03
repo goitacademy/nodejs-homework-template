@@ -3,7 +3,7 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const crypto = require("node:crypto");
 
-const contactsPath = path.resolve("models", "contacts.json");
+const contactsPath = path.resolve(__dirname, "contacts.json");
 
 const readFile = async () => {
   try {
