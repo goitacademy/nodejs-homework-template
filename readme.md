@@ -3,6 +3,8 @@
 
 ```js
 npm install mongoose -S
+
+npm run start:dev
 ```
 
 **Express**:
