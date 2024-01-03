@@ -1,3 +1,12 @@
+**Mongoose**
+бібліотека (Object Data Modelling) для роботи з MongoDB
+
+```js
+npm install mongoose -S
+
+npm run start:dev
+```
+
 **Express**:
 
 Опис: Express - це веб-фреймворк для розвитку додатків на мові JavaScript за допомогою Node.js. Він надає простий та ефективний спосіб створення веб-серверів та обробки HTTP-запитів.
