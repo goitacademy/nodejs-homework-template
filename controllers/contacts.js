@@ -1,4 +1,4 @@
-const contacts = require("../models/contact");
+const Contact = require("../models/contact");
 const { ctrlWrapper } = require("../helpers");
 // const { HttpError, ctrlWrapper } = require("../helpers");
 
@@ -30,7 +30,7 @@ const { ctrlWrapper } = require("../helpers");
 //   .messages({ "object.min": "missing fields" });
 
 const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
+  const result = await Contact.find();
   res.json(result);
 };
 
