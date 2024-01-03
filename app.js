@@ -21,11 +21,8 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  //! ------   ВАРІАНТ-2  ------
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({ message });
-  //! ------   ВАРІАНТ-1  ------
-  // res.status(500).json({ message: err.message });
 });
 
 module.exports = app;
