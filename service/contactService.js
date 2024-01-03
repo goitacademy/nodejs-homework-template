@@ -30,10 +30,10 @@ const updateContact = (contactId, body) =>
 const updateStatusContact = (contactId, body) =>
     Contact.findByIdAndUpdate(contactId, body, { new: true });
 
-const checkContactExistById = async id => {
+const checkContactExistById = async (id, owner) => {
     const idIsValid = Types.ObjectId.isValid(id);
     if (!idIsValid) throw new HttpError(404);
-    const isContactExist = await Contact.exists({ _id: id });
+    const isContactExist = await Contact.exists({ _id: id, owner });
     if (!isContactExist) throw new HttpError(404);
 };
 
