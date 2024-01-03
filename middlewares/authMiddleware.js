@@ -1,6 +1,6 @@
 //----------------------------------------------------------------
 // const shema = require("../Shema");
-const { userServices } = require("../services");
+const { userServices, jwtService } = require("../services");
 const { contactSchema } = require("../Shema");
 const { signupSchemaValidation } = require("../Shema/shema");
 
@@ -30,9 +30,15 @@ const checkLogin = async (req, res, next) => {
 };
 //----------------------------------------------------------------
 const protect = async (req, res, next) => {
-  const tokem =
+  const token =
     req.headers.authorization?.startsWith("Bear") &&
     req.headers.authorization.split(" ")[1];
+  const userId = jwtService.checkToken(token);
+  if (userId) throw new Error(401, "Invalid user data");
+  const currentUser = await userServices.getOneUser(userId);
+  if (currentUser) throw new Error(401, "Invalid user data");
+  req.user = currentUser;
+  next();
 };
 
 //----------------------------------------------------------------

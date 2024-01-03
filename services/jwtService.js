@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const { HttpError } = require("../Helpers");
 exports.singToken = (id) =>
   jwt.sign({ id }, "secret", {

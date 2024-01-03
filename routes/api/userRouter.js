@@ -7,6 +7,8 @@ const {
   checkId,
 } = require("../../middlewares/validateBody");
 const schemas = require("../../Shema/shema");
+
+router.use(authMiddleware.protect);
 //======================getAll==========================
 router.get("/", controlers.userController.getAllUser);
 //========================getID========================
