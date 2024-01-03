@@ -1,69 +1,103 @@
-const contacts = require("../models/contacts");
-const Joi = require("joi");
+const { isValidObjectId } = require("mongoose");
+const {
+  Contact,
+  addSchema,
+  updateFavoriteSchema,
+} = require("../models/contacts");
 
-const addShema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-
-const listContacts = async (req, res) => {
-  const result = await contacts.listContacts();
-  res.json(result);
+const getAllContacts = async (req, res, next) => {
+  const contacts = await Contact.find();
+  res.json(contacts);
 };
 
-const getContactById = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await contacts.getContactById(contactId);
-
-  if (!result) {
-    res.status(404).json({ message: "Not found" });
+const getContactById = async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const isValidId = isValidObjectId(contactId);
+  if (!isValidId) {
+    res.status(400).json({ message: `${contactId} isn't a valid contactId!` });
     return;
   }
 
-  res.json(result);
+  const contact = await Contact.findById(contactId);
+  res.json(contact);
 };
 
-const addContact = async (req, res) => {
-  const { error } = addShema.validate(req.body);
+const createContact = async (req, res, next) => {
+  const body = req.body;
+  const { error } = addSchema.validate(body);
+
   if (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: "missing required name field" });
     return;
   }
 
-  const result = await contacts.addContact(req.body);
-
-  res.status(201).json(result);
+  const newContact = await Contact.create(body);
+  res.status(201).json(newContact);
 };
 
-const removeContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await contacts.removeContact(contactId);
-
-  if (!result) {
-    res.status(404).json({ message: "Not found" });
+const deleteContact = async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const isValidId = isValidObjectId(contactId);
+  if (!isValidId) {
+    res.status(400).json({ message: `${contactId} isn't a valid contactId!` });
     return;
   }
 
-  res.json({ message: "contact deleted" });
+  const deletedContact = await Contact.findByIdAndDelete(contactId);
+  res.json(deletedContact);
 };
 
-const updateContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
-
-  if (!result) {
-    res.status(404).json({ message: "Not found" });
+const updateContact = async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const isValidId = isValidObjectId(contactId);
+  if (!isValidId) {
+    res.status(400).json({ message: `${contactId} isn't a valid contactId!` });
     return;
   }
+
+  const body = req.body;
+  const { error } = addSchema.validate(body);
+
+  if (error) {
+    res.status(400).json({ message: "missing required name field" });
+    return;
+  }
+
+  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
+
+  res.json(updatedContact);
+};
+
+const updateContactFavorite = async (req, res) => {
+  const contactId = req.params.contactId;
+  const isValidId = isValidObjectId(contactId);
+  if (!isValidId) {
+    res.status(400).json({ message: `${contactId} isn't a valid contactId!` });
+    return;
+  }
+
+  const body = req.body;
+  const { error } = updateFavoriteSchema.validate(body);
+
+  if (error) {
+    res.status(400).json({ message: "missing required favourite field" });
+    return;
+  }
+
+  const result = await Contact.findByIdAndUpdate(contactId, body, {
+    new: true,
+  });
 
   res.json(result);
 };
 
 module.exports = {
-  listContacts,
+  getAllContacts,
   getContactById,
-  addContact,
-  removeContact,
+  createContact,
+  deleteContact,
   updateContact,
+  updateContactFavorite,
 };
