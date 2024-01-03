@@ -1,4 +1,4 @@
-const express = require("express");
+const { Router } = require("express");
 
 const ctrl = require('../../controllers/users/index.js');
 
@@ -6,7 +6,7 @@ const { validateBody, authenticate } = require('../../middlewares');
 
 const { schemas } = require('../../models/user.js');
 
-const router = express.Router();
+const router = Router();
 
 router.post("/users/register", validateBody(schemas.registerSchema), ctrl.register);
 

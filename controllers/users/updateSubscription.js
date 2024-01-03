@@ -3,16 +3,22 @@ const { User } = require("../../models/user.js");
 
 const updateSubscription = async (req, res) => {
   const { _id } = req.user;
+  const { subscription } = req.body;
 
-  if (!req.body) throw HttpError(400, "missing field subscription");
+  if (
+    !subscription ||
+    subscription !== "starter" &&
+      subscription !== "pro" &&
+      subscription !== "business"
+  ) throw HttpError(400, "missing field subscription");
 
-  const { email, subscription } = await User.findByIdAndUpdate(_id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  if (!email || !subscription) throw HttpError(404, "Not found");
+  const updateStatusUser= await User.findByIdAndUpdate(_id, {subscription});
+  if (!updateStatusUser) throw HttpError(404, "Not found");
 
-  res.status(201).json({ email, subscription });
+  res.status(201).json({ 
+    email: updateStatusUser.email, 
+    subscription: updateStatusUser.subscription,
+   });
 };
 
 module.exports = updateSubscription;

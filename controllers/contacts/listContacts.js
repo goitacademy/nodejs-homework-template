@@ -1,25 +1,19 @@
-const { Contact } = require("../../models");
+const Contact = require("../../models/contact.js");
+const { ctrlWrapper } = require('../../helpers');
 
 const listContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const searchParams = {
-    owner,
-  };
 
-  const { page = 1, limit = 20, favorite } = req.query;
+  const { page = 1, limit = 20, favorite = null } = req.query;
   const skip = (page - 1) * limit;
 
-  if (typeof favorite === "undefined") {
-    delete searchParams.favorite;
-  } else {
-    searchParams.favorite = favorite;
-  }
+  const filter = favorite === null ? { owner } : { favorite, owner };
 
-  const result = await Contact.find(searchParams, "-createdAt -updatedAt", {
+  const result = await Contact.find(filter, "", {
     skip,
     limit,
-  }).populate("owner", "email");
+  }).populate("owner", "email subscription");
   res.json(result);
 };
 
-module.exports = listContacts;
+module.exports = {listContacts: ctrlWrapper(listContacts)};
