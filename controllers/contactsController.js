@@ -52,16 +52,34 @@ const deleteContact = async (req, res, next) => {
 const updateContactById = async (req, res, next) => {
 	try {
 		const { id } = req.params;
+		const contact = await contacts.updateContact(id, req.body);
 
-		const result = await contacts.updateContact(id, req.body);
-		if (!result) {
-			throw HttpError(404, "Not found");
+		if (!contact) {
+			throw HttpError(404, `Not found`);
 		}
-		res.json(result);
+
+		res.status(200).json(contact);
 	} catch (error) {
 		next(error);
 	}
 };
+// const updateById = async (req, res, next) => {
+// 	try {
+// 		const { error } = movieUpdateSchema.validate(req.body);
+// 		if (error) {
+// 			throw HttpError(400, error.message);
+// 		}
+// 		const { id } = req.params;
+// 		const result = await moviesService.updateMovieById(id, req.body);
+// 		if (!result) {
+// 			throw HttpError(404, `Movie with id=${id} not found`);
+// 		}
+
+// 		res.json(result);
+// 	} catch (error) {
+// 		next(error);
+// 	}
+// };
 
 module.exports = {
 	getAllContacts,
