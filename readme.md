@@ -5,7 +5,30 @@
 npm install mongoose -S
 
 npm run start:dev
+
+
 ```
+
+const { DB_HOST } = process.env;
+// const { DB_HOST } = require("./config");
+
+//_ На ПК немає такого ключа (властивості), який ввели на render.com:
+console.log(process.env.DB_HOST);
+//_ Але з'являється, коли записуємо у файл '.env' (після встановлення пакету 'dotenv')
+
+Створимо файл `.env`:
+
+```js
+npm install dotenv
+```
+
+```
+DB_HOST=mongodb+srv://Roman80:rzAnXHy4cqIPbVBh@cluster0.qwko4cb.mongodb.net/db-contacts?retryWrites=true&w=majority
+PORT=3002
+```
+
+Можна відразу імпортувати і викликати:
+require('dotenv').config();
 
 **Express**:
 

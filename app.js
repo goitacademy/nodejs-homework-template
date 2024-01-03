@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+//* Можна відразу імпортувати і викликати:
+require("dotenv").config();
 
 const contactsRouter = require("./routes/api/contacts");
 
