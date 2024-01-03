@@ -4,6 +4,9 @@ const app = require("./app");
 
 const { DB_HOST } = require("./config");
 
+//* На ПК немає такого ключа (властивості), який ввели на render.com:
+console.log(process.env.DB_HOST);
+
 mongoose.set(`strictQuery`, true);
 
 mongoose
