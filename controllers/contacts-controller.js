@@ -8,13 +8,17 @@ import {
 
 const getAll = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, favorite } = req.query;
     const skip = (page - 1) * limit;
     const { _id: owner } = req.user;
-    const result = await Contact.find({ owner }, "-updatedAt", {
-      skip,
-      limit,
-    }).populate("owner", "email subscription");
+    const result = await Contact.find(
+      favorite ? { owner, favorite } : { owner },
+      "-updatedAt",
+      {
+        skip,
+        limit,
+      }
+    ).populate("owner", "email subscription");
     res.json(result);
   } catch (error) {
     next(error);
