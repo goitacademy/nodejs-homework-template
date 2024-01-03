@@ -10,14 +10,15 @@ const { JWT_SECRET } = process.env;
 const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (user) {
-      throw HttpError(409, "Email in use");
-    }
     const { error } = userRegisterSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
+    const user = await User.findOne({ email });
+    if (user) {
+      throw HttpError(409, "Email in use");
+    }
+
     const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = await User.create({ ...req.body, password: hashPassword });
@@ -35,11 +36,11 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
     const { error } = userLoginSchema.validate(req.body);
     if (error) {
       throw HttpError(400, error.message);
     }
+    const user = await User.findOne({ email });
     if (!user) {
       throw HttpError(401, "Email or password is wrong");
     }
