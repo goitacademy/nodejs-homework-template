@@ -55,14 +55,33 @@ const signIn = async (req, res) => {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '12h' });
+    await User.findByIdAndUpdate(id, {token})
 
     res.json({
         token,
     })
-}
+};
+
+const getCurrent = async (req, res) => {
+    const { email, subscription } = req.user;
+
+    res.json({
+        email,
+        subscription
+    });
+};
+
+const signOut = async (req, res) => {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" });
+
+    res.status(204).json();
+};
 
 
 export default {
     signUp: ctrlWrapper(signUp),
     signIn: ctrlWrapper(signIn),
+    getCurrent: ctrlWrapper(getCurrent),
+    signOut: ctrlWrapper(signOut),
 };
