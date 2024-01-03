@@ -30,6 +30,9 @@ PORT=3002
 Можна відразу імпортувати і викликати:
 require('dotenv').config();
 
+https://node-hw-rest-api.onrender.com/api/contacts
+https://localhost:3002/api/contacts
+
 **Express**:
 
 Опис: Express - це веб-фреймворк для розвитку додатків на мові JavaScript за допомогою Node.js. Він надає простий та ефективний спосіб створення веб-серверів та обробки HTTP-запитів.
