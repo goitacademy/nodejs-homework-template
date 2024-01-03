@@ -1,15 +1,33 @@
 const Joi = require("joi");
 
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required(),
+const contactAddSchema = Joi.object({
+  name: Joi.string().min(6).required().messages({
+    "string.base": "name must be a string",
+    "string.min": "name must be at least {#limit} characters long",
+    "any.required": "missing required name field",
+  }),
+  email: Joi.string().min(6).required().messages({
+    "string.base": "email must be a string",
+    "string.min": "email must be at least {#limit} characters long",
+    "any.required": "missing required email field",
+  }),
+  phone: Joi.string().min(6).required().messages({
+    "string.base": "phone must be a string",
+    "string.min": "phone must be at least {#limit} characters long",
+    "any.required": "missing required phone field",
+  }),
 });
 
-const contactSchemaUpd = Joi.object({
-  name: Joi.string(),
-  email: Joi.string(),
-  phone: Joi.string(),
+const contactUpdateSchema = Joi.object({
+  name: Joi.string().messages({
+    "any.required": "missing required name field",
+  }),
+  email: Joi.string().messages({
+    "any.required": "missing required email field",
+  }),
+  phone: Joi.string().messages({
+    "any.required": "missing required phone field",
+  }),
 });
 
-module.exports = { contactSchema, contactSchemaUpd };
+module.exports = { contactAddSchema, contactUpdateSchema };

@@ -2,11 +2,6 @@ const { HttpError, ctrlWrapper } = require("../utils/index");
 
 const contacts = require("../models/contacts");
 
-const {
-  contactSchema,
-  contactSchemaUpd,
-} = require("../contactsSchemas/contacts.js");
-
 const getAll = async (req, res) => {
   const rezult = await contacts.listContacts();
   if (!rezult) {
@@ -24,18 +19,8 @@ const getById = async (req, res) => {
   res.status(200).json(rezult);
 };
 
-const add = async (req, res) => {
+const add = async (req, res, next) => {
   const id = req.body;
-  const { error } = contactSchema.validate(req.body, {
-    abortEarly: false,
-  });
-
-  if (typeof error !== "undefined") {
-    return res
-      .status(400)
-      .send(error.details.map((err) => err.message).join(", "));
-  }
-
   const rezult = await contacts.addContact(id);
   if (!rezult) {
     throw HttpError(404, "Not found");
@@ -54,31 +39,14 @@ const deleteById = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { error } = contactSchemaUpd.validate(req.body, {
-    abortEarly: false,
-  });
-
   const value = req.body;
   const { contactId } = req.params;
-
-  if (isEmptyObject(value)) {
-    return res.status(400).json({ message: "missing fields" });
-  }
-  if (typeof error !== "undefined") {
-    return res
-      .status(400)
-      .send(error.details.map((err) => err.message).join(", "));
-  }
   const rezult = await contacts.updateContact(contactId, value);
   if (!rezult) {
     throw HttpError(404, "Not found");
   }
   return res.status(201).send(rezult);
 };
-
-function isEmptyObject(obj) {
-  return Object.keys(obj).length === 0;
-}
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
