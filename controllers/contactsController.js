@@ -1,10 +1,9 @@
-// const express = require("express");
-const models = require("../models");
 const HttpError = require("./helpers/error");
+const services = require("../services");
 
 exports.getAllContacts = async (req, res, next) => {
   try {
-    const result = await models.ContactModel.find({});
+    const result = await services.getAllContacts(req.query, req.user);
     return res.status(200).json(result);
   } catch (error) {
     next(error);
@@ -28,7 +27,7 @@ exports.postContact = async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
 
-    const result = await models.ContactModel.create({ name, email, phone });
+    const result = await models.ContactModel.create({ name, email, phone, owner: req.user });
 
     if (!result) {
       return HttpError(res, 404, "missing required name field");

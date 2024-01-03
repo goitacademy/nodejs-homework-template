@@ -7,16 +7,20 @@ const contactSchema = new Schema({
   },
   email: {
     type: String,
-    // required: true,
+
     unique: [true, "Duplicated email.."],
   },
   phone: {
     type: String,
-    // required: true,
   },
   favorite: {
     type: Boolean,
     default: false,
+  },
+
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
 });
 const ContactModel = model("contact", contactSchema);

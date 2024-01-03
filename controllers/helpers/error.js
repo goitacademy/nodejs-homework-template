@@ -1,5 +1,9 @@
-const HttpError = (res, status, errorMessage) => {
-  return res.status(status).json({ message: errorMessage });
-};
+class HttpError extends Error {
+  constructor(status, message, data = {}) {
+    super(message);
+    this.status = status;
+    this.data = data;
+  }
+}
 
 module.exports = HttpError;
