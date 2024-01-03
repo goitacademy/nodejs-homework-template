@@ -17,6 +17,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -31,7 +35,7 @@ export const addContactSchema = Joi.object({
   phone: Joi.string().required().messages({
     "any.required": "missing required phone field",
   }),
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean(),
 });
 
 export const updateContactSchema = Joi.object({

@@ -1,11 +1,15 @@
 import express from "express";
 import contactsController from "../../controllers/contacts-controller.js";
-import isEmptyBody from "../../middlewares/isEmptyBody.js";
-import isValidId from "../../middlewares/isValidId.js";
-import isEmptyBodyFav from "../../middlewares/isEmptyBodyFav.js";
+import {
+  authenticate,
+  isEmptyBody,
+  isValidId,
+  isEmptyBodyFav,
+} from "../../middlewares/index.js";
 
 const contactsRouter = express.Router();
 
+contactsRouter.use(authenticate);
 contactsRouter.get("/", contactsController.getAll);
 contactsRouter.post("/", isEmptyBody, contactsController.add);
 contactsRouter.get("/:id", isValidId, contactsController.getById);
