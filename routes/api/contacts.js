@@ -1,10 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const contacts = require('../../models/contacts')
+const { checkToken } = require('../../middlewares/userMiddlewares')
 // const { contactSchema } = require('../../models/contacts');
 // router.get("/", contacts.listContacts);
 
-
+router.use(checkToken)
+// router.use(checkToken, (req, res) => {
+//   res.json({ message: 'This route is protected!' });
+// });
 
 router.get('/', async (req, res, next) => {
   try {
