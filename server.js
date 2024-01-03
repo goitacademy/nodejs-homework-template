@@ -7,6 +7,7 @@ const { DB_HOST } = process.env;
 
 //* На ПК немає такого ключа (властивості), який ввели на render.com:
 console.log(process.env.DB_HOST);
+//* Але з'являється, коли записуємо у файл '.env' (після встановлення пакету 'dotenv')
 
 mongoose.set(`strictQuery`, true);
 

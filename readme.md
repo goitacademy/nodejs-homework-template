@@ -5,6 +5,19 @@
 npm install mongoose -S
 
 npm run start:dev
+
+
+```
+
+Створимо файл `.env`:
+
+```js
+npm install dotenv
+```
+
+```
+DB_HOST=mongodb+srv://Roman80:rzAnXHy4cqIPbVBh@cluster0.qwko4cb.mongodb.net/db-contacts?retryWrites=true&w=majority
+PORT=3002
 ```
 
 **Express**:
