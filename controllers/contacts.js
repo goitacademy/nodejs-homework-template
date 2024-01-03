@@ -45,7 +45,7 @@ const updateById = async (req, res) => {
   if (!rezult) {
     throw HttpError(404, "Not found");
   }
-  return res.status(201).send(rezult);
+  return res.status(200).send(rezult);
 };
 
 module.exports = {
