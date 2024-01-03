@@ -25,7 +25,7 @@ const add = async (req, res, next) => {
   if (!rezult) {
     throw HttpError(404, "Not found");
   }
-  return res.status(201).send(rezult);
+  return res.status(201).json(rezult);
 };
 
 const deleteById = async (req, res) => {
@@ -45,7 +45,7 @@ const updateById = async (req, res) => {
   if (!rezult) {
     throw HttpError(404, "Not found");
   }
-  return res.status(200).send(rezult);
+  return res.status(200).json(rezult);
 };
 
 module.exports = {

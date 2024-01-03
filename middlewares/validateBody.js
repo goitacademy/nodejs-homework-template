@@ -12,6 +12,7 @@ const validateBody = (schema) => {
       const errorMessages = error.details.map((err) => err.message);
       return res.status(400).json({ message: errorMessages.join(", ") });
     }
+    next();
   };
   return func;
 };
