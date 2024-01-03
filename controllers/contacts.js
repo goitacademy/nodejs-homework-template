@@ -1,32 +1,33 @@
 const contacts = require("../models/contacts");
-const { HttpError, ctrlWrapper } = require("../helpers");
+const { ctrlWrapper } = require("../helpers");
+// const { HttpError, ctrlWrapper } = require("../helpers");
 
-const Joi = require("joi");
+// const Joi = require("joi");
 
-const addShema = Joi.object({
-  name: Joi.string()
-    .min(3)
-    .max(30)
-    .required()
-    .messages({ "any.required": "missing required name field" }),
-  email: Joi.string()
-    .email()
-    .required()
-    .messages({ "any.required": "missing required email field" }),
-  phone: Joi.string()
-    .min(5)
-    .max(15)
-    .required()
-    .messages({ "any.required": "missing required phone field" }),
-});
+// const addShema = Joi.object({
+//   name: Joi.string()
+//     .min(3)
+//     .max(30)
+//     .required()
+//     .messages({ "any.required": "missing required name field" }),
+//   email: Joi.string()
+//     .email()
+//     .required()
+//     .messages({ "any.required": "missing required email field" }),
+//   phone: Joi.string()
+//     .min(5)
+//     .max(15)
+//     .required()
+//     .messages({ "any.required": "missing required phone field" }),
+// });
 
-const updateShema = Joi.object({
-  name: Joi.string().min(3).max(30),
-  email: Joi.string().email(),
-  phone: Joi.string().min(5).max(15),
-})
-  .min(1)
-  .messages({ "object.min": "missing fields" });
+// const updateShema = Joi.object({
+//   name: Joi.string().min(3).max(30),
+//   email: Joi.string().email(),
+//   phone: Joi.string().min(5).max(15),
+// })
+//   .min(1)
+//   .messages({ "object.min": "missing fields" });
 
 const listContacts = async (req, res) => {
   const result = await contacts.listContacts();
