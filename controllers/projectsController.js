@@ -24,7 +24,7 @@ exports.getAllProjects = catchAsync(async (req, res) => {
 });
 
 exports.getProjectById = catchAsync(async (req, res, next) => {
-  const project = await Projects.findById(req.params.id);
+  const project = await Projects.findById(req.params.id).populate('events');
 
   if (!project) return next(new AppError("No project with such id", 404));
 
