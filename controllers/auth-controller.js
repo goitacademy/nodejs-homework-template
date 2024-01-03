@@ -15,7 +15,7 @@ const signup = async (req, res, next) => {
             throw HttpError(400, error.message);
         }
 
-        const { email, password } = req.body;
+        const { email, password} = req.body;
         const user = await User.findOne({ email });
         if (user) {
             throw HttpError(409, "Email in use");
@@ -23,11 +23,11 @@ const signup = async (req, res, next) => {
 
         const hashPassword = await bcrypt.hash(password, 10)
         
-        const newUser = await User.create({ ...req.body, password: hashPassword });
-        res.json({
+        const newUser = await User.create({ ...req.body, password: hashPassword});
+        res.status(201).json({
             user: ({
                 email: newUser.email,
-            subscription: newUser.subscription
+                subscription: newUser.subscription
             })
             
         })
@@ -92,10 +92,7 @@ const signout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
 
-    res.json({
-        email,
-        subscription
-    })
+    res.status(204).json();
 }
     
 
