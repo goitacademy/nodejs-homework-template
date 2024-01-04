@@ -63,23 +63,6 @@ const updateContactById = async (req, res, next) => {
 		next(error);
 	}
 };
-// const updateById = async (req, res, next) => {
-// 	try {
-// 		const { error } = movieUpdateSchema.validate(req.body);
-// 		if (error) {
-// 			throw HttpError(400, error.message);
-// 		}
-// 		const { id } = req.params;
-// 		const result = await moviesService.updateMovieById(id, req.body);
-// 		if (!result) {
-// 			throw HttpError(404, `Movie with id=${id} not found`);
-// 		}
-
-// 		res.json(result);
-// 	} catch (error) {
-// 		next(error);
-// 	}
-// };
 
 module.exports = {
 	getAllContacts,
