@@ -20,12 +20,16 @@ router.get("/", authenticate, async (req, res, next) => {
 
 router.get("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
+  const user = req.user;
   const isValid = isValidObjectId(contactId);
   if (!isValid) {
     res.status(400).json({ message: `${contactId} isn't a valid id!` });
     return;
   }
-  const contact = await Contact.findById(contactId);
+  const contact = await Contact.findOne({
+    _id: contactId,
+    owner: user._id,
+  });
   if (!contact) {
     res.status(404).json({ message: "Not found" });
     return;
@@ -50,13 +54,17 @@ router.post("/", authenticate, async (req, res, next) => {
 
 router.delete("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
+  const user = req.user;
   const isValid = isValidObjectId(contactId);
   if (!isValid) {
     res.status(400).json({ message: `${contactId} isn't a valid id!` });
     return;
   }
 
-  const removedContact = await Contact.findByIdAndDelete(contactId);
+  const removedContact = await Contact.deleteOne({
+    _id: contactId,
+    owner: user._id,
+  });
   console.log(removedContact);
   if (!removedContact) {
     res.status(404).json({ message: "Not found" });
@@ -68,6 +76,7 @@ router.delete("/:contactId", authenticate, async (req, res, next) => {
 
 router.put("/:contactId", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
+  const user = req.user;
 
   const isValid = isValidObjectId(contactId);
   if (!isValid) {
@@ -85,9 +94,13 @@ router.put("/:contactId", authenticate, async (req, res, next) => {
     res.status(400).json({ message: error.details[0].message });
     return;
   }
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
-    new: true,
-  });
+  const updatedContact = await Contact.updateOne(
+    { _id: contactId, owner: user._id },
+    body,
+    {
+      new: true,
+    }
+  );
   if (!updatedContact) {
     res.status(404).json({ message: "Not found" });
     return;
@@ -97,6 +110,7 @@ router.put("/:contactId", authenticate, async (req, res, next) => {
 
 router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
   const contactId = req.params.contactId;
+  const user = req.user;
 
   const isValid = isValidObjectId(contactId);
   if (!isValid) {
@@ -114,9 +128,13 @@ router.patch("/:contactId/favorite", authenticate, async (req, res, next) => {
     res.status(400).json({ message: error.details[0].message });
     return;
   }
-  const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
-    new: true,
-  });
+  const updatedContact = await Contact.updateOne(
+    { _id: contactId, owner: user._id },
+    body,
+    {
+      new: true,
+    }
+  );
   if (!updatedContact) {
     res.status(404).json({ message: "Not found" });
     return;
