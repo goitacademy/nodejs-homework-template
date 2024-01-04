@@ -13,9 +13,7 @@ router.get("/:contactId", ContactsService.getContactById);
 
 router.post("/", validate(schema), ContactsService.addNewContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", ContactsService.deleteContact);
 
 router.put('/:contactId', async (req, res, next) => {
   res.json({ message: 'template message' })
