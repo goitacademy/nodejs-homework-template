@@ -45,13 +45,13 @@ const removeById = async (req, res, next) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(200, { message: "contact deleted" });
+  res.status(200).json({ message: "contact deleted" });
 };
 
 const updateById = async (req, res, next) => {
   const { error } = addSchema.validate(req.body);
   if (error) {
-    throw HttpError(400, { message: "missing fields" });
+    throw HttpError(400, "missing fields");
   }
   const { contactId } = req.params;
   const result = await updateContact(contactId, req.body);
