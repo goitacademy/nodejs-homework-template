@@ -1,12 +1,12 @@
 const User = require("../models/users.js");
 const Joi = require("joi");
 const { PASSWD_REGEX } = require("../constats/regex.js");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 // const { registrationSchema } = require("../routes/api/users.js");
 const bcrypt = require("bcrypt");
 const { promisify } = require("util");
 
-const verifyToken = promisify(jwt.verify)
+const verifyToken = promisify(jwt.verify);
 
 const registrationSchema = Joi.object({
   email: Joi.string().required().email(),
@@ -21,22 +21,24 @@ exports.userMiddleware = async (req, res, next) => {
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-    
+
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(409).json({ message: "email in use" });
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     const newUser = new User({
       email,
       password: hashedPassword,
       subscription: "starter",
     });
     const savedUser = await newUser.save();
-    
-    const token = jwt.sign({ userId: savedUser.id }, secKey, { expiresIn: "1d" });
+
+    const token = jwt.sign({ userId: savedUser.id }, secKey, {
+      expiresIn: "1d",
+    });
     savedUser.token = token;
     await savedUser.save();
     res.status(201).json({
@@ -72,10 +74,10 @@ exports.loginMiddleware = async (req, res, next) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Email or password is wrong" });
     }
-
     const token = jwt.sign({ userId: user.id }, secKey, { expiresIn: "1d" });
     user.token = token;
     await user.save();
+    console.log(user);
 
     res.status(200).json({
       token,
@@ -91,49 +93,59 @@ exports.loginMiddleware = async (req, res, next) => {
   }
 };
 
-
 exports.checkToken = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.startsWith('Bearer ') && req.headers.authorization.split(' ')[1];
-    if(!token) {
-      return res.status(401).json({ message: 'not authorize'})
+    const token =
+      req.headers.authorization?.startsWith("Bearer ") &&
+      req.headers.authorization.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "not authorize" });
     }
-    const decoded = await verifyToken(token, secKey);
+    const decoded = await jwt.verify(token, secKey);
 
-    const user = await User.findById(decoded.id)
+    const user = await User.findById(decoded.id);
 
-    if(!user || token !== user.token) {
-      return res.status(401).json({ message: 'not authorize'})
+    if (!user || token !== user.token) {
+      return res.status(401).json({ message: "not authorize" });
     }
-req.user = decoded.user
-next()
-
+    console.log(user);
+    req.user = { email: user.email, subscription: user.subscription };
+    next();
   } catch (error) {
-    return res.status(401).json({ message: 'Not authorized' });
+    return res.status(401).json({ message: "Not authorized" });
   }
-}
+};
 
+exports.currentUser = async (req, res, next) => {
+  try {
+    const currentUserData = {
+      email: req.user.email,
+      subscription: req.user.subscription,
+    };
+
+    res.status(200).json(currentUserData);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 exports.logoutMiddleware = async (req, res, next) => {
   try {
+    console.log(req.user.id);
     const userId = req.user.id;
 
     const user = await User.findById(userId);
-    if(!user) {
-      return res.status(401).json({ message: 'not authorize'})
+    if (!user) {
+      console.log(userId);
+      return res.status(401).json({ message: "not authorize" });
     }
-   user.token = null;
+    user.token = null;
 
-   await user.save();
-   
+    await user.save();
+
     res.status(201).send();
   } catch (error) {
-    return res.status(500).json({ message: 'Internal Server Error' });
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-}
-
-exports.currentUser = async (req, res, next) => {
-  res.status(200).json({
-    msg: 'Success',
-    user: req.user,
-  })
-}
+};
