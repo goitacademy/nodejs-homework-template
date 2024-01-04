@@ -46,18 +46,30 @@ const deleteContact = async (req, res, next) => {
     next(error);
   }
 };
+
 const updateContactId = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const updateContact = await ContactsService.updateContact(id, req.body); 
+    const { contactId } = req.params;
+
+    if (Object.keys(req.body).length === 0) {
+      throw new HttpError(400, `missing fields`);
+    }
+
+    const updateContact = await ContactsService.updateContact(
+      contactId,
+      req.body
+    );
+
     if (!updateContact) {
       throw new HttpError(404, `Not found`);
     }
+
     res.status(200).json(updateContact);
   } catch (error) {
     next(error);
   }
 };
+
 module.exports = {
   getAllContacts,
   getContactById,
