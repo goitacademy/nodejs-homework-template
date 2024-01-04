@@ -48,11 +48,11 @@ exports.signup = async (data) => {
 exports.login = async ({ email, password }) => {
   const user = await User.findOne({ email }).select("+password");
 
-  if (!user) throw new HttpError(401, "Not Found");
+  if (!user) HttpError(401, "Not Found");
 
   const passwordIsValued = await user.checkPassword(password, user.password);
 
-  if (!passwordIsValued) throw new HttpError(401, "dont work");
+  if (!passwordIsValued) throw HttpError(401, "dont work");
 
   user.password = undefined; // delete password
   const token = singToken(user.id);

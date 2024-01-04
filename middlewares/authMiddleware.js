@@ -2,7 +2,10 @@
 // const shema = require("../Shema");
 const { userServices, jwtService } = require("../services");
 const { contactSchema } = require("../Shema");
-const { signupSchemaValidation } = require("../Shema/shema");
+const {
+  signupSchemaValidation,
+  loginSchemaValidation,
+} = require("../Shema/shema");
 
 // ----------------------------------------------------------------
 const checkSing = async (req, res, next) => {
@@ -22,7 +25,7 @@ const checkLogin = async (req, res, next) => {
   console.log("================================================");
   console.log(req.body);
   console.log("================================================");
-  const { value, error } = loginSchemaValidation(req.body);
+  const { value, error } = loginSchemaValidation.validate(req.body);
   if (error) throw new Error(401, "Invalid user data");
   // проверяем есть ли пользователь в базе
   req.body = value;
@@ -45,4 +48,5 @@ const protect = async (req, res, next) => {
 module.exports = {
   checkSing,
   checkLogin,
+  protect,
 };
