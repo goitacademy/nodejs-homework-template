@@ -45,12 +45,23 @@ const deleteContact = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-
-
+};
+const updateContactId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updateContact = await ContactsService.updateContact(id, req.body); 
+    if (!updateContact) {
+      throw new HttpError(404, `Not found`);
+    }
+    res.status(200).json(updateContact);
+  } catch (error) {
+    next(error);
+  }
 };
 module.exports = {
   getAllContacts,
   getContactById,
   addNewContact,
   deleteContact,
+  updateContactId,
 };

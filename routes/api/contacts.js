@@ -15,8 +15,6 @@ router.post("/", validate(schema), ContactsService.addNewContact);
 
 router.delete("/:contactId", ContactsService.deleteContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:contactId", validate(schema), ContactsService.updateContactId);
 
 module.exports = router

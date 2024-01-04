@@ -84,7 +84,6 @@ const updateContact = async (id, body) => {
     throw new Error(`Error updating contact: ${error.message}`);
   }
 };
-
 module.exports = {
   listContacts,
   getContactById,
