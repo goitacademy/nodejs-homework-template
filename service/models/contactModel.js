@@ -1,11 +1,11 @@
-const {Schema, model} = require('mongoose');
+const {Schema, model, Types} = require('mongoose');
 const { regexp } = require('../../vars');
 
 const contactSchema = new Schema(
     {
         name: {
             type: String,
-            require: [true, 'Set name for contact'],
+            required: [true, 'Set name for contact'],
         },
         email: {
             type: String,
@@ -13,15 +13,20 @@ const contactSchema = new Schema(
         },
         phone: {
             type: String,
-            require: true,
+            required: true,
             match: regexp.phone,
         },
         favorite: {
             type: Boolean,
             default: false,
         },
+        owner: {
+            type: Types.ObjectId,
+            ref: 'user',
+            required: true,
+        },
     },
     { versionKey: false }
 );
 
-exports.ContactModel = model('contact', contactSchema)
+exports.Contact = model('contact', contactSchema)
