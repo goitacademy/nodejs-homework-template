@@ -14,14 +14,9 @@ const config = {
 
 const transporter = nodemailer.createTransport(config);
 
-const email = {
-    from: UKR_NET_EMAIL,
-    to: 'natif44891@vasteron.com',
-    subject: 'Test email',
-    html: '<strong>Test email</strong> from Nodemailer!',
+const sendEmail = async data => {
+    const email = { ...data, from: UKR_NET_EMAIL };
+    return transporter.sendMail(email);
 };
 
-transporter
-    .sendMail(email)
-    .then(() => console.log('Email send success'))
-    .catch(error => console.log(error.message));
+module.exports = sendEmail;

@@ -6,5 +6,3 @@ const handleResizeAvatar = async pathToImg => {
 };
 
 module.exports = handleResizeAvatar;
-
-// Jimp.read('./path/to/image.jpg');
