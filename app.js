@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 
 require("dotenv").config();
 
-const contactsRouter = require("./routes/api/contacts");
+const authRouter = require("./routes/api/authRoute");
+const contactsRouter = require("./routes/api/contactsRoute");
 const { addSchema, updateSchema, updateStatusSchema } = require("./middlewares/validateContacts");
 
 const app = express();
@@ -17,7 +18,7 @@ mongoose
   })
   .catch((error) => {
     console.log(error);
-    process.exit(1); //should refactoring code to async/awate
+    process.exit(1); // should refactoring code to async/awate
   });
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -26,31 +27,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  if (req.method === "POST") {
-    const validateResult = addSchema.validate(req.body);
-    if (validateResult.error) {
-      return res.status(400).json({ message: validateResult.error });
-    }
-  } else if (req.method === "PUT") {
-    const validateResult = updateSchema.validate(req.body);
-    if (validateResult.error) {
-      return res.status(400).json({ message: validateResult.error });
-    }
-  }
-  next();
-});
-
-app.use((req, res, next) => {
-  if (req.method === "PATCH") {
-    const validateResult = updateStatusSchema.validate(req.body);
-    if (validateResult.error) {
-      return res.status(400).json({ message: validateResult.error });
-    }
-  }
-  next();
-});
-
+app.use("/api/users", authRouter);
 app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
