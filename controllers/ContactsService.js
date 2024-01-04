@@ -38,8 +38,8 @@ const deleteContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const deletedContact = await ContactsService.removeContact(contactId);
-    if (deletedContact) {
-      res.status(404).json({ message: "Not found" });
+    if (!deletedContact) {
+      return res.status(404).json({ message: "Not found" });
     }
      res.status(200).json({ message: "contact deleted" });
   } catch (error) {
