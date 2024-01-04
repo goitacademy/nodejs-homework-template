@@ -10,6 +10,31 @@ const getAllContacts = async (req, res, next) => {
   }
 };
 
+const getContactById = async (req, res, next) => {
+  try {
+    const { contactId } = req.params;
+    const contact = await ContactsService.getContactById(contactId);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    res.status(200).json(contact);
+  } catch (error) {
+     next(error);
+  }
+  
+};
+
+const addNewContact = async (req, res, next) => {
+  try {
+    const newContact = await ContactsService.addContact(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
+  }
+  
+}
 module.exports = {
   getAllContacts,
+  getContactById,
+  addNewContact,
 };

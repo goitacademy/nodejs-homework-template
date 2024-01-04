@@ -7,7 +7,7 @@ const contactsPath = path.resolve(__dirname, "contacts.json");
 
 const readFile = async () => {
   try {
-    const data = await fs.readFile(contactsPath(), { encoding: "utf-8" });
+    const data = await fs.readFile(contactsPath, { encoding: "utf-8" });
     return JSON.parse(data);
   } catch (error) {
     throw new Error(`Error reading contacts: ${error.message}`);
@@ -16,7 +16,7 @@ const readFile = async () => {
 
 const writeFile = async (contacts) => {
   try {
-    await fs.writeFile(contactsPath(), JSON.stringify(contacts, null, 2));
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   } catch (error) {
     throw new Error(`Error reading contacts: ${error.message}`);
   }
