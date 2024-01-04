@@ -9,21 +9,26 @@ const listContacts = async (_, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId).select("-updatedAt");
+  const result = await Contact.findById(contactId).select(
+    "-createdAt -updatedAt"
+  );
   if (!result) throw HttpError(404, "Not found");
   res.json(result);
 };
 
 const addContact = async (req, res) => {
   const result = await Contact.create(req.body);
-  res.status(201).json(result);
+  const updatedResult = await Contact.findById(result._id).select(
+    "-createdAt -updatedAt"
+  );
+  res.status(201).json(updatedResult);
 };
 
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
-  });
+  }).select("-createdAt -updatedAt");
   if (!result) throw HttpError(404, "Not found");
   res.json(result);
 };
@@ -32,7 +37,7 @@ const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
     new: true,
-  }).select("-updatedAt");
+  }).select("-createdAt -updatedAt");
   if (!result) throw HttpError(404, "Not found");
   res.json(result);
 };
