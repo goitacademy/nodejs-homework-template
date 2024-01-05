@@ -9,6 +9,7 @@ const registerUser = catchAsync(async (req, res) => {
 		user: {
 			email: user.email,
 			subscription: user.subscription || 'started',
+			avatar: user.avatar,
 		},
 	})
 });
@@ -22,7 +23,7 @@ const loginUser = catchAsync(async (req, res) => {
 		user: {
 			email: user.email,
 			subscription: user.subscription || 'started',
-		},
+		}
 	})
 
 });
@@ -56,6 +57,15 @@ const updateSub = (req, res) => {
 	})
 }
 
+const updateAvatar = catchAsync(async (req, res) => {
+	const updateUser = await userServise.updateMe(req.body, req.user, req.file);
+
+	res.status(200).json({
+		'massage': 'success',
+		'avatarURL': updateUser.avatar,
+	})
+})
+
 
 
 
@@ -68,4 +78,5 @@ module.exports = {
 	getMy,
 	logOut,
 	updateSub,
+	updateAvatar,
 }

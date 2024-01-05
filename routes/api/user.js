@@ -10,5 +10,5 @@ router.post('/login', userAuthMiddlewares.checkLoginUserData, userController.log
 router.post('/logout', userAuthMiddlewares.protect, userController.logOut);
 router.get('/current', userAuthMiddlewares.protect, userController.getMy);
 router.patch('/', userAuthMiddlewares.protect, userController.updateSub);
-
+router.patch('/avatar', userAuthMiddlewares.protect, userAuthMiddlewares.uploadAvatar, userController.updateAvatar);
 module.exports = router

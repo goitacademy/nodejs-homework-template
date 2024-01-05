@@ -36,13 +36,13 @@ mongoose
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 app.use('/api/user', userRouter);
 app.use('/api/contacts', contactsRouter);
 
 app.use((err, req, res, next) => {
   res.status(err.status ?? 500).json({ message: err.message });
-  console.log(err);
 })
 
 app.all('*', (req, res) => {

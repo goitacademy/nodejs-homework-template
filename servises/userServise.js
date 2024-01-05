@@ -1,6 +1,7 @@
 const { registerToken } = require('./jwtServise');
 const Users = require('../models/userModel');
 const { HttpError } = require('../utils');
+const ImageService = require('./imageServise');
 
 
 
@@ -50,3 +51,24 @@ exports.checkContactExist = async (status) => {
 	if (userExists) throw new HttpError(409, 'User Exists');
 }
 
+exports.updateMe = async (userData, user, file) => {
+	if (file) {
+		user.avatar = await ImageService.saveImage(
+			file,
+			{ maxFileSize: 1.2, width: 250, height: 250 },
+			'avatar',
+			'users',
+			user.id,
+		);
+	}
+	// console.log(user.avatar);
+	// console.log(userData);
+	// console.log(user);
+
+
+	Object.keys(userData).forEach((key) => {
+		user[key] = userData[key];
+	});
+
+	return await Users.findByIdAndUpdate(user.id, { avatar: user.avatar }, { new: true });
+};
