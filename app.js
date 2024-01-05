@@ -38,7 +38,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-app.use('/api/user', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/contacts', contactsRouter);
 
 app.use((err, req, res, next) => {
