@@ -11,8 +11,12 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "joi": "^17.11.0",
+    "mongoose": "^8.0.3",
+    "morgan": "1.10.0",
+    "nanoid": "^3.3.4"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -22,5 +26,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Realizează un fork al acestui repozitoriu pentru a îndeplini temele de acasă (2-6). Fork-ul va crea un repozitoriu pe contul tău de pe http://github.com",
+  "main": ".eslintrc.js",
+  "author": "",
+  "license": "ISC"
 }
