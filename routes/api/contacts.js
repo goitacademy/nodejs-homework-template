@@ -9,13 +9,24 @@ router.get("/", async (req, res, next) => {
     console.log(contacts);
     res.status(200).json(contacts);
   } catch (error) {
-    console.log("error here");
+    console.log("Error here");
     next(error);
   }
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const { contactId } = req.params;
+    const contact = await contactsFoo.getContactById(contactId);
+    if (contact) {
+      console.log(contact);
+      res.status(200).json(contact);
+    }
+    res.status(404).json({ message: "Not found" });
+  } catch (error) {
+    console.log("Error here");
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
