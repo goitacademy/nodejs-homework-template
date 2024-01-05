@@ -1,44 +1,40 @@
-import path from "path";
-
-import { v4 as uuidv4 } from "uuid";
-
-import fs from "fs/promises";
-
-const contactsPath = path.join(process.cwd(), "contacts.json");
+import Contact from "./contactModel.js";
 
 const listContacts = async () => {
-	const data = await fs.readFile(contactsPath, "utf-8");
-	return JSON.parse(data);
+	return Contact.find();
 };
 
 const getContactById = async (contactId) => {
-	const contacts = await listContacts();
-	const contact = contacts.find((c) => c.id === contactId);
-	return contact;
+	return Contact.findById(contactId);
 };
 
 const removeContact = async (contactId) => {
-	const contacts = await listContacts();
-	const updatedContacts = contacts.filter((c) => c.id !== contactId);
-	await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
+	return Contact.findByIdAndDelete(contactId);
 };
 
 const addContact = async (body) => {
-	const contacts = await listContacts();
-	const newContact = { id: uuidv4(), ...body };
-	contacts.push(newContact);
-	await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-	return newContact;
+	return Contact.create(body);
 };
 
 const updateContact = async (contactId, body) => {
-	const contacts = await listContacts();
-	const index = contacts.findIndex((c) => c.id === contactId);
+	return Contact.findByIdAndUpdate(contactId, body, { new: true });
+};
 
-	if (index !== -1) {
-		contacts[index] = { ...contacts[index], ...body };
-		await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-		return contacts[index];
+const updateStatusContact = async (contactId, body) => {
+	const { favorite } = body;
+
+	if (favorite === undefined) {
+		throw new Error("missing field favorite");
+	}
+
+	const contact = await Contact.findByIdAndUpdate(
+		contactId,
+		{ favorite },
+		{ new: true }
+	);
+
+	if (contact) {
+		return contact;
 	} else {
 		throw new Error("Not found");
 	}
@@ -50,4 +46,5 @@ export {
 	removeContact,
 	addContact,
 	updateContact,
+	updateStatusContact,
 };
