@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const schema = Joi.object({
   name: Joi.string().alphanum().min(2).max(30).required(),
@@ -14,4 +14,4 @@ const validation = (req, res, next) => {
   next();
 };
 
-module.exports = validation;
+export { validation };

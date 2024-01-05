@@ -1,7 +1,7 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { v4: uuidv4 } = require("uuid"); //ID generator (instead of nanoid)
-const contactsPath = path.join(__dirname, "contacts.json");
+import { promises as fs } from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid"; //ID generator (instead of nanoid)
+const contactsPath = path.join(process.cwd(), "db", "contacts.json");
 
 const listContacts = async () => {
   const contacts = await fs.readFile(contactsPath);
@@ -65,7 +65,7 @@ const updateContact = async (contactId, { name, email, phone }) => {
   }
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,

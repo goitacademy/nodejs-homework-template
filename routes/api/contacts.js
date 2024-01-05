@@ -1,15 +1,15 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
 
-const {
+import {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-} = require("../../models/contacts");
+} from "../../models/contacts.js";
 
-const validation = require("../../validation/validation");
+import { validation } from "../../validation/validation.js";
 
 router.get("/", async (req, res, next) => {
   try {
@@ -73,4 +73,4 @@ router.put("/:contactId", validation, async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export { router as contactsRouter };
