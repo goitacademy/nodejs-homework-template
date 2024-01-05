@@ -1,6 +1,6 @@
-const { model, Shema } = require("mongoose");
+const { model, Schema } = require("mongoose");
 
-const contactShema = new Shema({
+const contactShema = new Schema({
   name: {
     type: String,
     required: [true, "Set name for contact"],

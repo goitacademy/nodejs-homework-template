@@ -3,6 +3,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
@@ -18,7 +20,7 @@ require("dotenv").config();
 app.use("/api/contacts", contactsRouter);
 
 //========================mongo========================================
-mongoose.connect(process.env.MONGO_URL).then(() => {
+mongoose.connect(process.env.MONGODB_URL).then(() => {
   try {
     console.log("mongo db connection");
   } catch (error) {

@@ -2,31 +2,27 @@ const contacts = require("../models/contacts");
 const { contactSchema } = require("../Shema/shema");
 const { HttpError } = require("../Helpers/HttpError");
 const decorarot = require("../Helpers/decorator");
+const Contact = require("../model/contactModel");
+const shema = require("../Shema/shema");
 //======================getAll==========================
 const getAll = async (req, res, next) => {
-  const allContacts = await contacts.listContacts();
-  console.log(allContacts);
-  res.status(200).json(allContacts);
+  // for user pawword   const contacts = await Contact.find().select('-password');
+  const contacts = await Contact.find();
+  res.status(200).json(contacts);
 };
 
 //========================getID========================
 const getID = async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await contacts.getContactById(contactId);
-  if (contact === null) {
-    res.status(404).json({ message: "missing required name field" });
-  }
-  res.status(200).json(contact);
-  console.log(contact);
+  const contact = await Contact.findById(req.params.id);
+  console.log("work controllers");
+
+  res.status(200).json({ msg: "Id contact", contact });
 };
 
-//=======================post=========================
+//=======================create=========================
 const post = async (req, res, next) => {
-  const newContact = await contacts.addContact(req.body);
-  if (newContact === null) {
-    res.status(400).json({ message: "missing required name field" });
-    new Error(400, message);
-  }
+  const newContact = await Contact.create(req.body);
+  // just for password  newUser.password = undefined
   res.status(201).json(newContact);
 };
 
