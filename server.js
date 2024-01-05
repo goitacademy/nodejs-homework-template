@@ -1,16 +1,19 @@
 const app = require("./app");
 
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
 
-dotenv.config({
-  path: process.env.NODE_ENV === "production" ? "./envs/p" : "./envs/dev.env",
-});
+// dotenv.config({
+//   path: process.env.NODE_ENV === "production" ? "./envs/p" : "./envs/dev.env",
+// });
+
+const DB_HOST =
+  "mongodb+srv://Den:ddLNYiDyVhQMsDgg@cluster0.yotpivk.mongodb.net/";
 
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(process.env.DB_HOST)
+  .connect(DB_HOST)
   .then(() => {
     app.listen(3000);
   })
