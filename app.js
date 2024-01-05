@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const contactsRouter = require('./routes/api/contacts');
 const usersRouter = require('./routes/api/users');
-const authMiddleware = require('./middlewares/authMiddleware');
 
 
 const app = express();
@@ -39,8 +38,6 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// Middleware for checking the token
-app.use(authMiddleware);
 
 app.use('/api/contacts', contactsRouter);
 app.use('/api/users', usersRouter);

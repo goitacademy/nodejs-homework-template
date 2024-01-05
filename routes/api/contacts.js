@@ -2,6 +2,10 @@ const express = require('express');
 const router = express.Router();
 const Contact = require('../../models/contacts');
 
+const authMiddleware = require('../../middlewares/authMiddleware');
+
+router.use(authMiddleware);
+
 router.get('/', async (req, res) => {
   try {
     const contacts = await Contact.find({ owner: req.user._id });
