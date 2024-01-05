@@ -9,10 +9,28 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
-    "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "@naholyr/cross-env": "^1.0.0",
+    "@types/http-errors": "^2.0.4",
+    "add": "^2.0.6",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "busboy": "^1.6.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "fa-icons": "^0.2.0",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.0.3",
+    "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "process-env": "^2.0.2",
+    "reaact": "^0.0.1-security",
+    "react-fa": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
