@@ -31,6 +31,15 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
     },
+    verify: {
+      type: Boolean, // чи підтвердила людина емаіл
+      default: false, // по замовчуванню зареєструвалася, але емаіл ще не підтвердила
+    },
+    verificationToken: {
+      type: String,
+      default: "",
+      //required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -45,6 +54,10 @@ const registerSchema = Joi.object({
   token: Joi.string(),
 });
 
+const EmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 // дані, які приходять з фронтенду для авторизації
 const loginSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
@@ -54,6 +67,7 @@ const loginSchema = Joi.object({
 const schemas = {
   registerSchema,
   loginSchema,
+  EmailSchema,
 };
 
 const User = model("user", userSchema);
