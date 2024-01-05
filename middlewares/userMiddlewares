@@ -2,18 +2,14 @@ const User = require("../models/users.js");
 const Joi = require("joi");
 const { PASSWD_REGEX } = require("../constats/regex.js");
 const jwt = require("jsonwebtoken");
-// const { registrationSchema } = require("../routes/api/users.js");
 const bcrypt = require("bcrypt");
-const { promisify } = require("util");
 
-const verifyToken = promisify(jwt.verify);
+const secKey = process.env.JWT_SECRET;
 
 const registrationSchema = Joi.object({
   email: Joi.string().required().email(),
   password: Joi.string().regex(PASSWD_REGEX).required(),
 });
-const secKey = process.env.JWT_SECRET;
-
 exports.userMiddleware = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -46,7 +42,6 @@ exports.userMiddleware = async (req, res, next) => {
     });
   } catch (error) {
     console.error(error.message);
-
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -74,11 +69,10 @@ exports.loginMiddleware = async (req, res, next) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Email or password is wrong" });
     }
-    const token = jwt.sign({ userId: user.id }, secKey, { expiresIn: "1d" });
+    const token = jwt.sign({ userId: user.id }, secKey, { expiresIn: 100000 });
     user.token = token;
     await user.save();
-    console.log(user);
-
+    user.password = undefined;
     res.status(200).json({
       token,
       user: {
@@ -88,37 +82,42 @@ exports.loginMiddleware = async (req, res, next) => {
     });
   } catch (error) {
     console.error(error.message);
-
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 exports.checkToken = async (req, res, next) => {
   try {
-    const token =
-      req.headers.authorization?.startsWith("Bearer ") &&
-      req.headers.authorization.split(" ")[1];
-
+    const { authorization = "" } = req.headers;
+    const [bearer, token] = authorization.split(" ");
+    console.log(token);
     if (!token) {
       return res.status(401).json({ message: "not authorize" });
     }
     const decoded = await jwt.verify(token, secKey);
+    console.log('qwe', decoded, bearer)
 
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(decoded.userId);
 
     if (!user || token !== user.token) {
+      console.log("Invalid token or user not found");
       return res.status(401).json({ message: "not authorize" });
     }
-    console.log(user);
-    req.user = { email: user.email, subscription: user.subscription };
+    req.user = user;
     next();
   } catch (error) {
+    console.error("Error in checkToken:", error.message);
     return res.status(401).json({ message: "Not authorized" });
   }
 };
 
 exports.currentUser = async (req, res, next) => {
   try {
+    if (!req.user || !req.user.email || !req.user.subscription) {
+      console.log("Invalid user data", req.user);
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
     const currentUserData = {
       email: req.user.email,
       subscription: req.user.subscription,
@@ -126,19 +125,19 @@ exports.currentUser = async (req, res, next) => {
 
     res.status(200).json(currentUserData);
   } catch (error) {
-    console.error(error.message);
-    res.status(500).json({ message: 'Internal Server Error' });
+    console.error("Error in currentUser:", error.message);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 exports.logoutMiddleware = async (req, res, next) => {
   try {
-    console.log(req.user.id);
+    console.log("Logout user ID:", req.user.id);
     const userId = req.user.id;
-
     const user = await User.findById(userId);
     if (!user) {
-      console.log(userId);
-      return res.status(401).json({ message: "not authorize" });
+      console.log("User not found for logout");
+      return res.status(401).json({ message: "NOT authorize" });
     }
     user.token = null;
 
@@ -146,6 +145,7 @@ exports.logoutMiddleware = async (req, res, next) => {
 
     res.status(201).send();
   } catch (error) {
+    console.error("Error in logoutMiddleware:", error.message);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };

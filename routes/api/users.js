@@ -8,7 +8,7 @@ const { loginMiddleware } = require('../../middlewares/userMiddlewares');
 router.post('/register', userMiddleware)
 router.post('/login', loginMiddleware)
 router.post('/logout', checkToken, logoutMiddleware)
-router.get('/current', currentUser)
+router.get('/current', checkToken, currentUser)
 
 module.exports = router
    
