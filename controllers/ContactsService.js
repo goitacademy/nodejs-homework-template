@@ -6,7 +6,7 @@ const getAllContacts = async (req, res, next) => {
     const result = await ContactsService.listContacts();
     res.json(result);
   } catch (error) {
-    next(new HttpError(500, `Error fetching contacts: ${error.message}`));
+     next(error);
   }
 };
 
@@ -15,7 +15,7 @@ const getContactById = async (req, res, next) => {
     const { contactId } = req.params;
     const contact = await ContactsService.getContactById(contactId);
     if (!contact) {
-      return res.status(404).json({ message: "Not found" });
+      throw HttpError(404, `Not found`);
     }
     res.status(200).json(contact);
   } catch (error) {
@@ -39,7 +39,7 @@ const deleteContact = async (req, res, next) => {
     const { contactId } = req.params;
     const deletedContact = await ContactsService.removeContact(contactId);
     if (!deletedContact) {
-      return res.status(404).json({ message: "Not found" });
+      throw HttpError(404, `Not found`);
     }
      res.status(200).json({ message: "contact deleted" });
   } catch (error) {
@@ -50,21 +50,15 @@ const deleteContact = async (req, res, next) => {
 const updateContactId = async (req, res, next) => {
   try {
     const { contactId } = req.params;
+    const { body } = req;
 
-    if (Object.keys(req.body).length === 0) {
-      throw new HttpError(400, `missing fields`);
+    const updatedContact = await ContactsService.updateContact(contactId, body);
+
+    if (!updatedContact) {
+      throw new HttpError(404, "Not found");
     }
 
-    const updateContact = await ContactsService.updateContact(
-      contactId,
-      req.body
-    );
-
-    if (!updateContact) {
-      throw new HttpError(404, `Not found`);
-    }
-
-    res.status(200).json(updateContact);
+    res.status(200).json(updatedContact);
   } catch (error) {
     next(error);
   }
