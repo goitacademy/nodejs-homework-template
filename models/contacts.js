@@ -1,12 +1,8 @@
-const fs = require("fs/promises");
-const path = require("path");
-
-const contactsPath = path.join(__dirname, "contacts.json");
+const Contact = require("../service/schemas/contact");
 
 const readContacts = async () => {
   try {
-    const contactsData = await fs.readFile(contactsPath, "utf-8");
-    return JSON.parse(contactsData);
+    return Contact.find();
   } catch (error) {
     console.error(error.message);
     return [];
@@ -15,58 +11,85 @@ const readContacts = async () => {
 
 const writeContacts = async (contacts) => {
   try {
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(contacts, null, 2),
-      "utf-8"
-    );
+    await Contact.insertMany(contacts);
   } catch (error) {
     console.error(error.message);
   }
 };
 
-const listContacts = async () => {
-  return await readContacts();
-};
-
 const getById = async (id) => {
-  const contacts = await readContacts();
-  return contacts.find((contact) => contact.id === id);
+  try {
+    return await Contact.findById(id);
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  }
 };
 
 const removeContact = async (id) => {
-  const contacts = await readContacts();
-  const updatedContacts = contacts.filter((contact) => contact.id !== id);
-  if (contacts.length !== updatedContacts.length) {
-    await writeContacts(updatedContacts);
-    return true;
+  try {
+    const result = await Contact.deleteOne({ _id: id });
+    return result.deletedCount > 0;
+  } catch (error) {
+    console.error(error.message);
+    return false;
   }
-  return false;
 };
 
 const addContact = async ({ name, email, phone }) => {
-  const contacts = await readContacts();
-  const newContact = { id: Date.now().toString(), name, email, phone };
-  contacts.push(newContact);
-  await writeContacts(contacts);
-  return newContact;
+  const newContact = new Contact({ name, email, phone });
+  try {
+    await newContact.save();
+    return newContact;
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  }
 };
 
 const updateContact = async (id, { name, email, phone }) => {
-  const contacts = await readContacts();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  if (index !== -1) {
-    contacts[index] = { ...contacts[index], name, email, phone };
-    await writeContacts(contacts);
-    return contacts[index];
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      id,
+      { name, email, phone },
+      { new: true }
+    );
+    return updatedContact;
+  } catch (error) {
+    console.error(error.message);
+    return null;
   }
-  return null;
+};
+
+const updateStatusContact = async (contactId, favorite) => {
+  try {
+    const contact = await Contact.findById(contactId);
+
+    if (!contact) {
+      return null;
+    }
+
+    if (favorite !== undefined) {
+      contact.favorite = favorite;
+    } else {
+      return { message: "missing field favorite" };
+    }
+
+    await contact.save();
+
+    return contact;
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  }
 };
 
 module.exports = {
-  listContacts,
+  readContacts,
+  writeContacts,
   getById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 };
