@@ -40,10 +40,32 @@ const deletebyId = async (req, res) => {
     message: `Contact with id: ${contactId} has been deleted`,
   });
 };
+
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  if (!req.body || req.body.favorite === undefined ) {
+    res.json({
+      status: 400,
+      message: "missing field favorite"
+    })
+    return;
+  }
+
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    if (!result) {
+      throw HttpError(404, "Not found").HttpError;
+    }
+    res.json({
+      status: 200,
+      data: result,
+    });
+};
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
   updateById: ctrlWrapper(updateById),
   deletebyId: ctrlWrapper(deletebyId),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };
