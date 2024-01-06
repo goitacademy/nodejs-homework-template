@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
     "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
@@ -25,7 +26,8 @@
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "^5.0.3",
-    "nestjs": "^0.0.1"
+    "nestjs": "^0.0.1",
+    "nodemailer": "^6.9.8"
   },
   "devDependencies": {
     "@babel/core": "^7.23.7",

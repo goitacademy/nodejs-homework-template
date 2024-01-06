@@ -35,6 +35,10 @@ authRouter.patch(
 	authController.updateSubscription
 );
 
-authRouter.patch("/avatars", upload.single("avatarURL"), isEmptyBody, resizeAvatar, authenticate, authController.updateAvatar)
+authRouter.patch("/avatars", upload.single("avatarURL"), resizeAvatar, authenticate, authController.updateAvatar)
+
+authRouter.get("/verify/:verificationToken", authController.verify)
+
+authRouter.post("/verify", isEmptyBody, authController.resendVerificationEmail)
 
 export default authRouter;
