@@ -60,6 +60,10 @@ export const userUpdateSubscriptionScheme = Joi.object({
 	subscription: Joi.string().required()
 })
 
+export const userEmailScheme = Joi.object({
+	email: Joi.string().required()
+})
+
 const User = model('user', userSchema)
 
 export default User
