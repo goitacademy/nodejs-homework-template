@@ -16,14 +16,14 @@ router.get("/", controler.listContacts);
 
 router.get("/:contactId", isValidId, controler.getContactById);
 
-router.post("/", validateBody(schemas.addSchema), controler.addContact);
+router.post("/", validateBody(schemas.joiSchema), controler.addContact);
 
 router.delete("/:contactId", isValidId, controler.removeContact);
 
 router.put(
   "/:contactId",
   isValidId,
-  validateBody(schemas.addSchema),
+  validateBody(schemas.joiSchema),
   controler.updateContact
 );
 
