@@ -2,14 +2,20 @@ const { Contact } = require("../models/contact");
 const { ctrlWrapper } = require("../helpers");
 const { HttpError } = require("../helpers");
 
-const getAll = async (req, res, next) => {
+const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 20, favorite: reqFavorite = null } = req.query;
   const skip = (page - 1) * limit;
-  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
-    skip,
-    limit,
-  }).populate("owner", "name email");
+  const favorite = reqFavorite === null ? { $exists: true } : reqFavorite;
+
+  const result = await Contact.find(
+    { owner, favorite },
+    "-createdAt -updatedAt",
+    {
+      skip,
+      limit,
+    }
+  ).populate("owner", "name email");
 
   res.status(200).json(result);
 };
