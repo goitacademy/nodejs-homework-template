@@ -15,12 +15,18 @@ router.post(
 );
 
 router.get("/:id", isValidMongoId, contactsControllers.getContactById);
-// router.delete("/:id", isValidMongoId,contactsControllers.removeContact);
+router.delete("/:id", isValidMongoId, contactsControllers.removeContact);
 router.put(
   "/:id",
   isValidMongoId,
   validateBody(contactsSchema.createContactsSchema),
   contactsControllers.updateContact
+);
+router.patch(
+  "/:id/favorite",
+  isValidMongoId,
+  validateBody(contactsSchema.updateFavorite),
+  contactsControllers.updateFavorite
 );
 
 module.exports = router;
