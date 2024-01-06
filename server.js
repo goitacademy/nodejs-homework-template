@@ -7,8 +7,7 @@ const mongoose = require("mongoose");
 //   path: process.env.NODE_ENV === "production" ? "./envs/p" : "./envs/dev.env",
 // });
 
-const DB_HOST =
-  "mongodb+srv://Den:ddLNYiDyVhQMsDgg@cluster0.yotpivk.mongodb.net/";
+const { DB_HOST } = process.env;
 
 mongoose.set("strictQuery", true);
 
