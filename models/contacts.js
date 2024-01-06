@@ -1,29 +1,37 @@
-const { model, Schema  } = require('mongoose');
+const { model, Schema } = require("mongoose");
 
 const contactSchema = new Schema(
   {
-  name: {
-    type: String,
-    required: [true, 'Set name for contact'],
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-}
+  {
+    timestamps: true,
+    versionKey: false,
+  }
 );
-const Contact = model('Contact', contactSchema)
+const Contact = model("Contact", contactSchema);
 
-const listContacts = async () => {
+const listContacts = async (ownerId) => {
   try {
-    const contacts = await Contact.find();
-    console.log('Contacts:', contacts);
+    const contacts = await Contact.find({ owner: ownerId });
+    console.log("contacts", contacts)
     return contacts;
   } catch (error) {
     console.error(error.massage);
@@ -33,9 +41,9 @@ const listContacts = async () => {
 
 const getContactById = async (contactId) => {
   try {
-    console.log('Searching for contact with ID:', contactId);
-    const contact = await Contact.findById(contactId)
-    console.log('Result:', contact);
+    console.log("Searching for contact with ID:", contactId);
+    const contact = await Contact.findById(contactId);
+    console.log("Result:", contact);
     return contact || null;
   } catch (err) {
     console.error(err.massage);
@@ -57,9 +65,9 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (body) => {
+const addContact = async (body, ownerId) => {
   try {
-    const newContact = await Contact.create(body)
+    const newContact = await Contact.create({ ...body, owner: ownerId });
     return newContact;
   } catch (err) {
     console.error(err.massage);
@@ -69,14 +77,16 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const updatedContact = Contact.findByIdAndUpdate(contactId,
-      {$set: body},
-      {new: true});
+    const updatedContact = Contact.findByIdAndUpdate(
+      contactId,
+      { $set: body },
+      { new: true }
+    );
     if (!updatedContact) {
       console.warn("Contact not found");
       return null;
     }
-       return updatedContact;
+    return updatedContact;
   } catch (err) {
     console.error(err.massage);
     return null;
@@ -91,16 +101,16 @@ const updateStatusContact = async (contactId, { favorite }) => {
       { $set: { favorite } },
       { new: true }
     );
-      if(!updatedContact) {
-        console.warn("Contact not found");
-        return null;
-      }
-      return updatedContact;
+    if (!updatedContact) {
+      console.warn("Contact not found");
+      return null;
+    }
+    return updatedContact;
   } catch (err) {
     console.error(err.massage);
     return null;
   }
-}
+};
 
 module.exports = {
   listContacts,
@@ -109,5 +119,5 @@ module.exports = {
   addContact,
   updateContact,
   contactSchema,
-  updateStatusContact
+  updateStatusContact,
 };
