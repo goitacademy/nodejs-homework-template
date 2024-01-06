@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Contact = require('../../models/contacts');
+const { Contact, contactValidationSchema } = require('../../models/contacts');
 
 const authMiddleware = require('../../middlewares/authMiddleware');
 
@@ -32,13 +32,20 @@ router.get('/:contactId', async (req, res) => {
 router.post('/', async (req, res) => {
   const { body } = req;
 
+  // Validate request body using Joi schema
+  const { error } = contactValidationSchema.validate(body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   try {
-    const newContact = await Contact.create({ ...body, owner: req.user._id });
+    const newContact = await Contact.create(body);
     res.status(201).json(newContact);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 router.delete('/:contactId', async (req, res) => {
   const { contactId } = req.params;
@@ -59,12 +66,14 @@ router.put('/:contactId', async (req, res) => {
   const { contactId } = req.params;
   const { body } = req;
 
+  // Validate request body using Joi schema
+  const { error } = contactValidationSchema.validate(body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
   try {
-    const updatedContact = await Contact.findOneAndUpdate(
-      { _id: contactId, owner: req.user._id },
-      body,
-      { new: true }
-    );
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, body, { new: true });
     if (updatedContact) {
       res.json(updatedContact);
     } else {

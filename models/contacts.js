@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Joi = require('joi');
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -15,12 +16,16 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
 });
 
 const Contact = mongoose.model('Contact', contactSchema);
 
-module.exports = Contact;
+// validation
+const contactValidationSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+  favorite: Joi.boolean(),
+});
+
+module.exports = { Contact, contactValidationSchema };
