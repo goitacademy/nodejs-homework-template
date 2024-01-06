@@ -69,7 +69,7 @@ exports.loginMiddleware = async (req, res, next) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Email or password is wrong" });
     }
-    const token = jwt.sign({ userId: user.id }, secKey, { expiresIn: 100000 });
+    const token = jwt.sign({ userId: user.id }, secKey, { expiresIn: "2h" });
     user.token = token;
     await user.save();
     user.password = undefined;
@@ -95,7 +95,7 @@ exports.checkToken = async (req, res, next) => {
       return res.status(401).json({ message: "not authorize" });
     }
     const decoded = await jwt.verify(token, secKey);
-    console.log('qwe', decoded, bearer)
+    console.log('User', decoded, bearer)
 
     const user = await User.findById(decoded.userId);
 
@@ -131,21 +131,31 @@ exports.currentUser = async (req, res, next) => {
 };
 
 exports.logoutMiddleware = async (req, res, next) => {
-  try {
-    console.log("Logout user ID:", req.user.id);
-    const userId = req.user.id;
-    const user = await User.findById(userId);
-    if (!user) {
-      console.log("User not found for logout");
-      return res.status(401).json({ message: "NOT authorize" });
-    }
-    user.token = null;
+  // try {
+  //   // console.log("Logout user ID:", req.user.id);
+  //   // const userId = req.user.id;
+  //   // const user = await User.findById(userId);
+  //   // if (!user) {
+  //   //   console.log("User not found for logout");
+  //   //   return res.status(401).json({ message: "NOT authorize" });
+  //   // }
+  //   const token = req.headers.authorization.split(" ")[1];
+  //   const decoded = await jwt.verify(token, secKey)
 
-    await user.save();
+  //   const user = await User.findById(decoded.userId)
+  //   user.token = null;
 
-    res.status(201).send();
-  } catch (error) {
-    console.error("Error in logoutMiddleware:", error.message);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
+  //   await user.save();
+
+  //   res.status(201).send();
+  // } catch (error) {
+  //   console.error("Error in logoutMiddleware:", error.message);
+  //   return res.status(500).json({ message: "Internal Server Error" });
+  // }
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, {token: ""})
+  res.status(204).json({
+    message: "Logout success"
+  });
+
 };
