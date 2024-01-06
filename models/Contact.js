@@ -1,35 +1,36 @@
 import { Schema, model } from 'mongoose';
 import Joi from 'joi';
 
-import { onSaveError } from './hooks.js';
+import { addUpdateSettings, onSaveError } from './hooks.js';
 
 // ============================================================
 
 const phoneRegExp = /^[\d+(). -]{5,15}$/;
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    min: 3,
-    max: 30,
-    required: true,
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      minLength: 3,
+      maxLength: 30,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+      minLength: 5,
+      maxLength: 15,
+      match: phoneRegExp,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    min: 5,
-    max: 15,
-    match: phoneRegExp,
-    required: true,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-});
+  { versionKey: false }
+);
 
 export const contactAddSchema = Joi.object({
   name: Joi.string()
@@ -57,7 +58,15 @@ export const contactUpdateSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
+export const contactUpdateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 contactSchema.post('save', onSaveError);
+
+contactSchema.pre('findOneAndUpdate', addUpdateSettings);
+
+contactSchema.post('findOneAndUpdate', onSaveError);
 
 const Contact = model('contact', contactSchema);
 
