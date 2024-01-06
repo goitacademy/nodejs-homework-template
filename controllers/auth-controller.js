@@ -46,9 +46,9 @@ const singup = async (req, res) => {
 	const verifyEmail = {
 		to: email,
 		from: SENGRID_EMAIL_FROM,
-		subject: "Verify email",
+		subject: "Please follow this link below to verify your email",
 		text: "To activate your account and start exploring, please click the verification link below",
-		html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click here to verify.</a>`,
+		html: `<p>Click this link to verify your <a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">email</a></p>`,
 	  };
 
 	await sendEmail(verifyEmail);
