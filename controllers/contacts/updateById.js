@@ -1,4 +1,4 @@
-const Contact = require('../models/contact')
+const Contact = require('../../models/contact')
 const { RequestError } = require('../RequestError')
 
 const updateById = async (req, res, next) => {

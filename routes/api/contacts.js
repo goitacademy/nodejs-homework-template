@@ -1,8 +1,8 @@
 const express = require("express")
 
-const { getAll, getById, add, removeById, updateById, updateByFavorite } = require('../../controllers/index')
+const { getAll, getById, add, removeById, updateById, updateByFavorite } = require('../../controllers/contacts/index')
 const { validateBody, isValidId } = require('../../middlewares')
-const { bodySchema, updateByFavoriteSchema } = require('../../schemas')
+const { bodySchema, updateByFavoriteSchema } = require('../../schemas/contacts')
 
 const router = express.Router()
 
