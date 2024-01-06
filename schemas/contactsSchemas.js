@@ -1,6 +1,6 @@
 const Joi = require("joi");
 
-const AddSchema = Joi.object({
+const addSchema = Joi.object({
 	name: Joi.string()
 		.required()
 		.messages({ "any.required": "missing required name field" }),
@@ -12,4 +12,10 @@ const AddSchema = Joi.object({
 		.messages({ "any.required": "missing required phone field" }),
 });
 
-module.exports = AddSchema;
+const putSchema = Joi.object({
+	name: Joi.string(),
+	email: Joi.string().email(),
+	phone: Joi.string(),
+});
+
+module.exports = { addSchema, putSchema };
