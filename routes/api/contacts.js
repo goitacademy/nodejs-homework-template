@@ -22,10 +22,15 @@ router.post(
 //=======================delete=========================
 router.delete(
   "/:contactId",
-
+  contactsMiddlewares.checkContactsCreateValidat,
   control.delet
 );
 //========================put========================
-router.put("/:contactId", validateBody(schemas.contactSchema), control.put);
+router.put(
+  "/:contactId",
+  contactsMiddlewares.checkContactsCreateValidat,
+  validateBody(schemas.contactSchema),
+  control.put
+);
 
 module.exports = router;

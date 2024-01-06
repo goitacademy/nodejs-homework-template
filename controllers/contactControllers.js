@@ -13,9 +13,9 @@ const getAll = async (req, res, next) => {
 
 //========================getID========================
 const getID = async (req, res, next) => {
-  const contact = await Contact.findById(req.params.id);
-  console.log("work controllers");
-
+  const contact = await Contact.findById(req.params.contactId);
+  if (!contact) throw new HttpError(404, "Contact not found");
+  console.log(contact);
   res.status(200).json({ msg: "Id contact", contact });
 };
 
@@ -29,25 +29,33 @@ const post = async (req, res, next) => {
 //=======================delete=========================
 const delet = async (req, res, next) => {
   const { contactId } = req.params;
-  const func = await contacts.removeContact(contactId);
-  if (func) {
-    res.status(200).json({ message: "contact deleted" });
-  } else !func;
-  {
-    res.status(404).json({ message: "not found" });
-  }
+  await Contact.findByIdAndDelete(contactId);
+  res.sendStatus(204);
 };
 
-//========================put========================
+//========================update========================
 const put = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
-  if (result === null) {
-    res.status(404).json({ message: "not valid ID" });
-  }
-  res.status(200).json(result);
+
+  const { name, email, phone } = req.body;
+  const updateUser = await Contact.findByIdAndUpdate(contactId, {
+    name,
+    email,
+    phone,
+  });
+
+  res.status(200).json({ msg: "Contact is update", contact: updateUser });
 };
 
+//  =======================
+const favorite = async (req, res, next) => {
+  const { contactId } = req.params;
+  const favorite = req.body.favorite;
+  if (!favorite) res.status(400).json({ message: "missing field favorite" });
+  const updateStatusContact(contactId, body) = req.body;
+  if (updateStatusContact) res.status(200).json(updateStatusContact)
+  res.status(404).json({" message ":" Not found "})
+};
 module.exports = {
   getAll: decorarot(getAll),
   getID: decorarot(getID),
