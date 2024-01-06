@@ -1,46 +1,44 @@
 const express = require("express");
-const {
-  addValid,
-  updateValid,
-  updateFavoriteValid,
-} = require("../../middlewares/contactsValidation");
-const isValidId = require("../../middlewares/isValidId");
+const ContactsController = require("../../controllers/ContactsController");
 const authenticate = require("../../middlewares/authenticate");
-const userVerification = require("../../middlewares/userVerification");
-const contactsCtrl = require("../../controllers/contacts.js");
-
+const validateId = require("../../middlewares/validateId");
+const validateBody = require("../../middlewares/validateBody");
+const contactsJoiSchema = require("../../schemas/contactsJoiSchema")
 const router = express.Router();
 
-router.get("/", authenticate, (req, res) => {
-  console.log("GET /contacts route hit");
-  contactsCtrl.listContactsForUser(req, res);
-});
+router.get("/", authenticate, ContactsController.getAllContacts);
 
-router.get("/:contactId", authenticate, isValidId, (req, res) => {
-  console.log("GET /contacts/:contactId route hit");
-  contactsCtrl.getContactById(req, res);
-});
+router.get(
+  "/:contactId",
+  authenticate,
+  validateId,
+  ContactsController.getOneContact
+);
 
-router.post("/", authenticate, addValid, (req, res) => {
-  console.log("POST /contacts route hit");
-  contactsCtrl.addContact(req, res);
-});
+router.post(
+  "/",
+  authenticate,
+  validateBody(contactsJoiSchema),
+  ContactsController.createContact
+);
 
-router.delete("/:contactId", authenticate, userVerification, isValidId, (req, res) => {
-  console.log("DELETE /contacts/:contactId route hit");
-  contactsCtrl.removeContact(req, res);
-});
+router.delete(
+  "/:contactId",
+  authenticate,
+  validateId,
+  ContactsController.deleteContact
+);
 
-router.put("/:contactId", authenticate, userVerification, isValidId, updateValid, (req, res) => {
-  console.log("PUT /contacts/:contactId route hit");
-  contactsCtrl.updateContact(req, res);
-});
-
-router.patch("/:contactId/favorite", authenticate, userVerification, isValidId, updateFavoriteValid, (req, res) => {
-  console.log("PATCH /contacts/:contactId/favorite route hit");
-  contactsCtrl.updateStatusContact(req, res);
-});
+router.put(
+  "/:contactId",
+  authenticate,
+  validateId,
+  ContactsController.updateContact
+);
+router.patch(
+  "/:contactId/favorite",
+  validateId,
+  ContactsController.updateStatusContact
+);
 
 module.exports = router;
-
-

@@ -1,35 +1,25 @@
-const express = require('express');
-const logger = require('morgan');
-const cors = require('cors');
-
-const contactsRouter = require('./routes/api/contacts');
-const authRouter = require('./routes/api/auth');
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(express.static("public"));
 
-// Виведення в консоль для перевірки
-app.use((req, res, next) => {
-  console.log(`Received ${req.method} request for ${req.url}`);
-  next();
-});
-
-app.use('/users', authRouter);
-app.use('/api/contacts', contactsRouter);
+app.use("/api/contacts", require("./routes/api/contacts"));
+app.use("/users", require("./routes/api/users"));
 
 app.use((req, res) => {
-  // Виведення в консоль для перевірки
-  console.log(`Route not found: ${req.method} ${req.url}`);
-  res.status(404).json({ message: 'Not found' });
+  res.status(404).json({ message: "Not found" });
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error' });
+  res.status(err.code).json({ message: err.message });
 });
 
 module.exports = app;

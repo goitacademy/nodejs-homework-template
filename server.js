@@ -1,26 +1,14 @@
-require('dotenv').config();
 const app = require("./app");
-const mongoose = require("mongoose");
+require("colors");
+const { join } = require("path");
+const connectDb = require("./config/connectDb");
+const configPath = join(__dirname, "config", ".env");
+require("dotenv").config({ path: configPath });
 
-mongoose
-  .connect('mongodb+srv://admin:aaaaaaa@atlascluster.xsuex4j.mongodb.net/?retryWrites=true&w=majority')
-  .then(() => {
-    app.listen(3000);
-    console.log("Database connection successful on port 3000");
-  })
-  .catch((err) => {
-    console.error(err.message);
-    process.exit(1);
-  });
+connectDb();
 
-process.on('SIGINT', async () => {
-  try {
-    await mongoose.connection.close();
-    console.log('MongoDB connection closed.');
-    process.exit(0);
-  } catch (err) {
-    console.error('Error closing MongoDB connection:', err.message);
-    process.exit(1);
-  }
+const { PORT } = process.env;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`.magenta.italic);
 });
-//  Art 

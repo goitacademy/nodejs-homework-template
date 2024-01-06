@@ -1,47 +1,33 @@
-const { Schema, model } = require("mongoose");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const { model, Schema } = require("mongoose");
+const mongooseErrorHandler = require("../middlewares/mongooseErrorHandler");
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      default: "User",
+    },
     password: {
       type: String,
-      required: [true, 'Set password for user'],
+      required: [true, "Set password for user"],
+      minlength: 6,
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: [true, "Set email for user"],
       unique: true,
+    },
+    avatarURL: {
+      type: String,
     },
     subscription: {
       type: String,
       enum: ["starter", "pro", "business"],
-      default: "starter"
+      default: "starter",
     },
-    token: String,
-  }
+    token: { type: String, default: null },
+  },
+  { versionKey: false, timestamps: true }
 );
 
-userSchema.virtual("contacts", {
-  ref: "contact",
-  localField: "_id",
-  foreignField: "owner",
-});
-
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, 10);
-  }
-  next();
-});
-
-userSchema.methods.generateAuthToken = function () {
-  // eslint-disable-next-line no-undef
-  const token = jwt.sign({ _id: this._id }, SECRET_KEY);
-  this.token = token;
-  return token;
-};
-
-const User = model("user", userSchema);
-
-module.exports = User;
+module.exports = model("user", userSchema);

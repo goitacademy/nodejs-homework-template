@@ -1,21 +1,16 @@
-const authenticate = async (req, res, next) => {
+const jwt = require("jsonwebtoken");
+const HTTPError = require("../helpers/HTTPError");
+
+module.exports = (req, res, next) => {
+  const [bearer, token] = req.headers.authorization.split(" ");
   try {
-    const token = req.header("Authorization")?.replace("Bearer ", ""); // Змінено спосіб отримання токену
-    // eslint-disable-next-line no-undef
-    const decoded = jwt.verify(token, SECRET_KEY);
-
-    // eslint-disable-next-line no-use-before-define
-    const user = await user.findOne({ _id: decoded._id, token });
-    if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
-    }
-
-    req.token = token;
-    req.user = user;
-    next();
+     if (bearer === "Bearer" && token) {
+       const decoded = jwt.verify(token, process.env.SECRET_KEY);
+       res.locals.user = decoded;
+       next();
+     }
   } catch (error) {
-    res.status(401).json({ message: "Not authorized" });
+    res.status(401);
+    throw HTTPError(401);
   }
 };
-
-module.exports = authenticate;
