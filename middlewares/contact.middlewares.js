@@ -5,20 +5,20 @@ const { contactValidator } = require('../utils/validators');
 
 
 
-exports.checkUserId = catchAsync(async (req, res, next) => {
+exports.checkContactId = catchAsync(async (req, res, next) => {
 	const { contactId } = req.params;
-	await contactServise.checkUserbyId(contactId);
+	await contactServise.checkContactbyId(contactId);
 
 	next();
 });
 
 
-exports.checkupdateUserDatafavorite = catchAsync(async (req, res, next) => {
-	const { value, error } = contactValidator.updateUserDataValidatorfavorite(req.body);
+exports.checkupdateContactDatafavorite = catchAsync(async (req, res, next) => {
+	const { value, error } = contactValidator.updateContactDataValidatorfavorite(req.body);
 
 	if (error) throw new HttpError(400, 'missing field favorite', error);
 
-	await contactServise.userFavorite({ favorite: value.favorite });
+	await contactServise.contactFavorite({ favorite: value.favorite });
 
 	req.body = value;
 
@@ -27,11 +27,10 @@ exports.checkupdateUserDatafavorite = catchAsync(async (req, res, next) => {
 
 
 exports.checkCreateUserData = catchAsync(async (req, res, next) => {
-	const { value, error } = contactValidator.createUserDataValidator(req.body);
+	const { value, error } = contactValidator.createContactDataValidator(req.body);
 
 	if (error) throw new HttpError(400, 'Invalid user data!', error);
 
-	await contactServise.checkContactExist({ email: value.email });
 
 	req.body = value;
 
@@ -40,7 +39,10 @@ exports.checkCreateUserData = catchAsync(async (req, res, next) => {
 
 
 exports.checkUpdateUserData = catchAsync(async (req, res, next) => {
-	const { value, error } = contactValidator.updateUserDataValidator(req.body);
+	const isEmpty = Object.keys(req.body).length === 0;
+	if (isEmpty) throw new HttpError(400, 'Invalid user data!');
+
+	const { value, error } = contactValidator.updateContactDataValidator(req.body);
 
 	if (error) throw new HttpError(400, 'Invalid user data!', error);
 

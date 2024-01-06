@@ -11,3 +11,12 @@ exports.userRegistrationValidator = joiValidator((data) =>
 			subscription: Joi.string(),
 		})
 		.validate(data));
+
+
+exports.subscriptionValidator = joiValidator((data) =>
+	Joi.object()
+		.options({ abortEarly: false })
+		.keys({
+			subscription: Joi.string().valid('starter', 'pro', 'business'),
+		})
+		.validate(data));

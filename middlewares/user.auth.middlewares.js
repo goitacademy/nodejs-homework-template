@@ -16,13 +16,29 @@ exports.checkRegistrations = catchAsync(async (req, res, next) => {
 
 
 exports.checkLoginUserData = (req, res, next) => {
+
+	const isEmpty = Object.keys(req.body).length === 0;
+	if (isEmpty) throw new HttpError(400, 'Invalid user data!....');
+
 	const { value, error } = userValidator.userRegistrationValidator(req.body);
+
 	if (error) throw new HttpError(401, 'Not authorized', error);
 
 	req.body = value;
+
 	next();
 };
 
+exports.checkSubscription = catchAsync(async (req, res, next) => {
+	const isEmpty = Object.keys(req.body).length === 0;
+	if (isEmpty) throw new HttpError(400, 'Invalid subscription data!....');
+
+	const { value, error } = userValidator.subscriptionValidator(req.body);
+	if (error) throw new HttpError(401, 'Invalid subscription data!....', error);
+
+	req.body = value;
+	next();
+});
 
 exports.protect = catchAsync(async (req, res, next) => {
 	const token = req.headers.authorization?.startsWith('Bearer ') && req.headers.authorization.split(' ')[1];

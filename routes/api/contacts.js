@@ -11,13 +11,13 @@ router.get('/', contactControllers.listContacts);
 
 router.post('/', contactMiddlewares.checkCreateUserData, contactControllers.addContact)
 
-router.get('/:contactId', contactMiddlewares.checkUserId, contactControllers.getContactById)
+router.get('/:contactId', contactMiddlewares.checkContactId, contactControllers.getContactById)
 
-router.delete('/:contactId', contactMiddlewares.checkUserId, contactControllers.removeContact)
+router.delete('/:contactId', contactMiddlewares.checkContactId, contactControllers.removeContact)
 
-router.put('/:contactId', contactMiddlewares.checkUserId, contactMiddlewares.checkUpdateUserData, contactControllers.updateContact)
+router.put('/:contactId', contactMiddlewares.checkContactId, contactMiddlewares.checkUpdateUserData, contactControllers.updateContact)
 
-router.patch('/:contactId/favorite', contactMiddlewares.checkUserId, contactMiddlewares.checkupdateUserDatafavorite, contactControllers.updateContactFavorite)
+router.patch('/:contactId/favorite', contactMiddlewares.checkContactId, contactMiddlewares.checkupdateContactDatafavorite, contactControllers.updateContactFavorite)
 
 
 module.exports = router

@@ -45,17 +45,18 @@ const getMy = (req, res) => {
 	})
 }
 
+
 const updateSub = (req, res) => {
 	const { subscription } = req.body;
 	const { _id } = req.user
 
 	userServise.updateSubscription(_id, subscription);
-
-	res.status(201).json({
+	res.status(200).json({
 		email: req.user.email,
-		subscription: req.user.subscription,
+		subscription: subscription,
 	})
 }
+
 
 const updateAvatar = catchAsync(async (req, res) => {
 	const updateUser = await userServise.updateMe(req.body, req.user, req.file);

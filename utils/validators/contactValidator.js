@@ -1,7 +1,7 @@
 const Joi = require('joi');
 const joiValidator = require('./joiValidator');
 
-exports.createUserDataValidator = joiValidator((data) =>
+exports.createContactDataValidator = joiValidator((data) =>
 	Joi
 		.object()
 		.options({ abortEarly: false })
@@ -14,7 +14,7 @@ exports.createUserDataValidator = joiValidator((data) =>
 		.validate(data));
 
 
-exports.updateUserDataValidator = joiValidator((data) =>
+exports.updateContactDataValidator = joiValidator((data) =>
 	Joi
 		.object()
 		.keys({
@@ -26,7 +26,7 @@ exports.updateUserDataValidator = joiValidator((data) =>
 		.validate(data));
 
 
-exports.updateUserDataValidatorfavorite = joiValidator((data) =>
+exports.updateContactDataValidatorfavorite = joiValidator((data) =>
 	Joi
 		.object()
 		.keys({

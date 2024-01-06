@@ -42,33 +42,33 @@ exports.getContactByIdinDataBase = async (contactId, owner) => {
 exports.removeContact = async (contactId, owner) => {
 	const { _id: ownerId } = owner;
 
-	const removeContact = await Contacts.findOneAndDelete({ _id: contactId, owner: ownerId });
+	const contact = await Contacts.findOneAndDelete({ _id: contactId, owner: ownerId });
 
-	if (!removeContact) {
+	if (!contact) {
 		throw new HttpError(404, 'User not found');
 	}
 
-	return removeContact;
+	return contact;
 
 }
 
 
 exports.addContact = async (dataContact, owner) => {
-	const newContact = await Contacts.create({ ...dataContact, owner });
-	return newContact;
+	const contact = await Contacts.create({ ...dataContact, owner });
+	return contact;
 }
 
 
 exports.updateContact = async (contactId, updateContact, owner) => {
 	const { _id: ownerId } = owner;
 
-	const updatedUser = await Contacts.findOneAndUpdate({ _id: contactId, owner: ownerId }, updateContact, { new: true });
+	const contact = await Contacts.findOneAndUpdate({ _id: contactId, owner: ownerId }, updateContact, { new: true });
 
-	if (!updatedUser) {
+	if (!contact) {
 		throw new HttpError(404, 'User not found');
 	}
 
-	return updatedUser.save();
+	return contact.save();
 
 }
 
@@ -76,32 +76,32 @@ exports.updateContact = async (contactId, updateContact, owner) => {
 exports.updateContactFavorite = async (contactId, favorite, owner) => {
 	const { _id: ownerId } = owner;
 
-	const updateFavorite = await Contacts.findOneAndUpdate({ _id: contactId, owner: ownerId }, { favorite }, { new: true });
+	const contact = await Contacts.findOneAndUpdate({ _id: contactId, owner: ownerId }, { favorite }, { new: true });
 
-	if (!updateFavorite) {
+	if (!contact) {
 		throw new HttpError(404, 'User not found');
 	}
 
 
 
-	return updateFavorite;
+	return contact;
 }
 
 
-exports.userFavorite = async (filter) => {
+exports.contactFavorite = async (filter) => {
 	const favorite = await Contacts.exists(filter);
 	if (!favorite) throw new HttpError(404, 'User not found');
 }
 
 
 exports.checkContactExist = async (status) => {
-	const userExists = await Contacts.exists(status);
+	const contactExists = await Contacts.exists(status);
 
-	if (userExists) throw new HttpError(409, 'User Exists');
+	if (contactExists) throw new HttpError(409, 'User Exists');
 }
 
 
-exports.checkUserbyId = async (id) => {
+exports.checkContactbyId = async (id) => {
 	const idIsValid = Types.ObjectId.isValid(id);
 
 	if (!idIsValid) throw new HttpError(404, 'User not found..');

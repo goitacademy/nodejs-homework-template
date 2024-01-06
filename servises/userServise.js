@@ -19,6 +19,7 @@ exports.registerUser = async (userData) => {
 
 
 exports.loginUser = async (userData) => {
+
 	const user = await Users.findOne({ email: userData.email }).select('+password');
 	if (!user) throw new HttpError(401, 'Email or password is wrong');
 
@@ -41,9 +42,7 @@ exports.getsignOutUser = async (id) => await Users.findByIdAndUpdate(id, { token
 
 
 exports.updateSubscription = async (id, subscriptionUpd) => {
-	console.log(subscriptionUpd);
-	const updSub = await Users.findByIdAndUpdate(id, { subscription: subscriptionUpd }, { new: true });
-	return (updSub);
+	return await Users.findByIdAndUpdate(id, { subscription: subscriptionUpd }, { new: true });
 }
 
 exports.checkContactExist = async (status) => {
