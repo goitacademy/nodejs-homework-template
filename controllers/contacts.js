@@ -36,20 +36,22 @@ const addContact = async (req, res, next) => {
 //   res.status(204);
 // };
 
-// const updateContact = async (req, res, next) => {
-//   const { id } = req.params;
-//   const body = req.body;
-//   const updatedContact = await contactsFunctions.updateContact(id, body);
-//   if (!updatedContact) {
-//     throw httpError(404, `Book with ID ${id} not found`);
-//   }
-//   res.json(updatedContact);
-// };
+const updateContact = async (req, res, next) => {
+  const { id } = req.params;
+  const body = req.body;
+  const updatedContact = await Contact.findByIdAndUpdate(id, body, {
+    new: true,
+  });
+  if (!updatedContact) {
+    throw httpError(404, `Book with ID ${id} not found`);
+  }
+  res.json(updatedContact);
+};
 
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   // removeContact: ctrlWrapper(removeContact),
-  // updateContact: ctrlWrapper(updateContact),
+  updateContact: ctrlWrapper(updateContact),
 };

@@ -16,10 +16,11 @@ router.post(
 
 router.get("/:id", isValidMongoId, contactsControllers.getContactById);
 // router.delete("/:id", isValidMongoId,contactsControllers.removeContact);
-// router.put(
-//   "/:id", isValidMongoId,
-//   validateBody(contactsSchema.createContactsSchema),
-//   contactsControllers.updateContact
-// );
+router.put(
+  "/:id",
+  isValidMongoId,
+  validateBody(contactsSchema.createContactsSchema),
+  contactsControllers.updateContact
+);
 
 module.exports = router;
