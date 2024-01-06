@@ -83,13 +83,22 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const value = contactUpdateSchema.validate(req.body);
-  if (typeof value.error !== "undefined") {
-    return res.status(400).json({ message: "missing fields" });
+  try {
+    const value = contactUpdateSchema.validate(req.body);
+    if (typeof value.error !== "undefined") {
+      return res.status(400).json({ message: value.error.details[0].message });
+    }
+    const { contactId } = req.params;
+
+    const result = await contactsFoo.updateContact(contactId, req.body);
+    if (!result) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
-  const result = await contactsFoo.updateContact(contactId, req.body);
-  res.status(200).json(result);
 });
 
 module.exports = router;
