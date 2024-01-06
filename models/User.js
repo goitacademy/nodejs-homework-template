@@ -9,7 +9,6 @@ const subscriptionList = ["starter", "pro", "business"];
 const userSchema = new Schema({
     name: {
         type: String,
-        required: true, 
     },
     email: {
         type: String,
@@ -34,7 +33,7 @@ userSchema.post('save', handleSaveError);
 userSchema.pre('findOneAndUpdate', addUpdateDocument);
 
 export const userSignupSchema = Joi.object({
-    name: Joi.string().required(),
+    name: Joi.string(),
     email: Joi.string().pattern(emailRegexp).required(),
     password: Joi.string().min(6).required(),
 });

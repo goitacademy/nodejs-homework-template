@@ -6,10 +6,10 @@ import { authenticate, isEmptyBody } from "../../middlewares/index.js";
 
 const authRouter = express.Router();
 
-authRouter.post('/signup', isEmptyBody, authController.signUp);
-authRouter.post('/signin', isEmptyBody, authController.signIn);
+authRouter.post('/register', isEmptyBody, authController.signUp);
+authRouter.post('/login', isEmptyBody, authController.signIn);
 authRouter.get('/current', authenticate, authController.getCurrent);
-authRouter.post('/signout', authenticate, authController.signOut);
+authRouter.post('/logout', authenticate, authController.signOut);
 authRouter.patch('/subscription', authenticate, isEmptyBody, authController.updateSubs);
 
 
