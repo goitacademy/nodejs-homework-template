@@ -46,7 +46,6 @@ export const contactAddSchema = Joi.object({
     'string.pattern.base': `PHONE must have only digits.`,
     'any.required': 'missing required PHONE field',
   }),
-  favorite: Joi.boolean(),
 });
 
 export const contactUpdateSchema = Joi.object({
@@ -55,7 +54,6 @@ export const contactUpdateSchema = Joi.object({
   phone: Joi.string().min(5).max(15).pattern(phoneRegExp).messages({
     'string.pattern.base': `PHONE must have only digits.`,
   }),
-  favorite: Joi.boolean(),
 });
 
 export const contactUpdateFavoriteSchema = Joi.object({
