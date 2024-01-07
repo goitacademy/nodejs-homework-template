@@ -6,4 +6,15 @@ const contactSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-module.exports = { contactSchema };
+const loginSchema = Joi.object({
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
+const signupSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
+
+module.exports = { contactSchema, signupSchema, loginSchema };
