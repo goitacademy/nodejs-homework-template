@@ -2,7 +2,6 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -10,12 +9,11 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
+    "express": "^4.17.1",
     "joi": "^17.11.0",
-    "morgan": "1.10.0",
-    "nanoid": "^5.0.1"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -25,5 +23,9 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Realizează un fork al acestui repozitoriu pentru a îndeplini temele de acasă (2-6). Fork-ul va crea un repozitoriu pe contul tău de pe http://github.com",
+  "main": ".eslintrc.js",
+  "author": "",
+  "license": "ISC"
 }

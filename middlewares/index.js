@@ -1,1 +1,4 @@
-export { default as isEmptyBody } from "./isEmptyBody.js";
+const validateBody = require("./validateBody");
+const isEmptyBody = require("./emtyBody");
+
+module.exports = { validateBody, isEmptyBody };
