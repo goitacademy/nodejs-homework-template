@@ -66,19 +66,26 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
-const updateAvatar = async (req, res) => {
+const updateAvatar = async (req, res, next) => {
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
+  if (!tempUpload) {
+    throw HttpError(400, "Bad Request");
+  }
+  try {
+    await fs.rename(tempUpload, resultUpload);
+  } catch (err) {
+    await fs.unlink(tempUpload);
+    return next(err);
+  }
 
   const picture = await Jimp.read(resultUpload);
   picture.resize(250, 250).write(resultUpload);
 
-  fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
-
   res.json({ avatarURL });
 };
 
