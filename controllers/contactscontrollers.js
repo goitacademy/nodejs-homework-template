@@ -1,6 +1,6 @@
 const { HttpError } = require("../addoption/");
 const { catchAsync } = require("../addoption");
-const schema = require("../validation/schema");
+const { schema: contactSchema } = require("../validation/schema");
 // const { updateContactService } = require("../services/contacts");
 const contactsModels = require("./../models/contactsModels");
 
@@ -29,7 +29,7 @@ const removeContact = catchAsync(async (req, res) => {
 });
 
 const addContact = catchAsync(async (req, res) => {
-  const { error } = schema.validate(req.body);
+  const { error } = contactSchema.validate(req.body);
 
   if (error) return res.status(400).json({ message: error.message });
 

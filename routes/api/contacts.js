@@ -1,11 +1,12 @@
 const express = require("express");
 const { contactsController } = require("../../controllers");
 
-const {
-  validateBody: validateBodyFunc,
-} = require("../../middlewares/validate");
+// const {
+//   validateBody: validateBodyFunc,
+// } = require("../../middlewares/validate");
 const { checkContactId } = require("../../middlewares/validate");
-const schema = require("../../validation/schema");
+const { validateBody } = require("../../middlewares/validate");
+// const schema = require("../../validation/schema");
 
 const router = express.Router();
 
@@ -13,14 +14,14 @@ router.get("/", contactsController.listContacts);
 
 router.get("/:contactId", checkContactId, contactsController.getContactById);
 
-router.post("/", validateBodyFunc(schema), contactsController.addContact);
+router.post("/", validateBody, contactsController.addContact);
 
 router.delete("/:contactId", checkContactId, contactsController.removeContact);
 
 router.put(
   "/:contactId",
   checkContactId,
-  validateBodyFunc(schema),
+  validateBody,
   contactsController.updateContact
 );
 

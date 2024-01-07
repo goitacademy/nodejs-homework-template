@@ -2,11 +2,13 @@ const { HttpError, catchAsync } = require("../addoption/");
 const { Types } = require("mongoose");
 const { Contact } = require("../models");
 
-const validateBody = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body);
+const { schema: contactSchema } = require("../validation/schema");
+
+const validateBody = catchAsync(async (req, res, next) => {
+  const { error } = contactSchema.validate(req.body);
   if (error) throw HttpError(400, error.message);
   next();
-};
+});
 
 const checkContactId = catchAsync(async (req, res, next) => {
   const { contactId } = req.params;
