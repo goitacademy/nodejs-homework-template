@@ -6,10 +6,8 @@ const validate = schema => {
     if (error) {
       if (Object.keys(req.body).length === 0) {
         next(HttpError(400, 'Missing fields'));
-      } else next(HttpError(400, 'Missing required name field'));
+      } else next();
     }
-
-    next();
   };
   return func;
 };
