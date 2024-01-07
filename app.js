@@ -1,7 +1,7 @@
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const contactsRouter = require("./routes/api/contacts");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import contactsRouter from "./routes/api/contacts.js";
 
 const app = express();
 
@@ -55,4 +55,4 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
 
-module.exports = app;
+export { app };

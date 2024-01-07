@@ -1,6 +1,6 @@
-const express = require("express");
-const Joi = require("joi");
-const contactsController = require("../../controllers/contactsController");
+import express from "express";
+import Joi from "joi";
+import * as contactsController from "../../controllers/contactsController.js";
 
 const router = express.Router();
 
@@ -58,4 +58,4 @@ router.put("/:contactId", validateContact, async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

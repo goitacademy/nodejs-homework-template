@@ -1,11 +1,14 @@
-const fs = require("fs").promises;
-const path = require("path");
+import { promises as fs } from "fs";
+import path from "path";
 
-const contactsFilePath = path.join(__dirname, "contacts.json");
+const contactsFilePath = path.join(
+  process.cwd(),
+  "/routes/api/db/contacts.json"
+);
 
 let contacts = [];
 
-const readContactsFile = async () => {
+export const readContactsFile = async () => {
   try {
     const data = await fs.readFile(contactsFilePath, "utf-8");
     return JSON.parse(data);
@@ -19,27 +22,27 @@ const readContactsFile = async () => {
   }
 };
 
-const writeContactsFile = async (data) => {
+export const writeContactsFile = async (data) => {
   await fs.writeFile(contactsFilePath, JSON.stringify(data, null, 2), "utf-8");
 };
 
-const listContacts = async () => {
+export const listContacts = async () => {
   contacts = await readContactsFile();
   return contacts;
 };
 
-const getContactById = async (contactId) => {
+export const getContactById = async (contactId) => {
   contacts = await readContactsFile();
   return contacts.find((contact) => contact.id === contactId);
 };
 
-const removeContact = async (contactId) => {
+export const removeContact = async (contactId) => {
   contacts = await readContactsFile();
   contacts = contacts.filter((contact) => contact.id !== contactId);
   await writeContactsFile(contacts);
 };
 
-const addContact = async (body) => {
+export const addContact = async (body) => {
   contacts = await readContactsFile();
   const newContact = { id: Date.now().toString(), ...body };
   contacts.push(newContact);
@@ -47,7 +50,7 @@ const addContact = async (body) => {
   return newContact;
 };
 
-const updateContact = async (contactId, body) => {
+export const updateContact = async (contactId, body) => {
   contacts = await readContactsFile();
   const index = contacts.findIndex((contact) => contact.id === contactId);
   if (index !== -1) {
@@ -58,10 +61,10 @@ const updateContact = async (contactId, body) => {
   return null;
 };
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+// export {
+//   listContacts,
+//   getContactById,
+//   removeContact,
+//   addContact,
+//   updateContact,
+// };

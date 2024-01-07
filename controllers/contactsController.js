@@ -1,4 +1,4 @@
-const contactsModel = require("../models/contactsModel");
+import * as contactsModel from "../models/contactsModel.js";
 
 const listContacts = async (req, res) => {
   const contacts = await contactsModel.listContacts();
@@ -38,7 +38,7 @@ const updateContact = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,
