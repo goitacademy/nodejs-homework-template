@@ -4,6 +4,7 @@ const contactSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const loginSchema = Joi.object({
@@ -15,6 +16,10 @@ const signupSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = { contactSchema, signupSchema, loginSchema };
