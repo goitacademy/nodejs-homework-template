@@ -1,4 +1,5 @@
-const { signup, login, logout, updateSubscription } = require("../services");
+const { signup, login, logout, updateSubscription, uploadFile, updateAvatarPath } = require("../services");
+// const path = require("path");
 
 exports.signup = async (req, res, next) => {
   const { user, token } = await signup(req.body);
@@ -38,4 +39,17 @@ exports.updateSubscription = async (req, res) => {
     email: updatedUser.email,
     subscription: updatedUser.subscription,
   });
+};
+
+exports.uploadAvatar = async (req, res, next) => {
+  const { path: temporaryName, originalname } = req.file;
+  try {
+    const uploadedFileName = await uploadFile(temporaryName, originalname, req.user._id);
+    await updateAvatarPath(req.user, uploadedFileName);
+    res.status(200).json({
+      avatarURL: uploadedFileName,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

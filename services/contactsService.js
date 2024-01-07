@@ -19,3 +19,8 @@ exports.getAllContacts = async (query, owner) => {
   const contacts = await contactsQuery;
   return { contacts, total };
 };
+
+exports.checkedContactByUser = async (contactId, owner) => {
+  const contact = await models.ContactModel.findById(contactId);
+  return contact.owner === owner;
+};

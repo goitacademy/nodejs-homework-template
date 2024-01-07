@@ -2,6 +2,26 @@ const HttpError = require("../controllers/helpers/error");
 const models = require("../models");
 const bcrypt = require("bcryptjs");
 const { signToken } = require("./jwtService");
+const gravatar = require("gravatar");
+const fs = require("fs").promises;
+const path = require("path");
+const utils = require("../utils");
+
+// service functions
+exports.uploadFile = async (temporaryName, originalName, userId) => {
+  try {
+    const avatarPath = await utils.proceedFile(temporaryName, originalName, userId);
+    return avatarPath;
+  } catch (err) {
+    await fs.unlink(temporaryName);
+    throw err;
+  }
+};
+
+exports.updateAvatarPath = async (user, newAvatarPath) => {
+  user.avatarURL = newAvatarPath;
+  await user.save();
+};
 
 exports.checkUserExists = async (filter) => {
   const userExist = await models.UsersModel.exists(filter);
@@ -17,10 +37,12 @@ const hashPassword = (password) => {
 };
 
 exports.signup = async (data) => {
+  const avatarLink = gravatar.url(data.email, { protocol: "https", s: "100" }, true);
   const hash = hashPassword(data.password);
   const newUser = await models.UsersModel.create({
     email: data.email,
     password: hash,
+    avatarURL: avatarLink,
   });
   newUser.password = undefined;
 
