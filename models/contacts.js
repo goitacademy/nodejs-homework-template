@@ -1,6 +1,6 @@
 // contacts.js
 const fs = require('fs/promises');
-// const {nanoid} = require('nanoid');
+const {nanoid} = require('../node_modules/nanoid');
 
 const contactsPath = './models/contacts.json';
 
@@ -13,7 +13,8 @@ const listContacts = async () => {
 const getContactById = async(contactId)=> {
     // ...твой код. Возвращает объект контакта с таким id. Возвращает null, если объект с таким id не найден.
     const contacts = await listContacts();
-    return contacts.find(contact => contact.id === contactId) || null;
+    const result = contacts.find(contact => contact.id === contactId);
+    return result || null;
 }
 
 const removeContact = async(contactId)=> {
@@ -32,7 +33,7 @@ const addContact = async (body)=> {
     // ...твой код. Возвращает объект добавленного контакта. 
     const contacts = await listContacts();
     const newContact = {
-        // id: nanoid(),
+        id: nanoid(),
         ...body,
     };
     const isExistingContact = ({ name }) => contacts.some(contact => contact.name === name); 
