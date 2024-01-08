@@ -3,7 +3,7 @@ const fs = require('fs/promises');
 const Jimp = require('jimp');
 const { User } = require('../../models');
 
-const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
+const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
 
 const updateAvatar = async(req, res) => {
     const {_id} = req.user;
@@ -20,13 +20,11 @@ const updateAvatar = async(req, res) => {
     const userAvatar = await Jimp.read(resultUpload);
     userAvatar.resize(250, 250).write(resultUpload);
 
-    const avatarURL = path.join(`http://localhost:5000/avatars`, filename);
+    const avatarURL = path.join("avatars", filename);
     await User.findByIdAndUpdate(_id, { avatarURL });
 
     res.join({
-        status: "success",
-        code: 200,
-        data: {avatarURL},
+      avatarURL
     });
 };
 
