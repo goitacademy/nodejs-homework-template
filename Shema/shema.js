@@ -13,13 +13,8 @@ const loginSchema = Joi.object({
 });
 
 const signupSchema = Joi.object({
-  name: Joi.string().required(),
   email: Joi.string().required(),
-  phone: Joi.string().required(),
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
+  password: Joi.string().required(),
 });
 
 const userSchema = Joi.object({

@@ -29,7 +29,24 @@ exports.getUsers = async (req, res, next) => {
 };
 
 exports.getUserId = async (req, res, next) => {
-  const user = await User.findById();
-  if (!user) res.status(404).json({ msg: "is not valid" });
-  res.status(200).json(user);
+  try {
+    const user = await User.findById();
+    if (!user) {
+      return res.status(404).json({ msg: "is not valid" });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.getCurrent = (req, res) => {
+  console.log("we try");
+
+  try {
+    res.status(200).json({ msg: "isCurrent", user: req.user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
