@@ -6,7 +6,6 @@ const controllerWrapper = controller => {
       next(error);
     }
   };
-
   return func;
 };
 

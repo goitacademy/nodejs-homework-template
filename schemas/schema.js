@@ -11,6 +11,4 @@ const validationSchema = Joi.object({
     .required(),
 });
 
-module.exports = {
-  validationSchema,
-};
+module.exports = { validationSchema };
