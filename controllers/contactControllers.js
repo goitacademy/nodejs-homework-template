@@ -7,18 +7,21 @@ const listContacts = catchAsync(async (req, res) => {
 	res.status(200).json({
 		contacts,
 		total,
-		user: req.user,
+		// user: req.user,
 	})
 });
 
 
 const addContact = catchAsync(async (req, res) => {
 
-	const contact = await contactServise.addContact(req.body, req.user);
+	const { _id, name, phone, favorite } = await contactServise.addContact(req.body, req.user);
 
-	res.status(201).json(
-		contact,
-	)
+	res.status(201).json({
+		_id,
+		name,
+		phone,
+		favorite,
+	})
 })
 
 

@@ -100,6 +100,12 @@ exports.checkContactExist = async (status) => {
 	if (contactExists) throw new HttpError(409, 'User Exists');
 }
 
+exports.checkContactIdIsValid = async (id) => {
+	const idIsValid = Types.ObjectId.isValid(id);
+
+	if (!idIsValid) throw new HttpError(404, 'User not found..');
+}
+
 
 exports.checkContactbyId = async (id) => {
 	const idIsValid = Types.ObjectId.isValid(id);

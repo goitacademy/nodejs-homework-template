@@ -12,6 +12,13 @@ exports.checkContactId = catchAsync(async (req, res, next) => {
 	next();
 });
 
+exports.checkContactIdisValid = catchAsync(async (req, res, next) => {
+	const { contactId } = req.params;
+	await contactServise.checkContactIdIsValid(contactId);
+
+	next();
+});
+
 
 exports.checkupdateContactDatafavorite = catchAsync(async (req, res, next) => {
 	const { value, error } = contactValidator.updateContactDataValidatorfavorite(req.body);
