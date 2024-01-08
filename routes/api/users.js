@@ -2,7 +2,7 @@ const { Router } = require("express");
 
 const ctrl = require('../../controllers/users/index.js');
 
-const { validateBody, authenticate } = require('../../middlewares');
+const { validateBody, authenticate, upload } = require('../../middlewares');
 
 const { schemas } = require('../../models/user.js');
 
