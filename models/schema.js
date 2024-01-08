@@ -9,6 +9,16 @@ const validateContacts = Joi.object({
     .max(14)
     .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
     .required(),
+  favorite: Joi.boolean(),
 });
 
-module.exports = validateContacts;
+const validateFavorite = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+const schemas = {
+  validateFavorite,
+  validateContacts,
+};
+
+module.exports = schemas;
