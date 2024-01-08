@@ -33,7 +33,7 @@ const removeContact = async (req, res, next) => {
     throw httpError(404, `Book with ID ${id} not found`);
   }
   res.json(deletedContact);
-  res.status(204).send();
+  // res.status(204).send();
 };
 
 const updateContact = async (req, res, next) => {
