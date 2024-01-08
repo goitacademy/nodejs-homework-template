@@ -18,10 +18,13 @@ const contactSchema = new Schema({
         type: Boolean,
         default: false,
     },
-}, {versionKey: false});
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    },
+}, { versionKey: false, timestamps: true });
 
 contactSchema.post('save', handleSaveError);
-
 contactSchema.pre('findOneAndUpdate', addUpdateDocument);
 
 export const contactAddSchema = Joi.object({
