@@ -1,6 +1,7 @@
 const jwtService = require('./jwtService');
 const { HttpError } = require('../helpers');
 const { User } = require('./models/userModel');
+const ImageService = require('./imageService');
 
 exports.register = async body => {
     const checkEmailInDB = await User.findOne({ email: body.email });
@@ -23,4 +24,12 @@ exports.logout = async user => {
 
 exports.findUserByFilter = (filter = {}) => User.findOne(filter);
 
-exports.updateSubscription = (id, subscription) => User.findByIdAndUpdate(id, subscription, {new: true});
+exports.updateSubscription = (userId, subscription) =>
+    User.findByIdAndUpdate(userId, subscription, { new: true });
+
+exports.updateAvatar = async (userId, file) => {
+    console.log("userId:", userId)
+    const avatarURL = await ImageService.saveImages(file, {}, 'images', 'users', userId);
+    await User.findByIdAndUpdate(userId, {avatarURL})
+    return avatarURL
+}

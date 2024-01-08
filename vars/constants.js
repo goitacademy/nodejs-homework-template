@@ -5,3 +5,5 @@ exports.subscrUser = {
 };
 
 exports.sortOrder = ['ASC', 'DESC'];
+
+exports.oneMbSize = 1024 * 1024;

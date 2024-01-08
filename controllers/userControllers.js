@@ -1,8 +1,8 @@
-const { catchAsync } = require('../helpers');
-const { userService } = require('../service');
+const { catchAsync, HttpError } = require('../helpers');
+const { userService, ImageService } = require('../service');
 
 exports.register = catchAsync(async (req, res) => {
-    const { email, subscription } = await userService.register(req.body);
+    const { email, subscription} = await userService.register(req.body);
     res.status(201).json({
         user: {
             email,
@@ -12,11 +12,12 @@ exports.register = catchAsync(async (req, res) => {
 });
 
 exports.login = catchAsync(async (req, res) => {
-    const { email, subscription, token } = await userService.login(req.user);
+    const { email, subscription, token, avatarURL } = await userService.login(req.user);
     res.json({
         user: {
             email,
             subscription,
+            avatarURL,
         },
         token,
     });
@@ -35,4 +36,10 @@ exports.current = (req, res) => {
 exports.updateSubscription = catchAsync(async(req, res) => {
     const user = await userService.updateSubscription(req.user.id, req.body)
     res.json({user})
+})
+
+exports.uploadAvatar = catchAsync(async (req, res) => {
+    if(!req.file) throw new HttpError(400, 'File must be required')
+    const avatarURL = await userService.updateAvatar(req.user.id, req.file)
+    res.json({avatarURL})
 })
