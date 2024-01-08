@@ -11,10 +11,12 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "add": "^2.0.6",
     "cross-env": "7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
-    "jdi": "^1.1.3",
+    "joi": "^17.11.0",
+    "join": "^3.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
     "morgan": "^1.10.0",
@@ -28,5 +30,18 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
-  }
+  },
+  "description": "Realice un fork de este repositorio para realizar las tareas (2-6).El fork creará un repositorio en su",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Viktoriya-ri/nodejs-hw-rest-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Viktoriya-ri/nodejs-hw-rest-api/issues"
+  },
+  "homepage": "https://github.com/Viktoriya-ri/nodejs-hw-rest-api#readme"
 }
