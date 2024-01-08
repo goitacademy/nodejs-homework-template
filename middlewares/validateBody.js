@@ -1,4 +1,4 @@
-const { RequestError } = require('../helpers/RequestError')
+const { RequestError } = require('../helpers')
 
 const validateBody = (schema) => {
     const fn = (req, res, next) => {

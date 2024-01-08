@@ -1,6 +1,6 @@
 const express = require("express")
 
-const { getAll, getById, add, removeById, updateById, updateByFavorite } = require('../../controllers/contacts/index')
+const { getAll, getById, add, removeById, updateById, updateByFavorite } = require('../../controllers/contacts')
 const { validateBody, isValidId } = require('../../middlewares')
 const { bodySchema, updateByFavoriteSchema } = require('../../schemas/contacts')
 
