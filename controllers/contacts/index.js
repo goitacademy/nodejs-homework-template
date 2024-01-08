@@ -1,16 +1,17 @@
-const { ctrlWrapper } = require('../../helpers/index.js');
-const listContacts = require('./listContacts.js');
-const getById = require('./getById.js');
-const addContact = require('./addContact.js');
-const removeContact = require('./removeContact.js');
-const updateById = require('./updateById.js');
-const updateFavorite = require('./updateFavorite.js');
+const { ctrlWrapper } = require("../../helpers");
+
+const listContacts = require("./listContacts");
+const getById = require("./getById");
+const removeContact = require("./removeContact");
+const addContact = require("./addContact");
+const updateContact = require("./updateContact");
+const updateFavorite = require("./updateFavorite");
 
 module.exports = {
-    listContacts: ctrlWrapper(listContacts),
-    getById: ctrlWrapper(getById),
-    addContact: ctrlWrapper(addContact),
-    removeContact: ctrlWrapper(removeContact),
-    updateById: ctrlWrapper(updateById),
-    updateFavorite: ctrlWrapper(updateFavorite),
+  listContacts: ctrlWrapper(listContacts),
+  getById: ctrlWrapper(getById),
+  removeContact: ctrlWrapper(removeContact),
+  addContact: ctrlWrapper(addContact),
+  updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };

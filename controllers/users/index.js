@@ -1,14 +1,15 @@
-const { ctrlWrapper } = require("../../helpers/index.js");
-const register = require('./register.js');
-const login = require('./login.js');
-const getCurrent = require('./getCurrent.js');
-const logout = require('./logout.js');
-const updateSubscription = require('./updateSubscription.js');
+const { ctrlWrapper } = require("../../helpers");
+
+const register = require("./register");
+const login = require("./login");
+const getCurrent = require("./getCurrent");
+const logout = require("./logout");
+const updateSubscription = require("./updateSubscription");
 
 module.exports = {
-    register: ctrlWrapper(register),
-    login: ctrlWrapper(login),
-    getCurrent: ctrlWrapper(getCurrent),
-    logout: ctrlWrapper(logout),
-    updateSubscription: ctrlWrapper(updateSubscription)
-}
+  register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
+  logout: ctrlWrapper(logout),
+  getCurrent: ctrlWrapper(getCurrent),
+  updateSubscription: ctrlWrapper(updateSubscription),
+};
