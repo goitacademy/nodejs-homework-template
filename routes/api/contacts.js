@@ -62,7 +62,7 @@ router.delete("/:id", async (req, res, next) => {
     const deletedContact = contacts.removeContact(id);
     if (deletedContact) {
       res.status(200).json({
-        message: "good",
+        message: "contact deleted",
         deletedContact,
       });
 

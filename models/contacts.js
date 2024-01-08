@@ -37,15 +37,16 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     const data = await listContacts();
-    const contactIndex = data.filter((contact) => contact.id !== contactId);
+    const contactIndex = data.findIndex((contact) => contact.id === contactId);
 
     if (contactIndex !== -1) {
       const removedContact = data.splice(contactIndex, 1)[0];
 
       await fs.writeFile(contactsPath, JSON.stringify(data), "utf-8");
-      console.log("Contact removed: ", removedContact);
+      console.log("Contact removed:", removedContact);
       return removedContact;
     }
+
     console.log("No contacts found with the specified id");
     return null;
   } catch (error) {
@@ -53,6 +54,7 @@ const removeContact = async (contactId) => {
     throw error;
   }
 };
+
 
 const addContact = async (name, email, phone) => {
   try {
@@ -66,7 +68,7 @@ const addContact = async (name, email, phone) => {
     );
     if (existingContact) {
       console.log("Contact is already exists");
-      return;
+      return null;
     }
 
     const newContact = {
