@@ -71,7 +71,7 @@ const updateAvatar = async (req, res, next) => {
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
-  if (!tempUpload) {
+  if (!req.file) {
     throw HttpError(400, "Bad Request");
   }
   try {
