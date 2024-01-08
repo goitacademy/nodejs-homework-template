@@ -39,10 +39,10 @@ const listContacts = async (ownerId) => {
   }
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (contactId, ownerId) => {
   try {
     console.log("Searching for contact with ID:", contactId);
-    const contact = await Contact.findById(contactId);
+    const contact = await Contact.findOne({ _id: contactId, owner: ownerId });
     console.log("Result:", contact);
     return contact || null;
   } catch (err) {
@@ -51,9 +51,9 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {
+const removeContact = async (contactId, ownerId) => {
   try {
-    const removedContact = Contact.findByIdAndDelete(contactId);
+    const removedContact = Contact.findOneAndDelete({ _id: contactId, owner: ownerId });
     if (!removedContact) {
       console.warn("Contact not found");
       return null;
@@ -75,10 +75,10 @@ const addContact = async (body, ownerId) => {
   }
 };
 
-const updateContact = async (contactId, body) => {
+const updateContact = async (contactId, body, ownerId) => {
   try {
     const updatedContact = Contact.findByIdAndUpdate(
-      contactId,
+      { _id: contactId, owner: ownerId },
       { $set: body },
       { new: true }
     );
@@ -93,11 +93,11 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-const updateStatusContact = async (contactId, { favorite }) => {
+const updateStatusContact = async (contactId, { favorite }, ownerId) => {
   try {
     // const { contactId } = req.params;
     const updatedContact = await Contact.findByIdAndUpdate(
-      contactId,
+      { _id: contactId, owner: ownerId },
       { $set: { favorite } },
       { new: true }
     );
