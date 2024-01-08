@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto')
 
 const userSchema = new mongoose.Schema(
     {
@@ -16,7 +17,8 @@ const userSchema = new mongoose.Schema(
           enum: ["starter", "pro", "business"],
           default: "starter"
         },
-        token: String
+        token: String,
+        avatarUrl: String,
       },
       {
         timestamps: true,
@@ -24,6 +26,17 @@ const userSchema = new mongoose.Schema(
       }
     
 );
+
+userSchema.pre('save', async function(next) {
+  if(this.isNew) {
+    const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
+    this.avatarUrl = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=retro`
+  }
+  if(!this.isModified('password')) return next()
+
+  next();
+
+})
 
 const User = mongoose.model('User', userSchema);
 

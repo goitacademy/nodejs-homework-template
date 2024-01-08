@@ -1,10 +1,11 @@
-
+const uuid = require('uuid').v4
 const User = require("../models/users.js");
 const Joi = require("joi");
-const { PASSWD_REGEX } = require("../constats/regex.js");
+const { PASSWD_REGEX } = require("../constants/regex.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
+const multer = require("multer");
+const Jimp = require('jimp');
 const secKey = process.env.JWT_SECRET;
 
 const registrationSchema = Joi.object({
@@ -138,3 +139,106 @@ exports.logoutMiddleware = async (req, res, next) => {
   res.status(204).send();
 
 };
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cllbck) => {
+    cllbck(null, 'temp');
+  },
+  filename: (req, file, cllbck) => {
+    const extention = file.mimetype.split('/')[1];
+  cllbck(null, `${req.user.id}-${uuid()}.${extention}`)
+  }
+});
+
+const multerFilter = (req, file, cllbck) => {
+  if (file.mimetype.startsWith('image/')) {
+    cllbck(null, true);
+  } else {
+    cllbck(new Error('Invalid file type'), false);
+  }
+};
+
+exports. uploadUserAvatar = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+}).single('avatar')
+
+// const proccessAvatar = async (fileBuffer, userId) => {
+//   return new Promise((resolve, reject) => {
+//     Jimp.read(fileBuffer)
+//         .then((image) => {
+//             return image.resize(250, 250).write(`public/avatars/${userId}.jpg`, (err) => {
+//                 if (err) {
+//                     reject(err);
+//                 } else {
+//                     const avatarUrl = `/avatars/${userId}.jpg`;
+//                     resolve(avatarUrl);
+//                 }
+//             });
+//         })
+//         .catch((err) => {
+//             reject(err);
+//         });
+// });
+// }
+
+// const proccessAvatar = async (fileBuffer, userId) => {
+//       const image = await Jimp.read(fileBuffer);
+//       await image.resize(250, 250);
+//       await image.writeAsync(`public/avatars/${userId}.jpg`);
+//       const avatarUrl = `/avatars/${userId}.jpg`;
+//       return avatarUrl;
+// };
+
+const resizeImage = async (filePath, targetPath, width, height) => {
+  try {
+    const image = await Jimp.read(filePath);
+    await image.resize(width, height).write(targetPath);
+  } catch (error) {
+    console.error('Error resizing image:', error.message);
+    throw error;
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file provided' });
+    }
+
+    const userId = req.user._id.toString();
+    const originalFilePath = req.file.path;
+    const resizedFilePath = `public/avatars/${userId}.jpg`;
+
+    await resizeImage(originalFilePath, resizedFilePath, 250, 250);
+
+    const avatarUrl = `/avatars/${userId}.jpg`;
+
+    req.user.avatarUrl = avatarUrl;
+    await req.user.save();
+
+    res.status(200).json({ avatarUrl });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+// exports.updateUser = async(req, res) => {
+//   try {
+//     if(!req.file) {
+//       return res.status(400).json({ message: 'No file provided' });
+//     }
+  
+//     const userId = req.user._id.toString();
+//     const avatarUrl =await proccessAvatar(req.file.buffer, userId);
+//   //  `avatar/${req.file.filename}`
+//     req.user.avatarUrl = avatarUrl;
+//     await req.user.save();
+  
+//     res.status(200).json({ avatarUrl })
+  
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).json({ message: 'Internal Server Error' });
+//   }
+// }
