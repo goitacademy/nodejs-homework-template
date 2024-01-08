@@ -5,6 +5,12 @@ const express = require('express')
 const router = express.Router()
 const Contacts = require("../../models/contacts");
 const jsonParser = express.json();
+const Joi = require('joi');
+ const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required()
+ });
 
 router.get('/', async (req, res, next) => {
  const result = await Contacts.listContacts();
@@ -30,21 +36,21 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', jsonParser, async (req, res, next) => {
-  // const { name, email, phone } = req.params;
-  res.json({ message: 'template message' })
-  console.log(req.body);
-  // try {
-  //   const result = await Contacts.addContact(req.body);
  
-    // if (result === undefined) {
-    //  res.status(404).send("Error 404! Not found");
-    // }
-  //   res.status(200).json(result);
+  console.log(req.body);
+  try {
+    const {error} = addSchema.validate(req.body);
+    console.log(error);
+    if (error) {
+      res.status(400).json({ message: 'missing required name field' });
+    }
+    const result = await Contacts.addContact(req.body);
+    res.status(201).json(result);
     
-  //  } catch (error) {
-  //    console.error(error);
-  //    res.status(500).send("Internal Server Error");
-  //  }
+   } catch (error) {
+     console.error(error);
+     res.status(500).send("Internal Server Error");
+   }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
@@ -66,7 +72,24 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  // res.json({ message: 'template message' })
+  try {
+    const {error} = addSchema.validate(req.body);
+    console.log(error);
+    if (error) {
+      res.status(400).json({ message: 'missing required name field' });
+    }
+    const { contactId } = req.params;
+    const result = await Contacts.updateContact(contactId, req.body);
+    if (result === undefined) {
+      res.status(404).send("Error 404! Not found");
+     }
+     res.status(200).json(result);
+    
+   } catch (error) {
+     console.error(error);
+     res.status(500).send("Internal Server Error");
+   }
 })
 
 module.exports = router
