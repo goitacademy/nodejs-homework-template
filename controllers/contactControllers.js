@@ -14,13 +14,11 @@ const listContacts = catchAsync(async (req, res) => {
 
 const addContact = catchAsync(async (req, res) => {
 
-	const newContact = await contactServise.addContact(req.body, req.user);
+	const contact = await contactServise.addContact(req.body, req.user);
 
-	res.status(201).json({
-		mes: 'Success',
-		newContact,
-		// user: req.user,
-	})
+	res.status(201).json(
+		contact,
+	)
 })
 
 
@@ -29,9 +27,9 @@ const getContactById = catchAsync(async (req, res) => {
 
 	const contact = await contactServise.getContactByIdinDataBase(contactId, req.user);
 
-	res.status(200).json({
+	res.status(200).json(
 		contact,
-	})
+	)
 });
 
 
@@ -52,11 +50,10 @@ const updateContact = catchAsync(async (req, res) => {
 	const { contactId } = req.params;
 	const update = req.body;
 
-	const updatedUser = await contactServise.updateContact(contactId, update, req.user);
-	res.status(200).json({
-		mes: 'Success',
-		updatedUser,
-	})
+	const contact = await contactServise.updateContact(contactId, update, req.user);
+	res.status(200).json(
+		contact,
+	)
 })
 
 
@@ -66,10 +63,9 @@ const updateContactFavorite = catchAsync(async (req, res) => {
 
 	const updateFavorite = await contactServise.updateContactFavorite(contactId, favorite, req.user);
 
-	res.status(200).json({
-		mes: 'Success',
+	res.status(200).json(
 		updateFavorite,
-	})
+	)
 })
 
 

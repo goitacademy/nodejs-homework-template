@@ -1,5 +1,4 @@
-const { model, Schema, Types } = require('mongoose');
-const { userRolesEnum } = require('../constants');
+const { model, Schema } = require('mongoose');
 
 const contactsSchema = new Schema({
 	name: {
@@ -16,15 +15,9 @@ const contactsSchema = new Schema({
 		type: Boolean,
 		default: false,
 	},
-	role: {
-		type: String,
-		enum: Object.values(userRolesEnum),
-		default: userRolesEnum.USER,
-	},
 	owner: {
-		type: Types.ObjectId,
+		type: Schema.Types.ObjectId,
 		ref: 'users',
-		required: true,
 	}
 },
 	{

@@ -10,5 +10,5 @@ router.post('/login', userAuthMiddlewares.checkLoginUserData, userController.log
 router.post('/logout', userAuthMiddlewares.protect, userController.logOut);
 router.get('/current', userAuthMiddlewares.protect, userController.getMy);
 router.patch('/subscription', userAuthMiddlewares.protect, userAuthMiddlewares.checkSubscription, userController.updateSub);
-router.patch('/avatar', userAuthMiddlewares.protect, userAuthMiddlewares.uploadAvatar, userController.updateAvatar);
+router.patch('/avatars', userAuthMiddlewares.protect, userAuthMiddlewares.uploadAvatar, userController.updateAvatar);
 module.exports = router

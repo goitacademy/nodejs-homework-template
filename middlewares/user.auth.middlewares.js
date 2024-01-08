@@ -21,7 +21,8 @@ exports.checkLoginUserData = (req, res, next) => {
 	if (isEmpty) throw new HttpError(400, 'Invalid user data!....');
 
 	const { value, error } = userValidator.userRegistrationValidator(req.body);
-
+	console.log(value);
+	if (!value.email || !value.password) throw new HttpError(400, 'Invalid user data!....');
 	if (error) throw new HttpError(401, 'Not authorized', error);
 
 	req.body = value;
