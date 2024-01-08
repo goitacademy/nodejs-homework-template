@@ -1,51 +1,50 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+
 const { handleMongooseError } = require("../helpers");
 
-const contactSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, "Set name for contact"],
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
-  email: {
-    type: String,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  favorite: {
-    type: Boolean,
-    default: false,
-  },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'user',
-    required: true,
-  },
-});
+  { versionKey: false, timestamps: true }
+);
 
 contactSchema.post("save", handleMongooseError);
 
+const Contact = model("contact", contactSchema);
+
 const addSchema = Joi.object({
-  name: Joi.string().min(3).max(15).required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().min(10).required(),
+  name: Joi.string().required(),
+  email: Joi.string(),
+  phone: Joi.string(),
   favorite: Joi.boolean(),
 });
 
-const updateFavoriteSchema = Joi.object({
+const updFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
 const schemas = {
   addSchema,
-  updateFavoriteSchema,
-}
+  updFavoriteSchema,
+};
 
-const Contact = model("contact", contactSchema);
-
-module.exports = {
-    Contact,
-    schemas,
-}
+module.exports = { Contact, schemas };
