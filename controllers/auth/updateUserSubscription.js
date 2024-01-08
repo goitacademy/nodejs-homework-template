@@ -15,6 +15,7 @@ const updateUserSubscription = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(_id, { subscription });
 
   if (!updatedUser) throw HttpError(404, "Not found");
+  
     res.status(201).json({
         email: updatedUser.email,
         subscription: updatedUser.subscription
