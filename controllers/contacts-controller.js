@@ -52,7 +52,7 @@ const updateById = async (req, res, next) => {
             throw HttpError(400, error.message);
         }
         const { contactId } = req.params;
-        const result = await Contact.findByIdAndUpdate(contactId, req.body);
+        const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
         if (!result) {
             throw HttpError(404, `Movie with id=${contactId} not found`);
         }
