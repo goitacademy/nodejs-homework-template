@@ -12,6 +12,8 @@ const {
 
 const { schemas } = require("../../models/contact");
 
+router.use(authentificate);
+
 router.get("/", authentificate, ctrl.getAll);
 
 router.get("/:id", authentificate, isValidId, ctrl.getById);
