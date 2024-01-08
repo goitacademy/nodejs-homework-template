@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 
 const contactsRouter = require("./routes/api/contacts");
-
+const authRoutes = require("./routes/api/authRoutes");
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -16,8 +16,9 @@ app.use(cors());
 app.use(express.json());
 
 require("dotenv").config();
-
+// =================================================================
 app.use("/api/contacts", contactsRouter);
+app.use("/api/users", authRoutes);
 
 //========================mongo========================================
 mongoose.connect(process.env.MONGODB_URL).then(() => {
