@@ -3,7 +3,7 @@ import express from "express";
 import contactsControllers from "../../controllers/contacts-controllers.js";
 
 import { isEmptyBody, isValidId } from "../../middlewares/index.js";
-import { contactAddSchema, contactUpdateSchema, contactUpdateFavoriteSchema } from "../../models/Contact.js";
+// import { contactAddSchema, contactUpdateSchema, contactUpdateFavoriteSchema } from "../../models/Contact.js";
 
 
 const contactsRouter = express.Router();
