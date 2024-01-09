@@ -1,12 +1,12 @@
 const express = require('express');
 const { contactsController } = require('../../controllers');
 const { bodySchemaCreate, bodySchemaUpdate } = require('../../schemas/contactSchema');
-const { validateBody, checkValidId, checkUserByToken, validateQuery } = require('../../middlewares');
+const { validateBody, checkValidId, validateQuery, userMiddleware } = require('../../middlewares');
 const querySchema = require('../../schemas/querySchema');
 
 const router = express.Router();
 
-router.use(checkUserByToken)
+router.use(userMiddleware.checkUserByToken);
 router
     .route('/')
     .get(validateQuery(querySchema), contactsController.getContacts)

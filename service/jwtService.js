@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { HttpError } = require('../helpers');
+const { serverConfig } = require('../configs');
 
-const { SECRET_KEY, JWT_EXPIRES } = process.env;
+const { SECRET_KEY, JWT_EXPIRES } = serverConfig;
 
 exports.signToken = payload => jwt.sign(payload, SECRET_KEY, { expiresIn: JWT_EXPIRES });
 

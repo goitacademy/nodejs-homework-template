@@ -1,13 +1,11 @@
 const validateBody = require('./validateBody');
-const { checkValidId } = require('./checkValidId');
-const { checkLoginData } = require('./checkLoginData');
-const checkUserByToken = require('./checkUserByToken');
+const { checkValidId } = require('./contactMiddleware');
+const userMiddleware = require('./userMiddleware');
 const validateQuery = require('./validateQuery');
 
 module.exports = {
     validateBody,
     checkValidId,
-    checkLoginData,
-    checkUserByToken,
-    validateQuery
+    userMiddleware,
+    validateQuery,
 };
