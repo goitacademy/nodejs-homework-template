@@ -54,20 +54,9 @@
     "phone": "(748) 206-2688"
   },
   {
-    "name": "Oleg",
-    "email": "hid@gmail.com",
-    "phone": "4647788888",
-    "id": "b4706448-f475-475b-9e77-92c6cd5dab37"
-  },
-  {
-    "name": "Oleg",
-    "email": "goit@gmailcom",
-    "contactId": "75136edf-722f-4300-8d3f-0592e56c9f69"
-  },
-  {
-    "name": "Oleg",
-    "email": "goit@gmailcom",
-    "phone": "12-44-555-6",
-    "contactId": "3de891cd-2feb-4306-bfd8-5c87889a7f00"
+    "id": "e10e7c46-4746-4c4c-9b18-5acdcc01aa20",
+    "name": "Alex",
+    "email": "shhds@gmail.com",
+    "phone": "066-78-44-111"
   }
 ]
