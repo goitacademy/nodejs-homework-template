@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import mongoose from "mongoose";
 import app from "./app.js";
 
@@ -17,12 +16,4 @@ mongoose
     process.exit(1);
   });
 
-=======
-import mongoose from 'mongoose';
 
-const app = require('./app')
-// Db60e2sXCl6BZZpZ
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
->>>>>>> Stashed changes
