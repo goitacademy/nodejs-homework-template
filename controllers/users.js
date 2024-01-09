@@ -9,7 +9,9 @@ const { SECRET_KEY } = process.env;
  * @призначення для регістриції користувача
  */
 const registerUser = async (req, res, next) => {
-  const { email, password, subscription } = await contactServices.signup(req.body);
+  const { email, password, subscription } = await contactServices.signup(
+    req.body
+  );
 
   res.status(201).json({
     user: {
@@ -66,10 +68,14 @@ const resendVerifyEmail = async (req, res) => {
 
 /**
  * @призначення для авторизації користувача
+ * ///
  */
 
 const loginUser = async (req, res, next) => {
-  const { user, token } = await contactServices.login(req.body.email, req.body.password);
+  const { user, token } = await contactServices.login(
+    req.body.email,
+    req.body.password
+  );
 
   res.status(200).json({
     ResponseBody: {
@@ -80,12 +86,11 @@ const loginUser = async (req, res, next) => {
       },
     },
   });
-
-}
+};
 
 const logoutUser = async (req, res, next) => {
   const { msg } = await contactServices.logOut(req.user);
-  
+
   res.json({
     message: msg,
   });
@@ -94,32 +99,33 @@ const logoutUser = async (req, res, next) => {
 const getCurrentUser = async (req, res, next) => {
   const { email, subscription } = await contactServices.getCurrent(req.user);
 
-    res.json({
-      email: email,
-      subscription: subscription,
-    });
+  res.json({
+    email: email,
+    subscription: subscription,
+  });
 };
 
 const updateUserSubscription = async (req, res, next) => {
-  const { email, subscription } = await contactServices.updateSubscription(req.user, req.body);
- 
+  const { email, subscription } = await contactServices.updateSubscription(
+    req.user,
+    req.body
+  );
+
   res.status(200).json({
     email: email,
     subscription: subscription,
   });
 };
 
-
 const updateUserAvatar = async (req, res, next) => {
   if (!req.file) throw HttpError(400);
 
-    const { avatarURL } = await contactServices.updateAvatar(req.user, req.file);
+  const { avatarURL } = await contactServices.updateAvatar(req.user, req.file);
 
   res.status(200).json({
     avatarURL: avatarURL,
   });
 };
-
 
 module.exports = {
   registerUser: ctrlWrapper(registerUser),
