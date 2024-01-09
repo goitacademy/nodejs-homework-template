@@ -52,9 +52,9 @@ const favorite = async (req, res, next) => {
   const { contactId } = req.params;
   const favorite = req.body.favorite;
   if (!favorite) res.status(400).json({ message: "missing field favorite" });
-  const updateStatusContact(contactId, body) = req.body;
-  if (updateStatusContact) res.status(200).json(updateStatusContact)
-  res.status(404).json({" message ":" Not found "})
+  const updateStatusContact = req.body;
+  if (updateStatusContact) res.status(200).json(updateStatusContact);
+  res.status(404).json({ " message ": " Not found " });
 };
 module.exports = {
   getAll: decorarot(getAll),
