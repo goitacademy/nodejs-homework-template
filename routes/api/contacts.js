@@ -1,7 +1,5 @@
 
 const express = require('express')
-// const fs = require("node:fs/promises");
-// const path = require("node:path");
 const router = express.Router()
 const Contacts = require("../../models/contacts");
 const jsonParser = express.json();
