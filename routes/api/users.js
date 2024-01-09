@@ -10,8 +10,6 @@ const { schemas } = require("../../models/user");
 
 // signup
 router.post("/register", validateBody(schemas.registerSchema), ctrl.registerUser);
-router.get("/verify/:verificationToken", ctrl.verifyEmail);                              // для підтверження емейлу
-router.post("/verify", validateBody(schemas.EmailSchema, ctrl.resendVerifyEmail));      // для повторного підтверження емейлу
 router.post("/login",  validateBody(schemas.registerSchema),  ctrl.loginUser);
 router.post("/logout", authenticate, ctrl.logoutUser);
 router.get("/current", authenticate, ctrl.getCurrentUser);

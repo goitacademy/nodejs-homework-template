@@ -1,16 +1,15 @@
 const { Types } = require("mongoose");
 const { Contact } = require("../models/contact");
 const { User } = require("../models/user");
-const { HttpError, sendEmail } = require("../helpers");
+const { HttpError } = require("../helpers");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");                                      // пакет для генерації аватара по емейл
 const path = require("path");           
 const fs = require("fs/promises");                                         // відмовідає за всі операції з файлами
 const Jimp = require("jimp");                                                // пакет для обробки зображення (якщо, напр. користувач буде присилати велике зобр) 
-const { nanoid } = require("nanoid");
 
-const { SECRET_KEY, BASE_URL } = process.env;
+const { SECRET_KEY } = process.env;
 
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");        // створюємо шлях ...public/avatars
 
@@ -106,23 +105,13 @@ exports.signup = async (userdata) => {
   
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);                                     // створюємо аватарку автоматично
-  const verificationToken = nanoid();
-
+  
   const newUser = await User.create({
     ...userdata,
     password: hashPassword,
     avatarURL,
-    verificationToken,
   });
-
-
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
-  };
   
-  await sendEmail(verifyEmail);
   
   return newUser;
 };
@@ -139,10 +128,6 @@ exports.login = async (email, password) => {
 
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
-  }
-
-  if (!user.verify) {
-    throw HttpError(401, "Email not verify");
   }
 
   const passwordCompare = await bcrypt.compare(password, user.password);
