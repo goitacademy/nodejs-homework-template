@@ -9,6 +9,8 @@ const { SECRET_KEY } = process.env;
  * @призначення для регістриції користувача
  * ///
  */
+// return hw 5
+
 const registerUser = async (req, res, next) => {
   const { email, password, subscription } = await contactServices.signup(
     req.body
