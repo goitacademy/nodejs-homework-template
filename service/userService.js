@@ -29,7 +29,7 @@ exports.updateSubscription = (userId, subscription) =>
 
 exports.updateAvatar = async (userId, file) => {
     console.log("userId:", userId)
-    const avatarURL = await ImageService.saveImages(file, {}, 'images', 'users', userId);
+    const avatarURL = await ImageService.saveImages(file, {}, 'images', 'users', 'avatars', userId);
     await User.findByIdAndUpdate(userId, {avatarURL})
     return avatarURL
 }
