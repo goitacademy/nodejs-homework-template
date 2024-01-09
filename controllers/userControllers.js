@@ -1,5 +1,5 @@
 const { catchAsync, HttpError } = require('../helpers');
-const { userService, ImageService } = require('../service');
+const { userService } = require('../service');
 
 exports.register = catchAsync(async (req, res) => {
     const { email, subscription} = await userService.register(req.body);
