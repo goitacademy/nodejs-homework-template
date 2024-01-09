@@ -68,37 +68,6 @@ const resendVerifyEmail = async (req, res) => {
  * @призначення для авторизації користувача
  */
 
-const loginUser = async (req, res, next) => {
-  const { user, token } = await contactServices.login(req.body.email, req.body.password);
-
-  res.status(200).json({
-    ResponseBody: {
-      token: token,
-      user: {
-        email: user.email,
-        subscription: user.subscription,
-      },
-    },
-  });
-
-}
-
-const logoutUser = async (req, res, next) => {
-  const { msg } = await contactServices.logOut(req.user);
-  
-  res.json({
-    message: msg,
-  });
-};
-
-const getCurrentUser = async (req, res, next) => {
-  const { email, subscription } = await contactServices.getCurrent(req.user);
-
-    res.json({
-      email: email,
-      subscription: subscription,
-    });
-};
 
 const updateUserSubscription = async (req, res, next) => {
   const { email, subscription } = await contactServices.updateSubscription(req.user, req.body);
