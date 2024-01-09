@@ -1,22 +1,20 @@
 // @ GET /api/contacts
 
-const contacts = require("../../models/contacts");
+const { basedir } = global;
 
-const getAllContacts = async (_req, res, next) => {
-  try {
-    const result = await contacts.listContacts();
+const service = require(`${basedir}/services`);
 
-    return res.json({
-      status: "Success",
-      code: 200,
-      message: "Contacts found",
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
+const getAllContacts = async (_req, res) => {
+  const result = await service.getAll();
+
+  return res.json({
+    status: "Success",
+    code: 200,
+    message: "Contacts found",
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = getAllContacts;

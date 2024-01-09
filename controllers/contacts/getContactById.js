@@ -1,29 +1,26 @@
 // @ GET /api/contacts/:id
 
-const contacts = require("../../models/contacts");
+const { basedir } = global;
 
-const { createError } = require("../../helpers");
+const service = require(`${basedir}/services`);
 
-const getContactById = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.getContactById(id);
+const { createError } = require(`${basedir}/help`);
 
-    if (result) {
-      return res.json({
-        status: "Success",
-        code: 200,
-        message: "Contact found",
-        data: {
-          result,
-        },
-      });
-    } else {
-      throw createError(404);
-    }
-  } catch (error) {
-    next(error);
+const getContactById = async (req, res) => {
+  const { id } = req.params;
+  const result = await service.getById(id);
+
+  if (!result) {
+    throw createError(404);
   }
+  return res.json({
+    status: "Success",
+    code: 200,
+    message: "Contact found",
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = getContactById;

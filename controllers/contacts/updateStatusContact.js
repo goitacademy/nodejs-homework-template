@@ -1,21 +1,21 @@
-// @ PUT /api/contacts/:id
-
+// @ PATCH /api/contacts/:id/favorite
 const { basedir } = global;
 
 const service = require(`${basedir}/services`);
 
 const { schemas } = require(`${basedir}/models/contact`);
 
-const { createError } = require(`${basedir}/help`);
+const { createError } = require(`${basedir}/helpers`);
 
-const updateContact = async (req, res) => {
-  const { error } = schemas.add.validate(req.body);
+const updateStatusContact = async (req, res) => {
+  const { error } = schemas.favoriteSchema.validate(req.body);
+
   if (error) {
-    throw createError(404, "Missing fields");
+    throw createError(404, "Missing field favorite");
   }
 
   const { id } = req.params;
-  const result = await service.update(id, req.body);
+  const result = await service.updateStatus(id, req.body);
 
   if (!result) {
     throw createError(404);
@@ -30,5 +30,4 @@ const updateContact = async (req, res) => {
     },
   });
 };
-
-module.exports = updateContact;
+module.exports = updateStatusContact;

@@ -1,29 +1,26 @@
 // @ DELETE /api/contacts/:id
 
-const contacts = require("../../models/contacts");
+const { basedir } = global;
 
-const { createError } = require("../../helpers/createError");
+const service = require(`${basedir}/services`);
 
-const removeContact = async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const result = await contacts.removeContact(id);
+const { createError } = require(`${basedir}/help`);
 
-    if (result) {
-      return res.json({
-        status: "Success",
-        code: 200,
-        message: "Contact deleted",
-        data: {
-          result,
-        },
-      });
-    } else {
-      throw createError(404);
-    }
-  } catch (error) {
-    next(error);
+const removeContact = async (req, res) => {
+  const { id } = req.params;
+  const result = await service.remove(id);
+
+  if (!result) {
+    throw createError(404);
   }
+  return res.json({
+    status: "Success",
+    code: 200,
+    message: "Contact deleted",
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = removeContact;

@@ -1,31 +1,29 @@
 // @ POST /api/contacts
 
-const contacts = require("../../models/contacts");
+const { basedir } = global;
 
-const { contactSchema } = require("../../schemas/contacts");
+const service = require(`${basedir}/services`);
 
-const { createError } = require("../../helpers");
+const { schemas } = require(`${basedir}/models/contact`);
 
-const addContact = async (req, res, next) => {
-  try {
-    const { error } = contactSchema.validate(req.body);
+const { createError } = require(`${basedir}/help`);
 
-    if (error) {
-      throw createError(400, "Missing required name field");
-    }
+const addContact = async (req, res) => {
+  const { error } = schemas.add.validate(req.body);
 
-    const result = await contacts.addContact(req.body);
-    return res.json({
-      status: "Success",
-      code: 201,
-      message: "Request successful. Contact created",
-      data: {
-        result,
-      },
-    });
-  } catch (error) {
-    next(error);
+  if (error) {
+    throw createError(400, "Missing required name field");
   }
+
+  const result = await service.add(req.body);
+  return res.json({
+    status: "Success",
+    code: 201,
+    message: "Request successful. Contact created",
+    data: {
+      result,
+    },
+  });
 };
 
 module.exports = addContact;
