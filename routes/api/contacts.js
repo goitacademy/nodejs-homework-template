@@ -14,7 +14,6 @@ const addScheme = Joi.object({
 });
 
 router.get('/', async (req, res, next) => {
-  // res.json(contacts);
   try {
     const result = await contacts.listContacts();
     res.json(result);
@@ -26,7 +25,6 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    console.log(req.params);
     const result = await contacts.getContactById(contactId);
     if (!result) {
       throw HttpError(404, "Not Found");
@@ -52,11 +50,35 @@ router.post('/', async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+try {
+  const { contactId } = req.params;
+  console.log(contactId);
+  const result = await contacts.removeContact(contactId);
+  if (!result) {
+    throw HttpError(404, "Not Found");
+  }
+    res.status(200).json({"message": "contact deleted"});
+  }  catch (err) {
+    next(err);
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    console.log(req.body);
+    const { error } = addScheme.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contacts.updateContact(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, "Not Found");
+    }
+    res.json(result);
+  } catch(error) {
+    next(error);
+  }
 })
 
 module.exports = router
