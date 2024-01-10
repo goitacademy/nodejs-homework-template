@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
-//! === Joi schemas ===
+//! === Joi schema ===
 
 const addSchema = Joi.object({
   name: Joi.string()
@@ -38,7 +38,7 @@ const updateStatusSchema = Joi.object({
     .messages({ "any.required": "missing field favorite" }),
 });
 
-//! === Mongoose schemas ===
+//! === Mongoose schema ===
 
 const contactSchema = new Schema(
   {
