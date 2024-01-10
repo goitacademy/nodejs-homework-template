@@ -32,10 +32,15 @@ router.post("/", async (req, res, next) => {
 
   const { error } = contactBodySchema.validate(body);
   if (error) {
-    res.status(400).json({ message: "missing required name field" });
+    res
+      .status(400)
+      .json({ message: `missing required ${error.details[0].path[0]} field` });
     return;
   }
-  const newContact = await addContact(body);
+
+  const newContactBody = { id: Math.floor(Math.random() * 1e6), ...body };
+
+  const newContact = await addContact(newContactBody);
 
   res.status(201).json(newContact);
 });

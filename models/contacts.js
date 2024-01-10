@@ -35,12 +35,8 @@ const removeContact = async (contactId) => {
   return removedContactById;
 };
 
-const addContact = async (body) => {
+const addContact = async (newContact) => {
   const contacts = await listContacts();
-  const newContact = {
-    id: Math.random().toString(),
-    ...body,
-  };
 
   const updatedContacts = [...contacts, newContact];
   await fs.writeFile(contactsPath, JSON.stringify(updatedContacts, null, 2));
