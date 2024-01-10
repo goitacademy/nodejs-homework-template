@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../helpers");
+// const { handleMongooseError } = require("../helpers");
 
 const contactSchema = new Schema(
   {
@@ -25,13 +25,8 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", handleMongooseError);
+// contactSchema.post("save", handleMongooseError);
 
-// if (typeof handleMongooseError === "function") {
-//   contactSchema.post("save", handleMongooseError);
-// } else {
-//   console.error("handleMongooseError не является функцией или не определен");
-// }
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
