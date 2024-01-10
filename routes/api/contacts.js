@@ -5,7 +5,7 @@ const router = express.Router();
 
 const contacts = require("../../models/contacts");
 
-const { HttpError } = require("../../helpers");
+// const { HttpError } = require("../../helpers");
 
 const addScheme = Joi.object({
   name: Joi.string().required(),
@@ -27,7 +27,8 @@ router.get('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await contacts.getContactById(contactId);
     if (!result) {
-      throw HttpError(404, "Not Found");
+      // throw HttpError(404, "Not Found");
+      res.status(404).json({"message": "Not found"});
     }
     res.status(200).json(result);
   } catch (err) {
@@ -40,7 +41,8 @@ router.post('/', async (req, res, next) => {
     console.log(req.body);
     const { error } = addScheme.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing required name field");
+      // throw HttpError(400, "missing required name field");
+      res.status(400).json({"message": "missing required name field"});
     }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
@@ -55,7 +57,8 @@ try {
   console.log(contactId);
   const result = await contacts.removeContact(contactId);
   if (!result) {
-    throw HttpError(404, "Not Found");
+    // throw HttpError(404, "Not Found");
+    res.status(404).json({"message": "Not found"});
   }
     res.status(200).json({"message": "contact deleted"});
   }  catch (err) {
@@ -68,12 +71,14 @@ router.put('/:contactId', async (req, res, next) => {
     console.log(req.body);
     const { error } = addScheme.validate(req.body);
     if (error) {
-      throw HttpError(400, "missing required name field");
+      // throw HttpError(400, "missing required name field");
+      res.status(400).json({"message": "missing required name field"});
     }
     const { contactId } = req.params;
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {
-      throw HttpError(404, "Not Found");
+      // throw HttpError(404, "Not Found");
+      res.status(404).json({"message": "Not Found"});
     }
     res.json(result);
   } catch(error) {
