@@ -1,4 +1,3 @@
-
 const fs = require("node:fs/promises");
 const path = require("node:path");
 const crypto = require("node:crypto");
@@ -21,7 +20,6 @@ const writeFile = async (contacts) => {
     throw new Error(`Error reading contacts: ${error.message}`);
   }
 };
-
 
 const listContacts = async () => {
   try {
@@ -90,4 +88,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
