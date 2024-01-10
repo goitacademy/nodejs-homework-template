@@ -32,7 +32,7 @@ userSchema.pre('save', async function(next) {
     const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
     this.avatarUrl = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=retro`
   }
-  if(!this.isModified('password')) return next()
+ 
 
   next();
 

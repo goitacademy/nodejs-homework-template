@@ -1,3 +1,4 @@
+const fsPromises = require('fs').promises;
 const uuid = require('uuid').v4
 const User = require("../models/users.js");
 const Joi = require("joi");
@@ -6,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const Jimp = require('jimp');
+
+
 const secKey = process.env.JWT_SECRET;
 
 const registrationSchema = Joi.object({
@@ -145,7 +148,7 @@ const multerStorage = multer.diskStorage({
     cllbck(null, 'temp');
   },
   filename: (req, file, cllbck) => {
-    const extention = file.mimetype.split('/')[1];
+  const extention = file.mimetype.split('/')[1];
   cllbck(null, `${req.user.id}-${uuid()}.${extention}`)
   }
 });
@@ -213,9 +216,12 @@ exports.updateUser = async (req, res) => {
     await resizeImage(originalFilePath, resizedFilePath, 250, 250);
 
     const avatarUrl = `/avatars/${userId}.jpg`;
-
+    await fsPromises.unlink(originalFilePath);
+    // fs.unlink(originalFilePath);
     req.user.avatarUrl = avatarUrl;
+    req.file.path = null;
     await req.user.save();
+
 
     res.status(200).json({ avatarUrl });
   } catch (error) {
