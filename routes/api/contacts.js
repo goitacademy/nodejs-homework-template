@@ -4,7 +4,7 @@ const { basedir } = global;
 
 const ctrl = require(`${basedir}/controllers/contacts`);
 
-const { ctrlWrapper } = require(`${basedir}/helpers`);
+const { ctrlWrapper } = require(`${basedir}/helpe`);
 
 const router = express.Router();
 
