@@ -223,22 +223,3 @@ exports.updateUser = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-// exports.updateUser = async(req, res) => {
-//   try {
-//     if(!req.file) {
-//       return res.status(400).json({ message: 'No file provided' });
-//     }
-  
-//     const userId = req.user._id.toString();
-//     const avatarUrl =await proccessAvatar(req.file.buffer, userId);
-//   //  `avatar/${req.file.filename}`
-//     req.user.avatarUrl = avatarUrl;
-//     await req.user.save();
-  
-//     res.status(200).json({ avatarUrl })
-  
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// }
