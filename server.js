@@ -1,18 +1,18 @@
-const app = require("./app");
 const mongoose = require("mongoose");
-const { envsConfig } = require("./configs");
 
-// mongodb + srv://Olena:3144223@cluster0.ic2uyyp.mongodb.net/?retryWrites=true&w=majority
+const app = require("./app");
+
+const { DB_HOST, PORT = 3000 } = process.env;
+
+mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(envsConfig.dbHost)
+  .connect(DB_HOST)
   .then(() => {
-    app.listen(envsConfig.port, () => {
-      console.log(`Server running. Use our API on port: ${envsConfig.port}`);
-    });
+    app.listen(PORT);
   })
-  .catch(() => {
-    console.log("Connection error");
+  .catch((error) => {
+    console.log(error.message);
     process.exit(1);
   });
 

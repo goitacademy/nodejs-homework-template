@@ -27,6 +27,11 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
+// if (typeof handleMongooseError === "function") {
+//   contactSchema.post("save", handleMongooseError);
+// } else {
+//   console.error("handleMongooseError не является функцией или не определен");
+// }
 const addSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
@@ -41,6 +46,6 @@ const schemas = {
   addSchema,
   updateFavoriteSchema,
 };
-const Contact = model("contact", contactSchema);
+const contact = model("contact", contactSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { contact, schemas };
