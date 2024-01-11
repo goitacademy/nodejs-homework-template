@@ -24,6 +24,7 @@ const aunthenticate = async (req, res, next) => {
       next(HttpError(401));
     }
 
+    req.user = user; //* До обєкту Реквест додаємо ключ `user`, яке буде = користувачу, який ми знайшли по `id`
     next();
   } catch (error) {
     next(HttpError(401));
