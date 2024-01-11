@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const addSchema = Joi.object({
+const userInputSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   phone: Joi.string()
@@ -8,5 +8,5 @@ const addSchema = Joi.object({
 });
 
 module.exports = {
-  addSchema,
+  userInputSchema,
 };
