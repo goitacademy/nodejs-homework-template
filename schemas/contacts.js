@@ -10,4 +10,5 @@ const addSchema = Joi.object({
 const addFavoriteSchema = Joi.object({
   favorite: Joi.string().required(),
 });
+
 module.exports = { addSchema, addFavoriteSchema };

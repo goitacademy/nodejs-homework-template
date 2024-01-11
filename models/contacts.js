@@ -1,5 +1,3 @@
-const crypto = require("crypto");
-
 const mongoose = require("mongoose");
 
 const contactsSchema = new mongoose.Schema({
@@ -27,6 +25,9 @@ const listContacts = async () => {
 };
 
 const getContactById = async (contactId) => {
+  if (!mongoose.isValidObjectId(contactId)) {
+    return null;
+  }
   const contact = await contactsDB.findById(contactId);
   return contact || null;
 };
@@ -40,7 +41,6 @@ const addContact = async (body) => {
   const { name, email, phone, favorite } = body;
 
   const newContact = {
-    id: crypto.randomUUID(),
     name: name,
     email: email,
     phone: phone,
