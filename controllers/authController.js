@@ -1,4 +1,4 @@
-const { signup, login, logout, updateSubscription, uploadFile, updateAvatarPath } = require("../services");
+const { signup, login, logout, updateSubscription, uploadFile, updateAvatarPath, checkVerificationToken } = require("../services");
 // const path = require("path");
 
 exports.signup = async (req, res, next) => {
@@ -48,6 +48,19 @@ exports.uploadAvatar = async (req, res, next) => {
     await updateAvatarPath(req.user, uploadedFileName);
     res.status(200).json({
       avatarURL: uploadedFileName,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.userOfVerification = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  try {
+    await checkVerificationToken(verificationToken);
+
+    res.status(200).json({
+      message: "Verification successful",
     });
   } catch (error) {
     next(error);

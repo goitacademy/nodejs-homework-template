@@ -1,6 +1,7 @@
 const fs = require("fs").promises;
 const path = require("path");
 const Jimp = require("jimp");
+const nodemailer = require("nodemailer");
 
 // settings for upload
 const storeImage = path.join(process.cwd(), "/public/avatars");
@@ -34,6 +35,33 @@ exports.proceedFile = async (filePath, originalName, userId) => {
     .quality(60) // set JPEG quality
     .writeAsync(newPath); // save
   return newPath;
+};
+
+//
+
+const mailConfig = {
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "i.am.blinova@gmail.com",
+    pass: process.env.SMTP_PASSWORD,
+  },
+};
+
+const transporter = nodemailer.createTransport(mailConfig);
+
+exports.sendMail = (mailTo, verificationToken) => {
+  const emailOptions = {
+    from: "irynanodejs@gmail.com",
+    to: mailTo,
+    subject: "Nodemailer test",
+    text: `localhost:3000/api/users/verify/${verificationToken}`,
+  };
+  return transporter
+    .sendMail(emailOptions)
+    .then((info) => console.log(info))
+    .catch((err) => console.log(err));
 };
 
 exports.storeImage = storeImage;

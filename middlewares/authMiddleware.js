@@ -27,6 +27,11 @@ exports.checkLoginData = async (req, res, next) => {
   next();
 };
 
+exports.checkVerification = async (req, res, next) => {
+  const currentUser = await services.getCurrentUser(req.body.email);
+  if (!currentUser.verify) throw new HttpError(401, "User not activation..");
+};
+
 exports.protect = async (req, res, next) => {
   const token = req.headers.authorization?.startsWith("Bearer") && req.headers.authorization.split(" ")[1];
   if (!token) throw new HttpError(401, "Unauthorized");

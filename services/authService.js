@@ -4,8 +4,8 @@ const bcrypt = require("bcryptjs");
 const { signToken } = require("./jwtService");
 const gravatar = require("gravatar");
 const fs = require("fs").promises;
-const path = require("path");
 const utils = require("../utils");
+const { v4: uuidv4 } = require("uuid");
 
 // service functions
 exports.uploadFile = async (temporaryName, originalName, userId) => {
@@ -43,11 +43,11 @@ exports.signup = async (data) => {
     email: data.email,
     password: hash,
     avatarURL: avatarLink,
+    verificationToken: uuidv4(),
   });
   newUser.password = undefined;
-
+  utils.sendMail(newUser.email, newUser.verificationToken);
   // const token = signToken(newUser.id);
-
   return { user: newUser };
 };
 
@@ -79,4 +79,13 @@ exports.updateSubscription = (newSubscription, user) => {
   user.subscription = newSubscription.subscription;
   user.save();
   return user;
+};
+
+exports.checkVerificationToken = async (token) => {
+  const user = await models.UsersModel.findOne({ verificationToken: token });
+  if (!user) throw new HttpError(404, "User not found");
+
+  user.verificationToken = null;
+  user.verify = true;
+  await user.save();
 };

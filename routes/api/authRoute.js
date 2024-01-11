@@ -23,7 +23,8 @@ const upload = multer({
 const router = Router();
 
 router.post("/register", authMiddleware.checkSignupData, authController.signup);
-router.post("/login", authMiddleware.checkLoginData, authController.login);
+
+router.post("/login", authMiddleware.checkVerification, authMiddleware.checkLoginData, authController.login);
 router.post("/logout", authMiddleware.protect, authController.logout);
 
 router.get("/current", authMiddleware.protect, authController.current);
@@ -31,4 +32,6 @@ router.get("/current", authMiddleware.protect, authController.current);
 router.patch("/", authMiddleware.protect, authMiddleware.checkSubscriptionData, authController.updateSubscription);
 
 router.patch("/avatars", authMiddleware.protect, upload.single("avatar"), authController.uploadAvatar);
+
+router.get("/verify/:verificationToken", authController.userOfVerification);
 module.exports = router;
