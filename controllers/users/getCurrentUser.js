@@ -1,7 +1,12 @@
-const getCurrentUser = async (req, res) => {
-  const { email, subscription } = await req.user;
+const { HttpError } = require("../../helpers");
 
-  res.json({ email, subscription });
+const getCurrentUser = async (req, res) => {
+  try {
+    const { email, subscription } = req.user;
+    res.json({ email, subscription });
+  } catch (error) {
+    throw HttpError(401, "Unauthorized");
+  }
 };
 
 module.exports = getCurrentUser;
