@@ -51,10 +51,10 @@ const login = async (req, res) => {
 
   // const token = "fdas4dasdfg.as3df5sd.khjgfg4213";
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-  //* Не тільки відправляємо токен, а ще й записуємо в базу людині, яка залогінилася
+  //* Не тільки відправляємо токен, а ще й записуємо в базу користувачу, який залогінився
   await User.findByIdAndUpdate(user._id, { token });
 
-  res.json({
+  res.status(200).json({
     token,
     user: {
       email: user.email,
@@ -67,7 +67,7 @@ const login = async (req, res) => {
 const getCurrent = async (req, res) => {
   const { email, subscription } = req.user;
 
-  res.json({
+  res.status(200).json({
     email,
     subscription,
   });
@@ -81,9 +81,34 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+//! === updateSubscription ===
+const updateSubscription = async (req, res) => {
+  const { _id } = req.user;
+  // console.log(req.user);
+  const { subscription } = req.body;
+  // console.log(req.body);
+  if (
+    subscription !== "starter" &&
+    subscription !== "pro" &&
+    subscription !== "business"
+  ) {
+    throw HttpError(
+      400,
+      "Subscription not true, must be: starter, pro or business"
+    );
+  }
+
+  const updateUser = await User.findByIdAndUpdate(_id, { subscription });
+  if (!updateUser) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(201).json(updateUser);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
+  updateSubscription: ctrlWrapper(updateSubscription),
 };
