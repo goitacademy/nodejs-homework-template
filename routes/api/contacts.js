@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// const = require("../../validator/validator");
+const { schemaAdd, schemaUpdate } = require("../../validate/validate");
 
 const {
   listContacts,
@@ -39,7 +39,7 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   try {
     const body = req.body;
-    //validator?
+    const { error } = schemaAdd.validate(body);
     if (error) {
       return res.status(400).json({ message: error.message });
     }
@@ -69,11 +69,11 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-try{
-  const { contactId } = req.params;
-  const updatedContact = req.body;
-    //validate
-    
+  try {
+    const { contactId } = req.params;
+    const updatedContact = req.body;
+    const { error } = schemaUpdate.validate(updatedContact);
+
     if (error) {
       return res.status(400).json({ message: error.message });
     }
@@ -84,12 +84,10 @@ try{
     } else if (response === "Not found") {
       res.status(404).json({ message: "Contact not found!" });
     }
-}
-catch (error){
-  res.status(500).json({ message: "Internal Server Error" });
-  console.error(error);
-}
-
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+    console.error(error);
+  }
 });
 
 module.exports = router;
