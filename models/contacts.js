@@ -22,8 +22,8 @@ const removeContact = async (contactId) => {
     const restOfContacts = contacts.filter(
       (contact) => contact.id != contactId
     );
-    await fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
-    console.log(`${contactToDelete} has been deleted`);
+    await fs.writeFile(contactPath, JSON.stringify(restOfContacts, null, 2));
+    console.log(`${contactToDelete.name} has been deleted`);
     return true;
   } else {
     console.log(`${contactToDelete} was not found`);
@@ -52,7 +52,7 @@ const updateContact = async (contactId, body) => {
     return "Not found";
   } else {
     contacts[indexToUpdate] = { ...contacts[indexToUpdate], ...body };
-    fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    fs.writeFile(contactPath, JSON.stringify(contacts, null, 2));
     return "Contact updated!";
   }
 };
