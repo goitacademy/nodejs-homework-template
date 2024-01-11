@@ -13,7 +13,7 @@ const {
 router.get("/", async (req, res, next) => {
   try {
     const contacts = await listContacts();
-    res.status(200).json({ message: contacts });
+    res.status(200).json(contacts);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
     console.error(error);
@@ -26,7 +26,7 @@ router.get("/:contactId", async (req, res, next) => {
     const response = await getContactById(contactId);
 
     if (response !== null) {
-      res.status(200).json({ message: response });
+      res.status(200).json((response));
     } else {
       res.status(404).json({ message: "Not found" });
     }
