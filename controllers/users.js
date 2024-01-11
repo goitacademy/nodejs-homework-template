@@ -87,16 +87,6 @@ const updateSubscription = async (req, res) => {
   // console.log(req.user);
   const { subscription } = req.body;
   // console.log(req.body);
-  if (
-    subscription !== "starter" &&
-    subscription !== "pro" &&
-    subscription !== "business"
-  ) {
-    throw HttpError(
-      400,
-      "Subscription not true, must be: starter, pro or business"
-    );
-  }
 
   const updateUser = await User.findByIdAndUpdate(_id, { subscription });
   if (!updateUser) {
