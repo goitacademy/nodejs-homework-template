@@ -20,6 +20,9 @@ const userSchema = new Schema(
       required: true,
       minlength: 6,
     },
+    token: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
