@@ -36,10 +36,17 @@ const updateContact = async (req, res, next) => {
   res.json(result);
 };
 
+const updateStatusContact = async (req, res, next) => {
+  const { contactId } = req.params;
+  const result = await contacts.updateStatusContact(contactId, req.body);
+  res.json(result);
+};
+
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
   getContactById: ctrlWrapper(getContactById),
   addContact: ctrlWrapper(addContact),
   removeContact: ctrlWrapper(removeContact),
   updateContact: ctrlWrapper(updateContact),
+  updateStatusContact: ctrlWrapper(updateStatusContact),
 };

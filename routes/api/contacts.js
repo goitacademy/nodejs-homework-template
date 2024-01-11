@@ -26,4 +26,10 @@ router.put(
   ctrl.updateContact
 );
 
+router.patch(
+  "/:contactId/favorite",
+  validateBody(schema.addFavoriteSchema, "missing field favorite"),
+  ctrl.updateStatusContact
+);
+
 module.exports = router;
