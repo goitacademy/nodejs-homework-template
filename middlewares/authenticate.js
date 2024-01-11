@@ -5,7 +5,7 @@ const { HttpError } = require("../helpers");
 
 const { SECRET_KEY } = process.env;
 
-const aunthenticate = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
@@ -20,7 +20,7 @@ const aunthenticate = async (req, res, next) => {
     //* Перевіряємо чи є людина в базі
     const user = await User.findById(id);
 
-    if (!user) {
+    if (!user || !user.token || user.token !== token) {
       next(HttpError(401));
     }
 
@@ -31,4 +31,4 @@ const aunthenticate = async (req, res, next) => {
   }
 };
 
-module.exports = aunthenticate;
+module.exports = authenticate;
