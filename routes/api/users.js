@@ -134,43 +134,48 @@ router.get('/current', authMiddleware, async (req, res) => {
 });
 
 router.patch(
-    '/avatars',
-    authMiddleware,
-    upload.single('avatar'),
-    async (req, res) => {
-      try {
-        // Перевірка чи користувач має права на оновлення аватара
-        if (req.user._id.toString() !== req.body.userId) {
-          return res.status(401).json({ message: 'Not authorized' });
-        }
-  
-        // Завантажений файл
-        const { file } = req;
-  
-        // Зчитування файлу та його обробка
-        const image = await jimp.read(file.path);
-        await image.resize(AVATAR_SIZE, AVATAR_SIZE).writeAsync(file.path);
-  
-        // Унікальне ім'я файлу
-        const fileName = generateFileName(req.user._id, file.originalname);
-  
-        // Переміщення файлу в папку public/avatars
-        await promisify(require('fs').rename)(
-          file.path,
-          path.join(__dirname, '../../public/avatars', fileName)
-        );
-  
-        // Поставити згенероване посилання на аватар у поле користувача
-        const avatarURL = `/avatars/${fileName}`;
-  
-        // Оновити поле avatarURL користувача в базі даних
-        await User.findByIdAndUpdate(req.user._id, { avatarURL });
-  
-        res.status(200).json({ avatarURL });
-      } catch (error) {
-        res.status(500).json({ message: error.message });
+  '/avatars',
+  authMiddleware,
+  upload.single('avatar'),
+  async (req, res) => {
+    try {
+      // Перевірка чи користувач має права на оновлення аватара
+      if (req.user._id.toString() !== req.body.userId) {
+        return res.status(401).json({ message: 'Not authorized' });
       }
+
+      // Перевірка чи файл був доданий
+      if (!req.file) {
+        return res.status(400).json({ message: 'File not provided' });
+      }
+
+      // Завантажений файл
+      const { file } = req;
+
+      // Зчитування файлу та його обробка
+      const image = await jimp.read(file.path);
+      await image.resize(AVATAR_SIZE, AVATAR_SIZE).writeAsync(file.path);
+
+      // Унікальне ім'я файлу
+      const fileName = generateFileName(req.user._id, file.originalname);
+
+      // Переміщення файлу в папку public/avatars
+      await promisify(require('fs').rename)(
+        file.path,
+        path.join(__dirname, '../../public/avatars', fileName)
+      );
+
+      // Поставити згенероване посилання на аватар у поле користувача
+      const avatarURL = `/avatars/${fileName}`;
+
+      // Оновити поле avatarURL користувача в базі даних
+      await User.findByIdAndUpdate(req.user._id, { avatarURL });
+
+      res.status(200).json({ avatarURL });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-  );
+  }
+);
 
 module.exports = router;
