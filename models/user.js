@@ -4,9 +4,6 @@ const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 // const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-// /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-// ^[_\.0-9a-zA-Z-]+@([0-9a-zA-Z][0-9a-zA-Z-]+\.)+[a-zA-Z]{2,6}$
-// /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const emailRegexp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 //! === Mongoose schema ===
@@ -43,6 +40,7 @@ userSchema.post("save", handleMongooseError);
 
 const userJoiSchema = Joi.object({
   password: Joi.string()
+    .min(6)
     .required()
     .messages({ "any.required": "Set password for user" }),
   email: Joi.string()
@@ -54,8 +52,14 @@ const userJoiSchema = Joi.object({
     .default("starter"),
 });
 
+// === updateSubscriptionSchema ===
+const updateSubscriptionSchema = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business"),
+});
+
 const schemas = {
   userJoiSchema,
+  updateSubscriptionSchema,
 };
 
 const User = model("user", userSchema);
