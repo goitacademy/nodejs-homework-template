@@ -1,8 +1,8 @@
-const express = require("express");
+import { Router } from "express";
 
-const contacts = require("./js/contacts.js");
+import * as contacts from "./js/contacts.js";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", async (req, res, next) => {
   res.json({ message: "template message" });
@@ -24,4 +24,4 @@ router.put("/:contactId", async (req, res, next) => {
   res.json({ message: "template message" });
 });
 
-module.exports = router;
+export default router;
