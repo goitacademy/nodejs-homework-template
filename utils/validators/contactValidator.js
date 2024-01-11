@@ -30,7 +30,9 @@ exports.updateContactDataValidatorfavorite = joiValidator((data) =>
 	Joi
 		.object()
 		.keys({
-			favorite: Joi.boolean().required().messages({ 'any.required': 'Missing field favorite' }),
+			favorite: Joi.boolean()
+				.required()
+				.messages({ 'any.required': 'Missing field favorite' }),
 		})
 		.validate(data));
 
