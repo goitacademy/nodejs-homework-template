@@ -6,7 +6,8 @@ import { addUpdateSettings, onSaveError } from './hooks.js';
 // ============================================================
 
 const emailRegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-const passwordRegExp = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+const passwordRegExp = /^[a-zA-Z0-9]{6,16}$/;
+const subscriptionList = ['starter', 'pro', 'business'];
 
 const userSchema = new Schema(
   {
@@ -18,17 +19,17 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      match: passwordRegExp,
       minLength: 6,
-      maxLength: 16,
       required: [true, 'Set password for user'],
     },
     subscription: {
       type: String,
-      enum: ['starter', 'pro', 'business'],
+      enum: subscriptionList,
       default: 'starter',
     },
-    token: String,
+    token: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -38,8 +39,20 @@ userSchema.pre('findOneAndUpdate', addUpdateSettings);
 userSchema.post('findOneAndUpdate', onSaveError);
 
 export const userSignSchema = Joi.object({
-  email: Joi.string().pattern(emailRegExp).required(),
-  password: Joi.string().pattern(passwordRegExp).min(6).max(16).required(),
+  email: Joi.string().pattern(emailRegExp).required().messages({
+    'any.required': 'Validation Error.',
+    'string.pattern.base': 'Validation Error.',
+  }),
+  password: Joi.string().pattern(passwordRegExp).required().messages({
+    'any.required': 'Validation Error.',
+    'string.pattern.base': 'Validation Error.',
+  }),
+});
+
+export const userUpdateSubscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subscriptionList)
+    .required(),
 });
 
 const User = model('user', userSchema);
