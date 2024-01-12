@@ -3,7 +3,8 @@ const { HttpError } = require("../helpers");
 const { Contact } = require("../models/contact");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner }).populate("owner");
   res.status(200).json(result);
 };
 
@@ -17,7 +18,8 @@ const getOne = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
