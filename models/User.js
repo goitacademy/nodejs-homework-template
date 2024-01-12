@@ -4,6 +4,8 @@ import { addUpdateSettings, handleSaveError } from "./hooks.js";
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+const subType = ["starter", "pro", "business"];
+
 const userSchema = new Schema(
   {
     password: {
@@ -17,7 +19,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subType,
       default: "starter",
     },
     token: {
@@ -41,6 +43,12 @@ export const userSignupSchema = Joi.object({
 export const userSigninSchema = Joi.object({
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
+});
+
+export const subscriptionSchema = Joi.object({
+  subscription: Joi.string()
+    .valid(...subType)
+    .required(),
 });
 
 const User = model("user", userSchema);
