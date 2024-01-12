@@ -2,7 +2,7 @@ const { User } = require("../models");
 const { HttpError } = require("../addoption/");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-const fs = require("fs").promises;
+const fse = require("fs-extra");
 const jimp = require("jimp");
 
 exports.checkUserEmailExists = async (email) => {
@@ -58,7 +58,7 @@ exports.avatars = async (userData, user, file, res) => {
     const fileName = `${_id}-${file.originalname}`;
     const filePath = path.join(tmpPath, fileName);
 
-    await fs.writeFile(filePath, file.buffer);
+    await fse.rename(tmpPath, filePath);
 
     const image = await jimp.read(filePath);
     await image.resize(250, 250).write(filePath);
@@ -67,7 +67,7 @@ exports.avatars = async (userData, user, file, res) => {
     const avatarURL = `/avatars/${fileName}`;
     const destinationPath = path.join(avatarsPath, fileName);
 
-    await fs.rename(filePath, destinationPath);
+    await fse.move(filePath, destinationPath);
 
     user.avatarURL = avatarURL;
   }
