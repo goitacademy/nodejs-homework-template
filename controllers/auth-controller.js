@@ -37,25 +37,26 @@ const signin = async (req, res) => {
     throw HttpError(401, "Email or password invalid");
   }
 
-  const { _id: id } = user;
+  const { _id: id, subscription } = user;
   const payload = {
     id,
   };
 
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
-  await User.findByIdAndUpdate(id, { token });
+  await User.findByIdAndUpdate(id, { token, user: { email, subscription } });
 
   res.json({
     token,
+    user: { email, subscription },
   });
 };
 
 const getCurrent = async (req, res) => {
-  const { username, email } = req.user;
+  const { subscription, email } = req.user;
 
   res.json({
-    username,
     email,
+    subscription,
   });
 };
 

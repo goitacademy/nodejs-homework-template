@@ -4,6 +4,7 @@ import isEmptyBody from "../../middlewares/isEmptyBody.js";
 import authController from "../../controllers/auth-controller.js";
 import validateBody from "../../decorators/validateBody.js";
 import authenticate from "../../middlewares/autheticate.js";
+import { contactUpdateFavoriteSchema } from "../../models/Contact.js";
 
 const authRouter = express.Router();
 
@@ -24,5 +25,11 @@ authRouter.post(
 authRouter.get("/current", authenticate, authController.getCurrent);
 
 authRouter.post("/signout", authenticate, authController.signout);
+
+authRouter.patch(
+  "/users",
+  authenticate,
+  validateBody(contactUpdateFavoriteSchema)
+);
 
 export default authRouter;
