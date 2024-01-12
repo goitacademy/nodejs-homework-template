@@ -1,14 +1,21 @@
+import fs from "fs/promises";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import path from "path";
+import Jimp from "jimp";
 
 import User, { userUpdateSubscriptionSchema, userSignupSchema, userSigninSchema } from "../models/User.js";
 import { HttpError } from "../helpers/index.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
+
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve("public", "avatars");
 
 const signUp = async (req, res) => {
     const { email, password } = req.body;
+    const avatarURL = gravatar.url(email, { s: '200', r: 'pg', d: '404' });
     
     const { error } = userSignupSchema.validate(req.body);
     if (error) {
@@ -22,7 +29,7 @@ const signUp = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
 
     res.status(201).json({
         user: {
@@ -91,10 +98,41 @@ const updateSubs = async (req, res) => {
 
     const { _id } = req.user;
     const { subscription } = req.body;
-    await User.findByIdAndUpdate(_id, { subscription })
+    await User.findByIdAndUpdate(_id, { subscription });
 
     res.json({
         message: "Subscription updated"
+    });
+};
+
+const updateAvatar = async (req, res) => {
+    if (!req.file) {
+        throw HttpError(400, "No file uploaded");
+    };
+
+    const { _id } = req.user;
+    const { path: oldPath, filename } = req.file;
+
+    await Jimp.read(oldPath)
+    .then(img => {
+        img
+        .resize(250, 250)
+                .quality(60);
+                return img.writeAsync(oldPath);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+        
+    const newPath = path.join(avatarsPath, filename);
+    await fs.rename(oldPath, newPath);
+
+    const avatarURL = path.join("avatars", filename);
+
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+        avatarURL
     });
 };
 
@@ -105,4 +143,5 @@ export default {
     getCurrent: ctrlWrapper(getCurrent),
     signOut: ctrlWrapper(signOut),
     updateSubs: ctrlWrapper(updateSubs),
+    updateAvatar: ctrlWrapper(updateAvatar),
 };
