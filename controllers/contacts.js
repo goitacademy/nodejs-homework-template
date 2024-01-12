@@ -1,12 +1,12 @@
 // const contacts = require("../models/contacts.js");
 
 // const { HttpError, ctrlWrapper } = require("../helpers");
-const { contact } = require("../models/contact");
+const { Contact } = require("../models/contact");
 
 const { ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await contact.find({}, "-createdAt -updatedAt");
+  const result = await Contact.find({}, "-createdAt -updatedAt");
   res.json(result);
 };
 
@@ -19,10 +19,10 @@ const getAll = async (req, res) => {
 //   res.json(result);
 // };
 
-// const add = async (req, res) => {
-//   const result = await contacts.addContact(req.body);
-//   res.status(201).json(result);
-// };
+const add = async (req, res) => {
+  const result = await Contact.create(req.body);
+  res.status(201).json(result);
+};
 
 // const updateById = async (req, res) => {
 //   const { contactId } = req.params;
@@ -46,7 +46,7 @@ const getAll = async (req, res) => {
 module.exports = {
   getAll: ctrlWrapper(getAll),
   // getById: ctrlWrapper(getById),
-  // add: ctrlWrapper(add),
+  add: ctrlWrapper(add),
   // updateById: ctrlWrapper(updateById),
   // deletebyId: ctrlWrapper(deletebyId),
 };
