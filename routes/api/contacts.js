@@ -9,12 +9,12 @@ const {
 
 const {
   getById,
- 
+  getAll,
   addContactById,
   deleteContactById,
   updateContactById,
-  getAll,
 } = require("../../controller/contacts.js");
+
 
 const router = express.Router();
 
@@ -26,6 +26,6 @@ router.post("/", validateBody(contactAddSchema), addContactById);
 
 router.delete("/:contactId", deleteContactById);
 
-router.put("/:contactId", validateBody(contactUpdateSchema), updateContactById);
+router.put("/:contactId",  validateBody(contactUpdateSchema), updateContactById);
 
 module.exports = router;

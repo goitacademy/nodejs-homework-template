@@ -45,9 +45,11 @@ const addContact = async (body) => {
 
   contacts.push(newContact);
 
-  await writeContacts(contacts);
+  await writeContacts(contacts); 
+
 
   return newContact;
+  
 };
 
 const updateContact = async (contactId, body) => {
