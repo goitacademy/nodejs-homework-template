@@ -30,38 +30,38 @@ function checkContactExists(req, res, next) {
 }
 
 router.get("/", async (req, res, next) => {
-  // res.json({ message: 'template message' })
   try {
-    res.json(constacts);
+    // Błędne użycie 'constacts', poprawione poniżej
+    res.json(contacts);
   } catch (error) {
     next(error);
   }
 });
 
 router.get("/:contactId", checkContactExists, async (req, res, next) => {
-  // res.json({ message: "template message" });
-try {
-  const contactId = parseInt(req.params.contactId);
-  const contact = contacts.find((contact) => contact.id === contactId);
-  res.json(contact);
-} catch (error) {
-  next(error);
+  try {
+    const contactId = parseInt(req.params.contactId);
+    const contact = contacts.find((contact) => contact.id === contactId);
+    res.json(contact);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/", async (req, res, next) => {
-  // res.json({ message: "template message" });
-
   try {
     const { error } = contactForm.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: `Validation error: ${error.message}` });
+      return res
+        .status(400)
+        .json({ message: `Validation error: ${error.message}` });
     }
-    const {name, email, phone} = req.body;
+    const { name, email, phone } = req.body;
     const newContact = {
       id: contacts.length + 1,
       name,
       email,
-      phone
+      phone,
     };
     contacts.push(newContact);
     res.status(201).json(newContact);
@@ -71,7 +71,6 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:contactId", checkContactExists, async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
     const contactId = parseInt(req.params.contactId);
     contacts = contacts.filter((contact) => contact.id !== contactId);
@@ -82,23 +81,29 @@ router.delete("/:contactId", checkContactExists, async (req, res, next) => {
 });
 
 router.put("/:contactId", checkContactExists, async (req, res, next) => {
-  // res.json({ message: "template message" });
   try {
     const contactId = parseInt(req.params.contactId);
-    const { error } = contactSchema.validate(req.body);
+    // Brak deklaracji contactSchema, poprawione poniżej
+    const { error } = contactForm.validate(req.body);
 
     if (error) {
-      return res.status(400).json({ message: `Validation error: ${error.message}` });
+      return res
+        .status(400)
+        .json({ message: `Validation error: ${error.message}` });
     }
 
     const { name, email, phone } = req.body;
     const updatedContactIndex = contacts.findIndex((c) => c.id === contactId);
-    contacts[updatedContactIndex] = { ...contacts[updatedContactIndex], name, email, phone };
+    contacts[updatedContactIndex] = {
+      ...contacts[updatedContactIndex],
+      name,
+      email,
+      phone,
+    };
     res.json(contacts[updatedContactIndex]);
   } catch (error) {
     next(error);
   }
-
 });
 
 module.exports = router;
