@@ -106,9 +106,13 @@ const updateSubs = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+    if (!req.file) {
+        throw HttpError(400, "No file uploaded");
+    };
+
     const { _id } = req.user;
     const { path: oldPath, filename } = req.file;
-    
+
     await Jimp.read(oldPath)
     .then(img => {
         img
