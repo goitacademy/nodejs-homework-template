@@ -28,14 +28,14 @@ userSchema.post("save", handleMongooseError);
 const registerSchema = Joi.object({
   password: Joi.string().min(4).required(),
   email: Joi.string().required(),
-  subscription: Joi.string().required(),
+  subscription: Joi.string(),
   token: Joi.string(),
 });
 
 const loginSchema = Joi.object({
   password: Joi.string().min(4).required(),
   email: Joi.string().required(),
-  // subscription: Joi.string().required(),
+  subscription: Joi.string(),
   token: Joi.string(),
 });
 
