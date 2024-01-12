@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 
 const { validateBody, isValidId, aunthenficate } = require("../../middlewares");
 const {
@@ -8,9 +7,11 @@ const {
   updateStatusSchema,
 } = require("../../models/contact");
 
+const router = express.Router();
+
 const ctrl = require("../../controllers/contacts");
 
-router.get("/", ctrl.listContacts);
+router.get("/", aunthenficate, ctrl.listContacts);
 
 router.get("/:contactId", aunthenficate, isValidId, ctrl.getContactById);
 
@@ -28,8 +29,8 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
-  isValidId,
   aunthenficate,
+  isValidId,
   validateBody(updateStatusSchema),
   ctrl.updateStatusContact
 );
