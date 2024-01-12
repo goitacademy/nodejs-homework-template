@@ -20,5 +20,3 @@ router.patch(
   validateBody(userSubscriptionSchema),
   ctrl.updateSubscription
 );
-
-module.exports = router;

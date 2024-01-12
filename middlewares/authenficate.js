@@ -4,7 +4,7 @@ const { User } = require("../models/user");
 
 const { SECRET_KEY } = process.env;
 
-const aunthenticate = async (req, res, next) => {
+const aunthenficate = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
 
@@ -29,4 +29,4 @@ const aunthenticate = async (req, res, next) => {
   }
 };
 
-module.exports = aunthenticate;
+module.exports = aunthenficate;
