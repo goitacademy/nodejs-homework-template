@@ -30,11 +30,14 @@ router.get("/:contactId", async (req, res, next) => {
 router.post("/", async (req, res, next) => {
   const body = req.body;
 
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
+
   const { error } = contactBodySchema.validate(body);
   if (error) {
-    res
-      .status(400)
-      .json({ message: `missing required ${error.details[0].path[0]} field` });
+    res.status(400).json({ message: error.details[0].message });
     return;
   }
 
@@ -60,9 +63,14 @@ router.put("/:contactId", async (req, res, next) => {
   const contactIdParam = req.params.contactId;
   const body = req.body;
 
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({ message: "missing fields" });
+    return;
+  }
+
   const { error } = contactBodySchema.validate(body);
   if (error) {
-    res.status(400).json({ message: "missing fields" });
+    res.status(400).json({ message: error.details[0].message });
     return;
   }
   const updatedContact = await updateContact(contactIdParam, body);
