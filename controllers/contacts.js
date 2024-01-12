@@ -4,7 +4,10 @@ const { Contact } = require("../models/contact");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
-  const result = await Contact.find({ owner }).populate("owner");
+  const result = await Contact.find({ owner }).populate(
+    "owner",
+    "email subscription"
+  );
   res.status(200).json(result);
 };
 
