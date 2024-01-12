@@ -8,9 +8,11 @@ import {
   contactUpdateFavoriteSchema,
   contactUpdateSchema,
 } from "../../models/Contact.js";
+import authenticate from "../../middlewares/autheticate.js";
 
 const contactsRouter = express.Router();
 
+contactsRouter.use(authenticate);
 contactsRouter.get("/", contactsController.getAll);
 contactsRouter.get("/:id", isValidId, contactsController.getByID);
 contactsRouter.post(
