@@ -52,7 +52,7 @@ const userJoiSchema = Joi.object({
     .default("starter"),
 });
 
-// === updateSubscriptionSchema ===
+// === updateSubscription ===
 const updateSubscriptionSchema = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business"),
 });
