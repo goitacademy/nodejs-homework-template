@@ -10,14 +10,24 @@ router.get("/", ContactsController.getAllContacts);
 
 router.get("/:contactId", ContactsController.getById);
 
-router.post("/", validate(schema), ContactsController.addNewContact);
+router.post(
+  "/",
+  validate(schema.contactSchema),
+  ContactsController.addNewContact
+);
 
 router.delete("/:contactId", ContactsController.deleteContact);
 
 router.put(
   "/:contactId",
-  validate(schema),
+  validate(schema.contactSchema),
   ContactsController.updateContactById
+);
+
+router.patch(
+  "/:contactId/favorite",
+  validate(schema.favoriteSchema),
+  ContactsController.updateFavorite
 );
 
 module.exports = router;
