@@ -4,13 +4,44 @@ import { userRegisterSchema, userLoginSchema } from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import fs from "fs/promises";
+import path from "path";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve("public", "avatars");
+
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { path: oldPath, filename } = req.file;
+    const newPath = path.join(avatarsPath, filename);
+    Jimp.read(oldPath)
+      .then((image) => {
+        image.resize(250, 250).write(newPath);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    await fs.rename(oldPath, newPath);
+
+    const avatarURL = path.join("avatars", filename);
+    const { _id } = req.user;
+    const result = await User.findByIdAndUpdate(_id, { avatarURL });
+    if (!result) {
+      throw HttpError(404);
+    }
+    res.json({ avatarURL });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const register = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const { error } = userRegisterSchema.validate(req.body);
+
     if (error) {
       throw HttpError(400, error.message);
     }
@@ -20,8 +51,12 @@ const register = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const newUser = await User.create({
+      ...req.body,
+      avatarURL,
+      password: hashPassword,
+    });
     res.status(201).json({
       user: {
         email: newUser.email,
@@ -75,4 +110,4 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
-export default { register, login, getCurrent, logout };
+export default { register, login, getCurrent, logout, updateAvatar };
