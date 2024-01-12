@@ -4,7 +4,7 @@ const { userJoiSchema, userSubscriptionSchema } = require("../../models/user");
 
 const router = express.Router();
 
-const ctrl = require("../../controllers/users");
+const ctrl = require("../../controllers/auth");
 
 router.post("/register", validateBody(userJoiSchema), ctrl.registerUser);
 
