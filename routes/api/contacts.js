@@ -37,16 +37,12 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const body = req.body;
-  console.log(schemaReq.validate(body));
-  if (!body.name || !body.email || !body.phone) {
-    const missing = [];
-    !body.name && missing.push("name");
-    !body.email && missing.push("email");
-    !body.phone && missing.push("phone");
+  const val = schemaReq.validate(body);
+  if (val.error) {
     res.json({
       status: "error",
       code: 400,
-      message: `Missing fields: ${missing.join(", ")}`,
+      message: val.error.message,
     });
     return;
   }
@@ -62,18 +58,19 @@ router.delete("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   const deleted = await contacts.removeContact(id);
   deleted
-    ? res.json({ status: "success", code: 200, message: "Contact delted" })
+    ? res.json({ status: "success", code: 200, message: "Contact deleted" })
     : res.json({ status: "error", code: "404", message: "Not found" });
 });
 
 router.put("/:contactId", async (req, res, next) => {
   const id = req.params.contactId;
   const body = req.body;
-  if (!body) {
+  const val = schema.validate(body);
+  if (val.error) {
     res.json({
       status: "error",
       code: 400,
-      message: `Missing fields.`,
+      message: val.error.message,
     });
     return;
   }
