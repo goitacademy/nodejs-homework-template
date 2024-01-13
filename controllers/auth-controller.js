@@ -11,6 +11,7 @@ const { JWT_SECRET } = process.env;
 const signup = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
+
   if (user) {
     throw HttpError(409, "Email already used");
   }
@@ -19,9 +20,9 @@ const signup = async (req, res) => {
 
   const newUser = await User.create({ ...req.body, password: hashPassword });
 
-  res.json({
-    username: newUser.username,
+  res.status(201).json({
     email: newUser.email,
+    subscription: newUser.subscription,
   });
 };
 
