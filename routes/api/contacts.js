@@ -1,7 +1,6 @@
 const express = require("express");
 const validateBody = require("../../middlewares/validateBody.js");
 
-
 const {
   contactAddSchema,
   contactUpdateSchema,
@@ -14,7 +13,7 @@ const {
   deleteContactById,
   updateContactById,
 } = require("../../controller/contacts.js");
-
+const validateIsBodyEmpty = require("../../middlewares/validateIsBodyEmpty.js");
 
 const router = express.Router();
 
@@ -26,6 +25,11 @@ router.post("/", validateBody(contactAddSchema), addContactById);
 
 router.delete("/:contactId", deleteContactById);
 
-router.put("/:contactId",  validateBody(contactUpdateSchema), updateContactById);
+router.put(
+  "/:contactId",
+  validateIsBodyEmpty,
+  validateBody(contactUpdateSchema),
+  updateContactById
+);
 
 module.exports = router;

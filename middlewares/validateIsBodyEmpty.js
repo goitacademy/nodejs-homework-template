@@ -1,12 +1,12 @@
 const { HttpError } = require("../helpers");
 
-const validateIsBodyEmpty = () => {
-     return (req, res, next) => {
-         if (Object.keys(req.body).length === 0) {
-           throw HttpError(404, "missing fields");
-         }
-         next()
-     }
+const validateIsBodyEmpty = (req, res, next) => {
+ 
+    if (!req.body || Object.keys(req.body).length === 0) {
+      throw HttpError(404, "missing fields");
+    }
+    next();
+  
 };
 
 module.exports = validateIsBodyEmpty;
