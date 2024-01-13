@@ -5,26 +5,35 @@ const { HttpError } = require("../helpers/index");
 
 const getAll = async (req, res, next) => {
   try {
-// Извлекаем идентификатор владельца (пользователя) из объекта запроса
-const { _id: owner } = req.user;
+    // Извлекаем идентификатор владельца (пользователя) из объекта запроса
+    const { _id: owner } = req.user;
 
-// Извлекаем значения параметров "page" и "limit" из строки запроса
-const { page = 1, limit = 20 } = req.query;
+    // Извлекаем значения параметров "page" и "limit" из строки запроса
+    const { page = 1, limit = 20, favorite } = req.query;
 
-// Рассчитываем значение "skip" для использования в запросе к базе данных
-const skip = (page - 1) * limit;
+    // Рассчитываем значение "skip" для использования в запросе к базе данных
+    const skip = (page - 1) * limit;
 
-// Ищем контакты, принадлежащие данному владельцу, с учетом пагинации
-// Используем метод populate для связывания с данными владельца (name и email)
-const result = await Contact.find({ owner }, null, { skip, limit }).populate("owner", "name email");
+    // Формируем объект с условиями запроса для поиска контактов, принадлежащих данному владельцу
+    const queryConditions = { owner };
 
+    // Если задан параметр "favorite", добавляем его в условия запроса
+    if (favorite !== undefined) {
+      queryConditions.favorite = favorite;
+    }
 
-    //!если бы нам нужно было вернуть не все поля, а конкретные то сделали бы так:
-    // const result = await Contact.find({}, "name favorite"), а еще без какогото то ставим "-" перед названием
+    // Ищем контакты, принадлежащие данному владельцу, с учетом пагинации и фильтрации по полю "favorite"
+    // Используем метод populate для связывания с данными владельца (name и email)
+    const result = await Contact.find(queryConditions, null, {
+      skip,
+      limit,
+    }).populate("owner", "name email");
+
+    // Возвращаем результат в виде JSON
     res.json(result);
     // console.table(result)
   } catch (error) {
-    next(error); //Express ищет не простo следующий обработчик, а именнo обработчик ошибок. В нашем случае это хранщаяся в файле app.js последняя middleware
+    next(error); // Express ищет не просто следующий обработчик, а именно обработчик ошибок.
   }
 };
 
@@ -56,10 +65,10 @@ const addContact = async (req, res, next) => {
     // console.log(req.)
 
     //! Теперь каждый контакт будет записан за конкретным человеком
-// Извлекаем _id из объекта req.user и присваиваем его переменной owner.
-const {_id: owner} = req.user;
-// Создаем новый контакт, объединяя данные из req.body и устанавливая owner
-const result = await Contact.create({...req.body, owner});
+    // Извлекаем _id из объекта req.user и присваиваем его переменной owner.
+    const { _id: owner } = req.user;
+    // Создаем новый контакт, объединяя данные из req.body и устанавливая owner
+    const result = await Contact.create({ ...req.body, owner });
 
     res.status(201).json(result);
   } catch (error) {
@@ -115,7 +124,6 @@ const updateFavorite = async (req, res, next) => {
     if (!req.body || !req.body.favorite) {
       throw HttpError(400, "missing field favorite");
     }
-
     const { error } = schemas.updateFavoriteSchema.validate(req.body);
     console.log("error:", error);
     if (error) {
@@ -123,7 +131,7 @@ const updateFavorite = async (req, res, next) => {
     }
     const { contactId } = req.params;
     const { favorite } = req.body;
-    
+    console.log("req.body", req.body);
     const result = await Contact.findByIdAndUpdate(contactId, favorite, {
       new: true,
     });

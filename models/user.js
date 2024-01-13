@@ -3,7 +3,7 @@ const Joi = require("joi"); //библиотека для проверки и в
 const { handleMongooseError } = require("../helpers");
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+const subscriptionRegex = ["starter", "pro", "business"]
 const userSchema = new Schema(
   {
     //Схема = требования к проекту
@@ -24,7 +24,7 @@ const userSchema = new Schema(
     },
     subscription: {
       type: String,
-      enum: ["starter", "pro", "business"],
+      enum: subscriptionRegex,
       default: "starter"
     },
     token: {
@@ -44,6 +44,7 @@ const registerSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().pattern(emailRegex).required(),
   password: Joi.string().min(6).required(),
+  subscription: Joi.string().valid(...subscriptionRegex).default('starter'),//(распыление) используется для передачи элементов массива subscriptionRegex в качестве отдельных аргументов методу .valid()
 });
 
 const loginSchema = Joi.object({

@@ -21,7 +21,7 @@ const authenticate = async (req, res, next) => {
       next(HttpError(401)); //Пользователь не найден
     }
     req.user = user;
-    console.log("req.user", req.user);
+    // console.log("req.user", req.user);
     next();
   } catch (error) {
     next(HttpError(401)); //Неверный токен

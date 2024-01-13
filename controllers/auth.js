@@ -125,9 +125,48 @@ res.status(201).json({
 
   }
 }
+
+const updateSubscription = async (req, res, next) => {
+  try {
+    const {_id} = req.user
+    const { subscription } = req.body;
+
+    // Проверка, что подписка установлена в одно из допустимых значений
+    const validSubscriptions = ['starter', 'pro', 'business'];
+    if (!validSubscriptions.includes(subscription)) {
+      throw HttpError(400, "Invalid subscription value");
+    }
+
+    // Проверка валидности запроса с использованием схемы
+    const { error } = validatePatchSubscription(req.body);
+    if (error) {
+      throw HttpError(400, error.details[0].message);
+    }
+
+    // Обновление подписки пользователя в базе данных
+    const updatedUser = await User.findByIdAndUpdate(_id, { subscription }, { new: true });
+
+    if (!updatedUser) {
+      throw HttpError(404, "User not found");
+    }
+    
+        // Отправляем обновленного пользователя в ответ
+        res.status(200).json({
+            email: updatedUser.email,
+            subscription: updatedUser.subscription,
+        });
+        
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 module.exports = {
   register,
   login,
   getCurrent,
-  logout
+  logout,
+  updateSubscription
 };
