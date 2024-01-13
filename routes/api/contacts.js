@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { schemaReq, schema } from "../../js/validation.js";
 
 import * as contacts from "../../js/contacts.js";
 
@@ -36,6 +37,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const body = req.body;
+  console.log(schemaReq.validate(body));
   if (!body.name || !body.email || !body.phone) {
     const missing = [];
     !body.name && missing.push("name");
