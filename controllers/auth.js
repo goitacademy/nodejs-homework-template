@@ -5,9 +5,7 @@ const jwt = require("jsonwebtoken");
 
 // ============================== Get current User
 const getCurrentUser = async (req, res) => {
-  const { _id } = req.user;
-
-  const { email, subscription } = await User.findOne({ _id });
+  const { email, subscription } = req.user;
 
   res.json({ email, subscription });
 };
@@ -63,17 +61,6 @@ const loginUser = async (req, res) => {
   });
 };
 
-// ============================== Update subscription
-
-const updateSubscription = async (req, res) => {
-  const { _id } = req.user;
-  const user = await User.findByIdAndUpdate({ _id }, req.body, {
-    new: true,
-  });
-
-  res.json(user);
-};
-
 // ============================== Logout User
 
 const logoutUser = async (req, res) => {
@@ -88,5 +75,4 @@ module.exports = {
   registerUser: ctrlWrapper(registerUser),
   loginUser: ctrlWrapper(loginUser),
   logoutUser: ctrlWrapper(logoutUser),
-  updateSubscription: ctrlWrapper(updateSubscription),
 };
