@@ -9,7 +9,7 @@ const transport = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
   tls: {
-    rejectUnauthorized: false, 
+    rejectUnauthorized: false,
   },
 });
 
@@ -28,7 +28,12 @@ const sendVerificationEmail = async (to, verificationToken) => {
   const verify = {
     to,
     subject: "Verification email",
-    text: `Hello, this is a verification email! Confirm your email using this ${url}`,
+    text: `
+    <p>Hello,</p>
+    <p>This is a verification email! Please confirm your email using the link below:</p>
+    <a href="${url}">Verify Email</a>
+    <p>Thank you!</p>
+  `,
   };
   await sendEmail(verify);
 };

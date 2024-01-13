@@ -7,10 +7,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const Jimp = require("jimp");
-const {
-  sendVerificationEmail,
-} = require("../services/emailServices.js");
-// const { info } = require("console");
+const { sendVerificationEmail } = require("../services/emailServices.js");
 const secKey = process.env.JWT_SECRET;
 
 const registrationSchema = Joi.object({
@@ -218,33 +215,6 @@ exports.uploadUserAvatar = multer({
   fileFilter: multerFilter,
 }).single("avatar");
 
-// const proccessAvatar = async (fileBuffer, userId) => {
-//   return new Promise((resolve, reject) => {
-//     Jimp.read(fileBuffer)
-//         .then((image) => {
-//             return image.resize(250, 250).write(`public/avatars/${userId}.jpg`, (err) => {
-//                 if (err) {
-//                     reject(err);
-//                 } else {
-//                     const avatarUrl = `/avatars/${userId}.jpg`;
-//                     resolve(avatarUrl);
-//                 }
-//             });
-//         })
-//         .catch((err) => {
-//             reject(err);
-//         });
-// });
-// }
-
-// const proccessAvatar = async (fileBuffer, userId) => {
-//       const image = await Jimp.read(fileBuffer);
-//       await image.resize(250, 250);
-//       await image.writeAsync(`public/avatars/${userId}.jpg`);
-//       const avatarUrl = `/avatars/${userId}.jpg`;
-//       return avatarUrl;
-// };
-
 const resizeImage = async (filePath, targetPath, width, height) => {
   try {
     const image = await Jimp.read(filePath);
@@ -269,7 +239,6 @@ exports.updateUser = async (req, res) => {
 
     const avatarUrl = `/avatars/${userId}.jpg`;
     await fsPromises.unlink(originalFilePath);
-    // fs.unlink(originalFilePath);
     req.user.avatarUrl = avatarUrl;
     req.file.path = null;
     await req.user.save();
