@@ -2,8 +2,13 @@ const express = require("express");
 
 const ctrl = require("../../controllers/contactsController");
 
-const { isEmptyBody, isValidId } = require("../../middlewares");
+const {
+	isEmptyBody,
+	isValidId,
+	isEmptyFavorite,
+} = require("../../middlewares");
 const { schemas } = require("../../models/contact");
+
 const { validateBody } = require("../../decorators");
 
 const router = express.Router();
@@ -31,7 +36,7 @@ router.put(
 
 router.patch(
 	"/:id/favorite",
-	isEmptyBody,
+	isEmptyFavorite,
 	isValidId,
 	validateBody(schemas.patchSchema),
 	ctrl.updateStatusContact
