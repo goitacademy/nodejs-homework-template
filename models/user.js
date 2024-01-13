@@ -10,12 +10,12 @@ const userSchema = new Schema(
     email: {
       type: String,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      required: true,
+      required: [true, "Email is required"],
       unique: true,
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Set password for user"],
     },
   },
   { versionKey: false, timestamps: true }
