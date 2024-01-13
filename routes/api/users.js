@@ -1,14 +1,26 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { userMiddleware, checkToken, logoutMiddleware, currentUser } = require('../../middlewares/userMiddlewares');
-const { loginMiddleware, uploadUserAvatar, updateUser } = require('../../middlewares/userMiddlewares');
+const errorHandler = require("../../services/errorHandler")
 
-// router.use(checkToken)
+const {
+  userMiddleware,
+  checkToken,
+  logoutMiddleware,
+  currentUser,
+  loginMiddleware,
+  uploadUserAvatar,
+  updateUser,
+  verifyUser,
+  verifyManualSend,
+} = require("../../middlewares/userMiddlewares");
 
-router.post('/register', userMiddleware)
-router.post('/login', loginMiddleware)
-router.post('/logout', checkToken, logoutMiddleware)
-router.get('/current', checkToken, currentUser)
-router.patch('/avatars', checkToken, uploadUserAvatar, updateUser)
-module.exports = router
-   
+router.use(errorHandler);
+router.post("/register", userMiddleware);
+router.post("/login", loginMiddleware);
+router.post("/logout", checkToken, logoutMiddleware);
+router.get("/current", checkToken, currentUser);
+router.patch("/avatars", checkToken, uploadUserAvatar, updateUser);
+router.get("/verify/:verificationToken", verifyUser);
+router.get("/verify/", verifyManualSend);
+
+module.exports = router;
