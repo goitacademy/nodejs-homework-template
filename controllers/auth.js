@@ -136,20 +136,14 @@ const updateSubscription = async (req, res, next) => {
     if (!validSubscriptions.includes(subscription)) {
       throw HttpError(400, "Invalid subscription value");
     }
-
-    // Проверка валидности запроса с использованием схемы
-    const { error } = validatePatchSubscription(req.body);
-    if (error) {
-      throw HttpError(400, error.details[0].message);
-    }
-
+ 
     // Обновление подписки пользователя в базе данных
     const updatedUser = await User.findByIdAndUpdate(_id, { subscription }, { new: true });
 
     if (!updatedUser) {
       throw HttpError(404, "User not found");
     }
-    
+
         // Отправляем обновленного пользователя в ответ
         res.status(200).json({
             email: updatedUser.email,
