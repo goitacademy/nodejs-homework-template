@@ -1,20 +1,20 @@
 import { Schema, model } from "mongoose";
 import Joi from "joi";
-import { handleSaveError,addUpdateSettings } from "./hooks.js"; 
+import { handleSaveError, addUpdateSettings } from "./hooks.js"; 
 
 const contactSchema = new Schema(
     {
         name: {
             type: String,
-            required: true,
+            required: [true, "Set name for contact"],
         },
         email: {
             type: String,
-            required: true,
+            
         },
         phone: {
             type: String,
-            required: true,
+            
         },
         favorite: {
             type: Boolean,
@@ -48,10 +48,11 @@ export const contactAddSchema = Joi.object({
 export const contactUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
-  phone: Joi.string(),
+    phone: Joi.string(),
+  favorite:Joi.boolean(),
 });
 
-export const contactUpdateFavoriteSchema = Joi.object({
+export const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean().required()
 });
 

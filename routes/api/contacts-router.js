@@ -2,8 +2,9 @@ import express from "express";
 
 import contactsControllers from "../../controllers/contacts-controllers.js";
 
-import { isEmptyBody, isValidId } from "../../middlewares/index.js";
-// import { contactAddSchema, contactUpdateSchema, contactUpdateFavoriteSchema } from "../../models/Contact.js";
+import { isEmptyBody, isValidId, isEmptyBodyFavorite } from "../../middlewares/index.js";
+
+
 
 
 const contactsRouter = express.Router();
@@ -18,21 +19,6 @@ contactsRouter.put('/:id',isValidId, isEmptyBody, contactsControllers.updateById
 
 contactsRouter.delete('/:id', isValidId, contactsControllers.deleteById);
 
-contactsRouter.patch('/:id/favorite', isValidId, isEmptyBody,contactsControllers.updateById);
+contactsRouter.patch('/:id/favorite', isValidId, isEmptyBodyFavorite, contactsControllers.updateStatusContact);
 
 export default contactsRouter;
-
-
-// router.post('/', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.delete('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// router.put('/:contactId', async (req, res, next) => {
-//   res.json({ message: 'template message' })
-// })
-
-// module.exports = router

@@ -1,6 +1,6 @@
 import Contact from "../models/Contact.js";
 import { HttpError } from "../helpers/index.js";
-import { contactAddSchema, contactUpdateSchema,contactUpdateFavoriteSchema } from "../models/Contact.js";
+import { contactAddSchema, contactUpdateSchema,updateFavoriteSchema} from "../models/Contact.js";
 
 
 
@@ -36,7 +36,7 @@ const add = async (req, res, next) => {
             throw HttpError(400, error.message);
         }
         const result = await Contact.create(req.body);
-        res.status(201).json(result)
+        res.status(201).json(result);
     }
     catch (error) {
         next(error);
@@ -45,7 +45,7 @@ const add = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
     try {
-        const { error } = contactUpdateSchema.validate(request.body);
+        const { error } = contactUpdateSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
         }
@@ -69,7 +69,7 @@ const deleteById = async (req, res, next) => {
             throw HttpError(404, `Contact with id=${id} not found`);
         }
         res.json({
-            message: "Contact delete"
+            message: "Contact deleted"
         });
     }
     catch (error) {
@@ -79,7 +79,7 @@ const deleteById = async (req, res, next) => {
 
 const updateStatusContact = async (req, res, next) => {
     try {
-        const { error } = contactUpdateFavoriteSchema.validate(req.body);
+        const { error } = updateFavoriteSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
         }
@@ -100,4 +100,4 @@ export default {
     updateById,
     deleteById,
     updateStatusContact,
-}
+};
