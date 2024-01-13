@@ -64,5 +64,23 @@
     "name": "Mango",
     "email": "mango@hotmail.com",
     "phone": "123455678"
+  },
+  {
+    "id": "e3cecc6a-ba99-4308-a731-71862736b209",
+    "name": "Apple",
+    "email": "Apple@hotmail.com",
+    "phone": "123455678"
+  },
+  {
+    "id": "a6a95a3e-8bff-4800-b595-79d858af12b6",
+    "name": "Banana",
+    "email": "banana@hotmail.com",
+    "phone": "123455678"
+  },
+  {
+    "id": "abd55770-df60-4a84-8563-d2553a80e626",
+    "name": "Orange",
+    "email": "orange@hotmail.com",
+    "phone": "123455678"
   }
 ]
