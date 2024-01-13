@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 const { handleMongooseError } = require("../helpers");
 const Joi = require("joi");
 
@@ -44,6 +45,6 @@ const schemas = {
   loginSchema,
 };
 
-const User = model("user", userSchema);
+const User = mongoose.model("user", userSchema);
 
 module.exports = { User, schemas };
