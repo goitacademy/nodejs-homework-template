@@ -1,22 +1,31 @@
-const mongoose = require('mongoose');
+// models/users.js
 
-const userSchema = new mongoose.Schema({
-  password: {
-    type: String,
-    required: [true, 'Set password for user'],
-  },
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
     unique: true,
+    validate: {
+      validator: (value) => /\S+@\S+\.\S+/.test(value),
+      message: 'Invalid email format',
+    },
   },
-  subscription: {
+  password: {
     type: String,
-    enum: ['starter', 'pro', 'business'],
-    default: 'starter',
+    required: [true, 'Password is required'],
   },
   avatarURL: String,
-  token: String,
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 });
 
 const User = mongoose.model('User', userSchema);
