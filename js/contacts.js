@@ -12,8 +12,7 @@ const contactsPath = format({
 async function listContacts() {
   try {
     const contacts = await fs.readFile(contactsPath);
-    console.log(contacts.toString());
-    return;
+    return contacts.toString();
   } catch (e) {
     return e.message;
   }
@@ -24,8 +23,7 @@ async function getContactById(contactId) {
   try {
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data.toString());
-    console.log(contacts.filter((obj) => obj.id === contactId));
-    return;
+    return contacts.filter((obj) => obj.id === contactId);
   } catch (e) {
     return e.message;
   }
@@ -36,43 +34,61 @@ async function removeContact(contactId) {
   try {
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data.toString());
-    await fs.writeFile(
-      contactsPath,
-      JSON.stringify(contacts.filter((contact) => contact.id !== contactId))
-    );
-    return;
+    if (contacts.find((obj) => obj.id === contactId)) {
+      await fs.writeFile(
+        contactsPath,
+        JSON.stringify(contacts.filter((contact) => contact.id !== contactId))
+      );
+      return true;
+    }
+    return false;
   } catch (e) {
     return e.message;
-  } finally {
-    const data = await fs.readFile(contactsPath);
-    const contacts = JSON.parse(data.toString());
-    if (contacts.filter((contact) => contact.id === contactId)) {
-      console.log("Contact have been deleted.");
-    } else {
-      console.log("Something went wrong.");
-    }
   }
 }
 
 //   Adds new contact
-async function addContact(name, email, phone) {
+async function addContact(body) {
   try {
-    if (!name || !email || !phone) {
-      console.log("Please add all information");
-      !name && console.log("You are missing name");
-      !email && console.log("You are missing email");
-      !phone && console.log("You are missing phone");
-      return;
-    }
+    const contact = {
+      id: nanoid(),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    };
     const data = await fs.readFile(contactsPath);
     const contacts = JSON.parse(data.toString());
-    contacts.push({ id: nanoid(), name: name, email: email, phone: phone });
+    contacts.push(contact);
     await fs.writeFile(contactsPath, JSON.stringify(contacts));
-    console.log("Contact have been added.");
-    return;
+    return contact;
   } catch (e) {
     return e.message;
   }
 }
 
-export { listContacts, getContactById, removeContact, addContact };
+async function updateContact(id, body) {
+  try {
+    const data = await fs.readFile(contactsPath);
+    const contacts = JSON.parse(data.toString());
+    const oldContact = contacts.find((obj) => obj.id === id);
+    const newContact = { ...oldContact, ...body };
+    const newList = contacts.map((obj) => {
+      if (obj.id === id) {
+        return newContact;
+      }
+      return obj;
+    });
+    await fs.writeFile(contactsPath, JSON.stringify(newList));
+    return newContact;
+  } catch (e) {
+    return e.message;
+  }
+}
+
+export {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
