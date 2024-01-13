@@ -5,7 +5,20 @@ const { HttpError } = require("../helpers/index");
 
 const getAll = async (req, res, next) => {
   try {
-    const result = await Contact.find();
+// Извлекаем идентификатор владельца (пользователя) из объекта запроса
+const { _id: owner } = req.user;
+
+// Извлекаем значения параметров "page" и "limit" из строки запроса
+const { page = 1, limit = 20 } = req.query;
+
+// Рассчитываем значение "skip" для использования в запросе к базе данных
+const skip = (page - 1) * limit;
+
+// Ищем контакты, принадлежащие данному владельцу, с учетом пагинации
+// Используем метод populate для связывания с данными владельца (name и email)
+const result = await Contact.find({ owner }, null, { skip, limit }).populate("owner", "name email");
+
+
     //!если бы нам нужно было вернуть не все поля, а конкретные то сделали бы так:
     // const result = await Contact.find({}, "name favorite"), а еще без какогото то ставим "-" перед названием
     res.json(result);
@@ -41,7 +54,13 @@ const addContact = async (req, res, next) => {
     // console.log(req.body)
     // console.log(req.params)
     // console.log(req.)
-    const result = await Contact.create(req.body);
+
+    //! Теперь каждый контакт будет записан за конкретным человеком
+// Извлекаем _id из объекта req.user и присваиваем его переменной owner.
+const {_id: owner} = req.user;
+// Создаем новый контакт, объединяя данные из req.body и устанавливая owner
+const result = await Contact.create({...req.body, owner});
+
     res.status(201).json(result);
   } catch (error) {
     next(error);
@@ -104,6 +123,7 @@ const updateFavorite = async (req, res, next) => {
     }
     const { contactId } = req.params;
     const { favorite } = req.body;
+    
     const result = await Contact.findByIdAndUpdate(contactId, favorite, {
       new: true,
     });

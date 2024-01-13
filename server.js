@@ -1,7 +1,10 @@
 const app = require("./app"); // Подключение файла app.js с настройками Express
 const mongoose = require("mongoose"); // Подключение Mongoose для работы с MongoDB
+
 const { DB_HOST, PORT = 3000 } = process.env;
+
 mongoose.set("strictQuery", true);
+
 mongoose
   .connect(DB_HOST) // Подключение к MongoDB
   .then(() => {
