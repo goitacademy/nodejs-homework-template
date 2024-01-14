@@ -1,8 +1,8 @@
-const { HttpError } = require("../Helpers");
+const { HttpError } = require("../helpers");
 
-const validateBody = (shema) => {
+const validateBody = (schema) => {
   const func = (req, res, next) => {
-    const { error } = shema.validate(req.body);
+    const { error } = schema.validate(req.body);
     if (error) {
       next(HttpError(400, error.message));
     }
@@ -10,4 +10,5 @@ const validateBody = (shema) => {
   };
   return func;
 };
+
 module.exports = validateBody;
