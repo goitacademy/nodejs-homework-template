@@ -1,31 +1,61 @@
-## GoIT Node.js Course Template Homework
+# goit-node-hw-01
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Node.js project to manage contacts using API.
 
-Додайте ментора до колаборації
+## General info
 
-Для кожної домашньої роботи створюйте свою гілку.
+With this program you can manage contacts using http. View all or, add, edit or delete
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+## Technologies
 
-Кожна нова гілка для др повинна робитися з master
+Used technologies:
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+- Node.js,
+- express,
+- morgan,
+- cors,
+- nanoid.
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+## GH of project
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+You are here but here is a link:
+[https://mattmalicki.github.io/goit-node-hw-02/]
 
-### Команди:
+## Install and run
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+### Install all dependencies:
+
+```shell
+npm install
+```
+
+### Run project in your localhost:
+
+```shell
+npm start
+```
+
+### API:
+
+#### @ GET /api/contacts
+
+Get all contacts.
+
+#### @ GET /api/contacts/:id
+
+Get specific contact using id.
+
+#### @ POST /api/contacts
+
+Add contact.
+With object in body that contains name, email and phone, create new contact.
+All keys are required.
+
+#### @ DELETE /api/contacts/:id
+
+Delete specific contact using id.
+
+#### @ PUT /api/contacts/:id
+
+Change specific contact.
+Params required id. And in body required is object that contains at least one of: name, email, phone.
