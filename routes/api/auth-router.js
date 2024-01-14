@@ -1,7 +1,13 @@
 import express from 'express';
 
 import authController from '../../controllers/auth-controller.js';
-import { isEmptyBody, isValidId, isEmptyStatus, authenticate } from '../../middlewares/index.js';
+import {
+  isEmptyBody,
+  isValidId,
+  isEmptyStatus,
+  authenticate,
+  upload,
+} from '../../middlewares/index.js';
 import { validateBody } from '../../decorators/index.js';
 import { userSignSchema, userUpdateSubscriptionSchema } from '../../models/User.js';
 
@@ -9,7 +15,13 @@ import { userSignSchema, userUpdateSubscriptionSchema } from '../../models/User.
 
 const authRouter = express.Router();
 
-authRouter.post('/register', isEmptyBody, validateBody(userSignSchema), authController.register);
+authRouter.post(
+  '/register',
+  upload.single('avatar'),
+  isEmptyBody,
+  validateBody(userSignSchema),
+  authController.register
+);
 authRouter.post('/login', isEmptyBody, validateBody(userSignSchema), authController.login);
 authRouter.get('/current', authenticate, authController.getCurrent);
 authRouter.post('/logout', authenticate, authController.logout);

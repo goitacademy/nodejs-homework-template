@@ -1,6 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import fs from 'fs/promises';
+import path from 'path';
+import gravatar from 'gravatar';
 
 import User from '../models/User.js';
 import { HttpError } from '../helpers/index.js';
@@ -9,9 +12,16 @@ import { ctrlWrapper } from '../decorators/index.js';
 // ============================================================
 
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve('public', 'avatars');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
+
+  // const { path: oldPath, filename } = req.file;
+  // const newPath = path.join(avatarsPath, filename);
+  // await fs.rename(oldPath, newPath);
+  // const avatarURL = path.join('avatars', filename);
+  const avatarURL = gravatar.url(email);
   const user = await User.findOne({ email });
   if (user) {
     throw HttpError(409, 'Email in use');
