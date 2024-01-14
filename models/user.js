@@ -9,7 +9,6 @@ const userSchema = new Schema(
     //Схема = требования к проекту
     name: {
       type: String,
-      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -20,7 +19,7 @@ const userSchema = new Schema(
     password: {
       type: String,
       minlength: 6,
-      required: true,
+      required: [true, 'Password is required'],
     },
     subscription: {
       type: String,
@@ -41,7 +40,7 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
-  name: Joi.string().required(),
+  name: Joi.string(),
   email: Joi.string().pattern(emailRegex).required(),
   password: Joi.string().min(6).required(),
   subscription: Joi.string().valid(...subscriptionRegex).default('starter'),//(распыление) используется для передачи элементов массива subscriptionRegex в качестве отдельных аргументов методу .valid()
