@@ -2,24 +2,12 @@ const express = require('express')
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'Hello World!' })
-})
+const getRouters = require('./get.routers')
+const putRouters = require('./put.routers')
+const patchRouters = require('./patch.routers')
+const postRouters = require('./post.routers')
+const deleteRouters = require('./delete.routers')
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use('/', getRouters , putRouters, patchRouters, postRouters, deleteRouters)
 
 module.exports = router
