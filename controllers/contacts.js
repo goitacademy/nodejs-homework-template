@@ -9,7 +9,10 @@ const listContacts = async (req, res, next) => {
   const { limit, page } = req.query;
   const skip = (page - 1) * limit;
 
-  const data = await Contact.find({ owner }).skip(skip).limit(limit);
+  const data = await Contact.find({ owner })
+    .skip(skip)
+    .limit(limit)
+    .populate("owner", "email name");
   // if not needed - find({}, '-name -email etc')
   res.json(data);
 };
