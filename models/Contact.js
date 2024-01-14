@@ -17,6 +17,10 @@ const contactSchema = new Schema({
       type: Boolean,
       default: false,
     },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "user",
+    }
 }, { versionKey: false })
 
 contactSchema.post("save", handleSaveError);
@@ -35,6 +39,7 @@ export const contactAddSchema = Joi.object({
     phone: Joi.string().required().messages({
         "message": `"missing required phone field"`
     }),
+    favorite: Joi.boolean(),
 })
 
 export const contactUpdateSchema = Joi.object({
@@ -42,6 +47,10 @@ export const contactUpdateSchema = Joi.object({
     email: Joi.string(),
     phone: Joi.string(),
     favorite: Joi.boolean(),
+})
+
+export const contactUpdateFavoriteSchema = Joi.object({
+    favorite: Joi.boolean().required()
 })
 
 const Contact = model("contact", contactSchema)

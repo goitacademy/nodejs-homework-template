@@ -3,88 +3,72 @@ import Contact from "../models/Contact.js";
 import { HttpError } from "../helpers/index.js";
 
 import { contactAddSchema, contactUpdateSchema } from "../models/Contact.js";
+import {ctrlWrapper} from "../decorators/index.js";
 
 const getAll = async (req, res, next) => {
-    try {
-        const result = await Contact.find();
+    const { _id: owner } = req.user;
+    console.log("owner - ", owner);
 
+    const {page = 1, limit = 20, favorite = false} = req.query;
+    const skip = (page - 1) * limit;
+    console.log("favorite - ", favorite);
+    if (favorite) {
+        const result = await Contact.find({ owner, favorite }, "-createdAt -updatedAt", { skip, limit }).populate("owner", "username");
         res.json(result);
-    }
-    catch (error) {
-        next(error);
-    }
+        return;
+    } 
+
+    const result = await Contact.find({ owner }, "-createdAt -updatedAt", { skip, limit }).populate("owner", "username");
+    res.json(result);
 }
 
 const getById = async (req, res, next) => {
-    try {
-        const { contactId } = req.params;
-        const result = await Contact.findById(contactId);
-        if (!result) {
-            throw HttpError(404, `Contacts with id=${contactId} not found`);
-        }
-        res.json(result);
+    const { contactId } = req.params;
+    const { _id: owner } = req.user;
+    const result = await Contact.findById(contactId, owner);
+    if (!result) {
+        throw HttpError(404, `Contacts with id=${contactId} not found`);
     }
-    catch (error) {
-        next(error);
-    }
+    res.json(result);
 }
 
 const add = async (req, res, next) => {
-    try {
-        const { error } = contactAddSchema.validate(req.body);
-        if (error) {
-            throw HttpError(400, error.message);
-        }
-        const result = await Contact.create(req.body);
+    const { _id: owner } = req.user;
+    console.log("owner - ", owner);
+    
+    const result = await Contact.create({...req.body, owner});
 
-        res.status(201).json(result)
-    }
-    catch (error) {
-        next(error);
-    }
+    res.status(201).json(result)
 }
 
-const updateById = async (req, res, next) => {
-    try {
-        
-        const { error } = contactUpdateSchema.validate(req.body);
-        if (error) {
-            throw HttpError(400, error.message);
-        }
-        const { contactId } = req.params;
-        const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
-        if (!result) {
-            throw HttpError(404, `Movie with id=${contactId} not found`);
-        }
+const updateById = async (req, res, next) => { 
+    const {_id: owner} = req.user;
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate({contactId, owner}, req.body, {new: true});
+    if (!result) {
+         throw HttpError(404, `Contact with id=${contactId} not found`);
+    }
 
-        res.json(result);
-    }
-    catch (error) {
-        next(error);
-    }
+    res.json(result);
 }
 
 const deleteById = async (req, res, next) => {
-    try {
-        const { contactId } = req.params;
-        const result = await Contact.findByIdAndDelete(contactId);
-        if (!result) {
-            throw HttpError(404, `Movie with id=${contactId} not found`);
-        }
+    const {_id: owner} = req.user;
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndDelete({contactId, owner});
+    if (!result) {
+        throw HttpError(404, `Contact with id=${contactId} not found`);
+    }
 
-        res.json({
-            message: "Delete success"
-        })
-    }
-    catch (error) {
-        next(error);
-    }
+    res.json({
+        message: "Delete success"
+    })
 }
 
 export default {
-    getAll,
-    getById,
-    add,
-    updateById,
-    deleteById,
+    getAll: ctrlWrapper(getAll),
+    getById: ctrlWrapper(getById),
+    add: ctrlWrapper(add),
+    updateById: ctrlWrapper(updateById),
+    deleteById: ctrlWrapper(deleteById),
 }

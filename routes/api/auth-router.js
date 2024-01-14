@@ -6,16 +6,18 @@ import { isEmptyBody, authenticate } from "../../middlewares/index.js";
 
 import {validateBody} from "../../decorators/index.js";
 
-import { userSignupSchema, userSigninSchema } from "../../models/Users.js";
+import { userSignupSchema, userSigninSchema, userUpdateSubscription } from "../../models/Users.js";
 
 const authRouter = express.Router()
 
-authRouter.post("/signup", isEmptyBody, validateBody(userSignupSchema), authController.signup);
+authRouter.post("/register", isEmptyBody, validateBody(userSignupSchema), authController.signup);
 
-authRouter.post("/signin", isEmptyBody, validateBody(userSigninSchema), authController.signin);
+authRouter.post("/login", isEmptyBody, validateBody(userSigninSchema), authController.signin);
+
+authRouter.patch("/users", authenticate, isEmptyBody, validateBody(userUpdateSubscription), authController.subscriptionUpdate);
 
 authRouter.get("/current", authenticate, authController.getCurrent);
 
-authRouter.post("/signout", authenticate, authController.signout);
+authRouter.post("/logout", authenticate, authController.signout);
 
 export default authRouter;

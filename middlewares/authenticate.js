@@ -4,7 +4,7 @@ import { HttpError } from "../helpers/index.js";
 
 import User from "../models/Users.js";
 
-const { JWT_SECRET } = process.env;
+import { JWT_SECRET } from "../server.js";
 
 const authenticate = async (req, res, next) => {
     const { authorization } = req.headers;

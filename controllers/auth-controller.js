@@ -5,7 +5,7 @@ import User from "../models/Users.js";
 
 import { HttpError } from "../helpers/index.js";
 
-import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { ctrlWrapper } from "../decorators/index.js";
 
 import { JWT_SECRET } from "../server.js";
 
@@ -22,6 +22,7 @@ const signup = async (req, res) => {
 
     res.json({
         email: newUser.email,
+        subscription: newUser.subscription,
     })
 }
 
@@ -45,6 +46,8 @@ const signin = async (req, res) => {
     await User.findByIdAndUpdate(id, {token});
     res.json({
         token,
+        email: newUser.email,
+        subscription: newUser.subscription,
     })
 }
 
@@ -66,11 +69,20 @@ const signout = async(req, res)=> {
     })
 }
 
+const subscriptionUpdate = async (req, res) => {
+    const { _id } = req.user;
+    const result = await User.findByIdAndUpdate({_id}, req.body, {new: true});
+    if (!result) {
+         throw HttpError(404, `User with id=${contactId} not found`);
+    }
 
+    res.json(result);
+}
 
 export default {
     signup: ctrlWrapper(signup),
     signin: ctrlWrapper(signin),
     getCurrent: ctrlWrapper(getCurrent),
     signout: ctrlWrapper(signout),
+    subscriptionUpdate: ctrlWrapper(subscriptionUpdate),
 }
