@@ -64,9 +64,26 @@ const logout = async (req, res) => {
   res.json({ message: "Logout successful" });
 };
 
+const getOneUser = async (req, res) => {
+  const { _id } = req.user;
+  const user = await User.aggregate([
+    { $match: { _id } },
+    {
+      $lookup: {
+        from: "contacts",
+        localField: "_id",
+        foreignField: "owner",
+        as: "books",
+      },
+    },
+  ]);
+  res.json(user[0]);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
+  getOneUser: ctrlWrapper(getOneUser),
 };

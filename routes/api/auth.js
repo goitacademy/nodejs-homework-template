@@ -20,5 +20,6 @@ router.post(
 
 router.get("/current", authorization, authController.current);
 router.get("/logout", authorization, authController.logout);
+router.get("/getOne", authorization, authController.getOneUser);
 
 module.exports = router;
