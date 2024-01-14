@@ -1,14 +1,12 @@
+const app = require("./app");
 const mongoose = require("mongoose");
 
-const app = require("./app");
-
 const { DB_HOST } = process.env;
-
-mongoose.set("strictQuery", true);
 
 mongoose
   .connect(DB_HOST)
   .then(() => {
+    console.log(DB_HOST);
     console.log("Database connection successful");
     app.listen(3000);
   })

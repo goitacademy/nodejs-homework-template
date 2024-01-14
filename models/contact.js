@@ -1,48 +1,44 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+const mongoose = require("mongoose");
 const { handleMongooseError } = require("../helpers");
+const Schema = mongoose.Schema;
+const Joi = require("joi");
 
-// ---JOI Schema --------------------------------
+// ========================== Joi schemas
 
 const addSchema = Joi.object({
   name: Joi.string()
-    .min(2)
+    .min(3)
+    .max(30)
     .required()
     .messages({ "any.required": "missing required name field" }),
   email: Joi.string()
     .email()
-    .min(6)
     .required()
     .messages({ "any.required": "missing required email field" }),
   phone: Joi.string()
-    .min(8)
+    .min(5)
+    .max(15)
     .required()
     .messages({ "any.required": "missing required phone field" }),
   favorite: Joi.boolean(),
 });
 
 const updateSchema = Joi.object({
-  name: Joi.string().min(2),
+  name: Joi.string().min(3).max(30),
   email: Joi.string().email(),
-  phone: Joi.string().min(8),
+  phone: Joi.string().min(5).max(15),
   favorite: Joi.boolean(),
 })
   .min(1)
   .messages({ "object.min": "missing fields" });
 
-const updateFavoriteSchema = Joi.object({
+const updateStatusSchema = Joi.object({
   favorite: Joi.boolean()
     .required()
     .messages({ "any.required": "missing field favorite" }),
 });
 
-const schemas = {
-  addSchema,
-  updateSchema,
-  updateFavoriteSchema,
-};
-
-// ---Mongoose Schema --------------------------------
+// ========================== Mongoose schemas
 
 const contactSchema = new Schema(
   {
@@ -66,6 +62,6 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
-const Contact = model("contact", contactSchema);
+const Contact = mongoose.model("contact", contactSchema);
 
-module.exports = { Contact, schemas };
+module.exports = { Contact, addSchema, updateSchema, updateStatusSchema };
