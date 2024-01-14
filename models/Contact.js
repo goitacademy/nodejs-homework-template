@@ -10,17 +10,15 @@ const contactSchema = new Schema(
         },
         email: {
             type: String,
-            
         },
         phone: {
             type: String,
-            
         },
         favorite: {
             type: Boolean,
             default: false,
-         },
-  },
+        },
+    },
   { versionKey: false, timestamps: true }
 );
 
@@ -48,7 +46,7 @@ export const contactAddSchema = Joi.object({
 export const contactUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
-    phone: Joi.string(),
+  phone: Joi.string(),
   favorite:Joi.boolean(),
 });
 

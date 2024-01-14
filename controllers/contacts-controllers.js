@@ -1,6 +1,6 @@
 import Contact from "../models/Contact.js";
 import { HttpError } from "../helpers/index.js";
-import { contactAddSchema, contactUpdateSchema,updateFavoriteSchema} from "../models/Contact.js";
+import { contactAddSchema, contactUpdateSchema, updateFavoriteSchema} from "../models/Contact.js";
 
 
 
@@ -40,7 +40,7 @@ const add = async (req, res, next) => {
     }
     catch (error) {
         next(error);
-    };
+    }
 };
 
 const updateById = async (req, res, next) => {
@@ -50,7 +50,7 @@ const updateById = async (req, res, next) => {
             throw HttpError(400, error.message);
         }
         const { id } = req.params;
-        const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+        const result = await Contact.findByIdAndUpdate(id, req.body);
         if (!result) {
             throw HttpError(404, `Contact with id=${id} not found`);
         }
