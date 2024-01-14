@@ -12,6 +12,7 @@ const contactsPath = path.resolve("./models/contacts.json");
 const data = fs.readFileSync(contactsPath);
 const contacts = JSON.parse(data);
 
+
 function listContacts() {
   try {
     return contacts;
@@ -20,7 +21,9 @@ function listContacts() {
   }
 }
 
-
+const getById = (contactId) => {
+  return contacts.find((contact) => contact.id === contactId);
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 router.get('/', async (req, res, next) => {
@@ -32,8 +35,15 @@ router.get('/', async (req, res, next) => {
   
 })
 
+
+
 router.get('/:contactId', async (req, res, next) => {
-  // res.json({ message: 'template message' })
+  const contact = getById(req.params.contactId);
+  if (!contact) {
+    return res.status(404).send({ message: "Not found" })
+  }
+  res.status(200).send(contact)
 })
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 module.exports = router
