@@ -14,6 +14,9 @@ const avatarsPath = path.resolve("public", "avatars");
 
 const updateAvatar = async (req, res, next) => {
   try {
+    if (!req.file) {
+      throw HttpError(400, "missing file");
+    }
     const { path: oldPath, filename } = req.file;
     const newPath = path.join(avatarsPath, filename);
     Jimp.read(oldPath)
