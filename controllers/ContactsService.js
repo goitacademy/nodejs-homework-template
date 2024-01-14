@@ -26,18 +26,14 @@ async function getContactById(req, res, next) {
 }
 
 async function addNewContact(req, res, next) {
-   const contact = {
-     name: req.body.name,
-     email: req.body.email,
-     phone: req.body.phone,
-   };
   try {
-    const result = await ContactsService.create(contact);
+    const result = await ContactsService.create(req.body);
     res.status(201).send(result);
   } catch (error) {
     next(error);
   }
 }
+
 
 async function deleteContact(req, res, next) {
   const { contactId } = req.params;
@@ -93,7 +89,7 @@ async function changeContactFavorite(req, res, next) {
     );
 
     if (result === null) {
-       throw new HttpError(404, `Not found`);
+      return res.status(404).send("Contact not found");
     }
 
     res.send(result);
