@@ -6,8 +6,10 @@ const Contact = require("../models/contact");
 
 const listContacts = async (req, res, next) => {
   const { id: owner } = req.user;
+  const { limit, page } = req.query;
+  const skip = (page - 1) * limit;
 
-  const data = await Contact.find({ owner });
+  const data = await Contact.find({ owner }).skip(skip).limit(limit);
   // if not needed - find({}, '-name -email etc')
   res.json(data);
 };
