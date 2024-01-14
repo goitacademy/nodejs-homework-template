@@ -1,6 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
 
 const contactsRouter = require("./routes/api/contacts");
 
@@ -15,6 +17,15 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
+
+mongoose.connect(process.env.MONGODB_URL).then(() => {
+  try {
+    console.log("mongo db connection");
+  } catch (error) {
+    process.exit(1);
+    console.log(error);
+  }
+});
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
