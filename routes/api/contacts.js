@@ -3,9 +3,11 @@ const express = require("express");
 const contactsControllers = require("../../controllers/contacts");
 const { validateBody } = require("../../decorators");
 const { contactsSchema } = require("../../validators");
-const { isValidMongoId } = require("../../middlewares");
+const { isValidMongoId, authorization } = require("../../middlewares");
 
 const router = express.Router();
+
+router.use(authorization);
 
 router.get("/", contactsControllers.listContacts);
 router.post(

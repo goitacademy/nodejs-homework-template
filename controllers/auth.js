@@ -39,6 +39,8 @@ const login = async (req, res) => {
     { id: isExist.id },
     envsConfig.jwtSecret
   );
+  await User.findByIdAndUpdate(isExist.id, { token });
+
   res.json({
     user: {
       email: isExist.email,
@@ -48,7 +50,23 @@ const login = async (req, res) => {
   });
 };
 
+const current = async (req, res) => {
+  const { email, name } = req.user;
+
+  res.json({ email, name });
+};
+
+const logout = async (req, res) => {
+  const { id } = req.user;
+
+  await User.findByIdAndUpdate(id, { token: null });
+
+  res.json({ message: "Logout successful" });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  current: ctrlWrapper(current),
+  logout: ctrlWrapper(logout),
 };
