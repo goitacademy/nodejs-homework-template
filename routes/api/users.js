@@ -21,6 +21,6 @@ router.post("/logout", checkToken, logoutMiddleware);
 router.get("/current", checkToken, currentUser);
 router.patch("/avatars", checkToken, uploadUserAvatar, updateUser);
 router.get("/verify/:verificationToken", verifyUser);
-router.get("/verify/", verifyManualSend);
+router.post("/verify/", verifyManualSend);
 
 module.exports = router;
