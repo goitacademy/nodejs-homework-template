@@ -13,8 +13,18 @@ const listContacts = async (req, res, next) => {
     .skip(skip)
     .limit(limit)
     .populate("owner", "email name");
+
+  const count = await Contact.countDocuments({ owner });
+  const totalPages = Math.round(count / +limit);
+
+  const pagination = {
+    perPage: +limit,
+    count: data.length,
+    page: +page,
+    totalPages,
+  };
   // if not needed - find({}, '-name -email etc')
-  res.json(data);
+  res.json({ data, pagination });
 };
 
 const getContactById = async (req, res, next) => {
