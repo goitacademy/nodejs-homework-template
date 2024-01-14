@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import app from "./app.js";
 
-const {DB_HOST, PORT} = process.env
+export const {JWT_SECRET, DB_HOST, PORT } = process.env
 
 mongoose.connect(DB_HOST)
   .then(() => {
