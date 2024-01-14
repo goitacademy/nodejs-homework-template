@@ -35,6 +35,7 @@ const loginSchema = Joi.object({
   password: Joi.string().min(4).required(),
   email: Joi.string().required(),
   subscription: Joi.string(),
+  token: Joi.string(),
 });
 
 const schemas = {
