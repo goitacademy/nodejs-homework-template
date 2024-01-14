@@ -134,7 +134,7 @@ const updateSubscription = async (req, res, next) => {
     // Проверка, что подписка установлена в одно из допустимых значений
     const validSubscriptions = ['starter', 'pro', 'business'];
     if (!validSubscriptions.includes(subscription)) {
-      throw HttpError(400, "Invalid subscription value");
+      throw HttpError(400, "Invalid subscription value. Subscription must have one of the following values: ['starter', 'pro', 'business']");
     }
  
     // Обновление подписки пользователя в базе данных
