@@ -43,6 +43,15 @@ $ npm install gravatar
 Створюй посилання на аватарку користувача за допомогою `gravatar`
 Отриманий URL збережи в поле `avatarURL` під час створення користувача
 
+```js
+http://localhost:3000/api/users/register
+
+{
+  "password": "werty45345",
+  "email": "werty@gmail.com"
+}
+```
+
 ### Крок 4
 
 Додай можливість поновлення аватарки, створивши ендпоінт `/users/avatars` і використовуючи метод `PATCH`.
