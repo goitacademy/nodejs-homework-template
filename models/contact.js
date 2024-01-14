@@ -1,7 +1,7 @@
-const { Schema, model } = require("mongoose");
-const Joi = require("joi");
+import { Schema, model } from "mongoose";
+import Joi from "joi";
 
-const { handleMongooseError } = require("../helpers/");
+import { handleMongooseError } from "../helpers/index.js";
 
 const contactSchema = new Schema(
 	{
@@ -25,7 +25,7 @@ const contactSchema = new Schema(
 
 contactSchema.post("save", handleMongooseError);
 
-const addSchema = Joi.object({
+export const addSchema = Joi.object({
 	name: Joi.string()
 		.required()
 		.messages({ "any.required": "missing required name field" }),
@@ -38,21 +38,17 @@ const addSchema = Joi.object({
 	favorite: Joi.boolean(),
 });
 
-const putSchema = Joi.object({
+export const putSchema = Joi.object({
 	name: Joi.string(),
 	email: Joi.string().email(),
 	phone: Joi.string(),
 	favorite: Joi.boolean(),
 }).or("name", "email", "phone", "favorite");
 
-const patchSchema = Joi.object({
+export const patchSchema = Joi.object({
 	favorite: Joi.boolean().required(),
 });
 
-const schemas = {
-	addSchema,
-	putSchema,
-	patchSchema,
-};
 const Contact = model("contact", contactSchema);
-module.exports = { Contact, schemas };
+
+export default Contact;

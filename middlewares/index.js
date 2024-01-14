@@ -1,9 +1,3 @@
-const isEmptyBody = require("./isEmptyBody");
-const isValidId = require("./isValidId");
-const isEmptyFavorite = require("./isEmptyFavorite");
-
-module.exports = {
-	isEmptyBody,
-	isValidId,
-	isEmptyFavorite,
-};
+export { default as isEmptyBody } from "./isEmptyBody.js";
+export { default as isEmptyFavorite } from "./isEmptyFavorite.js";
+export { default as isValidId } from "./isValidId.js";

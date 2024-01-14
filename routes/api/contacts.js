@@ -1,15 +1,12 @@
-const express = require("express");
-
-const ctrl = require("../../controllers/contactsController");
-
-const {
+import express from "express";
+import ctrl from "../../controllers/contactsController.js";
+import {
 	isEmptyBody,
 	isValidId,
 	isEmptyFavorite,
-} = require("../../middlewares");
-const { schemas } = require("../../models/contact");
-
-const { validateBody } = require("../../decorators");
+} from "../../middlewares/index.js";
+import { addSchema, patchSchema, putSchema } from "../../models/contact.js";
+import { validateBody } from "../../decorators/index.js";
 
 const router = express.Router();
 
@@ -17,12 +14,7 @@ router.get("/", ctrl.getAllContacts);
 
 router.get("/:id", isValidId, ctrl.getById);
 
-router.post(
-	"/",
-	isEmptyBody,
-	validateBody(schemas.addSchema),
-	ctrl.addNewContact
-);
+router.post("/", isEmptyBody, validateBody(addSchema), ctrl.addNewContact);
 
 router.delete("/:id", isValidId, ctrl.deleteContact);
 
@@ -30,7 +22,7 @@ router.put(
 	"/:id",
 	isEmptyBody,
 	isValidId,
-	validateBody(schemas.putSchema),
+	validateBody(putSchema),
 	ctrl.updateContactById
 );
 
@@ -38,8 +30,8 @@ router.patch(
 	"/:id/favorite",
 	isEmptyFavorite,
 	isValidId,
-	validateBody(schemas.patchSchema),
+	validateBody(patchSchema),
 	ctrl.updateStatusContact
 );
 
-module.exports = router;
+export default router;

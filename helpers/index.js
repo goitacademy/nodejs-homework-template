@@ -1,7 +1,2 @@
-const HttpError = require("./HttpError");
-const handleMongooseError = require("./handleMongooseError");
-
-module.exports = {
-	HttpError,
-	handleMongooseError,
-};
+export { default as HttpError } from "./HttpError.js";
+export { default as handleMongooseError } from "./handleMongooseError.js";
