@@ -6,6 +6,7 @@ const { contactsController } = require("../../controllers");
 // } = require("../../middlewares/validate");
 const { checkContactId } = require("../../middlewares/validate");
 const { validateBody } = require("../../middlewares/validate");
+const { protect } = require("../../middlewares/auth");
 // const schema = require("../../validation/schema");
 
 const router = express.Router();
@@ -24,6 +25,8 @@ router.put(
   validateBody,
   contactsController.updateContact
 );
+
+router.use(protect);
 
 router
   .route("/:contactId/favorite")
