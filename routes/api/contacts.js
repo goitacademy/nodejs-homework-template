@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { createContact } from "../../controllers/contacts/createContacts";
-import { deleteContact } from "../../controllers/contacts/deleteContacts";
-import { indexContacts } from "../../controllers/contacts/indexContacts";
-import { showContact } from "../../controllers/contacts/showContacts";
-import { updateContact } from "../../controllers/contacts/updateContacts";
+import { showContact } from "../../controllers/contacts/showContacts.js";
+import { indexContacts } from "../../controllers/contacts/indexContacts.js";
+import { createContact } from "../../controllers/contacts/createContacts.js";
+import { deleteContact } from "../../controllers/contacts/deleteContacts.js";
+import { updateContact } from "../../controllers/contacts/updateContacts.js";
 
 const router = Router();
 

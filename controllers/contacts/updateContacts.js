@@ -1,5 +1,5 @@
-import { updateContact } from "../../js/contacts";
-import { schema } from "../../js/validation";
+import { updateContact } from "../../js/contacts.js";
+import { schema } from "../../js/validation.js";
 
 export async function updateContact(res, req, next) {
   try {
