@@ -6,20 +6,13 @@ dotenv.config();
 
 const getAllContacts = async (req, res) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 20, favorite, ...filterParams } = req.query;
+  const { page = 1, limit = 20 } = req.query;
   const skip = (page - 1) * limit;
-  const filter = favorite
-    ? { owner, favorite, ...filterParams }
-    : { owner, ...filterParams };
-  const result = await Contact.find(filter, "-createdAt -updatedAt", {
+  const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
     skip,
     limit,
-  }).populate("owner", "email");
-  const total = await Contact.countDocuments(filter);
-  res.json({
-    result,
-    total,
-  });
+  }).populate("owner", "username");
+  res.json(result);
 };
 
 const getContactById = async (req, res, next) => {
