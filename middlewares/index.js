@@ -1,5 +1,5 @@
-const validateContact = require("./validateContact.js");
-
 module.exports = {
-  validateContact
+  validateContact: require("./validateContact.js"),
+  validateUser: require("./validateUser.js"),
+  authenticate: require("./authenticate.js"),
 };
