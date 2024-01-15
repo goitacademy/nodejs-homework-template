@@ -5,14 +5,12 @@ import { HttpError } from '../helpers/index.js';
 
 // ============================================================
 
-const destination = path.resolve('temp');
+const destination = path.resolve('tmp');
 
 const storage = multer.diskStorage({
   destination,
   filename: (req, file, callback) => {
-    const uniquePreffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
-    const filename = `${uniquePreffix}_${file.originalname}`;
-    callback(null, filename);
+    callback(null, file.originalname);
   },
 });
 
@@ -21,7 +19,7 @@ const limits = {
 };
 
 const fileFilter = (req, file, callback) => {
-  const extention = req.originalname.split('.').pop();
+  const extention = file.originalname.split('.').pop();
   if (extention === 'exe') {
     callback(HttpError(400, '.exe not valid extention'));
   }
@@ -30,7 +28,7 @@ const fileFilter = (req, file, callback) => {
 const upload = multer({
   storage,
   limits,
-  //   fileFilter,
+  // fileFilter,
 });
 
 export default upload;
