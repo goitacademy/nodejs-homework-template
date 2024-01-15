@@ -605,3 +605,48 @@ const { nanoid } = require('nanoid');
 ```js
 $ npm install joi
 ```
+
+## GitHub
+
+Щоб змержити зміни з однієї гілки в іншу на GitHub, вам слід виконати кілька кроків у вашому локальному репозиторії та після цього зробити push змін на віддалений репозиторій (GitHub). Ось загальний опис процесу:
+
+Оновіть вашу гілку master:
+
+bash
+Copy code
+git checkout master
+git pull origin master
+Перейдіть на гілку, з якої ви хочете взяти зміни:
+
+bash
+Copy code
+git checkout назва_гілки
+Зробіть зміни та закомітьте їх:
+
+bash
+Copy code
+git add .
+git commit -m "Опис ваших змін"
+Перейдіть назад на гілку master:
+
+bash
+Copy code
+git checkout master
+Змірджіть зміни з іншої гілки в гілку master:
+
+bash
+Copy code
+git merge назва_гілки
+Якщо конфлікти, ви повинні їх вирішити. Git повідомить вас про конфлікти при спробі змірджити гілки.
+
+Закомітьте зміни після злиття (merge commit):
+
+bash
+Copy code
+git commit -m "Злиття змін з назва_гілки"
+Оновіть віддалений репозиторій на GitHub:
+
+bash
+Copy code
+git push origin master
+Тепер ваші зміни з іншої гілки мають бути злиті з гілкою master на GitHub. Зверніть увагу, що вам може бути необхідно мати права на запис (write access) до репозиторію для виконання пушу змін.
