@@ -1,38 +1,33 @@
-// const contacts = require("../models/contacts");
+const { Contact } = require("../models/contact");
 
-const Contact = require("../models/contact");
-
-// const { HttpError, ctrlWrapper } = require("../helpers");
-const { ctrlWrapper } = require("../helpers");
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const listContacts = async (req, res, next) => {
   const contacts = await Contact.find();
   res.status(200).json(contacts);
 };
 
-// const getContactById = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const getContact = await contacts.getContactById(contactId);
+const getContactById = async (req, res, next) => {
+  const { id } = req.params;
+  const getContact = await Contact.findById(id);
 
-//   if (!getContact) {
-//     throw HttpError(404, "Not found!");
-//   }
-//   res.status(200).json(getContact);
-// };
+  if (!getContact) {
+    throw HttpError(404, "Not found!");
+  }
+  res.status(200).json(getContact);
+};
 
-// const addContact = async (req, res, next) => {
-//   const requiredFields = ["name", "email", "phone"];
-//   const missingFields = requiredFields.filter((field) => !(field in req.body));
-//   if (missingFields.length > 0) {
-//     return res.status(400).send({
-//       message: `missing required ${missingFields.join(", ")} field(s)`,
-//     });
-//   }
+const addContact = async (req, res, next) => {
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
 
-//   const addedContact = await contacts.addContact(req.body);
-//   console.log(req.body);
-//   res.status(201).json(addedContact);
-// };
+  const addedContact = await Contact.create(contact);
+  console.log(contact);
+  res.status(201).json(addedContact);
+};
 
 // const removeContact = async (req, res, next) => {
 //   const { contactId } = req.params;
@@ -44,19 +39,46 @@ const listContacts = async (req, res, next) => {
 //   res.json({ message: "contact deleted" });
 // };
 
-// const updateContact = async (req, res, next) => {
-//   const { contactId } = req.params;
-//   const updatedContact = await contacts.updateContact(contactId, req.body);
-//   if (!updatedContact) {
-//     throw HttpError(404, "Not found!");
-//   }
-//   res.status(200).json(updatedContact);
-// };
+const updateContact = async (req, res, next) => {
+  const { id } = req.params;
+  const contact = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone,
+  };
+
+  const updatedContact = await Contact.findByIdAndUpdate(id, contact, {
+    new: true,
+  });
+  if (!updatedContact) {
+    throw HttpError(404, "Not found!");
+  }
+  res.status(200).json(updatedContact);
+};
+
+const updateFavorite = async (req, res, next) => {
+  const { id } = req.params;
+
+  const updatedFavorite = await Contact.findByIdAndUpdate(
+    id,
+    {
+      favorite: req.body.favorite,
+    },
+    {
+      new: true,
+    }
+  );
+  if (!updatedFavorite) {
+    throw HttpError(404, "Not found!");
+  }
+  res.status(200).json(updatedFavorite);
+};
 
 module.exports = {
   listContacts: ctrlWrapper(listContacts),
-  // getContactById: ctrlWrapper(getContactById),
-  // addContact: ctrlWrapper(addContact),
+  getContactById: ctrlWrapper(getContactById),
+  addContact: ctrlWrapper(addContact),
   // removeContact: ctrlWrapper(removeContact),
-  // updateContact: ctrlWrapper(updateContact),
+  updateContact: ctrlWrapper(updateContact),
+  updateFavorite: ctrlWrapper(updateFavorite),
 };
