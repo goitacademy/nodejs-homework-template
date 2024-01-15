@@ -1,7 +1,7 @@
 import { addContact } from "../../js/contacts.js";
 import { schemaReq } from "../../js/validation.js";
 
-export async function createContact(res, req, next) {
+export async function createContact(req, res, next) {
   try {
     const body = req.body;
     const val = schemaReq.validate(body);

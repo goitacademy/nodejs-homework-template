@@ -1,7 +1,7 @@
 import { updateContact } from "../../js/contacts.js";
 import { schema } from "../../js/validation.js";
 
-export async function updateContact(res, req, next) {
+export async function updateContacts(req, res, next) {
   try {
     const id = req.params.contactId;
     const body = req.body;
@@ -13,7 +13,7 @@ export async function updateContact(res, req, next) {
       return;
     }
     const data = await updateContact(id, body);
-    res.status(201).json({ data });
+    res.status(201).json(data);
   } catch (e) {
     res.status(500).json(`An error occured: ${e}`);
   }

@@ -1,6 +1,6 @@
 import { removeContact } from "../../js/contacts.js";
 
-export async function deleteContact(res, req, next) {
+export async function deleteContact(req, res, next) {
   try {
     const id = req.params.contactId;
     const deleted = await removeContact(id);
