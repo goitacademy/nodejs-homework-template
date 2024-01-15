@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
+const Jimp = require("jimp");
 
 const { User } = require("../models/user");
 
@@ -107,16 +108,25 @@ const updateSubscription = async (req, res) => {
 
 //! === updateAvatar ===
 const updateAvatar = async (req, res) => {
+  if (!req.file) {
+    throw HttpError(400, "File is not found.");
+  }
+
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
 
   const resultUpload = path.join(avatarDir, filename);
+  const image = await Jimp.read(tempUpload);
+  image.resize(256, 256).dither565().quality(60).write(tempUpload);
+
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename); //  "avatars/user123.jpg"
   await User.findByIdAndUpdate(_id, { avatarURL });
 
-  res.json({ avatarURL });
+  res.json({
+    avatarURL,
+  });
 };
 
 module.exports = {

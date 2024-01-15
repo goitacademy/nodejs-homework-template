@@ -88,6 +88,62 @@ ResponseBody: {
   Перенеси аватарку користувача з папки tmp в папку public/avatars і дай їй унікальне ім'я для конкретного користувача.
 - Отриманий URL /avatars/<ім'я файлу з розширенням> та збережи в поле avatarURL користувача
 
+---
+
+```js
+npm install jimp
+```
+
+```
+Align Mode	                           Axis Point
+Jimp.HORIZONTAL_ALIGN_LEFT	Positions the x-axis at the left of the image
+Jimp.HORIZONTAL_ALIGN_CENTER	Positions the x-axis at the center of the image
+Jimp.HORIZONTAL_ALIGN_RIGHT	Positions the x-axis at the right of the image
+Jimp.VERTICAL_ALIGN_TOP	Positions the y-axis at the top of the image
+Jimp.VERTICAL_ALIGN_MIDDLE	Positions the y-axis at the center of the image
+Jimp.VERTICAL_ALIGN_BOTTOM	Positions the y-axis at the bottom of the image
+```
+
+```js
+const updateAvatar = async (req, res) => {
+  // Перевірка, чи був переданий файл в запиті
+  if (!req.file) {
+    throw HttpError(400, "File is not found.");
+  }
+
+  // Отримання ідентифікатора користувача з об'єкта req.user
+  const { _id } = req.user;
+  // Отримання шляху (який тут відразу й іменуємо: 'tempUpload') та оригінального імені завантаженого файлу з об'єкта req.file
+  const { path: tempUpload, originalname } = req.file;
+  // Формування шляху для результату завантаження в папку з аватарами (додаючи ід та оригінальне ім'я файлу)
+  const resultUpload = path.join(avatarDir, `${_id}_${originalname}`);
+
+  // Завантаження зображення з файлу за допомогою бібліотеки Jimp
+  const image = await Jimp.read(tempUpload);
+  // Автоматичне обрізання та розміщення зображення для отримання кадру розміром 250x250 пікселів
+  image
+    // .resize(256, 256) // resize
+    .autocrop()
+    .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE) // resize
+    .dither565() // згладжування зображення та зменшення колірного простору до 16 біт (RGB565)
+    .quality(60) // set JPEG quality
+    .write(tempUpload); // save
+
+  // Перейменування тимчасового файлу зображення на постійне місце зберігання
+  await fs.rename(tempUpload, resultUpload);
+  // Формування шляху до аватара для збереження в базі даних
+  const avatarURL = path.join("avatars", `${_id}_${originalname}`);
+
+  // Оновлення інформації користувача в базі даних (вказуючи новий шлях до аватара)
+  const user = await User.findByIdAndUpdate({ _id }, { avatarURL });
+
+  // Відправлення відповіді клієнту з новим шляхом до аватара
+  res.json({
+    avatarURL,
+  });
+};
+```
+
 ### Додаткове завдання - необов'язкове
 
 #### 1. Написати unit-тести для контролера входу (логін)
