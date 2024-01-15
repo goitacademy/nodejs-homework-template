@@ -107,9 +107,16 @@ const updateSubscription = async (req, res) => {
 
 //! === updateAvatar ===
 const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
-  const resultUpload = path.join(avatarDir, originalname);
+  const filename = `${_id}_${originalname}`;
+
+  const resultUpload = path.join(avatarDir, filename);
   await fs.rename(tempUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename); //  "avatars/user123.jpg"
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({ avatarURL });
 };
 
 module.exports = {
