@@ -1,7 +1,4 @@
 import { Router } from "express";
-import { schemaReq, schema } from "../../js/validation.js";
-
-import * as contacts from "../../js/contacts.js";
 
 const router = Router();
 
