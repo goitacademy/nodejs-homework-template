@@ -33,8 +33,9 @@ export const removeContact = async (contactId) => {
 }
 
 // Повертає об'єкт доданого контакту.
-export const addContact = async (name, email, phone) => {
+export const addContact = async (body) => {
   const contacts = await listContacts();
+  const {name, email, phone} = body
   const newContact = {
     id: nanoid(),
     name,
@@ -46,15 +47,17 @@ export const addContact = async (name, email, phone) => {
   return newContact;
 }
 
-// const updateContact = async (contactId, body) => {}
+export const updateContactById = async (contactId, body) => {
+  const contacts = await listContacts();
+  const index = contacts.findIndex(item => item.id === contactId);
+  if (index === -1) {
+      return null;
+  }
+  contacts[index] = { ...contacts[index], ...body };
+  await updateContact(contacts);
+  return contacts[index];
+}
 
-// export default {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-//   updateContact,
-// }
 
 
 
