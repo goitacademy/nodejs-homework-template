@@ -1,25 +1,47 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express"); // Express - фреймворк для создания веб-серверов и API на Node.js
+const logger = require("morgan"); // Middleware для вывода в консоль HTTP-запросов
+const cors = require("cors"); // Middleware для обработки CORS (Cross-Origin Resource Sharing) в Express
+require("dotenv").config(); //одновременно подключаем библиотеку dotenv и вызываем функцию config(), которая загружает переменные окружения из файла .env в приложение Node.js, делая их доступными через объект process.env. Файл .env содержит пары ключ-значение для определения переменных окружения
 
-const contactsRouter = require('./routes/api/contacts')
+const routes = require("./routes/api/index");
 
-const app = express()
+const app = express(); // app - наш веб-сервер  //Вызываем его как функцию
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+// !app.use() в Express используется middleware. Эти функции могут обрабатывать запросы, модифицировать объекты запросов и ответов или выполнять аутентификацию. Они принимают три аргумента: req (запрос), res (ответ) и next (следующая функция middleware).
+app.use(logger(formatsLogger));
 
-app.use('/api/contacts', contactsRouter)
+app.use(cors()); //позволяет запросы с любого источника
 
+/* app.use(cors({ // разрешает запросы только с "http://localhost:3000"
+  origin:"http://localhost:3000",
+  optionsSuccessStatus: 200
+})) */
+
+app.use(express.json()); //позволяет Express обрабатывать входящие запросы в формате JSON, преобразуя их тело в объект JavaScript для дальнейшей обработки. Действует глобально, что не всегда хорошо  если нужно локально, то смотри пример дальше
+// !Для локального использования
+// const jsonParser = express.json() //и теперь используем как второй аргумент по такому примеру:
+// router.post('/', jsonParser, ctrl.addContact)
+
+app.use("/api", routes); //все маршруты, определенные в файле ./routes/api/index.js, будут доступны с префиксом /api.
+
+// !обрабатывает запросы, попавшие на несуществующие страницы или маршруты в вашем Express-приложении.
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found" });
+});
 
+// !используется для обработки ошибок
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = "Server error" } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+// Пример мидлвэр - функции, которая обрабатывает запрос на /contacts
+/* app.get("/contacts", (request, response)=>{
+  console.log(request.url); // Выводит URL запроса
+  console.log(request.method); // Выводит HTTP метод запроса
+}
+) */
+
+module.exports = app;
