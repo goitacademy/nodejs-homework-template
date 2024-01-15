@@ -5,11 +5,14 @@ const mongoose = require('mongoose')
 
 const contactsRouter = require('./routes/api/contacts');
 const userRouter = require('./routes/api/user');
+const viewRouter = require('./routes/api/viev');
 const dotenv = require('dotenv');
+const path = require('path');
 
 
 
 const app = express()
+
 
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
@@ -20,7 +23,8 @@ dotenv.config({
 
 const { serverConfig } = require('./config');
 // const { globalError } = require('./controllers');
-
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 
 mongoose
@@ -40,6 +44,7 @@ app.use(express.static('public'));
 
 app.use('/api/users', userRouter);
 app.use('/api/contacts', contactsRouter);
+app.use('/', viewRouter);
 
 app.use((err, req, res, next) => {
   res.status(err.status ?? 500).json({ message: err.message });

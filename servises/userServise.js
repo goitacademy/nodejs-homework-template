@@ -6,6 +6,7 @@ const ImageService = require('./imageServise');
 
 
 
+
 exports.registerUser = async (userData) => {
 	const newUser = await Users.create(userData);
 	newUser.password = undefined;
@@ -37,6 +38,8 @@ exports.loginUser = async (userData) => {
 
 exports.getOneUser = (id) => Users.findById(id);
 
+exports.getUserByEmail = (email) => Users.findOne({ email });
+
 
 exports.getsignOutUser = async (id) => await Users.findByIdAndUpdate(id, { token: '' });
 
@@ -60,9 +63,6 @@ exports.updateMe = async (userData, user, file) => {
 			user.id,
 		);
 	}
-	// console.log(user.avatar);
-	// console.log(userData);
-	// console.log(user);
 
 
 	Object.keys(userData).forEach((key) => {
@@ -71,3 +71,17 @@ exports.updateMe = async (userData, user, file) => {
 
 	return await Users.findByIdAndUpdate(user.id, { avatar: user.avatar }, { new: true });
 };
+
+
+exports.checkUserPassword = async (userId, currentPassword, newPassword) => {
+
+	const currentUser = await Users.findById(userId).select('+password');
+
+	if (!(await currentUser.checkPassword(currentPassword, currentUser.password)))
+		throw new HttpError(401, 'Current password invalid');
+
+	const passwdHash = await currentUser.newPassword(newPassword);
+	// console.log(passwdHash);
+	await Users.findByIdAndUpdate(userId, { password: passwdHash }, { new: true });
+
+}

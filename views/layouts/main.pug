@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title #{title}
+    link(rel="stylesheet", href="/css/main.css")
+  body
+    header.header
+      nav.header__nav
+        ul.header__item-list
+          li.header__item
+            a(href="/home" class=(active === 'home' ? 'active' : '')) Home
+          li.header__item 
+            a(href="/todos" class=(active === 'todos' ? 'active' : '')) Todos list
+    
+    main.main
+      block content
+
+    footer.footer
+      .footer__info
+        span.footer__copy All rights reserved &copy;
+        span.footer__year 2023
+

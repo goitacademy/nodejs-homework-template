@@ -17,7 +17,10 @@ router.delete('/:contactId', contactMiddlewares.checkContactId, contactControlle
 
 router.put('/:contactId', contactMiddlewares.checkContactId, contactMiddlewares.checkUpdateUserData, contactControllers.updateContact)
 
-router.patch('/:contactId/favorite', contactMiddlewares.checkContactIdisValid, contactMiddlewares.checkupdateContactDatafavorite, contactControllers.updateContactFavorite)
+router.patch('/:contactId/favorite',
+	contactMiddlewares.checkContactIdisValid,
+	contactMiddlewares.checkupdateContactDatafavorite,
+	contactControllers.updateContactFavorite)
 
 
 module.exports = router

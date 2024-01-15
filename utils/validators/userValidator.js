@@ -20,3 +20,21 @@ exports.subscriptionValidator = joiValidator((data) =>
 			subscription: Joi.string().valid('starter', 'pro', 'business'),
 		})
 		.validate(data));
+
+
+exports.userNewPasswordValidator = joiValidator((data) =>
+	Joi.object()
+		.options({ abortEarly: false })
+		.keys({
+			newPassword: Joi.string().regex(regex.PASSWD_REGEX).required(),
+		})
+		.validate(data));
+
+
+exports.userEmailValidator = joiValidator((data) =>
+	Joi.object()
+		.options({ abortEarly: false })
+		.keys({
+			email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).required(),
+		})
+		.validate(data));

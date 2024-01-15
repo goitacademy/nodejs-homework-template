@@ -21,7 +21,7 @@ exports.checkLoginUserData = (req, res, next) => {
 	if (isEmpty) throw new HttpError(400, 'Invalid user data!....');
 
 	const { value, error } = userValidator.userRegistrationValidator(req.body);
-	console.log(value);
+
 	if (!value.email || !value.password) throw new HttpError(400, 'Invalid user data!....');
 	if (error) throw new HttpError(401, 'Not authorized', error);
 
@@ -52,6 +52,31 @@ exports.protect = catchAsync(async (req, res, next) => {
 	if (!currentUser) throw new HttpError(401, 'Not authorized');
 
 	req.user = currentUser;
+	next();
+});
+
+
+exports.checkUpdateMyPassword = catchAsync(async (req, res, next) => {
+	const { currentPassword, newPassword } = req.body;
+
+	const { value, error } = userValidator.userNewPasswordValidator({ newPassword: newPassword });
+	if (error) throw new HttpError(401, 'Invalid new password!....', error);
+
+	req.body.newPassword = value;
+
+	await userServise.checkUserPassword(req.user._id, currentPassword, newPassword);
+	next();
+});
+
+
+exports.checkUserEmail = catchAsync(async (req, res, next) => {
+	const { email } = req.body;
+
+	const { value, error } = userValidator.userEmailValidator({ email });
+	if (error) throw new HttpError(401, 'Invalid email', error);
+
+	req.body = value;
+
 	next();
 });
 

@@ -25,8 +25,6 @@ exports.checkupdateContactDatafavorite = catchAsync(async (req, res, next) => {
 
 	if (error) throw new HttpError(400, 'missing field favorite', error);
 
-	await contactServise.contactFavorite({ favorite: value.favorite });
-
 	req.body = value;
 
 	next();

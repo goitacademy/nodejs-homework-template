@@ -1,0 +1,17 @@
+extends layouts/main
+
+block content
+  h1 Todos list
+  .todos
+    each todo in todos
+      .todo
+        .owner
+          figure.owner__pic
+            img(src= todo.owner.avatar)
+          p.owner__name= todo.owner.name
+        .todo__content
+          h3.h3= todo.name
+          p.description= todo.phone
+          p.duedate= todo.email
+
+

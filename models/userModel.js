@@ -23,6 +23,16 @@ const userSchema = new Schema({
 	},
 	avatar: String,
 
+	// verify: {
+	// 	type: Boolean,
+	// 	default: false,
+	// },
+	// verificationToken: {
+	// 	type: String,
+	// 	required: [true, 'Verify token is required'],
+	// },
+
+
 },
 	{
 		versionKey: false,
@@ -35,7 +45,6 @@ userSchema.pre('save', async function (next) {
 		const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
 
 		this.avatar = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=robohash`;
-		console.log(this.avatar);
 	}
 
 	if (!this.isModified('password')) return next();
@@ -45,6 +54,13 @@ userSchema.pre('save', async function (next) {
 
 	next();
 });
+
+userSchema.methods.newPassword = async (password) => {
+	const salt = await genSalt(10);
+	const newPassword = await hash(password, salt);
+	return newPassword;
+
+}
 
 userSchema.methods.checkPassword = (candidate, passwdHash) => compare(candidate, passwdHash);
 

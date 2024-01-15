@@ -68,6 +68,26 @@ const updateAvatar = catchAsync(async (req, res) => {
 })
 
 
+const updateMyPassword = catchAsync(async (req, res) => {
+	res.status(200).json({
+		user: req.user,
+	})
+})
+
+
+const forgotPassword = catchAsync(async (req, res) => {
+	res.status(200).json({
+		user: req.user,
+	})
+})
+
+const resetPassword = catchAsync(async (req, res) => {
+	res.status(200).json({
+		user: req.user,
+	})
+})
+
+
 
 
 
@@ -80,4 +100,7 @@ module.exports = {
 	logOut,
 	updateSub,
 	updateAvatar,
+	updateMyPassword,
+	forgotPassword,
+	resetPassword,
 }

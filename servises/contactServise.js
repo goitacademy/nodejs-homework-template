@@ -90,7 +90,8 @@ exports.updateContactFavorite = async (contactId, favorite, owner) => {
 
 exports.contactFavorite = async (filter) => {
 	const favorite = await Contacts.exists(filter);
-	if (!favorite) throw new HttpError(404, 'User not found');
+	// console.log(favorite);
+	if (!favorite) throw new HttpError(404, 'Not found');
 }
 
 
