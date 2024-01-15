@@ -9,14 +9,14 @@ const { schemas } = require("../../models/user");
 const router = express.Router();
 
 router.post(
-  "/signup",
+  "/register",
   isEmptyBody,
   validateBody(schemas.signUpSchema),
   authController.signUp
 );
 
 router.post(
-  "/signin",
+  "/login",
   isEmptyBody,
   validateBody(schemas.signInSchema),
   authController.singIn
@@ -24,6 +24,6 @@ router.post(
 
 router.get("/current", authenticate, authController.getCurrent);
 
-router.post("/signout", authenticate, authController.signOut);
+router.post("/logout", authenticate, authController.signOut);
 
 module.exports = router;
