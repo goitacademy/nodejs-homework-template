@@ -29,3 +29,6 @@ node server.js
 
 ## Find by id:
 ![Find by id](assets/find-by-id.png)
+
+## Remove:
+![Remove](assets/delete-cont.png)
