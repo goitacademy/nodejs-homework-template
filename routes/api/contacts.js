@@ -3,7 +3,7 @@ import { showContact } from "../../controllers/contacts/showContacts.js";
 import { indexContacts } from "../../controllers/contacts/indexContacts.js";
 import { createContact } from "../../controllers/contacts/createContacts.js";
 import { deleteContact } from "../../controllers/contacts/deleteContacts.js";
-import { updateContact } from "../../controllers/contacts/updateContacts.js";
+import { updateContacts } from "../../controllers/contacts/updateContacts.js";
 
 const router = Router();
 
@@ -15,6 +15,6 @@ router.post("/", createContact);
 
 router.delete("/:contactId", deleteContact);
 
-router.put("/:contactId", updateContact);
+router.put("/:contactId", updateContacts);
 
 export default router;
