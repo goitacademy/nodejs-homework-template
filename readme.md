@@ -1,31 +1,61 @@
-## GoIT Node.js Course Template Homework
+# Contacts CLI APP
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+---
 
-Додайте ментора до колаборації
+## DEMO
 
-Для кожної домашньої роботи створюйте свою гілку.
+### GET `http://localhost:3000/api/contacts`
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+![](./images/Screenshot_1.png)
 
-Кожна нова гілка для др повинна робитися з master
+### GET by ID `http://localhost:3000/api/contacts/CONTACT_ID`
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+![](./images/Screenshot_2.png)
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+### POST `http://localhost:3000/api/contacts/`
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+![](./images/Screenshot_3.png)
 
-### Команди:
+### PUT `http://localhost:3000/api/contacts/CONTACT_ID`
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+![](./images/Screenshot_4.png)
+
+### DELETE `http://localhost:3000/api/contacts/CONTACT_ID`
+
+![](./images/Screenshot_5.png)
+
+---
+
+## Technologies
+
+- Node.js
+- JavaScript
+
+---
+
+## Setup
+
+Clone this repo to your desktop and run `npm install` to install all the dependencies.
+
+---
+
+## Usage
+
+After you clone this repo to your desktop, go to its root directory and run `npm install` to install
+its dependencies.
+
+Once the dependencies are installed, you can run `npm run start:dev`
+
+Open your browser or postman and check all available methods and endpoint's
+
+- GET (contacts) : `http://localhost:3000/api/contacts`
+- GET (find contact by id) : `http://localhost:3000/api/contacts/CONTACT_ID`
+- POST (add new contact with json) : `http://localhost:3000/api/contacts/`
+- PUT (update contact with json) : `http://localhost:3000/api/contacts/CONTACT_ID`
+- DELETE (remove contact with unique id) : `http://localhost:3000/api/contacts/CONTACT_ID`
+
+---
+
+## Feel free to share your opinion
+
+- https://www.linkedin.com/in/klima96/
