@@ -53,7 +53,8 @@ const updateContact = async (req, res, next) => {
   if (!updatedContact) {
     throw HttpError(404, "Not found!");
   }
-  res.status(200).json(updatedContact);
+  console.log(updatedContact);
+  res.status(200).send(updatedContact);
 };
 
 const updateFavorite = async (req, res, next) => {

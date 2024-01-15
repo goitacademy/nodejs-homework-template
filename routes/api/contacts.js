@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const ctrl = require("../../controllers/contacts");
+const ctrl = require("../../controllers/contact");
 const jsonParser = express.json();
 
 const { validateBody } = require("../../middlewares");
@@ -10,7 +10,7 @@ const { schemas } = require("../../models/contact");
 
 router.get("/", ctrl.listContacts);
 
-router.get("/:id",  ctrl.getContactById);
+router.get("/:id", ctrl.getContactById);
 
 router.post("/", jsonParser, validateBody(schemas.addSchema), ctrl.addContact);
 
@@ -23,5 +23,9 @@ router.put(
   ctrl.updateContact
 );
 
-router.patch("/:id/favorite", validateBody(schemas.updateFavoriteSchema), ctrl.updateFavorite)
+router.patch(
+  "/:id/favorite",
+  validateBody(schemas.updateFavoriteSchema),
+  ctrl.updateFavorite
+);
 module.exports = router;
