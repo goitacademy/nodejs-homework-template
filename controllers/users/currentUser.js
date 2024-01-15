@@ -1,4 +1,4 @@
-const { RequestError } = require('../../helpers')
+const { RequestError } = require('../../helpers/RequestError')
 
 const currentUser = async (req, res, next) => {
     try {

@@ -1,5 +1,5 @@
 const RequestError = require('./RequestError')
-const handleSaveErrors = require('../helpers/handleSaveErrors')
+const handleSaveErrors = require('./handleSaveErrors')
 
 module.exports = {
     RequestError,
