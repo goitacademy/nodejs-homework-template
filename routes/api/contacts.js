@@ -8,6 +8,9 @@ const validateContact = async (req, res, next) => {
   const { body } = req;
 
   try {
+    if (Object.keys(body).length === 0) {
+      return res.status(400).json({ message: "missing fields" });
+    }
     await contactShema.validateAsync(body, { abortEarly: false });
     next();
   } catch (error) {
@@ -59,7 +62,6 @@ router.put("/:contactId", validateContact, async (req, res, next) => {
   const { body } = req;
 
   const updatedContact = await contacts.updateContact(contactId, body);
-  console.log(updatedContact);
 
   if (updatedContact) {
     return res
