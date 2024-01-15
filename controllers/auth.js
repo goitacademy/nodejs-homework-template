@@ -45,6 +45,10 @@ const login = async (req, res) => {
   console.log(token);
   res.status(200).json({
     token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
   });
 };
 
@@ -58,9 +62,12 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json({
-    message: "Bearer {{token}}",
-  });
+  res
+    .status(204)
+    .json({
+      message: "Bearer {{token}}",
+    })
+    .message("No Content");
 };
 
 module.exports = {
