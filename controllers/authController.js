@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt");
-const { User } = require("../schemas/mongooseSchemas/user");
+const { User } = require("../schemas/mongooseSchemas/userSchema");
 const jwt = require("jsonwebtoken");
 const { funcHandler, handleError } = require("../utils");
+
 const { SECRET_KEY } = process.env;
 
 const registration = async (req, res) => {

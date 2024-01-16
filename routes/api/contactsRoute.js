@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { contactValidator } = require("../../utils/validator.js");
-const contactsController = require("../../models/contacts.js");
+const contactsController = require("../../models/contactsModel.js");
 
 router.get("/", async (req, res, next) => {
   try {

@@ -1,4 +1,4 @@
-const Contact = require("../schemas/mongooseSchemas/contact");
+const Contact = require("../schemas/mongooseSchemas/contactSchema");
 const { handleError, funcHandler } = require("../utils");
 
 const readContacts = async (req, res) => {

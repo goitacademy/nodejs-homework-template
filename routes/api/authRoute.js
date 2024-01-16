@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const { reqValidation, authMiddleware } = require("../../midlewares");
-const { schemas } = require("../../schemas/mongooseSchemas/user");
-const func = require("../../controllers/authorization");
+const { schemas } = require("../../schemas/mongooseSchemas/userSchema");
+const func = require("../../controllers/authController");
 
 router.post("/register", reqValidation(schemas.registerSchema), func.register);
 

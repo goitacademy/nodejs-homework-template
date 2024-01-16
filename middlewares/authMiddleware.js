@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { SEKRET_KEY } = process.env;
 const { handleError } = require("../utils/handleError");
 
-const { User } = require("../schemas/mongooseSchemas/user");
+const { User } = require("../schemas/mongooseSchemas/userSchema");
 
 const authMiddleware = async (req, res, next) => {
   const { authorization = "" } = req.headers;
