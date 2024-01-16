@@ -1,29 +1,42 @@
 import express from "express";
-import ctrl from "../../controllers/contactsController.js";
+import { ctrlWrapper, validateBody } from "../../decorators/index.js";
 import {
 	isEmptyBody,
 	isValidId,
 	isEmptyFavorite,
 } from "../../middlewares/index.js";
 import { addSchema, patchSchema, putSchema } from "../../models/contact.js";
-import { validateBody } from "../../decorators/index.js";
+
+import {
+	addNewContact,
+	deleteContact,
+	getAllContacts,
+	getById,
+	updateContactById,
+	updateStatusContact,
+} from "../../controllers/contactsController.js";
 
 const router = express.Router();
 
-router.get("/", ctrl.getAllContacts);
+router.get("/", ctrlWrapper(getAllContacts));
 
-router.get("/:id", isValidId, ctrl.getById);
+router.get("/:id", isValidId, ctrlWrapper(getById));
 
-router.post("/", isEmptyBody, validateBody(addSchema), ctrl.addNewContact);
+router.post(
+	"/",
+	isEmptyBody,
+	validateBody(addSchema),
+	ctrlWrapper(addNewContact)
+);
 
-router.delete("/:id", isValidId, ctrl.deleteContact);
+router.delete("/:id", isValidId, ctrlWrapper(deleteContact));
 
 router.put(
 	"/:id",
 	isEmptyBody,
 	isValidId,
 	validateBody(putSchema),
-	ctrl.updateContactById
+	ctrlWrapper(updateContactById)
 );
 
 router.patch(
@@ -31,7 +44,7 @@ router.patch(
 	isEmptyFavorite,
 	isValidId,
 	validateBody(patchSchema),
-	ctrl.updateStatusContact
+	ctrlWrapper(updateStatusContact)
 );
 
 export default router;
