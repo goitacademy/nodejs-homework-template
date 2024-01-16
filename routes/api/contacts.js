@@ -37,7 +37,6 @@ router.get("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // res.json({ message: "template message" });
 });
 
 router.post("/", async (req, res, next) => {
@@ -78,7 +77,8 @@ router.put("/:contactId", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
-      throw HttpError(404, error.message);
+      res.status(400).json({ message: "missing fields" });
+      return;
     }
     const { id } = req.params;
     const result = await contacts.updateContact(id, req.body);
@@ -89,7 +89,6 @@ router.put("/:contactId", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // res.json({ message: "template message" });
 });
 
 module.exports = router;
