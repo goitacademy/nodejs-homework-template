@@ -6,17 +6,17 @@ const Joi = require("joi");
 //   phone: Joi.string().required(),
 // });
 
-const contactSchema = Joi.object({
+const postContactSchema = Joi.object({
   name: Joi.string().required().messages({
     "string.base": "Name must be a string",
     "string.empty": "Name cannot be empty",
-    "any.required": "Name is required",
+    "any.required": "missing required name field",
   }),
   email: Joi.string().email().required().messages({
     "string.base": "Email must be a valid string",
     "string.email": "Email must be a valid email address",
     "string.empty": "Email cannot be empty",
-    "any.required": "Email is required",
+    "any.required": "missing required email field",
   }),
 
   phone: Joi.string()
@@ -25,8 +25,30 @@ const contactSchema = Joi.object({
     .messages({
       "string.base": "Phone must be a string",
       "string.empty": "Phone cannot be empty",
-      "any.required": "Phone is required",
+      "any.required": "missing required phone field",
     }),
 });
 
-module.exports = contactSchema;
+const putContactSchema = Joi.object({
+  name: Joi.string().messages({
+    "string.base": "Name must be a string",
+    "string.empty": "Name cannot be empty",
+  }),
+  email: Joi.string().email().messages({
+    "string.base": "Email must be a valid string",
+    "string.email": "Email must be a valid email address",
+    "string.empty": "Email cannot be empty",
+  }),
+
+  phone: Joi.string()
+    .pattern(/^\(\d{3}\) \d{3}-\d{4}$/)
+    .messages({
+      "string.base": "Phone must be a string",
+      "string.empty": "Phone cannot be empty",
+    }),
+});
+
+module.exports = {
+  postContactSchema,
+  putContactSchema,
+};
