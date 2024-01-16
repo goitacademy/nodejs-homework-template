@@ -27,8 +27,7 @@ async function getContact(req, res, next) {
 }
 
 async function createContact(req, res, next) {
-  // Add Joi before
-
+ 
   const contact = {
     name: req.body.name,
     email: req.body.email,
@@ -95,11 +94,13 @@ async function changeContactFavorite(req, res, next) {
       },
       { new: true }
     );
-
+      console.log(req.body.favorite)
+    if (req.body.favorite === undefined) {
+      return res.status(400).send("missing field favorite");
+    }
     if (result === null) {
       return res.status(404).send("Contact not found");
     }
-
     res.send(result);
   } catch (error) {
     next(error);
