@@ -25,8 +25,7 @@ const saveFile = () => {
 
 router.listContacts =  () => {
     try {      
-        // console.log(nanoid())
-    return contacts;
+       return contacts;
 } catch (err) {
   console.log(err.message);
   }
@@ -67,23 +66,9 @@ router.removeContact = (contactId) => {
     newContacts.push( newContact )
     contacts = newContacts  
     saveFile(contacts)
-  } else {
-    // const contact = {
-    //   id: contactId,
-    //   name: body.name,
-    //   email: body.email,
-    //   phone: body.phone      
-    // }
-    // contacts.push(contact)
-    return false
-    
+  } else {   
+    return false    
   }     
-  // fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), (err) => {
-  //   if (err) {
-  //     return console.log(`Reading error: ${err.message}`);      
-  //     }
-    
-  //   });
 }
 
 
