@@ -1,29 +1,48 @@
-## GoIT Node.js Course Template Homework
+ContactManager API is a Node.js-based service facilitating contact management.
+This API allows operations on an address book, offering endpoints for listing, retrieving, adding, updating, and removing contacts.
 
-Wykonaj forka tego repozytorium, aby wykonywać zadania domowe (2-6). Fork utworzy repozytorium na Twoim koncie na http://github.com
+Getting Started:
 
-Dodaj mentora jako collaboratora.
+Clone the repository.
+Run npm install to install dependencies.
 
-Dla każdego zadania domowego utwórz nową gałąź (branch).
+Scripts:
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+npm start: Launches the application in production mode for contact management via the command-line interface.
+npm run start:dev: Launches the application in development mode using nodemon for automatic code reloading.
+npm run lint: Performs code checking with ESLint.
+npm lint:fix: Same as above, automatically fixing simple errors.
+Usage:
 
-Każda nowa gałąź dla zadania powinna być tworzona z gałęzi master.
+List Contacts
 
-Po zakończeniu wykonania zadania domowego na swojej gałęzi, należy zrobić pull request (PR). Następnie dodaj mentora do przeglądu kodu. Dopiero po zatwierdzeniu PR przez mentora możesz scalić gałąź z zadaniem domowym do gałęzi master.
+Path: /api/contacts
+Method: GET
+Status: 200 OK / 404 Not Found
 
-Uważnie czytaj komentarze mentora. Popraw uwagi i zrób commit na gałęzi z zadaniem domowym. Zmiany automatycznie pojawią się w PR po wysłaniu commitu z poprawkami na GitHub. Po poprawkach ponownie dodaj mentora do przeglądu kodu.
+Get Contact by ID
 
-- Podczas oddawania zadania domowego podaj link do PR.
-- Kod JS jest czytelny i zrozumiały, do formatowania używany jest Prettier.
+Path: /api/contacts/:contactId
+Method: GET
+URL Parameters: contactId - Contact ID
+Status: 200 OK / 404 Not Found
 
-### Komendy:
+Path: /api/contacts/
+Method: POST
+Request Body: JSON with new contact data
+Status: 201 Created / 400 Bad Request - message "missing required field"
 
-- `npm start` &mdash;  uruchamia serwer w trybie produkcyjnym
-- `npm run start:dev` &mdash; uruchamia serwer w trybie deweloperskim (development)
-- `npm run lint` &mdash; uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
-- `npm lint:fix` &mdash; to samo co powyższe, ale również automatycznie poprawia proste błędy.
+Update Contact
+
+Path: /api/contacts/:contactId
+Method: PUT
+URL Parameters: contactId - Contact ID
+Request Body: JSON with updated contact data
+Status: 200 OK / 404 Not Found
+
+Remove Contact
+
+Path: /api/contacts/:contactId
+Method: DELETE
+URL Parameters: contactId - Contact ID
+Status: 200 OK / 404 Not Found
