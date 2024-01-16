@@ -3,11 +3,19 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Conflict, Unauthorized, NotFound, BadRequest } = require('http-errors');
-const { validateSignup, validateLogin, validateVerification, validateResendVerification } = require('../../middlewares/validation');
-const { NODEMAILER_USER, NODEMAILER_PASS, BASE_URL } = process.env;
+const multer = require('multer');
+const path = require('path');
 const nodemailer = require('nodemailer');
 const { nanoid } = require('nanoid');
-const User = require('../../models/users');
+const User = require('../../models/user');
+const {
+  validateSignup,
+  validateLogin,
+  validateVerification,
+  validateResendVerification,
+} = require('../../middleware/validation');
+
+const { NODEMAILER_USER, NODEMAILER_PASS, BASE_URL, NODE_ENV } = process.env;
 
 const createTransporter = () => {
   return nodemailer.createTransport({
@@ -34,6 +42,60 @@ const sendVerificationEmail = async (user) => {
 
   await transporter.sendMail(mailOptions);
 };
+
+router.post('/signup', validateSignup, async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      throw new Conflict('Email in use');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      email,
+      password: hashedPassword,
+      verificationToken: nanoid(),
+    });
+
+    await sendVerificationEmail(user);
+
+    res.status(201).json({
+      message: 'Registration successful. Verification email sent.',
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Функція для завантаження файлів
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '../../public/avatars'));
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, `${nanoid()}${ext}`);
+  },
+});
+
+const upload = multer({ storage });
+
+// Оновлення аватара
+router.patch('/avatars', upload.single('avatar'), async (req, res, next) => {
+  try {
+    const userId = req.user._id;
+    const avatarURL = req.file.filename;
+
+    // Оновити поле avatarURL користувача
+    const updatedUser = await User.findByIdAndUpdate(userId, { avatarURL }, { new: true });
+
+    res.json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.post('/signup', validateSignup, async (req, res, next) => {
   try {
