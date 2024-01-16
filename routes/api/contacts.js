@@ -2,7 +2,8 @@
 import  express  from 'express';
 import { nanoid } from 'nanoid';
 
-import  { listContacts, getContactById, addContact, removeContact, updateContact } from '../../models/contacts.js';   
+import { validateContactData } from '../../validation/joi.js';
+import  { listContacts, getContactById, addContact, removeContact, updateContact } from '../../models/contacts.js';  
 
 const router = express.Router()
 
@@ -32,7 +33,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateContactData, async (req, res, next) => {
   const { name, email, phone } = req.body;
 
   if (!name || !email || !phone) {
@@ -63,7 +64,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validateContactData, async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
 

@@ -3,9 +3,7 @@ import path from 'path'
 import * as url from 'url';
 
 const __filename = url.fileURLToPath(import.meta.url);
-console.log(__filename)
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
-console.log(__dirname)
 const contactsPath = path.resolve(__dirname, 'contacts.json');
 
 async function listContacts() {
