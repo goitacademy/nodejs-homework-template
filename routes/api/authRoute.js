@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { reqValidation, authMiddleware } = require("../../midlewares");
+const { reqValidation, authMiddleware } = require("../../middlewares");
 const { schemas } = require("../../schemas/mongooseSchemas/userSchema");
 const func = require("../../controllers/authController");
 

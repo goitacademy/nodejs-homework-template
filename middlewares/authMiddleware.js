@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { SEKRET_KEY } = process.env;
-const { handleError } = require("../utils/handleError");
+const handleError = require("../utils/handleError");
 
 const { User } = require("../schemas/mongooseSchemas/userSchema");
 

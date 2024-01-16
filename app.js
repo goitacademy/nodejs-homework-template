@@ -5,7 +5,8 @@ const cors = require("cors");
 
 const { connectToDatabase } = require("./config/connectToDatabase");
 
-const contactsRouter = require("./routes/api/contactsRoute");
+const contactsRoute = require("./routes/api/contactsRoute");
+const authRoute = require("./routes/api/authRoute");
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -18,7 +19,8 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to the API" });
 });
 
-app.use("/api/contacts", contactsRouter);
+app.use("/users", authRoute);
+app.use("/api/contacts", contactsRoute);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
