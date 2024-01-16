@@ -24,6 +24,13 @@ const userSchema = new Schema(
     },
     avatarURL: String,
     token: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -42,6 +49,10 @@ export const userRegisterSchema = Joi.object({
 
 export const userLoginSchema = Joi.object({
   password: Joi.string().required(),
+  email: Joi.string().required(),
+});
+
+export const userEmailSchema = Joi.object({
   email: Joi.string().required(),
 });
 

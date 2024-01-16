@@ -15,5 +15,7 @@ userRouter.patch(
   authenticate,
   userController.updateAvatar
 );
+userRouter.get("/verify/:verificationToken", userController.verify);
+userRouter.post("/verify", isEmptyBody, userController.resendEmail);
 
 export default userRouter;
