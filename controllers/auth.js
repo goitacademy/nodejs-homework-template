@@ -93,8 +93,9 @@ const updateAvatar = async (req, res) => {
   await fs.rename(tempUpload, resultUpload);
 
   // Обробка аватарки за допомогою Jimp
-  const avatar = await Jimp.read(resultUpload);
-  await avatar.resize(250, 250).write(resultUpload);
+  Jimp.read(tempUpload)
+    .then((image) => image.resize(250, 250).write(resultUpload))
+    .catch((error) => console.log(error));
 
   const avatarURL = path.join("avatars", filename);
   await User.findByIdAndUpdate(_id, { avatarURL });
