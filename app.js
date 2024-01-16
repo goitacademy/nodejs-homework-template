@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Parse data sent in x-www-form-urlencoded format
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/api/contacts", contactsRouter);
 
