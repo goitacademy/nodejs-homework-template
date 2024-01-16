@@ -8,13 +8,13 @@ const contacts = require("../../models/contacts.js");
 const addSchema = Joi.object({
   name: Joi.string()
     .required()
-    .messages({ "any required": "missing required name field" }),
+    .messages({ "any.required": "missing required name field" }),
   email: Joi.string()
     .required()
-    .messages({ "any required": "missing required email field" }),
+    .messages({ "any.required": "missing required email field" }),
   phone: Joi.string()
     .required()
-    .messages({ "any required": "missing required phone field" }),
+    .messages({ "any.required": "missing required phone field" }),
 });
 
 router.get("/", async (req, res, next) => {
