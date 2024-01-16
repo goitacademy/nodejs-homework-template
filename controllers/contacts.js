@@ -12,8 +12,12 @@ const getAll = async (req, res) => {
 };
 
 const getOne = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById({
+    _id: contactId,
+    owner: _id,
+  }).populate("owner", "email subscription");
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -38,10 +42,18 @@ const updateById = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findByIdAndUpdate(
+    {
+      _id: contactId,
+      owner: _id,
+    },
+    req.body,
+    {
+      new: true,
+    }
+  ).populate("owner", "_id email subscription");
   if (!result) {
     throw HttpError(400, "missing field favorite");
   }
