@@ -1,8 +1,12 @@
-const { catchAsync, HttpError } = require('../helpers');
+const { catchAsync, HttpError, sendEmail } = require('../helpers');
 const { userService } = require('../service');
 
 exports.register = catchAsync(async (req, res) => {
-    const { email, subscription} = await userService.register(req.body);
+    const { email, subscription, verificationToken } = await userService.register(req.body);
+    const url = `${req.protocol}://${req.get('host')}/api/users/verify/${verificationToken}`;
+
+    await sendEmail.verify(email, url)
+
     res.status(201).json({
         user: {
             email,
@@ -10,6 +14,27 @@ exports.register = catchAsync(async (req, res) => {
         },
     });
 });
+
+exports.verify = catchAsync(async (req, res) => {
+    const { verificationToken } = req.params;
+    await userService.verify(verificationToken)
+    res.json({ message: 'Verification successful' });
+})
+
+exports.sendVerifyToken = catchAsync(async (req, res) => {
+    const user = await userService.findUserByFilter({ email: req.body.email })
+    console.log("user:", user)
+    if (!user) throw new HttpError(404, 'User not found')
+    if (user.verify) throw new HttpError(400, 'Verification has already been passed');
+
+    const url = `${req.protocol}://${req.get('host')}/api/users/verify/${user.verificationToken}`;
+
+    await sendEmail.verify(user.email, url);
+
+    res.json({
+        message: 'Verification email sent',
+    });
+})
 
 exports.login = catchAsync(async (req, res) => {
     const { email, subscription, token, avatarURL } = await userService.login(req.user);
@@ -34,8 +59,18 @@ exports.current = (req, res) => {
 };
 
 exports.updateSubscription = catchAsync(async(req, res) => {
-    const user = await userService.updateSubscription(req.user.id, req.body)
-    res.json({user})
+    const { email, subscription, token, avatarURL } = await userService.updateSubscription(
+        req.user.id,
+        req.body
+    );
+    res.json({
+        user: {
+            email,
+            subscription,
+            avatarURL,
+        },
+        token,
+    });
 })
 
 exports.uploadAvatar = catchAsync(async (req, res) => {

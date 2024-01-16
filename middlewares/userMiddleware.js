@@ -5,6 +5,7 @@ exports.checkLoginData = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
     const user = await userService.findUserByFilter({ email }).select('+password');
     if (!user) throw new HttpError(401, 'Email or password is wrong');
+    if (!user.verify) throw new HttpError(403, 'User not verify')
     const pswdIsValid = await user.checkPswd(password, user.password);
     if (!pswdIsValid) throw new HttpError(401, 'Email or password is wrong');
     req.user = user;
