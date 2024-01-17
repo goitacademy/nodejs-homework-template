@@ -1,5 +1,7 @@
+const serverConfig = require("../config/serverConfig");
+
 const jwt = require("jsonwebtoken");
-const { SEKRET_KEY } = process.env;
+const SECRET_KEY = serverConfig.SECRET_KEY;
 const handleError = require("../utils/handleError");
 
 const { User } = require("../schemas/mongooseSchemas/userSchema");
@@ -14,16 +16,16 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const { id } = jwt.verify(token, SEKRET_KEY);
+    const { id } = jwt.verify(token, SECRET_KEY);
 
     const user = await User.findById(id);
     if (!user || !user.token || user.token !== token) {
-      next(handleError(401));
+      throw new Error("Invalid token");
     }
     req.user = user;
     next();
-  } catch {
-    next(handleError(401));
+  } catch (error) {
+    next(handleError(401, error.message));
   }
 };
 

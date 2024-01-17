@@ -29,12 +29,12 @@ const userSchema = new Schema(
 userSchema.post("save", mongoSwerverError);
 
 const registerSchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().required().email(),
   password: Joi.string().min(6).required(),
 });
 
 const loginSchema = Joi.object({
-  email: Joi.string().required(),
+  email: Joi.string().required().email(),
   password: Joi.string().min(6).required(),
 });
 

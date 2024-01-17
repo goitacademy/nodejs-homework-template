@@ -2,8 +2,9 @@ const bcrypt = require("bcrypt");
 const { User } = require("../schemas/mongooseSchemas/userSchema");
 const jwt = require("jsonwebtoken");
 const { funcHandler, handleError } = require("../utils");
+const serverConfig = require("../config/serverConfig");
 
-const { SECRET_KEY } = process.env;
+const SECRET_KEY = serverConfig.SECRET_KEY;
 
 const registration = async (req, res) => {
   const { email, password } = req.body;
