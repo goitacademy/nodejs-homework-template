@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { mongoSwerverError } = require("../../utils");
+const crypto = require("crypto");
+
 const userSchema = new Schema(
   {
     password: {
@@ -22,9 +24,21 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    avatarURL: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
+
+userSchema.pre("save", async function (next) {
+  if (this.isNew) {
+    const emailHash = crypto.createHash("md5").update(this.email).digest("hex");
+
+    this.avatar = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=monsterid`;
+  }
+  next();
+});
 
 userSchema.post("save", mongoSwerverError);
 

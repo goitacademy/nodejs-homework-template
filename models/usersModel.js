@@ -12,7 +12,10 @@ const registerUser = async (email, password) => {
   const newUser = new User({ email, password: hashedPassword });
   await newUser.save();
 
-  return { email: newUser.email, subscription: newUser.subscription };
+  return {
+    email: newUser.email,
+    subscription: newUser.subscription,
+  };
 };
 
 module.exports = { registerUser };
