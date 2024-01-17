@@ -23,12 +23,13 @@ const fileFilter = (req, file, callback) => {
   if (extention === 'exe') {
     callback(HttpError(400, '.exe not valid extention'));
   }
+  callback(null, file.originalname);
 };
 
 const upload = multer({
   storage,
   limits,
-  // fileFilter,
+  fileFilter,
 });
 
 export default upload;
