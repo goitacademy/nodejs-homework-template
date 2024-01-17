@@ -13,8 +13,9 @@
     "cross-env": "7.0.3",
     "express": "4.17.1",
     "joi": "^17.11.0",
+    "mongodb": "^6.3.0",
     "morgan": "1.10.0",
-    "nanoid": "^5.0.4"
+    "nanoid": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
