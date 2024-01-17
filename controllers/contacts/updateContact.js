@@ -2,11 +2,15 @@ const { HttpError } = require("../../helpers");
 const { Contact } = require("../../models");
 
 const updateContact = async (req, res) => {
+  const {_id} = req.user;
   const { contactId } = req.params;
 
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+  const result = await Contact.findByIdAndUpdate({
+    _id: contactId,
+    owner: _id
+  }, req.body, {
     new: true,
-  });
+  }).populate ( "owner","_id subscription email");
 
   if (!result) throw HttpError(404, "Not found");
 
