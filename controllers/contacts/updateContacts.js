@@ -1,4 +1,4 @@
-import { updateContact } from "../../models/contacts.js";
+import { updateContact } from "#models/contacts.js";
 
 async function updateContacts(req, res, next) {
   const { contactId } = req.params;

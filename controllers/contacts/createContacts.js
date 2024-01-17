@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 
-import { addContact } from "../../models/contacts.js";
+import { addContact } from "#models/contacts.js";
 
 async function createContacts(req, res, next) {
   const { name, email, phone } = req.body;
