@@ -1,8 +1,14 @@
 const express = require("express");
 const contacts = require("../../models/contacts");
-
 const router = express.Router();
 const { HttpError } = require("../../utils");
+const Joi = require("joi");
+
+const AddSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.number().required(),
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -29,6 +35,10 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
+    const { error } = AddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
     const result = await contacts.addContact(req.body);
     res.status(201).json(result);
   } catch (error) {
