@@ -4,6 +4,7 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const jimp = require("jimp");
+require("dotenv").config();
 
 const { User } = require("../models/user");
 
