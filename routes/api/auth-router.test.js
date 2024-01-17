@@ -28,7 +28,7 @@ describe('test /api/users/register', () => {
 
   test('test register with correct data', async () => {
     const registerData = {
-      email: 'testUser@mail.com',
+      email: 'testuser@mail.com',
       password: '12345678',
     };
 
@@ -38,11 +38,14 @@ describe('test /api/users/register', () => {
     expect(statusCode).toBe(201);
     expect(body.user.email).toBe(registerData.email);
     expect(body.user.subscription).toBe('starter');
+
+    const user = await User.findOne({ email: registerData.email });
+    expect(user).toBeTruthy();
   });
 
   test('test not register new user with already added email', async () => {
     const registerData = {
-      email: 'testUser@mail.com',
+      email: 'testuser@mail.com',
       password: '12345678',
     };
 
@@ -74,16 +77,20 @@ describe('test /api/users/login', () => {
 
   test('test login with correct data', async () => {
     const registerData = {
-      email: 'testUser@mail.com',
+      email: 'testuser@mail.com',
       password: '12345678',
     };
 
     await request(app).post('/api/users/register').send(registerData);
 
-    const { statusCode, body } = await request(app)
-      .post('/api/users/login')
-      .send(registerData);
+    const {
+      statusCode,
+      body: { token, user },
+    } = await request(app).post('/api/users/login').send(registerData);
     expect(statusCode).toBe(200);
-    expect(body.token).toBeDefined();
+    expect(token).toBeDefined();
+    expect(Object.keys(user)).toContain('email' && 'subscription');
+    expect(typeof user.email).toBe('string');
+    expect(typeof user.subscription).toBe('string');
   });
 });
