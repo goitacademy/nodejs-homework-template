@@ -1,8 +1,8 @@
 const express = require("express");
 
-const controller = require("../../controllers/auth");
+const authController = require("../../controllers/authController");
 
-const { validateBody } = require("../../middlewares");
+const { validateBody, isAuthenticated } = require("../../middlewares");
 
 const { schemas } = require("../../models/user");
 
@@ -10,10 +10,25 @@ const router = express.Router();
 
 router.post(
   "/register",
-  validateBody(schemas.registerSchema),
-  controller.register
+  validateBody(schemas.joiRegisterSchema),
+  authController.register
 );
 
-router.post("/login", validateBody(schemas.loginSchema), controller.login);
+router.post(
+  "/login",
+  validateBody(schemas.joiLoginSchema),
+  authController.login
+);
+
+router.post("/logout", isAuthenticated, authController.logout);
+
+router.get("/current", isAuthenticated, authController.getCurrent);
+
+router.patch(
+  "/",
+  isAuthenticated,
+  validateBody(schemas.joiSubscriptionSchema),
+  authController.updateSubscription
+);
 
 module.exports = router;
