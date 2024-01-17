@@ -16,7 +16,7 @@ const listContacts = async (req, res) => {
       }
     ).populate("owner", "name email");
     return res.json(result);
-  }
+  } else if (favorite === "") throw HttpError(400, "Bad request");
   const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
     skip,
     limit,

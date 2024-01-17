@@ -9,3 +9,10 @@ GET /api/contacts/MDR7V-G-P3mpHyHoaFog9 27-12-2023_01:50:35
 PUT /api/contacts/MDR7V-G-P3mpHyHoaFog9 27-12-2023_01:50:44
 GET /api/contacts 27-12-2023_01:50:46
 DELETE /api/contacts/MDR7V-G-P3mpHyHoaFog9 27-12-2023_01:51:03
+POST /api/users/login 17-01-2024_09:45:59
+GET /api/contacts/?favorite 17-01-2024_09:47:42
+GET /api/contacts/?favorite 17-01-2024_09:49:08
+GET /api/contacts/?favorite 17-01-2024_09:49:26
+GET /api/contacts/?favorite 17-01-2024_09:50:19
+GET /api/contacts/?favorite=true 17-01-2024_09:51:18
+GET /api/contacts/?favorite=false 17-01-2024_09:51:23
