@@ -59,9 +59,21 @@ const signOut = async (req, res) => {
   res.json();
 };
 
+const updateSubscriptionUser = async (req, res) => {
+  const { _id } = req.user;
+  console.log(req.user);
+  console.log(req.body);
+  const result = await User.findByIdAndUpdate(_id, req.body, {
+    new: true,
+  }).select("-createdAt -updatedAt");
+  if (!result) throw HttpError(404, "Not found");
+  res.json(result);
+};
+
 module.exports = {
   signUp: ctrlWrapper(signUp),
   singIn: ctrlWrapper(singIn),
   getCurrent: ctrlWrapper(getCurrent),
   signOut: ctrlWrapper(signOut),
+  updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser),
 };
