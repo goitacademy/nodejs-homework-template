@@ -6,6 +6,8 @@ const serverConfig = {
 	environment: process.env.NODE_ENV ?? 'development',
 	jwtSecret: process.env.JWT_SECRET ?? 'SECRET',
 	jwtExpiration: process.env.JWT_EXPIRATION ?? '1h',
+	emailFrom: process.env.EMAIL_FROM ?? 'admin@example.com',
+
 };
 
 module.exports = serverConfig;

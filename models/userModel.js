@@ -22,16 +22,15 @@ const userSchema = new Schema({
 		default: '',
 	},
 	avatar: String,
-
-	// verify: {
-	// 	type: Boolean,
-	// 	default: false,
-	// },
-	// verificationToken: {
-	// 	type: String,
-	// 	required: [true, 'Verify token is required'],
-	// },
-
+	passwordResetToken: String,
+	passwordResetTokenExp: Date,
+	verify: {
+		type: Boolean,
+		default: false,
+	},
+	verificationToken: {
+		type: String,
+	}
 
 },
 	{
@@ -61,6 +60,24 @@ userSchema.methods.newPassword = async (password) => {
 	return newPassword;
 
 }
+
+userSchema.methods.createPasswordResetToken = function () {
+	const resetToken = crypto.randomBytes(32).toString('hex');
+
+	this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+	this.passwordResetTokenExp = Date.now() + 10 * 60 * 1000;
+
+	return resetToken;
+};
+
+
+
+userSchema.methods.createVerificationToken = function () {
+	const verToken = crypto.randomBytes(32).toString('hex');
+	return verToken;
+};
+
+
 
 userSchema.methods.checkPassword = (candidate, passwdHash) => compare(candidate, passwdHash);
 

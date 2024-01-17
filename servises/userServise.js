@@ -2,26 +2,56 @@ const { registerToken } = require('./jwtServise');
 const Users = require('../models/userModel');
 const { HttpError } = require('../utils');
 const ImageService = require('./imageServise');
+const crypto = require('crypto');
 
 
 
 
 
 exports.registerUser = async (userData) => {
-	const newUser = await Users.create(userData);
-	newUser.password = undefined;
-	const token = registerToken(newUser._id);
-	await Users.findByIdAndUpdate(newUser._id, { token });
+	const User = await Users.create(userData);
+	User.password = undefined;
+	const token = registerToken(User._id);
+	const otp = User.createVerificationToken();
+	await Users.findByIdAndUpdate(User._id, { token, verificationToken: otp });
+
 	return {
-		user: newUser,
-		token: newUser.token,
+		user: User,
+		token: User.token,
+		otp,
 	}
 }
+
+exports.verificationUser = async (otp) => {
+	const user = await Users.findOne({
+		verificationToken: otp,
+	});
+
+	if (!user) throw new HttpError(404, 'User not found');
+
+	user.verify = true;
+	user.verificationToken = null;
+
+	await user.save();
+}
+
+
+exports.SendNewToken = async (user) => {
+	if (user.verify === true) throw new HttpError(400, 'Verification has already been passed');
+	const otp = user.createVerificationToken();
+	await Users.findOneAndUpdate({ email: user.email }, { verificationToken: otp });
+
+	return {
+		otp,
+	}
+
+}
+
 
 
 exports.loginUser = async (userData) => {
 
-	const user = await Users.findOne({ email: userData.email }).select('+password');
+	const user = await Users.findOne({ email: userData.email, verify: true }).select('+password');
 	if (!user) throw new HttpError(401, 'Email or password is wrong');
 
 	const passwordisValid = await user.checkPassword(userData.password, user.password);
@@ -84,4 +114,21 @@ exports.checkUserPassword = async (userId, currentPassword, newPassword) => {
 	// console.log(passwdHash);
 	await Users.findByIdAndUpdate(userId, { password: passwdHash }, { new: true });
 
+}
+
+exports.resetPassword = async (otp, newPassword) => {
+	const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
+
+	const user = await Users.findOne({
+		passwordResetToken: hashedOtp,
+		passwordResetTokenExp: { $gt: Date.now() },
+	});
+
+	if (!user) throw new HttpError(400, 'Token is not valid');
+
+	user.password = newPassword;
+	user.passwordResetToken = undefined;
+	user.passwordResetTokenExp = undefined;
+
+	await user.save();
 }

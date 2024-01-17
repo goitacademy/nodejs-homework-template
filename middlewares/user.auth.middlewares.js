@@ -73,7 +73,19 @@ exports.checkUserEmail = catchAsync(async (req, res, next) => {
 	const { email } = req.body;
 
 	const { value, error } = userValidator.userEmailValidator({ email });
-	if (error) throw new HttpError(401, 'Invalid email', error);
+	if (error) throw new HttpError(400, 'Invalid email', error);
+
+	req.body = value;
+
+	next();
+});
+
+
+exports.checkNewPassword = catchAsync(async (req, res, next) => {
+	const { password } = req.body;
+
+	const { value, error } = userValidator.userPassvordValidator({ password });
+	if (error) throw new HttpError(400, 'Invalid subscription data!....');
 
 	req.body = value;
 

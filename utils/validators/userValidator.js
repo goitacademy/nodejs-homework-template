@@ -38,3 +38,12 @@ exports.userEmailValidator = joiValidator((data) =>
 			email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ua'] } }).required(),
 		})
 		.validate(data));
+
+
+exports.userPassvordValidator = joiValidator((data) =>
+	Joi.object()
+		.options({ abortEarly: false })
+		.keys({
+			password: Joi.string().regex(regex.PASSWD_REGEX).required(),
+		})
+		.validate(data));
