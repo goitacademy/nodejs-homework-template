@@ -3,13 +3,21 @@ const { HttpError } = require("../helpers");
 const { Contact } = require("../models/contact");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find();
+  const { _id: owner } = req.user;
+  const result = await Contact.find({ owner }).populate(
+    "owner",
+    "email subscription"
+  );
   res.status(200).json(result);
 };
 
 const getOne = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findById(contactId);
+  const result = await Contact.findById({
+    _id: contactId,
+    owner: _id,
+  }).populate("owner", "email subscription");
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -17,7 +25,8 @@ const getOne = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const result = await Contact.create(req.body);
+  const { _id: owner } = req.user;
+  const result = await Contact.create({ ...req.body, owner });
   res.status(201).json(result);
 };
 
@@ -33,10 +42,18 @@ const updateById = async (req, res) => {
 };
 
 const updateStatusContact = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
+  const result = await Contact.findByIdAndUpdate(
+    {
+      _id: contactId,
+      owner: _id,
+    },
+    req.body,
+    {
+      new: true,
+    }
+  ).populate("owner", "_id email subscription");
   if (!result) {
     throw HttpError(400, "missing field favorite");
   }
@@ -44,8 +61,12 @@ const updateStatusContact = async (req, res) => {
 };
 
 const removeById = async (req, res) => {
+  const { _id } = req.user;
   const { contactId } = req.params;
-  const result = await Contact.findByIdAndDelete(contactId);
+  const result = await Contact.findByIdAndDelete({
+    _id: contactId,
+    owner: _id,
+  }).populate("owner", "_id email subscription");
   if (!result) {
     throw HttpError(404, "Not found");
   }
