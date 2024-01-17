@@ -4,6 +4,7 @@ import {
 	isEmptyBody,
 	isValidId,
 	isEmptyFavorite,
+	authenticate,
 } from "../../middlewares/index.js";
 import { addSchema, patchSchema, putSchema } from "../../models/contact.js";
 
@@ -18,12 +19,13 @@ import {
 
 const router = express.Router();
 
-router.get("/", ctrlWrapper(getAllContacts));
+router.get("/", authenticate, ctrlWrapper(getAllContacts));
 
-router.get("/:id", isValidId, ctrlWrapper(getById));
+router.get("/:id", authenticate, isValidId, ctrlWrapper(getById));
 
 router.post(
 	"/",
+	authenticate,
 	isEmptyBody,
 	validateBody(addSchema),
 	ctrlWrapper(addNewContact)
@@ -33,6 +35,7 @@ router.delete("/:id", isValidId, ctrlWrapper(deleteContact));
 
 router.put(
 	"/:id",
+	authenticate,
 	isEmptyBody,
 	isValidId,
 	validateBody(putSchema),
@@ -41,6 +44,7 @@ router.put(
 
 router.patch(
 	"/:id/favorite",
+	authenticate,
 	isEmptyFavorite,
 	isValidId,
 	validateBody(patchSchema),
