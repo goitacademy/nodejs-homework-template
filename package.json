@@ -13,10 +13,7 @@
     "cross-env": "7.0.3",
     "express": "^4.17.1",
     "joi": "^17.11.1",
-<<<<<<< HEAD
     "joi-phone-number": "^5.1.1",
-=======
->>>>>>> dde0c06544d8d0fbe61967dfadf96a7f8202570b
     "morgan": "^1.10.0",
     "nanoid": "^3.3.4"
   },
