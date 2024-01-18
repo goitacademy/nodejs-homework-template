@@ -1,6 +1,8 @@
-const { app } = require("./app");
-const db = require("./db");
-const { serverPort } = require("./config");
+const { app } = require("../goit-nodejs-hw/app");
+// const db = require("./db");
+const db = require("../goit-nodejs-hw/db");
+// const { serverPort } = require("./config");
+const { serverPort } = require("../goit-nodejs-hw/config");
 
 (async () => {
   try {

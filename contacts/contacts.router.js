@@ -6,9 +6,11 @@ const {
   addContactHandler,
   updateContactHandler,
   updateStatusContactHandler,
-} = require("./contacts.controllers");
+} = require("../contacts/contacts.controllers");
 
-const { contactValidationMiddleware } = require("./contacts.validators");
+const {
+  contactValidationMiddleware,
+} = require("../contacts/contacts.validators");
 
 const contactsRouter = Router();
 

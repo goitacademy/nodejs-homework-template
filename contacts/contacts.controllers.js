@@ -5,7 +5,8 @@ const {
   addContact,
   updateContact,
   updateStatusContact,
-} = require("./contacts.services");
+} = require("../contacts/contacts.services");
+// } = require("../contacts.services");
 
 const listContactsHandler = async (req, res) => {
   try {
