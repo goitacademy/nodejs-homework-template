@@ -1,11 +1,11 @@
-import { getContactById } from "#models/contacts.js";
+import { Contacts } from "#models/contacts.shema.js";
 
 async function showContacts(req, res, next) {
-  const { contactId } = req.params;
+  const contactId = req.params.contactId;
   try {
-    const getById = await getContactById(contactId);
-    if (getById) {
-      return res.json(getById);
+    const contact = await Contacts.findById(contactId);
+    if (contact) {
+      return res.json(contact);
     } else {
       res.status(404).json({ message: "Not Found" });
     }

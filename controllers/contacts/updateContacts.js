@@ -1,15 +1,14 @@
-import { updateContact } from "#models/contacts.js";
+import { Contacts } from "#models/contacts.shema.js";
 
 async function updateContacts(req, res, next) {
-  const { contactId } = req.params;
+  const contactId = req.params.contactId;
   const { name, email, phone } = req.body;
-
   if (!name && !email && !phone) {
     return res.status(400).json({ message: "Missing fields" });
   }
 
   try {
-    const updatedContact = await updateContact(contactId, {
+    const updatedContact = await Contacts.findByIdAndUpdate(contactId, {
       name,
       email,
       phone,

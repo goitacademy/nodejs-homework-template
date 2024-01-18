@@ -1,9 +1,9 @@
-import { removeContact } from "#models/contacts.js";
+import { Contacts } from "#models/contacts.shema.js";
 
 async function deleteContacts(req, res, next) {
-  const { id } = req.params;
+  const contactId = req.params.contactId;
   try {
-    const contactToDelete = await removeContact(id);
+    const contactToDelete = await Contacts.findByIdAndDelete(contactId);
     if (contactToDelete) {
       res.status(200).json({ message: "Contact Deleted" });
     } else {
