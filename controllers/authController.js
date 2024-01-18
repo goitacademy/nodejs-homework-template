@@ -16,8 +16,10 @@ export const register = async (req, res) => {
 	const newUser = await User.create({ ...req.body, password: hashPassword });
 
 	res.status(201).json({
-		email: newUser.email,
-		password: newUser.password,
+		user: {
+			email: newUser.email,
+			subscription: newUser.subscription,
+		},
 	});
 };
 
@@ -43,13 +45,37 @@ export const login = async (req, res) => {
 
 	const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 	await User.findByIdAndUpdate(user._id, { token });
-	res.json({
+	res.status(200).json({
 		token,
+		user: {
+			email,
+			subscription: user.subscription,
+		},
 	});
 };
 
 export const getCurrent = async (req, res) => {
-	const { email } = req.user;
+	const { email, subscription } = req.user;
 
-	res.json({ email });
+	res.status(200).json({
+		email,
+		subscription,
+	});
+};
+export const logout = async (req, res) => {
+	const { _id } = req.user;
+	await User.findByIdAndUpdate(_id, { token: "" });
+
+	res.status(204).json({
+		message: "No Content",
+	});
+};
+
+export const patchSubscription = async (req, res) => {
+	const { _id } = req.user;
+	const result = await User.findByIdAndUpdate(_id, req.body, { new: true });
+	if (!result) {
+		throw HttpError(404, "Not found");
+	}
+	res.status(200).json(result);
 };

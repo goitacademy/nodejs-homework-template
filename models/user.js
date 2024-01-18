@@ -52,6 +52,10 @@ export const logInSchema = Joi.object({
 		.messages({ "any.required": "missing required password field" }),
 });
 
+export const patchSubscriptionSchema = Joi.object({
+	subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
+
 const User = model("user", userSchema);
 
 export default User;

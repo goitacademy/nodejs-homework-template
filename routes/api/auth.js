@@ -1,10 +1,16 @@
 import express from "express";
-import { logInSchema, registerSchema } from "../../models/user.js";
+import {
+	logInSchema,
+	patchSubscriptionSchema,
+	registerSchema,
+} from "../../models/user.js";
 import { ctrlWrapper, validateBody } from "../../decorators/index.js";
 import {
 	login,
 	register,
 	getCurrent,
+	logout,
+	patchSubscription,
 } from "../../controllers/authController.js";
 import { isEmptyBody, authenticate } from "../../middlewares/index.js";
 
@@ -25,5 +31,14 @@ router.post(
 );
 
 router.get("/current", authenticate, ctrlWrapper(getCurrent));
+
+router.post("/logout", authenticate, ctrlWrapper(logout));
+
+router.patch(
+	"/",
+	authenticate,
+	validateBody(patchSubscriptionSchema),
+	ctrlWrapper(patchSubscription)
+);
 
 export default router;
