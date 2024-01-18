@@ -42,11 +42,12 @@ async function login(req, res, next) {
         .send({ message: "Email or password is incorrect" });
     }
 
-    const token = jwt.sign(
-      { id: user._id, name: user.name },
-      process.env.JWT_SECRET,
-      { expiresIn: 60 * 60 }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: 60 * 60,
+    });
+
+
+    await User.findByIdAndUpdate(user._id, { token });
 
     res.send({ token });
   } catch (error) {
