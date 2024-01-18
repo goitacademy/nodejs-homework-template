@@ -29,22 +29,26 @@ exports.checkLoginData = async (req, res, next) => {
 
 exports.checkVerification = async (req, res, next) => {
   const currentUser = await services.getCurrentUser(req.body.email);
-  if (!currentUser.verify) throw new HttpError(401, "User not activation..");
+  if (!currentUser.verify) next(new HttpError(401, "User not activation.."));
+  else next();
 };
 
 exports.protect = async (req, res, next) => {
-  const token = req.headers.authorization?.startsWith("Bearer") && req.headers.authorization.split(" ")[1];
-  if (!token) throw new HttpError(401, "Unauthorized");
+  try {
+    const token = req.headers.authorization?.startsWith("Bearer") && req.headers.authorization.split(" ")[1];
+    if (!token) throw new HttpError(401, "Unauthorized");
 
-  const userId = services.checkToken(token);
-  if (!userId) throw new HttpError(401, "Not logged in..");
+    const userId = services.checkToken(token);
+    if (!userId) throw new HttpError(401, "Not logged in..");
+    const currentUser = await services.getOneUser(userId);
+    if (!currentUser) throw new HttpError(401, "Not logged in..");
 
-  const currentUser = await services.getOneUser(userId);
-  if (!currentUser) throw new HttpError(401, "Not logged in..");
+    req.user = currentUser;
 
-  req.user = currentUser;
-
-  next();
+    next();
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.checkSubscriptionData = async (req, res, next) => {
@@ -56,5 +60,13 @@ exports.checkSubscriptionData = async (req, res, next) => {
     throw new HttpError(400, "Subscription with wrong value", error);
   }
 
+  next();
+};
+
+exports.checkEmailInRequest = async (req, res, next) => {
+  if (!req.body.email)
+    res.status(400).json({
+      message: "missing required field email",
+    });
   next();
 };

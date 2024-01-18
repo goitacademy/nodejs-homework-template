@@ -1,4 +1,4 @@
-const { signup, login, logout, updateSubscription, uploadFile, updateAvatarPath, checkVerificationToken } = require("../services");
+const { signup, login, logout, updateSubscription, uploadFile, updateAvatarPath, checkVerificationToken, checkEmailForResendVerification } = require("../services");
 // const path = require("path");
 
 exports.signup = async (req, res, next) => {
@@ -61,6 +61,19 @@ exports.userOfVerification = async (req, res, next) => {
 
     res.status(200).json({
       message: "Verification successful",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.checkResentVerification = async (req, res, next) => {
+  const emailForVerification = req.body.email;
+  try {
+    await checkEmailForResendVerification(emailForVerification);
+
+    res.status(200).json({
+      message: "Verification email sent",
     });
   } catch (error) {
     next(error);

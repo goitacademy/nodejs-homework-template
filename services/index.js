@@ -1,4 +1,4 @@
-const { checkUserExists, signup, login, logout, updateSubscription, uploadFile, updateAvatarPath, checkVerificationToken } = require("./authService");
+const { checkUserExists, signup, login, logout, updateSubscription, uploadFile, updateAvatarPath, checkVerificationToken, checkEmailForResendVerification } = require("./authService");
 const { signToken, checkToken } = require("./jwtService");
 const { getOneUser, getCurrentUser } = require("./userService");
 const { getAllContacts, checkedContactByUser } = require("./contactsService");
@@ -17,5 +17,6 @@ module.exports = {
   getAllContacts,
   updateSubscription,
   checkedContactByUser,
+  checkEmailForResendVerification,
   getCurrentUser,
 };

@@ -1,8 +1,9 @@
-const { uploadDir, storeImage, prepareEnvironment, proceedFile } = require("./utils");
+const { uploadDir, storeImage, prepareEnvironment, proceedFile, sendMail } = require("./utils");
 
 module.exports = {
   uploadDir,
   storeImage,
   prepareEnvironment,
   proceedFile,
+  sendMail,
 };

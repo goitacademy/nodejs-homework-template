@@ -89,3 +89,10 @@ exports.checkVerificationToken = async (token) => {
   user.verify = true;
   await user.save();
 };
+
+exports.checkEmailForResendVerification = async (email) => {
+  const user = await models.UsersModel.findOne({ email: email });
+  if (!user) throw new HttpError(404, "No user with such email");
+  if (user.verify) throw new HttpError(400, "Verification has already been passed");
+  utils.sendMail(user.email, user.verificationToken);
+};

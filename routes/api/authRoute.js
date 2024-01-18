@@ -34,4 +34,5 @@ router.patch("/", authMiddleware.protect, authMiddleware.checkSubscriptionData, 
 router.patch("/avatars", authMiddleware.protect, upload.single("avatar"), authController.uploadAvatar);
 
 router.get("/verify/:verificationToken", authController.userOfVerification);
+router.post("/verify", authMiddleware.checkEmailInRequest, authController.checkResentVerification);
 module.exports = router;
