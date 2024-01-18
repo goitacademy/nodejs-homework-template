@@ -2,8 +2,10 @@ const ContactsService = require("../models/contacts");
 const HttpError = require("../error/error.js");
 
 async function getAllContacts(req, res, next) {
+  // console.log(req.user);
   try {
-    const contacts = await ContactsService.find();
+    const userId = req.user.id;
+    const contacts = await ContactsService.find({ ownerId: userId });
      res.send(contacts);
   } catch (error) {
     next(error);
