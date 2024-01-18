@@ -1,31 +1,30 @@
-## GoIT Node.js Course Template Homework
+# Node.JS Homework (console app)
+============
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+This is a node.js homework application powered b Express that provides the main functions you'd expect from a REST api. The application responds to GET, POST, PUT, DELETE type queries.
 
-Додайте ментора до колаборації
+---
 
-Для кожної домашньої роботи створюйте свою гілку.
+## How to install
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+```shell
+npm install
+```
 
-Кожна нова гілка для др повинна робитися з master
+## How to use
+### Start
+![Start](./models//images/run.png)
+```shell
+npm run start 
+```
+--------------- 
+### GET
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+You should send your request, e.g. via the Postman application, to http://localhost:3000/
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+![GET](./models//images/get.PNG)
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
 
-### Команди:
+--------------- 
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+
