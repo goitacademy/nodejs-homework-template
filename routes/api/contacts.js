@@ -3,28 +3,27 @@ const Joi = require("@hapi/joi")
 
 const router = express.Router()
 const handler = require('./handlers')
-// const contacts1 = require("../models/contacts.json")
 
 router.use('/', handler)
-const schema = Joi.object({
-    name: Joi.string()
-        .alphanum()
-        .min(3)
-        .max(30)
-        .required(),
-    email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-        .required(),
-    phone: Joi.number()        
-        .required()
 
-})
+const schema = Joi.object({
+  name: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+    .required(),
+  phone: Joi.number()
+    .required()
+
+});
 
 router.get('/', async (req, res, next) => {
-  // res.json(contacts1).status(200)
-  const contacts = handler.listContacts();  
-  res.send(contacts).status(200)
   
+  const contacts = handler.listContacts();  
+  return res.json(contacts).status(200);  
   
 })
 
@@ -32,9 +31,11 @@ router.get('/', async (req, res, next) => {
 router.get('/:contactId', async (req, res, next) => {
   const contact = handler.getById(req.params.contactId);
   if (!contact) {
-    return res.status(404).send({ message: "Not found" })
+    return res.status(404).json({ message: "Not found" })
+  } else {
+    return res.status(200).json(contact)
   }
-  res.status(200).send(contact)
+  
 })
 
 
@@ -50,7 +51,7 @@ router.post('/', (req, res, next) => {
     return res.status(400).send({ message: "missing required name - field"})
   } else {
   handler.addContact(contact);  
-  res.status(201).send(contact)
+  return res.status(201).json(contact)
   }
   
 })
@@ -61,11 +62,11 @@ router.delete('/:contactId', async (req, res, next) => {
     
   if (!validate) {
     
-    return res.status(404).send({ message: "Not found" })
+    return res.status(404).json({ message: "Not found" })
   } else {
     
   handler.removeContact(contactId);
-  res.status(200).send({ message: "contact deleted"})
+  return res.status(200).json({ message: "contact deleted"})
     }
 })
 
@@ -81,7 +82,7 @@ router.put('/:contactId', async (req, res, next) => {
   
     if (result.error) {
       
-    return res.status(400).send({ message: "missing fields" })
+    return res.status(400).json({ message: "missing fields" })
     }
     const contact = handler.validate(contactId)
   if (contact) {
