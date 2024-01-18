@@ -1,7 +1,6 @@
 /* eslint-disable spaced-comment */
 
 const { nanoid } = require("nanoid");
-const Joi = require("@hapi/joi")
 
 const fs = require("fs");
 const path = require("path");
@@ -10,20 +9,6 @@ const contactsPath = path.resolve("./models/contacts.json");
 const data = fs.readFileSync(contactsPath);
 let contacts = JSON.parse(data);
 let newContact = {};
-
-const schema = Joi.object({
-  name: Joi.string()
-    .alphanum()
-    .min(3)
-    .max(30)
-    .required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
-  phone: Joi.number()
-    .required()
-
-});
 
 const validate = (contactId) => contacts.find((contact) => contact.id === contactId);
 const filteredContacts = (contactId) => contacts.filter((contact) => contact.id !== contactId)
@@ -84,5 +69,5 @@ const removeContact = (contactId) => {
   }     
 }
  
-module.exports = { addContact, schema, listContacts, getById, removeContact, validate, updateContact }
+module.exports = { addContact, listContacts, getById, removeContact, validate, updateContact }
 

@@ -1,6 +1,6 @@
 
 const handler = require('../handlers')
-
+const validator = require('../validators/contacts/createValidator')
 
 async function updateContacts(req, res, next) {
     const contactId = req.params.contactId
@@ -10,7 +10,7 @@ async function updateContacts(req, res, next) {
     phone: req.body.phone
   };
  
-    const result = handler.schema.validate(req.body)   
+    const result = validator.schema.validate(req.body)   
   
     if (result.error) {
       
