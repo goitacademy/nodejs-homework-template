@@ -6,6 +6,7 @@ import { showContacts } from "#controllers/contacts/showContacts.js";
 import { createContacts } from "#controllers/contacts/createContacts.js";
 import { deleteContacts } from "#controllers/contacts/deleteContacts.js";
 import { updateContacts } from "#controllers/contacts/updateContacts.js";
+import { updateStatusContact } from "#controllers/contacts/updateStatusContact.js";
 
 const router = express.Router();
 
@@ -18,5 +19,7 @@ router.post("/", validateContactData, createContacts);
 router.delete("/:contactId", deleteContacts);
 
 router.put("/:contactId", validateContactData, updateContacts);
+
+router.patch("/:contactId/favorite", updateStatusContact);
 
 export { router };
