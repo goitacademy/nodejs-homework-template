@@ -2,7 +2,6 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const morgan = require("morgan");
 const authRouter = require("./routes/api/auth");
 const contactsRouter = require("./routes/api/contacts");
 
