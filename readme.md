@@ -1,31 +1,30 @@
-## GoIT Node.js Course Template Homework
+# Node.JS Homework (console app)
+============
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+This is a node.js homework application powered b Express that provides the main functions you'd expect from a REST api. The application responds to GET, POST, PUT, DELETE type queries.
 
-Додайте ментора до колаборації
+---
+# console app
 
-Для кожної домашньої роботи створюйте свою гілку.
+## how to install
+```shell
+npm install
+```
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+## how to use
+### list
+![List](https://i.imgur.com/6wjcpQ5.png)
+```shell
+npm run start -- -a list
+```
+--------------- 
+### get
+![Get by ID](https://i.imgur.com/pduMILf.png)
+```shell
+npm run -- -a get -id 
+```
 
-Кожна нова гілка для др повинна робитися з master
+--------------- 
+### add
+![Add, delete, list](https://i.imgur.com/DU6oJ7f.png)
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
-
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
-
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
-
-### Команди:
-
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
