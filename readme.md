@@ -4,27 +4,27 @@
 This is a node.js homework application powered b Express that provides the main functions you'd expect from a REST api. The application responds to GET, POST, PUT, DELETE type queries.
 
 ---
-# console app
 
-## how to install
+## How to install
+
 ```shell
 npm install
 ```
 
-## how to use
-### list
+## How to use
+### Start
 ![Start](./models//images/run.png)
 ```shell
-npm run start -- -a list
+npm run start 
 ```
 --------------- 
-### get
-![Get by ID](./models//images/get.PNG)
-```shell
-npm run -- -a get -id 
-```
+### GET
+
+You should send your request, e.g. via the Postman application, to http://localhost:3000/
+
+![GET](./models//images/get.PNG)
+
 
 --------------- 
-### add
-![Add, delete, list](https://i.imgur.com/DU6oJ7f.png)
+
 
