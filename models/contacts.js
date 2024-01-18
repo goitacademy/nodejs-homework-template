@@ -1,114 +1,157 @@
-import * as path from "path";
-import { readFile, writeFile } from "fs/promises";
-import { nanoid } from "nanoid";
+import express from "express";
+import Joi from "joi";
 
-const contactsPath = path.resolve("./models", "contacts.json");
+import {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} from "./models/contacts.js";
 
-const getContacts = async () => {
+export const router = express.Router();
+
+const schemaAdd = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
+
+const schemaEdit = Joi.object({
+  name: Joi.string(),
+  email: Joi.string().email(),
+  phone: Joi.string(),
+}).unknown(false);
+
+router.get("/", async (req, res, next) => {
   try {
-    const contactsJson = await readFile(contactsPath);
-    const contacts = JSON.parse(contactsJson);
-    return contacts;
+    const contacts = await listContacts();
+
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { contacts },
+    });
   } catch (err) {
-    console.error("Error reading contacts from file: ", err);
-    throw err;
+    res
+      .status(500)
+      .json(`An error occurred while getting the contact list: ${err}`);
   }
-};
+});
 
-const setContacts = async (data) => {
+router.get("/:id", async (req, res, next) => {
+  const { id } = req.params;
   try {
-    await writeFile(contactsPath, JSON.stringify(data, null, 2));
-  } catch (err) {
-    console.error("Error writing contacts to file: ", err);
-    throw err;
-  }
-};
-
-export const listContacts = async () => {
-  try {
-    return await getContacts();
-  } catch (err) {
-    console.log("Error getting contact list: ", err);
-    throw err;
-  }
-};
-
-export const getContactById = async (contactId) => {
-  try {
-    const contacts = await getContacts();
-    const contact = contacts.find((contact) => contact.id === contactId);
-
-    return contact;
-  } catch (err) {
-    console.log(`Error getting contact with id ${contactId}: `, err);
-    throw err;
-  }
-};
-
-export const removeContact = async (contactId) => {
-  try {
-    const contacts = await getContacts();
-    const contact = contacts.find((contact) => contact.id === contactId);
+    const contact = await getContactById(id);
 
     if (!contact) {
-      console.log(`Contact with id ${contactId} not found.`);
+      res.status(404).json(`Contact with id ${id} not found`);
 
       return false;
     }
 
-    const newContacts = contacts.filter((contact) => contact.id !== contactId);
-    await setContacts(newContacts);
-    console.log(`Contact with id ${contactId} removed successfully`);
-
-    return true;
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { contact },
+    });
   } catch (err) {
-    console.log(`Error removing contact with id ${contactId}: `, err);
-    throw err;
+    res.status(500).json(`An error occurred while getting the contact: ${err}`);
   }
-};
+});
 
-export const addContact = async (body) => {
-  try {
-    const contacts = await getContacts();
-    const { name, email, phone } = body;
-    const newContact = {
-      id: nanoid(),
-      name,
-      email,
-      phone,
-    };
+router.post("/", async (req, res, next) => {
+  const body = req.body;
 
-    contacts.push(newContact);
-    await setContacts(contacts);
-    console.log("Contact has been added successfully");
+  if (Object.keys(body).length === 0) {
+    res.status(400).json("Error! Missing fields! Empty request is not allowed");
 
-    return newContact;
-  } catch (err) {
-    console.log("Error adding new contact: ", err);
-    throw err;
+    return;
   }
-};
 
-export const updateContact = async (contactId, body) => {
+  const { error } = schemaAdd.validate(body);
+
+  if (error) {
+    res.status(400).json(`Error: ${error.details[0].message}`);
+
+    return;
+  }
+
   try {
-    const contacts = await getContacts();
-    const index = contacts.findIndex((contact) => contact.id === contactId);
+    const contact = await addContact(body);
 
-    if (index === -1) {
-      console.log(`There is no contact with id ${contactId} !`);
+    if (!contact) {
+      res.status(404).json(`Contact not found`);
 
       return false;
     }
 
-    const contact = contacts[index];
-    const updatedContact = { ...contact, ...body };
-    contacts[index] = updatedContact;
-    await setContacts(contacts);
-    console.log(`Contact has been updated successfully.`);
-
-    return updatedContact;
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { contact },
+    });
   } catch (err) {
-    console.error("An error occurred while updating contact: ", err);
-    throw err;
+    res.status(500).json(`An error occurred while adding the contact: ${err}`);
   }
-};
+});
+
+router.delete("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const isContactRemoved = await removeContact(id);
+
+    if (!isContactRemoved) {
+      res.status(404).json(`Contact with id ${id} not found`);
+
+      return false;
+    }
+
+    res.status(200).json({
+      message: `Contact with ID ${id} has been successfully removed.`,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json(`An error occurred while removing the contact: ${err}`);
+  }
+});
+
+router.put("/:id", async (req, res, next) => {
+  const { id } = req.params;
+  const body = req.body;
+
+  if (Object.keys(body).length === 0) {
+    res.status(400).json("Error! Missing fields! Empty request is not allowed");
+
+    return;
+  }
+
+  const { error } = schemaEdit.validate(body);
+
+  if (error) {
+    res.status(400).json(`Error field: ${error.details[0].message}`);
+
+    return;
+  }
+
+  try {
+    const updatedContact = await updateContact(id, body);
+
+    if (!updatedContact) {
+      res.status(404).json(`Contact with id ${id} not found`);
+
+      return false;
+    }
+
+    res.json({
+      status: "success",
+      code: 200,
+      data: { updatedContact },
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json(`An error occurred while updating the contact: ${err}`);
+  }
+});
