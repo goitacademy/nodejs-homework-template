@@ -70,7 +70,7 @@ router.put("/:contactId", async (req, res, next) => {
     const { contactId } = req.params;
     if (error) {
       console.log("failed validation");
-      throw HttpError(400, "Not found!");
+      throw HttpError(400, error.message);
     }
     const result = await contacts.updateContact(contactId, req.body);
     if (!result) {

@@ -24,13 +24,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-<<<<<<< HEAD
-
-// {
-//   "id": "AeHIrLTr6JkxGE6SN-0Rw",
-// "name": "Allen Richmond",
-// "email": "nulla.rich@vestibul.co.uk",
-// "phone": "(992) 914-3792"
-// },
-=======
->>>>>>> dde0c06544d8d0fbe61967dfadf96a7f8202570b
