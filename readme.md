@@ -13,13 +13,13 @@ npm install
 
 ## how to use
 ### list
-![List](https://i.imgur.com/6wjcpQ5.png)
+![Start](./models//images/run.PNG)
 ```shell
 npm run start -- -a list
 ```
 --------------- 
 ### get
-![Get by ID](https://i.imgur.com/pduMILf.png)
+![Get by ID](./models//images/get.PNG)
 ```shell
 npm run -- -a get -id 
 ```
