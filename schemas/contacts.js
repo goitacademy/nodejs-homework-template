@@ -22,6 +22,9 @@ const addSchemaPut = Joi.object({
   phone: Joi.string().messages({
     "any.required": `Missing required phone field`,
   }),
+  favorite: Joi.boolean().messages({
+    "any.required": `Missing required favorite field`,
+  })
 });
 
 module.exports = {

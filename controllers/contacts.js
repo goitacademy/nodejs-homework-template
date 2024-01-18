@@ -1,46 +1,66 @@
-const contacts = require("../models/contacts");
+const Contacts = require("../models/contacts");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const getAll = async (req, res) => {
-  const result = await contacts.listContacts();
-  res.json(result);
-};
+async function getAll(req, res, next) {
+  try {
+    const result = await Contacts.find();
+    res.send(result);
+  } catch (error) {
+    next(error);
+  }
+}
 
 const getById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await contacts.getContactById(id);
-  if (!result) {
-    throw HttpError(404, "Not found");
+  try {
+    const result = await Contacts.findById(id);
+    if (result === null) {
+      return res.status(404).send("Contact not found");
+    }
+    res.send(result);
+  } catch (error) {
+    next(error);
   }
-  res.json(result);
 };
 
-const add = async (req, res) => {
-  const result = await contacts.addContact(req.body);
-  res.status(201).json(result);
+const add = async (req, res, next) => {
+  try {
+    const result = await Contacts.create(req.body);
+    res.status(201).json(result);
+  }catch (error) {
+    next(error);
+  }
 };
 
-const remove = async (req, res) => {
+const remove = async (req, res, next) => {
   const { id } = req.params;
-  const result = await contacts.removeContact(id);
-  if (!result) {
-    throw HttpError(404, "Not found");
+  try {
+    const result = await Contacts.findByIdAndDelete(id);
+    if (result === null) {
+      return res.status(404).send("Contact is not found");
+    }
+    res.send({ id });
+  } catch (error) {
+    next(error);
   }
-  res.status(200).json({ message: "contact deleted" });
-};
+}
 
-const updateById = async (req, res) => {
+const updateById = async (req, res, next) => {
   const body = req.body;
-  if (!body || Object.keys(body).length === 0) {
-    return res.status(400).json({ message: "missing fields" });
+  try {
+    if (!req.body || Object.keys(body).length === 0) {
+      return res.status(400).json({ message: "missing fields" });
+    }
+    const { contactId } = req.params;
+    const result = await Contacts.findByIdAndUpdate(contactId, { favorite: req.body.favorite },  { new: false });
+    if (result === null) {
+      return res.status(404).send("Contact not found");
+    }
+    res.send(result);
+  } catch (error) {
+    next(error);
   }
-  const { contactId } = req.params;
-  const result = await contacts.updateContact(contactId, req.body);
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.json(result);
 };
 
 module.exports = {
