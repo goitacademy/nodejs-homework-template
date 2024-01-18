@@ -6,7 +6,7 @@ const cors = require("cors");
 const contactsRouter = require("./routes/api/contacts");
 const authRoutes = require("./routes/api/auth");
 
-const authMiddleware = require("./middlewares/auth");
+// const authMiddleware = require("./middlewares/auth");
 
 console.log(authRoutes); 
 const app = express();
@@ -17,8 +17,8 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/contacts",authMiddleware, contactsRouter);
-app.use("/api/auth",authMiddleware, authRoutes);
+app.use("/api/contacts", contactsRouter);
+app.use("/api/auth", authRoutes);
 
 
 app.use((req, res) => {

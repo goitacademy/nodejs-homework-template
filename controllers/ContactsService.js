@@ -4,7 +4,7 @@ const HttpError = require("../error/error.js");
 async function getAllContacts(req, res, next) {
   // console.log(req.user);
   try {
-    const userId = req.user.id;
+    const userId = req.user.contactId;
     const contacts = await ContactsService.find({ ownerId: userId });
      res.send(contacts);
   } catch (error) {
