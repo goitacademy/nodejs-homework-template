@@ -1,4 +1,13 @@
 const Contact = require("../models/contact");
+const Joi = require('joi');
+ const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required()
+ });
+//  const addSchemaId = Joi.object({
+//   id: Joi.string().required()
+//  });
 
 async function getContacts(req, res, next) {
   try {
@@ -14,15 +23,19 @@ async function getContact(req, res, next) {
   const { id } = req.params;
 
   try {
-    const contact = await Contact.findById(id);
+  
+      const contact = await Contact.findById(id);
 
-    if (contact === null) {
-      return res.status(404).send("Contact not found");
-    }
-
-    res.send(contact);
-  } catch (error) {
-    next(error);
+      if (contact === null) {
+        return res.status(404).send("Contact not found");
+      }
+      
+      res.send(contact);
+    
+   
+  } 
+  catch (error) {
+    res.status(400).json({ message: 'not valid Id' });
   }
 }
 
@@ -40,7 +53,7 @@ async function createContact(req, res, next) {
 
     res.status(201).send(result);
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: 'missing required name field' });
   }
 }
 
@@ -55,15 +68,20 @@ async function updateContact(req, res, next) {
   };
 
   try {
-    const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
-
-    if (result === null) {
-      return res.status(404).send("Contact not found");
+    const {error} = addSchema.validate(req.body);
+    if (error) {
+      res.status(400).json({ message: 'missing required name field' });
     }
+    if (!error) {
+      const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
 
-    res.send(result);
+      if (result === null) {
+        return res.status(404).send("Contact not found");
+      }  res.send(result);}
+   
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: 'not valid Id' });
+    
   }
 }
 
@@ -79,7 +97,8 @@ async function deleteContact(req, res, next) {
 
     res.send({ id });
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: 'not valid Id' });
+    
   }
 }
 
@@ -103,7 +122,8 @@ async function changeContactFavorite(req, res, next) {
     }
     res.send(result);
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: 'not valid Id' });
+    
   }
 }
 
