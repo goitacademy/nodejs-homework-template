@@ -41,14 +41,14 @@ async function login(req, res, next) {
         .status(401)
         .send({ message: "Email or password is incorrect" });
     }
-      const token = jwt.sign(
-        { id: user._id, name: user.name },
-        process.env.JWT_SECRET,
-        { expiresIn: 60 * 60 } 
-      );
 
+    const token = jwt.sign(
+      { id: user._id, name: user.name },
+      process.env.JWT_SECRET,
+      { expiresIn: 60 * 60 }
+    );
 
-   res.send({ token });
+    res.send({ token });
   } catch (error) {
     next(error);
   }
