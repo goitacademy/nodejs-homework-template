@@ -1,11 +1,13 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+import mongoose from "mongoose";
+import express from "express";
+import cors from "cors";
 
-const express = require("express");
-const cors = require("cors");
+import { router as contactRoutes } from "./routes/api/contacts.routes.js";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
-const contactRoutes = require("./routes/api/contacts.routes");
 
 const PORT = process.env.PORT || 4000;
 
@@ -30,4 +32,3 @@ connection
     console.error(`Error while establishing connection: [${error}]`);
     process.exit(1);
   });
-module.exports = app;

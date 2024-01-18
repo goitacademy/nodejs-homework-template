@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import contactsController from "../../controllers/contacts.controller.js";
+
 const router = express.Router();
-const contactsController = require("../../controllers/contacts.controller");
 
 router.get("/contacts", contactsController.get);
 
@@ -14,4 +15,4 @@ router.patch("/contacts/:id/favorite", contactsController.updateFavorite);
 
 router.delete("/contacts/:id", contactsController.remove);
 
-module.exports = router;
+export { router };
