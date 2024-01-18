@@ -1,7 +1,7 @@
-const handler = require('../handlers')
+import { getById } from '../handlers.js'
 
 async function showContacts(req, res, next) {
-  const contact = handler.getById(req.params.contactId);
+  const contact = getById(req.params.contactId);
   if (!contact) {
     return res.status(404).json({ message: "Not found" })
   } else {
@@ -9,4 +9,4 @@ async function showContacts(req, res, next) {
   }
 }
 
-module.exports = showContacts;
+export { showContacts };
