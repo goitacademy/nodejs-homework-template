@@ -19,7 +19,7 @@ npm run start -- -a list
 ```
 --------------- 
 ### get
-![Get by ID](./models//images/get.PNG)
+![Get by ID](./models//images/get.png)
 ```shell
 npm run -- -a get -id 
 ```
