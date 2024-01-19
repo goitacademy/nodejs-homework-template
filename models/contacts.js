@@ -36,7 +36,17 @@ const addContact = async (body) => {
 };
 
 const updateContact = async (contactId, body) => {
-  return Contact.findByIdAndUpdate(contactId, body, { new: true });
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { $set: body },
+      { new: true }
+    );
+
+    return updatedContact;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };
 
 module.exports = {
