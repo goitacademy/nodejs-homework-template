@@ -3,26 +3,32 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import HttpError from "../helpers/HttpError.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import path from "path";
+import fs from "fs/promises";
+import gravatar from "gravatar";
 import dotenv from "dotenv";
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
+const avatarsDir = path.resolve("public", "avatars");
 
 const signup = async (req, res) => {
   const { email, password } = req.body;
+
   const user = await User.findOne({ email });
-
   if (user) {
-    throw HttpError(409, "Email already used");
+    throw HttpError(409, "Email in use");
   }
-
   const hashPassword = await bcrypt.hash(password, 10);
-
-  const newUser = await User.create({ ...req.body, password: hashPassword });
-
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
   res.status(201).json({
     email: newUser.email,
-    subscription: newUser.subscription,
+    subscription: "starter",
   });
 };
 
@@ -82,10 +88,25 @@ const updateSubscription = async (req, res) => {
   res.json(result);
 };
 
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tmpUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+  await fs.rename(tmpUpload, resultUpload);
+  const avatarURL = path.join("avatars", filename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({
+    avatarURL,
+  });
+};
+
 export default {
   signup: ctrlWrapper(signup),
   signin: ctrlWrapper(signin),
   getCurrent: ctrlWrapper(getCurrent),
   signout: ctrlWrapper(signout),
   updateSubscription: ctrlWrapper(updateSubscription),
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

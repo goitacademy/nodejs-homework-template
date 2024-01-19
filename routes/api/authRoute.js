@@ -5,12 +5,15 @@ import authController from "../../controllers/auth-controller.js";
 import validateBody from "../../decorators/validateBody.js";
 import authenticate from "../../middlewares/autheticate.js";
 import { contactUpdateFavoriteSchema } from "../../models/Contact.js";
+import upload from "../../middlewares/upload.js";
+import sizeChange from "../../middlewares/sizeChange.js";
 
 const authRouter = express.Router();
 
 authRouter.post(
   "/signup",
   isEmptyBody,
+  upload.single("avatar"),
   validateBody(userSignupSchema),
   authController.signup
 );
@@ -29,6 +32,8 @@ authRouter.post("/signout", authenticate, authController.signout);
 authRouter.patch(
   "/users",
   authenticate,
+  upload.single("avatar"),
+  sizeChange,
   validateBody(contactUpdateFavoriteSchema)
 );
 
