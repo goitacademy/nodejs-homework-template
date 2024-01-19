@@ -16,7 +16,7 @@ const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (user) {
+  if (!user) {
     throw HttpError(409, "Email in use");
   }
 
@@ -85,6 +85,10 @@ const updateAvatar = async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
+
+  if (!resultUpload) {
+    throw HttpError(401, "Not authorized");
+  }
 
   const modAvatar = await Jimp.read(path.join(tempUpload));
   await modAvatar.resize(250, 250);
