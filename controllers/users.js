@@ -38,7 +38,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -50,6 +50,8 @@ const register = async (req, res) => {
     },
   });
 };
+
+//! ======= verifyEmail =======
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
@@ -67,6 +69,8 @@ const verifyEmail = async (req, res) => {
   });
 };
 
+//! ======= resendVerifyEmail =======
+
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
@@ -80,7 +84,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
