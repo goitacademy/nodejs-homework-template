@@ -1,6 +1,6 @@
 const ContactsService = require("../models/contacts");
 const HttpError = require("../error/error.js");
-const User = require("../models/users");
+
 
 const { ObjectId } = require("mongoose").Types;
 
@@ -114,22 +114,6 @@ async function changeContactFavorite(req, res, next) {
   }
   
 }
-async function getCurrentUser(req, res, next) {
-  try {
-    const user = await User.findById(req.user.id);
-
-    if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
-    }
-
-    res.status(200).json({
-      email: user.email,
-      subscription: user.subscription,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
 
 module.exports = {
   getAllContacts,
@@ -138,5 +122,5 @@ module.exports = {
   deleteContact,
   updateContactId,
   changeContactFavorite,
-  getCurrentUser,
+
 };

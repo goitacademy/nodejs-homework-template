@@ -8,16 +8,13 @@ const authMiddleware = require("../../middlewares/auth");
 const router = express.Router();
 
 
-router.get("/", authMiddleware,ContactsService.getAllContacts);
-
+router.get("/", authMiddleware, ContactsService.getAllContacts);
 
 router.get("/:contactId", authMiddleware,ContactsService.getContactById);
 
 router.post("/", authMiddleware, validate(schema), ContactsService.addNewContact);
 
 router.delete("/:contactId", authMiddleware, ContactsService.deleteContact);
-
-router.get("/current", authMiddleware, ContactsService.getCurrentUser);
 
 router.put(
   "/:contactId",
