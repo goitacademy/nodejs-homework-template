@@ -1,3 +1,17 @@
+## HW-06
+
+```
+npm install @sendgrid/mail
+```
+
+2. Створюємо `sendEmail.js`
+
+3. Додамо нове поле в моделі Юзер:
+
+```
+https://temp-mail.org/uk/
+```
+
 ## HW-05
 
 Продовж створення REST API для роботи з колекцією контактів. Додай можливість завантаження аватарки користувача через [Multer] (https://github.com/expressjs/multer).
