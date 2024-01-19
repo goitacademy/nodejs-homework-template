@@ -1,5 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import path from 'path';
+import fs from 'fs/promises';
+import gravatar from 'gravatar';
+import Jimp from 'jimp';
 import 'dotenv/config';
 
 import User from '../models/User.js';
@@ -9,6 +13,7 @@ import { ctrlWrapper } from '../decorators/index.js';
 // ============================================================
 
 const { JWT_SECRET } = process.env;
+const avatarsPath = path.resolve('public', 'avatars');
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -18,7 +23,12 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({
+    ...req.body,
+    password: hashPassword,
+    avatarURL,
+  });
 
   res.status(201).json({
     user: {
@@ -74,7 +84,7 @@ const logout = async (req, res) => {
   res.status(204).json({ message: 'Logout success' });
 };
 
-const patch = async (req, res) => {
+const changeSubscription = async (req, res) => {
   const { subscription } = req.body;
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { subscription });
@@ -82,10 +92,31 @@ const patch = async (req, res) => {
   res.json({ message: 'Subscription change successful' });
 };
 
+const changeAvatar = async (req, res) => {
+  if (!req.file) {
+    throw HttpError(400, 'File not uploaded');
+  }
+  const { _id } = req.user;
+  const { path: oldPath, filename } = req.file;
+
+  const avatar = await Jimp.read(oldPath);
+  avatar.resize(250, 250);
+  await avatar.writeAsync(oldPath);
+
+  const newFilename = `${_id}_${filename}`;
+  const newPath = path.join(avatarsPath, newFilename);
+  await fs.rename(oldPath, newPath);
+  const avatarURL = path.join('avatars', newFilename);
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({ avatarURL });
+};
+
 export default {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
-  patch: ctrlWrapper(patch),
+  changeSubscription: ctrlWrapper(changeSubscription),
+  changeAvatar: ctrlWrapper(changeAvatar),
 };
