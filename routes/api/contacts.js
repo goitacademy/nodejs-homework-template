@@ -1,22 +1,57 @@
-const express = require("express");
+const express = require('express');
+
 const ContactsService = require("../../controllers/ContactsService.js");
 const validate = require("../../middlewares/validate.js");
 const schema = require("../../middlewares/schema/contact.js");
-const authMiddleware = require("../../middlewares/auth"); 
+const authMiddleware = require("../../middlewares/auth");
 
 const router = express.Router();
 
-router.use(authMiddleware);
 
-router.get("/", ContactsService.getAllContacts);
-router.get("/:contactId", ContactsService.getContactById);
-router.post("/", validate(schema), ContactsService.addNewContact);
-router.delete("/:contactId", ContactsService.deleteContact);
-router.put("/:contactId", validate(schema), ContactsService.updateContactId);
+router.get("/", authMiddleware,ContactsService.getAllContacts);
+
+
+router.get("/:contactId", authMiddleware,ContactsService.getContactById);
+
+router.post("/", authMiddleware, validate(schema), ContactsService.addNewContact);
+
+router.delete("/:contactId", authMiddleware, ContactsService.deleteContact);
+
+router.get("/current", authMiddleware, ContactsService.getCurrentUser);
+
+router.put(
+  "/:contactId",
+  authMiddleware, validate(schema),
+  ContactsService.updateContactId
+);
+
 router.patch(
   "/:contactId/favorite",
-  validate(schema),
+  authMiddleware, validate(schema),
   ContactsService.changeContactFavorite
 );
 
-module.exports = router;
+module.exports = router
+
+// const express = require("express");
+// const ContactsService = require("../../controllers/ContactsService.js");
+// const validate = require("../../middlewares/validate.js");
+// const schema = require("../../middlewares/schema/contact.js");
+// const authMiddleware = require("../../middlewares/auth");
+
+// const router = express.Router();
+
+// router.use(authMiddleware);
+
+// router.get("/", ContactsService.getAllContacts);
+// router.get("/:contactId", ContactsService.getContactById);
+// router.post("/", validate(schema), ContactsService.addNewContact);
+// router.delete("/:contactId", ContactsService.deleteContact);
+// router.put("/:contactId", validate(schema), ContactsService.updateContactId);
+// router.patch(
+//   "/:contactId/favorite",
+//   validate(schema),
+//   ContactsService.changeContactFavorite
+// );
+
+// module.exports = router;

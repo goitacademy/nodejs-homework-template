@@ -1,31 +1,43 @@
 const ContactsService = require("../models/contacts");
 const HttpError = require("../error/error.js");
+const User = require("../models/users");
+
+const { ObjectId } = require("mongoose").Types;
 
 async function getAllContacts(req, res, next) {
-  // console.log(req.user);
   try {
-    const userId = req.user.contactId;
-    const contacts = await ContactsService.find({ ownerId: userId });
-     res.send(contacts);
+    const ownerId = req.user.id;
+    const contacts = await ContactsService.find({
+      ownerId: new ObjectId(ownerId),
+    });
+    res.send(contacts);
   } catch (error) {
     next(error);
   }
-   
-
 }
 
+
+
 async function getContactById(req, res, next) {
-  const { contactId } = req.params;
   try {
+    const { contactId } = req.params;
+    const userId = req.user._id;
     const contact = await ContactsService.findById(contactId);
+
     if (contact === null) {
       throw HttpError(404, `Not found`);
     }
+
+    if (contact.ownerId.toString() !== userId) {
+      throw HttpError(404, `Not found`);
+    }
+
     res.send(contact);
   } catch (error) {
     next(error);
   }
 }
+
 
 async function addNewContact(req, res, next) {
   try {
@@ -54,10 +66,12 @@ async function deleteContact(req, res, next) {
 
 async function updateContactId(req, res, next) {
   const { contactId } = req.params;
+
      const contact = {
        name: req.body.name,
        email: req.body.email,
        phone: req.body.phone,
+       ownerId: req.user.id,
      };
    try {
      const result = await ContactsService.findByIdAndUpdate(
@@ -100,6 +114,22 @@ async function changeContactFavorite(req, res, next) {
   }
   
 }
+async function getCurrentUser(req, res, next) {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    res.status(200).json({
+      email: user.email,
+      subscription: user.subscription,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
 module.exports = {
   getAllContacts,
@@ -108,4 +138,5 @@ module.exports = {
   deleteContact,
   updateContactId,
   changeContactFavorite,
+  getCurrentUser,
 };

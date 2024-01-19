@@ -54,5 +54,14 @@ async function login(req, res, next) {
     next(error);
   }
 }
+async function logout(req, res, next) {
+  try {
+    await User.findByIdAndUpdate(req.user.id, { token: null });
 
-module.exports = { register, login };
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, logout };
