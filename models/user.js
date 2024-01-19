@@ -46,6 +46,10 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 userSchema.post("save", handleMongooseError);
 
 //! === Joi schema ===
@@ -71,6 +75,7 @@ const updateSubscriptionSchema = Joi.object({
 
 const schemas = {
   userJoiSchema,
+  emailSchema,
   updateSubscriptionSchema,
 };
 
