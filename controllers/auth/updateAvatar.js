@@ -9,6 +9,7 @@ const updateAvatar = async (req, res) => {
   // if (!req.file) {працює за умови що resizeAvatar буде в цьому ж файлі після перевірки  
   //   res.status(400).json("File upload error");
   // }
+  
   const { path: tempUpload, originalname } = req.file;
   const filename = `${id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
