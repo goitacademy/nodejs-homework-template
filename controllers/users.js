@@ -10,6 +10,8 @@ const { User } = require("../models/user");
 
 const { HttpError, ctrlWrapper, sendEmail } = require("../helpers");
 
+const { SECRET_KEY, BASE_URL } = process.env;
+
 const avatarDir = path.join(__dirname, "../", "public", "avatars");
 
 //! === Register ===
@@ -32,6 +34,14 @@ const register = async (req, res) => {
     avatarURL,
     verificationToken,
   });
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click verify email</a>`,
+  };
+
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
@@ -57,7 +67,7 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password invalid");
   }
 
-  const { SECRET_KEY } = process.env;
+  // const { SECRET_KEY } = process.env;  // виніс в глобальну змінну
 
   const payload = {
     id: user.id,
