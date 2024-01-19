@@ -2,7 +2,7 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
-"type": "module",
+  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./app.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./app.js",
@@ -10,14 +10,18 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.3.1",
     "express": "4.17.1",
     "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "4.1",
     "mongoose": "^8.1.0",
     "morgan": "1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
