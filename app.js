@@ -1,25 +1,34 @@
-const express = require("express");
-const logger = require("morgan");
-const cors = require("cors");
+import mongoose from "mongoose";
+import express from "express";
+import cors from "cors";
 
-const contactsRouter = require("./routes/api/contacts");
+import { router as contactRoutes } from "./routes/api/contacts.routes.js";
+
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
-const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+const PORT = process.env.PORT || 4000;
 
-app.use(logger(formatsLogger));
-app.use(cors());
+const connection = mongoose.connect(process.env.DB_URL, {
+  dbName: "db-contacts",
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 app.use(express.json());
+app.use(cors());
+app.use("/api", contactRoutes);
 
-app.use("/api/contacts", contactsRouter);
-
-app.use((req, res) => {
-  res.status(404).json({ message: " UUPS Not found" });
-});
-
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
-});
-
-module.exports = app;
+connection
+  .then(() => {
+    console.log("Database connection successful");
+    app.listen(PORT, () => {
+      console.log(`App listens on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error(`Error while establishing connection: [${error}]`);
+    process.exit(1);
+  });

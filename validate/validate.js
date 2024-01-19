@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const schemaAdd = Joi.object({
   name: Joi.string().trim().required(),
@@ -12,7 +12,7 @@ const schemaUpdate = Joi.object({
   phone: Joi.string().trim(),
 }).min(1);
 
-module.exports = {
+export {
   schemaAdd,
   schemaUpdate,
 };
