@@ -13,13 +13,13 @@ import authenticate from "../../middlewares/autheticate.js";
 const contactsRouter = express.Router();
 
 contactsRouter.use(authenticate);
-contactsRouter.get("/", contactsController.getAll);
-contactsRouter.get("/:id", isValidId, contactsController.getByID);
+contactsRouter.get("/", contactsController.listContacts);
+contactsRouter.get("/:id", isValidId, contactsController.getContactById);
 contactsRouter.post(
   "/",
   isEmptyBody,
   validateBody(contactAddSchema),
-  contactsController.add
+  contactsController.addContact
 );
 contactsRouter.put(
   "/:id",
@@ -28,7 +28,7 @@ contactsRouter.put(
   validateBody(contactUpdateSchema),
   contactsController.updateById
 );
-contactsRouter.delete("/:id", isValidId, contactsController.deleteById);
+contactsRouter.delete("/:id", isValidId, contactsController.removeContact);
 contactsRouter.patch(
   "/:id/favorite",
   isValidId,

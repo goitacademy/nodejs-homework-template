@@ -1,6 +1,7 @@
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
 import { Contact } from "../models/Contact.js";
+import dotenv from "dotenv";
 dotenv.config();
 
 const listContacts = async (req, res) => {
