@@ -47,7 +47,7 @@ const updateContact = async (id, body) => {
   if (index === -1) {
     return null;
   }
-  list[index] = { id, ...body };
+  list[index] = { ...list[index], ...body };
   await fs.writeFile(contactsPath, JSON.stringify(list, null, 2));
   return list[index];
 };
