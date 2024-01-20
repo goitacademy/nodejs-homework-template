@@ -1,12 +1,19 @@
-import { listContacts } from '../../models/contacts.js';
+import { getAllContacts } from '../../service/index.js';
 
 async function indexContacts(req, res, next) {
   try {
-    const contacts = await listContacts();
-
-    res.status(200).json({ contacts, itemCount: contacts.length });
+    const results = await getAllContacts();
+    res.json({
+      status: 'succes',
+      code: 200,
+      data: {
+        contacts: results,
+        contactsCount: results.length,
+      },
+    });
   } catch (error) {
-    res.status(500).json(`An error occured: ${error}`);
+    console.error(error);
+    next(error);
   }
 }
 

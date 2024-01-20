@@ -1,17 +1,19 @@
-import { getContactById } from '../../models/contacts.js';
+import { getContactById } from '../../service/index.js';
 
 async function showContacts(req, res, next) {
+  const { contactId } = req.params;
   try {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-
-    if (!contact) {
-      res.status(404).json({ message: 'Not found' });
-    } else {
-      res.status(200).json(contact);
+    const result = await getContactById(contactId);
+    if (result) {
+      res.json({
+        status: 'success',
+        code: 200,
+        data: { contact: result },
+      });
     }
   } catch (error) {
-    res.status(500).json(`An error occured: ${error}`);
+    console.error(error);
+    next(error);
   }
 }
 
