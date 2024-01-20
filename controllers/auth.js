@@ -22,9 +22,9 @@ async function register(req, res, next) {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const newUser = await User.findOne({ email });
 
-    if (user !== null) {
+    if (newUser !== null) {
       return res.status(409).send({ message: "Email in use" });
     }
 
@@ -32,7 +32,12 @@ async function register(req, res, next) {
 
     await User.create({ email: email, password: passwordHash });
 
-    res.status(201).json("good");
+    res.status(201).json({
+      user: {
+        email,
+        subscription: "starter",
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -96,10 +101,13 @@ async function logout(req, res, next) {
 }
 
 async function current(req, res, next) {
-  const { email, subscription } = req.user;
+  const { email } = req.user;
+
+  const user = await User.findOne({ email });
+
   res.json({
-    email,
-    subscription,
+    email: user.email,
+    subscription: user.subscription,
   });
 }
 
