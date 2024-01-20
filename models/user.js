@@ -21,7 +21,6 @@ const modelUserSchema = new Schema(
     },
     password: {
       type: String,
-      // match: patterns.password,
       required: [true, "Password is required"],
     },
     subscription: {
