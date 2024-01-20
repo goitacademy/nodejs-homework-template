@@ -1,31 +1,28 @@
-import { addContact } from '../../models/contacts.js';
-import Joi from '@hapi/joi';
-
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
-  phone: Joi.string().required(),
-});
+import { createContact, getContactByName } from '../../service/index.js';
 
 async function createContacts(req, res, next) {
+  const { name, email, phone, favorite } = req.body;
   try {
-    const result = schema.validate(req.body);
-    if (result.error) {
-      return res.status(400).json({ message: result.error.message });
-    }
+    const existingContact = await getContactByName(name);
 
-    const { name, email, phone } = req.body;
-    const newContact = await addContact({ name, email, phone });
-
-    if (!newContact) {
-      res.status(400).json({ message: 'Contact already exist' });
+    if (existingContact) {
+      res.status(400).json({
+        status: 'failed',
+        code: 400,
+        data: 'Not found',
+        message: `Contact with name: '${name}' already exsist`,
+      });
     } else {
-      res.status(201).json(newContact);
+      const result = await createContact({ name, email, phone, favorite });
+      res.status(201).json({
+        status: 'success',
+        code: 201,
+        data: { contact: result },
+      });
     }
   } catch (error) {
-    res.status(500).json(`An error occured: ${error}`);
+    console.error(error);
+    next(error);
   }
 }
 
