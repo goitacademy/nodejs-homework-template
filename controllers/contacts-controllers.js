@@ -51,13 +51,14 @@ const add = async (req, res, next) => {
 
 const updateById = async (req, res, next) => {
     try {
+        const { id: _id } = req.params;
+        const { _id: owner } = req.user;
         const { error } = contactUpdateSchema.validate(req.body);
         if (error) {
             throw HttpError(400, error.message);
         }
-        const { id: _id } = req.params;
-        const { _id: owner } = req.user;
-        const result = await Contact.findOne({ _id, owner },req.body);
+
+        const result = await Contact.findOneAndUpdate({ _id, owner },req.body);
         if (!result) {
             throw HttpError(404, `Contact with id=${id} not found`);
         }
@@ -86,21 +87,22 @@ const deleteById = async (req, res, next) => {
 };
 
 const updateStatusContact = async (req, res, next) => {
-    try {
-        const { error } = updateFavoriteSchema.validate(req.body);
-        if (error) {
-            throw HttpError(400, error.message);
-        }
-        const { id } = req.params;
-        const result = await Contact.findByIdAndUpdate(id, req.body);
-        if (!result) {
-            throw HttpError(404, `Not found`);
-        }
-        res.json(result);
-    } catch (error) {
-        next(error);
+  try {
+    const { error } = updateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
     }
+    const { id } = req.params;
+    const result = await Contact.findOneAndUpdate(id, req.body);
+    if (!result) {
+      throw HttpError(404, `Not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 };
+
 export default {
     getAll,
     getById,

@@ -92,13 +92,15 @@ const getCurrent = async (req, res, next) => {
      
 };
 
-const signout = async (req, res, next) => {
+const signout = async (req, res) => {
+  try {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
 
-    res.json({
-        message: "Signout success"
-    })
+    res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
 };
 
 
