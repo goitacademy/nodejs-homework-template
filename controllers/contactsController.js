@@ -30,8 +30,8 @@ export const addNewContact = async (req, res) => {
 
 export const deleteContact = async (req, res) => {
 	const { id: _id } = req.params;
-	const { _id: owner } = req.user;
-	const result = await Contact.findByIdAndDelete({ _id, owner });
+
+	const result = await Contact.findByIdAndDelete(_id);
 	if (!result) {
 		throw HttpError(404, "Not found");
 	}
@@ -42,8 +42,8 @@ export const deleteContact = async (req, res) => {
 
 export const updateContactById = async (req, res) => {
 	const { id: _id } = req.params;
-	const { _id: owner } = req.user;
-	const result = await Contact.findByIdAndUpdate({ _id, owner }, req.body, {
+
+	const result = await Contact.findByIdAndUpdate(_id, req.body, {
 		new: true,
 	});
 
@@ -55,8 +55,8 @@ export const updateContactById = async (req, res) => {
 
 export const updateStatusContact = async (req, res) => {
 	const { id: _id } = req.params;
-	const { _id: owner } = req.user;
-	const result = await Contact.findByIdAndUpdate({ _id, owner }, req.body, {
+
+	const result = await Contact.findByIdAndUpdate(_id, req.body, {
 		new: true,
 	});
 
