@@ -8,7 +8,7 @@ export async function updateContact(req, res, next) {
   try {
     const id = req.params.contactId;
     const { name, email, phone } = req.body;
-    const val = schema.validate(body);
+    const val = schema.validate({ name, email, phone });
     if (val.error) {
       return res.status(400).json({
         message: val.error.message,
