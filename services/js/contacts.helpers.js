@@ -31,4 +31,4 @@ function changeFavourite(id, body) {
   return Contact.findByIdAndUpdate(id, { favourite });
 }
 
-export { getAll, getOne, remove, create, update, updateFavourite };
+export { getAll, getOne, remove, create, update, changeFavourite };
