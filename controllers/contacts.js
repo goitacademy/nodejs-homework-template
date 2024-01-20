@@ -31,7 +31,7 @@ const add = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  const { _id: owner } = req.user;
+  const { _id } = req.user;
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(
     {
