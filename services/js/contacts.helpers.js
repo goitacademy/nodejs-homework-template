@@ -26,7 +26,7 @@ function update(id, body) {
   return Contact.findByIdAndUpdate(id, { name, email, phone });
 }
 
-function updateFavourite(id, body) {
+function changeFavourite(id, body) {
   const { favourite } = body;
   return Contact.findByIdAndUpdate(id, { favourite });
 }
