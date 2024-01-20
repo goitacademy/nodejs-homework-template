@@ -33,6 +33,7 @@ function auth(req, res, next) {
     req.user = {
       id: decode.id,
       email: decode.email,
+      subscription: decode.subscription,
     };
 
     next();

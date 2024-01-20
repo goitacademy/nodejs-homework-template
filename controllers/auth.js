@@ -4,10 +4,11 @@ const path = require("path");
 
 const User = require("../models/users");
 
-const { registerSchema, loginSchema } = require(path.join(
-  __dirname,
-  "../schemas/users"
-));
+const {
+  registerSchema,
+  loginSchema,
+  updateSubscriptionSchema,
+} = require(path.join(__dirname, "../schemas/users"));
 
 async function register(req, res, next) {
   const response = registerSchema.validate(req.body, {
@@ -111,4 +112,29 @@ async function current(req, res, next) {
   });
 }
 
-module.exports = { register, login, logout, current };
+async function updateSubscription(req, res, next) {
+  const response = updateSubscriptionSchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (typeof response.error !== "undefined") {
+    return res
+      .status(400)
+      .json({ message: "Помилка від Joi або іншої бібліотеки валідації" });
+  }
+
+  const { subscription } = req.body;
+  const { id } = req.user;
+  console.log(req.user);
+
+  try {
+    await User.findByIdAndUpdate(id, { subscription });
+
+    res.status(200).json({
+      message: `Subscription ${id} has been updated to ${subscription}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { register, login, logout, current, updateSubscription };

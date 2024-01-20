@@ -9,9 +9,36 @@ const Contact = require("../models/contact");
 
 async function getContacts(req, res, next) {
   try {
-    const contacts = await Contact.find();
+    const userId = req.user.id;
 
-    res.send(contacts);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const favorite = req.query.favorite === "true"; // Перевіркаь чи фейворіт тру
+
+    const skip = (page - 1) * limit;
+
+    const query = {
+      ownerId: userId,
+    };
+
+    if (favorite) {
+      query.favorite = true;
+    }
+
+    const contacts = await Contact.find(query).skip(skip).limit(limit);
+
+    const totalContacts = await Contact.find(query).countDocuments();
+    console.log("total Contacts " + totalContacts);
+    const totalPages = Math.ceil(totalContacts / limit);
+    console.log("total Pages " + totalPages);
+
+    res.send({
+      contacts,
+      currentPage: page,
+      totalPages,
+      totalContacts,
+    });
   } catch (error) {
     next(error);
   }
@@ -19,6 +46,7 @@ async function getContacts(req, res, next) {
 
 async function getContact(req, res, next) {
   const { id } = req.params;
+  const userId = req.user.id;
 
   try {
     const contact = await Contact.findById(id);
@@ -28,6 +56,10 @@ async function getContact(req, res, next) {
     if (contact === null) {
       return res.status(404).json({ message: "Not found" });
     }
+    if (contact.ownerId.toString() !== userId) {
+      return res.status(404).json({ message: "Not found" });
+    }
+
     res.send(contact);
   } catch (error) {
     next(error);
@@ -45,6 +77,7 @@ async function createContact(req, res, next) {
     phone: req.body.phone,
     email: req.body.email,
     favorite: req.body.favorite,
+    ownerId: req.user.id,
   };
 
   try {
@@ -70,11 +103,19 @@ async function updateContact(req, res, next) {
     return res.status(400).json({ message: "missing fields" });
   }
 
+  const oldContact = await Contact.findById(id);
+
+  const userId = req.user.id;
+  if (oldContact.ownerId.toString() !== userId) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
   const contact = {
     name: req.body.name,
     phone: req.body.phone,
     email: req.body.email,
     favorite: req.body.favorite,
+    ownerId: req.user.id,
   };
 
   try {
@@ -93,11 +134,18 @@ async function updateContact(req, res, next) {
 async function deleteContact(req, res, next) {
   const { id } = req.params;
 
+  const userId = req.user.id;
+
+  const contact = await Contact.findById(id);
+  if (contact.ownerId.toString() !== userId) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
   try {
     const result = await Contact.findByIdAndDelete(id);
 
     if (result === null) {
-      return res.status(404).send("Not found");
+      return res.status(404).send({ message: "Not found" });
     }
 
     return res.status(200).send("Contact deleted");
@@ -108,6 +156,11 @@ async function deleteContact(req, res, next) {
 
 async function changeContactFavorite(req, res, next) {
   const { id } = req.params;
+  const userId = req.user.id;
+  const contact = await Contact.findById(id);
+  if (contact.ownerId.toString() !== userId) {
+    return res.status(404).json({ message: "Not found" });
+  }
 
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).send("missing field favorite");
