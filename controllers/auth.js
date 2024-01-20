@@ -9,13 +9,28 @@ async function register(req, res, next) {
   try {
     const user = await User.findOne({ email });
     if (user !== null) {
-      throw HttpError(409, "Email in use");
+      throw new HttpError(409, "Email in use");
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    await User.create({ password: passwordHash, email, subscription });
-    res.status(201).send({ message: "Registration successful" });
+    const newUser = await User.create({
+      password: passwordHash,
+      email,
+      subscription,
+    });
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: 60 * 60,
+    });
+
+    await User.findByIdAndUpdate(newUser._id, { token });
+
+    res.status(201).json({
+      user: {
+        email: newUser.email,
+        subscription: newUser.subscription,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -28,15 +43,13 @@ async function login(req, res, next) {
     const user = await User.findOne({ email });
 
     if (user === null) {
-      console.log("Email");
-      throw HttpError(401, "Email or password is wrong");
+      throw new HttpError(401, "Email or password is wrong");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (isMatch === false) {
-      console.log("Password");
-      throw HttpError(401, "Email or password is wrong");
+    if (!isMatch) {
+      throw new HttpError(401, "Email or password is wrong");
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -45,11 +58,12 @@ async function login(req, res, next) {
 
     await User.findByIdAndUpdate(user._id, { token });
 
-    res.send({ token });
+    res.json({ token });
   } catch (error) {
     next(error);
   }
 }
+
 async function logout(req, res, next) {
   try {
     await User.findByIdAndUpdate(req.user.id, { token: null });
@@ -59,10 +73,11 @@ async function logout(req, res, next) {
     next(error);
   }
 }
+
 async function getCurrent(req, res, next) {
   try {
     const { email, subscription } = req.user;
-    res.status(200).json({ email, subscription });
+    res.json({ email, subscription });
   } catch (error) {
     next(error);
   }
