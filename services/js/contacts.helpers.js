@@ -22,8 +22,13 @@ function create(body) {
 }
 
 function update(id, body) {
-  const { name, phone, email, favourite } = body;
-  return Contact.findByIdAndUpdate(id, { name, email, phone, favourite });
+  const { name, phone, email } = body;
+  return Contact.findByIdAndUpdate(id, { name, email, phone });
 }
 
-export { getAll, getOne, remove, create, update };
+function updateFavourite(id, body) {
+  const { favourite } = body;
+  return Contact.findByIdAndUpdate(id, { favourite });
+}
+
+export { getAll, getOne, remove, create, update, updateFavourite };
