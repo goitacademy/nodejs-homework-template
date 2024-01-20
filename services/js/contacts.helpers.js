@@ -17,18 +17,15 @@ function remove(contactId) {
 
 //   Adds new contact
 function create(body) {
-  const { name, phone, email, favourite } = body;
-  return Contact.create({ name, email, phone, favourite });
+  return Contact.create(body);
 }
 
 function update(id, body) {
-  const { name, phone, email } = body;
-  return Contact.findByIdAndUpdate(id, { name, email, phone });
+  return Contact.findByIdAndUpdate(id, body);
 }
 
-function changeFavourite(id, body) {
-  const { favourite } = body;
-  return Contact.findByIdAndUpdate(id, { favourite });
+function changeFavourite(id, favorite) {
+  return Contact.findByIdAndUpdate(id, { favorite });
 }
 
 export { getAll, getOne, remove, create, update, changeFavourite };

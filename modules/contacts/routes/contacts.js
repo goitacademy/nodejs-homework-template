@@ -3,7 +3,7 @@ import { getAllContacts } from "../controllers/getAll.js";
 import { getOneContact } from "../controllers/getOne.js";
 import { createContact } from "../controllers/create.js";
 import { deleteContact } from "../controllers/delete.js";
-import { updateContact, updateFavourite } from "../controllers/update.js";
+import { updateContact, updateStatusContact } from "../controllers/update.js";
 
 const router = Router();
 
@@ -17,6 +17,6 @@ router.delete("/:contactId", deleteContact);
 
 router.put("/:contactId", updateContact);
 
-router.put("/:contactId/favourite", updateFavourite);
+router.put("/:contactId/favourite", updateStatusContact);
 
 export default router;

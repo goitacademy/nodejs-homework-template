@@ -21,19 +21,18 @@ export async function updateContact(req, res, next) {
   }
 }
 
-export async function updateFavourite(req, res, next) {
+export async function updateStatusContact(req, res, next) {
   try {
     const id = req.params.contactId;
-    const { favourite } = req.body;
-    const val = schema.validate(body);
-    if (val.error) {
+    const { favorite } = req.body;
+    if (typeof favorite !== "boolean") {
       return res.status(400).json({
-        message: val.error.message,
+        message: "missing field favourite",
       });
     }
-    const data = await changeFavourite(id, { favourite });
+    const data = await changeFavourite(id, favorite);
     return res.status(201).json(data);
   } catch (e) {
-    return res.status(500).json(`An error occured: ${e}`);
+    return res.status(404).json(`Not found.`);
   }
 }
