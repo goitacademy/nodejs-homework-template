@@ -1,8 +1,5 @@
-import {
-  update,
-  changeFavourite,
-} from "../../../services/js/contacts.helpers.js";
-import { schema } from "../../../services/js/contacts.validation.js";
+import { update, changeFavourite } from "../services/contacts.helpers.js";
+import { schema } from "../services/contacts.validation.js";
 
 export async function updateContact(req, res, next) {
   try {

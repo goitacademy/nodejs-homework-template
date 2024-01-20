@@ -1,5 +1,5 @@
-import { create } from "../../../services/js/contacts.helpers.js";
-import { schemaReq } from "../../../services/js/contacts.validation.js";
+import { create } from "../services/contacts.helpers.js";
+import { schemaReq } from "../services/contacts.validation.js";
 
 export async function createContact(req, res, next) {
   try {

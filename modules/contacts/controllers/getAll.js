@@ -1,4 +1,4 @@
-import { getAll } from "../../../services/js/contacts.helpers.js";
+import { getAll } from "../services/contacts.helpers.js";
 
 export async function getAllContacts(req, res, next) {
   try {

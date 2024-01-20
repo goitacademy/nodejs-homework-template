@@ -1,4 +1,4 @@
-import { getOne } from "../../../services/js/contacts.helpers.js";
+import { getOne } from "../services/contacts.helpers.js";
 
 export async function getOneContact(req, res, next) {
   try {
