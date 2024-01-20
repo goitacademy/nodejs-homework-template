@@ -81,14 +81,14 @@ const logout = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
   const { _id } = req.user;
   const { path: tempUpload, originalname } = req.file;
+
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
-
-  if (!resultUpload) {
-    throw HttpError(401, "Not authorized");
-  }
 
   const modAvatar = await Jimp.read(path.join(tempUpload));
   await modAvatar.resize(250, 250);
