@@ -103,9 +103,12 @@ async function updateContact(req, res, next) {
     return res.status(400).json({ message: "missing fields" });
   }
 
-  const oldContact = await Contact.findById(id);
-
   const userId = req.user.id;
+
+  const oldContact = await Contact.findById(id);
+  if (oldContact === null) {
+    return res.status(404).json({ message: "Not found" });
+  }
   if (oldContact.ownerId.toString() !== userId) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -137,6 +140,9 @@ async function deleteContact(req, res, next) {
   const userId = req.user.id;
 
   const contact = await Contact.findById(id);
+  if (contact === null) {
+    return res.status(404).json({ message: "Not found" });
+  }
   if (contact.ownerId.toString() !== userId) {
     return res.status(404).json({ message: "Not found" });
   }
@@ -156,14 +162,19 @@ async function deleteContact(req, res, next) {
 
 async function changeContactFavorite(req, res, next) {
   const { id } = req.params;
-  const userId = req.user.id;
-  const contact = await Contact.findById(id);
-  if (contact.ownerId.toString() !== userId) {
-    return res.status(404).json({ message: "Not found" });
-  }
 
   if (!req.body || Object.keys(req.body).length === 0) {
     return res.status(400).send("missing field favorite");
+  }
+
+  const userId = req.user.id;
+
+  const contact = await Contact.findById(id);
+  if (contact === null) {
+    return res.status(404).json({ message: "Not found" });
+  }
+  if (contact.ownerId.toString() !== userId) {
+    return res.status(404).json({ message: "Not found" });
   }
 
   try {
