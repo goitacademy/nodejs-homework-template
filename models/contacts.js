@@ -9,7 +9,6 @@ const listContacts = async () => {
     console.log(contactsPath);
     const readContacts = await fs.readFile(contactsPath);
     console.log("Loading...");
-    // console.log(JSON.parse(readContacts));
     return JSON.parse(readContacts);
   } catch (error) {
     console.log("Load error", error.message);
@@ -62,7 +61,6 @@ const addContact = async (body) => {
 const updateContact = async (contactId, body) => {
   try {
     const getContactsList = await listContacts();
-    // const getContact = await getContactById(contactId);
     const updateContactsList = getContactsList.map((cont) =>
       (cont.id === contactId ? { ...cont, ...body } : cont)
     );
