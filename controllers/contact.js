@@ -1,13 +1,4 @@
 const Contact = require("../models/contact");
-const Joi = require('joi');
- const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().required(),
-  phone: Joi.string().required()
- });
-//  const addSchemaId = Joi.object({
-//   id: Joi.string().required()
-//  });
 
 async function getContacts(req, res, next) {
   try {
@@ -27,7 +18,7 @@ async function getContact(req, res, next) {
       const contact = await Contact.findById(id);
 
       if (contact === null) {
-        return res.status(404).send("Contact not found");
+        return res.status(404).json({ message: "Not found" });;
       }
       
       res.send(contact);
@@ -68,16 +59,12 @@ async function updateContact(req, res, next) {
   };
 
   try {
-    const {error} = addSchema.validate(req.body);
-    if (error) {
-      res.status(400).json({ message: 'missing required name field' });
-    }
-    if (!error) {
-      const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
+    const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
 
       if (result === null) {
-        return res.status(404).send("Contact not found");
-      }  res.send(result);}
+        return res.status(404).json({ message: "Not found" });;
+      }  res.send(result);
+  
    
   } catch (error) {
     res.status(400).json({ message: 'not valid Id' });
@@ -92,7 +79,7 @@ async function deleteContact(req, res, next) {
     const result = await Contact.findByIdAndDelete(id);
 
     if (result === null) {
-      return res.status(404).send("Contact not found");
+      return res.status(404).json({ message: 'Not found' });;
     }
 
     res.send({ id });
@@ -115,10 +102,10 @@ async function changeContactFavorite(req, res, next) {
     );
       console.log(req.body.favorite)
     if (req.body.favorite === undefined) {
-      return res.status(400).send("missing field favorite");
+      return res.status(400).json({ message: "missing field favorite" });
     }
     if (result === null) {
-      return res.status(404).send("Contact not found");
+      return res.status(404).json({ message: 'Not found' });
     }
     res.send(result);
   } catch (error) {
