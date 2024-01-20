@@ -1,36 +1,35 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
+const HttpError = require("../error/error.js");
 
 function auth(req, res, next) {
   const authHeader = req.headers.authorization;
 
-  if (typeof authHeader === "undefined") {
-    return res.status(401).send({ message: "Invalid token" });
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+   throw HttpError(401, "Not authorized");
   }
 
-  const [bearer, token] = authHeader.split(" ", 2);
-
-  if (bearer !== "Bearer") {
-    return res.status(401).send({ message: "Invalid token" });
-  }
+  const token = authHeader.split(" ")[1];
 
   jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
     if (err) {
-      return res.status(401).send({ message: "Invalid token" });
+      throw HttpError(401, "Not authorized");
     }
 
-    const user = await User.findById(decode.id);
+    try {
+      const user = await User.findById(decode.id);
 
-    if (user === null) {
-      return res.status(401).send({ message: "Invalid token" });
-    }
+      if (!user || user.token !== token) {
+        throw HttpError(401, "Not authorized");
+      }
 
-    if (user.token !== token) {
-      return res.status(401).send({ message: "Invalid token" });
+      req.user = decode;
+      next();
+    } catch (error) {
+      console.error("Error in auth middleware:", error);
+      throw HttpError(500, "Internal Server Error");
+  
     }
-    // console.log(decode);
-    req.user = decode;
-    next();
   });
 }
 

@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/users");
 const jwt = require("jsonwebtoken");
+const HttpError = require("../error/error.js");
 
 async function register(req, res, next) {
   const { password, email, subscription } = req.body;
@@ -8,7 +9,7 @@ async function register(req, res, next) {
   try {
     const user = await User.findOne({ email });
     if (user !== null) {
-      return res.status(409).send({ message: "User already registered" });
+      throw HttpError(409, "Email in use");
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -28,24 +29,19 @@ async function login(req, res, next) {
 
     if (user === null) {
       console.log("Email");
-      return res
-        .status(401)
-        .send({ message: "Email or password is incorrect" });
+      throw HttpError(401, "Email or password is wrong");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch === false) {
       console.log("Password");
-      return res
-        .status(401)
-        .send({ message: "Email or password is incorrect" });
+      throw HttpError(401, "Email or password is wrong");
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: 60 * 60,
     });
-
 
     await User.findByIdAndUpdate(user._id, { token });
 
@@ -63,5 +59,13 @@ async function logout(req, res, next) {
     next(error);
   }
 }
+async function getCurrent(req, res, next) {
+  try {
+    const { email, subscription } = req.user;
+    res.status(200).json({ email, subscription });
+  } catch (error) {
+    next(error);
+  }
+}
 
-module.exports = { register, login, logout };
+module.exports = { register, login, logout, getCurrent };
