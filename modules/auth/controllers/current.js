@@ -1,4 +1,4 @@
-import { currentUser } from "../services/auth.helpers";
+import { currentUser } from "../services/auth.helpers.js";
 
 export async function current(req, res, next) {
   try {

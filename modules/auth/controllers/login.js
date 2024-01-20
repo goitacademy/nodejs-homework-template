@@ -1,4 +1,4 @@
-import { loginUser } from "../services/auth.helpers";
+import { loginUser } from "../services/auth.helpers.js";
 
 export async function login(req, res, next) {
   try {

@@ -1,4 +1,4 @@
-import { logoutUser } from "../services/auth.helpers";
+import { logoutUser } from "../services/auth.helpers.js";
 
 export async function logout(req, res, next) {
   try {
