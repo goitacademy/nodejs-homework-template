@@ -1,11 +1,14 @@
 import { Router } from 'express'
 import { add, deleteById, getAll, getById, updateById } from '../../controllers/contactsController.js'
 import { validateBody } from '../../decorators/validateBody.js'
+import { authenticate } from '../../middlewares/authenticate.js'
 import { isEmptyBody } from '../../middlewares/isEmptyBody.js'
 import { isValidId } from '../../middlewares/isValidId.js'
 import { contactAddSchema, contactUpdateFavoriteSchema, contactUpdateSchema } from '../../models/Contact.js'
 
 export const contactsRouter = Router()
+
+contactsRouter.use(authenticate)
 
 contactsRouter.get('/', getAll)
 

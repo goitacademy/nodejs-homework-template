@@ -1,7 +1,8 @@
 import { notFoundHttpError } from '../helpers/NotFoundHttpError.js'
 import { Contact } from '../models/Contact.js'
 
-export const getAll = async (_, res, next) => {
+export const getAll = async (req, res, next) => {
+  console.log(req.user)
   const { _id: owner } = req.user
   const { page = 1, limit = 20, favorite } = req.query
   const skip = (page - 1) * limit

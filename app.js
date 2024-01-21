@@ -2,7 +2,7 @@ import cors from 'cors'
 import 'dotenv/config'
 import express from 'express'
 import logger from 'morgan'
-import { authRouter } from './routes/api/auth-router.js'
+import { authRouter } from './routes/api/auth.js'
 import { contactsRouter } from './routes/api/contacts.js'
 
 export const app = express()
