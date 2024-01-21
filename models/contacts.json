@@ -7,15 +7,9 @@
   },
   {
     "id": "qdggE76Jtbfd9eWJHrssH",
-    "email": "qqqwia@gmail.com",
-    "phone": "12323423425",
-    "name": "John Doe"
-  },
-  {
-    "id": "drsAJ4SHPYqZeG-83QTVW",
-    "name": "Kennedy Lane",
-    "email": "mattis.Cras@nonenimMauris.net",
-    "phone": "(542) 451-7038"
+    "email": "bbb@gmail.com",
+    "phone": "098765433",
+    "name": "Test Doe"
   },
   {
     "id": "vza2RIzNGIwutCVCs4mCL",
@@ -102,12 +96,6 @@
     "phone": "12323423425"
   },
   {
-    "id": "f9cc3d316fabbe4f29e5",
-    "name": "John Doerrr",
-    "email": "qqqwia@gmail.com",
-    "phone": "12323423425"
-  },
-  {
     "id": "83845209ae44858e95dc",
     "name": "John Doerrr",
     "email": "qqqwia@gmail.com",
@@ -121,14 +109,26 @@
   },
   {
     "id": "f64e6069dd0398c100eb",
-    "name": "qawasia Qaymond",
-    "email": "super@john.com",
-    "phone": "(992) 914"
+    "name": "Test Kudej",
+    "email": "maciek@gmail.com",
+    "phone": "0987333365433"
   },
   {
     "id": "25655e79d2aa5861641a",
     "name": "Test Doe",
     "email": "bbb@gmail.com",
     "phone": "098765433"
+  },
+  {
+    "id": "fd5c78fed669c033ca8f",
+    "name": "Test Kudej",
+    "email": "maciek@gmail.com",
+    "phone": "0987333365433"
+  },
+  {
+    "id": "2eb0b83534c21d48b85b",
+    "name": "Test Kudej",
+    "email": "maciek@gmail.com",
+    "phone": "0987333365433"
   }
 ]
