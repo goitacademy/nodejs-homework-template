@@ -92,8 +92,9 @@ const updateStatusContact = async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const { id } = req.params;
-    const result = await Contact.findOneAndUpdate(id, req.body);
+      const { id: _id } = req.params;
+      const { _id: owner } = req.user;
+    const result = await Contact.findOneAndUpdate({ _id, owner },req.body);
     if (!result) {
       throw HttpError(404, `Not found`);
     }
