@@ -17,10 +17,6 @@ const getById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  //   const { error } = addSchema.validate(req.body);
-  //   if (error) {
-  //     throw HttpError(400, error.message);
-  //   }
   const result = await contacts.addContact(req.body);
   res.status(201).json(result);
 };
@@ -35,10 +31,6 @@ const deleteById = async (req, res) => {
 };
 
 const updateById = async (req, res) => {
-  //   const { error } = addSchema.validate(req.body);
-  //   if (error) {
-  //     throw HttpError(400, error.message);
-  //   }
   const { id } = req.params;
   const result = await contacts.updateContact(id, req.body);
   if (!result) {
