@@ -1,5 +1,4 @@
 const { Contact } = require("../models/contact");
-
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAllContacts = async (req, res) => {
@@ -33,7 +32,6 @@ const updateContact = async (req, res) => {
   const result = await Contact.findByIdAndUpdate(id, req.body, {
     new: true,
   });
-
   if (!result) {
     throw HttpError(404, "Not Found");
   }
