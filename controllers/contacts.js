@@ -15,7 +15,7 @@ const getOneContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
     const result = await contacts.getContact(contactId);
-    if (!result) {
+   if (!result) {
       throw HttpError(404, "Not found");
     }
     res.status(200).json(result);
