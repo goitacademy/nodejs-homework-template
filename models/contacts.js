@@ -19,7 +19,6 @@ const contactSchema = new mongoose.Schema(
     ownerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      // required: true,
     },
   },
   { versionKey: false, timestamps: true }
