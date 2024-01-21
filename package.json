@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest",
     "start": "cross-env NODE_ENV=production node ./server.js",
     "dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
@@ -23,6 +24,7 @@
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "^5.0.4",
+    "supertest": "^6.3.4",
     "yarn": "^1.22.21"
   },
   "devDependencies": {
