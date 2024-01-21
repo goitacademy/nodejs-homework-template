@@ -13,9 +13,9 @@ async function updateContacts(req, res, next) {
     const updatedContact = await updateContact(contactId, req.body);
 
     if (updatedContact) {
-      res.status(200).json(updatedContact);
+      return res.status(200).json(updatedContact);
     } else {
-      res.status(404).json({ message: 'Not found' });
+      return res.status(404).json({ message: 'Not found' });
     }
   } catch (error) {
     next(error);

@@ -8,9 +8,9 @@ async function showContacts(req, res, next) {
     const contact = await getContactById(contactId);
 
     if (contact) {
-      res.status(200).json(contact);
+      return res.status(200).json(contact);
     } else {
-      res.status(404).json({ message: 'Contact not found' });
+      return res.status(404).json({ message: 'Contact not found' });
     }
   } catch (error) {
     next(error);
