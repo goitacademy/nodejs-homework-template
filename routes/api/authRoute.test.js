@@ -25,8 +25,8 @@ describe("test/api/auth/signup", () => {
 
   test("test signup with correctData", async () => {
     const signupData = {
-      email: "haberserhii@gmail.com",
-      password: "123456",
+      email: "serhii@gmail.com",
+      password: "serhii12345",
     };
     const { statusCode, body } = await request(app)
       .post("/api/auth/signup")
@@ -39,7 +39,7 @@ describe("test/api/auth/signup", () => {
   });
 });
 
-describe("test api/users/signin", () => {
+describe("test/api/auth/signin", () => {
   let server = null;
 
   beforeAll(async () => {
@@ -57,25 +57,25 @@ describe("test api/users/signin", () => {
     await User.deleteMany({});
   });
 
-  test("auth test", async () => {
-    const currentUser = {
-      email: "haberserhii@gmail.com",
-      password: "123456",
+  test("Test signin with correct status", async () => {
+    const signinUser = {
+      email: "serhii@gmail.com",
+      password: "serhii12345",
     };
-    const response = await request(app)
+    const { statusCode } = await request(app)
       .post("/api/auth/signin")
-      .send(currentUser);
-    expect(response.status).toBe(200);
+      .send(signinUser);
+    expect(statusCode).toBe(200);
   });
 
-  test("auth test token", async () => {
-    const currentUser = {
-      email: "haberserhii@gmail.com",
-      password: "123456",
+  test("Test signin with correct token", async () => {
+    const signinUser = {
+      email: "serhii@gmail.com",
+      password: "serhii12345",
     };
     const response = await request(app)
       .post("/api/auth/signin")
-      .send(currentUser);
+      .send(signinUser);
 
     expect(response.body.token).toBeDefined();
     expect(
