@@ -6,7 +6,7 @@ const validateBody = (User) => {
   const func = async (req, res, next) => {
     try {
     await registerUser.validateAsync(req.body)
-      const user = new User(req.body);
+      const user = new User({ ...req.body, avatarUrl: 'temp' });
       await user.validate();
       next();
     } catch (error) {
