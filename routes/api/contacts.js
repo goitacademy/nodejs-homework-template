@@ -1,11 +1,17 @@
-const express = require("express");
-const { addDataSchema, updateDataSchema } = require("../../validation");
-const contacts = require("../../models/contacts");
+import express from "express";
+import { addDataSchema, updateDataSchema } from "../../validation.js";
+import {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} from "../../models/contacts.js";
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const contactList = await contacts.listContacts();
+    const contactList = await listContacts();
     res.status(200).json({ contactList });
   } catch (error) {
     next(error);
@@ -14,7 +20,7 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res, next) => {
   try {
-    const contactId = await contacts.getContactById(req.params.contactId);
+    const contactId = await getContactById(req.params.contactId);
     if (!contactId) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -31,7 +37,7 @@ router.post("/", async (req, res, next) => {
       console.log(validationResult.error.message);
       return res.status(400).json({ message: "missing required name - field" });
     }
-    const postContact = await contacts.addContact(req.body);
+    const postContact = await addContact(req.body);
     res.status(201).json({ postContact });
   } catch (error) {
     next(error);
@@ -40,7 +46,7 @@ router.post("/", async (req, res, next) => {
 
 router.delete("/:contactId", async (req, res, next) => {
   try {
-    const contacId = await contacts.removeContact(req.params.contactId);
+    const contacId = await removeContact(req.params.contactId);
     if (!contacId) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -57,11 +63,11 @@ router.put("/:contactId", async (req, res, next) => {
       return res.status(400).json({ message: "missing fields" });
     }
     const contactId = req.params.contactId;
-    const changes = await contacts.updateContact(contactId, req.body);
+    const changes = await updateContact(contactId, req.body);
     res.status(200).json({ changes });
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = router;
+export { router };

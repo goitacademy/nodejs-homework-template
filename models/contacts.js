@@ -1,7 +1,8 @@
-const path = require("path");
-const fs = require("fs").promises;
-const { randomBytes } = require("node:crypto");
-const contactsPath = path.join(__dirname, "/contacts.json");
+import path from "path";
+import { promises as fs } from "fs";
+import { randomBytes } from "crypto";
+
+const contactsPath = path.join(process.cwd(), "models/contacts.json");
 
 const listContacts = async () => {
   try {
@@ -74,7 +75,7 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,
