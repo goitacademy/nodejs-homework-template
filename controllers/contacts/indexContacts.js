@@ -12,13 +12,3 @@ async function indexContacts(req, res, next) {
 }
 
 export {indexContacts};
-
-
-// router.get('/api/contacts', async (req, res, next) => {
-//     try {
-//       const contacts = await listContacts();
-//       res.status(200).json(contacts);
-//     } catch (error) {
-//       next(error);
-//     }
-//   });
