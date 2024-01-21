@@ -26,8 +26,7 @@ function auth(req, res, next) {
       req.user = decode;
       next();
     } catch (error) {
-      console.error("Error in auth middleware:", error);
-      throw  HttpError(500, "Internal Server Error");
+      next(HttpError(401, "Not authorized"));
     }
   });
 }
