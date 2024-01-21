@@ -1,14 +1,15 @@
-const express = require('express')
-const router = express.Router()
-const Joi = require('joi');
 
-const {
+import express from "express";
+const router = express.Router()
+import Joi from "joi";
+
+import {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('../../models/contacts');
+} from "../../models/contacts.js";
 
 const contactSchema = Joi.object({
   name: Joi.string().min(3).required(),
@@ -88,4 +89,4 @@ router.put('/api/contacts/:contactId', async (req, res, next) => {
   }
 });
 
-module.exports = router
+export { router as contactsRouter };

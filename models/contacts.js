@@ -1,7 +1,8 @@
-const fs = require('fs/promises');
-const path = require('path');
 
-const contactsFilePath = path.join(__dirname, 'contacts.json');
+import fs from 'fs/promises';
+import path from 'path';
+
+const contactsFilePath = path.join(process.cwd(), "./models/contacts.json");
 
 const listContacts = async () => {
   try {
@@ -67,7 +68,7 @@ const generateUniqueId = () => {
   return Math.random().toString(36).substr(2, 9);
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,
