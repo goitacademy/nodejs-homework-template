@@ -4,7 +4,7 @@ const cors = require("cors");
 
 
 const contactsRouter = require("./routes/api/contacts");
-const authRoutes = require("./routes/api/auth");
+const authRoutes = require("./routes/api/users");
 
 // const authMiddleware = require("./middlewares/auth");
 
