@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const addDataSchema = Joi.object({
   name: Joi.string()
@@ -22,4 +22,4 @@ const updateDataSchema = Joi.object({
   phone: Joi.string().min(9).max(30),
 }).min(1);
 
-module.exports = { addDataSchema, updateDataSchema };
+export { addDataSchema, updateDataSchema };
