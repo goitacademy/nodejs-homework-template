@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const router = express.Router();
 const { HttpError, isValidId } = require("../../helpers");
-const contacts = require("../../models/contacts.js");
+// const contacts = require("../../models/contacts.js");
 
 const Contact = require("../../models/contact.js");
 
