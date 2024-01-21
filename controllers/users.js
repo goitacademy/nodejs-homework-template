@@ -9,7 +9,7 @@ async function register(req, res, next) {
   try {
     const user = await User.findOne({ email });
     if (user !== null) {
-      throw new HttpError(409, "Email in use");
+      throw  HttpError(409, "Email in use");
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -43,13 +43,13 @@ async function login(req, res, next) {
     const user = await User.findOne({ email });
 
     if (user === null) {
-      throw new HttpError(401, "Email or password is wrong");
+      throw  HttpError(401, "Email or password is wrong");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      throw new HttpError(401, "Email or password is wrong");
+      throw  HttpError(401, "Email or password is wrong");
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {

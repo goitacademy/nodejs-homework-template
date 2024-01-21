@@ -3,7 +3,7 @@ const express = require('express');
 const ContactsService = require("../../controllers/ContactsService.js");
 const validate = require("../../middlewares/validate.js");
 const schema = require("../../middlewares/schema/contact.js");
-const authMiddleware = require("../../middlewares/auth");
+const authMiddleware = require("../../middlewares/users");
 
 const router = express.Router();
 
