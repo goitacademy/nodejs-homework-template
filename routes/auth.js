@@ -5,7 +5,7 @@ import authController from "../controllers/auth-controller.js";
 import { isEmptyBody } from "../middlewares/index.js";
 import validateBody from "../decorators/validateBody.js";
 
-import { userSigninScheme, userSignupScheme, userUpdateSubscriptionScheme } from "../models/user.js";
+import { userSigninScheme, userSignupScheme, userUpdateSubscriptionScheme, userEmailScheme } from "../models/user.js";
 import authenticate from "../middlewares/authenticate.js";
 import  upload  from "../middlewares/upload.js";
 import resizeAvatar from "../middlewares/reseizeAvatar.js";
@@ -35,6 +35,10 @@ authRouter.patch(
 	authController.updateSubscription
 );
 
-authRouter.patch("/avatars", upload.single("avatarURL"), isEmptyBody, resizeAvatar, authenticate, authController.updateAvatar)
+authRouter.patch("/avatars", upload.single("avatarURL"), resizeAvatar, authenticate, authController.updateAvatar)
+
+authRouter.get("/verify/:verificationToken", authController.verify)
+
+authRouter.post("/verify", isEmptyBody, validateBody(userEmailScheme), authController.resendVerificationEmail)
 
 export default authRouter;
