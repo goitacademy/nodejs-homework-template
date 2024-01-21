@@ -32,9 +32,15 @@ authRouter.post("/signout", authenticate, authController.signout);
 authRouter.patch(
   "/users",
   authenticate,
+  validateBody(contactUpdateFavoriteSchema)
+);
+
+authRouter.patch(
+  "/users/avatars",
+  authenticate,
   upload.single("avatar"),
   sizeChange,
-  validateBody(contactUpdateFavoriteSchema)
+  authController.updateAvatar
 );
 
 export default authRouter;
