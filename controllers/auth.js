@@ -3,14 +3,18 @@ const ctrlWrapper = require("../helpers/ctrlWrapper.js");
 
 const jsonwebtoken = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
+const gravatar = require('gravatar');
 
-const { envsConfig } = require("../configs")
-
+const { envsConfig } = require("../configs");
 
 const register = async (req, res) => {
+  const { email } = req.body;
+
+  const avatarUrl = gravatar.url(email)
   const hashedPassword = await bcrypt.hash(req.body.password, 5)
 
-  const createdUser = await User.create({...req.body, password: hashedPassword, token: null});
+  const createdUser = await User.create({ ...req.body, password: hashedPassword, token: null, avatarUrl: avatarUrl});
+
   res.status(201).json({
     user: { email: createdUser.email, subscription: createdUser.subscription }
   })
@@ -69,5 +73,5 @@ module.exports = {
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   current: ctrlWrapper(current),
-  subscription: ctrlWrapper(subscription)
+  subscription: ctrlWrapper(subscription),
 };
