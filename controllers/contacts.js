@@ -1,6 +1,6 @@
-const contacts = require("../models/contacts");
+const contacts = require("../service");
 const HttpError = require("../utils/HttpError");
-const schemas = require("../schemas/contacts");
+const schemas = require("../schema/contacts-schema");
 
 const getAllContacts = async (req, res, next) => {
   try {
@@ -14,8 +14,8 @@ const getAllContacts = async (req, res, next) => {
 const getOneContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await contacts.getContactById(contactId);
-    if (!result) {
+    const result = await contacts.getContact(contactId);
+   if (!result) {
       throw HttpError(404, "Not found");
     }
     res.status(200).json(result);
@@ -76,10 +76,31 @@ const updateContactById = async (req, res, next) => {
   }
 };
 
+const updateContactFavorite = async (req, res, next) => {
+  try {
+    if (!Object.keys(req.body).length) {
+      throw HttpError(400, "missing field favorite");
+    }
+    const { error } = schemas.updateFavoriteSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { contactId } = req.params;
+    const result = await contacts.updateStatusContact(contactId, req.body);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAllContacts,
   getOneContact,
   addNewContact,
   deleteContact,
   updateContactById,
+  updateContactFavorite,
 };
