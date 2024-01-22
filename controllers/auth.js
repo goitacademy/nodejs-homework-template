@@ -98,8 +98,8 @@ const updateAvatar = async (req, res) => {
       return image.resize(250, 250).write(newPath);
     })
     .catch((err) => {
-      console.error("Error resizing avatar:", err);
-      res.status(500).json({ message: "Error resizing avatar" });
+      console.error("Error resizing avatar:", err.message);
+      throw new Error("Error resizing avatar");
     });
 
   const avatarUrl = req.file.originalname;
