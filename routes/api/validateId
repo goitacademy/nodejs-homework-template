@@ -1,0 +1,21 @@
+const Joi = require("joi");
+
+// Middleware to validate contactId using Joi
+function validateContactId(req, res, next) {
+  const { contactId } = req.params;
+
+  // Define Joi schema for contactId validation
+  const schema = Joi.string().length(24).hex().required();
+
+  // Validate the contactId against the schema
+  const { error } = schema.validate(contactId);
+
+  if (error) {
+    console.error("Joi validation error:", error);
+    return res.status(400).json({ message: "Invalid contact ID" });
+  }
+
+  next();
+}
+
+module.exports = validateContactId;

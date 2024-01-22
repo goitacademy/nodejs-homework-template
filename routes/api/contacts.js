@@ -10,6 +10,8 @@ const {
   updateStatusContact,
 } = require("../../models/contactsFuns");
 const contactSchema = require("./validationSchemas");
+const favoriteSchema = require("./validationfavoriteSchema");
+const validateContactId = require("./validateId");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -20,7 +22,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", validateContactId, async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const contact = await getContactById(contactId);
@@ -56,7 +58,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", validateContactId, async (req, res, next) => {
   const { contactId } = req.params;
   try {
     const result = await removeContact(contactId);
@@ -70,7 +72,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res) => {
+router.put("/:contactId", validateContactId, async (req, res) => {
   const { contactId } = req.params;
   const { name, email, phone } = req.body;
 
@@ -93,13 +95,19 @@ router.put("/:contactId", async (req, res) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res) => {
+router.patch("/:contactId/favorite", validateContactId, async (req, res) => {
   try {
     const { contactId } = req.params;
     const { favorite } = req.body;
 
     if (favorite === undefined) {
       return res.status(400).json({ message: "missing field favorite" });
+    }
+
+    const { error } = favoriteSchema.validate(req.body, { abortEarly: false });
+
+    if (error) {
+      return res.status(400).json({ message: error.message });
     }
 
     const updatedContact = await updateStatusContact(contactId, { favorite });
