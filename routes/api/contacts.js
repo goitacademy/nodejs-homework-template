@@ -1,25 +1,24 @@
-const express = require('express')
+import express from "express";
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { getAllContacts } from "../../controllers/contacts/indexContacts.js";
+import { getContact } from "../../controllers/contacts/showContacts.js";
+import { createContact } from "../../controllers/contacts/createContacts.js";
+import { delateContact } from "../../controllers/contacts/deleteContacts.js";
+import { putContact } from "../../controllers/contacts/updateContacts.js";
+import { patchContact } from "../../controllers/contacts/updateStatusContacts.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", getAllContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", getContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", createContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", delateContact);
 
-module.exports = router
+router.put("/:contactId", putContact);
+
+router.patch("/:contactId", patchContact);
+
+export { router };
