@@ -27,3 +27,4 @@ const params = {
         .catch((err) => done(err));
     })
   );
+  export default passport;
