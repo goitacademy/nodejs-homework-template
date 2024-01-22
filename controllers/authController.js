@@ -107,7 +107,7 @@ const setAvatar = async (req, res) => {
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
   const user = await User.findOne({ verificationToken });
-  if (!user) throw handleError(404, "Email not found");
+  if (!user) throw handleError(404, "User not found");
 
   await User.findByIdAndUpdate(user._id, {
     verify: true,

@@ -18,7 +18,6 @@ const mailSender = async (data) => {
   const emailOptions = {
     ...data,
     from: "ykcyc13@meta.ua",
-    to: "ykcyc13@meta.ua",
   };
   console.log(emailOptions);
 
