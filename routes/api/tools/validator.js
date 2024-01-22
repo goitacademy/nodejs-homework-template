@@ -1,7 +1,6 @@
-const Joi = require("joi");
+import Joi from "joi";
 
 const schema = Joi.object({
-  id: Joi.string().optional(),
   name: Joi.string().min(2).max(30).optional(),
   email: Joi.string().email().optional(),
   phone: Joi.string()
@@ -9,4 +8,4 @@ const schema = Joi.object({
     .optional(),
 });
 
-module.exports = schema;
+export { schema };

@@ -1,85 +1,24 @@
-const express = require("express");
-const { nanoid } = require("nanoid");
+import express from "express";
 
 const router = express.Router();
 
-const contacts = require("../../models/contacts");
-const schema = require("./tools/validator");
+import { getAllContacts } from "../../controllers/contacts/indexContacts.js";
+import { getContact } from "../../controllers/contacts/showContacts.js";
+import { createContact } from "../../controllers/contacts/createContacts.js";
+import { delateContact } from "../../controllers/contacts/deleteContacts.js";
+import { putContact } from "../../controllers/contacts/updateContacts.js";
+import { patchContact } from "../../controllers/contacts/updateStatusContacts.js";
 
-router.get("/", async (req, res, next) => {
-  const contactsList = await contacts.listContacts();
-  res.json({ status: 200, body: contactsList });
-});
+router.get("/", getAllContacts);
 
-router.get("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await contacts.getContactById(contactId);
-  if (contact) {
-    res.json({ status: 200, data: contact });
-  } else {
-    res.json({ status: 404, message: "Not found" });
-  }
-});
+router.get("/:contactId", getContact);
 
-router.post("/", async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const body = {
-    id: nanoid(),
-    name,
-    email,
-    phone,
-  };
+router.post("/", createContact);
 
-  const { error } = schema.validate(body);
-  if (error) {
-    console.log(error.details[0].message);
-    return res.json({ status: 400, message: `${error.details[0].message}` });
-  }
+router.delete("/:contactId", delateContact);
 
-  if (body.name && body.email && body.phone) {
-    const newContact = await contacts.addContact(body);
-    res.json({ status: 201, data: newContact });
-  } else {
-    res.json({ status: 400, message: "missing required name - field" });
-  }
-});
+router.put("/:contactId", putContact);
 
-router.delete("/:contactId", async (req, res, next) => {
-  const { contactId } = req.params;
-  const contact = await contacts.removeContact(contactId);
+router.patch("/:contactId", patchContact);
 
-  if (contact) {
-    res.json({ status: 200, message: "contact deleted" });
-  } else {
-    res.json({ status: 404, message: "Not found" });
-  }
-});
-
-router.put("/:contactId", async (req, res, next) => {
-  const { name, email, phone } = req.body;
-  const { contactId } = req.params;
-  const body = {
-    name,
-    email,
-    phone,
-  };
-
-  const { error } = schema.validate(body);
-  if (error) {
-    console.log(error.details[0].message);
-    return res.json({ status: 400, message: `${error.details[0].message}` });
-  }
-
-  if (body.name || body.email || body.phone) {
-    const renameContact = await contacts.updateContact(contactId, body);
-    if (renameContact) {
-      res.json({ status: 200, body: renameContact });
-    } else {
-      res.json({ status: 404, message: "Not found" });
-    }
-  } else {
-    res.json({ status: 400, message: "missing fields" });
-  }
-});
-
-module.exports = router;
+export { router };
