@@ -100,24 +100,34 @@ router.patch("/:contactId/favorite", validateContactId, async (req, res) => {
     const { contactId } = req.params;
     const { favorite } = req.body;
 
+    // Check if the 'favorite' field is missing in the request body
     if (favorite === undefined) {
       return res.status(400).json({ message: "missing field favorite" });
     }
 
-    const { error } = favoriteSchema.validate(req.body, { abortEarly: false });
+    // Validate the 'favorite' field using Joi schema
+    const { error } = favoriteSchema.validate(
+      { favorite },
+      { abortEarly: false }
+    );
 
+    // If there is a validation error, return a 400 response with the error message
     if (error) {
       return res.status(400).json({ message: error.message });
     }
 
+    // Call the updateStatusContact function to update the contact in the database
     const updatedContact = await updateStatusContact(contactId, { favorite });
 
+    // If the contact is updated successfully, return the updated contact and a 200 status
     if (updatedContact) {
       return res.status(200).json(updatedContact);
     } else {
+      // If the contact is not found, return a 404 response
       return res.status(404).json({ message: "Not found" });
     }
   } catch (error) {
+    // Handle internal server error
     console.error("Error in PATCH /api/contacts/:contactId/favorite:", error);
     res.status(500).json({ message: "Internal server error" });
   }
