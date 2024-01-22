@@ -82,21 +82,25 @@ const signout = async(req, res)=> {
 
 const avatarUpdate = async (req, res) => { 
     const { _id } = req.user;
-    const {path: oldPath, filename} = req.file;
+    if (!req.file) {
+        throw HttpError(400, `attached required file`);
+    }
+
+    const { path: oldPath, filename } = req.file;
     const newPath = path.join(postersPath, filename);
+
+    const newsize = await Jimp.read(oldPath);
+    await newsize.resize(250, 250).write(oldPath);
 
     await fs.rename(oldPath, newPath);
 
     const poster = path.join("public", "avatars", filename);
 
-    const newsize = await Jimp.read(newPath);
-    await newsize.resize(250, 250);
-    console.log("new - ", newsize);
-
     const result = await User.findByIdAndUpdate({_id},{"avatarURL": poster}, {new: true});
     if (!result) {
         throw HttpError(404, `User with id=${contactId} not found`);
     }
+    
     res.json(result);
 }
 
