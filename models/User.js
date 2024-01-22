@@ -34,6 +34,13 @@ const userSchema = new Schema(
     token: {
       type: String,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -48,6 +55,13 @@ export const userSignSchema = Joi.object({
     'string.pattern.base': 'Validation Error.',
   }),
   password: Joi.string().pattern(passwordRegExp).required().messages({
+    'any.required': 'Validation Error.',
+    'string.pattern.base': 'Validation Error.',
+  }),
+});
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegExp).required().messages({
     'any.required': 'Validation Error.',
     'string.pattern.base': 'Validation Error.',
   }),
