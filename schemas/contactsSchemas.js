@@ -19,8 +19,7 @@ const updateContactSchema = Joi.object({
         .email({ minDomainSegments: 2 }),
     phone: Joi.string()
         .pattern(/^\(\d{3}\) \d{3}-\d{4}$/),
-
-})
+}).min(1).messages({ "object.min": "Body must have at least one field" });
 
 module.exports = {
     createContactSchema,
