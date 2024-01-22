@@ -49,7 +49,7 @@ export const logout = async (req, res, next) => {
   if (!user) {
     return next(new createHttpError.Unauthorized('Not authorized'))
   }
-  res.status(204)
+  res.status(204).json({})
 }
 
 export const subscription = async (req, res) => {
