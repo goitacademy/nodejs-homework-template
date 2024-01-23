@@ -14,7 +14,19 @@ const authenticateToken = require('../../middleware/authenticateToken');
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
-    const contacts = await listContacts(userId);
+    const { page = 1, limit = 20, favorite } = req.query;
+    
+    let filter = { owner: userId };
+    if (favorite !== undefined) {
+      filter.favorite = favorite;
+    }
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+    };
+
+    const contacts = await listContacts(filter, options);
     res.json(contacts);
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });

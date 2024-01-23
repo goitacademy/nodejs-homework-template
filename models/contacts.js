@@ -1,30 +1,7 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoosePaginate = require('mongoose-paginate-v2');
 
-const userSchema = new Schema({
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-  },
-  subscription: {
-    type: String,
-    enum: ["starter", "pro", "business"],
-    default: "starter"
-  },
-  token: {
-    type: String,
-    default: null,
-  },
-});
-
-const User = mongoose.model('User', userSchema);
-
-const contactSchema = new Schema({
+const contactSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Set name for contact'],
@@ -40,33 +17,37 @@ const contactSchema = new Schema({
     default: false,
   },
   owner: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
 });
 
+
+contactSchema.plugin(mongoosePaginate);
+
 const Contact = mongoose.model('Contact', contactSchema);
 
-const listContacts = async (userId) => {
-  return Contact.find({ owner: userId });
+const listContacts = async (filter, options) => {
+
+  return Contact.paginate(filter, options);
 };
 
-const getContactById = async (contactId, userId) => {
-  return Contact.findOne({ _id: contactId, owner: userId });
+const getContactById = async (contactId) => {
+  return Contact.findById(contactId);
 };
 
-const removeContact = async (contactId, userId) => {
-  return Contact.findOneAndRemove({ _id: contactId, owner: userId });
+const removeContact = async (contactId) => {
+  return Contact.findByIdAndRemove(contactId);
 };
 
-const addContact = async (body, userId) => {
-  return Contact.create({ ...body, owner: userId });
+const addContact = async (body) => {
+  return Contact.create(body);
 };
 
-const updateContact = async (contactId, body, userId) => {
+const updateContact = async (contactId, body) => {
   try {
-    const updatedContact = await Contact.findOneAndUpdate(
-      { _id: contactId, owner: userId },
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
       { $set: body },
       { new: true }
     );
