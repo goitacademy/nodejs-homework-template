@@ -1,3 +1,5 @@
+describe("", () => {});
+
 // const authController = require("../controllers/auth");
 // const User = require("../models/user");
 // const httpMocks = require("node-mocks-http");
