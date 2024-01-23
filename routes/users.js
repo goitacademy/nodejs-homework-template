@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authenticateToken = require('../../middleware/authenticateToken');
-const User = require('../../models/users');
+const authenticateToken = require('../middleware/authenticateToken');
+const User = require('../models/users');
 
-router.get('/logout', authenticateToken, async (req, res) => {
+router.get('/current', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
 
@@ -13,10 +13,10 @@ router.get('/logout', authenticateToken, async (req, res) => {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
-    user.token = null;
-    await user.save();
-
-    res.status(204).send();
+    res.status(200).json({
+      email: user.email,
+      subscription: user.subscription,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
