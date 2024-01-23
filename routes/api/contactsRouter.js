@@ -1,12 +1,13 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const {
+import {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-} = require('../../controllers/contacts');
+  updateStatusContact,
+} from '../../controllers/contactsController.js';
 
 router.get('/', async (req, res, next) => {
   try {
@@ -58,4 +59,21 @@ router.put('/:contactId', async (req, res, next) => {
   }
 });
 
-module.exports = router;
+router.patch('/:contactId/favorite', async (req, res, next) => {
+  const { contactId } = req.params;
+  const { body } = req;
+
+  if (!body || typeof body.favorite === 'undefined') {
+    res.status(400).json({ message: 'missing field favorite' });
+    return;
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, body);
+    res.json(updatedContact);
+  } catch (error) {
+    res.status(404).json({ message: 'Not found' });
+  }
+});
+
+export default router;
