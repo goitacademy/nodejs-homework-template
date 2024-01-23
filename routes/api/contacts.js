@@ -7,24 +7,24 @@ const router = express.Router();
 
 router.get("/", ctrl.getAll);
 
-// router.get("/:id", isValidId, ctrl.getById);
+router.get("/:id", isValidId, ctrl.getById);
 
 router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 
-// router.delete("/:id", isValidId, ctrl.deleteContact);
+router.delete("/:id", isValidId, ctrl.deleteContact);
 
-// router.put(
-//   "/:id",
-//   isValidId,
-//   validateBody(schemas.putSchema),
-//   ctrl.updateContact
-// );
+router.put(
+  "/:id",
+  isValidId,
+  validateBody(schemas.putSchema),
+  ctrl.updateContact
+);
 
-// router.patch(
-//   "/:id/favorite",
-//   isValidId,
-//   validateBody(schemas.patchSchema),
-//   ctrl.updateFavorite
-// );
+router.patch(
+  "/:id/favorite",
+  isValidId,
+  validateBody(schemas.patchSchema),
+  ctrl.updateFavorite
+);
 
 module.exports = router;
