@@ -23,11 +23,8 @@ const contactSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 contactSchema.post("save", handleMongooseError);
-const Contact = model("contact", contactSchema);
 
-module.exports = { Contact };
-
-export const addSchema = Joi.object({
+const addSchema = Joi.object({
   name: Joi.string()
     .required()
     .messages({ "any.required": "missing required name field" }),
@@ -40,7 +37,7 @@ export const addSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-export const putSchema = Joi.object({
+const putSchema = Joi.object({
   name: Joi.string().messages({
     "any.required": "name is not valid",
   }),
@@ -53,4 +50,8 @@ export const putSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-export const patchSchema = Joi.object({ favorite: Joi.boolean().required });
+const patchSchema = Joi.object({ favorite: Joi.boolean().required });
+
+const Contact = model("contact", contactSchema);
+
+module.exports = { Contact, addSchema, patchSchema, putSchema };
