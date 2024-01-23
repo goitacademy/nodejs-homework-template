@@ -13,7 +13,7 @@ const authenticateToken = require('../../middleware/authenticateToken');
 
 router.get('/', authenticateToken, async (req, res) => {
   try {
-    const userId = req.user.userId; 
+    const userId = req.user.userId;
     const contacts = await listContacts(userId);
     res.json(contacts);
   } catch (error) {
