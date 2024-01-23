@@ -50,7 +50,7 @@ const putSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const patchSchema = Joi.object({ favorite: Joi.boolean().required });
+const patchSchema = Joi.object({ favorite: Joi.boolean().required() });
 
 const Contact = model("contact", contactSchema);
 
