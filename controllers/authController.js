@@ -54,9 +54,20 @@ const getCurrent = (req, res) => {
 
 const signOut = async (req, res) => {
   const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.findByIdAndUpdate(_id, { token: null });
 
   res.json();
+};
+
+const updateSubscriptionUser = async (req, res) => {
+  const { _id } = req.user;
+  console.log(req.user);
+  console.log(req.body);
+  const result = await User.findByIdAndUpdate(_id, req.body, {
+    new: true,
+  }).select("-createdAt -updatedAt");
+  if (!result) throw HttpError(404, "Not found");
+  res.json(result);
 };
 
 module.exports = {
@@ -64,4 +75,5 @@ module.exports = {
   singIn: ctrlWrapper(singIn),
   getCurrent: ctrlWrapper(getCurrent),
   signOut: ctrlWrapper(signOut),
+  updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser),
 };
