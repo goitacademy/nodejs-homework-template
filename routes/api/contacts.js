@@ -1,6 +1,6 @@
 const express = require("express");
 // const Joi = require("joi");
-const ctrl = require("../../controllers/contacts.js");
+const ctrl = require("../../controllers/contacts");
 // const {
 //   addSchema,
 //   putSchema,
