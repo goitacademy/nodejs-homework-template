@@ -1,4 +1,6 @@
 import { Router } from "express";
+import "../../auth/services/auth.strategy.js";
+import auth from "../../auth/middlewares/auth.js";
 import { getAllContacts } from "../controllers/getAll.js";
 import { getOneContact } from "../controllers/getOne.js";
 import { createContact } from "../controllers/create.js";
@@ -7,16 +9,16 @@ import { updateContact, updateStatusContact } from "../controllers/update.js";
 
 const router = Router();
 
-router.get("/", getAllContacts);
+router.get("/", auth, getAllContacts);
 
-router.get("/:contactId", getOneContact);
+router.get("/:contactId", auth, getOneContact);
 
-router.post("/", createContact);
+router.post("/", auth, createContact);
 
-router.delete("/:contactId", deleteContact);
+router.delete("/:contactId", auth, deleteContact);
 
-router.put("/:contactId", updateContact);
+router.put("/:contactId", auth, updateContact);
 
-router.put("/:contactId/favourite", updateStatusContact);
+router.put("/:contactId/favourite", auth, updateStatusContact);
 
 export default router;
