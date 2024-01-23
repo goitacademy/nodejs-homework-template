@@ -10,14 +10,14 @@ class Email {
 		this.to = user.email;
 		this.name = user.name;
 		this.url = url;
-		this.from = 'vladislav.shihar@ukr.net';
+		this.from = process.env.EMAIL_FROM;
 	}
 
 
 
 
 	async _send(template, subject) {
-		sgMail.setApiKey('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');
+		sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 		const html = pug.renderFile(path.join(__dirname, '..', 'views', 'emails', `${template}.pug`), {
 			name: this.name,
 			url: this.url,
