@@ -2,7 +2,7 @@ import contactsService from "../service/contacts.service.js"
 const get = async (req, res, next) => {
   try {
     const results = await contactsService.getAll();
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -28,7 +28,7 @@ const getById = async (req, res, next) => {
         },
       });
     }
-    res.json({
+    return res.json({
       status: "success",
       code: 200,
       data: {
@@ -36,7 +36,7 @@ const getById = async (req, res, next) => {
       },
     });
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       status: "error",
       code: 400,
       data: {
