@@ -1,5 +1,5 @@
 const serverConfig = {
-	mongoUrl: process.env.MONGO_URL ?? 'mongodb://localhost:27017',
+	mongoUrl: process.env.MONGO_URL ?? 'mongodb://127.0.0.1',
 	dbname: process.env.DB_NAME ?? 'testdb',
 	appName: process.env.PROJECT_NAME ?? 'Default name',
 	port: process.env.PORT ? +process.env.PORT : 3000,
