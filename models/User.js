@@ -21,7 +21,8 @@ const userSchema = new Schema({
         enum: ["starter", "pro", "business"],
         default: "starter"
     },
-    token: String
+  token: String,
+     avatarURL: String,
 
 }, { versionKey: false, timestamps: true });
 
@@ -34,11 +35,11 @@ export const userSignupSchema = Joi.object({
   email: Joi.string()
     .pattern(emailRegexp)
     .required()
-    .messages({ "any.required": "email", "any.pattern": "wrong email format" }),
+    .messages({ "any.required": "wrong email format", "any.pattern": "wrong email format" }),
   password: Joi.string()
     .min(6)
     .required()
-    .messages({ "any.required": "password" }),
+    .messages({ "any.required": "wrong password format" }),
   subscription: Joi.string()
     .default("starter"),
 });
@@ -47,11 +48,11 @@ export const userSigninSchema = Joi.object({
   email: Joi.string()
     .pattern(emailRegexp)
     .required()
-    .messages({ "any.required": "email", "any.pattern": "wrong email format" }),
+    .messages({ "any.required": "wrong email format", "any.pattern": "wrong email format" }),
   password: Joi.string()
     .min(6)
     .required()
-    .messages({ "any.required": "password" }),
+    .messages({ "any.required": "wrong password" }),
  
 });
 
