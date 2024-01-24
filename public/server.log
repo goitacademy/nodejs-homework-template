@@ -9,4 +9,3 @@ GET /api/contacts/MDR7V-G-P3mpHyHoaFog9 27-12-2023_01:50:35
 PUT /api/contacts/MDR7V-G-P3mpHyHoaFog9 27-12-2023_01:50:44
 GET /api/contacts 27-12-2023_01:50:46
 DELETE /api/contacts/MDR7V-G-P3mpHyHoaFog9 27-12-2023_01:51:03
-PATCH /api/users/avatars 21-01-2024_08:44:06
