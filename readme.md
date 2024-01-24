@@ -24,11 +24,17 @@ node server.js
 ```
 
 # Features
+## Use MongoDB Compass
+![MongoDB Compass](assets/compass.png)
+
 ## Contact list:
-![Contact List](assets/contacts-list.png)
+![Contact List](assets/list.png)
 
 ## Find by id:
 ![Find by id](assets/find-by-id.png)
 
-## Remove:
-![Remove](assets/delete-cont.png)
+## Favorite:
+![Favorite contacts](assets/favorite.png)
+
+## Remove contacts:
+![Remove contacts](assets/delete-cont.png)
