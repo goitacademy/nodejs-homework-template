@@ -29,6 +29,14 @@ router.get("/current", authenticate, authController.getCurrent);
 router.post("/logout", authenticate, authController.signOut);
 
 router.patch(
+  "/",
+  authenticate,
+  isEmptyBody,
+  validateBody(schemas.updateSubscriptionSchema),
+  authController.updateSubscriptionUser
+);
+
+router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
