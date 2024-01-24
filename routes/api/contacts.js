@@ -1,28 +1,44 @@
 const express = require("express");
 const { Contact } = require("../../contact.schema");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateStatusContact,
+  removeContact,
+  updateContact,
+} = require("../../models/contacts");
 
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
-  const contact = await Contact.find();
-  res.json({ data: contact });
+  const contacts = await listContacts();
+  res.json(contacts);
 });
 
 router.get("/:contactId", async (req, res, next) => {
-  const contact = await Contact.findOne({ _id: req.params.contactId });
-  res.json({ data: contact });
+  const contactById = await getContactById(req.params.contactId);
+  if (contactById == null) {
+    res.status(400);
+    res.json({ message: "Not found" });
+  } else {
+    res.json(contactById);
+  }
 });
 
 router.post("/", async (req, res, next) => {
-  const contact = new Contact({
-    name: req.body.name,
-    email: req.body.email,
-    phone: req.body.phone,
-    favorite: req.body.favorite,
-  });
-
-  contact.save();
-  res.json({ data: contact });
+  if (
+    Object.hasOwn(req.body, "name") &&
+    Object.hasOwn(req.body, "email") &&
+    Object.hasOwn(req.body, "phone")
+  ) {
+    await addContact(req.body);
+    res.status(201);
+    res.json(req.body);
+  } else {
+    res.status(400);
+    res.json({ message: "missing required name - field" });
+  }
 });
 
 router.patch("/:contactId/favorite", async (req, res) => {
@@ -32,41 +48,33 @@ router.patch("/:contactId/favorite", async (req, res) => {
     res.json({ message: "missing field favorite" });
     return;
   }
-
-  const result = await Contact.findOneAndUpdate(
-    {
-      _id: req.params.contactId,
-    },
-    {
-      $set: {
-        favorite: req.body.favorite,
-      },
-    }
-  );
-  const contact = await Contact.findById(req.params.contactId);
-  res.json({ data: contact });
+  const contact = await updateStatusContact(req.params.contactId, req.body);
+  res.json(contact);
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  const result = await Contact.findOneAndDelete({ _id: req.params.contactId });
-  res.json({ data: result });
+  const contactDeleted = await removeContact(req.params.contactId);
+  if (contactDeleted != null) {
+    res.json({ message: "Contact deleted" });
+  } else {
+    res.status(404);
+    res.json({ message: "Not found" });
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  const result = await Contact.findOneAndUpdate(
-    {
-      _id: req.params.contactId,
-    },
-    {
-      $set: {
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-      },
-    }
-  );
-  const contact = await Contact.findById(req.params.contactId);
-  res.json({ data: contact });
+  if (
+    Object.hasOwn(req.body, "name") ||
+    Object.hasOwn(req.body, "email") ||
+    Object.hasOwn(req.body, "phone") ||
+    Object.hasOwn(req.body, "favorite")
+  ) {
+    const contactUpdated = await updateContact(req.params.contactId, req.body);
+    if (contactUpdated) res.json(contactUpdated);
+  } else {
+    res.status(404);
+    res.json({ message: "Not found" });
+  }
 });
 
 module.exports = router;
