@@ -4,6 +4,9 @@ import logger from "morgan";
 import "dotenv/config";
 import path from "path";
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+
 import authRouter from "./routes/api/auth-router.js";
 import contactsRouter from "./routes/api/contacts-router.js";
 import googleAuthRouter from "./routes/api/google-auth-router.js";
@@ -17,6 +20,31 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
+
+
+// Swagger options
+const options = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'My Test Swagger API',
+      version: '1.0.0',
+      description: "Showing off swagger-ui-express",
+      license: {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    servers: [
+      { url: 'http://localhost:3232' }
+    ]
+  },
+  // Paths to files with annotations
+  apis: ['./swagger.js', './routes/api/auth-router.js'],
+};
+const specs = swaggerJsdoc(options);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+// Swagger options
 
 
 app.use("/users", authRouter);

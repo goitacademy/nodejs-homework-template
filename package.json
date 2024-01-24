@@ -28,7 +28,9 @@
     "nanoid": "^4.0.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "query-string": "^8.1.0"
+    "query-string": "^8.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
