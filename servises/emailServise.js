@@ -18,11 +18,12 @@ class Email {
 		// use MAILGUN in 'prod'
 		return nodemailer.createTransport({
 			// service: 'Sendgrid',
-			host: 'smtp.sendgrid.net',
+			host: 'smtp.meta.ua',
 			port: 465,
+			secure: true,
 			auth: {
-				user: 'apikey',
-				pass: process.env.SENDGRID_API_KEY,
+				user: 'vladislav.zhihar@meta.ua',
+				pass: process.env.META_PASS,
 			},
 		});
 	}
