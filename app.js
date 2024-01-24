@@ -40,7 +40,7 @@ const options = {
     ]
   },
   // Paths to files with annotations
-  apis: ['./swagger.js', './routes/api/auth-router.js'],
+  apis: ['./swagger/swagger.js', './routes/api/auth-router.js'],
 };
 const specs = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
