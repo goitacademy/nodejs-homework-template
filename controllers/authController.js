@@ -65,7 +65,7 @@ const getCurrent = (req, res) => {
 
 const signOut = async (req, res) => {
   const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { token: "" });
+  await User.findByIdAndUpdate(_id, { token: null });
 
   res.json();
 };
