@@ -2,7 +2,7 @@ const { registerToken } = require('./jwtServise');
 const Users = require('../models/userModel');
 const { HttpError } = require('../utils');
 const ImageService = require('./imageServise');
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
 
 
@@ -117,10 +117,10 @@ exports.checkUserPassword = async (userId, currentPassword, newPassword) => {
 }
 
 exports.resetPassword = async (otp, newPassword) => {
-	const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
+
 
 	const user = await Users.findOne({
-		passwordResetToken: hashedOtp,
+		passwordResetToken: otp,
 		passwordResetTokenExp: { $gt: Date.now() },
 	});
 

@@ -1,7 +1,8 @@
-const sgMail = require('@sendgrid/mail');
+// const sgMail = require('@sendgrid/mail');
 const path = require('path');
 const pug = require('pug');
 const { convert } = require('html-to-text');
+const nodemailer = require('nodemailer');
 
 
 
@@ -13,16 +14,29 @@ class Email {
 		this.from = process.env.EMAIL_FROM;
 	}
 
-
+	_initTransport() {
+		// use MAILGUN in 'prod'
+		return nodemailer.createTransport({
+			// service: 'Sendgrid',
+			host: 'smtp.sendgrid.net',
+			port: 465,
+			auth: {
+				user: 'apikey',
+				pass: process.env.SENDGRID_API_KEY,
+			},
+		});
+	}
 
 
 	async _send(template, subject) {
-		sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+		// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 		const html = pug.renderFile(path.join(__dirname, '..', 'views', 'emails', `${template}.pug`), {
 			name: this.name,
 			url: this.url,
 			subject,
 		});
+
 
 		const msg = {
 			to: this.to, // Change to your recipient
@@ -31,14 +45,15 @@ class Email {
 			text: convert(html),
 			html,
 		}
-		sgMail
-			.send(msg)
-			.then(() => {
-				console.log('Email sent')
-			})
-			.catch((error) => {
-				console.error(error)
-			})
+		// sgMail
+		// 	.send(msg)
+		// 	.then(() => {
+		// 		console.log('Email sent')
+		// 	})
+		// 	.catch((error) => {
+		// 		console.error(error)
+		// 	})
+		await this._initTransport().sendMail(msg);
 	}
 
 

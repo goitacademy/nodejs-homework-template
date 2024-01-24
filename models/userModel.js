@@ -64,7 +64,7 @@ userSchema.methods.newPassword = async (password) => {
 userSchema.methods.createPasswordResetToken = function () {
 	const resetToken = crypto.randomBytes(32).toString('hex');
 
-	this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+	this.passwordResetToken = resetToken;
 	this.passwordResetTokenExp = Date.now() + 10 * 60 * 1000;
 
 	return resetToken;
