@@ -4,7 +4,7 @@ const validator = (schema) => (payload) =>
   schema.validate(payload, { abortEarly: false });
 
 const addContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string().min(3).max(30).required(),
 
   email: Joi.string()
     .email({
@@ -14,12 +14,16 @@ const addContactSchema = Joi.object({
     .required(),
 
   phone: Joi.string()
-  .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
-  .required(),
+    .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+    .required(),
+
+  favorite: Joi.boolean().optional(),
+
+    
 });
 
 const updateContactSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).optional(),
+  name: Joi.string().min(3).max(30).optional(),
 
   email: Joi.string()
     .email({
@@ -29,9 +33,14 @@ const updateContactSchema = Joi.object({
     .optional(),
 
   phone: Joi.string()
-  .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
-  .optional(),
+    .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
+    .optional(),
 }).min(1);
+
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
 exports.validateAddContact = validator(addContactSchema);
 exports.validateUpdateContact = validator(updateContactSchema);
+exports.validateUpdateFavorite = validator(updateFavoriteSchema);
