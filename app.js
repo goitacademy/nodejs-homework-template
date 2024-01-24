@@ -1,25 +1,76 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+import express from "express";
+import cors from "cors";
+import logger from "morgan";
+import "dotenv/config";
+import path from "path";
 
-const contactsRouter = require('./routes/api/contacts')
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 
-const app = express()
+import authRouter from "./routes/api/auth-router.js";
+import contactsRouter from "./routes/api/contacts-router.js";
+import googleAuthRouter from "./routes/api/google-auth-router.js";
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const app = express(); // - web-server
 
-app.use('/api/contacts', contactsRouter)
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+app.use(express.static('public'));
+
+
+// Swagger options
+const options = {
+  definition: {
+    openapi: '3.0.1',
+    info: {
+      title: 'My Test Swagger API',
+      version: '1.0.0',
+      description: "API documentation for project 'final-project-backend'. [Backend github repository](https://github.com/NickTsalyn/final-project-backend)",
+      license: {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    servers: [
+      { url: 'http://localhost:3232' }
+    ]
+  },
+  // Paths to files with annotations
+  apis: ['./swagger/swagger.js', './routes/api/auth-router.js'],
+};
+const specs = swaggerJsdoc(options);
+app.use("/lobsters/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+// Swagger options
+
+
+app.use("/users", authRouter);
+app.use("/api/contacts/", contactsRouter);
+app.use("/auth", googleAuthRouter);
+
+
+// Код для перевірки авторизації з link.html
+const basePath = path.resolve();
+
+app.use(express.static(path.join(basePath, "public")));
+app.get("/link", (req, res) => {
+  res.sendFile(path.join(basePath, "public", "link.html"));
+});
+// Код для перевірки авторизації з link.html
+
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not Found" })
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = "Server error" } = err;
 
-module.exports = app
+  res.status(status).json({ message });
+});
+
+
+export default app;
