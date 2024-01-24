@@ -1,31 +1,62 @@
-## GoIT Node.js Course Template Homework
+## REST API
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+---
 
-Додайте ментора до колаборації
+REST API for working with a set of contacts.
 
-Для кожної домашньої роботи створюйте свою гілку.
+## Introduction
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+---
 
-Кожна нова гілка для др повинна робитися з master
+Postman was used to work with the REST API.
+Created a connection to MongoDB using Mongoose.
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+REST API supports the following routes:
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+- @GET /api/contacts
+- @GET /api/contacts/:id
+- @POST /api/contacts
+- @DELETE /api/contacts/:id
+- @PUT /api/contacts/:id
+- @PATCH /api/contacts/:contactId/favorite
+- @GET /api/contacts?page=1&limit=20 for pagination.
+- @GET /api/contacts?favorite=true for filtering by favorite contacts.
+- @PATCH /api/users/update-subscription to update the user's subscription.
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+For routes that accept data (POST and PUT), checking (validation) of the received data has been considered. The joi package was used for validation.
 
-### Команди:
+Strategy used: Single Action Controller.
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+## Technologies
+
+---
+
+- Java Script
+- Node.js
+
+## Starting up
+
+---
+
+### First install all required dependencies:
+
+- npm install
+
+### To run the application, use the following command:
+
+- npm start
+
+### The application will run on localhost:3000.
+
+## Project Structure
+
+---
+
+![Project structure](./ProjectStructure.jpg)
+
+## Author
+
+---
+
+- Arleta Janysz
+- email: arleta.janysz@gmail.com
