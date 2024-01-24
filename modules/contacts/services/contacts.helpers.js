@@ -1,8 +1,12 @@
 import { Contact } from "../schemas/contacts.schema.js";
 
 // Returns all contacts
-async function getAll(page = 0, limit = 10) {
-  const contacts = await Contact.find()
+async function getAll(
+  page = 0,
+  limit = 10,
+  favorite = { $or: [{ favorite: true }, { favorite: false }] }
+) {
+  const contacts = await Contact.find(favorite)
     .skip(limit * page)
     .limit(limit);
   return contacts;
