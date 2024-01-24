@@ -1,0 +1,18 @@
+extends layouts/main
+
+block content
+    tr
+        td.wrapper
+            p Hi, #{name}!
+            p Thank you for registering on our website! To complete the registration process, please confirm your email address by clicking the link below:
+            table.btn.btn-primary(role="presentation", border="0", cellpadding="0", cellspacing="0")
+                tbody
+                    tr
+                        td(align="left")
+                            table(role="presentation", border="0", cellpadding="0", cellspacing="0")
+                                tbody
+                                    tr
+                                        td
+                                            a(href= url, target="_blank") Verify link
+            p This is a really simple email template. It&apos;s sole purpose is to get the recipient to click the button with no distractions.
+            p Good luck! Hope it works.
