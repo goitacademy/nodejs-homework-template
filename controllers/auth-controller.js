@@ -7,6 +7,8 @@ import path from "path";
 import fs from "fs/promises";
 import gravatar from "gravatar";
 import dotenv from "dotenv";
+import { nanoid } from "nanoid";
+import sendEmail from "../helpers/sendEmail.js";
 dotenv.config();
 
 const { JWT_SECRET } = process.env;
@@ -20,12 +22,22 @@ const signup = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
+  const verificationCode = nanoid();
+
   const avatarURL = gravatar.url(email);
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationCode,
   });
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="http://localhost:3000/api/auth/verify/${verificationCode}">Click to verify email</a>`,
+  };
+  await sendEmail(verifyEmail);
+
   res.status(201).json({
     email: newUser.email,
     subscription: "starter",
