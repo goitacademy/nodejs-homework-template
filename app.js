@@ -29,7 +29,7 @@ const options = {
     info: {
       title: 'My Test Swagger API',
       version: '1.0.0',
-      description: "Showing off swagger-ui-express",
+      description: "API documentation for project 'final-project-backend'. [Backend github repository](https://github.com/NickTsalyn/final-project-backend)",
       license: {
         "name": "MIT",
         "url": "https://opensource.org/licenses/MIT"
@@ -43,7 +43,7 @@ const options = {
   apis: ['./swagger/swagger.js', './routes/api/auth-router.js'],
 };
 const specs = swaggerJsdoc(options);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use("/lobsters/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 // Swagger options
 
 
