@@ -1,8 +1,11 @@
 import { Contact } from "../schemas/contacts.schema.js";
 
 // Returns all contacts
-function getAll() {
-  return Contact.find({});
+async function getAll(page = 0, limit = 10) {
+  const contacts = await Contact.find()
+    .skip(limit * page)
+    .limit(limit);
+  return contacts;
 }
 
 // Returns contact with specific ID
