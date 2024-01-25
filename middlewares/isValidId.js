@@ -8,10 +8,5 @@ const isValidId = (req, res, next) => {
   }
   next();
 };
-// const isValidId = (req, res, next) => {
-//   const { id } = req.params;
-//   Types.ObjectId.isValid(id);
-//   if (!isValidId) throw new HttpError(404, "Contact not found");
-// };
 
 module.exports = isValidId;
