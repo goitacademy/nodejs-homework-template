@@ -3,12 +3,7 @@ const mongoose = require("mongoose");
 
 const contactSchema = new mongoose.Schema(
   {
-    // id: {
-    //   type: String,
-    //   minlength: 24,
-    //   maxlength: 24,
-    //   required: [true, 'Set id for searching contact'],
-    // },
+   
     name: {
       type: String,
       required: [true, 'Set name for contact']
@@ -23,6 +18,10 @@ const contactSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    }
   },
   { versionKey: false, timestamps: true }
 );
