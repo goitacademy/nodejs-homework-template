@@ -1,10 +1,17 @@
 import bcrypt from 'bcryptjs'
+import fs from 'fs/promises'
+import gravatar from 'gravatar'
 import createHttpError from 'http-errors'
+import Jimp from 'jimp'
 import jwt from 'jsonwebtoken'
+import { nanoid } from 'nanoid'
+import path from 'path'
 import { notFoundHttpError } from '../helpers/NotFoundHttpError.js'
 import { User } from '../models/User.js'
 
 const { JWT_SECRET } = process.env
+
+const avatarsFolder = path.resolve('public', 'avatars')
 
 export const register = async (req, res, next) => {
   const { email, password } = req.body
@@ -13,7 +20,8 @@ export const register = async (req, res, next) => {
     return next(new createHttpError.Conflict('Email in use'))
   }
   const hashPassword = await bcrypt.hash(password, 10)
-  const newUser = await User.create({ ...req.body, password: hashPassword })
+  const avatarURL = gravatar.url(email)
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL })
   res.status(201).json({ user: { email: newUser.email, subscription: newUser.subscription } })
 }
 
@@ -59,4 +67,23 @@ export const subscription = async (req, res) => {
     return notFoundHttpError('Not found')
   }
   res.json(result)
+}
+
+export const updateAvatar = async (req, res, next) => {
+  if (!req.file) {
+    return next(new createHttpError.BadRequest('Avatar must be provided'))
+  }
+  const { _id } = req.user
+  const { path: tmpUpload, originalname } = req.file
+  const fileName = `${nanoid()}_${originalname}`
+  const resultUpload = path.join(avatarsFolder, fileName)
+  Jimp.read(tmpUpload, (err, image) => {
+    if (err) return next(notFoundHttpError(err))
+    image.resize(250, 250).write(resultUpload)
+  })
+  await fs.unlink(tmpUpload)
+  const avatarURL = path.join('avatars', fileName)
+  await User.findByIdAndUpdate(_id, { avatarURL })
+
+  res.json({ avatarURL })
 }

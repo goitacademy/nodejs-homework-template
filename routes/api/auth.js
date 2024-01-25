@@ -1,8 +1,9 @@
 import { Router } from 'express'
-import { getCurrent, login, logout, register, subscription } from '../../controllers/authController.js'
+import { getCurrent, login, logout, register, subscription, updateAvatar } from '../../controllers/authController.js'
 import { validateBody } from '../../decorators/validateBody.js'
 import { authenticate } from '../../middlewares/authenticate.js'
 import { isEmptyBody } from '../../middlewares/isEmptyBody.js'
+import { upload } from '../../middlewares/upload.js'
 import { userLoginSchema, userRegisterSchema, userSubscriptionSchema } from '../../models/User.js'
 
 export const authRouter = Router()
@@ -16,3 +17,5 @@ authRouter.get('/current', authenticate, getCurrent)
 authRouter.post('/logout', authenticate, logout)
 
 authRouter.patch('/', authenticate, isEmptyBody, validateBody(userSubscriptionSchema), subscription)
+
+authRouter.patch('/avatars', authenticate, upload.single('avatar'), updateAvatar)
