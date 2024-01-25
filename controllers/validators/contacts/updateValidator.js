@@ -1,4 +1,4 @@
-const Joi = require("@hapi/joi")
+import Joi from "@hapi/joi"
 
 const schema = Joi.object({
   name: Joi.string()
@@ -14,4 +14,4 @@ const schema = Joi.object({
 
 });
 
-module.exports = { schema }
+export { schema }

@@ -1,24 +1,24 @@
 // /* eslint-disable spaced-comment */
 
-// import { nanoid } from "nanoid";
+import { nanoid } from "nanoid";
 
 import fs from "fs";
 import path from"path";
 
 const contactsPath = path.resolve("./models/contacts.json");
 const data = fs.readFileSync(contactsPath);
-const contacts = JSON.parse(data);
-// let newContact = {};
+let contacts = JSON.parse(data);
+let newContact = {};
 
-// const validate = (contactId) => contacts.find((contact) => contact.id === contactId);
-// const filteredContacts = (contactId) => contacts.filter((contact) => contact.id !== contactId)
-// const saveFile = () => {
-//     fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), (err) => {
-//     if (err) {
-//       return console.log(`Reading error: ${err.message}`);      
-//     }
-//   });
-// }
+const validate = (contactId) => contacts.find((contact) => contact.id === contactId);
+const filteredContacts = (contactId) => contacts.filter((contact) => contact.id !== contactId)
+const saveFile = () => {
+    fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), (err) => {
+    if (err) {
+      return console.log(`Reading error: ${err.message}`);      
+    }
+  });
+}
 
 const listContacts =  () => {
     try {      
@@ -32,43 +32,42 @@ const getById = (contactId) => {
   return contacts.find((contact) => contact.id === contactId);
 }
 
-// const addContact = (contact) => {
-//     const newContact = {
-//         id: nanoid(),
-//         name: contact.name,
-//         email: contact.email,
-//         phone: contact.phone
-//   }
-//   contacts.push(newContact);
-//     saveFile();
-//   return newContact;
-// }
+const addContact = (contact) => {
+    const newContact = {
+        id: nanoid(),
+        name: contact.name,
+        email: contact.email,
+        phone: contact.phone
+  }
+  contacts.push(newContact);
+    saveFile();
+  return newContact;
+}
 
-// const removeContact = (contactId) => {
+const removeContact = (contactId) => {
   
-//     contacts = filteredContacts(contactId)
-//    saveFile(contacts)
+    contacts = filteredContacts(contactId)
+   saveFile(contacts)
      
-// }
+}
 
-//  const updateContact = (contactId, body) => {
-//   newContact = validate(contactId)
+ const updateContact = (contactId, body) => {
+  newContact = validate(contactId)
   
-//   const newContacts = filteredContacts(contactId)
+  const newContacts = filteredContacts(contactId)
   
-//   if ( newContact) {    
-//      newContact.name = body.name
-//      newContact.email = body.email
-//      newContact.phone = body.phone
-//     newContacts.push( newContact )
-//     contacts = newContacts  
-//     saveFile(contacts)
+  if ( newContact) {    
+     newContact.name = body.name
+     newContact.email = body.email
+     newContact.phone = body.phone
+    newContacts.push( newContact )
+    contacts = newContacts  
+    saveFile(contacts)
     
-//   } else {   
-//     return false    
-//   }     
-// }
+  } else {   
+    return false    
+  }     
+}
  
-// export { addContact, listContacts, getById, removeContact, validate, updateContact }
-export { listContacts, getById }
+export { listContacts, getById, removeContact, validate, addContact, updateContact }
 
