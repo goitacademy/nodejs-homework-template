@@ -8,7 +8,14 @@ const data = fs.readFileSync(contactsPath);
 
 let newContact = {};
 
-const validate = (contactId) => contacts.find((contact) => contact.id === contactId);
+const validate = async (contactId) => {
+    try {      
+      const contact = await Contact.findOne({ _id: contactId })
+      return  contact;
+} catch (err) {
+  return console.log(err.message);
+  }
+}
 const filteredContacts = (contactId) => contacts.filter((contact) => contact.id !== contactId)
 const saveFile = () => {
     fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), (err) => {
@@ -36,7 +43,7 @@ const getById = async (contactId) => {
   }
 }
 
-const addContact = (contact) => {
+const addContact = async (contact) => {
     const newContact = new Contact({
     name: contact.name,
     email: contact.email,
@@ -44,15 +51,19 @@ const addContact = (contact) => {
     favorite: contact.favorite
   })
   
-  newContact.save()
+  await newContact.save()
   return newContact
   
 }
 
-const removeContact = (contactId) => {
+const removeContact = async (contactId) => {
   
-    contacts = filteredContacts(contactId)
-   saveFile(contacts)
+  try {      
+      const contact = await Contact.findOneAndDelete({ _id: contactId })
+    return contact
+} catch (err) {
+  return console.log(err.message);
+  }
      
 }
 
@@ -73,6 +84,11 @@ const removeContact = (contactId) => {
     return false    
   }     
 }
- 
-export { listContacts, getById, removeContact, validate, addContact, updateContact }
+
+const changeContact = (contactId) => {
+
+  
+}
+
+export { changeContact, listContacts, getById, removeContact, validate, addContact, updateContact }
 
