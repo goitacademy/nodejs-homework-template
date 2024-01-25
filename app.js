@@ -1,10 +1,19 @@
 import express from "express";
 import logger from "morgan";
 import cors from "cors";
-
+import 'dotenv/config';
 import { router } from "./routes/api/contacts.js";
-
+import mongoose from "mongoose";
 export const app = express();
+
+const connection = mongoose.connect(process.env.DATABASE_URL)
+.then(() => {
+  console.log('Database connection successful');
+})
+.catch((error) => {
+  console.error('Error connecting to database:', error);
+  process.exit(1);
+});
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
