@@ -9,7 +9,7 @@ async function updateStatusContacts(req, res, next) {
       return res.status(404).json({ message: "missing field favorite" });
     }
 
-    res.status(200).json({ patchContact });
+    return res.status(200).json({ patchContact });
   } catch (error) {
     next(error);
   }
