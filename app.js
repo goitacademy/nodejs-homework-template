@@ -1,9 +1,17 @@
+<<<<<<< Updated upstream
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 const contactsRouter = require('./routes/api/contacts');
 const usersRouter = require('./routes/users');
 const mongoose = require('mongoose');
+=======
+import express from 'express';
+import logger from 'morgan';
+import cors from 'cors';
+import contactsRouter from './routes/api/contacts';
+import mongoose from 'mongoose';
+>>>>>>> Stashed changes
 
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
@@ -29,10 +37,11 @@ app.use('/api/users', authenticateToken, usersRouter);
 app.use('/api/contacts', authenticateToken, contactsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' });
+  return res.status(404).json({ message: 'Not found' });
 });
 
 app.use((err, req, res, next) => {
+<<<<<<< Updated upstream
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({ message: 'Unauthorized' });
   } else {
@@ -41,3 +50,9 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+=======
+  return res.status(500).json({ message: err.message });
+});
+
+export default app;
+>>>>>>> Stashed changes

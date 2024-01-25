@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
+=======
+import mongoose from 'mongoose';
+>>>>>>> Stashed changes
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -58,7 +62,7 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,

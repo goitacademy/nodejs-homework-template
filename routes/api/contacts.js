@@ -1,13 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const Joi = require('joi');
-const {
+import express from 'express';
+import {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-} = require('../../models/contacts');
+} from '../../models/contacts';
+
+const router = express.Router();
 
 const authenticateToken = require('../../middleware/authenticateToken');
 
@@ -110,4 +110,4 @@ router.patch('/:contactId/favorite', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
