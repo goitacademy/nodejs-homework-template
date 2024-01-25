@@ -1,5 +1,6 @@
-const { HttpError, ctrlWrapper } = require("../helpers");
 const { Contact } = require("../models/contact");
+
+const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
@@ -55,6 +56,7 @@ const deletebyId = async (req, res) => {
     message: "Contact deleted",
   });
 };
+
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
