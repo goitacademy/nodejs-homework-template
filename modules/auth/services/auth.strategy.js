@@ -8,9 +8,13 @@ passport.use(
     {
       secretOrKey: process.env.TOKEN_SECRET,
       jwtFromRequest: passportJWT.ExtractJwt.fromAuthHeaderAsBearerToken(),
+      passReqToCallback: true,
     },
-    (payload, done) => {
-      User.findById(payload.id)
+    (req, payload, done) => {
+      User.find({
+        id: payload.id,
+        token: req.headers.authorization.split(" ")[1],
+      })
         .then((user) => {
           if (user) {
             return done(null, user);
