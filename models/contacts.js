@@ -1,7 +1,5 @@
 const fs = require("fs/promises");
-// const { nanoid } = require("nanoid");
 const path = require("path");
-// require("colors");
 const { v4 } = require("uuid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
@@ -11,7 +9,7 @@ const listContacts = async () => {
     const contacts = await fs.readFile(contactsPath, { encoding: "utf-8" });
     return JSON.parse(contacts);
   } catch (error) {
-    console.log(`Error: ${error.message}`.red);
+    console.log(error.message);
   }
 };
 
@@ -21,7 +19,7 @@ const getContactById = async (contactId) => {
     const contactById = contacts.find(({ id }) => id === contactId);
     return contactById;
   } catch (error) {
-    console.log(`Error: ${error.message}`.red);
+    console.log(error.message);
   }
 };
 
@@ -30,30 +28,25 @@ const removeContact = async (contactId) => {
     const contacts = await listContacts();
     const contactById = await getContactById(contactId);
     const newContactList = await contacts.filter(({ id }) => id !== contactId);
-    await fs.writeFile(contactsPath, JSON.stringify(newContact, null, 2));
+    await fs.writeFile(contactsPath, JSON.stringify(newContactList, null, 2));
+
     return contactById;
   } catch (error) {
-    console.log(`Error: ${error.message}`.red);
+    console.log(error.message);
   }
 };
-
 const addContact = async (body) => {
   try {
     const contacts = await listContacts();
     const { name, email, phone } = body;
-    const newContact = {
-      id: v4(),
-      name,
-      email,
-      phone,
-    };
+    const newContact = { id: v4(), name, email, phone };
     const newContactList = [...contacts, newContact];
     await fs.writeFile(contactsPath, JSON.stringify(newContactList, null, 2), {
       encoding: "utf-8",
     });
     return newContact;
   } catch (error) {
-    console.log(`Error: ${error.message}`.red);
+    console.log(error.message);
   }
 };
 
