@@ -1,8 +1,7 @@
-const app = require('./app');
-const mongoose = require('mongoose');
+import app from './app';
+import mongoose from 'mongoose';
 
 const PORT = process.env.PORT || 3000;
-
 
 mongoose.connect('mongodb+srv://Stefan:neptun25@cluster0.hcinref.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,

@@ -1,4 +1,4 @@
-const { listContacts } = require('../models/contacts');
+import { listContacts } from '../models/contacts';
 
 async function indexContacts(req, res, next) {
   try {
@@ -11,4 +11,4 @@ async function indexContacts(req, res, next) {
   }
 }
 
-module.exports = indexContacts;
+export default indexContacts;

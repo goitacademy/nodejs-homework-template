@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
+=======
+import mongoose from 'mongoose';
+>>>>>>> Stashed changes
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -15,12 +20,20 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
 });
+
+
+contactSchema.plugin(mongoosePaginate);
 
 const Contact = mongoose.model('Contact', contactSchema);
 
-const listContacts = async () => {
-  return Contact.find();
+const listContacts = async (filter, options) => {
+
+  return Contact.paginate(filter, options);
 };
 
 const getContactById = async (contactId) => {
@@ -49,7 +62,7 @@ const updateContact = async (contactId, body) => {
   }
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,
