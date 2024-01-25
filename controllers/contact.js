@@ -50,7 +50,7 @@ async function createContact(req, res, next) {
 
 async function updateContact(req, res, next) {
   const { id } = req.params;
-
+  
   const contact = {
     name: req.body.name,
     email: req.body.email,
@@ -58,11 +58,14 @@ async function updateContact(req, res, next) {
     
   };
 
+   if (contact.name === undefined && contact.email === undefined && contact.phone === undefined) {
+        return res.status(400).json({ message: "Body is empty" });
+      } ;
   try {
     const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
 
       if (result === null) {
-        return res.status(404).json({ message: "Not found" });;
+        return res.status(404).json({ message: "Not found" });
       }  res.send(result);
   
    
