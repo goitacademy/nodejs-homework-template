@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../middlewares");
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+// const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = new Schema({
     password: {
@@ -13,7 +13,7 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        match: emailRegexp,
+        // match: emailRegexp,
         required: [true, 'Email is required'],
         unique: true,
     },
@@ -32,12 +32,12 @@ userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
     password: Joi.string().min(6).required(),
-    email: Joi.string().pattern(emailRegexp).required(),
+    email: Joi.string().required(),
 });
 
 const loginSchema = Joi.object({
     password: Joi.string().min(6).required(),
-    email: Joi.string().pattern(emailRegexp).required(),
+    email: Joi.string().required(),
 })
 
 const schemas = {
