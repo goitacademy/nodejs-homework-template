@@ -1,9 +1,7 @@
 // /* eslint-disable spaced-comment */
-
-import { nanoid } from "nanoid";
-
 import fs from "fs";
 import path from"path";
+import { User } from "../controllers/service/schemas/user.js"
 
 const contactsPath = path.resolve("./models/contacts.json");
 const data = fs.readFileSync(contactsPath);
@@ -33,15 +31,16 @@ const getById = (contactId) => {
 }
 
 const addContact = (contact) => {
-    const newContact = {
-        id: nanoid(),
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone
-  }
-  contacts.push(newContact);
-    saveFile();
-  return newContact;
+    const user = new User({
+    name: contact.name,
+    email: contact.email,
+    phone: contact.phone,
+    favorite: contact.favorite
+  })
+  
+  user.save()
+  return user
+  
 }
 
 const removeContact = (contactId) => {
