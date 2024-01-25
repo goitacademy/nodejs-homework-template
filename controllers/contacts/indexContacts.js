@@ -1,9 +1,8 @@
-
-const handler = require('../handlers')
+import {listContacts} from '../handlers.js'
 
 async function indexContacts(req, res, next) {
-    const contacts = handler.listContacts();  
+    const contacts = listContacts();  
     return res.json(contacts).status(200); 
 }
 
-module.exports = indexContacts;
+export { indexContacts };

@@ -1,6 +1,6 @@
 
-const handler = require('../handlers')
-const validator = require('../validators/contacts/createValidator')
+import { updateContact, validate } from '../handlers.js'
+import {schema} from '../validators/contacts/updateValidator.js'
 
 async function updateContacts(req, res, next) {
     const contactId = req.params.contactId
@@ -10,15 +10,15 @@ async function updateContacts(req, res, next) {
     phone: req.body.phone
   };
  
-    const result = validator.schema.validate(req.body)   
+    const result = schema.validate(req.body)   
   
     if (result.error) {
       
     return res.status(400).json({ message: "missing fields" })
     }
-    const contact = handler.validate(contactId)
+    const contact = validate(contactId)
   if (contact) {
-    handler.updateContact(contactId, body)
+    updateContact(contactId, body)
     return res.status(200).json(contact)
   }
   else {
@@ -27,4 +27,4 @@ async function updateContacts(req, res, next) {
   }   
 }
 
-module.exports = updateContacts;
+export {updateContacts};

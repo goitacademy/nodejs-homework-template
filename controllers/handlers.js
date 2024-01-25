@@ -1,9 +1,9 @@
-/* eslint-disable spaced-comment */
+// /* eslint-disable spaced-comment */
 
-const { nanoid } = require("nanoid");
+import { nanoid } from "nanoid";
 
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from"path";
 
 const contactsPath = path.resolve("./models/contacts.json");
 const data = fs.readFileSync(contactsPath);
@@ -69,5 +69,5 @@ const removeContact = (contactId) => {
   }     
 }
  
-module.exports = { addContact, listContacts, getById, removeContact, validate, updateContact }
+export { listContacts, getById, removeContact, validate, addContact, updateContact }
 
