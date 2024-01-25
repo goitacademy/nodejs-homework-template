@@ -1,25 +1,32 @@
-const express = require('express')
+const express = require('express');
 
-const router = express.Router()
+const ContactsService = require("../../controllers/ContactsService.js");
+const validate = require("../../middlewares/validate.js");
+const schema = require("../../middlewares/schema/contact.js");
+const authMiddleware = require("../../middlewares/users");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", authMiddleware, ContactsService.getAllContacts);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", authMiddleware,ContactsService.getContactById);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", authMiddleware, validate(schema), ContactsService.addNewContact);
+
+router.delete("/:contactId", authMiddleware, ContactsService.deleteContact);
+
+router.put(
+  "/:contactId",
+  authMiddleware, validate(schema),
+  ContactsService.updateContactId
+);
+
+router.patch(
+  "/:contactId/favorite",
+  authMiddleware, validate(schema),
+  ContactsService.changeContactFavorite
+);
 
 module.exports = router
+
