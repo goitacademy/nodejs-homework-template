@@ -1,11 +1,11 @@
 // /* eslint-disable spaced-comment */
 import fs from "fs";
 import path from"path";
-import { User } from "../controllers/service/schemas/user.js"
+import { Contact } from "../controllers/service/schemas/user.js"
 
 const contactsPath = path.resolve("./models/contacts.json");
 const data = fs.readFileSync(contactsPath);
-let contacts = JSON.parse(data);
+
 let newContact = {};
 
 const validate = (contactId) => contacts.find((contact) => contact.id === contactId);
@@ -18,28 +18,34 @@ const saveFile = () => {
   });
 }
 
-const listContacts =  () => {
-    try {      
-       return contacts;
+const listContacts = async () => {
+  try {      
+      const contacts =  await Contact.find()
+       return  contacts;
 } catch (err) {
   return console.log(err.message);
   }
 }
 
-const getById = (contactId) => {
-  return contacts.find((contact) => contact.id === contactId);
+const getById = async (contactId) => {
+    try {      
+      const contact = await Contact.findOne({ _id: contactId })
+       return  contact;
+} catch (err) {
+  return console.log(err.message);
+  }
 }
 
 const addContact = (contact) => {
-    const user = new User({
+    const newContact = new Contact({
     name: contact.name,
     email: contact.email,
     phone: contact.phone,
     favorite: contact.favorite
   })
   
-  user.save()
-  return user
+  newContact.save()
+  return newContact
   
 }
 
