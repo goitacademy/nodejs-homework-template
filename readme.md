@@ -1,41 +1,30 @@
-# Node.JS Homework 3 (NoSQL Database - MongoDB)
+# Node.JS Homework (console app)
+============
 
-
-In this task, a third layer in the form of a database was implemented for our REST API. "MongoDB Atlas", "Studio 3T" and "MongoDB Compass" were used for this.
+This is a node.js homework application powered b Express that provides the main functions you'd expect from a REST api. The application responds to GET, POST, PUT, DELETE type queries.
 
 ---
 
-
 ## How to install
 
-Clone this repo to your desktop and run `npm install` to install all the dependencies.
+```shell
+npm install
+```
 
-Rename file `.env-sample` to `.env`
-
-You might want to look into `config.json` to make change the port you want to use and set up a SSL certificate.
-
-
-## Usage
-After you clone this repo to your desktop, go to its root directory and run `npm install` to install its dependencies.
-
-Once the dependencies are installed, you can run  `npm run start` to start the application. You will then be able to access it at localhost:3000
+## How to use
+### Start
 ![Start](./models//images/run.png)
 ```shell
 npm run start 
 ```
 --------------- 
-### Queries
+### GET
 
-You should send your queries, e.g. via the Postman application, to http://localhost:3000/
+You should send your request, e.g. via the Postman application, to http://localhost:3000/
 
 ![GET](./models//images/get.PNG)
 
 
 --------------- 
-### MongoDB
-
-Database changes visible with Studio 3T
-
-![Studio3T](./models//images/Studio3T.png)
 
 
