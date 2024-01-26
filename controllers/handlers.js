@@ -77,10 +77,23 @@ const removeContact = async (contactId) => {
    return contact
 }
 
-const changeContact = (contactId) => {
-
-  
+const updateStatusContact = async (contactId, newFavorite) => {
+  await Contact.findOneAndUpdate(
+    {
+       _id: contactId
+     },
+     {
+        $set: {
+        favorite: newFavorite
+        }
+     },
+     {
+       upsert: false
+     }
+  )
+  const contact = await Contact.findById(contactId)
+   return contact
 }
 
-export { changeContact, listContacts, getById, removeContact, validate, addContact, updateContact }
+export { updateStatusContact, listContacts, getById, removeContact, validate, addContact, updateContact }
 

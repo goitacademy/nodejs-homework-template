@@ -18,6 +18,6 @@ router.delete('/:contactId', deleteContacts)
 
 router.put('/:contactId', updateContacts)
 
-router.patch('/:contactId', changeContacts)
+router.patch('/:contactId/favorite', changeContacts)
 
 export { router }
