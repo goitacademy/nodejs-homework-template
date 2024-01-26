@@ -54,11 +54,13 @@ const login = async (req, res) => {
 }
 
 const getCurrent = async(req, res)=> {
-    const {email, name} = req.user;
+    const { email } = req.user;
+    console.log(email)
+    const user = await User.findOne({email});
 
     res.json({
         email,
-        name,
+        subscription:user.subscription,
     })
 }
 
