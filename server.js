@@ -30,7 +30,7 @@ async function doesFolderExist(folderPath) {
     await fs.access(folderPath);
     return true;
   } catch {
-    return flase;
+    return false;
   }
 }
 
