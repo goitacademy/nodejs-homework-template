@@ -8,6 +8,7 @@ import { createContacts } from '../../controllers/contacts/createContacts.js';
 import { changeContacts } from '../../controllers/contacts/changeContacts.js';
 
 const router = express.Router()
+
 router.get('/', indexContacts)
 
 router.get('/:contactId', showContacts)
