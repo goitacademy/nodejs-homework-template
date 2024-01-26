@@ -8,10 +8,11 @@ const {
 } = require("../../middlewares");
 
 const { schemas } = require("../../models/contact");
-router.get("/", ctrl.get);
+router.get("/", get);
 router.get("/:contactId", isValidId, ctrl.getContactById);
 router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 router.delete("/:contactId", isValidId, ctrl.removeContact);
+
 router.put(
   "/:contactId",
   isValidId,

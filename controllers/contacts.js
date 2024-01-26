@@ -2,7 +2,7 @@
 const Joi = require("joi");
 
 const router = express.Router(); */
-const Contact = require("../models/contact");
+const { Contact } = require("../models/contact");
 const HttpError = require("../helpers/HttpError");
 
 const get = async (req, res, next) => {
@@ -69,14 +69,18 @@ const updateStatusContact = async (req, res, next) => {
       return;
     }
 
-    const { error } = updateSchema.validate(req.body);
+    const { error } = schemas.updateFavoriteSchema.validate(req.body);
     if (error) {
       res.status(400).json({ message: error.message });
       return;
     }
+
     const { contactId } = req.params;
     const data = req.body;
-    const result = await Contact.updateById(contactId, data);
+    const result = await Contact.findByIdAndUpdate(contactId, data, {
+      new: true,
+    });
+
     if (!result) {
       res.status(404).json({ message: "Not found" });
       return;
