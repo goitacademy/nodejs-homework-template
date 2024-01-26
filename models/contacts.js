@@ -1,19 +1,66 @@
-// const fs = require('fs/promises')
+import mongoose from 'mongoose';
 
-const listContacts = async () => {}
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+});
 
-const getContactById = async (contactId) => {}
 
-const removeContact = async (contactId) => {}
+contactSchema.plugin(mongoosePaginate);
 
-const addContact = async (body) => {}
+const Contact = mongoose.model('Contact', contactSchema);
 
-const updateContact = async (contactId, body) => {}
+const listContacts = async (filter, options) => {
 
-module.exports = {
+  return Contact.paginate(filter, options);
+};
+
+const getContactById = async (contactId) => {
+  return Contact.findById(contactId);
+};
+
+const removeContact = async (contactId) => {
+  return Contact.findByIdAndRemove(contactId);
+};
+
+const addContact = async (body) => {
+  return Contact.create(body);
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { $set: body },
+      { new: true }
+    );
+
+    return updatedContact;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-}
+};
