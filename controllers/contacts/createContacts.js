@@ -1,15 +1,10 @@
 import { addContact } from "../../repositories/contacts/addContact.js";
-import { postContactSchema } from "../../routes/api/validators/postContactSchema.js";
 
 export async function createContacts(req, res, next) {
+  const { name, email, phone } = req.body;
   try {
-    const { error } = postContactSchema.validate(req.body);
-    if (error) {
-      res.status(400).json({ message: error.message });
-    } else {
-      const newContact = await addContact(req.body);
-      res.status(201).json(newContact);
-    }
+    const newContact = await addContact({ name, email, phone });
+    res.status(201).json(newContact);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

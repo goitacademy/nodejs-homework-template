@@ -1,16 +1,31 @@
 import { removeContact } from "../../repositories/contacts/removeContact.js";
+import { getContactById } from "../../repositories/contacts/getContactsById.js";
 
 export async function deleteContacts(req, res, next) {
-  try {
-    const { contactId } = req.params;
-    const removed = await removeContact(contactId);
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
 
-    if (removed) {
-      res.status(200).json({ message: "contact deleted" });
+  try {
+    if (contact) {
+      await removeContact(contactId);
+
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        message: "Contact deleted",
+      });
     } else {
-      res.status(404).json({ message: "Not found" });
+      res.status(404).json({
+        status: "Contact not found",
+        code: 404,
+        message: "Not found",
+      });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      status: "Internal Server Error",
+      code: 500,
+      message: err?.message,
+    });
   }
 }

@@ -1,23 +1,31 @@
-import { updateContactSchema } from "../../routes/api/validators/updateContactSchema.js";
+import { getContactById } from "../../repositories/contacts/getContactsById.js";
 import { updateContact } from "../../repositories/contacts/updateContact.js";
 
 export async function updateContacts(req, res, next) {
+  const { contactId } = req.params;
+  const updatedContact = req.body;
+  const contact = await getContactById(contactId);
   try {
-    const { error } = updateContactSchema.validate(req.body);
-    if (error) {
-      res.status(400).json({ message: error.message });
-    } else {
-      const { contactId } = req.params;
-      const body = req.body;
-      const updated = await updateContact(contactId, body);
+    const editedContact = await updateContact(contactId, updatedContact);
 
-      if (updated) {
-        res.status(200).json(updated);
-      } else {
-        res.status(404).json({ message: "Not found" });
-      }
+    if (contact) {
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        data: { editedContact },
+      });
+    } else {
+      res.status(404).json({
+        status: "Contact not found",
+        code: 404,
+        message: "Not found",
+      });
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      status: "Internal Server Error",
+      code: 500,
+      message: err?.message,
+    });
   }
 }

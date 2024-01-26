@@ -1,7 +1,6 @@
-import { readDataFromFile } from "../../services/readDataFromFile.js";
+import { readDataFromDb } from "../../services/readDataFromDb.js";
 
 export async function listContacts() {
-  const contacts = await readDataFromFile();
-  console.table(contacts);
+  const contacts = await readDataFromDb();
   return contacts;
 }

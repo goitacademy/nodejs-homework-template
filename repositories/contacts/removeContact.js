@@ -1,14 +1,5 @@
-import { readDataFromFile } from "../../services/readDataFromFile.js";
-import { writeDataToFile } from "../../services/writeDataToFile.js";
-import { listContacts } from "./listContacts.js";
+import { User } from "../../models/schemas/userSchema.js";
 
-export async function removeContact(contactId) {
-  const contacts = await readDataFromFile();
-  const newContacts = contacts.filter((contact) => contact.id !== contactId);
-
-  if (contacts.length > newContacts.length) {
-    await writeDataToFile(newContacts);
-    listContacts();
-  }
-  return false;
-}
+export const removeContact = (contactId) => {
+  return User.findByIdAndDelete({ _id: contactId });
+};
