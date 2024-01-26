@@ -7,7 +7,9 @@ async function updateContacts(req, res, next) {
      const body = {
     name: req.body.name,
     email: req.body.email,
-    phone: req.body.phone
+    phone: req.body.phone,
+    favorite: req.body.favorite
+    
   };
  
     const result = schema.validate(req.body)   
@@ -16,10 +18,11 @@ async function updateContacts(req, res, next) {
       
     return res.status(400).json({ message: "missing fields" })
     }
-    const contact = validate(contactId)
+  const contact = await validate(contactId)
+// ALBO TAK MA BYĆ ALBO W TREŚCI ZADANIA DLA MODUŁU 2 JEST BŁĄD
   if (contact) {
-    updateContact(contactId, body)
-    return res.status(200).json(contact)
+    const newContact = await updateContact(contactId, body)
+    return res.status(200).json(newContact)
   }
   else {
     return res.status(404).json("Not found")

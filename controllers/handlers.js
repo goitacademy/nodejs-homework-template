@@ -3,10 +3,6 @@ import fs from "fs";
 import path from"path";
 import { Contact } from "../controllers/service/schemas/user.js"
 
-const contactsPath = path.resolve("./models/contacts.json");
-const data = fs.readFileSync(contactsPath);
-
-let newContact = {};
 
 const validate = async (contactId) => {
     try {      
@@ -15,14 +11,6 @@ const validate = async (contactId) => {
 } catch (err) {
   return console.log(err.message);
   }
-}
-const filteredContacts = (contactId) => contacts.filter((contact) => contact.id !== contactId)
-const saveFile = () => {
-    fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2), (err) => {
-    if (err) {
-      return console.log(`Reading error: ${err.message}`);      
-    }
-  });
 }
 
 const listContacts = async () => {
@@ -67,22 +55,26 @@ const removeContact = async (contactId) => {
      
 }
 
- const updateContact = (contactId, body) => {
-  newContact = validate(contactId)
-  
-  const newContacts = filteredContacts(contactId)
-  
-  if ( newContact) {    
-     newContact.name = body.name
-     newContact.email = body.email
-     newContact.phone = body.phone
-    newContacts.push( newContact )
-    contacts = newContacts  
-    saveFile(contacts)
-    
-  } else {   
-    return false    
-  }     
+ const updateContact = async (contactId, body) => {
+   
+   const { name, email, phone, favorite } = body
+   console.log("test")
+   await Contact.updateOne(
+     {
+       _id: contactId
+     },
+     {
+       $set: {
+       name, email, phone, favorite
+     }
+     },
+     {
+       upsert: true
+     }
+   )
+
+   const contact = await Contact.findById(contactId)
+   return contact
 }
 
 const changeContact = (contactId) => {
