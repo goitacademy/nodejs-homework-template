@@ -1,6 +1,5 @@
 import path from "path";
 import multer from "multer";
-import fs from "fs/promises";
 
 export const uploadDir = path.join(process.cwd(), "public/avatars");
 
