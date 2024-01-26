@@ -62,34 +62,16 @@ const updateContact = async (req, res) => {
   }
   res.json(result);
 };
-const updateStatusContact = async (req, res, next) => {
-  try {
-    if (Object.keys(req.body).length === 0) {
-      res.status(400).json({ message: "missing fields" });
-      return;
-    }
-
-    const { error } = schemas.updateFavoriteSchema.validate(req.body);
-    if (error) {
-      res.status(400).json({ message: error.message });
-      return;
-    }
-
-    const { contactId } = req.params;
-    const data = req.body;
-    const result = await Contact.findByIdAndUpdate(contactId, data, {
-      new: true,
-    });
-
-    if (!result) {
-      res.status(404).json({ message: "Not found" });
-      return;
-    }
-
-    res.json(result);
-  } catch (error) {
-    next(error);
+const updateStatusContact = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+    new: true,
+  });
+  if (!result) {
+    res.status(404).json({ message: "Not found" });
+    return;
   }
+  res.json(result);
 };
 
 module.exports = {
