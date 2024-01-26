@@ -32,5 +32,10 @@ You should send your queries, e.g. via the Postman application, to http://localh
 
 
 --------------- 
+### MongoDB
+
+Database changes visible with Studio 3T
+
+![Studio3T](./models//images/Studio3T.png)
 
 
