@@ -1,8 +1,10 @@
+import "dotenv/config.js";
 import app from "./app.js";
+import fs from "fs/promises";
 import mongoose from "mongoose";
+import { tmpDir, avatarDir } from "./modules/users/middlewares/avatar.js";
 // import swaggerUi from "swagger-ui-express";
 // import swaggerDocument from "./swagger.json" assert { type: "json" };
-import "dotenv/config.js";
 
 // app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -12,6 +14,8 @@ const dbConnection = mongoose.connect(DB_HOST);
 dbConnection
   .then(() => {
     console.log("Database connection successful");
+    createFolderIfNotExist(tmpDir);
+    createFolderIfNotExist(avatarDir);
     app.listen(3000, () => {
       console.log("Server running. Use our API on port: 3000");
     });
@@ -20,3 +24,19 @@ dbConnection
     console.log(`Error occured: ${e.message}`);
     process.exit(1);
   });
+
+async function doesFolderExist(folderPath) {
+  try {
+    await fs.access(folderPath);
+    return true;
+  } catch {
+    return flase;
+  }
+}
+
+async function createFolderIfNotExist(folderPath) {
+  if (!doesFolderExist(folderPath)) {
+    await fs.mkdir(folderPath);
+  }
+  return;
+}
