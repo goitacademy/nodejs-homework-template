@@ -2,7 +2,15 @@ const contacts = require("../models");
 const { HttpError, controllerWrapper } = require("../helpers");
 
 const getContacts = async (request, response, next) => {
-    const result = await contacts.find({}, "-createdAt -updatedAt");
+  const { _id: owner } = request.user;
+  const { page = 1, limit = 10, favorite } = request.query;
+  const skip = (page - 1) * limit;
+  const query = { owner };
+  if (favorite !== undefined) {
+      query.favorite = favorite;
+  }
+
+    const result = await contacts.findfind(query, "-createdAt -updatedAt", { skip, limit }).populate("owner", "email");
     if (!result) {
         throw HttpError(404, "Not found");
     }

@@ -9,12 +9,20 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cjs-loader": "^0.1.0",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.4.1",
     "express": "4.17.1",
+    "express-joi-validation": "^5.0.1",
     "joi": "^17.12.0",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.0",
-    "morgan": "1.10.0"
+    "morgan": "1.10.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "schema": "^0.2.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",

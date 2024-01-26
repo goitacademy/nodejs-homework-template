@@ -25,6 +25,7 @@ const contactSchema = new Schema(
 );
 
 contactSchema.post("save", handleMongooseError);
+
 const requiredFieldsSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
