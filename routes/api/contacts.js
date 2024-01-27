@@ -53,7 +53,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   try {
-    const { error, name, email, phone } = postSchema.validate(req.body);
+    const { error, value } = postSchema.validate(req.body);
 
     if (error) {
       res.status(400).json({
@@ -64,6 +64,7 @@ router.post("/", async (req, res, next) => {
       });
       return;
     }
+    const { name, email, phone } = value;
     const contact = await addContact({ name, email, phone });
     res.status(201).json({
       status: "success",

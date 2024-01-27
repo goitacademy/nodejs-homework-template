@@ -6,12 +6,11 @@ const contactsPath = path.join("./models", "contacts.json");
 const contactsData = require("./contacts.json");
 
 const listContacts = async () => {
-  console.log("Accessed listContacts");
   try {
     const data = await fs.readFile(contactsPath);
     return JSON.parse(data.toString());
   } catch (err) {
-    console.log("listContact error:", err.message);
+    console.log(err.message);
   }
 };
 
@@ -54,7 +53,8 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (name, email, phone) => {
+const addContact = async (contact) => {
+  const { name, email, phone } = contact;
   const newContact = {
     id: crypto.randomUUID(),
     name,
@@ -67,7 +67,7 @@ const addContact = async (name, email, phone) => {
 
   fs.writeFile(contactsPath, contactsDataUpd, (err) => {
     if (err) {
-      console.log("addContact error", err.message);
+      console.log(err.message);
     }
   });
   console.log("Contact added!");
