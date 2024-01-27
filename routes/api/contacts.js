@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  listContsacts,
+  listContacts,
   getContactById,
-  removeContact,
   addContact,
+  removeContact,
   updateContact,
 } = require("../../models/contacts");
 
@@ -22,10 +22,16 @@ const putSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-router.get("/", async (_, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const contacts = await listContsacts();
-    res.json({ status: "success", code: 200, data: { contacts } });
+    const contacts = await listContacts();
+    res.json({
+      status: "success",
+      code: 200,
+      data: {
+        contacts,
+      },
+    });
   } catch (err) {
     next(err);
   }
