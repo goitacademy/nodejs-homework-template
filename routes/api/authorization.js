@@ -8,7 +8,7 @@ const { userModel } = require("../../models");
 const { schemas } = userModel;
 
 router.post(
-  "/register",
+  "/signup",
   validateData(schemas.registerSchema),
   authController.register
 );
