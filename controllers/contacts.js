@@ -54,12 +54,14 @@ const removeContact = async (req, res, next) => {
 };
 const updateContact = async (req, res, next) => {
   try {
-    const keys = Object.keys(req.body);
-    if (keys.length === 0) {
-      throw new HttpError(400, "Body must have at least one field");
+    if (Object.keys(req.body).length === 0) {
+      res.status(400).json({ message: "missing fields" });
+      return;
     }
-    const { id } = req.params;
-    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
     if (!result) {
       throw new HttpError(404, "Not found");
     }
