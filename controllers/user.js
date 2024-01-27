@@ -5,6 +5,7 @@ require("dotenv").config();
 const { SECRET_KEY } = process.env;
 
 const { User } = require("../models/user");
+
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const register = async (req, res) => {
@@ -16,6 +17,7 @@ const register = async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({ ...req.body, password: hashPassword });
+  console.log("New User Fields:", newUser.email);
   res.status(201).json({
     email: newUser.email,
     password: newUser.password,
@@ -39,7 +41,7 @@ const login = async (req, res) => {
   const payload = {
     id: user._id,
   };
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "96h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   await User.findByIdAndUpdate(user._id, { token });
   res.json({
     token,
