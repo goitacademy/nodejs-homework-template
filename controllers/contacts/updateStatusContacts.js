@@ -1,4 +1,4 @@
-import { updateStatusContact } from "../../models/contacts.js";
+import { updateStatusContact } from "#models/contacts.js";
 
 async function updateStatusContacts(req, res, next) {
   try {

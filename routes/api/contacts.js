@@ -1,12 +1,12 @@
 import express from "express";
-import { indexContacts } from "../../controllers/contacts/indexContacts.js";
-import { showContacts } from "../../controllers/contacts/showContacts.js";
-import { deleteContacts } from "../../controllers/contacts/deleteContacts.js";
-import { createContacts } from "../../controllers/contacts/createContacts.js";
-import { updateContacts } from "../../controllers/contacts/updateContacts.js";
-import { updateStatusContacts } from "../../controllers/contacts/updateStatusContacts.js";
-import { bodyValidate } from "../../middelwares/Validate.js";
-import { addDataSchema, updateDataSchema } from "../../validation.js";
+import { indexContacts } from "#controllers/contacts/indexContacts.js";
+import { showContacts } from "#controllers/contacts/showContacts.js";
+import { deleteContacts } from "#controllers/contacts/deleteContacts.js";
+import { createContacts } from "#controllers/contacts/createContacts.js";
+import { updateContacts } from "#controllers/contacts/updateContacts.js";
+import { updateStatusContacts } from "#controllers/contacts/updateStatusContacts.js";
+import { bodyValidate } from "#middlewares/validate.js";
+import { addDataSchema, updateDataSchema } from "#validators/validation.js";
 
 const router = express.Router();
 

@@ -28,5 +28,12 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "^2.0.22"
+  },
+  "imports": {
+    "#controllers/*": "./controllers/*",
+    "#routes/*": "./routes/*",
+    "#models/*": "./models/*",
+    "#validators/*": "./validators/*",
+    "#middlewares/*": "./middlewares/*"
   }
 }
