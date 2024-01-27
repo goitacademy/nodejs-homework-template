@@ -4,7 +4,7 @@ import path from 'path';
 
 const contactsFilePath = path.join(process.cwd(), "./models/contacts.json");
 
-const listContacts = async () => {
+export const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsFilePath, 'utf-8');
     const contacts = JSON.parse(data);
@@ -68,10 +68,5 @@ const generateUniqueId = () => {
   return Math.random().toString(36).substr(2, 9);
 };
 
-export {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+export { getContactById, removeContact, addContact, updateContact };
+
