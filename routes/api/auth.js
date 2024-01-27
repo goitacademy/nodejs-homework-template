@@ -15,5 +15,5 @@ router.get("/logout", authenticate, ctrl.logout);
 
 router.get("/current", authenticate, ctrl.getCurrent);
 
-router.patch("/:id", authenticate, ctrl.undateSubscribe);
+router.patch("/", authenticate, ctrl.undateSubscribe);
 module.exports = router;
