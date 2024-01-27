@@ -49,17 +49,13 @@ const updateFavoriteSchema = Joi.object({
 
 const updateSchema = Joi.object({
   name: Joi.string(),
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: { allow: ["com", "net"] },
-  }),
-  phone: Joi.number(),
+  email: Joi.string(),
+  phone: Joi.string(),
 });
 
 const schemas = {
   addSchema,
   updateFavoriteSchema,
-  /*  contSchema, */
   updateSchema,
 };
 

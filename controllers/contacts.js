@@ -52,29 +52,42 @@ const removeContact = async (req, res, next) => {
     next(error);
   }
 };
-const updateContact = async (req, res) => {
-  const contacts = await get();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  if (index === -1) {
-    return null;
+const updateContact = async (req, res, next) => {
+  try {
+    const keys = Object.keys(req.body);
+    if (keys.length === 0) {
+      throw new HttpError(400, "Body must have at least one field");
+    }
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, { new: true });
+    if (!result) {
+      throw new HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
-  const contactToUpdate = contacts.find((contact) => contact.id === id);
-  contacts[index] = { id, ...contactToUpdate, ...data };
-
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
 };
 
 const updateStatusContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
-  if (!result) {
-    res.status(404).json({ message: "Not found" });
-    return;
+  try {
+    const keys = Object.keys(req.body);
+
+    if (keys.length === 0) {
+      throw HttpError(400, "missing field favorite");
+    }
+    const { contactId } = req.params;
+    const result = await Contact.findByIdAndUpdate(contactId, req.body, {
+      new: true,
+    });
+    if (!result) {
+      res.status(404).json({ message: "Not found" });
+      return;
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
   }
-  res.json(result);
 };
 
 module.exports = {
