@@ -3,6 +3,7 @@ import logger from 'morgan';
 import cors from 'cors';
 import contactsRouter from './routes/api/contactsRouter.js';
 import mongoose from './db.js';
+import usersRouter from './routes/api/usersRouter.js';
 const app = express();
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
@@ -20,5 +21,6 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   res.status(500).json({ message: err.message });
 });
+app.use('/api/users', usersRouter);
 
 export default app;
