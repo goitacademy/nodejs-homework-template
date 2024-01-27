@@ -25,22 +25,6 @@ const contactSchema = new Schema(
 contactSchema.post("save", handeleMongooseError);
 
 const addSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email({
-      minDomainSegments: 2,
-      tlds: { allow: ["com", "net"] },
-    })
-    .required(),
-  phone: Joi.string().required(),
-  favorite: Joi.boolean(),
-});
-
-const updateFavoriteSchema = Joi.object({
-  favorite: Joi.boolean().required(),
-});
-
-const contSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": "Missing required name field",
   }),
@@ -59,6 +43,10 @@ const contSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
+const updateFavoriteSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
 const updateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string().email({
@@ -71,7 +59,7 @@ const updateSchema = Joi.object({
 const schemas = {
   addSchema,
   updateFavoriteSchema,
-  contSchema,
+  /*  contSchema, */
   updateSchema,
 };
 

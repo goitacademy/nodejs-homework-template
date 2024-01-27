@@ -11,7 +11,7 @@ const {
 const { schemas } = require("../../models/contact");
 router.get("/", ctrl.get);
 router.get("/:contactId", isValidId, ctrl.getContactById);
-router.post("/", validateBody(schemas.contSchema), ctrl.addContact);
+router.post("/", validateBody(schemas.addSchema), ctrl.addContact);
 router.delete("/:contactId", isValidId, ctrl.removeContact);
 
 router.put(
