@@ -11,7 +11,13 @@ const authenticateUser = async (req, res, next) => {
 			throw new Error("Not authorized");
 		}
 
-		req.user = user;
+		req.user = {
+			_id: user._id,
+			email: user.email,
+			subscription: user.subscription,
+			avatarURL: user.avatarURL,
+		};
+
 		next();
 	} catch (error) {
 		res.status(401).json({ message: "Not authorized" });

@@ -1,86 +1,47 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import gravatar from "gravatar";
+import Jimp from "jimp";
+import path from "path";
+import { promises as fsPromises } from "fs";
+import { v4 as uuidv4 } from "uuid";
 import User from "../models/userModel.js";
 
-const signup = async (req, res, next) => {
+const uploadAvatar = async (req, res, next) => {
 	try {
-		const { email, password } = req.body;
+		const userId = req.user._id;
 
-		const existingUser = await User.findOne({ email });
-		if (existingUser) {
-			return res.status(409).json({ message: "Email in use" });
+		// Sprawdź, czy załadowano plik
+		if (!req.file) {
+			return res.status(400).json({ message: "No file uploaded" });
 		}
 
-		const hashedPassword = await bcrypt.hash(password, 12);
-		const newUser = await User.create({
-			email,
-			password: hashedPassword,
-		});
+		// Opracuj załadowany awatar przy pomocy Jimp
+		const imagePath = path.join(__dirname, `../tmp/${req.file.filename}`);
+		const avatar = await Jimp.read(imagePath);
+		await avatar.resize(250, 250).writeAsync(imagePath);
 
-		res.status(201).json({
-			user: {
-				email: newUser.email,
-				subscription: newUser.subscription,
-			},
-		});
+		// Przenieś awatar do folderu public/avatars i nadaj unikalną nazwę
+		const avatarFileName = `${userId}-${uuidv4()}${path.extname(
+			req.file.originalname
+		)}`;
+		const avatarPath = path.join(
+			__dirname,
+			`../public/avatars/${avatarFileName}`
+		);
+		await fsPromises.rename(imagePath, avatarPath);
+
+		// Zaktualizuj pole avatarURL w bazie danych
+		const avatarURL = `/avatars/${avatarFileName}`;
+		await User.findByIdAndUpdate(userId, { avatarURL });
+
+		// Usuń tymczasowy plik
+		await fsPromises.unlink(avatarPath);
+
+		res.status(200).json({ avatarURL });
 	} catch (error) {
 		next(error);
 	}
 };
 
-const login = async (req, res, next) => {
-	try {
-		const { email, password } = req.body;
-
-		const user = await User.findOne({ email });
-		if (!user) {
-			return res.status(401).json({ message: "Email or password is wrong" });
-		}
-
-		const isPasswordValid = await bcrypt.compare(password, user.password);
-		if (!isPasswordValid) {
-			return res.status(401).json({ message: "Email or password is wrong" });
-		}
-
-		const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-			expiresIn: "1h",
-		});
-
-		user.token = token;
-		await user.save();
-
-		res.status(200).json({
-			token,
-			user: {
-				email: user.email,
-				subscription: user.subscription,
-			},
-		});
-	} catch (error) {
-		next(error);
-	}
-};
-
-const logout = async (req, res, next) => {
-	try {
-		req.user.token = null;
-		await req.user.save();
-
-		res.status(204).end();
-	} catch (error) {
-		next(error);
-	}
-};
-
-const getCurrentUser = async (req, res, next) => {
-	try {
-		res.status(200).json({
-			email: req.user.email,
-			subscription: req.user.subscription,
-		});
-	} catch (error) {
-		next(error);
-	}
-};
-
-export { signup, login, logout, getCurrentUser };
+export { uploadAvatar };
