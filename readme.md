@@ -1,31 +1,53 @@
-## GoIT Node.js Course Template Homework
+# Installation :
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+Clone the repository to your local machine: git clone https://github.com/DamianKaczmarczyk/aplikacja-REST-API
+Navigate to the project directory: cd goit-node.js-hw-02
+Install the dependencies: npm install
 
-Додайте ментора до колаборації
+# Postman Instructions :
 
-Для кожної домашньої роботи створюйте свою гілку.
+List Contacts:
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+Set the request type to GET.
+Set the request URL to http://localhost:3000/api/contacts.
+Click on the "Send" button to retrieve a list of all contacts.
+![Get index screen](./images/getIndex.png)
 
-Кожна нова гілка для др повинна робитися з master
+Get Contact by ID:
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+Set the request type to GET.
+Set the request URL to http://localhost:3000/api/contacts/:id (replace :id with the actual contact ID).
+Click on the "Send" button to retrieve the specific contact.
+![Single Contact screen](./images/singleContact.png)
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+Add Contact:
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+Set the request type to POST.
+Set the request URL to http://localhost:3000/api/contacts.
+Set the request body to raw JSON with the contact details: { "name": "examplename", "email": "exampleemail@gmail.com", "phone": "123-456-789" }
+Click on the "Send" button to add a new contact.
+![Add Contact screen](./images/addContact.png)
 
-### Команди:
+Delete Contact:
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+Set the request type to DELETE.
+Set the request URL to http://localhost:3000/api/contacts/:id (replace :id with the actual contact ID).
+Click on the "Send" button to delete the specific contact.
+![Delete Contact screen](./images/deleteContact.png)
+
+Update Contact:
+
+Set the request type to PUT.
+Set the request URL to http://localhost:3000/api/contacts/:id (replace :id with the actual contact ID).
+Set the request body to raw JSON with the updated contact details: { "name": "examplename", "email": "exampleemail@gmail.com", "phone": "123 456 789" }
+Click on the "Send" button to update the specific contact.
+![Update Contact screen](./images/updateContact.png)
+
+Add to Favorite:
+
+Set the request type to PATCH.
+Set the request URL to http://localhost:3000/api/contacts/:id/favorite (replace :id with the actual contact ID).
+Set the request body to raw JSON with the updated contact details: { "name": "examplename", "email": "exampleemail@gmail.com", "phone": "123 456 789" "favorite" "true/false"}.
+Click on the "Send" button to update the specific contact.
+
+![Favorite Contact screen](./images/favorite.png)
