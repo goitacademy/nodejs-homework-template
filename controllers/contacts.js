@@ -53,15 +53,18 @@ const removeContact = async (req, res, next) => {
   }
 };
 const updateContact = async (req, res) => {
-  const { contactId } = req.params;
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, {
-    new: true,
-  });
-  if (!result) {
-    throw HttpError(404, "Not Found");
+  const contacts = await get();
+  const index = contacts.findIndex((contact) => contact.id === id);
+  if (index === -1) {
+    return null;
   }
-  res.json(result);
+  const contactToUpdate = contacts.find((contact) => contact.id === id);
+  contacts[index] = { id, ...contactToUpdate, ...data };
+
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contacts[index];
 };
+
 const updateStatusContact = async (req, res) => {
   const { contactId } = req.params;
   const result = await Contact.findByIdAndUpdate(contactId, req.body, {
