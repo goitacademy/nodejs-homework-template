@@ -102,7 +102,7 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
   try {
-    const { error, name, email, phone } = putSchema.validate(req.body);
+    const { error, value } = putSchema.validate(req.body);
 
     if (error) {
       res.status(400).json({
@@ -115,19 +115,20 @@ router.put("/:contactId", async (req, res, next) => {
 
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
-    const body = { name, email, phone };
+    const body = value;
+
     if (contact) {
       await updateContact(contactId, body);
       res.json({
-        status: "Successful",
+        status: "success",
         code: 200,
-        message: "Contact was updated successfully",
+        message: "Contact was updated",
       });
     } else {
       res.json({
-        status: "Failure",
-        code: 400,
-        message: "Contact of given ID does not exist",
+        status: "failure",
+        code: 404,
+        message: "Not found",
       });
     }
   } catch (error) {
