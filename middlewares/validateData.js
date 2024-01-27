@@ -1,6 +1,6 @@
 const HttpError = require("../helpers");
 
-const validateData = schema => {
+const validateData = (schema) => {
   const func = (request, response, next) => {
     const { error } = schema.validate(request.body);
     if (error) {

@@ -1,12 +1,11 @@
-const passportJWT = require("passport-jwt");
 const passport = require("passport");
-const { userModel } = require("../models");
-const { HttpError } = require("../helpers");
-
+const passportJWT = require("passport-jwt");
 require("dotenv").config();
 
-const { SECRET_KEY } = process.env;
+const { userModel } = require("../models");
 const { User } = userModel;
+const { HttpError } = require("../helpers");
+const { SECRET_KEY } = process.env;
 
 const ExtractJWT = passportJWT.ExtractJwt;
 const Strategy = passportJWT.Strategy;
@@ -28,9 +27,15 @@ passport.use(
   })
 );
 
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
+    if (!req.get("Authorization")) {
+      return HttpError(401, "Not authorized");
+    }
+
+    const token = req.get("Authorization").replace("Bearer ", "");
+
+    if (!user || err || !token || token !== user.token) {
       return HttpError(401, "Not authorized");
     }
     req.user = user;

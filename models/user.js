@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
-const bcrypt = require("bcryptjs");
-const SALT_FACTOR = 6;
+const { handleMongooseError } = require("../helpers");
 
 const emailRegexp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -23,7 +22,6 @@ const userSchema = new Schema(
       enum: ["starter", "pro", "business"],
       default: "starter",
     },
-    token: { type: String, default: null },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
@@ -32,13 +30,7 @@ const userSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
-    const salt = await bcrypt.genSalt(SALT_FACTOR);
-    this.password = await bcrypt.hash(this.password, salt);
-  }
-  next();
-});
+userSchema.post("save", handleMongooseError);
 
 const registerSchema = Joi.object({
   password: Joi.string().min(6).required(),
