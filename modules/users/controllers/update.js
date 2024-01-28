@@ -9,7 +9,7 @@ export async function updateUser(req, res) {
     if (!subscriptions.includes(subscription)) {
       return res.status(400).json("Invalid subscription");
     }
-    const id = req.user.id;
+    const id = req.user[0].id;
     const user = await User.findByIdAndUpdate(id, {
       subscription: subscription,
     });
@@ -22,18 +22,21 @@ export async function updateUser(req, res) {
   }
 }
 
-export async function updateAvatar(req, res) {
+export async function updateAvatar(req, res, next) {
   try {
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user[0].id);
     if (!user) {
       return res.status(404).json("Not found");
     }
     const fileName = req.file.originalname;
-    const avatar = await Jimp.read(`${tempDir}/${fileName}`);
-    avatar.resize(250, 250);
-    const isUploaded = await avatar.write(`${avatarDir}/${user.id}${fileName}`);
-    console.log(isUploaded);
-    return res.status(200).json("Avatar uploaded.");
+    const avatar = await Jimp.read(`tmp/${fileName}`);
+    avatar.cover(250, 250);
+    await avatar.writeAsync(`public/avatars/${user.id}${fileName}`);
+    user.avatarURL = `http://localhost:3000/avatars/${user.id}${fileName}`;
+    user.save();
+    return res.status(200).json({
+      avatarUrl: `http://localhost:3000/avatars/${user.id}${fileName}`,
+    });
   } catch (e) {
     return res.status(500).json(e.message);
   }
