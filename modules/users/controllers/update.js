@@ -1,6 +1,6 @@
 import Jimp from "jimp";
 import { User } from "../schemas/user.schema.js";
-import { tempDir, avatarDir } from "../middlewares/avatar.js";
+import { tmpDir, avatarDir } from "../middlewares/avatar.js";
 
 export async function updateUser(req, res) {
   try {
