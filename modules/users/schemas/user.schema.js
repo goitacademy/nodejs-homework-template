@@ -42,4 +42,8 @@ user.methods.clearToken = function () {
   this.token = null;
 };
 
+user.methods.setAvatarUrl = function (avatarURL) {
+  this.avatarURL = avatarURL;
+};
+
 export const User = model("user", user);
