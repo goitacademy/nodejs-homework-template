@@ -1,4 +1,6 @@
+import Jimp from "jimp";
 import { User } from "../schemas/user.schema.js";
+import { tempDir, avatarDir } from "../middlewares/avatar.js";
 
 export async function updateUser(req, res) {
   try {
@@ -22,6 +24,15 @@ export async function updateUser(req, res) {
 
 export async function updateAvatar(req, res) {
   try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json("Not found");
+    }
+    const fileName = req.file.originalname;
+    const avatar = await Jimp.read(`${tempDir}/${fileName}`);
+    avatar.resize(250, 250);
+    const isUploaded = await avatar.write(`${avatarDir}/${user.id}${fileName}`);
+    console.log(isUploaded);
     return res.status(200).json("Avatar uploaded.");
   } catch (e) {
     return res.status(500).json(e.message);
