@@ -1,3 +1,4 @@
+import gravatar from "gravatar";
 import { User } from "../../users/schemas/user.schema.js";
 
 async function signupUser(body) {
@@ -7,6 +8,8 @@ async function signupUser(body) {
   }
   const user = new User({ email });
   user.setPassword(password);
+  const avatarURL = gravatar(email, { s: 250, protocol: "https" });
+  avatarURL && user.setAvatarUrl(avatarURL);
   await user.save();
   return user;
 }
