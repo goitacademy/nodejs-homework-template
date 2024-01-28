@@ -1,5 +1,9 @@
 import express from "express";
-import { userSigninSchema, userSignupSchema } from "../../models/User.js";
+import {
+  userEmailSchema,
+  userSigninSchema,
+  userSignupSchema,
+} from "../../models/User.js";
 import isEmptyBody from "../../middlewares/isEmptyBody.js";
 import authController from "../../controllers/auth-controller.js";
 import validateBody from "../../decorators/validateBody.js";
@@ -41,6 +45,15 @@ authRouter.patch(
   upload.single("avatar"),
   sizeChange,
   authController.updateAvatar
+);
+
+authRouter.get("/verify/:verificationCode", authController.verify);
+
+authRouter.post(
+  "/verify",
+  isEmptyBody,
+  validateBody(userEmailSchema),
+  authController.resendVerifyEmail
 );
 
 export default authRouter;
