@@ -50,7 +50,7 @@ const updateFavoriteSchema = Joi.object({
 const updateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
-  phone: Joi.string(),
+  phone: Joi.number(),
 });
 
 const schemas = {

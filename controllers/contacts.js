@@ -55,7 +55,7 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      res.status(400).json({ message: "missing fields" });
+      res.status(400).json({ message: "HttpError is not a constructor" });
       return;
     }
     const { contactId } = req.params;
