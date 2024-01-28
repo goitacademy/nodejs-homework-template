@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const gravatar = require ("gravatar");
+// const gravatar = require ("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
 const avatarsDir = path.join(__dirname, "../", "public", "avatars");
@@ -20,8 +20,8 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email);
-  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
+  // const avatarURL = gravatar.url(email);
+  const newUser = await User.create({ ...req.body, password: hashPassword});
   console.log("New User Fields:", newUser.email);
   res.status(201).json({
     email: newUser.email,
