@@ -8,7 +8,7 @@ async function signupUser(body) {
   }
   const user = new User({ email });
   user.setPassword(password);
-  const avatarURL = gravatar(email, { s: 250, protocol: "https" });
+  const avatarURL = gravatar.url(email, { s: 250, protocol: "https" });
   avatarURL && user.setAvatarUrl(avatarURL);
   await user.save();
   return user;
