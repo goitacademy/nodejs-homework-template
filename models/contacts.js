@@ -9,9 +9,9 @@ const listContacts = async () => {
   return JSON.parse(data);
 };
 
-const getContactById = async (contactId) => {
+const getContactById = async (id) => {
   const contacts = await listContacts();
-  const result = contacts.find((item) => item.id === contactId);
+  const result = contacts.find((item) => item.id === id);
   return result || null;
 };
 
