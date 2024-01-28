@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const gravatar = require('gravatar'); // Убедитесь, что gravatar установлен и импортирован
-
+const gravatar = require('gravatar'); 
 const userSchema = new mongoose.Schema({
   password: {
     type: String,
@@ -19,7 +18,15 @@ const userSchema = new mongoose.Schema({
     default: 'starter',
   },
   token: String,
-  avatarURL: String, // Добавление нового поля здесь
+  avatarURL: String, 
+    verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+  },
 });
 
 // Методы и хуки схемы

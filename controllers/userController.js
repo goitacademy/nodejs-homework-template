@@ -2,7 +2,9 @@ const jimp = require('jimp');
 const path = require('path');
 const fs = require('fs');
 const User = require('../models/user'); // Путь к модели User
-
+exports.resendVerificationEmail = async (req, res) => {
+  const { email } = req.body;
+  await sendVerificationEmail(user.email, user.verificationToken);
 exports.updateAvatar = async (req, res) => {
   try {
     const { path: tempPath, filename } = req.file;
@@ -24,4 +26,4 @@ exports.updateAvatar = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+};

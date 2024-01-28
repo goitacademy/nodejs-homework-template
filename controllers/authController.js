@@ -1,6 +1,9 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const sendVerificationEmail = (user, verificationToken) => {
+
+};
 
 const register = async (req, res) => {
   try {
@@ -32,6 +35,13 @@ const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+    const verificationToken = uuidv4(); 
+  newUser.verificationToken = verificationToken;
+  await newUser.save();
+    res.status(201).json({ /* ... дані користувача ... */ });
+
+
+  sendVerificationEmail(newUser, verificationToken);
 };
 
 module.exports = {
