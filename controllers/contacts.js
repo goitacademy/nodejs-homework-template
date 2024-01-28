@@ -19,7 +19,7 @@ const listContacts = async (req, res, next) => {
 const getContactById = async (req, res, next) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
-  const result = await Contact.findById({
+  const result = await Contact.findOne({
     _id: id,
     owner,
   });
@@ -38,7 +38,7 @@ const addContact = async (req, res, next) => {
 const removeContact = async (req, res, next) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
-  const result = await Contact.findByIdAndDelete({
+  const result = await Contact.findOneAndDelete({
     _id: id,
     owner,
   });
@@ -51,7 +51,7 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   const { id } = req.params;
   const { _id: owner } = req.user;
-  const result = await Contact.findByIdAndUpdate({ _id: id, owner }, req.body, {
+  const result = await Contact.findOneAndUpdate({ _id: id, owner }, req.body, {
     new: true,
   });
   if (!result) {
@@ -67,7 +67,7 @@ const updateStatusContact = async (req, res) => {
   if (favorite === undefined) {
     throw HttpError(400, "Missing field favorite");
   }
-  const result = await Contact.findByIdAndUpdate(
+  const result = await Contact.findOneAndUpdate(
     { _id: id, owner },
     { favorite },
     { new: true }
