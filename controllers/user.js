@@ -1,9 +1,11 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-// const gravatar = require ("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const gravatar = require ("gravatar");
+const Jimp = require("jimp");
+
+const avatarsDir = path.join(__dirname, "../","public","avatars");
 
 require("dotenv").config();
 const { SECRET_KEY } = process.env;
@@ -20,13 +22,20 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  // const avatarURL = gravatar.url(email);
-  const newUser = await User.create({ ...req.body, password: hashPassword});
+  // let avatarURL;
+  // if(req.file){
+  //   const {path,originalname}= req.file;
+  //   avatarURL = `/avatars/${req.user.id}_${originalname}`;
+  //   await fs.rename(path, path.join(avatarsDir, `${req.user.id}_${originalname}`));
+  // }
+  const avatarURL = gravatar.url(email);
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL}); // gravatar must added
   console.log("New User Fields:", newUser.email);
   res.status(201).json({
     email: newUser.email,
     password: newUser.password,
     subscription: newUser.subscription,
+    avatarURL: newUser.avatarURL,
   });
 };
 
@@ -84,13 +93,35 @@ const logout = async (req, res) => {
 const updateAvatar = async (req, res) =>{
   const {_id} = req.user;
   const {path: tempUpload, originalname} = req.file;
-  const resultUpload = path.join(avatarsDir, originalname);
-  await fs.rename(tempUpload,resultUpload);
-  const avatarURL = path.join("avatars", originalname);
-  await User.findByIdAndUpdate(_id, {avatarURL});
-  res.json({
-    avatarURL,
-  })
+  const filename = `${_id}_${originalname}`
+  const resultUpload = path.join(avatarsDir, filename);
+
+ 
+  try {
+    await fs.rename(tempUpload,resultUpload);
+    const image = await Jimp.read(resultUpload);
+
+    await image
+      .resize(250, 250)
+      .quality(60)
+      .write(resultUpload);
+
+    const avatarURL = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+
+    res.json({
+      avatarURL,
+    });
+  } catch (err) {
+    console.error(err);
+
+    // Additional error logging for better understanding of the issue
+    if (err.code === "EPERM") {
+      console.error("Permission issue:", err.message);
+    }
+
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 
 }
 
