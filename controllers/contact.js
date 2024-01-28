@@ -1,12 +1,13 @@
+// const { ObjectId } = require("mongodb");
 const Contact = require("../models/contact");
 
 async function getContacts(req, res, next) {
-  console.log(req.user);
+  console.log(req.user.id);
   try {
     const userId = req.user.id;
-    const contacts = await Contact.find({ ownerId: userId });
-    // const contacts = await Contact.find({ });
-
+    const contacts = await Contact.find({ownerId: userId});
+    // const contacts = await Contact.find();
+    console.log(contacts)
     res.send(contacts);
   } catch (error) {
     next(error);
@@ -15,7 +16,7 @@ async function getContacts(req, res, next) {
 
 async function getContact(req, res, next) {
   const { id } = req.params;
-
+  
   try {
     const userId = req.user.id;
       const contact = await Contact.findById(id);

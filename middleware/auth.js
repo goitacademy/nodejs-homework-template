@@ -5,7 +5,7 @@ const User = require("../models/user");
 function auth(req, res, next) {
     
   const authHeader = req.headers.authorization;
-
+ 
   if (typeof authHeader === "undefined") {
     return res.status(401).send({ message: "Not authorized" });
   }
@@ -22,7 +22,7 @@ function auth(req, res, next) {
     }
 
     const user = await User.findById(decode.id);
-    // console.log(user);
+   
     if (user === null) {
       return res.status(401).send({ message: "Not authorized" });
     }
@@ -34,7 +34,7 @@ function auth(req, res, next) {
     req.user = {
       id: decode.id
     };
-    // console.log(req.user);
+
     next();
   });
 }

@@ -5,10 +5,11 @@ const router = express.Router();
 
 const authRoutes = require("./users");
 const contactRoutes = require("./contacts");
-const authMiddleware = require("../../middleware/auth");
+
+const AuthMiddleware = require("../../middleware/auth");
 
 router.use("/users", authRoutes);
 
-router.use("/contacts", authMiddleware, contactRoutes);
+router.use("/contacts", AuthMiddleware, contactRoutes);
 
 module.exports = router;
