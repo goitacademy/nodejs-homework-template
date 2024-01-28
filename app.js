@@ -18,7 +18,7 @@ app.use('/api/users', authRouter)
 app.use('/api/contacts', contactsRouter)
 
 app.use((_, res) => {
-  res.status(404).json({ message: 'Not found' })
+  res.status(404).json({ message: 'Not foundd' })
 })
 
 app.use((err, _, res, __) => {
