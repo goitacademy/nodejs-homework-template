@@ -4,13 +4,21 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
+
 const app = express();
+
+const userRouter = require('./routes/api/users');
 app.use(logger('dev'));
 app.use(cors());
 app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/contacts', authMiddleware, contactsRouter);
 app.use(auth(config));
+app.use('/public', express.static('public')); 
+app.use('/api/users', userRouter);
+app.listen(3000, () => {
+  console.log("Server running. Use our API on port: 3000")
+});
 
 
 const contactsPath = path.join(__dirname, 'contacts.json');
