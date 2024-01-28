@@ -23,4 +23,12 @@ router.patch(
   func.setAvatar
 );
 
+router.get("/verify/:verificationToken", func.verifyEmail);
+
+router.post(
+  "/verify/",
+  reqValidation(schemas.mailSchema),
+  func.resendVerifyEmail
+);
+
 module.exports = router;

@@ -3,7 +3,6 @@ const serverConfig = require("../config/serverConfig");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = serverConfig.SECRET_KEY;
 const handleError = require("../utils/handleError");
-
 const { User } = require("../schemas/mongooseSchemas/userSchema");
 
 const authMiddleware = async (req, res, next) => {
