@@ -55,8 +55,7 @@ const removeContact = async (req, res, next) => {
 const updateContact = async (req, res, next) => {
   try {
     if (Object.keys(req.body).length === 0) {
-      res.status(400).json({ message: "HttpError is not a constructor" });
-      return;
+      throw HttpError(400, "Body must have at least one field");
     }
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
@@ -71,20 +70,19 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-const updateStatusContact = async (req, res) => {
+const updateStatusContact = async (req, res, next) => {
   try {
     const keys = Object.keys(req.body);
 
     if (keys.length === 0) {
-      throw HttpError(400, "missing field favorite");
+      throw new HttpError(400, "missing field favorite");
     }
     const { contactId } = req.params;
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {
       new: true,
     });
     if (!result) {
-      res.status(404).json({ message: "Not found" });
-      return;
+      return res.status(404).json({ message: "Not found" });
     }
     res.json(result);
   } catch (error) {
