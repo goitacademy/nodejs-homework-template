@@ -10,6 +10,13 @@ const userSchema = new Schema(
     subscription: { type: String, enum: ['starter', 'pro', 'business'], default: 'starter' },
     token: String,
     avatarURL: String,
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
   },
   { versionKey: false, timestamps: true }
 )
@@ -28,6 +35,18 @@ export const userRegisterSchema = Joi.object({
       return value
     }),
   password: Joi.string().min(8).required(),
+})
+
+export const userEmailSchema = Joi.object({
+  email: Joi.string()
+    .required()
+    .messages({ 'any.required': 'missing required field email' })
+    .custom((value, helper) => {
+      if (!validator.isEmail(value)) {
+        return helper.message('email is invalid')
+      }
+      return value
+    }),
 })
 
 export const userLoginSchema = Joi.object({
