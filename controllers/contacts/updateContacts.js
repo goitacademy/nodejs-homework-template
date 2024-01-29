@@ -7,11 +7,10 @@ export async function updateContacts(req, res, next) {
 
     const validationResult = schema.validate(req.body);
     if (validationResult.error) {
-      res.status(400).json({
+      return res.status(400).json({
         message: `missing required field`,
         error: validationResult.error,
       });
-      return;
     }
 
     const contactToUpdate = await Contact.findByIdAndUpdate(
@@ -20,7 +19,7 @@ export async function updateContacts(req, res, next) {
       { new: true }
     );
 
-    contactToUpdate
+    return contactToUpdate
       ? res.status(200).json({ contactToUpdate })
       : res.status(404).json({ message: "Not found" });
   } catch (error) {
