@@ -54,7 +54,7 @@ const putSchema = Joi.object({
   favorite: Joi.boolean(),
 });
 
-const patchSchema = Joi.object({
+const patchFavoriteSchema = Joi.object({
   favorite: Joi.boolean()
     .required()
     .messages({ "any.required": "missing field favorite" }),
@@ -62,7 +62,7 @@ const patchSchema = Joi.object({
 
 const Contact = model("contact", contactSchema);
 
-const schemas = { addSchema, patchSchema, putSchema };
+const schemas = { addSchema, patchFavoriteSchema, putSchema };
 
 module.exports = {
   Contact,

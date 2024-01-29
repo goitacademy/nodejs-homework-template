@@ -1,8 +1,9 @@
-const { User } = require("../models/user");
-const { HttpError } = require("../helpers");
-const ctrlWrapper = require("../helpers/ctrlWrapper.js");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const { User } = require("../models/user.js");
+const { HttpError } = require("../helpers");
+const ctrlWrapper = require("../helpers/ctrlWrapper.js");
 
 const { SECRET_KEY } = process.env;
 
@@ -51,7 +52,7 @@ const getCurrent = (req, res, next) => {
 
 const logout = async (req, res, next) => {
   const { id } = req.params;
-  await User.findByIdAndUpdate({ token: "" });
+  await User.findByIdAndUpdate(id, { token: "" });
   res.json({ message: "Logout success" });
 };
 

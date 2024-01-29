@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const { handleMongooseError } = require("../middlewares");
+const handleMongooseError = require("../middlewares/handleMongooseError");
 
 const userSchema = new Schema(
   {
@@ -36,11 +36,16 @@ const loginSchema = Joi.object({
   email: Joi.string().required(),
 });
 
-const schemas = {
+const subscriptionSchema = Joi.object({
+  subscription: Joi.string().required(),
+});
+
+const schemasUser = {
   loginSchema,
   registerSchema,
+  subscriptionSchema,
 };
 
 const User = model("user", userSchema);
 
-module.exports = { User, schemas };
+module.exports = { User, schemasUser };

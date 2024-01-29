@@ -1,5 +1,6 @@
 const express = require("express");
 const { schemas } = require("../../models/contact");
+const { schemasUser } = require("../../models/user");
 const ctrl = require("../../controllers/contacts.js");
 const { isValidId, validateBody, authenticate } = require("../../middlewares");
 
@@ -30,8 +31,15 @@ router.patch(
   "/:id/favorite",
   authenticate,
   isValidId,
-  validateBody(schemas.patchSchema),
+  validateBody(schemas.patchFavoriteSchema),
   ctrl.updateFavorite
+);
+router.patch(
+  "/:id",
+  authenticate,
+  isValidId,
+  validateBody(schemasUser.subscriptionSchema),
+  ctrl.updateSubscription
 );
 
 module.exports = router;
