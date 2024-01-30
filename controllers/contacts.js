@@ -10,10 +10,32 @@ const listContacts = async () => {
 }
 
 const getContactById = async (contactId) => {
+  try {
+    const contacts = await contactStorage;
+    const contact = contacts.find(u => u.id == contactId);
+    return contact;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
-}
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await contactStorage;
+    const index = contacts.findIndex((u) => u.id == contactId);
 
-const removeContact = async (contactId) => {}
+    if (index > -1) {
+      contacts.splice(index, 1);
+      await writeContactsFile(contacts);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error( error);
+    throw error;
+  }
+};
 
 const addContact = async (body) => {}
 
