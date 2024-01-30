@@ -52,7 +52,7 @@ export const verify = async (req, res) => {
   })
 }
 
-export const resendVerifyEmail = async (req, res) => {
+export const resendVerifyEmail = async (req, res, next) => {
   const { email } = req.body
   const user = await User.findOne({ email })
   if (!user) {
