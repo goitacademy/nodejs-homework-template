@@ -37,7 +37,7 @@ const addSchema = Joi.object({
     .messages({
       "any.required": "Missing required email field",
     }),
-  phone: Joi.number().required().messages({
+  phone: Joi.string().required().messages({
     "any.required": "Missing required phone field",
   }),
   favorite: Joi.boolean(),
@@ -50,7 +50,7 @@ const updateFavoriteSchema = Joi.object({
 const updateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
-  phone: Joi.number(),
+  phone: Joi.string(),
 });
 
 const schemas = {
