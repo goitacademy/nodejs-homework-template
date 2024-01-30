@@ -1,8 +1,17 @@
 // const fs = require('fs/promises')
 
-const listContacts = async () => {}
+const fs = require('fs').promises;
+const path = require('path');
 
-const getContactById = async (contactId) => {}
+const contactStorage = require('models/contacts.json')
+
+const listContacts = async () => {
+  return await contactStorage
+}
+
+const getContactById = async (contactId) => {
+
+}
 
 const removeContact = async (contactId) => {}
 
