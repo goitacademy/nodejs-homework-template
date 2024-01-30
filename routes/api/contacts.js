@@ -1,5 +1,4 @@
 import {
-  getContactById,
   removeContact,
   addContact,
   updateContact,
@@ -8,26 +7,13 @@ import {
 import express from "express";
 import { schema } from "../../helpers/joiValid.js";
 import { indexContacts } from "../../controllers/indexContacts.js";
+import { showContacts } from "../../controllers/contacts/showContacts.js";
 
 const router = express.Router();
 
 router.get("/", indexContacts);
 
-router.get("/:id", async (req, res, next) => {
-  getContactById();
-  const contacts = await listContacts();
-  const { id } = req.params;
-  const contact = contacts.filter((contact) => contact.id === id);
-
-  if (contact) {
-    return res.json({
-      status: "successs",
-      code: "200",
-      data: { contact },
-    });
-  }
-  return res.json({ message: "not found" }).status(404);
-});
+router.get("/:id", showContacts);
 
 router.post("/", async (req, res) => {
   addContact();
