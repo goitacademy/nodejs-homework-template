@@ -11,10 +11,6 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-<<<<<<< Updated upstream
-    "express": "4.17.1",
-    "morgan": "1.10.0"
-=======
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
     "joi": "^17.11.0",
@@ -22,7 +18,6 @@
     "mongoose": "^8.1.1",
     "morgan": "1.10.0",
     "uuid": "^9.0.1"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -31,10 +26,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-<<<<<<< Updated upstream
-    "nodemon": "2.0.15"
-=======
     "nodemon": "^3.0.3"
->>>>>>> Stashed changes
   }
 }

@@ -1,31 +1,18 @@
-const express = require('express')
+const express = require("express");
+const service = require("../../models/contacts");
+const router = express.Router();
 
-const router = express.Router()
+router.get("/", service.listContacts);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId", service.getContactById);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post( "/", service.addContact
+);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", service.removeContact);
 
-<<<<<<< Updated upstream
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-=======
 router.put("/:contactId", service.updateContact);
 router.patch(
   "/:contactId/favorite", service.updateFavoriteToContact);
->>>>>>> Stashed changes
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
