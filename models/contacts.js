@@ -1,5 +1,5 @@
-const fs = require("fs/promises");
-const path = require("path");
+import fs from "node:fs/promises";
+import path from "node:path";
 
 const contactsPath = path.join(process.cwd(), "/models/contacts.json");
 
@@ -21,9 +21,12 @@ const getContactById = async (contactId) => {
 const updateContact = async (contactId, name, email, phone) => {
   const contacts = await fs.writeFile(
     contactsPath,
-    JSON.stringify(contactId, name, email, phone)
+    JSON.stringify(contactId, (name, email, phone))
   );
   const contact = contacts.find((contact) => contact.id === contactId);
+  if (!contact) {
+    return null;
+  }
   return contact;
 };
 
@@ -47,7 +50,7 @@ const addContact = async (name, email, phone) => {
   return newContact;
 };
 
-module.exports = {
+export {
   listContacts,
   getContactById,
   removeContact,
