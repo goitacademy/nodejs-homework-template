@@ -2,20 +2,103 @@ import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
 
-const listContacts = async () => {};
+const contactsPath = path.join(__dirname, "contacts.json");
 
-const getContactById = async (contactId) => {};
+const listContacts = async () => {
+  try {
+    const contacts = await fs.readFile(contactsPath);
+    const contactsParsed = JSON.parse(contacts);
+    return console.log(contactsParsed);
+  } catch (error) {
+    return console.log(error.message);
+  }
+};
 
-const removeContact = async (contactId) => {};
+const getContactById = async (contactId) => {
+  try {
+    const contacts = await fs.readFile(contactsPath);
+    const contactsParsed = JSON.parse(contacts);
 
-const addContact = async (body) => {};
+    let getContact = `The contact with ID "${contactId}" does not exist.`;
 
-const updateContact = async (contactId, body) => {};
+    contactsParsed.map((contact) => {
+      if (contactId === contact.id) {
+        getContact =
+          ` Below are the contact details for id: "${contactId}"\n` +
+          `${contact.name}\n${contact.email}\n${contact.phone}`;
+      }
+    });
+
+    return console.log(getContact);
+  } catch (error) {
+    return console.log(error.message);
+  }
+};
+
+const removeContact = async (contactId) => {
+  try {
+    const contacts = await fs.readFile(contactsPath);
+    const contactsParsed = JSON.parse(contacts);
+    const index = contactsParsed.findIndex(
+      (contact) => contact.id === contactId
+    );
+
+    if (index > 0) {
+      contactsParsed.splice(index, 1);
+
+      const updatedContacts = JSON.stringify(contactsParsed, null, 2);
+      console.log(
+        `Contact "${contactsParsed[index].name}" successfully removed`
+      );
+      return fs.writeFile(contactsPath, updatedContacts);
+    } else {
+      return console.log(
+        `The contact with ID "${contactId}" that you want to delete does not exist in your contacts.`
+      );
+    }
+  } catch (error) {
+    return console.log(error.message);
+  }
+};
+
+const addContact = async (body) => {
+  try {
+    const newContact = {
+      id: nanoid(21),
+      name,
+      email,
+      phone,
+    };
+
+    const contacts = await fs.readFile(contactsPath);
+    const contactsParsed = JSON.parse(contacts);
+
+    if (
+      contactsParsed.find(
+        (contact) =>
+          contact.name?.toLowerCase() === newContact.name?.toLowerCase()
+      )
+    ) {
+      console.log(`Contact ${name} already exist on list`);
+      return;
+    } else {
+      contactsParsed.push(newContact);
+    }
+
+    const updatedContacts = JSON.stringify(contactsParsed, null, 2);
+    await fs.writeFile(contactsPath, updatedContacts);
+    return console.log(`Contact ${name} added successfully`);
+  } catch (error) {
+    return console.log(error.message);
+  }
+};
+
+// const updateContact = async (contactId, body) => {};
 
 export {
   listContacts,
   getContactById,
   removeContact,
   addContact,
-  updateContact,
+  // updateContact,
 };
