@@ -2,7 +2,7 @@ const express = require("express");
 
 const ContactController = require("../controllers/contact");
 
-const isValidId = require("../schemas/isValidId");
+const isValidId = require("../middleware/isValidId");
 
 const router = express.Router();
 const jsonParser = express.json();
