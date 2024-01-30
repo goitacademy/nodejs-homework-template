@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const fs = require("node:fs/promises");
 
 const gravatar = require("gravatar");
-
-const fs = require("node:fs/promises");
+const Jimp = require("jimp");
 
 const User = require("../models/users");
 
@@ -151,14 +151,27 @@ async function updateAvatar(req, res, next) {
   const { id } = req.user;
 
   try {
-    await fs.rename(
-      req.file.path,
-      path.join(__dirname, "..", "public/avatars", req.file.filename)
+    // Отримання шляху до завантаженого файлу та нового шляху для збереження
+    const originalPath = req.file.path;
+    const newPath = path.join(
+      __dirname,
+      "..",
+      "public/avatars",
+      req.file.filename
     );
+
+    // Змінення розмірів за допомогою Jimp
+    const image = await Jimp.read(originalPath);
+    await image.resize(250, 250).write(newPath);
+
+    // Видалення оригінального завантаженого файлу
+    await fs.unlink(originalPath);
 
     const avatarURL = path.join("avatars", req.file.filename);
 
+    // Оновлення посилання на аватар користувача в базі даних
     await User.findByIdAndUpdate(id, { avatarURL }, { new: true });
+
     res.status(200).json({
       avatarURL: avatarURL,
     });
