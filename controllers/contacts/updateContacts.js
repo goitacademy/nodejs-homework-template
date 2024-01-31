@@ -27,7 +27,7 @@ export async function updateContacts(req, res, next) {
       res.status(200).json(id);
     } else {
       const contact = {
-        id: id,
+        id: parseInt(id),
         name,
         email,
         phone,
