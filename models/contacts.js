@@ -14,24 +14,17 @@ export const listContacts = async () => {
   }
 };
 
-const getContactById = async (contactId) => {
+export const getById = async (contactId) => {
   try {
     const contacts = await fs.readFile(contactsPath);
+
     const contactsParsed = JSON.parse(contacts);
-
-    let getContact = `The contact with ID "${contactId}" does not exist.`;
-
-    contactsParsed.map((contact) => {
-      if (contactId === contact.id) {
-        getContact =
-          ` Below are the contact details for id: "${contactId}"\n` +
-          `${contact.name}\n${contact.email}\n${contact.phone}`;
-      }
-    });
-
-    return console.log(getContact);
+    const [contact] = contactsParsed.filter(
+      (contact) => contact.id === contactId
+    );
+    return contact;
   } catch (error) {
-    return console.log(error.message);
+    return JSON.parse(error.message);
   }
 };
 
