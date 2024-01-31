@@ -5,7 +5,7 @@ const router = express.Router();
 //-----TEST-----
 
 router.get("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  res.json({ message: "template message TEST" });
 });
 
 router.get("/:contactId", async (req, res, next) => {
