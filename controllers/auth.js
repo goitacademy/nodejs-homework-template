@@ -47,6 +47,7 @@ async function register(req, res, next) {
       user: {
         email,
         subscription: "starter",
+        avatarURL,
       },
     });
   } catch (error) {
@@ -94,6 +95,7 @@ async function login(req, res, next) {
       user: {
         email: user.email,
         subscription: user.subscription,
+        avatarURL: user.avatarURL,
       },
     });
   } catch (error) {
