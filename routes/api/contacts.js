@@ -34,12 +34,6 @@ router.patch(
   validateBody(schemas.patchFavoriteSchema),
   ctrl.updateFavorite
 );
-router.patch(
-  "/:id",
-  authenticate,
-  isValidId,
-  validateBody(schemasUser.subscriptionSchema),
-  ctrl.updateSubscription
-);
+
 
 module.exports = router;

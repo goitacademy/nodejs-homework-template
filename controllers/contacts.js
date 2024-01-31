@@ -80,21 +80,6 @@ const updateFavorite = async (req, res) => {
   res.json(result);
 };
 
-const updateSubscription = async (req, res) => {
-  const validSubscriptions = ["starter", "pro", "business"];
-  const { id } = req.params;
-  if (!req.body || Object.keys(req.body).length === 0) {
-    throw HttpError(400, "missing field subscription");
-  }
-  const result = await User.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.json(result);
-};
-
 module.exports = {
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
@@ -102,5 +87,4 @@ module.exports = {
   deleteContact: ctrlWrapper(deleteContact),
   updateContact: ctrlWrapper(updateContact),
   updateFavorite: ctrlWrapper(updateFavorite),
-  updateSubscription: ctrlWrapper(updateSubscription),
 };
