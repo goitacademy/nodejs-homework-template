@@ -1,13 +1,10 @@
-import {
-  removeContact,
-  addContact,
-  updateContact,
-} from "../../models/contacts.js";
+import { removeContact, updateContact } from "../../models/contacts.js";
 
 import express from "express";
 import { schema } from "../../helpers/joiValid.js";
 import { indexContacts } from "../../controllers/indexContacts.js";
 import { showContacts } from "../../controllers/contacts/showContacts.js";
+import { createContacts } from "../../controllers/contacts/createContacts.js";
 
 const router = express.Router();
 
@@ -15,36 +12,7 @@ router.get("/", indexContacts);
 
 router.get("/:id", showContacts);
 
-router.post("/", async (req, res) => {
-  addContact();
-  const contacts = await listContacts();
-
-  const { name, email, phone } = req.body;
-
-  if (!req.body) {
-    await addContact();
-    return res.json({ message: "missing required name - field" }).status(400);
-  }
-
-  const newContact = {
-    id: contacts.length + 1,
-    name,
-    email,
-    phone,
-  };
-  const result = schema.validate(req.body);
-  if (result.error) {
-    return res.status(400).json({ message: result.error.message });
-  } else {
-    res.json(result);
-  }
-  contacts.push(newContact);
-  return res.status(201).json({
-    status: "success",
-    code: 201,
-    data: { newContact },
-  });
-});
+router.post("/", createContacts);
 
 router.delete("/:id", async (req, res, next) => {
   removeContact();
