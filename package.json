@@ -1,17 +1,32 @@
 {
-  "name": "goit-nodejs-hw",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "name": "template",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nodemon app.js"
+    "start": "node --experimental-modules app.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "lint": "eslint **/*.js",
+    "lint:fix": "eslint --fix **/*.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "imports": {
+    "#controllers/*": "./controllers/*",
+    "#models/*": "./models/*",
+    "#routes/*": "./routes/*"
+  },
   "dependencies": {
-    "express": "^4.18.2",
-    "mongoose": "^8.1.1",
-    "nodemon": "^3.0.3"
+    "cross-env": "7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "mongoose": "^8.0.4"
+  },
+  "devDependencies": {
+    "eslint": "7.19.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "16.0.3",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "5.2.0",
+    "nodemon": "2.0.15"
   }
 }
