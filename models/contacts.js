@@ -2,15 +2,15 @@ import fs from "fs/promises";
 import path from "path";
 import { nanoid } from "nanoid";
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsPath = path.join(process.cwd(), "/models/contacts.json");
 
-const listContacts = async () => {
+export const listContacts = async () => {
   try {
     const contacts = await fs.readFile(contactsPath);
     const contactsParsed = JSON.parse(contacts);
-    return console.log(contactsParsed);
+    return contactsParsed;
   } catch (error) {
-    return console.log(error.message);
+    return JSON.parse(error.message);
   }
 };
 
@@ -94,11 +94,3 @@ const addContact = async (body) => {
 };
 
 // const updateContact = async (contactId, body) => {};
-
-export {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  // updateContact,
-};
