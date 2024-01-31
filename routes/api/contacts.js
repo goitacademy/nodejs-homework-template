@@ -1,11 +1,10 @@
-import { listContacts, updateContact } from "../../models/contacts.js";
-
 import express from "express";
-import { schema } from "../../helpers/joiValid.js";
-import { indexContacts } from "../../controllers/indexContacts.js";
+
+import { indexContacts } from "../../controllers/contacts/indexContacts.js";
 import { showContacts } from "../../controllers/contacts/showContacts.js";
 import { createContacts } from "../../controllers/contacts/createContacts.js";
 import { deleteContacts } from "../../controllers/contacts/deleteContacts.js";
+import { updateContacts } from "../../controllers/contacts/updateContacts.js";
 
 const router = express.Router();
 
@@ -17,38 +16,6 @@ router.post("/", createContacts);
 
 router.delete("/:id", deleteContacts);
 
-router.put("/:id", async (req, res, next) => {
-  const contacts = await listContacts();
+router.put("/:id", updateContacts);
 
-  const { id } = req.params;
-  const { name, email, phone } = req.body;
-  if (!req.body) {
-    return res.json({ message: "missing fields" }).status(400);
-  }
-  updateContact();
-
-  const contact = contacts.find((el) => el.id === parseInt(id));
-
-  if (contact) {
-    contact.name = name;
-    contact.email = email;
-    contact.phone = phone;
-    return res.status(200).json(contact);
-  } else {
-    const contact = {
-      id: "id",
-      name,
-      email,
-      phone,
-    };
-    const result = schema.validate(req.body);
-    if (result.error) {
-      return res.status(400).json({ message: result.error.message });
-    } else {
-      res.json(result);
-    }
-    contacts.push(contact);
-  }
-  return res.status(201).json({ id });
-});
 export { router };
