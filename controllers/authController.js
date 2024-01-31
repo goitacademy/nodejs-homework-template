@@ -28,7 +28,7 @@ export const register = async (req, res, next) => {
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click to verify email</a>`,
+    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to verify email</a>`,
   }
   await sendEmail(verifyEmail)
 
@@ -78,9 +78,15 @@ export const resendVerifyEmail = async (req, res, next) => {
 export const login = async (req, res, next) => {
   const { email, password } = req.body
   const user = await User.findOne({ email })
+
   if (!user) {
     return next(new createHttpError.Unauthorized('Email or password invalid'))
   }
+
+  if (!user.verify) {
+    return next(new createHttpError.Unauthorized('Email not verified'))
+  }
+
   const passwordCompare = await bcrypt.compare(password, user.password)
 
   if (!passwordCompare) {
