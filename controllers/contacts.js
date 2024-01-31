@@ -5,16 +5,14 @@ const listContact = async (req, res) => {
   const { _id: owner } = req.user;
   const { page = 1, limit = 20, favorite } = req.query;
   const skip = (page - 1) * limit;
-  // const filter = { owner };
-  const data = await Contact.find(
-    { owner },
-    // null
-    {
-      skip,
-      limit,
-      // favorite,
-    }
-  ).populate("owner", "email");
+  const filter = { owner: owner };
+  if (favorite !== undefined) {
+    filter.favorite = favorite === "true";
+  }
+  const data = await Contact.find(filter, null, {
+    skip,
+    limit,
+  }).populate("owner", "email");
   res.json(data);
 };
 
