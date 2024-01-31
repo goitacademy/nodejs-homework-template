@@ -1,6 +1,10 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const fs = require("node:fs/promises");
+
+const gravatar = require("gravatar");
+const Jimp = require("jimp");
 
 const User = require("../models/users");
 
@@ -31,12 +35,19 @@ async function register(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
-    await User.create({ email: email, password: passwordHash });
+    const avatarURL = gravatar.url(email);
+
+    await User.create({
+      email: email,
+      password: passwordHash,
+      avatarURL: avatarURL,
+    });
 
     res.status(201).json({
       user: {
         email,
         subscription: "starter",
+        avatarURL,
       },
     });
   } catch (error) {
@@ -84,6 +95,7 @@ async function login(req, res, next) {
       user: {
         email: user.email,
         subscription: user.subscription,
+        avatarURL: user.avatarURL,
       },
     });
   } catch (error) {
@@ -137,4 +149,43 @@ async function updateSubscription(req, res, next) {
   }
 }
 
-module.exports = { register, login, logout, current, updateSubscription };
+async function updateAvatar(req, res, next) {
+  const { id } = req.user;
+
+  try {
+    // Отримання шляху до завантаженого файлу та нового шляху для збереження
+    const originalPath = req.file.path;
+    const newPath = path.join(
+      __dirname,
+      "..",
+      "public/avatars",
+      req.file.filename
+    );
+
+    // Змінення розмірів за допомогою Jimp
+    const image = await Jimp.read(originalPath);
+    await image.resize(250, 250).write(newPath);
+
+    // Видалення оригінального завантаженого файлу
+    await fs.unlink(originalPath);
+
+    const avatarURL = path.join("avatars", req.file.filename);
+
+    // Оновлення посилання на аватар користувача в базі даних
+    await User.findByIdAndUpdate(id, { avatarURL }, { new: true });
+
+    res.status(200).json({
+      avatarURL: avatarURL,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = {
+  register,
+  login,
+  logout,
+  current,
+  updateSubscription,
+  updateAvatar,
+};
