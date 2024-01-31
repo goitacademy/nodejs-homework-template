@@ -1,8 +1,9 @@
-import { addContact } from "../../models/contacts.js";
+import { addContact, listContacts } from "../../models/contacts.js";
 import { schema } from "../../helpers/joiValid.js";
 export async function createContacts(req, res, next) {
   try {
-    const contacts = await addContact();
+    addContact();
+    const contacts = await listContacts();
     const { name, email, phone } = req.body;
     const newContact = {
       id: contacts.length + 1,

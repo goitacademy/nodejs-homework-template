@@ -1,10 +1,11 @@
-import { removeContact, updateContact } from "../../models/contacts.js";
+import { listContacts, updateContact } from "../../models/contacts.js";
 
 import express from "express";
 import { schema } from "../../helpers/joiValid.js";
 import { indexContacts } from "../../controllers/indexContacts.js";
 import { showContacts } from "../../controllers/contacts/showContacts.js";
 import { createContacts } from "../../controllers/contacts/createContacts.js";
+import { deleteContacts } from "../../controllers/contacts/deleteContacts.js";
 
 const router = express.Router();
 
@@ -14,16 +15,7 @@ router.get("/:id", showContacts);
 
 router.post("/", createContacts);
 
-router.delete("/:id", async (req, res, next) => {
-  removeContact();
-  const contacts = await listContacts();
-  const { id } = req.params;
-  const newContacts = contacts.findIndex((contact) => contact.id !== id);
-  if (newContacts === -1) {
-    return res.status(404).json({ message: "Not found" });
-  }
-  return res.status(200).json({ message: "contact deleted" });
-});
+router.delete("/:id", deleteContacts);
 
 router.put("/:id", async (req, res, next) => {
   const contacts = await listContacts();
