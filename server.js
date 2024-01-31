@@ -15,3 +15,9 @@ const { serverPort } = require("../goit-nodejs-hw/config");
     console.error(e.message);
   }
 })();
+
+process.on("SIGINT", async () => {
+  await db.disconnect();
+  console.log("Database connection closed");
+  process.exit();
+});
