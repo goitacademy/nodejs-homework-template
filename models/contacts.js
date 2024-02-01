@@ -28,7 +28,7 @@ export const getById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {
+export const removeContact = async (contactId) => {
   try {
     const contacts = await fs.readFile(contactsPath);
     const contactsParsed = JSON.parse(contacts);
@@ -40,14 +40,10 @@ const removeContact = async (contactId) => {
       contactsParsed.splice(index, 1);
 
       const updatedContacts = JSON.stringify(contactsParsed, null, 2);
-      console.log(
-        `Contact "${contactsParsed[index].name}" successfully removed`
-      );
-      return fs.writeFile(contactsPath, updatedContacts);
+      fs.writeFile(contactsPath, updatedContacts);
+      return true;
     } else {
-      return console.log(
-        `The contact with ID "${contactId}" that you want to delete does not exist in your contacts.`
-      );
+      return false;
     }
   } catch (error) {
     return console.log(error.message);
