@@ -1,11 +1,11 @@
-const models = require("../models/contacts");
+const models = require("../service");
 const {
   listContacts,
   getContactById,
   addContact,
   removeContact,
   updateContact,
-} = require("../models/contacts");
+} = require("../service");
 
 const Joi = require("joi");
 
