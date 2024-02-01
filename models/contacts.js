@@ -54,13 +54,13 @@ const removeContact = async (contactId) => {
   }
 };
 
-const addContact = async (body) => {
+export const addContact = async (body) => {
   try {
     const newContact = {
-      id: nanoid(21),
-      name,
-      email,
-      phone,
+      id: nanoid(24),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
     };
 
     const contacts = await fs.readFile(contactsPath);
@@ -72,15 +72,13 @@ const addContact = async (body) => {
           contact.name?.toLowerCase() === newContact.name?.toLowerCase()
       )
     ) {
-      console.log(`Contact ${name} already exist on list`);
-      return;
+      return null;
     } else {
       contactsParsed.push(newContact);
     }
-
     const updatedContacts = JSON.stringify(contactsParsed, null, 2);
     await fs.writeFile(contactsPath, updatedContacts);
-    return console.log(`Contact ${name} added successfully`);
+    return newContact;
   } catch (error) {
     return console.log(error.message);
   }
