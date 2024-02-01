@@ -1,0 +1,41 @@
+{
+  "name": "nanoid",
+  "version": "3.0.0",
+  "description": "A tiny (108 bytes), secure URL-friendly unique string ID generator",
+  "keywords": [
+    "uuid",
+    "random",
+    "id",
+    "url"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "ai/nanoid",
+  "browser": {
+    "./index.js": "./index.browser.js"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "main": "index.cjs",
+  "module": "index.js",
+  "react-native": "index.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "require": "./index.cjs",
+      "import": "./index.js",
+      "browser": "./index.browser.js"
+    },
+    "./async/package.json": "./async/package.json",
+    "./async": {
+      "require": "./async/index.cjs",
+      "import": "./async/index.js",
+      "browser": "./async/index.browser.js"
+    },
+    "./non-secure/package.json": "./non-secure/package.json",
+    "./non-secure": {
+      "require": "./non-secure/index.cjs",
+      "import": "./non-secure/index.js"
+    }
+  }
+}
