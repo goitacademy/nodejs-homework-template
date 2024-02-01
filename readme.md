@@ -1,31 +1,41 @@
-## GoIT Node.js Course Template Homework
+# Node.JS Homework 3 (NoSQL Database - MongoDB)
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
 
-Додайте ментора до колаборації
+In this task, a third layer in the form of a database was implemented for our REST API. "MongoDB Atlas", "Studio 3T" and "MongoDB Compass" were used for this.
 
-Для кожної домашньої роботи створюйте свою гілку.
+---
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
 
-Кожна нова гілка для др повинна робитися з master
+## How to install
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+Clone this repo to your desktop and run `npm install` to install all the dependencies.
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+Rename file `.env-sample` to `.env`
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+You might want to look into `config.json` to make change the port you want to use and set up a SSL certificate.
 
-### Команди:
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+## Usage
+After you clone this repo to your desktop, go to its root directory and run `npm install` to install its dependencies.
+
+Once the dependencies are installed, you can run  `npm run start` to start the application. You will then be able to access it at localhost:3000
+![Start](./models//images/run.png)
+```shell
+npm run start 
+```
+--------------- 
+### Queries
+
+You should send your queries, e.g. via the Postman application, to http://localhost:3000/
+
+![GET](./models//images/get.PNG)
+
+
+--------------- 
+### MongoDB
+
+Database changes visible with Studio 3T
+
+![Studio3T](./models//images/Studio3T.png)
+
+
