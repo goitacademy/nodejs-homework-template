@@ -1,24 +1,4 @@
 const models = require("../service");
-const {
-  listContacts,
-  getContactById,
-  addContact,
-  removeContact,
-  updateContact,
-} = require("../service");
-
-const Joi = require("joi");
-
-const postSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
-const putSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required(),
-});
 
 const get = async (_, res, next) => {
   try {
@@ -36,98 +16,100 @@ const get = async (_, res, next) => {
 };
 
 const getById = async (req, res, next) => {
+  const { contactId } = req.params;
+
   try {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-    if (contact) {
-      return res.json({ status: "success", code: 200, data: { contact } });
+    const result = await models.getContactById(contactId);
+    if (result) {
+      return res.json({
+        status: "success",
+        code: 200,
+        data: { contact: result },
+      });
+    } else {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: `Not found contact id: ${contactId}`,
+        data: "Not Found",
+      });
     }
-    res.status(404).json({ message: "Not Found", code: 404 });
   } catch (err) {
+    console.error(err);
     next(err);
   }
 };
 
 const create = async (req, res, next) => {
+  const { name, email, phone } = req.body;
+  console.log(req.body);
   try {
-    const { error, value } = postSchema.validate(req.body);
+    const result = await models.createContact({ name, email, phone });
 
-    if (error) {
-      return res.status(400).json({
-        status: "failure",
-        code: 400,
-        message: "Missing required field",
-        details: error.details,
-      });
-    }
-    const { name, email, phone } = value;
-    const contact = await addContact({ name, email, phone });
     return res.status(201).json({
       status: "success",
       code: 201,
-      data: contact,
+      data: { contact: result },
     });
   } catch (err) {
+    console.error(err);
     next(err);
   }
 };
 
 const remove = async (req, res, next) => {
-  try {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+  const { contactId } = req.params;
 
-    if (contact) {
-      await removeContact(contactId);
+  try {
+    const result = await models.removeContact(contactId);
+    if (result) {
       return res.json({
         status: "success",
         code: 200,
-        message: "contact deleted",
+        data: { contact: result },
+        message: "Contact removed. File saved with updated contacts list",
       });
     } else {
-      return res.json({
-        status: "failure",
+      return res.status(404).json({
+        status: "error",
         code: 404,
-        message: "Not found",
+        message: `Not found contact id: ${contactId}`,
+        data: "Not Found",
       });
     }
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 };
 
 const update = async (req, res, next) => {
+  const { contactId } = req.params;
+  const { name, email, phone } = req.body;
+
   try {
-    const { error, value } = putSchema.validate(req.body);
-
-    if (error) {
-      return res.status(400).json({
-        status: "failure",
-        code: 400,
-        message: "Missing fields",
-      });
-    }
-
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-    const body = value;
-
-    if (contact) {
-      await updateContact(contactId, body);
+    const result = await models.updateContact(contactId, {
+      name,
+      email,
+      phone,
+    });
+    if (result) {
       return res.json({
         status: "success",
         code: 200,
-        message: "Contact was updated",
+        data: { contact: result },
       });
     } else {
-      return res.json({
-        status: "failure",
+      return res.status(404).json({
+        status: "error",
         code: 404,
-        message: "Not found",
+        message: `Not found contact id: ${contactId}`,
+        data: "Not Found",
       });
     }
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    console.error(err);
+    next(err);
   }
 };
 
