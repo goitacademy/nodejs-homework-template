@@ -1,15 +1,8 @@
-import {
-  listContacts,
-  getContactById,
-  addContact,
-  updateContact,
-  updateStatusContact,
-  removeContact,
-} from "../service";
+import * as service from "../service/index.js";
 
 export const get = async (req, res, next) => {
   try {
-    const results = await listContacts();
+    const results = await service.listContacts();
     res.json({
       status: "success",
       code: 200,
@@ -27,7 +20,7 @@ export const get = async (req, res, next) => {
 export const getById = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const result = await getContactById(contactId);
+    const result = await service.getContactById(contactId);
     if (result) {
       res.json({
         status: "success",
@@ -53,7 +46,7 @@ export const getById = async (req, res, next) => {
 export const create = async (req, res, next) => {
   const { name, email, phone } = req.body;
   try {
-    const result = await addContact({ name, email, phone });
+    const result = await service.addContact({ name, email, phone });
     res.json({
       status: "success",
       code: 201,
@@ -72,7 +65,7 @@ export const update = async (req, res, next) => {
   const { contactId } = req.params;
   const { name, email, phone, favorite } = req.body;
   try {
-    const result = await updateContact(contactId, { name, email, phone, favorite });
+    const result = await service.updateContact(contactId, { name, email, phone, favorite });
     if (result) {
       res.json({
         status: "success",
@@ -104,7 +97,7 @@ export const updateStatus = async (req, res, next) => {
   }
 
   try {
-    const result = await updateStatusContact(contactId, { favorite });
+    const result = await service.updateStatusContact(contactId, { favorite });
     if (result) {
       res.json({
         status: "success",
@@ -130,7 +123,7 @@ export const updateStatus = async (req, res, next) => {
 export const remove = async (req, res, next) => {
   const { contactId } = req.params;
   try {
-    const result = await removeContact(contactId);
+    const result = await service.removeContact(contactId);
     if (result) {
       res.json({
         status: "success",
