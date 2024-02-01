@@ -5,7 +5,7 @@ const ctrlWrapper = require("../helpers/ctrlWrapper.js");
 const getAll = async (req, res) => {
   const { _id: owner } = req.user;
 
-  const { page = 1, limit = 20 } = req.query;
+  const { page = 1, limit = 3 } = req.query;
   const skip = (page - 1) * limit;
   const result = await Contact.find({ owner }, "-createdAt -updatedAt", {
     skip,
@@ -24,7 +24,8 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res, next) => {
   const { id } = req.params;
-  const result = await Contact.findById(id);
+  const { _id: owner } = req.user;
+  const result = await Contact.findById(id, owner);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -43,7 +44,8 @@ const addContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { id } = req.params;
-  const result = await Contact.findByIdAndDelete(id);
+  const { _id: owner } = req.user;
+  const result = await Contact.findByIdAndDelete(id, owner);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -51,12 +53,13 @@ const deleteContact = async (req, res) => {
 };
 
 const updateContact = async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
   if (!req.body || Object.keys(req.body).length === 0) {
     throw HttpError(400, "missing fields");
   }
 
-  const result = await Contact.findByIdAndUpdate(id, req.body, {
+  const result = await Contact.findByIdAndUpdate(id, req.body, owner, {
     new: true,
   });
   if (!result) {
@@ -71,7 +74,7 @@ const updateFavorite = async (req, res) => {
     throw HttpError(400, "missing field favorite");
   }
 
-  const result = await Contact.findByIdAndUpdate(id, req.body, {
+  const result = await Contact.findByIdAndUpdate(id, req.body, owner, {
     new: true,
   });
   if (!result) {

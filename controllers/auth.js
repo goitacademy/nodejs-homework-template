@@ -53,8 +53,8 @@ const getCurrent = (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  const { id } = req.params;
-  await User.findByIdAndUpdate(id, { token: "" });
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
   res.status(204).json();
 };
 
