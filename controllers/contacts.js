@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 
-const contactStorage = require('models/contacts.json')
+const contactStorage = require('../models/contacts.json')
 
 const listContacts = async () => {
   return await contactStorage
