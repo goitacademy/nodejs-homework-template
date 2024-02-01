@@ -10,7 +10,11 @@ In this task, a third layer in the form of a database was implemented for our RE
 
 Clone this repo to your desktop and run `npm install` to install all the dependencies.
 
+<<<<<<< HEAD
 Rename file `.env-sample` to `.env`.
+=======
+Rename file `.env-sample` to `.env`
+>>>>>>> parent of c4a95b6 (Merge pull request #6 from ArkadiuszMyszka/revert-5-hw03-mongodb)
 
 You might want to look into `config.json` to make change the port you want to use and set up a SSL certificate.
 
