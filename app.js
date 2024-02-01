@@ -15,3 +15,5 @@ app.use("/api/contacts", contactsRouter);
 app.listen(PORT, () => {
   console.log(`Serwer działa. Używaj API na porcie: ${PORT}`);
 });
+
+export default app;

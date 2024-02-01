@@ -1,13 +1,13 @@
-import { removeContact } from "#models/contacts/removeContact.js";
+const { removeContact } = "#models/contacts.js";
 
 async function deleteContacts(req, res, next) {
   const { contactId } = req.params;
 
   try {
     await removeContact(contactId);
-    res.status(204).json({ message: "Contact deleted" });
-  } catch (error) {
-    res.status(400).json({ message: "Not found" });
+    res.status(200).json({ message: "Contact deleted" });
+  } catch (err) {
+    res.status(404).json({ message: "Not found" });
   }
 }
 
