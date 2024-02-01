@@ -3,6 +3,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+require("dotenv").config();
+
 const contactsRouter = require("./routes/api/contacts");
 
 const app = express();
