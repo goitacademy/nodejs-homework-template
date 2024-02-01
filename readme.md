@@ -1,5 +1,6 @@
 # Node.JS Homework 3 (NoSQL Database - MongoDB)
 
+
 In this task, a third layer in the form of a database was implemented for our REST API. "MongoDB Atlas", "Studio 3T" and "MongoDB Compass" were used for this.
 
 ---
