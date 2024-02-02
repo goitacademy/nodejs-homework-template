@@ -4,6 +4,7 @@ import logger from "morgan";
 import cors from "cors";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import usersRouter from './routes/api/users.js';
 import contactsRouter from "./routes/api/contacts.js";
 
 const app = express()
@@ -34,6 +35,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+app.use('/users', usersRouter);
 app.use('/', contactsRouter)
 
 app.use((req, res) => {
