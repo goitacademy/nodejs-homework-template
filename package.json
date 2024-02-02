@@ -17,6 +17,7 @@
   "dependencies": {
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.1",
+    "esm": "^3.2.25",
     "express": "^4.18.2",
     "mongoose": "^8.1.1"
   },

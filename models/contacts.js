@@ -1,21 +1,25 @@
-// models/contacts.js
 import mongoose from "mongoose";
+// import dotenv from "dotenv";
 import dotenv from "dotenv";
 const { Schema } = mongoose;
 
 dotenv.config();
+// config();
+// require("dotenv").config();
 
 const { DB_CONNECTION_STRING } = process.env;
-
+console.log(DB_CONNECTION_STRING);
 mongoose.connect(DB_CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  // server: { socketOptions: { keepAlive: 1 } },
 });
 
 const db = mongoose.connection;
 
 db.on("error", (err) => {
   console.error(`Error connecting to MongoDB: ${err}`);
+  // console.error(err.stack);
   process.exit(1);
 });
 
