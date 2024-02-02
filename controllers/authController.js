@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
@@ -45,6 +45,9 @@ const register = async (req, res) => {
     html: `<h1>Verify your email</h1>
     <p>Please click the link below to verify your email</p>
     <a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Verify</a>`,
+    text: `<h1>Verify your email</h1>
+    <p>Please click the link below to verify your email</p>
+    <a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Verify</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -88,6 +91,9 @@ const resendVerifyEmail = async (req, res) => {
     to: email,
     subject: "Verify your email",
     html: `<h2>Verify your email</h2>
+    <p>Please click the link below to verify your email</p>
+    <a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Verify</a>`,
+    text: `<h1>Verify your email</h1>
     <p>Please click the link below to verify your email</p>
     <a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Verify</a>`,
   };
