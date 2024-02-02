@@ -1,20 +1,20 @@
 import express from "express";
-import { listContacts } from "../../models/contacts.js";
+import {
+  listContacts,
+  getContactById,
+  removeContact,
+} from "../../models/contacts.js";
 const router = express.Router();
 
 router.get("/", listContacts);
 
-router.get("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.get("/:contactId", getContactById);
 
 router.post("/", async (req, res, next) => {
   res.json({ message: "template message" });
 });
 
-router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.delete("/:contactId", removeContact);
 
 router.put("/:contactId", async (req, res, next) => {
   res.json({ message: "template message" });
