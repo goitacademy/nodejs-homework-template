@@ -1,22 +1,6 @@
-import fs from "fs/promises";
-import path from "path";
 import { nanoid } from "nanoid";
-
-const contactsPath = path.join(process.cwd(), "models/contacts.json");
-
-const readContacts = async () => {
-  const contacts = await fs.readFile(contactsPath);
-  return JSON.parse(contacts);
-};
-
-const writeContacts = async (contactsParsed) => {
-  await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
-};
-
-const findContactIndexById = async (contactId) => {
-  const contactsParsed = await readContacts();
-  return contactsParsed.findIndex((contact) => contact.id === contactId);
-};
+import { validateContact, contactSchema } from "./schemaJoi.js";
+import { writeContacts, readContacts, findContactIndexById } from "./utils.js";
 
 export const listContacts = async (_, res, next) => {
   try {
@@ -61,53 +45,47 @@ export const removeContact = async (req, res, next) => {
 
 export const addContact = async (req, res, next) => {
   const body = req.body;
-  const requiredFields = ["name", "email", "phone"];
-  const missingFields = requiredFields.filter((field) => !(field in body));
-  if (missingFields.length > 0) {
-    const errorMessage = `Missing required field(s): ${missingFields.join(
-      ", "
-    )}`;
-    res.status(400).json({ message: errorMessage });
-  } else {
-    const newContact = {
-      id: nanoid(21),
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-    };
-    try {
-      const contactsParsed = await readContacts();
-      contactsParsed.push(newContact);
-      await writeContacts(contactsParsed);
-      res.status(201).json(newContact);
-    } catch (error) {
-      next(error);
-    }
+
+  const { error } = validateContact(body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+  const newContact = {
+    id: nanoid(21),
+    name: body.name,
+    email: body.email,
+    phone: body.phone,
+  };
+
+  try {
+    const contactsParsed = await readContacts();
+    contactsParsed.push(newContact);
+    await writeContacts(contactsParsed);
+    res.status(201).json(newContact);
+  } catch (error) {
+    next(error);
   }
 };
 
 export const updateContact = async (req, res, next) => {
   const contactId = req.params.contactId;
   const body = req.body;
-  const requiredFields = ["name", "email", "phone"];
-  const missingFields = requiredFields.filter((field) => !(field in body));
-  if (missingFields.length > 0) {
-    const errorMessage = `Missing required field(s): ${missingFields.join(
-      ", "
-    )}`;
-    res.status(400).json({ message: errorMessage });
-  } else {
-    try {
-      const contactIndex = await findContactIndexById(contactId);
-      if (contactIndex === -1) {
-        return res.status(404).json({ message: "Not found" });
-      }
-      const contactsParsed = await readContacts();
-      Object.assign(contactsParsed[contactIndex], body);
-      await writeContacts(contactsParsed);
-      res.json(contactsParsed[contactIndex]);
-    } catch (error) {
-      next(error);
+
+  const { error } = validateContact(body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
+  }
+
+  try {
+    const contactIndex = await findContactIndexById(contactId);
+    if (contactIndex === -1) {
+      return res.status(404).json({ message: "Not found" });
     }
+    const contactsParsed = await readContacts();
+    Object.assign(contactsParsed[contactIndex], body);
+    await writeContacts(contactsParsed);
+    res.json(contactsParsed[contactIndex]);
+  } catch (error) {
+    next(error);
   }
 };
