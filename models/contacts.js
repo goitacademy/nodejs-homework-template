@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { validateContact, contactSchema } from "./schemaJoi.js";
+import { validateContact } from "./schemaJoi.js";
 import { writeContacts, readContacts, findContactIndexById } from "./utils.js";
 
 export const listContacts = async (_, res, next) => {
