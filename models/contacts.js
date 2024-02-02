@@ -4,10 +4,23 @@ import { nanoid } from "nanoid";
 
 const contactsPath = path.join(process.cwd(), "models/contacts.json");
 
+const readContacts = async () => {
+  const contacts = await fs.readFile(contactsPath);
+  return JSON.parse(contacts);
+};
+
+const writeContacts = async (contactsParsed) => {
+  await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+};
+
+const findContactIndexById = async (contactId) => {
+  const contactsParsed = await readContacts();
+  return contactsParsed.findIndex((contact) => contact.id === contactId);
+};
+
 export const listContacts = async (_, res, next) => {
   try {
-    const contacts = await fs.readFile(contactsPath);
-    const contactsParsed = JSON.parse(contacts);
+    const contactsParsed = await readContacts();
     res.json(contactsParsed);
   } catch (error) {
     next(error);
@@ -17,8 +30,7 @@ export const listContacts = async (_, res, next) => {
 export const getContactById = async (req, res, next) => {
   const contactId = req.params.contactId;
   try {
-    const contacts = await fs.readFile(contactsPath);
-    const contactsParsed = JSON.parse(contacts);
+    const contactsParsed = await readContacts();
     const findId = contactsParsed.find((contact) => contact.id === contactId);
     if (findId) {
       res.json(findId);
@@ -33,14 +45,11 @@ export const getContactById = async (req, res, next) => {
 export const removeContact = async (req, res, next) => {
   const contactId = req.params.contactId;
   try {
-    const contacts = await fs.readFile(contactsPath);
-    const contactsParsed = JSON.parse(contacts);
-    const contactIndex = contactsParsed.findIndex(
-      (contact) => contact.id === contactId
-    );
+    const contactIndex = await findContactIndexById(contactId);
     if (contactIndex !== -1) {
+      const contactsParsed = await readContacts();
       const removedContact = contactsParsed.splice(contactIndex, 1)[0];
-      await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+      await writeContacts(contactsParsed);
       res.json({ message: "contact deleted" });
     } else {
       res.status(404).json({ message: "contact not Found" });
@@ -49,6 +58,7 @@ export const removeContact = async (req, res, next) => {
     next(error);
   }
 };
+
 export const addContact = async (req, res, next) => {
   const body = req.body;
   const requiredFields = ["name", "email", "phone"];
@@ -66,10 +76,9 @@ export const addContact = async (req, res, next) => {
       phone: body.phone,
     };
     try {
-      const contacts = await fs.readFile(contactsPath);
-      const contactsParsed = JSON.parse(contacts);
+      const contactsParsed = await readContacts();
       contactsParsed.push(newContact);
-      await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+      await writeContacts(contactsParsed);
       res.status(201).json(newContact);
     } catch (error) {
       next(error);
@@ -89,16 +98,13 @@ export const updateContact = async (req, res, next) => {
     res.status(400).json({ message: errorMessage });
   } else {
     try {
-      const contacts = await fs.readFile(contactsPath);
-      const contactsParsed = JSON.parse(contacts);
-      const contactIndex = contactsParsed.findIndex(
-        (contact) => contact.id === contactId
-      );
+      const contactIndex = await findContactIndexById(contactId);
       if (contactIndex === -1) {
         return res.status(404).json({ message: "Not found" });
       }
+      const contactsParsed = await readContacts();
       Object.assign(contactsParsed[contactIndex], body);
-      await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+      await writeContacts(contactsParsed);
       res.json(contactsParsed[contactIndex]);
     } catch (error) {
       next(error);
