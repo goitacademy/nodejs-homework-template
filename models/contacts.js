@@ -65,14 +65,15 @@ export const addContact = async (req, res, next) => {
       email: body.email,
       phone: body.phone,
     };
-
-    const contacts = await fs.readFile(contactsPath);
-    const contactsParsed = JSON.parse(contacts);
-
-    contactsParsed.push(newContact);
-
-    await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
-    res.status(201).json(newContact);
+    try {
+      const contacts = await fs.readFile(contactsPath);
+      const contactsParsed = JSON.parse(contacts);
+      contactsParsed.push(newContact);
+      await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+      res.status(201).json(newContact);
+    } catch (error) {
+      next(error);
+    }
   }
 };
 
