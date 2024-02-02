@@ -1,5 +1,6 @@
 
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const contactSchema = new mongoose.Schema(
   {
@@ -9,7 +10,8 @@ const contactSchema = new mongoose.Schema(
       required: [true, 'Set name for contact']
     },
     email: {
-      type: String, unique: true 
+      type: String, unique: true ,
+      
     },
     phone: {
       type: String,
@@ -25,5 +27,10 @@ const contactSchema = new mongoose.Schema(
   },
   { versionKey: false, timestamps: true }
 );
-
-module.exports = mongoose.model("Contact", contactSchema);
+const validSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().min(6).required(),
+});
+const Contact = mongoose.model("Contact", contactSchema);
+module.exports = { Contact, validSchema };

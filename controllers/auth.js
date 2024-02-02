@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
-const User = require("../models/user");
+const HttpError = require("../helpers/HttpError.js");
+const { User } = require("../models/user");
 
 async function register(req, res, next) {
   const { email, password } = req.body;
@@ -10,7 +10,8 @@ async function register(req, res, next) {
     const user = await User.findOne({ email });
 
     if (user !== null) {
-      return res.status(409).send({"message": "Email in use" });
+      next(HttpError(409, "Email in use"));
+      // return res.status(409).send({"message": "Email in use" });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -31,18 +32,20 @@ async function login(req, res, next) {
 
     if (user === null) {
       console.log("Email");
-      return res
-        .status(401)
-        .send({ message: "Email or password is wrong" });
+      next(HttpError(401, "Email or password is wrong"));
+      // return res
+      //   .status(401)
+      //   .send({ message: "Email or password is wrong" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch === false) {
       console.log("Password");
-      return res
-        .status(401)
-        .send({ message: "Email or password is wrong" });
+      next(HttpError(401, "Email or password is wrong"));
+      // return res
+      //   .status(401)
+      //   .send({ message: "Email or password is wrong" });
     }
 
     const token = jwt.sign(
@@ -62,7 +65,7 @@ async function login(req, res, next) {
 async function logout(req, res, next) {
   try {
     await User.findByIdAndUpdate(req.user.id, { token: null });
-    console.log(req.user.id)
+
     res.status(204).send({ message: 'No content'});
   } catch (error) {
     next(error);
@@ -76,27 +79,32 @@ async function current(req, res, next) {
     const authHeader = req.headers.authorization;
  
   if (typeof authHeader === "undefined") {
-    return res.status(401).send({ message: "Not authorized" });
+    next(HttpError(401, "Not authorized"));
+    // return res.status(401).send({ message: "Not authorized" });
   }
 
   const [bearer, token] = authHeader.split(" ", 2);
 
   if (bearer !== "Bearer") {
-    return res.status(401).send({ message: "Not authorized" });
+    next(HttpError(401, "Not authorized"));
+    // return res.status(401).send({ message: "Not authorized" });
   }
     jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
     if (err) {
-      return res.status(401).send({ message: "Not authorized" });
+      next(HttpError(401, "Not authorized"));
+      // return res.status(401).send({ message: "Not authorized" });
     }
 
     const user = await User.findById(decode.id);
    
     if (user === null) {
-      return res.status(401).send({ message: "Not authorized" });
+      next(HttpError(401, "Not authorized"));
+      // return res.status(401).send({ message: "Not authorized" });
     }
 
     if (user.token !== token) {
-      return res.status(401).send({ message: "Not authorized" });
+      next(HttpError(401, "Not authorized"));
+      // return res.status(401).send({ message: "Not authorized" });
     }
 
     res.status(200).send({ "email": user.email });
