@@ -6,7 +6,7 @@ The application also integrates SendGrid for email verification and sending.
 It provides endpoints for user authentication, managing contacts, and sending email notifications using SendGrid.
 
 # Deployment
-The app is deployed at https://phonebook-node.up.railway.app.
+The app is deployed at [phonebook-api-swagger](https://phonebook-api-node.onrender.com/api#/)
 
 # Stack
 
