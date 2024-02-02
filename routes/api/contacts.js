@@ -4,6 +4,7 @@ import {
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 } from "../../models/contacts.js";
 
 const router = express.Router();
@@ -16,8 +17,6 @@ router.post("/", addContact);
 
 router.delete("/:contactId", removeContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:contactId", updateContact);
 
 export { router };

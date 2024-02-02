@@ -77,4 +77,31 @@ export const addContact = async (req, res, next) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+export const updateContact = async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const body = req.body;
+  const requiredFields = ["name", "email", "phone"];
+  const missingFields = requiredFields.filter((field) => !(field in body));
+  if (missingFields.length > 0) {
+    const errorMessage = `Missing required field(s): ${missingFields.join(
+      ", "
+    )}`;
+    res.status(400).json({ message: errorMessage });
+  } else {
+    try {
+      const contacts = await fs.readFile(contactsPath);
+      const contactsParsed = JSON.parse(contacts);
+      const contactIndex = contactsParsed.findIndex(
+        (contact) => contact.id === contactId
+      );
+      if (contactIndex === -1) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      Object.assign(contactsParsed[contactIndex], body);
+      await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+      res.json(contactsParsed[contactIndex]);
+    } catch (error) {
+      next(error);
+    }
+  }
+};
