@@ -3,16 +3,16 @@ import {
   listContacts,
   getContactById,
   removeContact,
+  addContact,
 } from "../../models/contacts.js";
+
 const router = express.Router();
 
 router.get("/", listContacts);
 
 router.get("/:contactId", getContactById);
 
-router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.post("/", addContact);
 
 router.delete("/:contactId", removeContact);
 

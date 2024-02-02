@@ -1,5 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
+import { nanoid } from "nanoid";
+
 const contactsPath = path.join(process.cwd(), "models/contacts.json");
 
 export const listContacts = async (_, res, next) => {
@@ -39,7 +41,7 @@ export const removeContact = async (req, res, next) => {
     if (contactIndex !== -1) {
       const removedContact = contactsParsed.splice(contactIndex, 1)[0];
       await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
-      res.json(removedContact);
+      res.json({ message: "contact deleted" });
     } else {
       res.status(404).json({ message: "contact not Found" });
     }
@@ -47,6 +49,31 @@ export const removeContact = async (req, res, next) => {
     next(error);
   }
 };
-const addContact = async (body) => {};
+export const addContact = async (req, res, next) => {
+  const body = req.body;
+  const requiredFields = ["name", "email", "phone"];
+  const missingFields = requiredFields.filter((field) => !(field in body));
+  if (missingFields.length > 0) {
+    const errorMessage = `Missing required field(s): ${missingFields.join(
+      ", "
+    )}`;
+    res.status(400).json({ message: errorMessage });
+  } else {
+    const newContact = {
+      id: nanoid(21),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    };
+
+    const contacts = await fs.readFile(contactsPath);
+    const contactsParsed = JSON.parse(contacts);
+
+    contactsParsed.push(newContact);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+    res.status(201).json(newContact);
+  }
+};
 
 const updateContact = async (contactId, body) => {};
