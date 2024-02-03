@@ -5,7 +5,6 @@ const app = require('./app');
 
 const URI = process.env.DB_HOST;
 
-console.log(process.env.DB_HOST);
 mongoose
   .connect(URI)
   .then(() => {
