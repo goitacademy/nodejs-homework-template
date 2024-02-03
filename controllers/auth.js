@@ -90,6 +90,10 @@ const undateSubscribe = async (req, res) => {
 };
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
+  if (!req.file) {
+    res.status(400).json({ message: "Please upload an image file" });
+  }
+
   const { path: tempUpload, originalname } = req.file;
 
   const filename = `${_id}_${originalname}`;
