@@ -15,7 +15,7 @@ const options = {
         const user = await User.findById(payload.userId);
 
         if (!user) {
-            return done(null, false, { message: 'Not authorized' });
+            return done(null, false);
         }
 
         return done(null, user);
@@ -27,13 +27,19 @@ const options = {
 passport.use(jwtStrategy);
   
 const authenticateToken = (req, res, next) => {
-    passport.authenticate('jwt', { session: false }, (err, user) => {
+    console.log('Request Headers:', req.headers);
+    passport.authenticate('jwt', { session: false }, (err, user, info) => {
+        console.log('Error:', err);
+        console.log('User:', user);
+        console.log('Info:', info);
+        
         if (err) {
-            return res.status(401).json({ message: 'Not authorized' });
+            console.error('Error during authentication:', err);
+            return res.status(401).json({ message: 'Authentication error' });
         }
 
         if (!user) {
-            return res.status(401).json({ message: 'Not authorized' });
+            return res.status(401).json({ message: 'Not enough rights' });
         }
 
         req.user = user;
