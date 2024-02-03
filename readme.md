@@ -39,6 +39,8 @@ The application will be accessible at localhost:3000.
 
 Project Structure:
 
+![projectStructure](https://github.com/szczepanskimichal/goit-nodejs-hw/assets/127307935/989e9f48-8ee9-4656-9a16-8ef33abffd88)
+
 Author:
 
 Michał Szczepański
