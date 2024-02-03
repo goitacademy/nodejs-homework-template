@@ -16,12 +16,12 @@ const {
 
 router.get('/', getAllContacts);
 
-router.get('/:id', getOneContact);
+// router.get('/:id', getOneContact);
 
 router.post('/', validateBody(createContactSchema), createContact);
 
-router.put('/:id', validateBody(updateContactSchema), updateContact);
+// router.put('/:id', validateBody(updateContactSchema), updateContact);
 
-router.delete('/:id', deleteContact);
+// router.delete('/:id', deleteContact);
 
 module.exports = router;

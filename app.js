@@ -23,9 +23,5 @@ app.use((err, req, res, next) => {
   res.status(status).json({ message });
 });
 
-app.use((req, res, next) => {
-  console.log('Hello from middleware');
-  next();
-});
 
 module.exports = app;

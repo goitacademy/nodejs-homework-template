@@ -1,4 +1,4 @@
-const { HttpError } = require('../helpers');
+const { HttpError } = require('../helpers/HttpError');
 const {
   createContactSchema,
   updateContactSchema,
@@ -20,4 +20,4 @@ const validateBody = schema => {
   return func;
 };
 
-module.exports = validateBody;
+module.exports.validateBody = validateBody;
