@@ -2,6 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import { User } from '../../models/userModel.js';
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const loginSchema = Joi.object({
     email: Joi.string().email().required(),
