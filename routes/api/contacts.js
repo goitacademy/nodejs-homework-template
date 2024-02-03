@@ -1,9 +1,9 @@
 import express from "express";
 import {
-  listContacts,
-  getContactById,
-  removeContact,
   addContact,
+  getContactById,
+  listContacts,
+  removeContact,
   updateContact,
 } from "../../models/contacts.js";
 

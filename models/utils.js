@@ -1,7 +1,9 @@
 import fs from "fs/promises";
-import path from "path";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const contactsPath = path.join(process.cwd(), "models/contacts.json");
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const contactsPath = join(__dirname, "models/contacts.json");
 
 export const readContacts = async () => {
   const contacts = await fs.readFile(contactsPath);
