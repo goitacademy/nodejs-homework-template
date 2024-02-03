@@ -1,5 +1,5 @@
 // /* eslint-disable spaced-comment */
-import { Contact } from "../controllers/service/schemas/user.js";
+import { Contact } from "../controllers/service/schemas/contact.js";
 
 const validate = async (contactId) => {
   try {
