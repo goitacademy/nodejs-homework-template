@@ -32,19 +32,28 @@ Strategy used: Single Action Controller.
 Technologies:
 
 JavaScript
+
 Node.js
+
 Starting up:
 
 First, install all required dependencies:
 
 bash
+
 Copy code
+
 npm install
+
 To run the application, use the following command:
 
+
 bash
+
 Copy code
+
 npm start
+
 The application will be accessible at localhost:3000.
 
 Project Structure:
