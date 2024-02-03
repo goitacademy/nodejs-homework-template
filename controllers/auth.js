@@ -10,7 +10,7 @@ async function register(req, res, next) {
     const user = await User.findOne({ email });
 
     if (user !== null) {
-      next(HttpError(409, "Email in use"));
+      throw HttpError(409, "Email in use");
       // return res.status(409).send({"message": "Email in use" });
     }
 
@@ -32,7 +32,7 @@ async function login(req, res, next) {
 
     if (user === null) {
       console.log("Email");
-      next(HttpError(401, "Email or password is wrong"));
+      throw HttpError(401, "Email or password is wrong");
       // return res
       //   .status(401)
       //   .send({ message: "Email or password is wrong" });
@@ -42,7 +42,7 @@ async function login(req, res, next) {
 
     if (isMatch === false) {
       console.log("Password");
-      next(HttpError(401, "Email or password is wrong"));
+      throw HttpError(401, "Email or password is wrong");
       // return res
       //   .status(401)
       //   .send({ message: "Email or password is wrong" });
@@ -79,31 +79,31 @@ async function current(req, res, next) {
     const authHeader = req.headers.authorization;
  
   if (typeof authHeader === "undefined") {
-    next(HttpError(401, "Not authorized"));
+    throw HttpError(401, "Not authorized");
     // return res.status(401).send({ message: "Not authorized" });
   }
 
   const [bearer, token] = authHeader.split(" ", 2);
 
   if (bearer !== "Bearer") {
-    next(HttpError(401, "Not authorized"));
+    throw HttpError(401, "Not authorized");
     // return res.status(401).send({ message: "Not authorized" });
   }
     jwt.verify(token, process.env.JWT_SECRET, async (err, decode) => {
     if (err) {
-      next(HttpError(401, "Not authorized"));
+      throw HttpError(401, "Not authorized");
       // return res.status(401).send({ message: "Not authorized" });
     }
 
     const user = await User.findById(decode.id);
    
     if (user === null) {
-      next(HttpError(401, "Not authorized"));
+      throw HttpError(401, "Not authorized");
       // return res.status(401).send({ message: "Not authorized" });
     }
 
     if (user.token !== token) {
-      next(HttpError(401, "Not authorized"));
+      throw HttpError(401, "Not authorized");
       // return res.status(401).send({ message: "Not authorized" });
     }
 

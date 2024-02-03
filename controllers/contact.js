@@ -55,7 +55,7 @@ async function createContact(req, res, next) {
 
     res.status(201).send(result);
   } catch (error) {
-    next(HttpError(400, "missing required name field"));
+    next(error.message);
     // res.status(400).json({ message: 'missing required name field' });
   }
 }
