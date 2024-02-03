@@ -1,61 +1,48 @@
 REST API for Contacts
-This REST API is designed for managing a set of contacts. It utilizes Node.js and MongoDB, with the connection established using Mongoose. The API supports the following routes:
 
-GET /api/contacts: Retrieve all contacts.
-GET /api/contacts/:id: Retrieve a specific contact by ID.
-POST /api/contacts: Create a new contact.
-DELETE /api/contacts/:id: Delete a contact by ID.
-PUT /api/contacts/:id: Update a contact by ID.
-PATCH /api/contacts/:contactId/favorite: Update the favorite status of a contact.
-For routes that involve data manipulation (POST and PUT), input data validation is implemented using the joi package.
+Introduction:
 
-Technologies Used
+Postman was utilized for interacting with the REST API. Connection to MongoDB was established using Mongoose.
+
+The API supports the following routes:
+
+GET /api/contacts
+GET /api/contacts/:id
+POST /api/contacts
+DELETE /api/contacts/:id
+PUT /api/contacts/:id
+PATCH /api/contacts/:contactId/favorite
+GET /api/contacts?page=1&limit=20 for pagination.
+GET /api/contacts?favorite=true for filtering by favorite contacts.
+PATCH /api/users/update-subscription to update the user's subscription.
+For routes that accept data (POST and PUT), data validation has been implemented using the joi package.
+
+Strategy used: Single Action Controller.
+
+Technologies:
+
 JavaScript
 Node.js
-MongoDB (with Mongoose)
-Getting Started
-To set up the project, start by installing the required dependencies:
+Starting up:
+
+First, install all required dependencies:
 
 bash
 Copy code
 npm install
-Next, run the application using the following command:
+To run the application, use the following command:
 
 bash
 Copy code
 npm start
-The application will be accessible at http://localhost:3000.
+The application will be accessible at localhost:3000.
 
-Project Structure
-The project is organized using the Single Action Controller strategy for better maintainability and readability.
+Project Structure:
 
-Project Structure
-scss
-Copy code
-project-root-directory
-│ README.md
-│ .gitignore
-│ ... (other project files)
-│  
-└───src
-│ │ app.js
-│ │ ... (other source files)
-│  
-└───controllers
-│ │ ... (controllers files)
-│  
-└───models
-│ │ ... (model files)
-│  
-└───routes
-│ │ ... (route files)
-│  
-└───middlewares
-│ ... (middleware files)
-Author
-Michal Szczepanski
+Author:
+
+Michał Szczepański
 
 Email: michalszczepanski07@gmail.com
-GitHub: szczepanskimichal
-LinkedIn: Michal Szczepanski
-Feel free to reach out for any questions or collaboration opportunities.
+GitHub: https://github.com/szczepanskimichal
+LinkedIn: www.linkedin.com/in/michal-szczepanski-a2bb9126b
