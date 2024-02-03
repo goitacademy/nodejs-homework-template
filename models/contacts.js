@@ -80,4 +80,23 @@ export const addContact = async (body) => {
   }
 };
 
-// const updateContact = async (contactId, body) => {};
+export const updateContacts = async (contactId, body) => {
+  try {
+    const contacts = await fs.readFile(contactsPath);
+    const contactsParsed = JSON.parse(contacts);
+    const index = contactsParsed.findIndex(
+      (contact) => contact.id === contactId
+    );
+
+    if (index > 0) {
+      contactsParsed[index] = { ...contactsParsed[index], ...body };
+
+      await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
+      return contactsParsed[index];
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return console.log(error.message);
+  }
+};

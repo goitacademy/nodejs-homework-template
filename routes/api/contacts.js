@@ -7,6 +7,9 @@ import { showContactById } from "../../controllers/contacts/showContactById.js";
 import { createContact } from "../../controllers/contacts/createContact.js";
 
 import { deleteContact } from "../../controllers/contacts/deleteContact.js";
+
+import { updateContact } from "../../controllers/contacts/updateContact.js";
+
 const router = express.Router();
 
 router.get("/", showContacts);
@@ -17,8 +20,6 @@ router.post("/", createContact);
 
 router.delete("/:contactId", deleteContact);
 
-router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
-});
+router.put("/:contactId", updateContact);
 
 export { router };
