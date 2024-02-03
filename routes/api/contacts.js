@@ -8,9 +8,11 @@ import { deleteContacts } from "../../controllers/contacts/deleteContacts.js";
 import { updateContacts } from '../../controllers/contacts/updateContacts.js';
 import { createContacts } from "../../controllers/contacts/createContacts.js";
 import { updateFavoriteStatusController } from '../../controllers/contacts/updateFavoriteStatus.js';
+
 import { login } from '../../controllers/users/loginUsersController.js';
 import { signup } from '../../controllers/users/registerUsersController.js';
 import { logout } from '../../controllers/users/logoutUserController.js';
+import { getCurrentUser } from '../../controllers/users/getCurrentUserController.js';
 
 const router = express.Router();
 
@@ -20,6 +22,7 @@ router.post("/api/contacts", authenticateToken, createContacts);
 router.delete('/api/contacts/:contactId', authenticateToken, deleteContacts);
 router.put('/api/contacts/:contactId', authenticateToken, updateContacts);
 router.patch('/api/contacts/:contactId/favorite', authenticateToken, updateFavoriteStatusController);
+
 router.post("/api/users/login", login);
 router.post("/api/users/signup", signup);
 router.get("/api/users/logout", authenticateToken, async (req, res) => {
@@ -30,5 +33,6 @@ router.get("/api/users/logout", authenticateToken, async (req, res) => {
       res.status(500).json({ message: 'Internal Server Error' });
     }
   });
+  router.get('/api/users/current', authenticateToken, getCurrentUser);
 
 export default router ;
