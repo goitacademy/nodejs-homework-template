@@ -1,12 +1,12 @@
 import { Router } from "express";
 
-import authRouter from '../../controllers/users/authRouter.js'
-import listRouter from "../../controllers/users/listRouter.js";
-import authMiddleware from "../../middlewares/jwt.js"
+import registerUser from "../../controllers/users/signupRouters.js";
+
 
 const router = Router();
 
-router.use("/auth", authRouter);
-router.use("/list", authMiddleware, listRouter);
+
+router.post("/register", registerUser);
+
 
 export default router;
