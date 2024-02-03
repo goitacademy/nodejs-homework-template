@@ -1,12 +1,27 @@
-// const fs = require('fs/promises')
-
+const fs = require('fs/promises');
+const path = require('path');
 const crypto = require('crypto');
 
-const contactStorage = require('../models/contacts.json')
+const contactsStorage = path.join(__dirname, '../db/contacts.json');
 
 const listContacts = async () => {
-  return await contactStorage
-}
+  try {
+    const data = await fs.readFile(contactsStorage, 'utf-8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+const saveContacts = async (contacts) => {
+  try {
+    await fs.writeFile(contactsStorage, JSON.stringify(contacts, null, 2), 'utf-8');
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 const getContactById = async (contactId) => {
   try {
@@ -26,7 +41,7 @@ const removeContact = async (contactId) => {
 
     if (index > -1) {
       contacts.splice(index, 1);
-      await contactStorage(contacts);
+      await saveContacts(contacts);
       return true;
     }
     return false;
@@ -44,7 +59,7 @@ const addContact = async (body) => {
       ...body,
     };
     contacts.push(newContact);
-    await contactStorage(contacts);
+    await saveContacts(contacts);
     return newContact;
   } catch (error) {
     console.error(error);
@@ -58,7 +73,7 @@ const updateContact = async (contactId, body) => {
     const index = contacts.findIndex(contact => contact.id === contactId);
     if (index !== -1) {
       contacts[index] = { ...contacts[index], ...body };
-      await contactStorage(contacts);
+      await saveContacts(contacts);
       return contacts[index];
     }
 
@@ -75,4 +90,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
