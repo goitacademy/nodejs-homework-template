@@ -8,7 +8,7 @@ const {
   updateContact,
 } = require("../../models/contacts");
 
-router.get("/", async (__, res, next) => {
+router.get("/", async (__, res) => {
   try {
     const contacts = await listContacts();
     res.json({
@@ -25,7 +25,7 @@ router.get("/", async (__, res, next) => {
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await getContactById(contactId);
@@ -44,7 +44,7 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", async (req, res) => {
   try {
     const body = req.body;
     const contact = await addContact(body);
@@ -63,7 +63,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const contact = await removeContact(contactId);
@@ -82,7 +82,7 @@ router.delete("/:contactId", async (req, res, next) => {
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.put("/:contactId", async (req, res) => {
   try {
     const { contactId } = req.params;
     const body = req.body;
