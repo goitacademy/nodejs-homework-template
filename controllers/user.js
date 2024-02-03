@@ -1,14 +1,17 @@
 const fs = require("fs/promises");
 const path = require("path");
+const crypto = require("node:crypto");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const gravatar = require ("gravatar");
+const gravatar = require("gravatar");
 const Jimp = require("jimp");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
-const avatarsDir = path.join(__dirname, "../","public","avatars");
-
+/** відправка пошти **/
+const sendEmail = require("../helpers/sendEmail");
 require("dotenv").config();
-const { SECRET_KEY } = process.env;
+/* ----------------**/
+const { SECRET_KEY, BASE_URL } = process.env;
 
 const { User } = require("../models/user");
 
@@ -22,14 +25,26 @@ const register = async (req, res) => {
     throw HttpError(409, "Email in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
-  // let avatarURL;
-  // if(req.file){
-  //   const {path,originalname}= req.file;
-  //   avatarURL = `/avatars/${req.user.id}_${originalname}`;
-  //   await fs.rename(path, path.join(avatarsDir, `${req.user.id}_${originalname}`));
-  // }
+
   const avatarURL = gravatar.url(email);
-  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL}); // gravatar must added
+
+  /* підтвердження пошти користувача**/
+  const verificationToken = crypto.randomUUID();
+  await sendEmail({
+    to: email,
+    form: "yaozonka@gmail.com",
+    subject: "Welcome to ContactBook",
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}">Click verify email</a>`,
+    text: `To confirm your registration please open the link ${BASE_URL}/api/users/verify/${verificationToken}`,
+  });
+  /* ------------------------------**/
+
+  const newUser = await User.create({
+    ...req.body,
+    verificationToken,
+    password: hashPassword,
+    avatarURL,
+  });
   console.log("New User Fields:", newUser.email);
   res.status(201).json({
     email: newUser.email,
@@ -52,6 +67,12 @@ const login = async (req, res) => {
     throw HttpError(401, "Email or password is wrong");
   }
 
+  /* верифікуємо користувача **/
+
+  if (user.verify === false) {
+    throw HttpError(404, "User not found!");
+  }
+  /** -----------------------  **/
   const payload = {
     id: user._id,
   };
@@ -90,21 +111,17 @@ const logout = async (req, res) => {
   });
 };
 
-const updateAvatar = async (req, res) =>{
-  const {_id} = req.user;
-  const {path: tempUpload, originalname} = req.file;
-  const filename = `${_id}_${originalname}`
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
 
- 
   try {
-    await fs.rename(tempUpload,resultUpload);
+    await fs.rename(tempUpload, resultUpload);
     const image = await Jimp.read(resultUpload);
 
-    await image
-      .resize(250, 250)
-      .quality(60)
-      .write(resultUpload);
+    await image.resize(250, 250).quality(60).write(resultUpload);
 
     const avatarURL = path.join("avatars", filename);
     await User.findByIdAndUpdate(_id, { avatarURL });
@@ -122,14 +139,12 @@ const updateAvatar = async (req, res) =>{
 
     res.status(500).json({ message: "Internal Server Error" });
   }
-
-}
-
+};
 
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
-  updateAvatar: ctrlWrapper(updateAvatar)
+  updateAvatar: ctrlWrapper(updateAvatar),
 };

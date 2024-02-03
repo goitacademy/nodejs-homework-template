@@ -4,11 +4,6 @@ const { HttpError } = require("../helpers");
 const { SECRET_KEY } = process.env;
 
 const authenticate = async (req, res, next) => {
-  // const authHeader = req.headers.authorization;
-  // console.log(authHeader);
-  // if (typeof authHeader === "undefined") {
-  //   next(HttpError(401));
-  // }
 
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
