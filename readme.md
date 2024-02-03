@@ -7,15 +7,25 @@ Postman was utilized for interacting with the REST API. Connection to MongoDB wa
 The API supports the following routes:
 
 GET /api/contacts
+
 GET /api/contacts/:id
+
 POST /api/contacts
+
 DELETE /api/contacts/:id
+
 PUT /api/contacts/:id
+
 PATCH /api/contacts/:contactId/favorite
+
 GET /api/contacts?page=1&limit=20 for pagination.
+
 GET /api/contacts?favorite=true for filtering by favorite contacts.
+
 PATCH /api/users/update-subscription to update the user's subscription.
+
 For routes that accept data (POST and PUT), data validation has been implemented using the joi package.
+
 
 Strategy used: Single Action Controller.
 
