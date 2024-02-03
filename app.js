@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import contactsRouter from "#routes/api/contacts.js";
+import usersRouter from "#routes/api/users.js";
 
 dotenv.config();
 
