@@ -46,5 +46,7 @@ Author:
 Michał Szczepański
 
 Email: michalszczepanski07@gmail.com
+
 GitHub: https://github.com/szczepanskimichal
+
 LinkedIn: www.linkedin.com/in/michal-szczepanski-a2bb9126b
