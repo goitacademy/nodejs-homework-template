@@ -66,9 +66,15 @@ const loginSchema = Joi.object({
     .messages({ "any.required": `"password" and "email" are required field` }),
 });
 
+const emailSchema = {
+  email: Joi.string().pattern(emailRegExp).required(),
+  // .messages({ "any.required": `"password" and "email" are required field` }),
+};
+
 const schemas = {
   registerSchema,
   loginSchema,
+  emailSchema,
 };
 
 const User = model("User", userSchema);
