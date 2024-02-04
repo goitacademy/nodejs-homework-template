@@ -5,8 +5,9 @@ export default function authMiddleware(req, res, next) {
     if (!user || err) {
       return res.status(401).json({ message: "Not authorized" });
     }
-    req.user = user
+    req.user = user[0]
+    
     res.locals.user = user;
-    next();
+    return next();
   })(req, res, next);
 }
