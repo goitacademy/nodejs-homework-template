@@ -27,10 +27,10 @@ npm run start
 ## Usage 
 
 #### Without autorization 
-POST - http://localhost:3000/users/register - create new user in database and set hashtagged password in database
-POST - http://localhost:3000/users/login - login into account and set JWT in database
+POST - http://localhost:3000/users/register - create new user in database and set hashtagged password in database.
+POST - http://localhost:3000/users/login - login into account and set JWT in database.
 #### With authorization ![Authorization](./models//images/Authorization.png)
 GET - http://localhost:3000/users/logout - logout and delete JWT from database. 
-GET - http://localhost:3000/users/current - get logged user email and subscription
+GET - http://localhost:3000/users/current - get logged user email and subscription.
 
 
