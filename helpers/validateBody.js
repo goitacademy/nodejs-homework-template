@@ -6,11 +6,8 @@ const {
 const validateBody = schema => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
-
-    if (error && schema === schemas.createContactSchema) {
-      throw HttpError(400, error.message);
-    } else if (error && schema === schemas.updateContactSchema) {
-      throw HttpError(400, 'Body must have at least one field');
+    if(error){
+      throw HttpError(400, error.message)
     }
 
     next();
