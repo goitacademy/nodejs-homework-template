@@ -3,7 +3,7 @@ import express from "express";
 import controllersContact  from "../../controllers/contacts-controller.js";
 import { isEmptyBody } from "../../middlewares/isEmptyBody.js";
 import validateBody from "../../decorators/validateBody.js";
-import { contactAddSchema, contactUpdateFavoriteSchema, updateContactSchema } from "../../models/Contacts.js";
+import { contactAddSchema, contactUpdateFavoriteSchema, updateContactSchema } from "../../models/contacts.js";
 import {isValidId} from "../../middlewares/isValidid.js"
 import  authenticate  from "../../middlewares/authenticate.js";
 
