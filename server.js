@@ -1,3 +1,4 @@
+// server.js
 import app from "./app.js";
 import mongoose from "mongoose";
 
@@ -7,7 +8,7 @@ mongoose
   .connect(DB_HOST)
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Database connection successful");
+      console.log("Server is running");
     });
   })
   .catch((error) => {
