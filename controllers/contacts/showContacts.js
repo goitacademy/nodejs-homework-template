@@ -1,5 +1,5 @@
 
-import { getContactById } from '../../models/contacts.js';
+import { getContactById } from '../../models/contacts/contacts.js';
 
 async function showContacts(req, res, next) {
   const { contactId } = req.params;

@@ -4,8 +4,8 @@ import logger from "morgan";
 import cors from "cors";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import usersRouter from './routes/api/users.js';
-import contactsRouter from "./routes/api/contacts.js";
+import contactsRouter from "./routes/api/contacts/contacts.js";
+import usersRouter from './routes/api/users/users.js';
 
 const app = express()
 

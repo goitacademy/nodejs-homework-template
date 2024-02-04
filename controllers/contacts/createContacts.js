@@ -1,4 +1,4 @@
-import { addContact } from '../../models/contacts.js';
+import { addContact } from '../../models/contacts/contacts.js';
 import { contactSchema } from './contactValidation.js';
 
 async function createContacts(req, res, next) {
