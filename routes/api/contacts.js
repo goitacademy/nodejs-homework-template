@@ -1,15 +1,18 @@
 const express = require("express");
 
 const ContactController = require("../../controllers/contact");
+const authMiddleware = require("../../middleware/auth");
+const { validSchema } = require("../../models/contact");
+const { validateBody } = require("../../middleware/validateBody");
 
 const router = express.Router();
 const jsonParser = express.json();
 
-router.get("/", ContactController.getContacts);
+router.get("/", authMiddleware, ContactController.getContacts);
 
-router.get("/:id", ContactController.getContact);
+router.get("/:id", authMiddleware, ContactController.getContact);
 
-router.post("/", jsonParser, ContactController.createContact);
+router.post("/", authMiddleware, jsonParser, validateBody(validSchema), ContactController.createContact);
 
 router.put("/:id", jsonParser, ContactController.updateContact);
 

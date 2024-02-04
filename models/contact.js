@@ -1,20 +1,17 @@
 
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const contactSchema = new mongoose.Schema(
   {
-    // id: {
-    //   type: String,
-    //   minlength: 24,
-    //   maxlength: 24,
-    //   required: [true, 'Set id for searching contact'],
-    // },
+   
     name: {
       type: String,
       required: [true, 'Set name for contact']
     },
     email: {
-      type: String, unique: true 
+      type: String, unique: true ,
+      
     },
     phone: {
       type: String,
@@ -23,8 +20,17 @@ const contactSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    ownerId: {
+      type: String,
+      ref: 'user',
+    }
   },
   { versionKey: false, timestamps: true }
 );
-
-module.exports = mongoose.model("Contact", contactSchema);
+const validSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().min(6).required(),
+});
+const Contact = mongoose.model("Contact", contactSchema);
+module.exports = { Contact, validSchema };

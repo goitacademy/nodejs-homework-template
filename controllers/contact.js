@@ -1,9 +1,13 @@
-const Contact = require("../models/contact");
+// const { ObjectId } = require("mongodb");
+const { Contact }  = require("../models/contact");
+const HttpError = require("../helpers/HttpError.js");
 
 async function getContacts(req, res, next) {
+  console.log(req.user.id);
   try {
-    const contacts = await Contact.find({});
-
+    const userId = req.user.id;
+    const contacts = await Contact.find({ownerId: userId});
+      
     res.send(contacts);
   } catch (error) {
     next(error);
@@ -12,21 +16,27 @@ async function getContacts(req, res, next) {
 
 async function getContact(req, res, next) {
   const { id } = req.params;
-
-  try {
   
+  try {
+    const userId = req.user.id;
       const contact = await Contact.findById(id);
-
-      if (contact === null) {
-        return res.status(404).json({ message: "Not found" });;
-      }
       
+      if (contact === null) {
+        next(HttpError(404, "Not found"));
+        // return res.status(404).json({ message: "Not found" });;
+      }
+      if (contact.ownerId.toString() !== userId) {
+        // return res.status(403).send("Forbidden");
+        next(HttpError(404, "Contact not found"));
+        // return res.status(404).send("Contact not found");
+      }
       res.send(contact);
     
    
   } 
   catch (error) {
-    res.status(400).json({ message: 'not valid Id' });
+    next(HttpError(400, "not valid Id"));
+    // res.status(400).json({ message: 'not valid Id' });
   }
 }
 
@@ -35,7 +45,8 @@ async function createContact(req, res, next) {
   const contact = {
     name: req.body.name,
     email: req.body.email,
-    phone: req.body.phone
+    phone: req.body.phone,
+    ownerId: req.user.id,
     
   };
 
@@ -44,7 +55,8 @@ async function createContact(req, res, next) {
 
     res.status(201).send(result);
   } catch (error) {
-    res.status(400).json({ message: 'missing required name field' });
+    next(error.message);
+    // res.status(400).json({ message: 'missing required name field' });
   }
 }
 
@@ -59,18 +71,21 @@ async function updateContact(req, res, next) {
   };
 
    if (contact.name === undefined && contact.email === undefined && contact.phone === undefined) {
-        return res.status(400).json({ message: "Body is empty" });
+       next(HttpError(400, "Body is empty"));
+        // return res.status(400).json({ message: "Body is empty" });
       } ;
   try {
     const result = await Contact.findByIdAndUpdate(id, contact, { new: true });
 
       if (result === null) {
-        return res.status(404).json({ message: "Not found" });
+        next(HttpError(404, "Not found"));
+        // return res.status(404).json({ message: "Not found" });
       }  res.send(result);
   
    
   } catch (error) {
-    res.status(400).json({ message: 'not valid Id' });
+    next(HttpError(404, "not valid Id"));
+    // res.status(400).json({ message: 'not valid Id' });
     
   }
 }
@@ -82,12 +97,14 @@ async function deleteContact(req, res, next) {
     const result = await Contact.findByIdAndDelete(id);
 
     if (result === null) {
-      return res.status(404).json({ message: 'Not found' });;
+      next(HttpError(404, "Not found"));
+      // return res.status(404).json({ message: 'Not found' });;
     }
 
     res.send({ id });
   } catch (error) {
-    res.status(400).json({ message: 'not valid Id' });
+    next(HttpError(404, "not valid Id"));
+    // res.status(400).json({ message: 'not valid Id' });
     
   }
 }
@@ -105,14 +122,17 @@ async function changeContactFavorite(req, res, next) {
     );
       console.log(req.body.favorite)
     if (req.body.favorite === undefined) {
-      return res.status(400).json({ message: "missing field favorite" });
+      next(HttpError(400, "missing field favorite"));
+      // return res.status(400).json({ message: "missing field favorite" });
     }
     if (result === null) {
-      return res.status(404).json({ message: 'Not found' });
+      next(HttpError(404, "Not found"));
+      // return res.status(404).json({ message: 'Not found' });
     }
     res.send(result);
   } catch (error) {
-    res.status(400).json({ message: 'not valid Id' });
+    next(HttpError(400, "not valid Id"));
+    // res.status(400).json({ message: 'not valid Id' });
     
   }
 }
