@@ -7,7 +7,7 @@ export default function authMiddleware(req, res, next) {
     }
     req.user = user[0]
     
-    res.locals.user = user;
+    // res.locals.user = user;
     return next();
   })(req, res, next);
 }
