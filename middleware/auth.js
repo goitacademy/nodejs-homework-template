@@ -22,22 +22,24 @@ function auth(req, res, next) {
     if (err) {
       throw HttpError(401, "Not authorized");
     }
-
-    const user = await User.findById(decode.id);
+    try {
+      const user = await User.findById(decode.id);
    
-    if (user === null) {
-      throw HttpError(401, "Not authorized");
-    }
-
-    if (user.token !== token) {
-      throw HttpError(401, "Not authorized");
-    }
-
-    req.user = {
-      id: decode.id
-    };
-
-    next();
+      if (user === null) {
+        throw HttpError(401, "Not authorized");
+      }
+  
+      if (user.token !== token) {
+        throw HttpError(401, "Not authorized");
+      }
+  
+      req.user = {
+        id: decode.id
+      };
+  
+      next();
+    } catch (err) { next(HttpError(401, "Not authorized")); }
+   
   });
 }
 
