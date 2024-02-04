@@ -1,4 +1,5 @@
 import express from "express";
+import authMiddleware from "../../middlewares/jwt.js";
 
 import { indexContacts } from "../../controllers/contacts/indexContacts.js";
 import { showContacts } from "../../controllers/contacts/showContacts.js";
@@ -13,12 +14,12 @@ router.get("/", indexContacts);
 
 router.get("/:contactId", showContacts);
 
-router.post("/", createContacts);
+router.post("/", authMiddleware, createContacts);
 
-router.delete("/:contactId", deleteContacts);
+router.delete("/:contactId", authMiddleware, deleteContacts);
 
-router.put("/:contactId", updateContacts);
+router.put("/:contactId", authMiddleware, updateContacts);
 
-router.patch("/:contactId/favorite", changeContacts);
+router.patch("/:contactId/favorite", authMiddleware, changeContacts);
 
 export { router };

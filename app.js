@@ -5,7 +5,7 @@ import "dotenv/config";
 
 import { router as contactsRouter } from "./routes/api/contacts.js";
 import usersRouter from "./routes/api/users.js"
-// import setJWTStrategy from "./config/jwt.js";
+import setJWTStrategy from "./config/jwt.js";
 
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -14,7 +14,7 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-// setJWTStrategy()
+setJWTStrategy()
 
 app.use("/", contactsRouter);
 app.use("/users", usersRouter);

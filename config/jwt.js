@@ -1,6 +1,6 @@
 import passport from "passport";
 import { ExtractJwt, Strategy as JWTStrategy } from "passport-jwt";
-import User from "../models/User.js";
+import User from "../models/User.js"
 
 export default function setJWTStrategy() {
   const secret = process.env.SECRET;
@@ -12,7 +12,7 @@ export default function setJWTStrategy() {
   passport.use(
     new JWTStrategy(params, async function (payload, done) {
       try {
-        const user = User.find({ _id: payload.id }).lean();
+        const user = await User.find({ _id: payload.id }).lean();        
         if (!user) {
           return done(new Error("User not found"));
         }
