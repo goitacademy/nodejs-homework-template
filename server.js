@@ -1,5 +1,17 @@
-const app = require('./app')
+import mongoose from "mongoose";
+import app from "./app.js";
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+const PORT = process.env.PORT || 3001;
+const { DB_HOST } = process.env;
+
+mongoose.connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Database connection successful. Server running on ${PORT} PORT`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error connecting to the database:', error);
+    process.exit(1);
+  });
+
