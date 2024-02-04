@@ -55,10 +55,10 @@ const registerSchema = Joi.object({
   subscription: Joi.string(),
 });
 
-const emailSchema = {
+const emailSchema = Joi.object({
   email: Joi.string().pattern(emailRegExp).required(),
   // .messages({ "any.required": `"password" and "email" are required field` }),
-};
+});
 const loginSchema = Joi.object({
   password: Joi.string()
     .min(6)

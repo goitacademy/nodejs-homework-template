@@ -78,11 +78,11 @@ const resendVerifyEmail = async (req, res) => {
     throw HttpError(400, "Bad request");
   }
   if (user.verify) {
-    throw HttpError(401, "Verification has already been passed");
+    throw HttpError(400, "Verification has already been passed");
   }
-  // if (!user.verificationToken) {
-  //   throw HttpError(500, "Internal Server Error: Missing verificationToken");
-  // }
+  if (!user.verificationToken) {
+    throw HttpError(500, "Internal Server Error: Missing verificationToken");
+  }
   const verifyEmail = {
     to: email,
     subject: "Verify email",
