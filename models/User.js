@@ -1,47 +1,59 @@
-import { Schema, model } from "mongoose";
 import Joi from "joi";
+import { Schema, model } from "mongoose";
+import { addUpdateSettings, handleSaveError } from "./hooks.js";
 
-const emailRegexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-const subscriptionList = ["starter", "pro", "business"];
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const userSchema = new Schema({
 
-const userSchema = new Schema(
-  {
     password: {
-      type: String,
-      required: [true, "Set password for user"],
-      minlength: 6,
+        type: String,
+        required: [true, 'Set password for user'],
+        minlength: 6,
     },
     email: {
-      type: String,
-      match: emailRegexp,
-      required: [true, "Email is required"],
-      unique: true,
+        type: String,
+        match: emailRegexp,
+        required: [true, 'Email is required'],
+        unique: true,
     },
     subscription: {
-      type: String,
-      enum: subscriptionList,
-      default: "starter",
+        type: String,
+        enum: ["starter", "pro", "business"],
+        default: "starter"
     },
-    token: String,
-    avatarURL: {
-      type: String,
-      default: null,
-    },
-  },
-  { versionKey: false, timestamps: true }
-);
+  token: String,
+     avatarURL: String,
+
+}, { versionKey: false, timestamps: true });
+
+
+userSchema.post("save", handleSaveError);
+userSchema.post("findOneAndUpdate", handleSaveError)
+userSchema.pre("findOneAndUpdate", addUpdateSettings)
 
 export const userSignupSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(emailRegexp).required(),
-  subscription: Joi.string().valid(...subscriptionList),
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .messages({ "any.required": "wrong email format", "any.pattern": "wrong email format" }),
+  password: Joi.string()
+    .min(6)
+    .required()
+    .messages({ "any.required": "wrong password format" }),
+  subscription: Joi.string()
+    .default("starter"),
 });
 
 export const userSigninSchema = Joi.object({
-  password: Joi.string().min(6).required(),
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .messages({ "any.required": "wrong email format", "any.pattern": "wrong email format" }),
+  password: Joi.string()
+    .min(6)
+    .required()
+    .messages({ "any.required": "wrong password" }),
+ 
 });
 
-const User = model("user", userSchema);
-
-export default User;
+export const User = model("user", userSchema)

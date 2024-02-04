@@ -1,17 +1,17 @@
-// server.js
-import app from "./app.js";
 import mongoose from "mongoose";
+import app from "./app.js";
 
-const { DB_HOST, PORT = 3000 } = process.env;
+const PORT = process.env.PORT || 3001;
+const { DB_HOST } = process.env;
 
-mongoose
-  .connect(DB_HOST)
+mongoose.connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     app.listen(PORT, () => {
-      console.log("Server is running");
+      console.log(`Database connection successful. Server running on ${PORT} PORT`);
     });
   })
   .catch((error) => {
-    console.log(error.message);
+    console.error('Error connecting to the database:', error);
     process.exit(1);
   });
+

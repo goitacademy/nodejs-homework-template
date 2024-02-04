@@ -1,105 +1,102 @@
+import path from "path";
+import fs from "fs/promises";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import "dotenv/config";
+import dotenv from "dotenv";
+import gravatar from "gravatar";
+import Jimp from "jimp";
 
-import User, { userSignupSchema, userSigninSchema } from "../models/User.js";
 
-import { HttpError } from "../helpers/index.js";
+import { User } from "../models/User.js";
 
+import ctrlWrapper from "../decorators/ctrlWrapper.js";
+import { HttpError } from "../helpers/HttpError.js";
+
+dotenv.config();
 const { JWT_SECRET } = process.env;
 
-const signup = async (req, res, next) => {
-    try {
-        const { error } = userSignupSchema.validate(req.body);
-        if (error) {
-            throw HttpError(400, error.message);
-        }
+const avatarPath = path.resolve("public", "avatars");
 
-        const { email, password} = req.body;
-        const user = await User.findOne({ email });
-        if (user) {
-            throw HttpError(409, "Email in use");
-        }
+const register = async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    
+    if (user) {
+        throw HttpError(409, "Email in use")
+    }
 
-        const hashPassword = await bcrypt.hash(password, 10)
-        
-        const newUser = await User.create({ ...req.body, password: hashPassword});
-        res.status(201).json({
-            user: ({
-                email: newUser.email,
-                subscription: newUser.subscription
-            })
-            
-        })
-    }
-    catch (error) {
-        next(error)
-    }
+    
+   const avatarURL = gravatar.url(email);
+
+
+const hashPassword = await bcrypt.hash(password,10)
+
+    const newUser = await User.create({...req.body, password:hashPassword,avatarURL});
+     res.status(201).json({
+    user: { email: newUser.email, subscription: newUser.subscription,  },
+  });
 };
 
-const signin = async (req, res, next) => {
-    try {
-       const { error } = userSigninSchema.validate(req.body);
-        if (error) {
-            throw HttpError(400, error.message);
-        } 
-
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) {
-            throw HttpError(401, "Email or password is wrong");
-        }
-
-        const passwordCompare = await bcrypt.compare(password, user.password);
-        if (!passwordCompare) {
-          throw HttpError(401, "Email or password is wrong");  
-        }
-
-        const {_id: contactId} = user;
-    const payload = {
-     contactId
-        };
-
-         const token =jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
-        await User.findByIdAndUpdate(contactId, { token });
-        
-        res.json({
-            token,
-            user: ({
-                email: user.email,
-                subscription: user.subscription
-            })
-             
-        })
-     }
-    catch (error) {
-        next(error);
+const login = async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        throw HttpError(401,"Email or password is wrong")
     }
-}
-
-const getCurrent = async (req, res)=>{
-    
-        const { email, subscription } = req.user;
-    
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    if (!passwordCompare) {
+        throw HttpError(401, "Email or password is wrong")
+    }
+    const { _id: id } = user;
+    const payload = {
+        id
+    };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "23h" });
+    await User.findByIdAndUpdate(id, {token})
     res.json({
-        email,
-        subscription
-    });
-    
+           token,
+         user: { user: user.email, subscription: user.subscription },
+     
+    })
 }
 
-const signout = async (req, res) => {
+const getCurrent = async (req, res) => {
+  const { email, subscription } = req.user;
+
+  res.json({ email, subscription });
+};
+
+
+const logout = async (req, res) => {
     const { _id } = req.user;
-    await User.findByIdAndUpdate(_id, { token: "" });
-
-    res.status(204).json();
+    await User.findByIdAndDelete(_id, { token: "" })
+     res.status(204).json();
 }
-    
 
+const updateAvatar = async (req, res) => {
+       if (!req.file) {
+    throw HttpError(400, 'Avatar must be provided');
+  }
+    const {_id} = req.user
+    const { path: tempUpload, filename } = req.file;
+    const resultUpload = path.join(avatarPath, filename);
 
+ Jimp.read(tempUpload, (err, image) => {
+        if (err) throw HttpError(404, err);
+        image.resize(250, 250)
+            .write(resultUpload);
+    });
+   await fs.unlink(tempUpload);
+
+    const avatarURL = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL })
+    res.json ({avatarURL})
+}
 export default {
-    signup,
-    signin, 
-    getCurrent,
-    signout
+    signup: ctrlWrapper(register),
+    signin: ctrlWrapper(login),
+    getCurrent: ctrlWrapper(getCurrent),
+    logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar)
 }

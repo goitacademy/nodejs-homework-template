@@ -1,17 +1,17 @@
 import express from "express";
-
-import { isEmptyBody, authenticate } from "../../middlewares/index.js";
-
+import { isEmptyBody } from "../../middlewares/isEmptyBody.js";
 import authController from "../../controllers/auth-controller.js";
+import validateBody from "../../decorators/validateBody.js";
+import { userSigninSchema, userSignupSchema } from "../../models/User.js";
+import authenticate from "../../middlewares/authenticate.js";
+import upload from "../../middlewares/upload.js";
 
-const authRouter = express.Router();
 
-authRouter.post("/register", isEmptyBody, authController.signup);
 
-authRouter.post("/login", isEmptyBody, authController.signin);
+export const authRouter = express.Router();
 
-authRouter.get("/current", authenticate, authController.getCurrent);
-
-authRouter.post("/logout", authenticate, authController.signout);
-
-export default authRouter;
+authRouter.post("/register",upload.single("avatar"), isEmptyBody, validateBody(userSignupSchema), authController.signup);
+authRouter.post("/login", isEmptyBody, validateBody(userSigninSchema), authController.signin)
+authRouter.post("/logout", authenticate,authController.logout)
+authRouter.get("/current", authenticate, authController.getCurrent )
+authRouter.patch("/avatars",authenticate, upload.single("avatar"), authController.updateAvatar)
