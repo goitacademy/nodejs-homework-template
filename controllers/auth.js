@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const gravatar = require('gravatar');
 const HttpError = require("../helpers/HttpError.js");
 const { User } = require("../models/user");
 
@@ -15,8 +16,8 @@ async function register(req, res, next) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-
-    await User.create({ email, password: passwordHash });
+    const avatar = gravatar.url(email);
+    await User.create({ email, password: passwordHash, avatar });
 
     res.status(201).send({ message: "Registration successfully" });
   } catch (error) {
@@ -33,9 +34,7 @@ async function login(req, res, next) {
     if (user === null) {
       console.log("Email");
       throw HttpError(401, "Email or password is wrong");
-      // return res
-      //   .status(401)
-      //   .send({ message: "Email or password is wrong" });
+   
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -43,9 +42,7 @@ async function login(req, res, next) {
     if (isMatch === false) {
       console.log("Password");
       throw HttpError(401, "Email or password is wrong");
-      // return res
-      //   .status(401)
-      //   .send({ message: "Email or password is wrong" });
+ 
     }
 
     const token = jwt.sign(

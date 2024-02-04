@@ -17,10 +17,11 @@ router.post("/login", jsonParser, validateBody(schemas.loginSchema), AuthControl
 router.post("/logout", authMiddleware, AuthController.logout);
 router.get("/current", authMiddleware, AuthController.current);
 router.patch(
-    "/avatar",
+    "/avatars",
     uploadMiddleware.single("avatar"),
-    UserController.uploadAvatar
+    UserController.uploadAvatar, authMiddleware
   );
+// router.get("/avatars", UserController.getAvatar);
 
 
 // router.patch(

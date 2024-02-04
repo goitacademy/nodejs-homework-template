@@ -1,4 +1,4 @@
-// const fs = require("node:fs/promises");
+const fs = require("node:fs/promises");
 const path = require("node:path");
 
 const User = require("../models/user");
@@ -22,27 +22,28 @@ async function getAvatar(req, res, next) {
 }
 
 async function uploadAvatar(req, res, next) {
-    res.send("Upload avatar")
-//   try {
-//     await fs.rename(
-//       req.file.path,
-//       path.join(__dirname, "..", "public/avatars", req.file.filename)
-//     );
+    console.log("User",req.user);
+    // res.send("Upload avatar");
+  try {
+    await fs.rename(
+      req.file.path,
+      path.join(__dirname, "..", "public/avatars", req.file.filename)
+    );
+        // console.log(req.user.id);
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { avatar: req.file.filename },
+      { new: true }
+    );
 
-//     const user = await User.findByIdAndUpdate(
-//       req.user.id,
-//       { avatar: req.file.filename },
-//       { new: true }
-//     );
+    if (user === null) {
+      return res.status(404).send({ message: "User not found" });
+    }
 
-//     if (user === null) {
-//       return res.status(404).send({ message: "User not found" });
-//     }
-
-//     res.send(user);
-//   } catch (error) {
-//     next(error);
-//   }
+    res.send(user.avatar);
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = { uploadAvatar, getAvatar };
