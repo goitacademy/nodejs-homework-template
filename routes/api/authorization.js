@@ -15,8 +15,7 @@ router.post(
 
 router.post(
   "/login",
-  validateData,
-  schemas.registerSchema,
+  validateData(schemas.registerSchema),
   authController.login
 );
 
@@ -27,10 +26,10 @@ router.post("/logout", authenticate, authController.logout);
 router.patch(
   "/",
   authenticate,
-  validateData,
-  schemas.subscriptionSchema,
+  validateData(schemas.subscriptionSchema),
   authController.updateSubscription
 );
+
 router.patch(
   "/avatars",
   authenticate,

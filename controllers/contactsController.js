@@ -1,5 +1,8 @@
-const contacts = require("../models");
+const {contactModel} = require("../models");
 const { HttpError, controllerWrapper } = require("../helpers");
+
+const {Contact} = contactModel;
+
 
 const getContacts = async (request, response, next) => {
   const { _id: owner } = request.user;
@@ -10,8 +13,7 @@ const getContacts = async (request, response, next) => {
     query.favorite = favorite;
   }
 
-  const result = await contacts
-    .findfind(query, "-createdAt -updatedAt", { skip, limit })
+  const result = await Contact.find(query, "-createdAt -updatedAt", { skip, limit })
     .populate("owner", "email");
   if (!result) {
     throw HttpError(404, "Not found");
@@ -21,7 +23,7 @@ const getContacts = async (request, response, next) => {
 
 const getContact = async (request, response, next) => {
   const { contactId } = request.params;
-  const result = await contacts.finfById(contactId);
+  const result = await Contact.finfById(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -29,13 +31,14 @@ const getContact = async (request, response, next) => {
 };
 
 const addContact = async (request, response, next) => {
-  const result = await contacts.create(request.body);
+  const { _id: owner } = request.user;
+  const result = await Contact.create({...request.body, owner});
   response.status(201).json(result);
 };
 
 const deleteContact = async (request, response, next) => {
   const { contactId } = request.params;
-  const result = await contacts.findByIdAndDelete(contactId);
+  const result = await Contact.findByIdAndDelete(contactId);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -44,7 +47,7 @@ const deleteContact = async (request, response, next) => {
 
 const updateContact = async (request, response, next) => {
   const { contactId } = request.params;
-  const result = await contacts.findByIdAndUpdate(contactId, request.body, {
+  const result = await Contact.findByIdAndUpdate(contactId, request.body, {
     new: true,
   });
   if (!result) {
@@ -55,7 +58,7 @@ const updateContact = async (request, response, next) => {
 
 const updateStatusContact = async (request, response, next) => {
   const { contactId } = request.params;
-  const result = await contacts.findByIdAndUpdate(contactId, request.body, {
+  const result = await Contact.findByIdAndUpdate(contactId, request.body, {
     new: true,
   });
   if (!result) {

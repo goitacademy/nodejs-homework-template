@@ -5,13 +5,14 @@ const Jimp = require("jimp");
 const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const path = require("path");
-const saltRounds = 10;
+
 
 
 dotenv.config();
 
 const { userModel } = require("../models");
 const { HttpError, controllerWrapper } = require("../helpers");
+
 const { User } = userModel;
 const { SECRET_KEY } = process.env;
 
@@ -23,7 +24,7 @@ const signup = async (request, response, next) => {
   if (user) {
     throw HttpError(409, "Email in use");
   }
-  const hashPassword = await bcrypt.hash(password, saltRounds);
+  const hashPassword = await bcrypt.hash(password, 10);
 
   const avatarURL = gravatar.url(email);
 
@@ -33,7 +34,7 @@ const signup = async (request, response, next) => {
     avatarURL,
 
   });
-  response.status(200).json({
+  response.json({
     user: {
       email: newUser.email,
       subscription: newUser.subscription,

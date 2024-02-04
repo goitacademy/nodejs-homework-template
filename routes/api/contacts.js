@@ -2,14 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 const { contactsController } = require("../../controllers");
-const { schemas } = require("../../models/user");
-
+const { contactModel } = require("../../models");
 const {
   validateData,
   checkBody,
   isValidId,
   authenticate,
 } = require("../../middlewares");
+
+const { schemas } = contactModel;
 
 router.get("/", authenticate, contactsController.getContacts);
 
@@ -28,7 +29,12 @@ router.post(
   contactsController.addContact
 );
 
-router.delete("/:contactId", isValidId, contactsController.deleteContact);
+router.delete(
+  "/:contactId",
+  authenticate,
+  isValidId,
+  contactsController.deleteContact
+);
 
 router.put(
   "/:contactId",
@@ -38,3 +44,6 @@ router.put(
   validateData(schemas.requiredFieldsSchema),
   contactsController.updateContact
 );
+
+
+module.exports = router;
