@@ -1,5 +1,5 @@
-import fs from "fs/promises";
 import path from "path";
+import fs from "fs/promises";
 import { nanoid } from "nanoid";
 
 const contactsPath = path.join(process.cwd(), "/models/contacts.json");
