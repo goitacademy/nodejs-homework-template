@@ -51,7 +51,7 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
-app.use('/users', usersRouter);
+app.use('/', usersRouter);
 app.use('/', contactsRouter);
 app.post('/avatars', uploadAvatar.single('avatar'), (req, res) => {
   return res.status(200).json({ message: 'Аватар успешно загружен' });
@@ -62,7 +62,8 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  console.error('Global error handler:',err);
+  res.status(500).json({ message: 'Internal Server Error' })
 })
 
 export default app;
