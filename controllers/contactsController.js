@@ -75,6 +75,19 @@ const updateStatusContact = async (contactId, body) => {
     throw error;
   }
 };
+const updateAvatar = async (userId, filename) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { avatarURL: `/avatars/${filename}` },
+      { new: true }
+    );
+
+    return updatedUser.avatarURL;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   listContacts,
@@ -83,4 +96,5 @@ export {
   addContact,
   updateContact,
   updateStatusContact,
+  updateAvatar,
 };
