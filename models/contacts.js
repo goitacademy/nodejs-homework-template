@@ -36,7 +36,7 @@ export const removeContact = async (contactId) => {
       (contact) => contact.id === contactId
     );
 
-    if (index > 0) {
+    if (index > -1) {
       contactsParsed.splice(index, 1);
 
       const updatedContacts = JSON.stringify(contactsParsed, null, 2);
@@ -88,7 +88,7 @@ export const updateContacts = async (contactId, body) => {
       (contact) => contact.id === contactId
     );
 
-    if (index > 0) {
+    if (index > -1) {
       contactsParsed[index] = { ...contactsParsed[index], ...body };
 
       await fs.writeFile(contactsPath, JSON.stringify(contactsParsed, null, 2));
