@@ -16,16 +16,11 @@ const idSchema = Joi.object({
     id: Joi.string().pattern(/[a-zA-Z0-9_-]/).required(),
 });
 
-const validate = (schema) => async (req, res, next) => {
+const validate = (schema) => async (id) => {
     try {
         await schema.validateAsync(req.body);
-        next();
     } catch (err) {
-        return res.status(400).json({
-            status: 'error',
-            code: 400,
-            message: `Field ${err.message.replace(/"/g, '')}`,
-        });
+        return err;
     }
 };
 
