@@ -1,4 +1,4 @@
-
+// app.js
 import express from 'express'
 import logger from "morgan";
 import cors from "cors";
@@ -8,13 +8,14 @@ import contactsRouter from "./routes/api/contacts/contacts.js";
 import usersRouter from './routes/api/users/users.js';
 import multer from 'multer';
 import path from 'path';
+import { AvatarProcessor } from './controllers/users/AvatarProcessor.js';
 
 const app = express()
 
 dotenv.config();
 
-
 const avatarUploadDir = path.join(process.cwd(), 'public', 'avatars');
+const tmpDir = path.join(process.cwd(), 'tmp');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -26,6 +27,8 @@ const storage = multer.diskStorage({
 });
 
 const uploadAvatar = multer({ storage });
+
+const avatarProcessor = new AvatarProcessor(avatarUploadDir, path.join(process.cwd(), 'public'), tmpDir);
 
 const { MONGODB_URI } = process.env;
 

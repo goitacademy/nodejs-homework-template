@@ -1,4 +1,4 @@
-
+// models/user/userModel.js
 import mongoose from 'mongoose';
 import gravatar from 'gravatar';
 

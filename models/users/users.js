@@ -1,4 +1,4 @@
-
+// models/users/users.js
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { User } from './userModel';

@@ -1,9 +1,10 @@
-
+// controllers/users/registerUsersController.js
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import Joi from 'joi';
 import { User } from '../../models/users/userModel.js';
+import { AvatarProcessor } from './AvatarProcessor.js';
 
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -12,7 +13,7 @@ const signupSchema = Joi.object({
 
 const signup = async (req, res, next) => {
   try {
-    console.log('Received signup request:', req.body); // Добавим логирование
+    console.log('Received signup request:', req.body);
 
     const { email, password } = req.body
 
@@ -36,6 +37,11 @@ const signup = async (req, res, next) => {
       password: hashedPassword,
       avatarURL,
     });
+
+    const processedAvatarURL = await AvatarProcessor.processAvatar(req.file.path, user._id);
+
+    user.avatarURL = processedAvatarURL;
+    await user.save();
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: '1h',

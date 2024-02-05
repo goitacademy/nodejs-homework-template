@@ -1,3 +1,4 @@
+// controllers/users/getCurrentUserController.js
 import { User } from '../../models/users/userModel.js';
 
 const getCurrentUser = async (req, res) => {

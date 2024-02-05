@@ -1,3 +1,4 @@
+// middleware/authenticateToken.js
 import passport from 'passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import { User } from '../models/users/userModel.js';

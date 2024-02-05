@@ -1,3 +1,4 @@
+// controllers/contacts/indexContacts.js
 import { listContacts } from '../../models/contacts/contacts.js';
 
 async function indexContacts(req, res, next) {

@@ -1,3 +1,4 @@
+// models/contacts/contacts.js
 import { Contact } from './contactSchema.js';
 
 export const listContacts = async () => {

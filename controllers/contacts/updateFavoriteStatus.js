@@ -1,3 +1,4 @@
+// controllers/contacts/updateFavoriteStatus.js
 import { updateFavoriteStatus } from '../../models/contacts/contacts.js';
 
 export const updateFavoriteStatusController = async (req, res, next) => {

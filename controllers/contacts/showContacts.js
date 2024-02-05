@@ -1,4 +1,4 @@
-
+// controllers/contacts/showContacts.js
 import { getContactById } from '../../models/contacts/contacts.js';
 
 async function showContacts(req, res, next) {

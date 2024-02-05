@@ -1,4 +1,4 @@
-
+// controllers/users/logoutUserController.js
 import { User } from '../../models/users/userModel.js';
 
 const logout = async (req, res, next) => {

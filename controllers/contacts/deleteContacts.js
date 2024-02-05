@@ -1,3 +1,4 @@
+// controllers/contacts/deleteContacts.js
 import { removeContact } from '../../models/contacts/contacts.js';
 
 async function deleteContacts(req, res, next) {
