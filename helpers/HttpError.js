@@ -14,16 +14,3 @@ const errorMessagesList = {
 
   module.exports = HttpError;
 
-// const express = require("express");
-// const app = express();
-// // Handle 404 Error
-// app.use((err, res, next) => {
-//     res.status(401).send("Not authorized");
-//   });
-  
-//   // Handle Server Error
-//   app.use((error, _, res, __) => {
-//     console.error(error);
-  
-//     res.status(500).send("Internal Server Error");
-//   });
