@@ -7,13 +7,16 @@ import {
   updateAvatar, 
 } from '../../controllers/usersController.js';
 import { authMiddleware } from '../../middlewares/authMiddleware.js';
-
+import { verifyEmail, resendVerificationEmail } from '../../controllers/usersController.js';
 const router = express.Router();
 
 router.post('/signup', signUp);
 router.post('/login', login);
 router.post('/logout', authMiddleware, logout);
 router.get('/current', authMiddleware, getCurrentUser);
+router.get('/verify/:verificationToken', verifyEmail);
+router.post('/verify/resend', resendVerificationEmail);
+
 
 
 router.patch('/avatars', authMiddleware, async (req, res, next) => {
