@@ -1,4 +1,6 @@
 const bcrypt = require("bcrypt");
+const crypto = require("node:crypto");
+
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("node:fs/promises");
@@ -8,10 +10,13 @@ const Jimp = require("jimp");
 
 const User = require("../models/users");
 
+const sendEmail = require("../helpers/sendEmail");
+
 const {
   registerSchema,
   loginSchema,
   updateSubscriptionSchema,
+  resendVerifySchema,
 } = require(path.join(__dirname, "../schemas/users"));
 
 async function register(req, res, next) {
@@ -35,12 +40,23 @@ async function register(req, res, next) {
 
     const passwordHash = await bcrypt.hash(password, 10);
 
+    const verifyToken = crypto.randomUUID();
+
     const avatarURL = gravatar.url(email);
+
+    await sendEmail({
+      to: email,
+      from: process.env.SENDER_MAIL,
+      subject: "Verify your email address",
+      html: `To confirm your email address please click the <a href="http://${process.env.BASE_URL}/api/users/verify/${verifyToken}">link</a>`,
+      text: `To confirm your email address please open the link ->> the http://${process.env.BASE_URL}/api/users/verify/${verifyToken}`,
+    });
 
     await User.create({
       email: email,
       password: passwordHash,
       avatarURL: avatarURL,
+      verifyToken: verifyToken,
     });
 
     res.status(201).json({
@@ -48,6 +64,7 @@ async function register(req, res, next) {
         email,
         subscription: "starter",
         avatarURL,
+        verify: false,
       },
     });
   } catch (error) {
@@ -80,6 +97,10 @@ async function login(req, res, next) {
     if (isMatch === false) {
       console.log("Password");
       return res.status(401).send({ message: "Email or password is wrong" });
+    }
+
+    if (user.verify === false) {
+      return res.status(404).send({ message: "User not found" });
     }
 
     const token = jwt.sign(
@@ -181,6 +202,65 @@ async function updateAvatar(req, res, next) {
     next(error);
   }
 }
+
+async function verify(req, res, next) {
+  const { token } = req.params;
+
+  try {
+    const user = await User.findOne({ verifyToken: token });
+
+    if (user === null) {
+      return res.status(404).send({ message: "Not found" });
+    }
+    if (user.verify) {
+      return res.status(400).send({ message: "User already verified" });
+    }
+
+    await User.findByIdAndUpdate(user.id, { verify: true, verifyToken: null });
+
+    return res.status(200).send({ message: "Verification successful" });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function resendVerify(req, res, next) {
+  const response = resendVerifySchema.validate(req.body, {
+    abortEarly: false,
+  });
+  if (typeof response.error !== "undefined") {
+    return res
+      .status(400)
+      .json({ message: "Помилка від Joi або іншої бібліотеки валідації" });
+  }
+
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user === null) {
+    return res.status(404).send({ message: "Not found" });
+  }
+
+  if (user.verify === true) {
+    return res
+      .status(400)
+      .send({ message: "Verification has already been passed" });
+  }
+
+  await sendEmail({
+    to: email,
+    from: process.env.SENDER_MAIL,
+    subject: "Verify your email address",
+    html: `To confirm your email address please click the <a href="http://${process.env.BASE_URL}/api/users/verify/${user.verifyToken}">link</a>`,
+    text: `To confirm your email address please open the link ->> the http://${process.env.BASE_URL}/api/users/verify/${user.verifyToken}`,
+  });
+
+  res.status(200).json({
+    message: "Verification email sent",
+  });
+}
+
 module.exports = {
   register,
   login,
@@ -188,4 +268,6 @@ module.exports = {
   current,
   updateSubscription,
   updateAvatar,
+  verify,
+  resendVerify,
 };

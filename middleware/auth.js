@@ -30,6 +30,10 @@ function auth(req, res, next) {
       return res.status(401).send({ message: "Not authorized" });
     }
 
+    if (user.verify === false) {
+      return res.status(401).send({ message: "Your account is not verified" });
+    }
+
     req.user = {
       id: decode.id,
       email: decode.email,
