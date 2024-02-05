@@ -1,8 +1,8 @@
 const Contact = require("./schemas/contactSchemas");
 const mongoose = require("mongoose");
 
-const getAllContacts = () => {
-  return Contact.find();
+const getAllContacts = (userEmail) => {
+  return Contact.find({ email: userEmail });
 };
 
 const getContactById = (id) => {

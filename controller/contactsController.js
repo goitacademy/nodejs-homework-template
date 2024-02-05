@@ -8,7 +8,7 @@ const {
 const get = async (req, res, next) => {
   const { email } = req.user;
   try {
-    const contactsList = await service.getAllContacts();
+    const contactsList = await service.getAllContacts(email);
     console.log(contactsList);
     res.json({ status: 200, user: email, body: contactsList });
   } catch (e) {
