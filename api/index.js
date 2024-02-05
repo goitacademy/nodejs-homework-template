@@ -1,6 +1,6 @@
 import express from "express";
 const router = express.Router();
-import * as ctrlContact from "../controller";
+import * as ctrlContact from "../controller/index.js";
 
 router.get("/", ctrlContact.get);
 router.get("/:contactId", ctrlContact.getById);
