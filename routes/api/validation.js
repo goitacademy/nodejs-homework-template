@@ -8,6 +8,14 @@ const contactSchema = Joi.object({
         .required(),
 });
 
+const updatedContactSchema = Joi.object({
+  name: Joi.string().min(1).max(20),
+  phone: Joi.number().integer(),
+  email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'ru'] } }),
+  isVaccinated: Joi.boolean().required(),
+});
+
 const statusContactSchema = Joi.object({
     isVaccinated: Joi.boolean().required(),
 });
@@ -24,6 +32,12 @@ const validate = (schema) => async (id) => {
     }
 };
 
-module.exports.validateContact = validate(contactSchema);
-module.exports.validateStatusContact = validate(statusContactSchema);
-module.exports.validateId = validate(idSchema);
+module.exports = {
+    contactSchema,
+    updatedContactSchema,
+    statusContactSchema,
+    idSchema,
+    validateContact: validate(contactSchema),
+    validateStatusContact: validate(statusContactSchema),
+    validateId: validate(idSchema),
+};

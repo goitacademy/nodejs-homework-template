@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Contacts = require('../../controllers/contacts');
 
-const { validateContact, validateId } = require('./../api/validation');
+const { updatedContactSchema, validateId } = require('./../api/validation');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -65,15 +65,19 @@ router.put('/:id', async (req, res, next) => {
   try {
     const { name, email, phone } = req.body;
     const contactId = req.params.id;
+    const { error } = updatedContactSchema.validate({ name, email, phone });
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\d{10}$/;
+
     if (!name || !email || !phone) {
       return res.status(400).json({ message: 'missing fields in req.body' });
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'invalid email format' });
     }
-    const phoneRegex = /^\d{10}$/;
     if (!phoneRegex.test(phone)) {
       return res.status(400).json({ message: 'invalid phone number format' });
     }
@@ -83,6 +87,7 @@ router.put('/:id', async (req, res, next) => {
       email,
       phone,
     });
+
     if (!updatedContact) {
       return res.status(404).json({ message: 'Not found' });
     }
@@ -94,6 +99,7 @@ router.put('/:id', async (req, res, next) => {
       },
     });
   } catch (error) {
+
     next(error);
   }
 });
