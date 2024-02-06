@@ -1,14 +1,26 @@
-// const fs = require('fs/promises')
+const { readFile } = require("fs/promises");
+const path = require("path");
 
-const listContacts = async () => {}
+const contactsPath = path.join(__dirname, "contacts.json");
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  return readFile(contactsPath, "utf-8")
+    .then((data) => JSON.parse(data))
+    .catch((err) => console.log(err));
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  return readFile(contactsPath, "utf-8")
+    .then((data) => JSON.parse(data))
+    .then((contacts) => contacts.find((contact) => contact.id === contactId))
+    .catch((err) => console.log(err));
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {};
+
+const updateContact = async (contactId, body) => {};
 
 module.exports = {
   listContacts,
@@ -16,4 +28,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
