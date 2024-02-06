@@ -1,5 +1,5 @@
 {
-  "name": "HW04-auth",
+  "name": "HW005-avatars",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -16,12 +16,17 @@
     "cross-env": "7.0.3",
     "dotenv": "^16.4.1",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.10",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.1.1",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nanoid": "^3.0.0",
     "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "uuid": "^9.0.1",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "eslint": "7.19.0",
