@@ -17,9 +17,9 @@ router.post("/login", loginUser);
 router.get("/logout", authMiddleware, logoutUser);
 router.get("/current", authMiddleware, currentUser);
 router.patch(
-    "/avatars",
-    authMiddleware,
-    uploadMiddleware.single("avatars"),
+  "/avatars",
+  authMiddleware,
+  uploadMiddleware.single("avatars"),
   jimpProcess,
   avatarsUser
 );

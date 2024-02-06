@@ -1,18 +1,20 @@
 import fs from "fs/promises";
 
-const createFolderIfNotExist = async (uploadDir) => {
-     const isAccessible = (uploadDir) => {
-       return fs
-         .access(uploadDir)
-         .then(() => true)
-         .catch(() => false);
-     };
+const createFolderIfNotExist = async (path) => {
+  const isAccessible = (path) => {
+    return fs
+      .access(path)
+      .then(() => true)
+      .catch(() => false);
+  };
 
-
-  if (!(await isAccessible(uploadDir))) {
-    await fs.mkdir(uploadDir);
+  if (!(await isAccessible(path))) {
+    try {
+      await fs.mkdir(path);
+    } catch (error) {
+      process.exit(1);
+    }
   }
-
 };
 
 export default createFolderIfNotExist;
