@@ -1,5 +1,10 @@
 const express = require("express");
-const { listContacts, getContactById } = require("../../models/contacts");
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  removeContact,
+} = require("../../models/contacts");
 
 const router = express.Router();
 
@@ -34,11 +39,38 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const body = {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    };
+    const newContact = await addContact(body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  try {
+    const result = await removeContact(req.params.contactId);
+    if (result & (result.status === "success")) {
+      res.status(200).json({
+        status: "success",
+        code: 200,
+        message: "contact deleted",
+      });
+    } else if (result && result.status === "error") {
+      res.status(result.code).json({
+        status: "error",
+        code: 404,
+        message: "Not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
