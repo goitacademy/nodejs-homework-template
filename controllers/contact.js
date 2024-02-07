@@ -120,13 +120,10 @@ async function changeContactFavorite(req, res, next) {
       },
       { new: true }
     );
-      console.log(req.body.favorite)
-    if (req.body.favorite === undefined) {
-      next(HttpError(400, "missing field favorite"));
-      // return res.status(400).json({ message: "missing field favorite" });
-    }
+      // console.log(req.body.favorite)
+   
     if (result === null) {
-      next(HttpError(404, "Not found"));
+      throw HttpError(404, "Not found");
       // return res.status(404).json({ message: 'Not found' });
     }
     res.send(result);

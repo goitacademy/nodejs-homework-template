@@ -32,5 +32,10 @@ const validSchema = Joi.object({
   email: Joi.string().required(),
   phone: Joi.string().min(6).required(),
 });
+
+const validSchemaFavorite = Joi.object({
+  favorite: Joi.boolean().required()
+ 
+});
 const Contact = mongoose.model("Contact", contactSchema);
-module.exports = { Contact, validSchema };
+module.exports = { Contact, validSchema,  validSchemaFavorite};
