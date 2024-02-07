@@ -21,3 +21,4 @@ router.delete("/:id", authMiddleware, ContactController.deleteContact);
 router.patch("/:id/favorite", authMiddleware, jsonParser, validateBody(validSchemaFavorite), ContactController.changeContactFavorite);
 
 module.exports = router;
+module.exports = router;
