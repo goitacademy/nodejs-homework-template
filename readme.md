@@ -1,31 +1,30 @@
-## GoIT Node.js Course Template Homework
+# Node.JS Homework 5 (Working with files and testing )
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+This task added options to automatically generate an avatar using "gravatar" when creating a new account. Added the ability to change the avatar by uploading the photo to the server thanks to the middleware "multer".  The photo is modified using "jimp" and the new address updates in the database.
 
-Додайте ментора до колаборації
+---
 
-Для кожної домашньої роботи створюйте свою гілку.
+## How to install
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+Clone this repo to your desktop and run `npm install` to install all the dependencies.
 
-Кожна нова гілка для др повинна робитися з master
+Rename file `.env-sample` to `.env`
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+#### Remember never to share passwords
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+You might want to look into `.env` to make change the port you want to use.
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+After you clone this repo to your desktop, go to its root directory and run `npm install` to install its dependencies.
 
-### Команди:
+Once the dependencies are installed, you can run `npm run start` to start the application. You will then be able to access it at localhost:3000
+![Start](./models//images/run.png)
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+```shell
+npm run start
+```
+---
+## Usage
+
+PATCH - http://localhost:3000/users/avatars - after login, using POSTMAN send photo to server
+![Upload](./public/screenshots/avatar.PNG)
+
