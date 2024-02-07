@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
+const crypto = require("node:crypto");
 const jwt = require("jsonwebtoken");
 const gravatar = require('gravatar');
 const HttpError = require("../helpers/HttpError.js");
 const { User } = require("../models/user");
+const sendEmail = require("../helpers/sendEmail.js");
 
 async function register(req, res, next) {
   const { email, password } = req.body;
@@ -12,12 +14,20 @@ async function register(req, res, next) {
 
     if (user !== null) {
       throw HttpError(409, "Email in use");
-      // return res.status(409).send({"message": "Email in use" });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
     const avatar = gravatar.url(email);
-    await User.create({ email, password: passwordHash, avatar });
+    const verifyToken = crypto.randomUUID();
+    console.log(verifyToken)
+    await sendEmail({
+      to: email,
+      from: "nedavnayaya.yana@gmail.com",
+      subject: "Welcome to ContactsBook",
+      html: `To confirm your registration please click on the <a href="http://localhost:3000/api/users/verify/${verifyToken}">link</a>`,
+      text: `To confirm your registration please open the link http://localhost:3000/api/users/verify/${verifyToken}`,
+    });
+    await User.create({ email, verificationToken: verifyToken, password: passwordHash, avatar });
 
     res.status(201).send({ message: "Registration successfully" });
   } catch (error) {
@@ -44,7 +54,9 @@ async function login(req, res, next) {
       throw HttpError(401, "Email or password is wrong");
  
     }
-
+    if (user.verify === false) {
+      return res.status(401).send({ message: "Your account is not verified" });
+    }
     const token = jwt.sign(
       { id: user._id, name: user.email },
       process.env.JWT_SECRET,
@@ -110,5 +122,21 @@ async function current(req, res, next) {
     next(error);
   }
 }
+async function verify(req, res, next) {
+  const { token } = req.params;
 
-module.exports = { register, login, logout, current };
+  try {
+    const user = await User.findOne({ verificationToken: token });
+
+    if (user === null) {
+      return res.status(404).send({ message: "Not found" });
+    }
+
+    await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
+
+    res.send({ message: "Email confirm successfully" });
+  } catch (error) {
+    next(error);
+  }
+}
+module.exports = { register, login, logout, current, verify };

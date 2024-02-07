@@ -22,7 +22,7 @@ router.patch(
     UserController.uploadAvatar
   );
 router.get("/avatars", authMiddleware, UserController.getAvatar);
-
+router.get("/verify/:token", AuthController.verify);
 
 // router.patch(
 //     "/",

@@ -23,7 +23,8 @@ const contactSchema = new mongoose.Schema(
     ownerId: {
       type: String,
       ref: 'user',
-    }
+    },
+    
   },
   { versionKey: false, timestamps: true }
 );
