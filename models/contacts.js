@@ -64,7 +64,45 @@ const addContact = async (body) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const { name, email, phone } = body;
+    if (!name && !email && !phone) {
+      const result = 400;
+      return result;
+    } else {
+      const data = await readFile(contactsPath, "utf8");
+      const contacts = JSON.parse(data);
+      const contactIdToUpdate = contacts.findIndex(
+        (contact) => contact.id === contactId
+      );
+      if (contactIdToUpdate === -1) {
+        return;
+      } else {
+        const contactToUpdate = contacts[contactIdToUpdate];
+        if (name) {
+          contactToUpdate.name = name;
+        }
+        if (email) {
+          contactToUpdate.email = email;
+        }
+        if (phone) {
+          contactToUpdate.phone = phone;
+        }
+        contacts.splice(contactIdToUpdate, 1, contactToUpdate);
+        const newContacts = JSON.stringify(contacts);
+        await writeFile(contactsPath, newContacts, (err) => {
+          if (err) {
+            console.error(err);
+          }
+        });
+        return contactToUpdate;
+      }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 module.exports = {
   listContacts,
