@@ -1,33 +1,22 @@
 {
-  "name": "template",
-  "version": "0.0.0",
-  "private": true,
-  "type": "module",
+  "name": "mongo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "start": "node --experimental-modules app.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "imports": {
-    "#controllers/*": "./controllers/*",
-    "#models/*": "./models/*",
-    "#routes/*": "./routes/*"
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   },
   "dependencies": {
-    "cross-env": "^7.0.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.1",
-    "esm": "^3.2.25",
     "express": "^4.18.2",
     "mongoose": "^8.1.1"
-  },
-  "devDependencies": {
-    "eslint": "7.19.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-config-standard": "16.0.3",
-    "eslint-plugin-import": "2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
   }
 }
