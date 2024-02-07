@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const gravatar = require('gravatar');
+const gravatar = require("gravatar");
 const HttpError = require("../helpers/HttpError.js");
 const { User } = require("../models/user");
 
