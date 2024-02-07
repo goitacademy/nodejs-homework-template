@@ -23,7 +23,11 @@ router.patch(
   );
 router.get("/avatars", authMiddleware, UserController.getAvatar);
 router.get("/verify/:token", AuthController.verify);
-
+router.post(
+  "/verify",
+  validateBody(schemas.verifyEmailSchema),
+  AuthController.resendVerifyEmail
+);
 // router.patch(
 //     "/",
 //     authMiddleware,

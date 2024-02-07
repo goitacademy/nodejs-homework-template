@@ -52,11 +52,17 @@ const subscriptionListSchema = Joi.object({
     .valid(...subscriptionList)
     .required(),
 });
-
+const verifyEmailSchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .messages({ "any.required": "missing required field email" }),
+});
 const schemas = {
   registerSchema,
   loginSchema,
   subscriptionListSchema,
+  verifyEmailSchema
 };
 // module.exports = mongoose.model("User", userSchema);
 const User = mongoose.model("user", userSchema);
