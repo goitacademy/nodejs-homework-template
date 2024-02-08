@@ -1,8 +1,8 @@
 const Contact = require("./schemas/contactSchemas");
 const mongoose = require("mongoose");
 
-const getAllContacts = (userEmail) => {
-  return Contact.find({ email: userEmail });
+const getAllContactsByUserEmail = (email) => {
+  return Contact.find({ email: email });
 };
 
 const getContactById = (id) => {
@@ -32,7 +32,7 @@ const updateContact = (id, fields) => {
 };
 
 module.exports = {
-  getAllContacts,
+  getAllContactsByUserEmail,
   getContactById,
   createContact,
   removeContact,

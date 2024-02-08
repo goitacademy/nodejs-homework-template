@@ -3,10 +3,13 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secret = process.env.SECRET;
 const { validateUser } = require("../tools/userValidator");
+const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs").promises;
 
 const signUp = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = await service.findUserByEmail({email});
+  const user = await service.findUserByEmail({ email });
   const { error } = await validateUser({ email, password });
   if (error) {
     console.log(error);
@@ -26,7 +29,11 @@ const signUp = async (req, res, next) => {
     res.json({
       status: 201,
       msg: "Create new user",
-      data: { email: newUser.email, subscription: "starter" },
+      data: {
+        email: newUser.email,
+        subscription: newUser.subscription,
+        avatarURL: newUser.avatarURL,
+      },
     });
   } catch (error) {
     next(error);
@@ -41,7 +48,7 @@ const logIn = async (req, res, next) => {
       console.log(error);
       return res.json({ status: 400, msg: "Missing fields" });
     }
-    const user = await service.findUserByEmail({email});
+    const user = await service.findUserByEmail({ email });
 
     if (!user || !user.validPassword(password)) {
       return res.status(400).json({
@@ -65,12 +72,13 @@ const logIn = async (req, res, next) => {
       user: {
         email: user.email,
         subscription: user.subscription,
+        avatarURL: user.avatarURL,
       },
       msg: `Login successful. ${user.email}`,
     });
-    } catch(error) {
-      next(error);
-    }  
+  } catch (error) {
+    next(error);
+  }
 };
 
 const logOut = async (req, res, next) => {
@@ -95,9 +103,38 @@ const current = async (req, res, next) => {
   }
 };
 
+const avatar = async (req, res, next) => {
+  const storeImage = path.join(process.cwd(), "public/avatars");
+  const { id } = req.user;
+  const { path: temporaryName, originalname } = req.file;
+  const ext = path.extname(originalname);
+  const newName = `pic_${id}${ext}`;
+  const newAvatarURL = `/avatars/${newName}`;
+  const fileName = path.join(storeImage, newName);
+
+  try {
+    await fs.rename(temporaryName, fileName);
+    await Jimp.read(fileName)
+      .then((avatar) => {
+        return avatar.resize(250, 250).write(fileName);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    await service.updateAvatar(id, newAvatarURL);
+    return res.status(200).json({
+      msg: "Set new avatar",      
+      avatarURL: newAvatarURL,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signUp,
   logIn,
   logOut,
   current,
-}
+  avatar,
+};
