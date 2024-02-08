@@ -124,17 +124,15 @@ async function current(req, res, next) {
 }
 async function verify(req, res, next) {
   const { token } = req.params;
-
   try {
     const user = await User.findOne({ verificationToken: token });
-
     if (user === null) {
-      return res.status(404).send({ message: "Not found" });
+      return res.status(404).send({ message: "User not found" });
     }
 
     await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
 
-    res.send({ message: "Email confirm successfully" });
+    res.send({ message: "Verification successful" });
   } catch (error) {
     next(error);
   }
@@ -142,7 +140,9 @@ async function verify(req, res, next) {
 
 const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
-  const user = User.findOne({ email });
+  console.log(email);
+  const user = await User.findOne({ email });
+  console.log(user);
   if (!user) {
     throw HttpError(400, "missing required field email");
   }
@@ -150,7 +150,7 @@ const resendVerifyEmail = async (req, res) => {
   if (user.verify) {
     throw HttpError(400, "Verification has already been passed");
   }
-
+  console.log(user.verificationToken)
   const verifyEmail = {
     to: email,
     subject: "Verify email",
