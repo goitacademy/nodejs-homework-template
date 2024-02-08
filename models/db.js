@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
+
+const dbUrl = process.env.DB_URL;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://Kotek:kotek1234@cluster0.00ivqpx.mongodb.net/?retryWrites=true&w=majority",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+    await mongoose.connect(dbUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+
     console.log("Database connection successful");
   } catch (error) {
     console.error("Connection error:", error.message);
