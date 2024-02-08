@@ -1,15 +1,19 @@
 const service = require("../service");
 const { contactValidator } = require("./../utils/validators/validator");
 
-const getAll = async (req, res) => {
-  const contacts = await service.getAllContacts();
-  console.log("contacts: ", contacts);
-  res.status(200).json(contacts);
+const getAll = async (req, res, next) => {
+  try {
+    const contacts = await service.getAllContacts();
+    res.status(200).json(contacts);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
 };
 
 const getById = async (req, res, next) => {
+  const { contactId } = req.params;
   try {
-    const { contactId } = req.params;
     const contact = await service.getContactById(contactId);
     if (!contact) return;
     res.status(404).json({ message: "Not found" });
@@ -17,6 +21,7 @@ const getById = async (req, res, next) => {
     if (contact) return;
     res.status(200).json(contact);
   } catch (e) {
+    console.error(e);
     next(e);
   }
 };
@@ -35,12 +40,16 @@ const addContact = async (req, res, next) => {
     });
     res.status(201).json(result);
   } catch (e) {
+    console.error(e);
     next(e);
   }
 };
 
 const updateContact = async (req, res, next) => {
   try {
+    const { error } = contactValidator(req.body);
+    if (error)
+      return res.status(400).json({ message: error.details[0].message });
     const { contactId } = req.params;
     const { name, email, phone } = req.body;
     if (!name && !email && !phone)
@@ -54,12 +63,14 @@ const updateContact = async (req, res, next) => {
         data: { result },
       });
   } catch (e) {
+    console.error(e);
     next(e);
   }
 };
 
 const setFavorite = async (req, res, next) => {
   try {
+    const { e } = contactValidator(req.body);
     const { contactId } = req.params;
     const { favorite } = req.body;
     if (favorite === undefined || favorite === null)
@@ -73,6 +84,7 @@ const setFavorite = async (req, res, next) => {
         data: { result },
       });
   } catch (e) {
+    console.error(e);
     next(e);
   }
 };
@@ -86,6 +98,7 @@ const removeContact = async (req, res, next) => {
     if (contactToRemove) return;
     res.status(200).json({ message: "Contact deleted" });
   } catch (e) {
+    console.error(e);
     next(e);
   }
 };
