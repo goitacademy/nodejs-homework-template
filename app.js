@@ -1,10 +1,9 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const connectDB = require("./db");
-connectDB();
-
+const { connectDB } = require("./models/db");
 const bodyParser = require("body-parser");
+
 const {
   listContacts,
   getById,
@@ -12,9 +11,11 @@ const {
   removeContact,
   updateContact,
   validateContact,
-} = require("./routes/api/contacts");
+} = require("./routes/api.js/contacts");
 
 const app = express();
+
+connectDB();
 
 app.use(morgan("dev"));
 app.use(cors());

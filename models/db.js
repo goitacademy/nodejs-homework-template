@@ -1,18 +1,17 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://localhost:3000/contacts", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const db = mongoose.connection;
-db.on("error", (error) => {
-  console.error("Connection error:", error.message);
-  process.exit(1);
-});
-db.once("open", () => {
-  console.log("Database connection successful");
-});
+const connectDB = async () => {
+  try {
+    await mongoose.connect("mongodb://localhost:3000/contacts", {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Database connection successful");
+  } catch (error) {
+    console.error("Connection error:", error.message);
+    process.exit(1);
+  }
+};
 
 const contactSchema = new mongoose.Schema({
   name: {
@@ -80,6 +79,7 @@ const updateContact = async (id, updatedContact) => {
 };
 
 module.exports = {
+  connectDB,
   listContacts,
   getById,
   addContact,
