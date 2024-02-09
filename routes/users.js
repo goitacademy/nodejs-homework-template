@@ -51,6 +51,14 @@ router.post('/verify', async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+router.get('/auth/verify/:verificationToken', async (req, res) => {
+  try {
+    res.json({ message: 'User verified successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 function generateVerificationToken() {
 }

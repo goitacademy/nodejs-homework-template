@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 const jwt = require('jsonwebtoken');
 const User = require('../models/users');
 

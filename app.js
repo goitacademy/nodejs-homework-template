@@ -6,6 +6,8 @@ import usersRouter from './routes/users';
 import mongoose from 'mongoose';
 import expressJwt from 'express-jwt';
 import authenticateToken from './middleware/authenticateToken';
+import path from 'path';
+import multer from 'multer';
 
 const app = express();
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
