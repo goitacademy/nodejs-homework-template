@@ -1,14 +1,5 @@
-import Joi from "joi";
-
+import { schema } from "../../validation.js";
 import { updateContacts } from "../../models/contacts.js";
-
-const schema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  phone: Joi.string().required(),
-});
 
 export async function updateContact(req, res, next) {
   try {

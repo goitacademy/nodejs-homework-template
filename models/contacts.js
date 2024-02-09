@@ -17,11 +17,8 @@ export const listContacts = async () => {
 export const getById = async (contactId) => {
   try {
     const contacts = await fs.readFile(contactsPath);
-
     const contactsParsed = JSON.parse(contacts);
-    const [contact] = contactsParsed.filter(
-      (contact) => contact.id === contactId
-    );
+    const contact = contactsParsed.find((item) => item.id === contactId);
     return contact;
   } catch (error) {
     return JSON.parse(error.message);
