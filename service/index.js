@@ -17,7 +17,8 @@ const updateContact = async (contactId, fields) => {
 };
 
 const updateStatusContact = async (contactId, favorite) => {
-  return Contact.findByIdAndUpdate(contactId, { favorite });
+  const update = { favorite: favorite };
+  return Contact.findByIdAndUpdate({ _id: contactId }, update, { new: true });
 };
 
 const deleteContact = async (contactId) => Contact.findByIdAndRemove(contactId);
