@@ -23,7 +23,18 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500, message = "Server error", code, name } = err;
+  // res.status(500).json({ message: err.message });
+
+  if (name === "ValidationError") {
+    return res.status(400).json({ message });
+  }
+
+  if (message.includes("E11000")) {
+    return res.status(400).json({ message: "Duplicated key!" });
+  }
+
+  res.status(status).json({ message });
 });
 
 module.exports = app;

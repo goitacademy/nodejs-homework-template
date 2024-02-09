@@ -1,10 +1,35 @@
 const User = require("../../models/users");
+const bcrypt = require("bcryptjs");
+
+const regControllerWrapper = require("./regControllerWrapper");
 
 const registration = async (req, res, next) => {
-  const result = await User.create(req.body);
-  //   console.log("registration");
+  const { error } = User.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
 
-  res.status(201).json(result);
+  const { email, password } = req.body;
+
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return res.status(409).json({ message: "Email in use" });
+  }
+
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const newUser = await User.create({
+    email,
+    password: hashedPassword,
+    subscription: "starter",
+  });
+
+  res.status(201).json({
+    user: { email: newUser.email, subscription: newUser.subscription },
+  });
+
+  return await newUser;
 };
 
 module.exports = registration;

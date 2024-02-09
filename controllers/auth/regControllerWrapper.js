@@ -13,4 +13,6 @@ const regControllerWrapper = (controller) => {
   };
 };
 
-module.exports = regControllerWrapper;
+module.exports = {
+  regControllerWrapper: regControllerWrapper,
+};
