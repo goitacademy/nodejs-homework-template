@@ -2,10 +2,12 @@ const User = require("../../models/users");
 const userSchema = require("./validationSchema");
 const bcrypt = require("bcryptjs");
 
-const regControllerWrapper = require("./regControllerWrapper");
+const jwt = require("jsonwebtoken");
+
+const { JWT_SECRET } = process.env;
 
 const login = async (req, res, next) => {
-  // try {
+  console.log("login");
   const { error } = userSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
@@ -24,16 +26,17 @@ const login = async (req, res, next) => {
     return res.status(401).json({ message: "Email or password is not valid" });
   }
 
-  // const token = jwt.sign({ userId: user._id }, "your_secret_key", {
-  //   expiresIn: "1h",
-  // });
-  res.status(200).json({
-    token: "TOKEN",
-    // user: { email: user.email, subscription: user.subscription },
+  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
   });
-  // } catch (error) {
-  //   handleErrors(res, error);
-  // }
+
+  res.status(200).json({
+    token,
+    user: {
+      email: user.email,
+      subscription: user.subscription,
+    },
+  });
 };
 
 module.exports = login;
