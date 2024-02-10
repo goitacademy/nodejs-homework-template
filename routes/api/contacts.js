@@ -1,25 +1,69 @@
-const express = require('express')
+const Contact = require("../../models/contact");
 
-const router = express.Router()
+const listContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find();
+    res.json(contacts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const getContactById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const contact = await Contact.findById(id);
+    if (!contact) return res.status(404).json({ message: "Contact not found" });
+    res.json(contact);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const removeContact = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedContact = await Contact.findByIdAndRemove(id);
+    if (!deletedContact)
+      return res.status(404).json({ message: "Contact not found" });
+    res.json({ message: "Contact deleted" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const addContact = async (req, res) => {
+  try {
+    const newContact = await Contact.create(req.body);
+    res.status(201).json(newContact);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const updateContact = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!updatedContact)
+      return res.status(404).json({ message: "Contact not found" });
+    res.json(updatedContact);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+};
