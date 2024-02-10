@@ -11,13 +11,15 @@
   "dependencies": {
     "colors": "^1.4.0",
     "cors": "2.8.5",
-    "cross-env": "7.0.3",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.1",
     "express": "4.17.1",
-    "joi": "^17.12.0",
+    "joi": "^17.12.1",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.1",
     "morgan": "1.10.0",
-    "nanoid": "^5.0.4",
-    "path": "^0.12.7",
-    "uuid": "^9.0.1"
+    "nanoid": "^5.0.5",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "eslint": "7.19.0",
