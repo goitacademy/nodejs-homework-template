@@ -1,10 +1,10 @@
 const Contact = require("../models/contact");
 const contacts = require("../models/contacts.json");
 
-const listContacts = async (page = 1, limit = 20) => {
+const listContacts = async (page = 1, limit = 20, query = {}) => {
   try {
     const skip = (page - 1) * limit;
-    return await Contact.find().skip(skip).limit(limit);
+    return await Contact.find(query).skip(skip).limit(limit);
   } catch (error) {
     console.error("Error listing contacts:", error);
     return [];

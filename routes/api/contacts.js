@@ -19,8 +19,14 @@ router.get("/", async (req, res, next) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
+    const favorite = req.query.favorite === "true";
 
-    const contacts = await listContacts(page, limit);
+    let query = {};
+    if (favorite) {
+      query.favorite = true;
+    }
+
+    const contacts = await listContacts(page, limit, query);
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
