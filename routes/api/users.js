@@ -9,5 +9,6 @@ router.get("/contact", authMiddleware, userController.getContact);
 router.get("/info", authMiddleware, userController.getInfo);
 router.get("/current", authMiddleware, userController.currentUser);
 router.post("/logout", authMiddleware, userController.logout);
+router.patch("", authMiddleware, userController.updateStatusContact);
 
 module.exports = router;
