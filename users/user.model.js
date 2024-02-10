@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const gravatar = require("gravatar");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
   password: {
@@ -20,6 +22,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  verify: {
+    type: Boolean,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: [true, "Verify token is required"],
+  },
+
   avatarURL: String,
 });
 
