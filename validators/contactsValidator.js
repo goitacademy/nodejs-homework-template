@@ -16,7 +16,7 @@ const newContactValidator = joi.object({
 	phone: joi
 		.string()
 		.regex(/^[\d+\-()\s]{9,15}$/)
-		.required(),
+		.optional(),
 });
 
 const updateContactValidator = joi.object({
@@ -37,7 +37,7 @@ const updateContactValidator = joi.object({
 	phone: joi
 		.string()
 		.regex(/^[\d+\-()\s]{9,15}$/)
-		.required(),
+		.optional(),
 });
 
 module.exports = {
