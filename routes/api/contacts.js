@@ -74,6 +74,7 @@ router.put("/:contactId", async (req, res, next) => {
 	}
 	const updatedContact = await updateContact(id, body);
 	const isValid = updateContactValidator.validate(updatedContact);
+
 	if (!updatedContact) {
 		res.status(404).send({ message: "Not found" });
 	} else if (isValid.error) {
