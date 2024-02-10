@@ -1,25 +1,23 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const ContactController = require("../../controllers/contact");
+const authMiddleware = require("../../middleware/auth");
+const { validSchema, validSchemaFavorite } = require("../../models/contact");
+const { validateBody } = require("../../middleware/validateBody");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
+const jsonParser = express.json();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", authMiddleware, ContactController.getContacts);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", authMiddleware, ContactController.getContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", authMiddleware, jsonParser, validateBody(validSchema), ContactController.createContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:id", authMiddleware, jsonParser, ContactController.updateContact);
 
-module.exports = router
+router.delete("/:id", authMiddleware, ContactController.deleteContact);
+
+router.patch("/:id/favorite", authMiddleware, jsonParser, validateBody(validSchemaFavorite), ContactController.changeContactFavorite);
+
+module.exports = router;
