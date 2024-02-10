@@ -17,7 +17,10 @@ const {
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await listContacts();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 20;
+
+    const contacts = await listContacts(page, limit);
     res.status(200).json(contacts);
   } catch (error) {
     next(error);

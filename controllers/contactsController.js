@@ -1,14 +1,10 @@
 const Contact = require("../models/contact");
 const contacts = require("../models/contacts.json");
 
-const listContacts = async () => {
+const listContacts = async (page = 1, limit = 20) => {
   try {
-    const { page = 1, limit = 20 } = req.query;
     const skip = (page - 1) * limit;
-
-    const contacts = await Contact.find().skip(skip).limit(parseInt(limit));
-
-    res.json(contacts);
+    return await Contact.find().skip(skip).limit(limit);
   } catch (error) {
     console.error("Error listing contacts:", error);
     return [];
@@ -67,21 +63,6 @@ async function updateStatusContact(contactId, body) {
     throw new Error("Contact not found");
   }
 }
-
-const getFavoriteContacts = async (req, res, next) => {
-  try {
-    const { favorite } = req.query;
-
-    const query = favorite ? { favorite: true } : {};
-
-    const favoriteContacts = await Contact.find(query);
-
-    res.json(favoriteContacts);
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports = {
   listContacts,
   getContactById,
@@ -89,5 +70,4 @@ module.exports = {
   addContact,
   updateContact,
   updateStatusContact,
-  getFavoriteContacts,
 };
