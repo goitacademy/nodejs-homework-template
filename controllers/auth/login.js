@@ -1,10 +1,8 @@
 const User = require("../../models/users");
-const userSchema = require("./validationSchema");
+const userSchema = require("./validationSchema.js");
 const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
-
-const { JWT_SECRET } = process.env;
 
 const login = async (req, res, next) => {
   console.log("login");
@@ -14,6 +12,7 @@ const login = async (req, res, next) => {
   }
 
   const { email, password } = req.body;
+  console.log(password);
 
   const user = await User.findOne({ email });
 
@@ -22,13 +21,17 @@ const login = async (req, res, next) => {
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
+  console.log(user.password);
   if (!isPasswordValid) {
     return res.status(401).json({ message: "Email or password is not valid" });
   }
 
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
+
+  user.token = token;
+  await user.save();
 
   res.status(200).json({
     token,

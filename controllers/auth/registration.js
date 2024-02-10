@@ -1,8 +1,6 @@
 const User = require("../../models/users");
 const bcrypt = require("bcryptjs");
 
-const regControllerWrapper = require("./regControllerWrapper");
-
 const registration = async (req, res, next) => {
   const { error } = User.validate(req.body);
   if (error) {
@@ -16,8 +14,7 @@ const registration = async (req, res, next) => {
     return res.status(409).json({ message: "Email in use" });
   }
 
-  const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(password, salt);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await User.create({
     email,
