@@ -8,6 +8,7 @@ const regControllerWrapper = (controller) => {
     try {
       await controller(req, res, next);
     } catch (error) {
+      console.error("Error", error);
       handleErrors(res, error);
     }
   };

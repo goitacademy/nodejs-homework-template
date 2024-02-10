@@ -24,6 +24,10 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "user",
     },
+    contacts: {
+      type: [Schema.Types.ObjectId],
+      ref: "contact",
+    },
   },
   {
     timestamps: true,

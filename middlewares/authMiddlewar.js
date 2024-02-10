@@ -1,25 +1,25 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 
-const unauthorizedError = (res) => {
-  res.status(401).json({ message: "Not authorized" });
-};
-
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization || "";
   const [type, token] = authHeader.split(" ");
 
   if (type !== "Bearer") {
-    throw new Error(401, "Token type is not valid");
+    return res.status(401).json({ message: "Token type is not valid" });
   }
 
   if (!token) {
-    throw new Error(401, "Not authorized");
+    return res.status(401).json({ message: "Not authorized" });
   }
 
   try {
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(id);
+    const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(401).json({ message: "Not authorized" });
+    }
 
     req.user = user;
     next();
@@ -29,7 +29,7 @@ const authMiddleware = async (req, res, next) => {
       error.name === "TokenExpiredError" ||
       error.name === "JsonWebTokenError"
     ) {
-      return res.status(401).json({ message: "Json web token id not valid" });
+      return res.status(401).json({ message: "Json web token is not valid" });
     }
     next(error);
   }
