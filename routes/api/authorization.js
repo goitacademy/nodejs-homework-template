@@ -7,11 +7,18 @@ const { userModel } = require("../../models/");
 
 const { schemas } = userModel;
 
+
+
+
 router.post(
   "/signup",
   validateData(schemas.registerSchema),
   authController.signup
 );
+
+router.get("/verify/:verificationToken", authController.verifyEmail);
+
+router.post("/verify", validateData(schemas.emailSchema), authController.resendVerifyEmail);
 
 router.post(
   "/login",

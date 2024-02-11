@@ -5,10 +5,12 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "type": "module",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@sendgrid/mail": "^8.1.0",
     "bcryptjs": "^2.4.3",
     "cjs-loader": "^0.1.0",
     "cors": "2.8.5",
@@ -23,6 +25,7 @@
     "mongoose": "^8.1.0",
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nanoid": "^3.3.4",
     "schema": "^0.2.1"
   },
   "devDependencies": {
