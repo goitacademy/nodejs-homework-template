@@ -1,6 +1,5 @@
-const createApp = require('./app');
-// const mongoose = require('mongoose');
-const { connect } = require('./db');
+const createApp = require("./app");
+const { connect } = require("./db");
 
 const PORT = process.env.PORT || 3000;
 
@@ -12,6 +11,6 @@ const PORT = process.env.PORT || 3000;
       console.log(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Error starting the server:', error.message);
+    console.error("Error starting the server:", error.message);
   }
 })();
