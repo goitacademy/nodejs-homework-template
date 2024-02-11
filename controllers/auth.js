@@ -34,7 +34,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}"> Click to verify </a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${verificationToken}"> Click to verify </a>`,
   };
   await sendEmail(verifyEmail);
   res.status(201).json({
@@ -69,7 +69,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${user.verificationToken}"> Click to verify </a>`,
+    html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}"> Click to verify </a>`,
   };
   await sendEmail(verifyEmail);
   res.status(201).json({
