@@ -32,7 +32,7 @@ const updateContact = (id, fields) => {
 };
 
 module.exports = {
-  getAllContactsByUserEmail,
+  getAllContactsByUserEmail, 
   getContactById,
   createContact,
   removeContact,
