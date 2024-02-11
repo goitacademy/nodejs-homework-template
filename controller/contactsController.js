@@ -64,7 +64,7 @@ const deleted = async (req, res, next) => {
     next(error);
   }
 };
-const updateAllFields = async (req, res, next) => {
+const update = async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const { error } = contactSchema.validate(req.body);
@@ -82,7 +82,7 @@ const updateAllFields = async (req, res, next) => {
     next(error);
   }
 };
-const updateFields = async (req, res, next) => {
+const updateFavorite = async (req, res, next) => {
   try {
     const contactId = req.params.contactId;
     const { favorite } = req.body;
@@ -107,6 +107,6 @@ module.exports = {
   getById,
   add,
   deleted,
-  updateAllFields,
-  updateFields,
+  update,
+  updateFavorite,
 };
