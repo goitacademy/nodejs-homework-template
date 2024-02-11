@@ -1,49 +1,96 @@
-const fs = require('fs').promises;
-const { nanoid } =  import('nanoid');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
+mongoose.connect(process.env.DB_HOST, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => {
+    console.log('Database connection successful');
+  })
+  .catch((error) => {
+    console.error('Database connection error:', error);
+    process.exit(1);
+  });
 
-const contactsFilePath = 'models/contacts.json';
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const Contact = mongoose.model('Contact', contactSchema);
 
 const listContacts = async () => {
-  const data = await fs.readFile(contactsFilePath, 'utf-8');
-  return JSON.parse(data);
-}
+  try {
+    const contacts = await Contact.find();
+    return contacts;
+  } catch (error) {
+    console.error('Error reading contacts:', error);
+    throw new Error(error.message);
+  }
+};
 
 const getContactById = async (contactId) => {
-  const contacts = await listContacts();
-  return contacts.find(contact => contact.id === contactId);
-}
+  try {
+    const contact = await Contact.findById(contactId);
+    return contact;
+  } catch (error) {
+    console.error('Error getting contact by ID:', error);
+    throw new Error(error.message);
+  }
+};
+
+const addContact = async (contact) => {
+  try {
+    const newContact = await Contact.create(contact);
+    return newContact;
+  } catch (error) {
+    console.error('Error adding contact:', error);
+    throw new Error(error.message);
+  }
+};
+
+const updateContact = async (contactId, updatedData) => {
+  try {
+    const updatedContact = await Contact.findByIdAndUpdate(
+      contactId,
+      updatedData,
+      { new: true }
+    );
+    return updatedContact;
+  } catch (error) {
+    console.error('Error updating contact:', error);
+    throw new Error(error.message);
+  }
+};
 
 const removeContact = async (contactId) => {
-  const contacts = await listContacts();
-  const filteredContacts = contacts.filter(contact => contact.id !== contactId);
-  await fs.writeFile(contactsFilePath, JSON.stringify(filteredContacts, null, 2));
-  return contacts.length !== filteredContacts.length;
-}
-
-const addContact = async (body) => {
-  const { name, email, phone } = body;
-  const newContact = { id: nanoid(), name, email, phone };
-  const contacts = await listContacts();
-  contacts.push(newContact);
-  await fs.writeFile(contactsFilePath, JSON.stringify(contacts, null, 2));
-  return newContact;
-}
-
-const updateContact = async (contactId, body) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex(contact => contact.id === contactId);
-  if (index === -1) return null;
-  const updatedContact = { ...contacts[index], ...body };
-  contacts[index] = updatedContact;
-  await fs.writeFile(contactsFilePath, JSON.stringify(contacts, null, 2));
-  return updatedContact;
-}
+  try {
+    const removedContact = await Contact.findByIdAndRemove(contactId);
+    return removedContact._id;
+  } catch (error) {
+    console.error('Error removing contact:', error);
+    throw new Error(error.message);
+  }
+};
 
 module.exports = {
+  Contact,
   listContacts,
   getContactById,
-  removeContact,
   addContact,
-  updateContact
-}
+  updateContact,
+  removeContact,
+};

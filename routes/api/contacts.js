@@ -1,84 +1,87 @@
 const express = require('express');
 const router = express.Router();
-const { listContacts, getContactById, removeContact, addContact, updateContact } = require('../../models/contacts');
-const Joi = require('joi');
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContact,
+  updateStatusContact,
+} = require('../../models/contacts');
 
-// Schemat walidacji dla danych kontaktowych
-const contactSchema = Joi.object({
-  name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone: Joi.string().required()
-});
-
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
-    const contacts = await listContacts();
-    res.json(contacts);
+    const allContacts = await listContacts();
+    res.json(allContacts);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
-    if (contact) {
-      res.json(contact);
-    } else {
-      res.status(404).json({ message: "Not found" });
+    const contact = await getContactById(id);
+    if (!contact) {
+      return res.status(404).json({ message: 'Contact not found' });
     }
+    res.json(contact);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   try {
-    // Walidacja danych wejściowych za pomocą Joi
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    }
-
     const newContact = await addContact(req.body);
     res.status(201).json(newContact);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    const { contactId } = req.params;
-    const deleted = await removeContact(contactId);
-    if (deleted) {
-      res.json({ message: "Contact deleted" });
-    } else {
-      res.status(404).json({ message: "Not found" });
+    const updatedContact = await updateContact(id, req.body);
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Contact not found' });
     }
+    res.json(updatedContact);
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
-router.put('/:contactId', async (req, res, next) => {
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
   try {
-    const { contactId } = req.params;
-    // Walidacja danych wejściowych za pomocą Joi
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+    const deletedContactId = await removeContact(id);
+    if (!deletedContactId) {
+      return res.status(404).json({ message: 'Contact not found' });
     }
-
-    const updatedContact = await updateContact(contactId, req.body);
-    if (updatedContact) {
-      res.json(updatedContact);
-    } else {
-      res.status(404).json({ message: "Not found" });
-    }
+    res.json({ id: deletedContactId, message: 'Contact deleted' });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.patch('/:contactId/favorite', async (req, res) => {
+  const { contactId } = req.params;
+  const { favorite } = req.body;
+
+  if (!favorite) {
+    return res.status(400).json({ message: 'Missing field favorite' });
+  }
+
+  try {
+    const updatedContact = await updateStatusContact(contactId, favorite);
+    if (!updatedContact) {
+      return res.status(404).json({ message: 'Not found' });
+    }
+    res.json(updatedContact);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
