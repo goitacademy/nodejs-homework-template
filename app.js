@@ -2,10 +2,10 @@ const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
 
-const contactsRouter = require("./routes/api/contacts");
+const contactsRouter = require("./routes/api/contactsRouter");
+const { error } = require("./validators/contactValidator");
 
 const app = express();
-
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
@@ -19,6 +19,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
+  console.log(err.message);
   res.status(500).json({ message: "Internal Server error " });
 });
 

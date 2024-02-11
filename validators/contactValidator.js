@@ -10,4 +10,8 @@ const contactSchema = Joi.object({
   phone: Joi.string().required().messages(customMessages),
 });
 
-module.exports = contactSchema;
+const favoriteFieldSchema= Joi.object({
+  favorite: Joi.boolean().required().messages(customMessages),
+});
+
+module.exports = { contactSchema, favoriteFieldSchema};
