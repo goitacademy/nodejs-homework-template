@@ -9,7 +9,6 @@ const {
 
 const validate = require("./../../validator/validator");
 
-
 const contactsRouter = express.Router();
 
 contactsRouter.get("/contacts", async (__, res) => {
@@ -27,7 +26,7 @@ contactsRouter.get("/contacts/:Id", async (req, res) => {
   }
 });
 
-contactsRouter.post("/contacts",validate.contactValid, async (req, res) => {
+contactsRouter.post("/contacts", validate.contactValid, async (req, res) => {
   const newContact = await addContact(req.body);
   res.json({ status: "success", code: 201, data: { newContact } });
 });
@@ -42,16 +41,8 @@ contactsRouter.delete("/contacts/:Id", async (req, res) => {
   }
 });
 
-contactsRouter.put("/contacts/:Id",validate.contactValid, async (req, res) => {
+contactsRouter.put("/contacts/:Id", validate.contactValid, async (req, res) => {
   const { Id } = req.params;
-
-  if (!req.body || Object.keys(req.body).length === 0) {
-    res.status(400).json({
-      code: 400,
-      message: "missing fields",
-    });
-    return;
-  }
 
   if (req.body) {
     const contactToEdit = await updateContact(Id, req.body);
