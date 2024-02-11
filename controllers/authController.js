@@ -46,6 +46,7 @@ const signup = async (request, response, next) => {
 
   response.json({
     user: {
+      name: newUser.name,
       email: newUser.email,
       subscription: newUser.subscription,
     },
@@ -65,7 +66,7 @@ const verifyEmail = async (request, response, next) => {
   });
 
   response.json({
-    message: "Verification successful",
+    message: "Email has been successfully verified",
   });
 };
 
