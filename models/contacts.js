@@ -1,12 +1,13 @@
 const fs = require("fs/promises");
 const path = require("path");
-const { nanoid } = require("nanoid");
+
+const Contact = require("../contactSchema");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 
 const listContacts = async () => {
 	try {
-		const contacts = await fs.readFile(contactsPath);
+		const contacts = await Contact.find();
 		return JSON.parse(contacts);
 	} catch (error) {
 		console.log(error.message);
@@ -48,13 +49,8 @@ const removeContact = async (contactId) => {
 const addContact = async (body) => {
 	try {
 		const { name, email, phone } = body;
-
-		const contact = { id: nanoid(), name, email, phone };
-
-		const resp = await fs.readFile(contactsPath);
-		const contacts = JSON.parse(resp);
-		const newContacts = [...contacts, contact];
-		await fs.writeFile(contactsPath, JSON.stringify(newContacts));
+		const contact = new Contact({ name, email, phone });
+		await contact.save();
 
 		return contact;
 	} catch (error) {
