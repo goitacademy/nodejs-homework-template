@@ -24,6 +24,10 @@ const removeContact = async (id) => {
   return Contact.findByIdAndDelete({ _id: id });
 };
 
+const updateStatusContact = async (id, favourite) => {
+  return Contact.findByIdAndUpdate({ _id: id }, favourite, { new: true });
+};
+
 export {
   getAllContacts,
   getContactById,
@@ -31,4 +35,5 @@ export {
   createContact,
   updateContact,
   removeContact,
+  updateStatusContact,
 };

@@ -10,6 +10,8 @@ import { deleteContact } from "../../controllers/contacts/deleteContact.js";
 
 import { updateExistContact } from "../../controllers/contacts/updateExistContact.js";
 
+import { updateStatus } from "../../controllers/contacts/updateStatus.js";
+
 const router = express.Router();
 
 router.get("/", showContacts);
@@ -21,5 +23,7 @@ router.post("/", createNewContact);
 router.delete("/:contactId", deleteContact);
 
 router.put("/:contactId", updateExistContact);
+
+router.patch("/:contactId/favourite", updateStatus);
 
 export { router };
