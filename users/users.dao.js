@@ -1,5 +1,5 @@
 const { User } = require("./user.model");
-const { Contact } = require("./contact.model");
+const { Contact } = require("../contacts/contacts.model");
 
 class DuplicatedEmailError extends Error {
   constructor(message) {
