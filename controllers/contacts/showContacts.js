@@ -1,9 +1,16 @@
-import { listContacts } from "../../models/contacts.js";
+import { getAllContacts } from "#service/index.js";
 
 export async function showContacts(req, res, next) {
   try {
-    const contacts = await listContacts();
-    res.status(200).json(contacts);
+    const contacts = await getAllContacts();
+    return res.json({
+      status: "succes",
+      code: 200,
+      data: {
+        contacts: contacts,
+        contactsCount: contacts.length,
+      },
+    });
   } catch (error) {
     res.status(500).json(`Error message: ${error}`);
   }
