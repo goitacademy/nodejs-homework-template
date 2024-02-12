@@ -13,9 +13,7 @@ const addContactSchema = Joi.object({
     })
     .required(),
 
-  phone: Joi.string()
-    .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
-    .required(),
+  phone: Joi.string().required(),
 
   favorite: Joi.boolean().optional(),
 });
@@ -30,9 +28,7 @@ const updateContactSchema = Joi.object({
     })
     .optional(),
 
-  phone: Joi.string()
-    .pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)
-    .optional(),
+  phone: Joi.string().optional(),
 }).min(1);
 
 const updateFavoriteSchema = Joi.object({

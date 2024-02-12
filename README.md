@@ -44,6 +44,10 @@ Project is created with:
 
 ![](./images/updateContacts.PNG)
 
+6. PATCH `http://localhost:3000/api/contacts/CONTACT_ID/FAVOURITE`
+
+![](./images/updatestatus.PNG)
+
 ## Setup
 
 Clone this repo to your desktop and run `npm install` to install all the dependencies.
@@ -57,10 +61,11 @@ Open your browser or postman and check all available methods and endpoint's
 - POST (add new contact) : `http://localhost:3000/api/contacts/`
 - DELETE (remove contact by id) : `http://localhost:3000/api/contacts/CONTACT_ID`
 - PUT (update contact with json) : `http://localhost:3000/api/contacts/CONTACT_ID`
+- PATCH (update one field with contact): `http://localhost:3000/api/contacts/CONTACT_ID/FAVOURITE`
 
 ## Project Status
 
-Project is: _finall_
+Project is: _in-progress_
 
 ## Acknowledgements
 
