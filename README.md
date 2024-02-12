@@ -46,7 +46,7 @@ Project is created with:
 
 6. PATCH `http://localhost:3000/api/contacts/CONTACT_ID/FAVOURITE`
 
-![](./images/updatestatus.PNG)
+![](./images/updateStatus.PNG)
 
 ## Setup
 
