@@ -1,4 +1,4 @@
-import { removeContact } from "#service/index.js";
+import { removeContact } from "../../service/index.js";
 
 export async function deleteContact(req, res, next) {
   try {
@@ -15,7 +15,7 @@ export async function deleteContact(req, res, next) {
       return res.json({
         status: "success",
         code: 200,
-        data: { conact: result },
+        data: { contact: isDelete },
         message: `Contact with id: '${contactId}' deleted`,
       });
     }

@@ -1,6 +1,4 @@
-const mongoose = require("mongoose");
-
-import { Contact } from "./schemas/contact.js";
+import { Contact } from "./schemas/contacts.js";
 
 const getAllContacts = async () => {
   return Contact.find();

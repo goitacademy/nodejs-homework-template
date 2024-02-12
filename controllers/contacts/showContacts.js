@@ -1,4 +1,4 @@
-import { getAllContacts } from "#service/index.js";
+import { getAllContacts } from "../../service/index.js";
 
 export async function showContacts(req, res, next) {
   try {
