@@ -11,14 +11,13 @@ export async function deleteContact(req, res, next) {
         message: `Not found contact id: '${contactId}'`,
         data: "Not found",
       });
-    } else {
-      return res.json({
-        status: "success",
-        code: 200,
-        data: { contact: isDelete },
-        message: `Contact with id: '${contactId}' deleted`,
-      });
     }
+    return res.json({
+      status: "success",
+      code: 200,
+      data: { contact: isDelete },
+      message: `Contact with id: '${contactId}' deleted`,
+    });
   } catch (error) {
     res.status(500).json(`Error message: ${error}`);
   }
