@@ -9,7 +9,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-app.use("/api/contacts", require("./api"));
+app.use("/api/contacts", require("./api/contacts"));
 app.use("/api/users", require("./api/users"));
 
 app.use((req, res) => {
