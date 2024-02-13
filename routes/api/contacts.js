@@ -3,47 +3,37 @@ const express = require("express");
 const {
   addContactScheme,
   putContactScheme,
-  contactIdScheme,
+  updFavScheme,
 } = require("../../schemas");
-const {
-  controlWrapper,
-  validation,
-  validationParams,
-} = require("../../middlewares");
+const { isValidId, validation } = require("../../middlewares");
 
 const validationMiddlewareAdd = validation(addContactScheme);
 const validationMiddlewarePut = validation(putContactScheme);
-const validationMiddlewareContactId = validationParams(contactIdScheme);
+const validationMiddlewareUpdFav = validation(updFavScheme);
 
-const { contacts: control } = require("../../controllers");
+const { contacts } = require("../../controllers");
 
 const router = express.Router();
 
-router.get("/", controlWrapper(control.getContacts));
+router.get("/", contacts.getContacts);
 
-router.get(
-  "/:contactId",
-  validationMiddlewareContactId,
-  controlWrapper(control.getContact)
-);
+router.get("/:contactId", isValidId, contacts.getContactsById);
 
-router.post(
-  "/",
-  validationMiddlewareAdd,
-  controlWrapper(control.addNewContact)
-);
+router.post("/", validationMiddlewareAdd, contacts.addNewContact);
 
-router.delete(
-  "/:contactId",
-  validationMiddlewareContactId,
-  controlWrapper(control.deleteContact)
-);
+router.delete("/:contactId", isValidId, contacts.deleteContact);
 
 router.put(
   "/:contactId",
-  validationMiddlewareContactId,
+  isValidId,
   validationMiddlewarePut,
-  controlWrapper(control.changeContact)
+  contacts.updateContact
+);
+router.patch(
+  "/:contactId/favorite",
+  isValidId,
+  validationMiddlewareUpdFav,
+  contacts.updateFav
 );
 
 module.exports = router;
