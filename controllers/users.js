@@ -32,6 +32,7 @@ const register = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -86,6 +87,7 @@ const logout = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
@@ -94,7 +96,7 @@ const current = async (req, res, next) => {
   try {
     const user = await service.getUser({ _id: req.user._id });
     if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
+      return res.status(401).json({ message: "Email or password is wrong" });
     } else {
       res.json({
         status: "success",
@@ -105,6 +107,7 @@ const current = async (req, res, next) => {
       });
     }
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };

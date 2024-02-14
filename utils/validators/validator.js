@@ -20,4 +20,4 @@ const userSchema = joi.object({
 
 const userValidator = validator(userSchema);
 
-module.exports = { contactValidator };
+module.exports = { contactValidator, userValidator };
