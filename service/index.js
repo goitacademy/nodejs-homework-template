@@ -40,6 +40,8 @@ const createUser = async ({ email, password }) => {
   return newUser;
 };
 
+
+
 export {
   getAllContacts,
   getContactById,
