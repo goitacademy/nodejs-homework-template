@@ -1,10 +1,11 @@
-const { userValidator } = require("./../utils/validators/validator");
-const service = require("../service/users");
-const jwt = require("jsonwebtoken");
-const User = require("../service/schemas/user");
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
-const secret = process.env.SECRET;
+const User = require("../service/schemas/user");
+const service = require("../service/users");
+const { userValidator } = require("./../utils/validators/validator");
+
+const SECRET = process.env.SECRET;
 
 const register = async (req, res, next) => {
   const { error } = userValidator(req.body);
@@ -55,10 +56,9 @@ const login = async (req, res, next) => {
 
   const payload = {
     id: user.id,
-    email: user.email,
   };
 
-  const token = jwt.sign(payload, secret, { expiresIn: "1h" });
+  const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
   user.setToken(token);
   await user.save();
   res.json({
