@@ -35,8 +35,25 @@ const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
 });
 
+const addUserSchema = Joi.object({
+  email: Joi.string()
+    .email({
+      minDomainSegments: 2,
+      tlds: { allow: ["pl", "com", "net", "eu"] },
+    })
+    .required(),
+
+  password: Joi.string().required(),
+});
+
 const validateAddContact = validator(addContactSchema);
 const validateUpdateContact = validator(updateContactSchema);
 const validateUpdateFavorite = validator(updateFavoriteSchema);
+const validateAddUser = validator(addUserSchema);
 
-export { validateAddContact, validateUpdateContact, validateUpdateFavorite };
+export {
+  validateAddContact,
+  validateUpdateContact,
+  validateUpdateFavorite,
+  validateAddUser,
+};

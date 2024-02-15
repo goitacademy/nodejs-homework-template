@@ -1,4 +1,5 @@
 import { Contact } from "./schemas/contacts.js";
+import { User } from "./schemas/users.js";
 
 const getAllContacts = async () => {
   return Contact.find();
@@ -28,6 +29,17 @@ const updateStatusContact = async (id, favourite) => {
   return Contact.findByIdAndUpdate({ _id: id }, favourite, { new: true });
 };
 
+const findUserByEmail = async (email) => {
+  return User.findOne(email);
+};
+
+const createUser = async ({ email, password }) => {
+  const newUser = new User({ email });
+  await newUser.setPassword(password);
+  await newUser.save();
+  return newUser;
+};
+
 export {
   getAllContacts,
   getContactById,
@@ -36,4 +48,6 @@ export {
   updateContact,
   removeContact,
   updateStatusContact,
+  findUserByEmail,
+  createUser,
 };
