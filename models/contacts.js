@@ -1,4 +1,4 @@
-const Contacts = require("../contactSchema");
+const Contacts = require("../schemata/contactSchema");
 
 const listContacts = async () => {
 	try {
@@ -40,11 +40,25 @@ const addContact = async (body) => {
 
 const updateContact = async (contactId, body) => {
 	try {
-		const contact = await Contacts.findByIdAndUpdate(contactId, body, {
-			new: true,
-			strict: "throw",
-			runValidators: true,
+		const filter = { _id: contactId };
+		const contact = await Contacts.findOneAndUpdate(filter, body, {
+			returnDocument: "after",
 		});
+		return contact;
+	} catch (error) {
+		console.log(error.message);
+	}
+};
+
+const updateStatusContact = async (contactId, body) => {
+	try {
+		const filter = { _id: contactId };
+		const update = { favorite: body };
+
+		const contact = await Contacts.findOneAndUpdate(filter, update, {
+			returnDocument: "after",
+		});
+		console.log(contact);
 		return contact;
 	} catch (error) {
 		console.log(error.message);
@@ -57,4 +71,5 @@ module.exports = {
 	removeContact,
 	addContact,
 	updateContact,
+	updateStatusContact,
 };

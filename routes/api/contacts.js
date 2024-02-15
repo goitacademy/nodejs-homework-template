@@ -5,6 +5,7 @@ const {
 	removeContact,
 	addContact,
 	updateContact,
+	updateStatusContact,
 } = require("../../models/contacts");
 const {
 	newContactValidator,
@@ -88,6 +89,22 @@ router.put("/:contactId", async (req, res, next) => {
 	} else {
 		res.send({ updatedContact });
 	}
+});
+
+router.patch("/:contactId", async (req, res, next) => {
+	const id = req.params.contactId;
+	const { favorite } = req.body;
+
+	if (!favorite) {
+		return res.status(400).send({ message: "missing field favorite" });
+	}
+	const updatedContact = await updateStatusContact(id, favorite);
+
+	if (!updatedContact) {
+		return res.status(404).send({ message: "Not found" });
+	}
+
+	res.send({ updatedContact });
 });
 
 module.exports = router;
