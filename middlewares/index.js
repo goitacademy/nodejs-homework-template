@@ -1,9 +1,10 @@
-const controlWrapper = require("./controlWrapper");
 const validation = require("./validation");
-const validationParams = require("./validationParams");
+// const validationParams = require("./validationParams");
+const handleMongooseError = require("./handleMongooseError");
+const isValidId = require("./isValidId");
 
 module.exports = {
-  controlWrapper,
   validation,
-  validationParams,
+  handleMongooseError,
+  isValidId,
 };

@@ -6,6 +6,7 @@ const addContactScheme = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   phone: Joi.string().required(),
+  favorite: Joi.boolean(),
 });
 
 const putContactScheme = Joi.object({
@@ -21,4 +22,13 @@ const contactIdScheme = Joi.object({
   contactId: Joi.string().alphanum().min(1).required(),
 });
 
-module.exports = { addContactScheme, putContactScheme, contactIdScheme };
+const updFavScheme = Joi.object({
+  favorite: Joi.boolean().required(),
+});
+
+module.exports = {
+  addContactScheme,
+  putContactScheme,
+  contactIdScheme,
+  updFavScheme,
+};
