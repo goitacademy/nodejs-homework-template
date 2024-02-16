@@ -30,7 +30,7 @@ const updateStatusContact = async (id, favourite) => {
 };
 
 const findUserByEmail = async (email) => {
-  return User.findOne(email);
+  return User.findOne({ email });
 };
 
 const createUser = async ({ email, password }) => {
@@ -40,8 +40,14 @@ const createUser = async ({ email, password }) => {
   return newUser;
 };
 
-
-
+const updateUser = async (id, token) => {
+  const updateData = {
+    $set: {
+      token: token,
+    },
+  };
+  await User.findByIdAndUpdate({ _id: id }, updateData, { new: true });
+};
 export {
   getAllContacts,
   getContactById,
@@ -52,4 +58,5 @@ export {
   updateStatusContact,
   findUserByEmail,
   createUser,
+  updateUser,
 };
