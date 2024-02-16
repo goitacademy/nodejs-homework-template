@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../service/schemas/user");
 const service = require("../service/users");
-const { userValidator } = require("./../utils/validators/validator");
+const { userValidator } = require("./../utils/validator");
 
 const SECRET = process.env.SECRET;
 
