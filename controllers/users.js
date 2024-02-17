@@ -59,15 +59,20 @@ const login = async (req, res, next) => {
   };
 
   const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
-  user.setToken(token);
-  await user.save();
-  res.json({
-    status: "success",
-    code: 200,
-    data: {
-      token,
-    },
-  });
+
+  try {
+    await User.findByIdAndUpdate(user._id, { token });
+
+    return res.status(200).json({
+      token: token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 const logout = async (req, res, next) => {
