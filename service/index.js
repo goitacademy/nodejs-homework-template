@@ -48,6 +48,11 @@ const updateUser = async (id, token) => {
   };
   await User.findByIdAndUpdate({ _id: id }, updateData, { new: true });
 };
+
+const findUserById = async (id) => {
+  await User.find({ _id: id });
+};
+
 export {
   getAllContacts,
   getContactById,
@@ -59,4 +64,5 @@ export {
   findUserByEmail,
   createUser,
   updateUser,
+  findUserById,
 };
