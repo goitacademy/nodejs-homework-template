@@ -25,19 +25,35 @@ passport.use(
   })
 );
 
-const auth = (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (err, user) => {
-    if (!user || err) {
+const auth = async (req, res, next) => {
+  const { authorization = "" } = req.headers;
+  const [bearer, token] = authorization.split(" ");
+  if (bearer !== "Bearer") {
+    return res.status(401).json({
+      status: "error",
+      message: "Not authorized",
+      data: "Unauthorized",
+    });
+  }
+  try {
+    const { id } = jwt.verify(token, SECRET_KEY);
+    const user = await User.findById(id);
+    if (!user || user.token !== token || !user.token) {
       return res.status(401).json({
         status: "error",
-        code: 401,
-        message: "Unauthorized",
+        message: "Not authorized",
         data: "Unauthorized",
       });
     }
     req.user = user;
     next();
-  })(req, res, next);
+  } catch {
+    return res.status(401).json({
+      status: "error",
+      message: "Not authorized",
+      data: "Unauthorized",
+    });
+  }
 };
 
 module.exports = { auth };

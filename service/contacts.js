@@ -15,7 +15,7 @@ const getContactById = async (contactId, userId) => {
     throw new Error("Not found. Invalid Id!");
   }
   try {
-    const selectedConctact = await Contact.findOne({ _id: contactId });
+    const selectedConctact = await Contact.findOne({ _id: contactId, owner });
     const contactOwner = selectedConctact.owner;
 
     if (userId.toString() !== contactOwner.toString()) {
@@ -39,7 +39,7 @@ const updateContact = async (contactId, body, userId) => {
       throw new Error("Not authorized.");
     }
 
-    await Contact.findByIdAndDelete(contactId, body);
+    await Contact.findByIdAndUptade(contactId, body);
     const updatedContact = (await Contact.findOne({ _id: contactId })) || null;
     return updatedContact;
   } catch (error) {
