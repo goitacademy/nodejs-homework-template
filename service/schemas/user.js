@@ -38,6 +38,6 @@ userSchema.methods.setToken = function (token) {
   this.token = token;
 };
 
-const User = mongoose.model("User", userSchema, "users");
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
