@@ -9,7 +9,7 @@ const {
   updateStatusContact,
 } = require('../../models/contacts');
 const bcrypt = require('bcrypt');
-const User = require('../../models/user');
+const User = require('../../models/users');
 
 
 router.get('/', async (req, res) => {
