@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const userSchema = new mongoose.Schema({
+const contactSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Name is required'],
@@ -9,25 +9,22 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
-    unique: true,
   },
-  password: {
+  phone: {
     type: String,
-    required: [true, 'Set password for user'],
+    required: [true, 'Phone number is required'],
   },
-  subscription: {
-    type: String,
-    enum: ['starter', 'pro', 'business'],
-    default: 'starter',
+  favorite: {
+    type: Boolean,
+    default: false,
   },
+  
   owner: {
     type: Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'User',
   },
-  token: String,
 });
 
-const User = mongoose.model('User', userSchema);
+const Contact = mongoose.model('Contact', contactSchema);
 
-module.exports = User;
-
+module.exports = Contact;

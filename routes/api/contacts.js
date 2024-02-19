@@ -10,12 +10,13 @@ const {
 } = require('../../models/contacts');
 const bcrypt = require('bcrypt');
 const User = require('../../models/users');
+const authenticateToken = require('../../middleware/autMiddleware'); // Importujemy middleware
 
-
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
-    const allContacts = await listContacts();
-    res.json(allContacts);
+    const userId = req.user.userId;
+    const userContacts = await listContacts({ owner: userId });
+    res.json(userContacts);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -36,7 +37,8 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const newContact = await addContact(req.body);
+    const newContactData = { ...req.body, owner: req.user.userId }; // Dodajemy właściciela (owner) do danych nowego kontaktu
+    const newContact = await addContact(newContactData);
     res.status(201).json(newContact);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -112,6 +114,5 @@ router.post('/register', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;

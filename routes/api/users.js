@@ -5,6 +5,7 @@ const authenticateToken = require('../../middleware/autMiddleware');
 const User = require('../../models/users');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); 
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
@@ -23,7 +24,7 @@ const generateAuthToken = (user) => {
       email: user.email,
   };
 
-  const token = jwt.sign(payload, 'Sasha1234', {
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '1h',
   });
 
