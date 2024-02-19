@@ -6,8 +6,10 @@ const {
   removeContact,
   updateContact,
   updateStatusContact,
-} = require("../../service/contactsController");
-const schema = require("../../service/Schemas/joiSchema");
+} = require("../../service/controllers/contactsController");
+const {
+  requiredContactSchema,
+} = require("../../service/Schemas/contactSchema");
 
 const router = express.Router();
 
@@ -34,7 +36,7 @@ router.get("/:contactId", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const body = req.body;
-  const validation = schema.validate(body);
+  const validation = requiredContactSchema.validate(body);
   if (validation.error) {
     res.status(400).json({ message: validation.error.details[0].message });
   } else {
@@ -63,7 +65,7 @@ router.delete("/:contactId", async (req, res, next) => {
 router.put("/:contactId", async (req, res, next) => {
   const contactId = req.params.contactId;
   const body = req.body;
-  const validation = schema.validate(body);
+  const validation = requiredContactSchema.validate(body);
 
   if (validation.error) {
     res.status(400).json({ message: validation.error.details[0].message });
