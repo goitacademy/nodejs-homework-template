@@ -19,14 +19,14 @@ app.use(express.json());
 
 setJWTStrategy();
 
-app.use("/api/contacts", contactsRouter);
-app.use("/api/users", authMiddleware, usersRouter);
+app.use("/api/contacts", authMiddleware, contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({
     status: "error",
     code: 404,
-    message: "Use api on routes: /api/tasks",
+    message: "Use api on routes: /api/contacts",
     data: "Not found",
   });
 });

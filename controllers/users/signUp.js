@@ -4,11 +4,13 @@ import { findUserByEmail, createUser } from "../../service/index.js";
 export async function signUp(req, res, next) {
   const { email, password } = req.body;
   const { error } = validateAddUser(req.body);
-  const user = await findUserByEmail({ email });
+
   if (error) {
-    console.log(error);
     return res.json({ status: 400, msg: "Missing fields" });
   }
+
+  const user = await findUserByEmail(email);
+
   if (user) {
     return res.json({ status: 409, msg: "Email in use" });
   }

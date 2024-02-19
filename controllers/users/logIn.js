@@ -5,12 +5,12 @@ import { findUserByEmail, updateUser } from "../../service/index.js";
 export async function logIn(req, res, next) {
   const { email, password } = req.body;
   const { error } = validateAddUser(req.body);
-  const user = await findUserByEmail(email);
 
   if (error) {
-    console.log(error);
     return res.json({ status: 400, msg: "Missing fields" });
   }
+
+  const user = await findUserByEmail(email);
 
   if (!user) {
     return res.json({ status: 401, msg: "Email or password is wrong" });
@@ -25,7 +25,8 @@ export async function logIn(req, res, next) {
         id,
         email: user.email,
       };
-      const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "1h" });
+      const token = jwt.sign(payload, process.env.SECRET, { expiresIn: "24h" });
+
       await updateUser(id, token);
 
       return res.status(200).json({
