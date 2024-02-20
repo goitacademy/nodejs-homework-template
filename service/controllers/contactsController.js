@@ -5,7 +5,7 @@ const listContacts = async () => {
     const contacts = await Contact.find();
     return contacts;
   } catch (err) {
-    console.log(err.message);
+    throw Error(err);
   }
 };
 
@@ -14,7 +14,7 @@ const getContactById = async (contactId) => {
     const contactToFind = await Contact.findOne({ _id: contactId });
     return contactToFind;
   } catch (err) {
-    console.log(err.message);
+    throw Error(err);
   }
 };
 
@@ -23,7 +23,7 @@ const removeContact = async (contactId) => {
     const contactToDelete = await Contact.findByIdAndDelete({ _id: contactId });
     return contactToDelete;
   } catch (err) {
-    console.log(err.message);
+    throw Error(err);
   }
 };
 
@@ -32,7 +32,7 @@ const addContact = async (body) => {
     const newContact = await Contact.create(body);
     return newContact;
   } catch (err) {
-    console.log(err.message);
+    throw Error(err);
   }
 };
 
@@ -43,7 +43,7 @@ const updateContact = async (contactId, body) => {
     });
     return contactToUpdate;
   } catch (err) {
-    console.log(err.message);
+    throw new Error(err);
   }
 };
 
@@ -59,7 +59,7 @@ const updateStatusContact = async (contactId, body) => {
     );
     return contactToUpdate;
   } catch (err) {
-    console.log(err.message);
+    throw new Error(err);
   }
 };
 
