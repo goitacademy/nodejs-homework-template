@@ -1,7 +1,6 @@
 const express = require("express");
 const signup = express.Router();
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const User = require("../../model/user.model");
 
@@ -28,16 +27,11 @@ signup.post("/", async (req, res) => {
 
     const newUser = new User({ email, password: hashedPassword });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-    newUser.token = token;
     await newUser.save();
 
     res.status(201).json({
       message: "Success, user registered",
       user: { email: newUser.email, subscription: newUser.subscription },
-      token: newUser.token,
     });
   } catch (error) {
     console.error("Error during user registration:", error);

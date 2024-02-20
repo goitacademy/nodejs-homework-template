@@ -29,7 +29,12 @@ login.post("/", async (req, res) => {
       return res.status(401).json({ message: "Email or password is wrong" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    user.token = token;
+    await user.save();
 
     res.status(200).json({
       message: "Success, user logged in",

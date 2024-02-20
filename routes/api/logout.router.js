@@ -1,8 +1,8 @@
 const express = require("express");
-const router = express.Router();
+const logout = express.Router();
 const User = require("../../model/user.model");
 
-router.get("/", async (req, res) => {
+logout.get("/", async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -19,4 +19,4 @@ router.get("/", async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = logout;
