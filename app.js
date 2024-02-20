@@ -13,11 +13,11 @@ app.use(express.json());
 app.use("/api/contacts", auth, require("./api/contacts"));
 app.use("/api/users", require("./api/users"));
 
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ message: "Not found" });
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _, res) => {
   res.status(500).json({ message: err.message });
 });
 
