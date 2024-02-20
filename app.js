@@ -25,7 +25,7 @@ app.use("/api/signup", signupRouter);
 app.use("/api/login", loginRouter);
 app.use("/api/contacts", tokenMiddleware, contactsRouter);
 app.use("/api/current", tokenMiddleware, currentRouter);
-app.use("/api/logout", logoutRouter);
+app.use("/api/logout", tokenMiddleware, logoutRouter);
 app.use(
   "/api/updateUserSubscription",
   tokenMiddleware,
