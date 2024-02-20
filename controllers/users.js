@@ -128,10 +128,99 @@ const getUsers = async (req, res, next) => {
   });
 };
 
+const updateSubscription = async (req, res, next) => {
+  try {
+    const { error } = userValidator(req.body);
+    if (error)
+      return res.status(400).json({ message: error.details[0].message });
+    const { subscription } = req.params;
+
+    if (!subscription) {
+      res.status(400).json({ message: "Missing subscription field" });
+    }
+    const user = await service.updateUserSubscription(userId, subscription);
+
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "Not found" });
+    }
+  } catch (error) {
+    console.log(error.message);
+    next(error);
+  }
+};
+
+const updateAvatar = async (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "There is no file" });
+  }
+  const { description } = req.body;
+  const { path: temporaryName } = req.file;
+  const fileName = path.join(imageStore, req.file.fileName);
+
+  const newUser = await service.updateUserAvatar(req.body.id, fileName);
+  try {
+    await fs.rename(temporaryName, fileName);
+  } catch (err) {
+    await fs.unlink(temporaryName);
+    return next(err);
+  }
+
+  const isValid = await isCorrectResizedImage(fileName);
+  if (!isValid) {
+    await fs.unlink(fileName);
+    return res
+      .status(400)
+      .json({ message: "File isn't a photo or problem with resizing" });
+  }
+
+  res.json({
+    description,
+    fileName,
+    avatarURL: newUser.avatarURL,
+    message: "File uploaded correctly",
+    status: 200,
+  });
+};
+
+const isCorrectResizedImage = async (imagePath) =>
+  new Promise((resolve) => {
+    try {
+      Jimp.read(imagePath, (error, image) => {
+        if (error) {
+          resolve(false);
+        } else {
+          image.resize(250, 250).write(imagePath);
+          resolve(true);
+        }
+      });
+    } catch (error) {
+      resolve(false);
+    }
+  });
+
+const deleteUserByMail = async (req, res) => {
+  try {
+    const email = req.query.email;
+    const userToRemove = await service.deleteUser(email);
+    if (!userToRemove) {
+      return res.status(404).json({ message: "Not found user" });
+    } else {
+      res.status(200).json({ message: "User deleted from data base" });
+    }
+  } catch (error) {
+    console.log(`Error: ${error.message}`.red);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
   current,
   getUsers,
+  updateSubscription,
+  updateAvatar,
+  deleteUserByMail,
 };
