@@ -15,8 +15,15 @@ const contactValidation = Joi.object({
     .required(),
 });
 
-
 const validate = (schema, obj, next, res) => {
+  if (!obj) {
+    res.status(400).json({
+      code: 400,
+      message: "missing fields",
+    });
+    return;
+  }
+
   const { error } = schema.validate(obj);
   if (error) {
     const [{ message }] = error.details;
@@ -32,8 +39,4 @@ const validate = (schema, obj, next, res) => {
 
 module.exports.contactValid = (req, res, next) => {
   return validate(contactValidation, req.body, next, res);
-};
-
-module.exports.contactUpdate = (req, res, next) => {
-  return validate(updateContact, req.body, next, res);
 };
