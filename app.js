@@ -16,7 +16,7 @@ app.use("/api/users", require("./api/users"));
 
 app.use(
   "/avatars",
-  express.static(path.join(process.cwd(), "piblic", "avatars"))
+  express.static(path.join(process.cwd(), "public", "avatars"))
 );
 
 app.use((_, res) => {

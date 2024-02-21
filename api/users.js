@@ -11,8 +11,12 @@ router.post("/login", userController.login);
 router.get("/logout", auth, userController.logout);
 router.get("/current", auth, userController.current);
 router.patch("/userId/subscription", auth, userController.updateSubscription);
-router.patch("/avatars", auth, uploadMiddleware.single("avatar"), userController.updateAvatar
+router.patch(
+  "/avatars",
+  auth,
+  uploadMiddleware.single("avatar"),
+  userController.updateAvatar
 );
-router.delete("/", userController.deleteUserbyMail);
+router.delete("/", userController.deleteUserByMail);
 
 module.exports = router;
