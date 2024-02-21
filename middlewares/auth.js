@@ -11,7 +11,6 @@ const params = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
 };
 
-// JWT Strategy
 passport.use(
   new Strategy(params, (payload, done) => {
     User.find({ _id: payload.id })

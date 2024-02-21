@@ -4,6 +4,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../service/schemas/user");
 const service = require("../service/users");
 const { userValidator } = require("./../utils/validator");
+const gravatar = require("gravatar");
+const fs = require("fs/promises");
+const path = require("path");
+const Jimp = require("jimp");
+const { imageStore } = require("../middlewares/upload");
 
 const SECRET = process.env.SECRET;
 
@@ -22,7 +27,9 @@ const register = async (req, res, next) => {
     });
   }
   try {
-    const newUser = new User({ email, password, subscription });
+    const avatarURL = gravatar.url(email, { s: "200", r: "pg", d: "mm" });
+
+    const newUser = new User({ email, password, subscription, avatarURL });
     newUser.setPassword(password);
     await newUser.save();
     res.status(201).json({
