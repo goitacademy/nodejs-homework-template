@@ -14,10 +14,11 @@ const SECRET = process.env.SECRET;
 
 const register = async (req, res, next) => {
   const { error } = userValidator(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
 
+  if (error) return res.status(400).json({ message: error.details[0].message });
   const { email, password, subscription } = req.body;
   const user = await service.getUser({ email });
+
   if (user) {
     return res.status(409).json({
       status: "error",
