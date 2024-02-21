@@ -6,13 +6,15 @@ const {
   logIn,
   logOut,
   current,
-  changeSubscription,
+  //   changeSubscription,
 } = require("../../service/controllers/userController");
 
 const router = express.Router();
 
-router.post("/users/singup", validateUserSchema, signUp);
-router.post("users/login", validateUserSchema, logIn);
-router.get("/users/logout", auth, logOut);
-router.get("users/current", auth, current);
-router.patch("/users", changeSubscription);
+router.post("/signup", validateUserSchema, signUp);
+router.post("/login", validateUserSchema, logIn);
+router.get("/logout", auth, logOut);
+router.get("/current", auth, current);
+// router.patch("/", changeSubscription);
+
+module.exports = router;

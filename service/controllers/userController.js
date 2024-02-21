@@ -1,20 +1,22 @@
-const User = require("../Schemas/userSchema");
+const { User } = require("../Schemas/userSchema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { SECRET } = process.env;
+
+require("dotenv").config();
+const SECRET = process.env.SECRET;
 
 const signUp = async (req, res, next) => {
   const { email, password } = req.body;
   let user;
   try {
     user = await User.findOne({ email });
+    console.log("~user");
   } catch (err) {
     return next(err);
   }
 
   if (user) {
     return res.status(409).json({
-      status: "Conflict",
       message: "Email in use",
     });
   } else {
@@ -27,10 +29,9 @@ const signUp = async (req, res, next) => {
     });
 
     res.status(201).json({
-      status: "Created",
-      data: {
+      user: {
         email: newUser.email,
-        subscription: newUser.supscription,
+        subscription: newUser.subscription,
       },
     });
   }
@@ -48,7 +49,6 @@ const logIn = async (req, res, next) => {
 
   if (!user) {
     return res.status(401).json({
-      status: "Unauthorized error",
       message: "Email is wrong",
     });
   } else {
@@ -61,13 +61,11 @@ const logIn = async (req, res, next) => {
 
     if (!isPasswordValid) {
       return res.status(401).json({
-        status: "Unauthorized error",
         message: "Password is wrong",
       });
     } else {
       const payload = { id: user._id };
       const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
-      console.log(token);
 
       try {
         await User.findByIdAndUpdate(user._id, { token });
@@ -87,22 +85,12 @@ const logIn = async (req, res, next) => {
 
 const logOut = async (req, res, next) => {
   const { _id } = req.user;
-  let user;
   try {
-    user = await User.findByIdAndUpdate(_id, { token: "" });
-    console.log("user logout~", user);
+    await User.findByIdAndUpdate(_id, { token: "" });
   } catch (err) {
     return next(err);
   }
-
-  //   if (!user) {
-  //     return res.status(401).json({
-  //       status: "Unauthorized error",
-  //       message: "Not authorized",
-  //     });
-  //   } else {
-  //     res.status(204);
-  //   }
+  res.status(204).json({});
 };
 
 const current = async (req, res, next) => {

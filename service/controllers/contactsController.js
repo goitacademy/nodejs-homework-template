@@ -1,4 +1,4 @@
-const Contact = require("../Schemas/contactSchema");
+const { Contact } = require("../Schemas/contactSchema");
 
 const listContacts = async () => {
   try {
@@ -43,7 +43,7 @@ const updateContact = async (contactId, body) => {
     });
     return contactToUpdate;
   } catch (err) {
-    throw new Error(err);
+    throw Error(err);
   }
 };
 
@@ -59,7 +59,7 @@ const updateStatusContact = async (contactId, body) => {
     );
     return contactToUpdate;
   } catch (err) {
-    throw new Error(err);
+    throw Error(err);
   }
 };
 
