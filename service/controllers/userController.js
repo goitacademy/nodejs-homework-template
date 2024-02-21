@@ -102,22 +102,4 @@ const current = async (req, res, next) => {
   });
 };
 
-// const changeSubscription = async (req, res, next) => {
-//   const { id, subscription } = req.body;
-//   const subscriptionType = ["starter", "pro", 'business'];
-
-//   if (!subscription) {
-//     res.status(400).json({ message: "missing field subscription" });
-//   } else {
-//     try {
-//       const updateSub = await User.findByIdAndUpdate({_id: id}, {subscription});
-//       if (!updateSub) {
-//         return res.status(404).json({ message: "Not found" });
-//       } else res.status(200).json(updateSub);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// };
-
 module.exports = { signUp, logIn, logOut, current };
