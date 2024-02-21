@@ -1,9 +1,9 @@
 const express = require("express");
-const router = express.Router();
+const current = express.Router();
 const User = require("../../model/user.model");
 const tokenMiddleware = require("../../middleware/tokenMiddleware");
 
-router.get("/current", tokenMiddleware, async (req, res) => {
+current.get("/", tokenMiddleware, async (req, res) => {
   try {
     const currentUser = await User.findById(req.user._id);
 
@@ -21,7 +21,7 @@ router.get("/current", tokenMiddleware, async (req, res) => {
   }
 });
 
-router.patch("/subscription", tokenMiddleware, async (req, res) => {
+current.patch("/subscription", tokenMiddleware, async (req, res) => {
   const { subscription } = req.body;
 
   if (!subscription) {
@@ -48,4 +48,4 @@ router.patch("/subscription", tokenMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
+module.exports = current;

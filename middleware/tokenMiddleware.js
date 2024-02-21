@@ -21,7 +21,7 @@ const tokenMiddleware = async (req, res, next) => {
     const userId = decoded.id;
 
     const user = await User.findById(userId);
-    if (!user || user.token !== token) {
+    if (!user || user.token !== tokenParts[1]) {
       return res.status(401).json({ message: "Not authorized" });
     }
 
