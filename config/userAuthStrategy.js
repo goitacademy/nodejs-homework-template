@@ -1,6 +1,6 @@
 import passport from "passport";
 import passportJWT from "passport-jwt";
-import { User } from "../service/schemas/users.js";
+import { findUserById } from "../service/index.js";
 
 import dotenv from "dotenv";
 
@@ -18,17 +18,17 @@ export default function setJWTStrategy() {
   };
 
   passport.use(
-    new Strategy(params, (payload, done) => {
-      User.findOne({ _id: payload.id })
-        .then((user) => {
-          if (user) {
-            return done(null, user);
-          }
+    new Strategy(params, async function (payload, done) {
+      try {
+        console.log(payload);
+        const user = await findUserById(payload.id);
+        if (!user) {
           return done(new Error("User not found"));
-        })
-        .catch((err) => {
-          return done(err);
-        });
+        }
+        return done(null, user);
+      } catch (e) {
+        return done(err);
+      }
     })
   );
 }
