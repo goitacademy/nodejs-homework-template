@@ -1,28 +1,10 @@
-const passport = require("passport");
-const passportJWT = require("passport-jwt");
+const jwt = require("jsonwebtoken");
+
 const User = require("../service/schemas/user");
+
 require("dotenv").config();
+
 const SECRET = process.env.SECRET;
-
-const ExtractJWT = passportJWT.ExtractJwt;
-const Strategy = passportJWT.Strategy;
-const params = {
-  secretOrKey: SECRET,
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-};
-
-passport.use(
-  new Strategy(params, (payload, done) => {
-    User.find({ _id: payload.id })
-      .then(([user]) => {
-        if (!user) {
-          return done(new Error("User not found"));
-        }
-        return done(null, user);
-      })
-      .catch((err) => done(err));
-  })
-);
 
 const auth = async (req, res, next) => {
   const { authorization = "" } = req.headers;
@@ -30,26 +12,26 @@ const auth = async (req, res, next) => {
   if (bearer !== "Bearer") {
     return res.status(401).json({
       status: "error",
-      message: "Not authorized",
+      message: "Missing token",
       data: "Unauthorized",
     });
   }
   try {
-    const { id } = jwt.verify(token, SECRET_KEY);
+    const { id } = jwt.verify(token, SECRET);
     const user = await User.findById(id);
     if (!user || user.token !== token || !user.token) {
       return res.status(401).json({
         status: "error",
-        message: "Not authorized",
+        message: "Not valid",
         data: "Unauthorized",
       });
     }
     req.user = user;
     next();
-  } catch {
+  } catch (err) {
     return res.status(401).json({
       status: "error",
-      message: "Not authorized",
+      message: "Internal error",
       data: "Unauthorized",
     });
   }

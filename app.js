@@ -11,6 +11,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/api/contacts", auth, require("./api/contacts"));
 app.use("/api/users", require("./api/users"));
