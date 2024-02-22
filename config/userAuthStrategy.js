@@ -20,7 +20,6 @@ export default function setJWTStrategy() {
   passport.use(
     new Strategy(params, async function (payload, done) {
       try {
-        console.log(payload);
         const user = await findUserById(payload.id);
         if (!user) {
           return done(new Error("User not found"));

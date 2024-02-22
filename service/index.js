@@ -50,7 +50,7 @@ const updateUser = async (id, token) => {
 };
 
 const findUserById = async (id) => {
-  await User.find({ _id: id });
+  return User.findOne({ _id: id });
 };
 
 export {

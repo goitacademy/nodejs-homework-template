@@ -2,12 +2,10 @@ import passport from "passport";
 
 const authMiddleware = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
-    console.log(user);
-
     if (!user || err) {
       return res.status(401).json({ message: "Not authorized" });
     }
-    res.user = user;
+    req.user = user;
     next();
   })(req, res, next);
 };
