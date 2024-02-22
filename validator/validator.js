@@ -1,5 +1,26 @@
 const Joi = require("joi");
 
+const validateData = (schema) => (req, res, next) => {
+  if (!req.body) {
+    return res.status(400).json({
+      code: 400,
+      message: "missing fields",
+    });
+  }
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    const [{ message }] = error.details;
+    console.log(error);
+    return res.status(400).json({
+      status: "failure",
+      code: 400,
+      message: `${message.replace(/"/g, "")}`,
+    });
+  }
+  next();
+};
+
 const contactValidation = Joi.object({
   name: Joi.string().min(2).max(30).required(),
 
@@ -15,28 +36,22 @@ const contactValidation = Joi.object({
     .required(),
 });
 
-const validate = (schema, obj, next, res) => {
-  if (!obj) {
-    res.status(400).json({
-      code: 400,
-      message: "missing fields",
-    });
-    return;
-  }
+const userValidation = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "pl"] } })
+    .required(),
 
-  const { error } = schema.validate(obj);
-  if (error) {
-    const [{ message }] = error.details;
-    console.log(error);
-    return res.json({
-      status: "failure",
-      code: 400,
-      message: `${message.replace(/"/g, "")}`,
-    });
-  }
-  next();
-};
+  password: Joi.string()
+    .min(8)
+    .pattern(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]+$/)
+    .required()
+    .messages({
+      "string.pattern.base":
+        "Password must contain at least one uppercase letter, one number, and one special character.",
+      "string.min": "Password must be at least {#limit} characters long.",
+      "any.required": "Password is required.",
+    }),
+});
 
-module.exports.contactValid = (req, res, next) => {
-  return validate(contactValidation, req.body, next, res);
-};
+module.exports.contactValid = validateData(contactValidation);
+module.exports.userValid = validateData(userValidation);

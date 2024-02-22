@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const routerContact = express.Router();
 const validate = require("../validator/validator");
 
 const {
@@ -11,16 +11,16 @@ const {
   updateContactStatus,
 } = require("../controller/contact");
 
-router.post("/Contacts", validate.contactValid, addContact);
+routerContact.post("/Contacts", validate.contactValid, addContact);
 
-router.get("/Contacts", getContacts);
+routerContact.get("/Contacts", getContacts);
 
-router.get("/Contacts/:id", getContactById);
+routerContact.get("/Contacts/:id", getContactById);
 
-router.put("/Contacts/:id", validate.contactValid, updateContact);
+routerContact.put("/Contacts/:id", validate.contactValid, updateContact);
 
-router.patch("/Contacts/:id/status", updateContactStatus);
+routerContact.patch("/Contacts/:id/status", updateContactStatus);
 
-router.delete("/Contacts/:id", removeContact);
+routerContact.delete("/Contacts/:id", removeContact);
 
-module.exports = router;
+module.exports = routerContact;
