@@ -2,8 +2,6 @@ const User = require("../service/schemas/user");
 const service = require("../service/user");
 const bcrypt = require("bcryptjs");
 
-
-
 const addUser = async (req, res, next) => {
   const { password, email } = req.body;
 
@@ -20,12 +18,19 @@ const addUser = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await service.createUser({ email, password: hashedPassword });
+    const result = await service.createUser({
+      email,
+      password: hashedPassword,
+    });
 
     res.status(201).json({
       status: "success",
       code: 201,
-      data: { message: " Registration succesful", user: result },
+      data: {
+        message: "Registration successful",
+        email: result.email,
+        subscription: result.subscription,
+      },
     });
   } catch (e) {
     console.error(e);
@@ -33,9 +38,5 @@ const addUser = async (req, res, next) => {
   }
 };
 
-const displayHello = (req, res) => {
-  res.send("hello world");
-  console.log("hello world");
-};
 
-module.exports = { addUser, displayHello };
+module.exports = { addUser };
