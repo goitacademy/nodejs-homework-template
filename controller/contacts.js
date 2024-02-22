@@ -3,7 +3,7 @@ const { validateContact } = require("../validator/contactValidator");
 
 const getContacts = async (req, res, next) => {
   try {
-    const result = await service.getAllContacts(req.query);
+    const result = await service.getContacts(req.query);
     res.json({
       status: "success",
       code: 200,

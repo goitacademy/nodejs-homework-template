@@ -1,6 +1,6 @@
 const Contact = require("./schemas/contacts");
 
-const getAllContacts = async ({ page = 1, limit = 20, favourite }) => {
+const getContacts = async ({ page = 1, limit = 20, favourite }) => {
   const options = {};
 
   if (favourite !== undefined) {
@@ -29,7 +29,7 @@ const removeContact = (id) => {
 };
 
 module.exports = {
-  getAllContacts,
+  getContacts,
   getContactById,
   createContact,
   updateContact,

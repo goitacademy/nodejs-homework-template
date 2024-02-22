@@ -8,7 +8,6 @@ const Joi = require("joi");
 const registerUser = async (req, res, next) => {
   const { error, value } = validateUser(req.body);
   const { email, password } = value;
-  const user = await User.findOne({ email });
   if (error) {
     res.status(400).json({
       status: "failure",
@@ -16,6 +15,7 @@ const registerUser = async (req, res, next) => {
       error: error.details,
     });
   } else {
+    const user = await User.findOne({ email });
     if (user) {
       return res.status(409).json({
         status: "error",
@@ -80,13 +80,6 @@ const loginUser = async (req, res, next) => {
 };
 
 const logoutUser = async (req, res, mext) => {
-  if (!req.user || !req.user._id) {
-    res.status(401).json({
-      status: "failure",
-      code: 401,
-      message: "Not authorized",
-    });
-  }
   const userId = req.user._id;
   try {
     await service.logoutUser(userId);
@@ -98,15 +91,8 @@ const logoutUser = async (req, res, mext) => {
 };
 
 const checkCurrentUser = async (req, res, next) => {
-  if (!req.user || !req.user._id) {
-    res.status(401).json({
-      status: "failure",
-      code: 401,
-      message: "Not authorized",
-    });
-  }
+  const userId = req.user._id;
   try {
-    const userId = req.user._id;
     const user = await service.getCurrentUser(userId);
     if (!user) {
       return res.status(401).json({
@@ -135,7 +121,6 @@ const updateUserSubscription = async (req, res, next) => {
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
-
   try {
     const userId = req.user._id;
     const { subscription } = req.body;
