@@ -1,6 +1,6 @@
 const express = require("express");
 const Joi = require("joi");
-const Contact = require("../../contact.model");
+const Contact = require("../../model/contact.model");
 
 const router = express.Router();
 
@@ -13,9 +13,24 @@ const contactSchema = Joi.object({
 
 router.get("/", async (req, res, next) => {
   try {
-    const contacts = await Contact.find();
-    res.json({ contacts });
+    const { page = 1, limit = 20, favorite } = req.query;
+    const query = {};
+
+    if (favorite !== undefined) {
+      query.favorite = favorite;
+    }
+
+    const contacts = await Contact.find(query)
+      .limit(Number(limit))
+      .skip((page - 1) * Number(limit))
+      .exec();
+
+    const count = await Contact.countDocuments(query);
+    const totalPages = Math.ceil(count / Number(limit));
+
+    res.json({ contacts, totalPages });
   } catch (error) {
+    console.error("Error fetching contacts:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -29,6 +44,7 @@ router.get("/:contactId", async (req, res, next) => {
     }
     res.json({ contact });
   } catch (error) {
+    console.error("Error fetching contact by ID:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -45,6 +61,7 @@ router.post("/", async (req, res, next) => {
     await newContact.save();
     res.status(201).json({ contact: newContact });
   } catch (error) {
+    console.error("Error creating contact:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -68,6 +85,7 @@ router.put("/:contactId", async (req, res, next) => {
     }
     res.json({ contact: updatedContact });
   } catch (error) {
+    console.error("Error updating contact:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -81,6 +99,7 @@ router.delete("/:contactId", async (req, res, next) => {
     }
     res.json({ message: "Contact deleted" });
   } catch (error) {
+    console.error("Error deleting contact:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -90,17 +109,18 @@ router.patch("/:contactId/favorite", async (req, res, next) => {
   const { favorite } = req.body;
 
   if (favorite === undefined) {
-    return res.status(400).json({ message: "missing field favorite" });
+    return res.status(400).json({ message: "Missing field 'favorite'" });
   }
 
   try {
-    const existingContact = await Contact.findById(contactId);
+    const existingContact = await Contact.findByIdAndUpdate(
+      contactId,
+      { favorite },
+      { new: true }
+    );
     if (!existingContact) {
       return res.status(404).json({ message: "Contact not found" });
     }
-
-    existingContact.favorite = favorite;
-    await existingContact.save();
 
     res.json({ contact: existingContact });
   } catch (error) {
