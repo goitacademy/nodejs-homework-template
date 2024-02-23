@@ -1,59 +1,29 @@
-const passport = require("passport");
-const passportJWT = require("passport-jwt");
-const User = require("../service/schemas/user");
-require("dotenv").config();
-const SECRET = process.env.SECRET;
+const { Unauthorized } = require("http-errors");
+const jwt = require("jsonwebtoken");
+const { User } = require("../models");
 
-const ExtractJWT = passportJWT.ExtractJwt;
-const Strategy = passportJWT.Strategy;
-const params = {
-  secretOrKey: SECRET,
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-};
-
-// JWT Strategy
-passport.use(
-  new Strategy(params, (payload, done) => {
-    User.find({ _id: payload.id })
-      .then(([user]) => {
-        if (!user) {
-          return done(new Error("User not found"));
-        }
-        return done(null, user);
-      })
-      .catch((err) => done(err));
-  })
-);
+const { SECRET } = process.env;
 
 const auth = async (req, res, next) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
-  if (bearer !== "Bearer") {
-    return res.status(401).json({
-      status: "error",
-      message: "Not authorized",
-      data: "Unauthorized",
-    });
-  }
   try {
-    const { id } = jwt.verify(token, SECRET_KEY);
+    if (bearer !== "Bearer" || !token) {
+      throw new Unauthorized("Not authorized");
+    }
+    const { id } = jwt.verify(token, SECRET);
     const user = await User.findById(id);
-    if (!user || user.token !== token || !user.token) {
-      return res.status(401).json({
-        status: "error",
-        message: "Not authorized",
-        data: "Unauthorized",
-      });
+    if (!user || !user.token) {
+      throw new Unauthorized("Not authorized");
     }
     req.user = user;
     next();
-  } catch {
-    return res.status(401).json({
-      status: "error",
-      message: "Not authorized",
-      data: "Unauthorized",
-    });
+  } catch (error) {
+    if (error.message === "Invalid signature") {
+      error.status = 401;
+    }
+    next(error);
   }
 };
 
-module.exports = { auth };
+module.exports = auth;
