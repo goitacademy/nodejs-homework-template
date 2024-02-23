@@ -1,7 +1,7 @@
 const User = require("../service/schemas/user");
 const service = require("../service/user");
 const bcrypt = require("bcryptjs");
-
+const { generateToken } = require("../config/passport-jwt");
 const addUser = async (req, res, next) => {
   const { password, email } = req.body;
 
@@ -30,6 +30,7 @@ const addUser = async (req, res, next) => {
         message: "Registration successful",
         email: result.email,
         subscription: result.subscription,
+        password: result.password
       },
     });
   } catch (e) {
@@ -39,4 +40,47 @@ const addUser = async (req, res, next) => {
 };
 
 
-module.exports = { addUser };
+const loginUser = async (req, res, next) => {
+  const { password, email } = req.body;
+
+  try {
+    const user = await service.findUser({email})
+    
+    if (!user) {
+      res.status(401).json({
+        status:"Unauthorized",
+        code: 401,
+        message: `There is no user ${email}`
+      });
+    } 
+
+
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({
+        status:"Unauthorized",
+        code: 401,
+        message: "Wrong password"
+      });
+    }
+
+    const token = generateToken(user);
+    
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  }
+  catch (e) {
+    console.error(e);
+    next(e);
+  }
+  
+}
+
+module.exports = { addUser, loginUser };
