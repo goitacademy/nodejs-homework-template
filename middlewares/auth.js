@@ -17,10 +17,10 @@ const auth = async (req, res, next) => {
         return res.status(401).json({
           message: "Not authorized",
         });
-      } else {
-        req.user = user;
-        next();
       }
+
+      req.user = user;
+      next();
     } catch (err) {
       res.status(401).json({
         message: "Not authorized",

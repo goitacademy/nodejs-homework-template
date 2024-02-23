@@ -19,22 +19,22 @@ const signUp = async (req, res, next) => {
     return res.status(409).json({
       message: "Email in use",
     });
-  } else {
-    const hashPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      email,
-      password: hashPassword,
-      supscription: "starter",
-    });
-
-    res.status(201).json({
-      user: {
-        email: newUser.email,
-        subscription: newUser.subscription,
-      },
-    });
   }
+
+  const hashPassword = await bcrypt.hash(password, 10);
+
+  const newUser = await User.create({
+    email,
+    password: hashPassword,
+    supscription: "starter",
+  });
+
+  res.status(201).json({
+    user: {
+      email: newUser.email,
+      subscription: newUser.subscription,
+    },
+  });
 };
 
 const logIn = async (req, res, next) => {
@@ -51,34 +51,34 @@ const logIn = async (req, res, next) => {
     return res.status(401).json({
       message: "Email is wrong",
     });
+  }
+
+  let isPasswordValid;
+  try {
+    isPasswordValid = await bcrypt.compare(password, user.password);
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!isPasswordValid) {
+    return res.status(401).json({
+      message: "Password is wrong",
+    });
   } else {
-    let isPasswordValid;
+    const payload = { id: user._id };
+    const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
+
     try {
-      isPasswordValid = await bcrypt.compare(password, user.password);
+      await User.findByIdAndUpdate(user._id, { token });
+      return res.status(200).json({
+        token,
+        user: {
+          email: user.email,
+          subscription: user.subscription,
+        },
+      });
     } catch (err) {
       return next(err);
-    }
-
-    if (!isPasswordValid) {
-      return res.status(401).json({
-        message: "Password is wrong",
-      });
-    } else {
-      const payload = { id: user._id };
-      const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
-
-      try {
-        await User.findByIdAndUpdate(user._id, { token });
-        return res.status(200).json({
-          token,
-          user: {
-            email: user.email,
-            subscription: user.subscription,
-          },
-        });
-      } catch (err) {
-        return next(err);
-      }
     }
   }
 };
