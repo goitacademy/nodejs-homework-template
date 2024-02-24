@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const configPassport = require("./config/config-passport");
+const uploadFunctions = require("./config/config-multer");
 
 require("dotenv").config();
 
@@ -41,18 +42,22 @@ app.use((err, _, res, __) => {
 
 const uriDb = process.env.DB_HOST;
 
-const connection = mongoose.connect(uriDb, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  dbName: "db-contacts",
-});
-
-connection
-  .then(() => {
+const startServer = async () => {
+  try {
+    await uploadFunctions.initUploadFolders();
+    await mongoose.connect(uriDb, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      dbName: "db-contacts",
+    });
     app.listen(3000, () => {
       console.log("Server running. Use our API on port: 3000");
     });
-  })
-  .catch((err) =>
-    console.log(`Server not running. Error message: ${err.message}`)
-  );
+  } catch (err) {
+    console.log(`Server not running. Error message: ${err.message}`);
+  }
+};
+
+startServer();
+
+module.exports = app;

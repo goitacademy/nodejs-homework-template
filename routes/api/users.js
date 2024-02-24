@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const ctrlUser = require("../../controller/users");
 require("../../config/config-passport");
+const uploadFunctions = require("../../config/config-multer");
 
 const router = express.Router();
 
@@ -25,6 +26,13 @@ router.patch(
   "/users",
   passport.authenticate("jwt", { session: false }),
   ctrlUser.updateUserSubscription
+);
+
+router.patch(
+  "/users/avatars",
+  passport.authenticate("jwt", { session: false }),
+  uploadFunctions.uploadMiddleware.single("avatar"),
+  ctrlUser.updateUserAvatar
 );
 
 module.exports = router;
