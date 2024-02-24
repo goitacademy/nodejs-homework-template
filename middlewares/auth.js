@@ -5,6 +5,7 @@ require("dotenv").config();
 const { SECRET } = process.env;
 
 const auth = async (req, res, next) => {
+  // debugger;
   const { authorization } = req.headers;
   if (authorization) {
     const token = authorization.split(" ")[1];
@@ -13,9 +14,10 @@ const auth = async (req, res, next) => {
       const payload = jwt.verify(token, SECRET);
       const { id } = payload;
       const user = await User.findById({ _id: id });
-      if (!user || user.token !== token) {
+      if (!user) {
         return res.status(401).json({
-          message: "Not authorized",
+          status: "Unauthorized",
+          message: "User cannot be found",
         });
       }
 

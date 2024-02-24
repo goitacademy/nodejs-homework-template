@@ -12,7 +12,8 @@ const listContacts = async (owner) => {
 const getContactById = async (contactId, userId) => {
   try {
     const contactToFind = await Contact.findOne({ _id: contactId });
-    if (userId !== contactToFind.owner) {
+
+    if (contactToFind && userId.toString() !== contactToFind.owner.toString()) {
       throw Error("Not found in your contacts!");
     }
     return contactToFind;
@@ -24,7 +25,10 @@ const getContactById = async (contactId, userId) => {
 const removeContact = async (contactId, userId) => {
   try {
     const contactToDelete = await Contact.findByIdAndDelete({ _id: contactId });
-    if (contactToDelete.owner !== userId) {
+    if (
+      contactToDelete &&
+      contactToDelete.owner.toString() !== userId.toString()
+    ) {
       throw Error("Not found in your contacts!");
     }
     return contactToDelete;
@@ -45,7 +49,10 @@ const addContact = async (contact) => {
 const updateContact = async (contactId, body, userId) => {
   try {
     const contactToUpdate = await Contact.findOne({ _id: contactId });
-    if (contactToUpdate.owner !== userId) {
+    if (
+      contactToUpdate &&
+      contactToUpdate.owner.toString() !== userId.toString()
+    ) {
       throw Error("Not found in your contacts!");
     }
     const updatedContact = await Contact.findByIdAndUpdate(contactId, body, {
@@ -61,7 +68,10 @@ const updateStatusContact = async (contactId, body, userId) => {
   const { favorite } = body;
   try {
     const contactToUpdate = await Contact.findOne({ _id: contactId });
-    if (contactToUpdate.owner !== userId) {
+    if (
+      contactToUpdate &&
+      contactToUpdate.owner.toString() !== userId.toString()
+    ) {
       throw Error("Not found in your contacts!");
     }
     const updatedContact = await Contact.findByIdAndUpdate(

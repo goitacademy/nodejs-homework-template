@@ -10,7 +10,6 @@ const signUp = async (req, res, next) => {
   let user;
   try {
     user = await User.findOne({ email });
-    console.log("~user");
   } catch (err) {
     return next(err);
   }

@@ -16,9 +16,7 @@ const auth = require("../../middlewares/auth");
 const router = express.Router();
 
 router.get("/", auth, async (req, res, next) => {
-  // debugger;
-  console.log(req.user);
-  const { _id: owner } = req.user;
+  const owner = req.user._id;
   try {
     const contacts = await listContacts(owner);
     res.status(200).json(contacts);
@@ -30,8 +28,7 @@ router.get("/", auth, async (req, res, next) => {
 router.get("/:contactId", auth, async (req, res, next) => {
   const userId = req.user._id;
   try {
-    const contact =
-      (await getContactById(req.params.contactId, userId)) || null;
+    const contact = await getContactById(req.params.contactId, userId);
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -43,8 +40,6 @@ router.get("/:contactId", auth, async (req, res, next) => {
 
 router.post("/", auth, async (req, res, next) => {
   const body = req.body;
-  const { _id: owner } = req.user;
-
   const validation = requiredContactSchema.validate(body);
 
   if (validation.error) {
@@ -53,6 +48,7 @@ router.post("/", auth, async (req, res, next) => {
       .json({ message: validation.error.details[0].message });
   }
 
+  const owner = req.user._id;
   try {
     const createdContact = { ...body, owner };
     const contact = await addContact(createdContact);
@@ -78,8 +74,6 @@ router.delete("/:contactId", auth, async (req, res, next) => {
 });
 
 router.put("/:contactId", auth, async (req, res, next) => {
-  const contactId = req.params.contactId;
-  const userId = req.user._id;
   const body = req.body;
   const validation = requiredContactSchema.validate(body);
 
@@ -88,6 +82,10 @@ router.put("/:contactId", auth, async (req, res, next) => {
       .status(400)
       .json({ message: validation.error.details[0].message });
   }
+
+  const contactId = req.params.contactId;
+  const userId = req.user._id;
+
   try {
     const contact = await updateContact(contactId, body, userId);
     if (!contact) {
@@ -99,7 +97,7 @@ router.put("/:contactId", auth, async (req, res, next) => {
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.patch("/:contactId/favorite", auth, async (req, res, next) => {
   const contactId = req.params.contactId;
   const body = req.body;
   const userId = req.user._id;
