@@ -1,7 +1,7 @@
 const express = require("express");
 const routerContact = express.Router();
 const validate = require("../validator/validator");
-
+const { auth } = require("../config/passport-jwt");
 const {
   addContact,
   getContacts,
@@ -11,16 +11,16 @@ const {
   updateContactStatus,
 } = require("../controller/contact");
 
-routerContact.post("/Contacts", validate.contactValid, addContact);
+routerContact.post("/contacts", validate.contactValid, auth, addContact);
 
-routerContact.get("/Contacts", getContacts);
+routerContact.get("/contacts",auth, getContacts);
 
-routerContact.get("/Contacts/:id", getContactById);
+routerContact.get("/contacts/:id",auth, getContactById);
 
-routerContact.put("/Contacts/:id", validate.contactValid, updateContact);
+routerContact.put("/contacts/:id", validate.contactValid,auth, updateContact);
 
-routerContact.patch("/Contacts/:id/status", updateContactStatus);
+routerContact.patch("/contacts/:id/status",auth, updateContactStatus);
 
-routerContact.delete("/Contacts/:id", removeContact);
+routerContact.delete("/contacts/:id",auth, removeContact);
 
 module.exports = routerContact;

@@ -1,5 +1,5 @@
-const User = require("../service/schemas/user");
-const service = require("../service/user");
+// const User = require("../service/schemas/user");
+const {createUser, findUser ,findUserByID} = require("../service/user");
 const bcrypt = require("bcryptjs");
 const { generateToken } = require("../config/passport-jwt");
 
@@ -7,7 +7,7 @@ const addUser = async (req, res, next) => {
   const { password, email } = req.body;
 
   try {
-    const isUserExist = await User.findOne({ email });
+    const isUserExist = await findUser({ email });
 
     if (isUserExist) {
       res.status(409).json({
@@ -19,7 +19,7 @@ const addUser = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await service.createUser({
+    const result = await createUser({
       email,
       password: hashedPassword,
     });
@@ -31,7 +31,6 @@ const addUser = async (req, res, next) => {
         message: "Registration successful",
         email: result.email,
         subscription: result.subscription,
-        password: result.password,
       },
     });
   } catch (e) {
@@ -44,7 +43,7 @@ const loginUser = async (req, res, next) => {
   const { password, email } = req.body;
 
   try {
-    const user = await service.findUser({ email });
+    const user = await findUser({ email });
 
     if (!user) {
       res.status(401).json({
@@ -64,11 +63,11 @@ const loginUser = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(user);
-    await service.findUserAndUpdateToken(email, token); 
+    user.token = generateToken(user);
+    await user.save();
     res.status(200).json({
       message: "Login successful",
-      token,
+      token: user.token,
       user: {
         email: user.email,
         subscription: user.subscription,
@@ -81,11 +80,15 @@ const loginUser = async (req, res, next) => {
 };
 
 const logoutUser = async (req, res, next) => {
-  const { _id } = req.user;
+  const { id } = req.user;
+  
   try {
-    const user = await service.findUserByID({ _id });
+    const user = await findUserByID({ id });
+    console.log(user)
     if (user) {
-      res.status(204).json({ status: "No content", code: 204 });
+      res
+      .status(204)
+      .json({ status: "No content", code: 204, message: "logout succesful" });
     } else {
       res
         .status(401)
@@ -98,8 +101,8 @@ const logoutUser = async (req, res, next) => {
 };
 
 const getCurrentUser = async (req, res) => {
+
   const { email, subscription } = req.user;
-  console.log(req.user);
   await res.json({
     status: "Success",
     code: 200,

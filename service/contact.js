@@ -1,8 +1,8 @@
 const Contact = require("./schemas/contact");
 
 
-const createContact = ({ name, email, phone }) => {
-  return Contact.create({ name, email, phone });
+const createContact = ({ name, email, phone, owner }) => {
+  return Contact.create({ name, email, phone, owner });
 };
 
 const getAllContacts = async () => {

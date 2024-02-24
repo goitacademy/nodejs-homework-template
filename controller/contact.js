@@ -2,8 +2,9 @@ const service = require("../service/contact");
 
 const addContact = async (req, res, next) => {
   const { name, email, phone } = req.body;
+  const owner = req.user._id
   try {
-    const result = await service.createContact({ name, email, phone });
+    const result = await service.createContact({ name, email, phone, owner });
 
     res.status(201).json({
       status: "success",
@@ -28,7 +29,6 @@ const getContacts = async (req, res, next) => {
     });
   } catch (e) {
     console.error(e);
-    console.log('error wystapil')
     next(e);
   }
 };

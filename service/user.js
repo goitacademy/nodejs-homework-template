@@ -8,13 +8,7 @@ const findUser = ({ email,token }) => {
   return User.findOneAndUpdate({email, token});
 };
 
-const findUserAndUpdateToken = async (email, newToken) => {
-  return User.findOneAndUpdate(
-    { email },
-    { token: newToken },
-    { new: true } // Zwraca zaktualizowany dokument
-  );
-};
+
 
 
 const findUserByID = ({ id }) => {
@@ -24,6 +18,5 @@ const findUserByID = ({ id }) => {
 module.exports = {
   createUser,
   findUser,
-  findUserAndUpdateToken,
   findUserByID,
 };

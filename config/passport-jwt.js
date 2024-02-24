@@ -15,12 +15,13 @@ const opts = {
 
 passport.use(new JWTStrategy(opts, async (payload, done) => {
     try {
-      const user = await User.findOnde({id:payload.sub});
+      const user = await User.findOne({_id:payload.id});
       if (!user) {
         return done(null, false);
       }
       return done(null, user);
     } catch (error) {
+      console.error(error)
       return done(error, false);
     }
   })
@@ -29,6 +30,7 @@ passport.use(new JWTStrategy(opts, async (payload, done) => {
 
 const auth = (req, res, next) => {
     passport.authenticate('jwt', { session: false }, (err, user) => {
+
       if (!user || err) {
         return res.status(401).json({
           status: 'error',
