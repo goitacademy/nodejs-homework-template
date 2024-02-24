@@ -2,6 +2,7 @@ const express = require("express");
 const signup = express.Router();
 const bcrypt = require("bcryptjs");
 const Joi = require("joi");
+const gravatar = require("gravatar");
 const User = require("../../model/user.model");
 
 const signupSchema = Joi.object({
@@ -23,9 +24,16 @@ signup.post("/", async (req, res) => {
       return res.status(409).json({ message: "Email in use" });
     }
 
+    const avatarURL = gravatar.url(email, {
+      protocol: "http",
+      s: "250",
+      rating: "pg",
+      d: "404",
+    });
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword, avatarURL }); // Dodajemy avatarURL do danych nowego użytkownika
 
     await newUser.save();
 

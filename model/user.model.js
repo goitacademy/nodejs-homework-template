@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const gravatar = require("gravatar");
 
 const userSchema = new Schema({
   email: {
@@ -19,6 +20,26 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  avatarURL: {
+    type: String,
+  },
+});
+
+userSchema.pre("save", async function (next) {
+  try {
+    if (!this.avatarURL) {
+      const avatarURL = gravatar.url(this.email, {
+        protocol: "http",
+        s: "250",
+        rating: "pg",
+        d: "404",
+      });
+      this.avatarURL = avatarURL;
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 const User = model("User", userSchema);

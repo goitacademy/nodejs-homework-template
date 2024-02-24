@@ -26,6 +26,7 @@ const tokenMiddleware = async (req, res, next) => {
     }
 
     req.user = user;
+    console.log("Authenticated user:", user);
     next();
   } catch (error) {
     console.error("Error in token middleware:", error);
