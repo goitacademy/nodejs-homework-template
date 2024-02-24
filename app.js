@@ -6,29 +6,12 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import contactsRouter from "./routes/api/contacts/contacts.js";
 import usersRouter from './routes/api/users/users.js';
-import multer from 'multer';
-import path from 'path';
-import { AvatarProcessor } from './controllers/users/AvatarProcessor.js';
+import { uploadAvatar } from './config.js';
+import { authenticateToken } from './middleware/authenticateToken.js';
 
 const app = express()
 
 dotenv.config();
-
-const avatarUploadDir = path.join(process.cwd(), 'public', 'avatars');
-const tmpDir = path.join(process.cwd(), 'tmp');
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, avatarUploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const uploadAvatar = multer({ storage });
-
-const avatarProcessor = new AvatarProcessor(avatarUploadDir, path.join(process.cwd(), 'public'), tmpDir);
 
 const { MONGODB_URI } = process.env;
 
@@ -56,9 +39,7 @@ app.use(express.json())
 
 app.use('/', usersRouter);
 app.use('/', contactsRouter);
-app.post('/avatars', uploadAvatar.single('avatar'), (req, res) => {
-  return res.status(200).json({ message: 'Аватар успешно загружен' });
-});
+app.use('/api/users', usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })

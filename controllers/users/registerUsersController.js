@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import Joi from 'joi';
 import { User } from '../../models/users/userModel.js';
-import { AvatarProcessor } from './AvatarProcessor.js';
+import { avatarProcessor } from '../../config.js';
+
 
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -30,6 +31,7 @@ const signup = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     
+    const avatarPath = req.file ? req.file.path : null;
     const avatarURL = gravatar.url(req.body.email, { s: '200', r: 'pg', d: 'mm' });
 
     const user = await User.create({
@@ -38,7 +40,7 @@ const signup = async (req, res, next) => {
       avatarURL,
     });
 
-    const processedAvatarURL = await AvatarProcessor.processAvatar(req.file.path, user._id);
+    const processedAvatarURL = await avatarProcessor.processAvatar(avatarPath, user._id);
 
     user.avatarURL = processedAvatarURL;
     await user.save();
@@ -50,7 +52,7 @@ const signup = async (req, res, next) => {
     user.token = token;
     await user.save();
 
-    console.log('User created successfully:', user);
+    console.log('User after saving token:', user);
 
     return res.status(201).json({
       user: {
