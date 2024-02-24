@@ -5,7 +5,6 @@ require("dotenv").config();
 const { SECRET } = process.env;
 
 const auth = async (req, res, next) => {
-  // debugger;
   const { authorization } = req.headers;
   if (authorization) {
     const token = authorization.split(" ")[1];
