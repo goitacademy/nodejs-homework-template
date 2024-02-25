@@ -26,9 +26,9 @@ router.get("/", auth, async (req, res, next) => {
 });
 
 router.get("/:contactId", auth, async (req, res, next) => {
-  const userId = req.user._id;
+  const owner = req.user._id;
   try {
-    const contact = await getContactById(req.params.contactId, userId);
+    const contact = await getContactById(req.params.contactId, owner);
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -60,10 +60,10 @@ router.post("/", auth, async (req, res, next) => {
 
 router.delete("/:contactId", auth, async (req, res, next) => {
   const contactId = req.params.contactId;
-  const userId = req.user._id;
+  const owner = req.user._id;
 
   try {
-    const contact = await removeContact(contactId, userId);
+    const contact = await removeContact(contactId, owner);
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -84,10 +84,10 @@ router.put("/:contactId", auth, async (req, res, next) => {
   }
 
   const contactId = req.params.contactId;
-  const userId = req.user._id;
+  const owner = req.user._id;
 
   try {
-    const contact = await updateContact(contactId, body, userId);
+    const contact = await updateContact(contactId, body, owner);
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -100,13 +100,13 @@ router.put("/:contactId", auth, async (req, res, next) => {
 router.patch("/:contactId/favorite", auth, async (req, res, next) => {
   const contactId = req.params.contactId;
   const body = req.body;
-  const userId = req.user._id;
+  const owner = req.user._id;
 
   if (!body.favorite) {
     return res.status(400).json({ message: "missing field favorite" });
   }
   try {
-    const updatedStatus = await updateStatusContact(contactId, body, userId);
+    const updatedStatus = await updateStatusContact(contactId, body, owner);
     if (!updatedStatus) {
       return res.status(404).json({ message: "Not found" });
     }
