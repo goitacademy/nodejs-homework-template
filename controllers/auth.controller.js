@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 require("dotenv").config();
 
@@ -21,7 +22,9 @@ const signup = async (req, res, next) => {
       });
   }
   try {
-    const newUser = new User({ email });
+    const avatarURL = gravatar.url(email, { s: "200", r: "pg", d: "mm" });
+
+    const newUser = new User({ email, avatarURL });
     newUser.setPassword(password);
     await newUser.save();
     res
@@ -34,6 +37,7 @@ const signup = async (req, res, next) => {
           user: {
             email: email,
             subscription: "starter",
+            avatarURL: avatarURL,
           },
         },
       });
