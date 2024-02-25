@@ -16,7 +16,7 @@ require("./config/passport");
 
 app.use("/api", contactRoutes);
 app.use("/api/users", usersRoutes);
-
+app.use("/avatars", express.static("./public/avatars"));
 connection
   .then(() => {
     console.log("Database connection successful");
