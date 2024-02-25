@@ -1,5 +1,5 @@
 const express = require("express");
-
+const router = express.Router();
 const { Contacts } = require("../schema");
 const router = express.Router();
 const { validateJoi } = require("./validation");
