@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { Contacts } = require("../schema");
 const router = express.Router();
 const { validateJoi } = require("./validation");
@@ -6,6 +7,7 @@ const { validateJoi } = require("./validation");
 router.get("/", async (__, res) => {
   const contacts = await Contacts.find();
   try {
+
     res.json({
       status: "success",
       code: 200,
@@ -21,9 +23,11 @@ router.get("/", async (__, res) => {
 });
 
 router.get("/:contactId", async (req, res) => {
+
   const { contactId } = req.params;
   try {
     const contact = await Contacts.findById(contactId);
+
     res.json({
       status: "success",
       code: 200,
@@ -40,11 +44,13 @@ router.get("/:contactId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+
   const body = req.body;
   const contact = new Contacts(body);
   const validate = validateJoi(contact);
   try {
     await validate.value.save();
+
     res.json({
       status: "success",
       code: 201,
@@ -61,6 +67,7 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:contactId", async (req, res) => {
+
   const { contactId } = req.params;
   try {
     const deleteContact = await Contacts.deleteOne({ _id: contactId });
@@ -68,6 +75,7 @@ router.delete("/:contactId", async (req, res) => {
       status: "success",
       code: 200,
       data: deleteContact,
+
       message: "Contact has been deleted",
     });
   } catch (error) {
@@ -80,12 +88,14 @@ router.delete("/:contactId", async (req, res) => {
 });
 
 router.put("/:contactId", async (req, res) => {
+
   const { contactId } = req.params;
   const body = req.body;
   const contact = await Contacts.findOneAndUpdate({ _id: contactId }, body);
   const validate = validateJoi(contact);
   try {
     await validate.value.save();
+
     res.json({
       status: "success",
       code: 200,
@@ -100,6 +110,7 @@ router.put("/:contactId", async (req, res) => {
     });
   }
 });
+
 
 
 router.patch("/:contactId/favorite", async (req, res) => {
@@ -136,6 +147,7 @@ router.patch("/:contactId/favorite", async (req, res) => {
     });
   }
 });
+
 
 
 module.exports = router;
