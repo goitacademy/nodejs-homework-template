@@ -6,23 +6,29 @@ const {
   removeContact,
   updateContact,
   updateStatusContact,
-} = require("../../service/contactsController");
-const schema = require("../../service/Schemas/joiSchema");
+} = require("../../service/controllers/contactsController");
+
+const {
+  requiredContactSchema,
+} = require("../../service/Schemas/contactSchema");
+const auth = require("../../middlewares/auth");
 
 const router = express.Router();
 
-router.get("/", async (req, res, next) => {
+router.get("/", auth, async (req, res, next) => {
+  const owner = req.user._id;
   try {
-    const contacts = await listContacts();
+    const contacts = await listContacts(owner);
     res.status(200).json(contacts);
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/:contactId", async (req, res, next) => {
+router.get("/:contactId", auth, async (req, res, next) => {
+  const owner = req.user._id;
   try {
-    const contact = (await getContactById(req.params.contactId)) || null;
+    const contact = await getContactById(req.params.contactId, owner);
     if (!contact) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -32,68 +38,81 @@ router.get("/:contactId", async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/", auth, async (req, res, next) => {
   const body = req.body;
-  const validation = schema.validate(body);
+  const validation = requiredContactSchema.validate(body);
+
   if (validation.error) {
-    res.status(400).json({ message: validation.error.details[0].message });
-  } else {
-    try {
-      const contact = await addContact(body);
-      res.status(201).json(contact);
-    } catch (error) {
-      next(error);
-    }
+    return res
+      .status(400)
+      .json({ message: validation.error.details[0].message });
   }
-});
 
-router.delete("/:contactId", async (req, res, next) => {
-  const contactId = req.params.contactId;
-
+  const owner = req.user._id;
   try {
-    const contact = await removeContact(contactId);
-    if (!contact) {
-      res.status(404).json({ message: "Not found" });
-    } else res.status(200).json({ message: "contact deleted" });
+    const createdContact = { ...body, owner };
+    const contact = await addContact(createdContact);
+    res.status(201).json(contact);
   } catch (error) {
     next(error);
   }
 });
 
-router.put("/:contactId", async (req, res, next) => {
+router.delete("/:contactId", auth, async (req, res, next) => {
   const contactId = req.params.contactId;
-  const body = req.body;
-  const validation = schema.validate(body);
+  const owner = req.user._id;
 
-  if (validation.error) {
-    res.status(400).json({ message: validation.error.details[0].message });
-  } else {
-    try {
-      const contact = await updateContact(contactId, body);
-      if (!contact) {
-        return res.status(404).json({ message: "Not found" });
-      } else res.status(200).json(contact);
-    } catch (error) {
-      next(error);
+  try {
+    const contact = await removeContact(contactId, owner);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
     }
+    res.status(200).json({ message: "contact deleted" });
+  } catch (error) {
+    next(error);
   }
 });
 
-router.patch("/:contactId/favorite", async (req, res, next) => {
+router.put("/:contactId", auth, async (req, res, next) => {
+  const body = req.body;
+  const validation = requiredContactSchema.validate(body);
+
+  if (validation.error) {
+    return res
+      .status(400)
+      .json({ message: validation.error.details[0].message });
+  }
+
+  const contactId = req.params.contactId;
+  const owner = req.user._id;
+
+  try {
+    const contact = await updateContact(contactId, body, owner);
+    if (!contact) {
+      return res.status(404).json({ message: "Not found" });
+    }
+    res.status(200).json(contact);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch("/:contactId/favorite", auth, async (req, res, next) => {
   const contactId = req.params.contactId;
   const body = req.body;
+  const owner = req.user._id;
 
   if (!body.favorite) {
-    res.status(400).json({ message: "missing field favorite" });
-  } else {
-    try {
-      const updatedStatus = await updateStatusContact(contactId, body);
-      if (!updatedStatus) {
-        return res.status(404).json({ message: "Not found" });
-      } else res.status(200).json(updatedStatus);
-    } catch (error) {
-      next(error);
+    return res.status(400).json({ message: "missing field favorite" });
+  }
+  try {
+    const updatedStatus = await updateStatusContact(contactId, body, owner);
+    if (!updatedStatus) {
+      return res.status(404).json({ message: "Not found" });
     }
+    res.status(200).json(updatedStatus);
+  } catch (error) {
+    next(error);
   }
 });
 
