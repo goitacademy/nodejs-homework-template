@@ -44,13 +44,13 @@ router.get("/:contactId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-
-  const body = req.body;
-  const contact = new Contacts(body);
+ const body = req.body;
   const validate = validateJoi(contact);
+  if (validate.error) return res.status(400).send(some error);
+  
+  const contact = new Contacts(body);
   try {
-    await validate.value.save();
-
+    await contact.save();
     res.json({
       status: "success",
       code: 201,
