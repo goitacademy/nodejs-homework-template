@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const { Contacts } = require("../schema");
-const router = express.Router();
-const { validateJoi } = require("./validation");
+
+const { validatePerson } = require("./validation");
 
 router.get("/", async (__, res) => {
-  const contacts = await Contacts.find();
+  
   try {
-
+    const contacts = await Contacts.find();
     res.json({
       status: "success",
       code: 200,
@@ -44,11 +44,10 @@ router.get("/:contactId", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
- const body = req.body;
-  const validate = validateJoi(contact);
-  if (validate.error) return res.status(400).send(some error);
-  
-  const contact = new Contacts(body);
+  const body = req.body;
+  const validate = validatePerson(body);
+  const contact = new Contacts(validate.value);
+
   try {
     await contact.save();
     res.json({
@@ -75,7 +74,6 @@ router.delete("/:contactId", async (req, res) => {
       status: "success",
       code: 200,
       data: deleteContact,
-
       message: "Contact has been deleted",
     });
   } catch (error) {
@@ -88,14 +86,18 @@ router.delete("/:contactId", async (req, res) => {
 });
 
 router.put("/:contactId", async (req, res) => {
-
   const { contactId } = req.params;
   const body = req.body;
-  const contact = await Contacts.findOneAndUpdate({ _id: contactId }, body);
-  const validate = validateJoi(contact);
+  const validate = validatePerson(body);
   try {
-    await validate.value.save();
-
+    const contact = await Contacts.findOneAndUpdate(
+      { _id: contactId },
+      validate.value,
+      {
+        new: true,
+        upsert: true,
+      }
+    );
     res.json({
       status: "success",
       code: 200,
