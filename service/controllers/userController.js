@@ -67,22 +67,22 @@ const logIn = async (req, res, next) => {
     return res.status(401).json({
       message: "Password is wrong",
     });
-  } else {
-    const payload = { id: user._id };
-    const token = jwt.sign(payload, SECRET, { expiresIn: "1h" });
+  }
 
-    try {
-      await User.findByIdAndUpdate(user._id, { token });
-      return res.status(200).json({
-        token,
-        user: {
-          email: user.email,
-          subscription: user.subscription,
-        },
-      });
-    } catch (err) {
-      return next(err);
-    }
+  const payload = { id: user._id };
+  const token = jwt.sign(payload, SECRET, { expiresIn: "3h" });
+
+  try {
+    await User.findByIdAndUpdate(user._id, { token });
+    return res.status(200).json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription,
+      },
+    });
+  } catch (err) {
+    return next(err);
   }
 };
 
