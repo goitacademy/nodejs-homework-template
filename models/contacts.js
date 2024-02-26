@@ -17,7 +17,6 @@ const listContacts = async (req, res) => {
 
 const getContactById = async (contactId) => {
   try {
-    // Decodificar la URL para manejar caracteres especiales
     contactId = decodeURIComponent(contactId);
 
     const data = await fs.readFile(contactsPath, "utf-8");
