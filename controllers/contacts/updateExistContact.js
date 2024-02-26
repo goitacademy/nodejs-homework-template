@@ -2,15 +2,22 @@ import { updateContact } from "../../service/index.js";
 import { validateUpdateContact } from "../../validator.js";
 
 export async function updateExistContact(req, res, next) {
+  const owner = req.user.id;
   const { contactId } = req.params;
-  const fields = req.body;
+  const { name, email, phone } = req.body;
   const { error } = validateUpdateContact(req.body);
   try {
     if (error) {
       console.log(error);
       return res.json({ status: 400, msg: "Missing fields" });
     }
-    const result = await updateContact(contactId, fields);
+    const result = await updateContact({
+      contactId,
+      name,
+      email,
+      phone,
+      owner,
+    });
     if (result) {
       return res.json({
         status: "success",

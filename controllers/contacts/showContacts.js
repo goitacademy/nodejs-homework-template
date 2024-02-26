@@ -2,7 +2,9 @@ import { getAllContacts } from "../../service/index.js";
 
 export async function showContacts(req, res, next) {
   try {
-    const contacts = await getAllContacts();
+    const owner = req.user._id;
+    const contacts = await getAllContacts({ owner });
+
     return res.json({
       status: "succes",
       code: 200,

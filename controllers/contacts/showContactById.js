@@ -1,9 +1,10 @@
 import { getContactById } from "../../service/index.js";
 
 export async function showContactById(req, res, next) {
+  const owner = req.user.id;
+  const id = req.params.contactId;
   try {
-    const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    const contact = await getContactById({ owner, id });
     if (!contact) {
       return res.status(404).json({ message: "Not Found" });
     }

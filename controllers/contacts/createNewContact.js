@@ -2,6 +2,7 @@ import { validateAddContact } from "../../validator.js";
 import { createContact, getContactByName } from "../../service/index.js";
 
 export async function createNewContact(req, res, next) {
+  const owner = req.user.id;
   const { name, email, phone, favorite } = req.body;
   const { error } = validateAddContact(req.body);
   if (error) {
@@ -19,7 +20,13 @@ export async function createNewContact(req, res, next) {
         message: `Contact with name: '${name}' already exsist`,
       });
     }
-    const newContact = await createContact({ name, email, phone, favorite });
+    const newContact = await createContact({
+      name,
+      email,
+      phone,
+      favorite,
+      owner,
+    });
     return res.status(201).json({
       status: "success",
       code: 201,

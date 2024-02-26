@@ -1,32 +1,45 @@
 import { Contact } from "./schemas/contacts.js";
 import { User } from "./schemas/users.js";
 
-const getAllContacts = async () => {
-  return Contact.find();
+const getAllContacts = async ({ owner }) => {
+  return Contact.find({ owner });
 };
 
-const getContactById = async (id) => {
-  return Contact.findOne({ _id: id });
+const getContactById = async ({ owner, id }) => {
+  return Contact.findOne({ _id: id, owner });
 };
 
-const getContactByName = async (name) => {
-  return Contact.findOne({ name: name });
+const getContactByName = async (name, userId) => {
+  return Contact.findOne({ name: name, owner: userId });
 };
 
-const createContact = async ({ name, email, phone, favorite }) => {
-  return Contact.create({ name, email, phone, favorite });
+const createContact = async ({ name, email, phone, favorite, owner }) => {
+  return Contact.create({ name, email, phone, favorite, owner });
 };
 
-const updateContact = async (id, fields) => {
-  return Contact.findByIdAndUpdate({ _id: id }, fields, { new: true });
+const updateContact = async ({ contactId, name, email, phone, owner }) => {
+  const contact = await Contact.findOne({ _id: contactId, owner });
+  if (!contact) {
+    return null;
+  }
+  return await Contact.findByIdAndUpdate(
+    { _id: contactId },
+    { name, email, phone, owner },
+    { new: true }
+  );
 };
 
-const removeContact = async (id) => {
-  return Contact.findByIdAndDelete({ _id: id });
+const removeContact = async ({ owner, id }) => {
+  return Contact.findByIdAndDelete({ _id: id, owner });
 };
 
-const updateStatusContact = async (id, favourite) => {
-  return Contact.findByIdAndUpdate({ _id: id }, favourite, { new: true });
+const updateStatusContact = async ({ contactId, favourite, owner }) => {
+  return Contact.findByIdAndUpdate(
+    { _id: contactId, owner, favourite },
+    {
+      new: true,
+    }
+  );
 };
 
 const findUserByEmail = async (email) => {
