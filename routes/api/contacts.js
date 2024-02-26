@@ -1,25 +1,29 @@
-const express = require('express')
+import express from "express";
 
-const router = express.Router()
+import { showContacts } from "../../controllers/contacts/showContacts.js";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { showContactById } from "../../controllers/contacts/showContactById.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { createNewContact } from "../../controllers/contacts/createNewContact.js";
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { deleteContact } from "../../controllers/contacts/deleteContact.js";
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { updateExistContact } from "../../controllers/contacts/updateExistContact.js";
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { updateStatus } from "../../controllers/contacts/updateStatus.js";
 
-module.exports = router
+const router = express.Router();
+
+router.get("/", showContacts);
+
+router.get("/:contactId", showContactById);
+
+router.post("/", createNewContact);
+
+router.delete("/:contactId", deleteContact);
+
+router.put("/:contactId", updateExistContact);
+
+router.patch("/:contactId/favourite", updateStatus);
+
+export { router };
