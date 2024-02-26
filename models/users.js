@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -9,20 +8,18 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Email is required'],
+    unique: true,
   },
-  phone: {
+  password: {
     type: String,
-    required: [true, 'Phone number is required'],
+    required: [true, 'Set password for user'],
   },
-  favorite: {
-    type: Boolean,
-    default: false,
+  subscription: {
+    type: String,
+    enum: ['starter', 'pro', 'business'],
+    default: 'starter',
   },
-  
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-  },
+  avatarURL: String,
 });
 
 const User = mongoose.model('User', userSchema);

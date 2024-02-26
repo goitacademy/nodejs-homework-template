@@ -6,6 +6,9 @@ const User = require('../../models/users');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 require('dotenv').config(); 
+const gravatar = require('gravatar');
+const multer = require('multer');
+
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
@@ -35,6 +38,12 @@ router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
+    const avatarURL = gravatar.url(email, {
+      s: '250',
+      r: 'pg',
+      d: 'identicon',
+    });
+
     const validation = registerSchema.validate({ name, email, password });
     if (validation.error) {
       return res.status(400).json({ message: validation.error.details[0].message });
@@ -48,7 +57,7 @@ router.post('/register', async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ name, email, password: hashedPassword, avatarURL });
     const savedUser = await newUser.save();
 
     res.status(201).json({ message: 'User registered successfully', user: savedUser });
@@ -107,6 +116,7 @@ router.get('/current', authenticateToken, async (req, res) => {
   }
 });
 
+
 router.post('/logout', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -120,6 +130,29 @@ router.post('/logout', authenticateToken, async (req, res) => {
     res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ message: 'Logout failed' });
+  }
+});
+
+const upload = multer({ dest: 'uploads/' });
+
+router.patch('/avatars', authenticateToken, upload.single('avatar'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const userId = req.user.userId;
+    const avatarURL = '/avatars/' + req.file.filename;
+
+    const user = await User.findByIdAndUpdate(userId, { avatarURL }, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Avatar updated successfully', avatarURL });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to update avatar' });
   }
 });
 
