@@ -1,6 +1,10 @@
 const User = require("./schemas/users");
+
+const sendVerificationEmail = require("../config/config-sendgrid");
+
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const { nanoid } = require("nanoid");
 
 const registerUser = async ({ email, password }) => {
   const gravatarHash = crypto
@@ -10,14 +14,46 @@ const registerUser = async ({ email, password }) => {
 
   const gravatarUrl = `https://www.gravatar.com/avatar/${gravatarHash}?d=identicon`;
 
-  const newUser = new User({ email, password, avatarURL: gravatarUrl });
+  const verificationToken = nanoid();
+
+  const newUser = new User({
+    email,
+    password,
+    avatarURL: gravatarUrl,
+    verificationToken,
+    verify: false,
+  });
   newUser.setPassword(password);
+
   try {
     await newUser.save();
   } catch (err) {
     console.error("Error saving user:", error);
     throw error;
   }
+  await sendVerificationEmail(newUser);
+
+  return newUser;
+};
+
+const verifyUser = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    return null;
+  }
+  user.verificationToken = null;
+  user.verify = true;
+  await user.save();
+  return user;
+};
+
+const resendVerificationEmail = async (email) => {
+  const user = await User.findOne({ email, verify: false });
+  if (!user) {
+    return null;
+  }
+  await sendVerificationEmail(user);
+  return user;
 };
 
 const loginUser = async (email, password) => {
@@ -61,4 +97,6 @@ module.exports = {
   getCurrentUser,
   updateSubscription,
   updateAvatar,
+  verifyUser,
+  resendVerificationEmail,
 };
