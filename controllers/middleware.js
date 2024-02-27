@@ -10,11 +10,19 @@ const middleware = async (req, res, next) => {
         message: "Token is empty",
         });
     }
-    const user = await authToken(auth);
+    const token = auth.split(" ")[1];
+    const user = await authToken(token);
+
+    if (!user) {
+        return res.json({
+        status: "error",
+        code: 401,
+        message: "Invalid token",
+        });
+    }
+
     const checkUser = await User.findOne({
         _id: user.id,
-        password: user.password,
-        email: user.email,
     }).lean();
 
     if (!checkUser) {
@@ -24,8 +32,10 @@ const middleware = async (req, res, next) => {
         message: "User does not exist",
         });
     }
+
     req.user = user;
     next();
 };
+
 
 module.exports = { middleware };

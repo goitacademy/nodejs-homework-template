@@ -3,7 +3,6 @@ const router = express.Router();
 const { User } = require("../models/schema");
 const { validateUser } = require("../models/validation");
 
-// SIGNUP
 router.post("/signup", async (req, res) => {
     const body = req.body;
     const { email, password } = body;
