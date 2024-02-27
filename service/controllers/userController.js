@@ -108,13 +108,12 @@ const current = async (req, res, next) => {
 const uploadAvatar = async (req, res, next) => {
   const { path: avatarDir } = req.file;
 
-  await Jimp.read(avatarDir)
-    .then((avatar) => {
-      return avatar.cover(250, 250).write(avatarDir);
-    })
-    .catch((err) => {
-      next(err);
-    });
+  try {
+    const avatar = await Jimp.read(avatarDir);
+    avatar.cover(250, 250).write(avatarDir);
+  } catch (err) {
+    return next(err);
+  }
 
   const avatarNewPath = path.join(process.cwd(), "public", "avatars");
   const userId = req.user._id;
@@ -130,7 +129,7 @@ const uploadAvatar = async (req, res, next) => {
       await fs.mkdir(avatarNewPath);
     }
   } catch (err) {
-    next(err);
+    return next(err);
   }
 
   try {
