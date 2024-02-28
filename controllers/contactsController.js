@@ -4,34 +4,38 @@ const { Contacts } = require("../routes/schema");
 
 const { validatePerson } = require("../models/validation");
 
-const {
-  getContacts,
-  getContactById,
-  createContact,
-  deleteContact,
-  updateContact,
-} = require("../controllers/contactsController");
+//const {
+//  getContacts,
+//  getContactById,
+//  createContact,
+//  deleteContact,
+//  updateContact,
+//} = require("../controllers/contactsController");
 
 
 
-router.get("/",  (__, res) => {
+
+const getContacts =  (req, res) => {
   try {
-    const contacts =  Contacts.find();
+    
+    const contacts = Contacts.find();
+    
     res.json({
       status: "success",
       code: 200,
       data: contacts,
     });
   } catch (error) {
+    
     res.status(400).json({
       status: "error",
       code: 400,
       message: "Bad Request",
     });
   }
-});
+};
 
-router.get("/:contactId",  (req, res) => {
+const getContactById =  (req, res) => {
   const { contactId } = req.params;
   try {
     const contact =  Contacts.findById(contactId);
@@ -49,9 +53,9 @@ router.get("/:contactId",  (req, res) => {
       message: "Bad Request",
     });
   }
-});
+};
 
-router.post("/",  (req, res) => {
+const createContact= (req, res) => {
   const body = req.body;
   const validate = validatePerson(body);
   const contact = new Contacts(validate.value);
@@ -71,12 +75,12 @@ router.post("/",  (req, res) => {
       message: "Bad Request",
     });
   }
-});
+};
 
-router.delete("/:contactId",  (req, res) => {
+const deleteContact=(req, res) => {
   const { contactId } = req.params;
   try {
-    const deleteContact =  Contacts.deleteOne({ _id: contactId });
+    const deleteContact = Contacts.deleteOne({ _id: contactId });
     res.json({
       status: "success",
       code: 200,
@@ -90,14 +94,14 @@ router.delete("/:contactId",  (req, res) => {
       message: "Bad Request",
     });
   }
-});
+};
 
-router.put("/:contactId",  (req, res) => {
+const updateContact = (req, res) => {
   const { contactId } = req.params;
   const body = req.body;
   const validate = validatePerson(body);
   try {
-    const contact =  Contacts.findOneAndUpdate(
+    const contact = Contacts.findOneAndUpdate(
       { _id: contactId },
       validate.value,
       {
@@ -118,7 +122,7 @@ router.put("/:contactId",  (req, res) => {
       message: "Bad Request",
     });
   }
-});
+};
 
 router.patch("/:contactId/favorite", (req, res) => {
   const { contactId } = req.params;
