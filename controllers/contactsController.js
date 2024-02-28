@@ -4,13 +4,7 @@ const { Contacts } = require("../routes/schema");
 
 const { validatePerson } = require("../models/validation");
 
-//const {
-//  getContacts,
-//  getContactById,
-//  createContact,
-//  deleteContact,
-//  updateContact,
-//} = require("../controllers/contactsController");
+
 
 
 
