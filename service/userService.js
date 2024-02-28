@@ -27,11 +27,11 @@ const registerUser = async ({ email, password }) => {
 
   try {
     await newUser.save();
+    await sendVerificationEmail(newUser);
   } catch (err) {
     console.error("Error saving user:", error);
     throw error;
   }
-  await sendVerificationEmail(newUser);
 
   return newUser;
 };

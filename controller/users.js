@@ -178,17 +178,23 @@ const verifyUser = async (req, res) => {
 };
 
 const resendVerificationEmail = async (req, res) => {
-  const { email } = req.body;
+  const { error, value } = validateUser(req.body);
+  const { email } = value;
+  if (error) {
+    res.status(400).json({
+      status: "failure",
+      code: 400,
+      error: error.details,
+    });
+  }
   if (!email) {
     return res.status(400).send({ message: "Missing required field email" });
   }
   const user = await service.resendVerificationEmail(email);
   if (!user) {
-    return res
-      .status(400)
-      .send({
-        message: "Verification has already been passed or user not found",
-      });
+    return res.status(400).send({
+      message: "Verification has already been passed or user not found",
+    });
   }
   res.status(200).send({ message: "Verification email sent" });
 };
