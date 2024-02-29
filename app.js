@@ -16,8 +16,13 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
 app.use(logger(formatsLogger));
 
+
 app.use(bodyParser.json({ extended: true }));
-app.use(express.urlencoded());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// app.use(bodyParser.json({ extended: true }));
+// app.use(express.urlencoded());
 
 // app.use(cors()); //
 //  app.use(express.json());
@@ -25,7 +30,7 @@ app.use(express.urlencoded());
 app.use("/api/contacts", contactsRouter);
 
 
-app.use(express.urlencoded());
+// app.use(express.urlencoded());
 app.use("/api/users", signup);
 app.use("/api/users", login);
 app.use("/api/users", middleware, current);
