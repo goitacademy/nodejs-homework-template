@@ -1,6 +1,6 @@
 const express = require("express");
 const logger = require("morgan");
-//const cors = require("cors");
+// const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const contactsRouter = require("./routes/api/contacts");
@@ -19,8 +19,8 @@ app.use(logger(formatsLogger));
 app.use(bodyParser.json({ extended: true }));
 app.use(express.urlencoded());
 
-//app.use(cors());
-//app.use(express.json());
+// app.use(cors()); //
+//  app.use(express.json());
 
 app.use("/api/contacts", contactsRouter);
 
