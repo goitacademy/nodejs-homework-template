@@ -1,6 +1,7 @@
 const fs = require("fs/promises");
 const { json } = require("express");
 const path = require("path");
+const shortid = require("shortid");
 
 const contactsPath = path.join(__dirname, "contacts.json");
 const listContacts = async (req, res) => {
@@ -17,6 +18,7 @@ const listContacts = async (req, res) => {
 
 const getContactById = async (contactId) => {
   try {
+    // Decodificar la URL para manejar caracteres especiales
     contactId = decodeURIComponent(contactId);
 
     const data = await fs.readFile(contactsPath, "utf-8");
@@ -30,11 +32,83 @@ const getContactById = async (contactId) => {
   }
 };
 
-const removeContact = async (contactId) => {};
+const addContact = async (body) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
 
-const addContact = async (body) => {};
+    const newContact = {
+      id: shortid.generate(),
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+    };
 
-const updateContact = async (contactId, body) => {};
+    contacts.push(newContact);
+
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+    console.log("The data was successfully added");
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const removeContact = async (contactId) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const removedContact = contacts.find((contact) => contact.id === contactId);
+
+    if (!removedContact) {
+      console.log("Contact not found");
+      return null;
+    }
+
+    const updatedContacts = contacts.filter(
+      (contact) => contact.id !== contactId
+    );
+
+    await fs.writeFile(contactsPath, JSON.stringify(updatedContacts));
+    // console.log("Contact successfully removed", { id: contactId });
+
+    return removedContact;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const updateContact = async (contactId, body) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+
+    // Busca el índice del contacto a actualizar
+    const contactIndex = contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+
+    // Si no se encuentra el contacto, devuelve null
+    if (contactIndex === -1) {
+      console.log("Contact not found");
+      return null;
+    }
+
+    // Actualiza el contacto con los nuevos datos
+    const updatedContact = { ...contacts[contactIndex], ...body };
+    contacts[contactIndex] = updatedContact;
+
+    // Escribe los contactos actualizados en el archivo
+    await fs.writeFile(contactsPath, JSON.stringify(contacts));
+
+    console.log("Contact successfully updated", { id: contactId });
+    return updatedContact; // Devuelve el contacto actualizado
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 module.exports = {
   listContacts,

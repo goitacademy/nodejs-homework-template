@@ -1,7 +1,21 @@
 const express = require("express");
-const { listContacts, getContactById } = require("../../models/contacts");
+const Joi = require("joi");
+
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContact,
+} = require("../../models/contacts");
 
 const router = express.Router();
+
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
+});
 
 router.get("/", async (req, res, next) => {
   try {
@@ -15,7 +29,6 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:contactId", async (req, res) => {
   const contactId = req.params.contactId;
-  console.log("Contact ID:", contactId);
 
   try {
     const contact = await getContactById(contactId);
@@ -31,12 +44,67 @@ router.get("/:contactId", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res, next) => {
+  const body = req.body;
+
+  const validation = contactSchema.validate(body);
+
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details[0].message });
+  } else {
+    try {
+      const contacts = await addContact(body);
+      res.json(body);
+    } catch (error) {
+      console.error("Error reading contacts:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+});
+
 router.delete("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const contactId = req.params.contactId;
+  console.log("Contact ID:", contactId);
+
+  try {
+    // Llama a la función removeContact para manejar el archivo json contacts.json
+    const removedContact = await removeContact(contactId);
+
+    if (!removedContact) {
+      // Si el contacto no se encuentra, devuelve un mensaje "Not found" con estado 404
+      res.status(404).json({ message: "Not found" });
+    } else {
+      // Si el contacto se elimina correctamente, devuelve un mensaje con estado 200
+      res.status(200).json({ mensaje: "Contacto eliminado" });
+    }
+  } catch (error) {
+    console.error("Error removing contact:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.put("/:contactId", async (req, res, next) => {
-  res.json({ message: "template message" });
+  const contactId = req.params.contactId;
+  const body = req.body;
+
+  const validation = contactSchema.validate(body);
+
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details[0].message });
+  } else {
+    try {
+      const updatedContact = await updateContact(contactId, body);
+
+      if (!updatedContact) {
+        res.status(404).json({ message: "Not found" });
+      } else {
+        res.status(200).json(updatedContact);
+      }
+    } catch (error) {
+      console.error("Error updating contact:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 });
 
 module.exports = router;
