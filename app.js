@@ -3,10 +3,10 @@ const logger = require("morgan");
 const cors = require("cors");
 
 const contactsRouter = require("./routes/api/contacts");
-const signup = require("./controllers/signup");
-const login = require("./controllers/login");
-const current = require("./controllers/current");
-const logout = require("./controllers/logout");
+const signup = require("./controllers/auth");
+const login = require("./controllers/auth");
+const current = require("./controllers/auth");
+const logout = require("./controllers/auth");
 const { middleware } = require("./controllers/middleware");
 
 const app = express();
