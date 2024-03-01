@@ -10,7 +10,7 @@ const {
 
 const {
   requiredContactSchema,
-} = require("../../service/Schemas/contactSchema");
+} = require("../../service/schemas/contactSchema");
 const auth = require("../../middlewares/auth");
 
 const router = express.Router();
