@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const authRouter = require("./routes/api/auth");
-const contactsRouter = require("./routes/api/contacts");
+const customersRouter = require("./routes/api/customers");
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
-app.use("/api/contacts", contactsRouter);
+app.use("/api/customers", customersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
