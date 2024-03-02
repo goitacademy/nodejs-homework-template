@@ -3,11 +3,11 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
-const customerSchema = new Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for customer"],
+      required: [true, "Set name for contact"],
     },
     email: {
       type: String,
@@ -28,7 +28,7 @@ const customerSchema = new Schema(
   { versionKey: false, timestamps: true }
 );
 
-customerSchema.post("save", handleMongooseError);
+contactSchema.post("save", handleMongooseError);
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -48,9 +48,9 @@ const schemas = {
   updateFavoriteSchema,
 };
 
-const Customer = model("customer", customerSchema);
+const Contact = model("contact", contactSchema);
 
 module.exports = {
-  Customer,
+  Contact,
   schemas,
 };
