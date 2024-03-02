@@ -6,7 +6,16 @@ const { validateUser } = require("../models/validation");
 
 router.get("/current", async (req, res) => {
   const { id, email } = req.user;
+  const owner = id;
   try {
+    const user = await User.findOne({ _id: id, owner });
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "User not found",
+      });
+    }
     res.json({
       status: "success",
       code: 200,
@@ -14,10 +23,10 @@ router.get("/current", async (req, res) => {
       message: "User data",
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
-      message: "Bad Request",
+      code: 500,
+      message: "Internal Server Error",
     });
   }
 });
@@ -25,24 +34,24 @@ router.get("/current", async (req, res) => {
 router.post("/login", async (req, res) => {
   const body = req.body;
   const { email, password } = body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.json({
-      status: "error",
-      code: 400,
-      message: "User with this email does not exist",
-    });
-  }
-  if (!user.validPassword(password)) {
-    return res.json({
-      status: "error",
-      code: 401,
-      message: "Password is wrong",
-    });
-  }
-  const token = createToken(user._id);
   try {
-    await User.updateOne({ email }, { token: token });
+    const user = await User.findOne({ email, owner: req.user.id });
+    if (!user) {
+      return res.json({
+        status: "error",
+        code: 400,
+        message: "User with this email does not exist",
+      });
+    }
+    if (!user.validPassword(password)) {
+      return res.json({
+        status: "error",
+        code: 401,
+        message: "Password is wrong",
+      });
+    }
+    const token = createToken(user._id);
+    await User.updateOne({ email }, { token });
     res.json({
       status: "success",
       code: 200,
@@ -50,10 +59,10 @@ router.post("/login", async (req, res) => {
       message: "User has been logged in",
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
-      message: "Bad Request",
+      code: 500,
+      message: "Internal Server Error",
     });
   }
 });
@@ -80,10 +89,11 @@ router.post("/logout", async (req, res) => {
 router.post("/signup", async (req, res) => {
   const body = req.body;
   const { email, password } = body;
-  if (!email && !password) {
+  const owner = req.user.id;
+  if (!email || !password) {
     return res.json({
       status: "error",
-      code: 404,
+      code: 400,
       message: "Email or password is empty",
     });
   }
@@ -95,16 +105,16 @@ router.post("/signup", async (req, res) => {
       message: validate.error.message,
     });
   }
-  const checkUser = await User.findOne({ email }).lean();
-  if (checkUser) {
-    return res.json({
-      status: "error",
-      code: 409,
-      message: "Email in use",
-    });
-  }
   try {
-    const user = await new User({ email: validate.value.email });
+    const checkUser = await User.findOne({ email, owner }).lean();
+    if (checkUser) {
+      return res.json({
+        status: "error",
+        code: 409,
+        message: "Email in use",
+      });
+    }
+    const user = new User({ email: validate.value.email, owner });
     await user.setPassword(password);
     await user.save();
     res.json({
@@ -114,10 +124,10 @@ router.post("/signup", async (req, res) => {
       message: "User has been created",
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
-      message: "Bad Request",
+      code: 500,
+      message: "Internal Server Error",
     });
   }
 });
