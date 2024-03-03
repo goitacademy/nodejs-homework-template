@@ -5,7 +5,7 @@ const {
   putContactScheme,
   updFavScheme,
 } = require("../../schemas");
-const { isValidId, validation } = require("../../middlewares");
+const { isValidId, validation, authenticate } = require("../../middlewares");
 
 const validationMiddlewareAdd = validation(addContactScheme);
 const validationMiddlewarePut = validation(putContactScheme);
@@ -15,22 +15,24 @@ const { contacts } = require("../../controllers");
 
 const router = express.Router();
 
-router.get("/", contacts.getContacts);
+router.get("/", authenticate, contacts.getContacts);
 
-router.get("/:contactId", isValidId, contacts.getContactsById);
+router.get("/:contactId", authenticate, isValidId, contacts.getContactsById);
 
-router.post("/", validationMiddlewareAdd, contacts.addNewContact);
+router.post("/", authenticate, validationMiddlewareAdd, contacts.addNewContact);
 
-router.delete("/:contactId", isValidId, contacts.deleteContact);
+router.delete("/:contactId", authenticate, isValidId, contacts.deleteContact);
 
 router.put(
   "/:contactId",
+  authenticate,
   isValidId,
   validationMiddlewarePut,
   contacts.updateContact
 );
 router.patch(
   "/:contactId/favorite",
+  authenticate,
   isValidId,
   validationMiddlewareUpdFav,
   contacts.updateFav
