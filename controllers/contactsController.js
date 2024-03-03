@@ -4,9 +4,9 @@ const { Contacts } = require("../models/schema");
 const { validatePerson } = require("../models/validation");
 
 const getContacts = async (req, res) => {
-  const owner = req.user.id; // Pobieramy ID aktualnego użytkownika
+  const owner = req.user.id;
   try {
-    const contacts = await Contacts.find({ owner }); // Dodajemy filtr "owner"
+    const contacts = await Contacts.find({ owner });
     res.json({
       status: "success",
       code: 200,
@@ -23,9 +23,9 @@ const getContacts = async (req, res) => {
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params;
-  const owner = req.user.id; // Pobieramy ID aktualnego użytkownika
+  const owner = req.user.id;
   try {
-    const contact = await Contacts.findOne({ _id: contactId, owner }); // Dodajemy filtr "owner"
+    const contact = await Contacts.findOne({ _id: contactId, owner });
     if (!contact) {
       return res.status(404).json({
         status: "error",
@@ -50,9 +50,8 @@ const getContactById = async (req, res) => {
 
 const createContact = async (req, res) => {
   const body = req.body;
-  const owner = req.user.id; // Pobieramy ID aktualnego użytkownika
-  const validate = validatePerson(body);
-  const contact = new Contacts({ ...validate.value, owner }); // Ustawiamy właściciela kontaktu
+  const owner = req.user.id;
+  const contact = new Contacts({ ...validate.value, owner });
 
   try {
     await contact.save();
@@ -73,12 +72,12 @@ const createContact = async (req, res) => {
 
 const deleteContact = async (req, res) => {
   const { contactId } = req.params;
-  const owner = req.user.id; // Pobieramy ID aktualnego użytkownika
+  const owner = req.user.id;
   try {
     const deletedContact = await Contacts.findOneAndDelete({
       _id: contactId,
       owner,
-    }); // Dodajemy filtr "owner"
+    });
     if (!deletedContact) {
       return res.status(404).json({
         status: "error",
@@ -104,11 +103,11 @@ const deleteContact = async (req, res) => {
 const updateContact = async (req, res) => {
   const { contactId } = req.params;
   const body = req.body;
-  const owner = req.user.id; // Pobieramy ID aktualnego użytkownika
+  const owner = req.user.id; 
   const validate = validatePerson(body);
   try {
     const updatedContact = await Contacts.findOneAndUpdate(
-      { _id: contactId, owner }, // Dodajemy filtr "owner"
+      { _id: contactId, owner }, 
       validate.value,
       { new: true, upsert: true }
     );
@@ -136,14 +135,14 @@ router.put("/:contactId", updateContact);
 router.patch("/:contactId/favorite", async (req, res) => {
   const { contactId } = req.params;
   const { favorite } = req.body;
-  const owner = req.user.id; // Pobieramy ID aktualnego użytkownika
+  const owner = req.user.id; 
   if (favorite === undefined) {
     return res.status(400).json({ message: "Missing field 'favorite'" });
   }
 
   try {
     const updatedContact = await Contacts.findOneAndUpdate(
-      { _id: contactId, owner }, // Dodajemy filtr "owner"
+      { _id: contactId, owner }, 
       { favorite },
       { new: true }
     );
