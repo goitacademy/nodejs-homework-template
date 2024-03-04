@@ -25,6 +25,7 @@ const register = async (req, res) => {
   });
 };
 const login = async (req, res) => {
+  console.log(User);
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -43,6 +44,8 @@ const login = async (req, res) => {
   };
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
+  await User.findByIdAndUpdate(user._id, { token });
+
   res.status(200).json({
     token: token,
     user: {
@@ -52,7 +55,48 @@ const login = async (req, res) => {
   });
 };
 
+const current = async (req, res) => {
+  const { email, subscription } = req.user;
+  res.json({
+    email,
+    subscription,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: null });
+  res.status(204).json({
+    message: "No content",
+  });
+};
+
+const updSubscription = async (req, res) => {
+  const { _id } = req.user;
+  const { subscription } = req.body;
+
+  const user = await User.findById(_id);
+
+  if (
+    subscription !== "starter" ||
+    subscription !== "pro" ||
+    subscription !== "business"
+  ) {
+    throw HttpError(404, "Unknown subscription");
+  }
+
+  await User.findByIdAndUpdate(_id, { subscription });
+
+  res.status(200).json({
+    message: "Subscription updated",
+    subscription: user.subscription,
+  });
+};
+
 module.exports = {
   register: controlWrapper(register),
   login: controlWrapper(login),
+  current: controlWrapper(current),
+  logout: controlWrapper(logout),
+  updSubscription: controlWrapper(updSubscription),
 };

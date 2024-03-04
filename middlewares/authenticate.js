@@ -1,4 +1,4 @@
-// const { User } = require("../models/userModel");
+const { User } = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const { HttpError } = require("../helpers");
 const { SECRET_KEY } = process.env;
@@ -12,12 +12,12 @@ const authenticate = async (req, res, next) => {
 
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
-    // const user = await User.findById(id);
+    const user = await User.findById(id);
 
-    // if (!user || !user.token || user.token !== token) {
-    //   next(HttpError(401));
-    // }
-    // req.user = user;
+    if (!user || !user.token || user.token !== token) {
+      next(HttpError(401));
+    }
+    req.user = user;
     next();
   } catch {
     next(HttpError(401));
