@@ -12,7 +12,7 @@ const {
 
 
 router.get("/", getContacts);
-router.get("/:contactId", getContactById);
+router.get("/:contactId", auth, getContactById);
 router.post("/", createContact);
 router.delete("/:contactId", deleteContact);
 router.put("/:contactId", updateContact);
