@@ -11,10 +11,10 @@ const {
 
 
 
-router.get("/", getContacts);
+router.get("/", auth, getContacts);
 router.get("/:contactId", auth, getContactById);
-router.post("/", createContact);
-router.delete("/:contactId", deleteContact);
-router.put("/:contactId", updateContact);
+router.post("/",  createContact);
+router.delete("/:contactId",  deleteContact);
+router.put("/:contactId",  updateContact);
 
 module.exports = router;
