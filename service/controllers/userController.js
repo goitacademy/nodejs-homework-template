@@ -5,6 +5,8 @@ const path = require("path");
 const gravatar = require("gravatar");
 const Jimp = require("jimp");
 const fs = require("fs/promises");
+const { nanoid } = require("nanoid");
+const sendVerificationEmail = require("./sendVerificationEmail");
 
 require("dotenv").config();
 const SECRET = process.env.SECRET;
@@ -23,14 +25,21 @@ const signUp = async (req, res, next) => {
       message: "Email in use",
     });
   }
-
+  const verificationToken = nanoid();
   const hashPassword = await bcrypt.hash(password, 10);
   const newUser = await User.create({
     email,
     password: hashPassword,
     supscription: "starter",
     avatarURL: gravatar.url(email),
+    verificationToken,
   });
+
+  try {
+    await sendVerificationEmail(email, verificationToken);
+  } catch (err) {
+    return next(err);
+  }
 
   res.status(201).json({
     user: {
@@ -66,6 +75,12 @@ const logIn = async (req, res, next) => {
   if (!isPasswordValid) {
     return res.status(401).json({
       message: "Password is wrong",
+    });
+  }
+
+  if (!user.verify) {
+    return res.status(401).json({
+      message: "Email has not been verified",
     });
   }
 
@@ -149,4 +164,74 @@ const uploadAvatar = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, logIn, logOut, current, uploadAvatar };
+const verifyEmail = async (req, res, next) => {
+  const { verificationToken } = req.params;
+  let user;
+
+  try {
+    user = await User.findOne({ verificationToken });
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  try {
+    await User.findByIdAndUpdate(user._id, {
+      verificationToken: "",
+      verify: true,
+    });
+
+    res.status(200).json({
+      message: "Verification successful",
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const resendVerificationEmail = async (req, res, next) => {
+  const { email } = req.body;
+  let user;
+
+  try {
+    user = await User.findOne({ email });
+  } catch (err) {
+    next(err);
+  }
+
+  if (!user) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  if (user.verify) {
+    return res.status(400).json({
+      message: "Verification has already been passed",
+    });
+  }
+
+  try {
+    await sendVerificationEmail(email, user.verificationToken);
+    res.status(200).json({
+      message: "Verification email sent",
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+module.exports = {
+  signUp,
+  logIn,
+  logOut,
+  current,
+  uploadAvatar,
+  verifyEmail,
+  resendVerificationEmail,
+};

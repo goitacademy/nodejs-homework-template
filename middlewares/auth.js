@@ -15,7 +15,6 @@ const auth = async (req, res, next) => {
       const user = await User.findById({ _id: id });
       if (!user) {
         return res.status(401).json({
-          status: "Unauthorized",
           message: "User cannot be found",
         });
       }
