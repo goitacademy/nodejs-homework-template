@@ -166,10 +166,38 @@ router.patch("/:contactId/favorite", async (req, res) => {
   }
 });
 
+const registerUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const avatarURL = gravatar.url(email, { s: "250", d: "retro" }, true);
+
+    const user = new User({ email, password: hashedPassword, avatarURL });
+    await user.save();
+
+    res.status(201).json({
+      status: "success",
+      code: 201,
+      data: { email, avatarURL },
+      message: "User registered successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      code: 500,
+      message: "Internal Server Error",
+    });
+  }
+};
+
 module.exports = {
   getContacts,
   getContactById,
   createContact,
   deleteContact,
   updateContact,
+  registerUser,
 };
