@@ -1,4 +1,4 @@
-const User = require("./schemas/user.schema");
+const { User } = require("./schemas/user.schema");
 const gravatar = require("gravatar");
 const { v4: uuidv4 } = require("uuid");
 const sendEmailToVerify = require("../nodemailer/emailVerification");
@@ -24,7 +24,7 @@ const signup = async (body) => {
     await newUser.save();
     return newUser;
   } catch (error) {
-    console.error("Adding user error:", error.message);
+    console.log("Adding user error:", error.message);
     throw error;
   }
 };
@@ -34,7 +34,7 @@ const login = async (email) => {
     const user = await User.findOne({ email });
     return user;
   } catch (error) {
-    console.error("Finding user error:", error.message);
+    console.log("Finding user error:", error.message);
     throw error;
   }
 };

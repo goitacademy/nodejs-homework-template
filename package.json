@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "nodejs-homeworks",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -10,11 +10,18 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^8.1.1",
+    "bcryptjs": "^2.4.3",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
     "dotenv": "^16.4.5",
     "express": "4.17.1",
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.12",
+    "joi": "^17.12.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.1",
     "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
     "nanoid": "^5.0.6",
     "nodemailer": "^6.9.11",
     "uuid": "^9.0.1"

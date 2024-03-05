@@ -5,7 +5,7 @@ const listContacts = async (ownerId) => {
     const contacts = await Contact.find({ owner: ownerId });
     return contacts;
   } catch (error) {
-    console.error("Reading contact list error:", error.message);
+    console.log("Reading contact list error:", error.message);
     throw error;
   }
 };
@@ -18,21 +18,19 @@ const getContactById = async (contactId, ownerId) => {
     });
     return contactToFindById;
   } catch (error) {
-    console.error("Getting contact by id error:", error.message);
-    throw error;
+    console.log("Getting contact by id error:", error.message);
   }
 };
 
 const removeContact = async (contactId, ownerId) => {
   try {
-    const contactToRemove = await Contact.findOneAndDelete({
+    const contactToRemove = await Contact.findByIdAndDelete({
       _id: contactId,
       owner: ownerId,
     });
     return contactToRemove;
   } catch (error) {
-    console.error("Removing contact error:", error.message);
-    throw error;
+    console.log("Removing contact error:", error.message);
   }
 };
 
@@ -41,14 +39,13 @@ const addContact = async (body, ownerId) => {
     const newContact = await Contact.create({ ...body, owner: ownerId });
     return newContact;
   } catch (error) {
-    console.error("Adding contact error:", error.message);
-    throw error;
+    console.log("Adding contact error:", error.message);
   }
 };
 
 const updateContact = async (contactId, body, ownerId) => {
   try {
-    const contactToUpdate = await Contact.findOneAndUpdate(
+    const contactToUpdate = await Contact.findByIdAndUpdate(
       { _id: contactId, owner: ownerId },
       body,
       { new: true }
@@ -56,13 +53,11 @@ const updateContact = async (contactId, body, ownerId) => {
     return contactToUpdate;
   } catch (error) {
     console.error("Updating contact error:", error.message);
-    throw error;
   }
 };
-
 const updateStatusContact = async (contactId, body, ownerId) => {
   try {
-    const contactToUpdate = await Contact.findOneAndUpdate(
+    const contactToUpdate = await Contact.findByIdAndUpdate(
       { _id: contactId, owner: ownerId },
       { favorite: body.favorite },
       { new: true }
@@ -70,10 +65,8 @@ const updateStatusContact = async (contactId, body, ownerId) => {
     return contactToUpdate;
   } catch (error) {
     console.error("Updating contact error:", error.message);
-    throw error;
   }
 };
-
 module.exports = {
   listContacts,
   getContactById,

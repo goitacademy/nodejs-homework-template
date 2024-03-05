@@ -2,17 +2,17 @@ const express = require("express");
 
 require("dotenv").config();
 
-const { User } = require("../../service/schemas/user.schema");
+const { User } = require("../service/usersService");
 
-const verifyToken = require("../../middlewares/auth");
-const upload = require("../../middlewares/upload");
+const verifyToken = require("../middlewares/auth");
+const upload = require("../middlewares/upload");
 
 const router = express.Router();
 
-const { signup, login } = require("../../service/usersService");
+const { signup, login } = require("../service/usersService");
 
-const { signupAndLoginSchema, emailSchema } = require("../../validation/Joi");
-const sendEmailToVerify = require("../../nodemailer/emailVerification");
+const { signupAndLoginSchema, emailSchema } = require("./../validation/joi");
+const sendEmailToVerify = require("../nodemailer/emailVerification");
 
 const jwt = require("jsonwebtoken");
 const Jimp = require("jimp");
