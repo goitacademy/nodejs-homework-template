@@ -25,7 +25,6 @@ const register = async (req, res) => {
   });
 };
 const login = async (req, res) => {
-  console.log(User);
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
@@ -56,7 +55,12 @@ const login = async (req, res) => {
 };
 
 const current = async (req, res) => {
-  const { email, subscription } = req.user;
+  const { _id, email, subscription } = req.user;
+  const user = User.findById(_id);
+
+  if (!user) {
+    throw HttpError(401, "Not authorized");
+  }
   res.json({
     email,
     subscription,
@@ -75,17 +79,18 @@ const updSubscription = async (req, res) => {
   const { _id } = req.user;
   const { subscription } = req.body;
 
-  const user = await User.findById(_id);
+  const condition =
+    subscription === "starter" ||
+    subscription === "pro" ||
+    subscription === "business";
 
-  if (
-    subscription !== "starter" ||
-    subscription !== "pro" ||
-    subscription !== "business"
-  ) {
+  if (condition) {
+    await User.findByIdAndUpdate(_id, { subscription });
+  } else {
     throw HttpError(404, "Unknown subscription");
   }
 
-  await User.findByIdAndUpdate(_id, { subscription });
+  const user = await User.findById(_id);
 
   res.status(200).json({
     message: "Subscription updated",
