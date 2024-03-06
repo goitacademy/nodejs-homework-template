@@ -1,27 +1,47 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const { verifyUserEmail } = require('../Users/verifyUserEmail');
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Name is required'],
+const userSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: 3,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      minlength: 5,
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 5,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
   },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, 'Set password for user'],
-  },
-  subscription: {
-    type: String,
-    enum: ['starter', 'pro', 'business'],
-    default: 'starter',
-  },
-  avatarURL: String,
-});
+  {
+    timestamps: true,
+  }
+);
+
+userSchema.methods.verifyUser = function (token, reqVerify) {
+  this.verificationToken = null;
+  this.isVerified = reqVerify;
+  return this.save();
+};
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = { User, verifyUserEmail };

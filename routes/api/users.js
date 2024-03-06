@@ -8,7 +8,10 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config(); 
 const gravatar = require('gravatar');
 const multer = require('multer');
+const { verify, verifyByEmail } = require('../../controllers/userController'); // Import verify and verifyByEmail
 
+router.get('/verify/:verificationToken', verify);
+router.post('/verify', verifyByEmail);
 
 const registerSchema = Joi.object({
   name: Joi.string().required(),
@@ -115,7 +118,6 @@ router.get('/current', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch user' });
   }
 });
-
 
 router.post('/logout', authenticateToken, async (req, res) => {
   try {
