@@ -7,6 +7,8 @@ const {
   getContactById,
 } = require("../models/contactsOperation");
 
+// test
+
 const getAll = async (req, res) => {
   const result = await getAllContacts();
   res.json(result);
