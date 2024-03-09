@@ -23,3 +23,4 @@ router.delete("/:id", remove);
 router.put("/:id", validateBody(updateContactSchema), update);
 
 module.exports = router;
+module.exports = router;
