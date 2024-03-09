@@ -15,7 +15,10 @@ const { avatars, upload } = require("../../controllers/avatars");
 
 router.get("/", auth, getContacts);
 router.get("/:contactId", auth, getContactById);
-router.post("/",  createContact);
+router.post("/", createContact);
+
+
+
 router.delete("/:contactId",  deleteContact);
 router.put("/:contactId",  updateContact);
 router.patch("../../controllers/avatars.js", middleware, upload.single("avatar"), avatars);
