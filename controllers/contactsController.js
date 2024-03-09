@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const { Contacts } = require("../models/schema");
 const { validatePerson } = require("../models/validation");
+const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
+const { User } = require("../models/schema");
 
 const getContacts = async (req, res) => {
   const owner = req.user.id;
