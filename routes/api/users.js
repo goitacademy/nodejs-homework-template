@@ -10,6 +10,8 @@ const gravatar = require('gravatar');
 const multer = require('multer');
 const { verify, verifyByEmail } = require('../../controllers/userController'); // Import verify and verifyByEmail
 
+const mailgun = require('mailgun-js')({ apiKey: process.env.MAILGUN_API_KEY, domain: process.env.MAILGUN_DOMAIN });
+
 router.get('/verify/:verificationToken', verify);
 router.post('/verify', verifyByEmail);
 
@@ -60,8 +62,30 @@ router.post('/register', async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    const newUser = new User({ name, email, password: hashedPassword, avatarURL });
+    const newUser = new User({ name, email, password: hashedPassword, avatarURL , isVerified: false });
+    
+    
+
+    
+    
+    
     const savedUser = await newUser.save();
+
+    // Send email after successful registration
+    const msg = {
+      to: email,
+      from: process.env.MAILGUN_EMAIL_FROM,
+      subject: 'Welcome to our platform',
+      text: `Hello ${name},\n\nWelcome to our platform! Your account has been successfully created.`,
+    };
+
+    mailgun.messages().send(msg, function (error, body) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent:', body);
+      }
+    });
 
     res.status(201).json({ message: 'User registered successfully', user: savedUser });
   } catch (error) {
@@ -71,9 +95,9 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, isVerified } = req.body;
 
-    const validation = loginSchema.validate({ email, password });
+    const validation = loginSchema.validate({ email, password, isVerified });
     if (validation.error) {
       return res.status(400).json({ message: validation.error.details[0].message });
     }
@@ -81,6 +105,9 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Email or password is wrong' });
+    }
+    if (!user.isVerified) {
+      return res.status(401).json({ message: 'Email not verified' });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
@@ -100,7 +127,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Login failed' });
   }
 });
-
 router.get('/current', authenticateToken, async (req, res) => {
   try {
     const userId = req.user.userId;

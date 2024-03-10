@@ -10,7 +10,7 @@ async function verify(req, res, reqVerify) {
   }
 
   user.verificationToken = null;
-  user.isVerified = reqVerify; // using the 'reqVerify' parameter here
+  user.isVerified = reqVerify; 
   await user.save();
 
   res.status(200).json({ message: 'Verification successful' });

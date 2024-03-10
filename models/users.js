@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const { verifyUserEmail } = require('../Users/verifyUserEmail');
+const { String } = require('joi');
 
 const userSchema = new Schema(
   {
@@ -30,6 +31,20 @@ const userSchema = new Schema(
     verificationToken: {
       type: String,
     },
+    verificationTokenExpiration: {
+      type: Date,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    token: {
+      type: String,
+    },
+    tokenExpiration: {
+      type: Date
+    },
+
   },
   {
     timestamps: true,

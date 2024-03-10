@@ -26,6 +26,7 @@
     "morgan": "1.10.0",
     "multer": "^1.4.5-lts.1",
     "nanoid": "^5.0.5",
+    "nodemailer": "^6.9.12",
     "sendgrid": "^5.2.3",
     "uuid": "^9.0.1"
   },
