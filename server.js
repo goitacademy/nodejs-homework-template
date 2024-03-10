@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 
 // Connection string do twojej bazy danych MongoDB w MongoDB Atlas
 const dbConnectionURI =
-  "mongodb+srv://MonikaG:Mm29030405@cluster0.eeog9dx.mongodb.net/";
+  "mongodb+srv://MonikaG:Mm29030405@cluster0.eeog9dx.mongodb.net/db-contacts";
 
 // Ustanawianie połączenia
 mongoose.connect(dbConnectionURI, {
