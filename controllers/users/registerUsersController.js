@@ -4,8 +4,13 @@ import jwt from 'jsonwebtoken';
 import gravatar from 'gravatar';
 import Joi from 'joi';
 import { User } from '../../models/users/userModel.js';
-import { avatarProcessor } from '../../config.js';
+import { AvatarProcessor } from './AvatarProcessor.js';
+import transporter from '../../models/shared/services/mail.service.js';
+import crypto from 'crypto';
 
+const generateVerificationToken = () => {
+  return crypto.randomBytes(20).toString('hex');
+};
 
 const signupSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -33,15 +38,18 @@ const signup = async (req, res, next) => {
     
     const avatarPath = req.file ? req.file.path : null;
     const avatarURL = gravatar.url(req.body.email, { s: '200', r: 'pg', d: 'mm' });
+    const verificationToken = generateVerificationToken();
 
     const user = await User.create({
       email,
       password: hashedPassword,
       avatarURL,
+      verificationToken,
     });
 
-    const processedAvatarURL = await avatarProcessor.processAvatar(avatarPath, user._id);
+    const verificationLink = `http://localhost:3000/verify-account/${user.verificationToken}`;
 
+    const processedAvatarURL = await AvatarProcessor.processAvatar(avatarPath, user._id);
     user.avatarURL = processedAvatarURL;
     await user.save();
 
@@ -54,7 +62,29 @@ const signup = async (req, res, next) => {
 
     console.log('User after saving token:', user);
 
-    return res.status(201).json({
+    const emailOptions = {
+      from: "no-reply@sandboxda33cce3c6f64200805e0f36879030b7.mailgun.org",
+      to: user.email,
+      subject: "Email Verification",
+      html: `
+              <p>
+                Click the following link to verify your account:
+                </p>
+                <a target="_blank" href="${encodeURIComponent(verificationLink)}">${verificationLink}
+              </a>
+            `,
+    };
+
+    try {
+      const response = await transporter.sendMail(emailOptions);
+      console.log(response);
+    } catch (error) {
+      console.error('Error during sending email:', error);
+      res.status(500).json({ message: 'Error during sending email' });
+      return;
+    }
+
+    res.status(201).json({
       user: {
         email: user.email,
         subscription: user.subscription,
@@ -63,11 +93,10 @@ const signup = async (req, res, next) => {
       message: 'Registration successful',
       token,
     });
-
   } catch (error) {
     console.error('Error during signup:', error);
-    next(error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-export { signup };
+export { signup, generateVerificationToken };

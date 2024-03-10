@@ -6,8 +6,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import contactsRouter from "./routes/api/contacts/contacts.js";
 import usersRouter from './routes/api/users/users.js';
-import { uploadAvatar } from './config.js';
-import { authenticateToken } from './middleware/authenticateToken.js';
 
 const app = express()
 
@@ -39,7 +37,6 @@ app.use(express.json())
 
 app.use('/', usersRouter);
 app.use('/', contactsRouter);
-app.use('/api/users', usersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
