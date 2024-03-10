@@ -1,10 +1,10 @@
 import Contact from "../../models/contactModel.js";
-export async function updateFavouriteStatus(req, res, next) {
+export async function updateFavoriteStatus(req, res, next) {
   const contactId = req.params.contactId;
-  const { favourite } = req.body;
+  const { favorite } = req.body;
 
-  if (favourite === undefined) {
-    return res.status(400).json({ message: "missing field favourite" });
+  if (favorite === undefined) {
+    return res.status(400).json({ message: "missing field favorite" });
   }
 
   try {
