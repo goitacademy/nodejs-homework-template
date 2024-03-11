@@ -1,97 +1,107 @@
-const express = require('express');
+const express = require("express");
+const Joi = require("joi");
+
+const {
+  listContacts,
+  getContactById,
+  addContact,
+  updateContact,
+  removeContact,
+} = require("../../models/contacts");
+
 const router = express.Router();
-const { 
-    listContacts, 
-    getById, 
-    addContact, 
-    removeContact, 
-    updateContact 
-} = require('./models/contacts');
 
-// GET /api/contacts
-router.get('/', async (req, res) => {
-    try {
-        const contacts = await listContacts();
-        res.status(200).json(contacts);
-    } catch (error) {
-        console.error('Error al obtener contactos:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
-    }
+const contactSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().required(),
 });
 
-// GET /api/contacts/:id
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const contact = await getById(id);
-
-        if (contact) {
-            res.status(200).json(contact);
-        } else {
-            res.status(404).json({ message: "Not found" });
-        }
-    } catch (error) {
-        console.error('Error al obtener contacto por ID:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
-    }
+router.get("/", async (req, res, next) => {
+  try {
+    const contacts = await listContacts();
+    res.json(contacts);
+  } catch (error) {
+    console.error("Error reading contacts:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// POST /api/contacts
-router.post('/', async (req, res) => {
-    const { name, email, phone } = req.body;
+router.get("/:contactId", async (req, res) => {
+  const contactId = req.params.contactId;
 
-    if (!name || !email || !phone) {
-        return res.status(400).json({ message: "missing required name field" });
-    }
+  try {
+    const contact = await getContactById(contactId);
 
-    try {
-        const newContact = await addContact({ name, email, phone });
-        res.status(201).json(newContact);
-    } catch (error) {
-        console.error('Error al agregar contacto:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+    if (!contact) {
+      res.status(404).json({ message: "Contact not found" });
+    } else {
+      res.json(contact);
     }
+  } catch (error) {
+    console.error("Error getting contact by ID:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
-// DELETE /api/contacts/:id
-router.delete('/:id', async (req, res) => {
-    const { id } = req.params;
+router.post("/", async (req, res, next) => {
+  const body = req.body;
 
+  const validation = contactSchema.validate(body);
+
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details[0].message });
+  } else {
     try {
-        const result = await removeContact(id);
-        if (result) {
-            res.status(200).json({ message: "contacto eliminado" });
-        } else {
-            res.status(404).json({ message: "Not found" });
-        }
+      const contacts = await addContact(body);
+      res.json(body);
     } catch (error) {
-        console.error('Error al eliminar contacto:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+      console.error("Error reading contacts:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
+  }
 });
 
-// PUT /api/contacts/:id
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { name, email, phone } = req.body;
+router.delete("/:contactId", async (req, res, next) => {
+  const contactId = req.params.contactId;
+  console.log("Contact ID:", contactId);
 
-    if (!name && !email && !phone) {
-        return res.status(400).json({ message: "missing fields" });
+  try {
+    const removedContact = await removeContact(contactId);
+
+    if (!removedContact) {
+      res.status(404).json({ message: "Not found" });
+    } else {
+      res.status(200).json({ mensaje: "Contacto eliminado" });
     }
+  } catch (error) {
+    console.error("Error removing contact:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
+router.put("/:contactId", async (req, res, next) => {
+  const contactId = req.params.contactId;
+  const body = req.body;
+
+  const validation = contactSchema.validate(body);
+
+  if (validation.error) {
+    res.status(400).json({ error: validation.error.details[0].message });
+  } else {
     try {
-        const updatedContact = await updateContact(id, { name, email, phone });
-        if (updatedContact) {
-            res.status(200).json(updatedContact);
-        } else {
-            res.status(404).json({ message: "Not found" });
-        }
+      const updatedContact = await updateContact(contactId, body);
+
+      if (!updatedContact) {
+        res.status(404).json({ message: "Not found" });
+      } else {
+        res.status(200).json(updatedContact);
+      }
     } catch (error) {
-        console.error('Error al actualizar contacto:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+      console.error("Error updating contact:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
+  }
 });
 
 module.exports = router;
-
