@@ -7,10 +7,14 @@ const requiredSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-const optionalSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().email(),
-  phone: Joi.string(),
-});
 
-export { requiredSchema, optionalSchema };
+const validation = (req, res, next) => {
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json(error.message);
+  }
+  next();
+};
+
+export { validation };
+
