@@ -8,7 +8,8 @@ const fs = require("fs/promises");
 
 const { SECRET_KEY } = process.env;
 
-const avatarsDir = path.join(__dirname, "../", "public", "avatars");
+const avatarsDir = path.join(__dirname, "../", "../", "public", "avatars");
+console.log(avatarsDir);
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -111,6 +112,7 @@ const updSubscription = async (req, res) => {
 
 const updAvatar = async (req, res) => {
   const { _id } = req.user;
+  console.log(req.file.path);
   const { path: tmpUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
