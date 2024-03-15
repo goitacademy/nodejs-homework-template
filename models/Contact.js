@@ -17,6 +17,11 @@ const contactSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  }
 });
 
 contactSchema.post("save", handleSaveError);
@@ -37,7 +42,9 @@ export const contactUpdateSchema = Joi.object({
   email: Joi.string(),
   phone: Joi.string(),
   favorite: Joi.boolean(),
-});
+})
+  .min(1)
+  .message("Body must have at least one field");
 
 export const contactFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required(),
