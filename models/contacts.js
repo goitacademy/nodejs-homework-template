@@ -76,7 +76,26 @@ const addContact = async (name, email, phone) => {
   }
 };
 
-const updateContact = async (contactId, body) => {};
+const updateContact = async (contactId, body) => {
+  try {
+    const data = await fs.readFile(contactsPath);
+    const contacts = JSON.parse(data);
+
+    const contactIndex = contacts.findIndex(
+      (contact) => contact.id === contactId
+    );
+    if (contactIndex === -1) {
+      throw new Error("Contact not found");
+    }
+
+    Object.assign(contacts[contactIndex], body);
+    await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+    return contacts[contactIndex];
+  } catch (error) {
+    console.error("Error al leer el archivo contacts.json:", error);
+    throw error;
+  }
+};
 
 module.exports = {
   listContacts,
