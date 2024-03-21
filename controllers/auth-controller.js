@@ -1,3 +1,5 @@
+import gravatar from "gravatar";
+
 import bcrypt from "bcryptjs";
 
 import jwt from "jsonwebtoken";
@@ -7,6 +9,7 @@ import User from "../models/User.js";
 import { ctrlWrapper } from "../decorators/index.js";
 
 import { HttpError } from "../helpers/index.js";
+
 import { get } from "mongoose";
 
 const { JWT_SECRET } = process.env;
@@ -20,7 +23,9 @@ const signup = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...req.body, password: hashPassword });
+  const avatarURL = gravatar.url(email);
+
+  const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL});
 
   res.status(201).json({
     username: newUser.username,
@@ -62,11 +67,11 @@ const getCurrent = async (req, res) => {
 
 const signout = async (req, res) => {
   const { _id } = req.user;
-    await User.findByIdAndUpdate(_id, { token: "" });
-    
-    res.json({
-        message: "Signout success"
-    })
+  await User.findByIdAndUpdate(_id, { token: "" });
+
+  res.json({
+    message: "Signout success",
+  });
 };
 
 export default {
