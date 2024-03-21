@@ -18,11 +18,11 @@ const processAvatar = async (req, res, next) => {
     const { path: tempUpload, originalname } = req.file;
     const filename = `${_id}_${originalname}`;
 
+    const image = await Jimp.read(tempUpload);
+    await image.resize(Jimp.AUTO, 250).writeAsync(tempUpload);
+
     const resultUpload = path.join(avatarsDir, filename);
     await fs.rename(tempUpload, resultUpload);
-
-    const image = await Jimp.read(resultUpload);
-    await image.resize(Jimp.AUTO, 250).writeAsync(resultUpload);
 
     const avatarURL = path.join("avatars", filename);
 
