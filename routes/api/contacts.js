@@ -1,9 +1,8 @@
 const express = require('express');
-const contactsService = require('../../services/contactsServices'); // Upewnij się, że ścieżka jest poprawna
+const contactsService = require('../../services/contactsServices');
 
 const router = express.Router();
 
-// Pobierz listę wszystkich kontaktów
 router.get('/', async (req, res, next) => {
   try {
     const contacts = await contactsService.listContacts();
@@ -13,7 +12,6 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Pobierz kontakt po ID
 router.get('/:contactId', async (req, res, next) => {
   try {
     const contact = await contactsService.getContactById(req.params.contactId);
@@ -26,7 +24,6 @@ router.get('/:contactId', async (req, res, next) => {
   }
 });
 
-// Dodaj nowy kontakt
 router.post('/', async (req, res, next) => {
   try {
     const newContact = await contactsService.addContact(req.body);
@@ -36,7 +33,6 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// Usuń kontakt po ID
 router.delete('/:contactId', async (req, res, next) => {
   try {
     const deletedContact = await contactsService.removeContact(req.params.contactId);
@@ -49,7 +45,6 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 });
 
-// Aktualizuj kontakt po ID
 router.put('/:contactId', async (req, res, next) => {
   try {
     const updatedContact = await contactsService.updateContact(req.params.contactId, req.body);
