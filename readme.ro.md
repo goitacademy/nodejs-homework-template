@@ -28,4 +28,3 @@ Citește cu atenție comentariile mentorului. Corectează observațiile și fă 
 - `npm run lint` &mdash; rulează verificarea codului cu ESLint, este necesar să se ruleze înaintea fiecărui PR și să se corecteze toate erorile linterului.
 - `npm lint:fix` &mdash; aceeași verificare a linterului, dar cu corecții automate pentru erorile simple.
  
- test
