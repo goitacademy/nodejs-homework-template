@@ -1,14 +1,36 @@
-// const fs = require('fs/promises')
+const Contact = require("../models/contact");
 
-const listContacts = async () => {}
+const listContacts = async (userId) => {
+  return await Contact.find({ owner: userId });
+};
 
-const getContactById = async (contactId) => {}
+const getContactById = async (userId, contactId) => {
+  return await Contact.findOne({ _id: contactId, owner: userId });
+};
 
-const removeContact = async (contactId) => {}
+const removeContact = async (userId, contactId) => {
+  return await Contact.findOneAndRemove({ _id: contactId, owner: userId });
+};
 
-const addContact = async (body) => {}
+const addContact = async (userId, body) => {
+  return await Contact.create({ ...body, owner: userId });
+};
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (userId, contactId, body) => {
+  return await Contact.findOneAndUpdate(
+    { _id: contactId, owner: userId },
+    { ...body },
+    { new: true }
+  );
+};
+
+const updateStatusContact = async (userId, contactId, body) => {
+  return await Contact.findOneAndUpdate(
+    { _id: contactId, owner: userId },
+    { favorite: body.favorite },
+    { new: true }
+  );
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +38,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+  updateStatusContact,
+};
