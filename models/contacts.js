@@ -1,14 +1,52 @@
-// const fs = require('fs/promises')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const listContacts = async () => {}
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Name is required'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+  },
+  phone: {
+    type: String,
+    required: [true, 'Phone number is required'],
+  },
+  favorite: {
+    type: Boolean,
+    default: false,
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+});
 
-const getContactById = async (contactId) => {}
+const Contact = mongoose.model('Contact', contactSchema);
 
-const removeContact = async (contactId) => {}
+const listContacts = async (owner) => {
+  return await Contact.find({ owner });
+};
 
-const addContact = async (body) => {}
+const getContactById = async (id, owner) => {
+  return await Contact.findOne({ _id: id, owner });
+};
 
-const updateContact = async (contactId, body) => {}
+const removeContact = async (id, owner) => {
+  return await Contact.findOneAndDelete({ _id: id, owner });
+};
+
+const addContact = async ({ name, email, phone, favorite = false, owner }) => {
+  const contact = new Contact({ name, email, phone, favorite, owner });
+  return await contact.save();
+};
+
+const updateContact = async (id, owner, updateFields) => {
+  return await Contact.findOneAndUpdate({ _id: id, owner }, updateFields, { new: true });
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +54,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
