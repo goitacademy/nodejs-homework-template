@@ -1,25 +1,34 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+import express from 'express';
+import logger from 'morgan';
+import cors from 'cors';
+import { config } from 'dotenv';
 
-const contactsRouter = require('./routes/api/contacts')
+import connectDB from './db.js';
+import contactsRouter from './routes/api/contacts.js';
+import usersRouter from './routes/api/users.js';
+import avatarsRouter from './routes/api/avatars.js';
+import { publicDirectory } from './repositories/avatars.js';
 
-const app = express()
+config();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const app = express();
+await connectDB(process.env.DB_USER, process.env.DB_PASSWORD); // there is no need to capture any exceptions here because, if there are any, process will exit
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
 
-app.use('/api/contacts', contactsRouter)
+app.use('/api/contacts', contactsRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/avatars', express.static(publicDirectory), avatarsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+	res.status(404).json({ message: 'Not found' });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+	res.status(500).json({ message: err.message });
+});
 
-module.exports = app
+export default app;
