@@ -1,25 +1,32 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
 
-const contactsRouter = require('./routes/api/contacts')
+require("dotenv").config();
 
-const app = express()
+const authRouter = require("./routes/api/auth");
+const contactsRouter = require("./routes/api/contacts");
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const app = express();
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
-app.use('/api/contacts', contactsRouter)
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+app.use(express.static("public"));
+
+app.use("/api/users", authRouter);
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found" });
+  res.status(400).json({ message: "Missing required name field" });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = "server error" } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+module.exports = app;
