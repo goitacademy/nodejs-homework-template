@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
+    "dev": "nodemon app.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
@@ -11,8 +12,11 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "express": "^4.17.1",
+    "joi": "^17.10.2",
+    "morgan": "1.10.0",
+    "nanoid": "^5.0.1",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -21,6 +25,6 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "nodemon": "^2.0.15"
   }
 }
