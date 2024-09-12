@@ -1,3 +1,5 @@
+// For the option to retrieve data from a file
+
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
