@@ -1,25 +1,58 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const {
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact,
+} = require("../models/contacts");
 
-const contactsRouter = require('./routes/api/contacts')
+const getAll = async (req, res, next) => {
+  const contacts = await listContacts();
+  res.status(200).json(contacts);
+};
 
-const app = express()
+const getById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await getContactById(contactId);
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+  if (!contact) {
+    const error = new Error("Not found");
+    error.status = 404;
+    throw error;
+  }
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+  res.status(200).json(contact);
+};
 
-app.use('/api/contacts', contactsRouter)
+const add = async (req, res, next) => {
+  const result = await addContact(req.body);
+  res.status(201).json(result);
+};
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+const remove = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await removeContact(contactId);
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  if (!contact) {
+    const error = new Error("Not found");
+    error.status = 404;
+    throw error;
+  }
 
-module.exports = app
+  res.status(200).json({ message: "contact deleted" });
+};
+
+const updateById = async (req, res, next) => {
+  const { contactId } = req.params;
+  const contact = await updateContact(contactId, req.body);
+
+  if (!contact) {
+    const error = new Error("Not found");
+    error.status = 404;
+    throw error;
+  }
+
+  res.status(200).json(contact);
+};
+
+module.exports = { getAll, getById, add, remove, updateById };
