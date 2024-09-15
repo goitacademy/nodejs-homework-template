@@ -1,25 +1,32 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require('express');                                    // створюємо веб-сервер
+const logger = require('morgan');                                      // для протоколювання запитів з можливістю налаштування формату виведення. Дозволить обробити свої журнали аналітичними застосунками, що генерують корисну статистику                
+const cors = require('cors');                                          // cors - всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)                                     
+const dotenv = require("dotenv");                                      // для того, щоб добавити змінну в змінні оточення
 
-const contactsRouter = require('./routes/api/contacts')
+const authRouter = require("./routes/api/users");
+const contactsRouter = require("./routes/api/contacts");               // підключаємо роутери з контактами (сторінку про контакти до книги)
 
-const app = express()
+dotenv.config();                                                       // шукає файл .env і додає дані з файлу у змінні оточення
+// require("dotenv").config(); можна  ітак написати
+const app = express()                                                  // запускаємо сервер
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'; 
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+app.use(logger(formatsLogger));                                       // викликаємо morgan
+app.use(cors());                                                      // всередині неї запускається мідлваре, де запускається дозвіл на кросдоменні запити (коли фронтенд і бекенд запущені на різних серверах)
+app.use(express.json());                                              // парсер (мідлвара) для отримання данних у форматі json
+app.use(express.static("public"));                                    // якщо прийде запит на файли, бере його з  папки Public. Налаштування express на роздачу статичних файлів з папки public (тобто, щоб файли з папки public було видно в браузеры, а інші ні, бо можна побачити код файлів)
 
-app.use('/api/contacts', contactsRouter)
+app.use("/api/users", authRouter);
+app.use("/api/contacts", contactsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  res.status(err.status ?? 500).json({ msg: err.message });
 })
+
 
 module.exports = app
