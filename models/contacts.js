@@ -1,14 +1,61 @@
-// const fs = require('fs/promises')
+// import { nanoid } from "nanoid";
+const fs = require("fs/promises");
+// const { nanoid } = require("nanoid");
+const { v4: uuidv4 } = require("uuid");
+const path = require("path");
+const contactsPath = path.join(__dirname, "contacts.json");
 
-const listContacts = async () => {}
+async function listContacts() {
+  const data = await fs.readFile(contactsPath);
+  return JSON.parse(data);
+}
 
-const getContactById = async (contactId) => {}
+const getContactById = async (contactId) => {
+  const allContacts = await listContacts();
+  const contact = allContacts.find((contact) => contact.id === contactId);
 
-const removeContact = async (contactId) => {}
+  return contact || null;
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  const allContacts = await listContacts();
+  const contactToRemove = allContacts.find(
+    (contact) => contact.id === contactId
+  );
+  if (!contactToRemove) return null;
+  const contacts = [...allContacts].filter(
+    (contact) => contact.id !== contactId
+  );
 
-const updateContact = async (contactId, body) => {}
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+
+  return contactToRemove;
+};
+
+const addContact = async (body) => {
+  const allContacts = await listContacts();
+
+  const newContact = {
+    id: uuidv4(),
+    ...body,
+  };
+  allContacts.push(newContact);
+
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex((contact) => contact.id === contactId);
+  if (index === -1) return null;
+  const id = contactId;
+  allContacts[index] = { id, ...body };
+
+  await fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
+  return allContacts[index];
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +63,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
