@@ -11,7 +11,8 @@
   "dependencies": {
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
+    "express": "^4.17.1",
+    "joi": "^17.9.2",
     "morgan": "1.10.0"
   },
   "devDependencies": {
@@ -21,6 +22,7 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
+    "nanoid": "^3.3.4",
     "nodemon": "2.0.15"
   }
 }
