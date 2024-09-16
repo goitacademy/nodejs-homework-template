@@ -1,25 +1,34 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+import express from 'express';
+import logger from 'morgan';
+import cors from 'cors';
+import * as path from 'path';
+import * as url from 'url';
+import contactsRouter from './routers/contacts.js';
+import userRouter from './routers/user.js';
+import meRouter from './routers/me.js';
 
-const contactsRouter = require('./routes/api/contacts')
+const app = express();
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-const app = express()
+app.use(logger(formatsLogger));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+app.use(cors());
+app.use('/api/avatars', express.static(path.join(__dirname, 'public/avatars')));
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
-
-app.use('/api/contacts', contactsRouter)
+app.use('/api/contacts', contactsRouter);
+app.use('/api/user', userRouter);
+app.use('/api/me', meRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: 'Not found' });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  const { status = 500, message = 'server error' } = err;
+  res.status(status).json({ message });
+});
 
-module.exports = app
+export default app;
