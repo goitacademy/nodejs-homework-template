@@ -1,19 +1,53 @@
-// const fs = require('fs/promises')
+const Joi = require("joi");
+const mongoose = require("mongoose");
 
-const listContacts = async () => {}
+const Schema = mongoose.Schema;
 
-const getContactById = async (contactId) => {}
+const contacts = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
 
-const removeContact = async (contactId) => {}
+const Contact = mongoose.model("contact", contacts);
 
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
+const addContactSchema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(50).required(),
+  email: Joi.string().email().required(),
+  phone: Joi.string().min(6).max(22).required(),
+});
+const changeContactShema = Joi.object({
+  name: Joi.string().alphanum().min(3).max(50),
+  email: Joi.string().email(),
+  phone: Joi.string().min(6).max(22),
+}).or("name", "email", "phone");
+const pathContactSchema = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+  Contact,
+  putValidate: changeContactShema,
+  postValidate: addContactSchema,
+  patchValidate: pathContactSchema,
+};
