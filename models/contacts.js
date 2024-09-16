@@ -1,19 +1,42 @@
-// const fs = require('fs/promises')
+const { model, Schema } = require('mongoose');
+const Joi = require('joi');
+const  handleMongooseErr  = require('../helpers/handleMongooseErr');
 
-const listContacts = async () => {}
+const contactSchema = new Schema({
+  name: {
+    type: String,
+    required: [true, 'Set name for contact'],
+  },
+  email: {
+    type: String,
+  },
+  phone: {
+    type: String,
+  },
+  favorite: {
+    type: Boolean,
+    default: false
+  },
+}, { versionKey: false, timestamps: true });
 
-const getContactById = async (contactId) => {}
 
-const removeContact = async (contactId) => {}
+contactSchema.post("save", handleMongooseErr);
 
-const addContact = async (body) => {}
+const JoiSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  favorite: Joi.boolean()
+});
 
-const updateContact = async (contactId, body) => {}
+const favoriteSchema = Joi.object({
+  favorite:Joi.boolean().required()
+})
+
+const Contact = model('contact', contactSchema);
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  Contact,
+  JoiSchema, 
+  favoriteSchema
 }
