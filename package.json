@@ -2,19 +2,26 @@
   "name": "template",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
-  },
-  "dependencies": {
+    "lint:fix": "eslint --fix **/*.js",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.3.1",
+    "morgan": "1.10.0",
+    "nanoid": "^3.3.4"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
@@ -22,5 +29,22 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
     "nodemon": "2.0.15"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "gravatar": "^1.8.2",
+    "i": "^0.3.7",
+    "jimp": "^0.22.8",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.3.4",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.3",
+    "npm": "^9.8.0"
   }
 }
