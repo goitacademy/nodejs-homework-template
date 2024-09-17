@@ -1,19 +1,11 @@
-// const fs = require('fs/promises')
+const { model } = require("mongoose");
 
-const listContacts = async () => {}
+const { mongooseContactSchema } = require("../validation/contacts");
 
-const getContactById = async (contactId) => {}
+const { handleSchemaValidationError } = require("../helpers");
 
-const removeContact = async (contactId) => {}
+mongooseContactSchema.post("save", handleSchemaValidationError);
 
-const addContact = async (body) => {}
+const Contact = model("contact", mongooseContactSchema);
 
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = Contact;
