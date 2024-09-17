@@ -1,25 +1,21 @@
 const express = require('express')
 
+const ctrl = require('../../controllers/contacts')
+
+const {validateBody, isValidId} =require('../../middelwares')
+const {schemas} = require('../../models/contact')
+
 const router = express.Router()
+router.get('/', ctrl.getAll )
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:id', isValidId,  ctrl.getById )
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', validateBody(schemas.addSchemas), ctrl.addContact)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put('/:id', isValidId, validateBody(schemas.addSchemas), ctrl.updateById)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch('/:id/favorite', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.updateStatusContact)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:id', isValidId, ctrl.deleteById)
 
 module.exports = router
