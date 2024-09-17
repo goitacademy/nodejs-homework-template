@@ -1,18 +1,21 @@
 {
-  "name": "template",
+  "name": "",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
+    "dev": "nodemon server.js",
     "lint": "eslint **/*.js",
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
-    "express": "4.17.1",
-    "morgan": "1.10.0"
+    "dotenv": "^16.3.1",
+    "express": "^4.17.1",
+    "joi": "^17.9.2",
+    "mongo": "^0.1.0",
+    "morgan": "^1.10.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
@@ -21,6 +24,18 @@
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
+    "husky": "^4.3.8",
+    "lint-staged": "^13.1.2",
+    "nodemon": "2.0.22"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
