@@ -1,31 +1,145 @@
 ## GoIT Node.js Course Template Homework
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+-Overview
 
-Додайте ментора до колаборації
+This app allows the creation back-end for adding phone contacts along with possibility to edit or change status.
+To save data we using siple database - MongoDB.
 
-Для кожної домашньої роботи створюйте свою гілку.
+### API
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+# Get all contacts: `GET` /api/contacts/
 
-Кожна нова гілка для др повинна робитися з master
+- Paramaters: No parameters
+- Media type: aplication/json
+- Response example value:
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+```javascript
+[
+  {
+    _id: "62a86a9b3fc333ef2a601319",
+    name: "Allen Raymond",
+    email: "nulla.ante@vestibul.co.uk",
+    phone: "(992) 914-3792",
+    favorite: false,
+  },
+  {
+    _id: "62a86a9b3fc333ef2a60131a",
+    name: "Chaim Lewis",
+    email: "dui.in@egetlacus.ca",
+    phone: "(294) 840-6685",
+    favorite: true,
+  },
+];
+```
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+# Get one contact: `GET` /api/contacts/`:contactId`
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+- Paramaters: `contactId`
+- Media type: aplication/json
+- Response example value:
 
-### Команди:
+```javascript
+{
+  "\_id": "62a86a9b3fc333ef2a601319",
+  "name": "Allen Raymond",
+  "email": "nulla.ante@vestibul.co.uk",
+  "phone": "(992) 914-3792",
+  "favorite": false
+  }
+```
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+# Add contact `POST` /api/contacts/
+
+- Paramaters: `body` -
+  ```javascript
+  {
+  "name": "Allen Raymond", <=== `required`
+  "email": "nulla.ante@vestibul.co.uk", <=== `required`
+  "phone": "(992) 914-3792", <=== `required`
+  "favorite": false <=== `(if not included in request, default parameter will be `false`)`
+  }
+  ```
+- Media type: aplication/json
+- Response example value:
+
+```javascript
+  {
+  "\_id": "62a86a9b3fc333ef2a601319",
+  "name": "Allen Raymond",
+  "email": "nulla.ante@vestibul.co.uk",
+  "phone": "(992) 914-3792",
+  "favorite": false
+  }
+```
+
+# Remove contact `DELETE` /api/contacts/`:contactId`
+
+- Paramaters: `contactId`
+- Media type: aplication/json
+- Response example value:
+
+```javascript
+  {
+  "message": "contact deleted"
+  }
+```
+
+# Edit contact `PUT` /api/contacts/`:contactId`
+
+- Paramaters: `contactId`, `body` -
+
+```javascript
+  {
+  "name": "Ajax Poly", <=== `required`
+  "email": "nulla.ante@vestibul.co.uk", <=== `required`
+  "phone": "(992) 914-3792", <=== `required`
+  "favorite": false <=== `(if not included in request, default parameter will be `false`)`
+  }
+```
+
+- Media type: aplication/json
+- Response example value:
+
+```javascript
+  {
+  "\_id": "62a86a9b3fc333ef2a601319",
+  "name": "Ajax Poly",
+  "email": "nulla.ante@vestibul.co.uk",
+  "phone": "(992) 914-3792",
+  "favorite": false
+  }
+```
+
+# Update contact status `PATCH` /api/contacts/`:contactId`/favorite
+
+- Paramaters: `contactId`, `body` -
+
+```javascript
+  {
+  "favorite": true <=== `required`
+  }
+```
+
+- Media type: aplication/json
+- Response example value:
+
+```javascript
+  {
+  "\_id": "62a86a9b3fc333ef2a601319",
+  "name": "Ajax Poly",
+  "email": "nulla.ante@vestibul.co.uk",
+  "phone": "(992) 914-3792",
+  "favorite": true <=== `As a response you will get an object with updated status "favorite"`
+  }
+```
+
+### Scripts:
+
+- `npm start` &mdash; start server in "production" mode;
+- `npm run start:dev` &mdash; start server in "development" mode;
+- `npm run lint` &mdash; run code verification with eslint, must be performed before each PR and correct all linter errors;
+- `npm lint:fix` &mdash; same code verification but with automatic correction simple errors;
+
+```
+
+```
