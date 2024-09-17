@@ -1,19 +1,36 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require('mongoose');
+const { handleMongooseError } = require('../helpers');
 
-const listContacts = async () => {}
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  },
+  {
+    versionKey: false,
+  }
+);
 
-const getContactById = async (contactId) => {}
+// if there is an error in save or update
 
-const removeContact = async (contactId) => {}
+contactsSchema.post('save', handleMongooseError);
 
-const addContact = async (body) => {}
+const Contacts = model('contact', contactsSchema);
 
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = Contacts;
