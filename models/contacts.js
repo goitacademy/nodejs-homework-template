@@ -1,19 +1,53 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require('mongoose');
+const { handleErrors } = require('../middlewares');
+const Joi = require('joi');
 
-const listContacts = async () => {}
+const emailRegex = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-z]+)$/;
+const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
-const getContactById = async (contactId) => {}
+const contactSchema = new Schema(
+  {
+    name: {
+      type: String,
+      minlength: 2,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+      unique: true,
+      mattch: emailRegex,
+      required: [true, 'Set email for contact'],
+    },
+    phone: {
+      type: String,
+      mattch: phoneRegex,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const removeContact = async (contactId) => {}
+contactSchema.post('save', handleErrors);
 
-const addContact = async (body) => {}
+const joiSchema = Joi.object({
+  name: Joi.string().min(2).required(),
+  email: Joi.string().email().pattern(emailRegex).required(),
+  phone: Joi.string().pattern(phoneRegex).required(),
+  favorite: Joi.bool(),
+});
 
-const updateContact = async (contactId, body) => {}
+const favoriteJoiSchema = Joi.object({
+  favorite: Joi.bool().required(),
+});
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+const Contact = model('contact', contactSchema);
+
+module.exports = { Contact, joiSchema, favoriteJoiSchema };
