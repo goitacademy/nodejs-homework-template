@@ -1,25 +1,17 @@
-const express = require('express')
+const express = require("express");
+const contacts = require("../../models/contacts");
+const requestError = require("../../helpers/requestError");
+const router = express.Router();
+const contactsController = require('../../controllers/contacts')
 
-const router = express.Router()
+router.get("/", contactsController.listContacts);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:contactId",contactsController.getContactById);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", contactsController.addContact);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:contactId", contactsController.removeContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.put("/:id", contactsController.updateContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-module.exports = router
+module.exports = router;
