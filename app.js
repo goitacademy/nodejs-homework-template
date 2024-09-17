@@ -1,6 +1,8 @@
+// 6aW8ACM88Ob9FowD, Sergey
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
 
 const contactsRouter = require('./routes/api/contacts')
 
