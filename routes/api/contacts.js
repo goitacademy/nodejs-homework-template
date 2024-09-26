@@ -1,25 +1,26 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const controlers = require("../../controller/index");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const isValidId = require("../../Helpers/IsValidId");
+// ------------------Get contacts------------------
+router.get("/", controlers.get);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// ------------------Find by ID------------------
+router.get("/:contactId", isValidId, controlers.findById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// ------------------Add new contact------------------
+router.post("/", controlers.addNewContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// ------------------Remove contact------------------
+router.delete("/:contactId", isValidId, controlers.deleteContact);
 
-module.exports = router
+// ------------------Update contact------------------
+router.put("/:contactId", isValidId, controlers.updateContact);
+
+// ------------------UpdateStatusContact------------------
+router.patch("/:contactId/favorite", isValidId, controlers.updateStatusContact);
+
+module.exports = router;
