@@ -1,19 +1,26 @@
-// const fs = require('fs/promises')
+import { Schema, model } from "mongoose";
+import { handleSaveError, runValidatorsAtUpdate } from "./hooks.js";
 
-const listContacts = async () => {}
+const contactsSchema = new Schema({
+    name: {
+        type: String,
+        required: [true, 'Set name for contact'],
+    },
+    email: {
+        type: String,
+    },
+    phone: {
+        type: String,
+    },
+    favorite: {
+        type: Boolean,
+        default: false,
+    },
+});
+contactsSchema.post("save", handleSaveError);
+contactsSchema.pre("findOneAndUpdate", runValidatorsAtUpdate);
+contactsSchema.post("findOneAndUpdate", handleSaveError);
 
-const getContactById = async (contactId) => {}
+const Contacts = model("contact", contactsSchema);
 
-const removeContact = async (contactId) => {}
-
-const addContact = async (body) => {}
-
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+export default Contacts;
