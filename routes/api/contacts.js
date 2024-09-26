@@ -1,25 +1,89 @@
-const express = require('express')
+import express from "express";
+import Joi from "joi";
 
-const router = express.Router()
+import contactsService from "../../models/index.js";
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+import { HttpError } from "../../helpers/index.js";
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactAddSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+});
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactUpdateSchema = Joi.object({
+  name: Joi.string(),
+  email: Joi.string(),
+  phone: Joi.string(),
+});
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/", async (req, res, next) => {
+  try {
+    const result = await contactsService.listContacts();
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
 
-module.exports = router
+router.get("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsService.getContactById(id);
+    if (!result) {
+      throw HttpError(404, `Contact with id=${id} not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/", async (req, res, next) => {
+  try {
+    const { error } = contactAddSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const result = await contactsService.addContact(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await contactsService.removeContact(id);
+    if (!result) {
+      throw HttpError(404, `Contact with id=${id} not found`);
+    }
+
+    // res.json(result);
+    res.json({ message: "Contact deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/:id", async (req, res, next) => {
+  try {
+    const { error } = contactUpdateSchema.validate(req.body);
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await contactsService.updateContactById(id, req.body);
+    if (!result) {
+      throw HttpError(404, `Contact with id=${id} not found`);
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default router;
