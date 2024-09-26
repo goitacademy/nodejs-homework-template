@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logowanie i Rejestracja</title>
+  </head>
+  <body>
+    <h1>Logowanie</h1>
+    <form id="login-form">
+      <label for="login-email">Email:</label>
+      <input type="email" id="login-email" name="email" required /><br />
+      <label for="login-password">Hasło:</label>
+      <input
+        type="password"
+        id="login-password"
+        name="password"
+        required
+      /><br />
+      <button type="submit">Zaloguj się</button>
+    </form>
+
+    <h1>Rejestracja</h1>
+    <form id="register-form">
+      <label for="register-email">Email:</label>
+      <input type="email" id="register-email" name="email" required /><br />
+      <label for="register-password">Hasło:</label>
+      <input
+        type="password"
+        id="register-password"
+        name="password"
+        required
+      /><br />
+      <button type="submit">Zarejestruj się</button>
+    </form>
+
+    <script>
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = document.getElementById("login-email").value;
+          const password = document.getElementById("login-password").value;
+
+          fetch("http://localhost:3001/api/login", {
+            method: "POST",
+            body: JSON.stringify(data),
+          }).then((res) => console.log(res));
+        });
+
+      document
+        .getElementById("register-form")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const email = document.getElementById("register-email").value;
+          const password = document.getElementById("register-password").value;
+
+          fetch("http://localhost:3001/api/registration", {
+            method: "POST",
+            body: JSON.stringify(data),
+          }).then((res) => console.log(res));
+        });
+    </script>
+  </body>
+</html>
