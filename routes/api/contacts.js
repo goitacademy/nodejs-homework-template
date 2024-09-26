@@ -1,25 +1,21 @@
-const express = require('express')
+import express from "express";
+import {contactAddSchema} from "../../utils/validation/contactValidationSchemas.js";
+import contactsController from "../../controllers/contactControllers.js";
+import validateBody from "../../utils/validation/validateBody.js";
 
-const router = express.Router()
+const contactAddValidate = validateBody(contactAddSchema);
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsRouter = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get('/', contactsController.getAll);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.get('/:contactId', contactsController.getById)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.post('/', contactAddValidate, contactsController.add)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.delete('/:contactId', contactsController.deleteById)
 
-module.exports = router
+contactsRouter.put('/:contactId', contactAddValidate, contactsController.updateById)
+
+export default contactsRouter;
+
