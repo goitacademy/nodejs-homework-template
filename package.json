@@ -1,7 +1,8 @@
 {
-  "name": "template",
+  "name": "NODE-HW",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node ./server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
@@ -9,10 +10,14 @@
     "lint:fix": "eslint --fix **/*.js"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "cors": "2.8.5",
     "cross-env": "7.0.3",
+    "dotenv": "^16.4.1",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "mongoose": "^8.1.1",
+    "morgan": "1.10.0",
+    "nanoid": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "7.19.0",
