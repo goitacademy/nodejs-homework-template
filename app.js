@@ -1,25 +1,43 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+// app.js
+const express = require('express');
+const morgan = require('morgan');
+const cors = require('cors');
+const contactsRouter = require('./routes/api/contacts');  
 
-const contactsRouter = require('./routes/api/contacts')
+require('dotenv').config();
 
-const app = express()
+const app = express();
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
+const mongoose = require('mongoose');
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const MONGODB_URI = 'mongodb://127.0.0.1:27017/db-contacts'; //  URI з MongoDB Atlas
 
-app.use('/api/contacts', contactsRouter)
+mongoose.connect(MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('Database connection successful');
+});
+
+app.use(morgan(formatsLogger));
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: 'Not found' });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
-
-module.exports = app
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal Server Error' });
+});
+app.use(express.static('public'));
+module.exports = app;

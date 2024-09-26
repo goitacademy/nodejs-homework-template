@@ -1,19 +1,23 @@
-// const fs = require('fs/promises')
+// contacts.js (модуль з функціями для роботи з контактами)
 
-const listContacts = async () => {}
+const mongoose = require('mongoose');
 
-const getContactById = async (contactId) => {}
+const contactSchema = new mongoose.Schema({
+  // Додайте інші поля контакту
+   name: String, 
+   phone: String, 
+   email: String, 
 
-const removeContact = async (contactId) => {}
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Посилання на колекцію користувачів
+  },
+});
 
-const addContact = async (body) => {}
+const Contact = mongoose.model('Contact', contactSchema);
 
-const updateContact = async (contactId, body) => {}
+module.exports = Contact;
 
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+
+
+
