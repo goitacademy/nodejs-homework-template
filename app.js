@@ -1,25 +1,35 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+const express = require("express");
+const logger = require("morgan");
+const cors = require("cors");
+require("dotenv").config();
 
-const contactsRouter = require('./routes/api/contacts')
+require("./auth/auth");
 
-const app = express()
+const contactsRouter = require("./routes/api/contacts");
+const usersRouter = require("./routes/api/users");
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+const connectDB = require("./db");
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+const app = express();
+app.use(express.static("public"));
 
-app.use('/api/contacts', contactsRouter)
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
+
+app.use(logger(formatsLogger));
+app.use(cors());
+app.use(express.json());
+
+connectDB();
+
+app.use("/api/contacts", contactsRouter);
+app.use("/api/users", usersRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+  res.status(404).json({ message: "Not found page" });
+});
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+  res.status(500).json({ message: err.message });
+});
 
-module.exports = app
+module.exports = app;
