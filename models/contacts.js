@@ -1,19 +1,39 @@
-// const fs = require('fs/promises')
+const { Schema, model } = require("mongoose")
+const {handleMongooseError} = require("../helpers")
+const contactSchema = new Schema(  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+        type: String,
+        match: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+    },
+phone: {
+    type: String,
+    required: [true, 'Phone number is required'],
+    validate: {
+      validator: function (value) {
+        return /^\(\d{3}\) \d{3}-\d{4}$/.test(value);
+      },
+      message: 'Invalid phone number format, should be (XXX) XXX-XXXX',
+    },
+  },
+    favorite: {
+      type: Boolean,
+      default: false,
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required:true,
+    }
+  });
 
-const listContacts = async () => {}
 
-const getContactById = async (contactId) => {}
 
-const removeContact = async (contactId) => {}
+contactSchema.post("save", handleMongooseError)
 
-const addContact = async (body) => {}
+const Contact = model("contact", contactSchema)
 
-const updateContact = async (contactId, body) => {}
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+module.exports = Contact;
