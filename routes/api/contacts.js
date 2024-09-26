@@ -1,25 +1,22 @@
-const express = require('express')
+import express from "express"
+
+import contactsCTRL from "../../controllers/contactsCTRL.js";
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', contactsCTRL.getAllContacts)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId',contactsCTRL.getContactById)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/',contactsCTRL.addContact)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', contactsCTRL.removeContact)
 
-module.exports = router
+router.put("/:contactId", contactsCTRL.updateContact)
+
+ router.patch("/:contactId/favorite", contactsCTRL.updateFavorite);
+
+
+
+export default router
