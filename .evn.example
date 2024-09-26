@@ -1,0 +1,2 @@
+PORT= number port, default 8080
+MONGO_URL= mongodb connection string
