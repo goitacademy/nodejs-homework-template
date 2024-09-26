@@ -1,0 +1,25 @@
+
+GET /api/contacts/ 13-04-2023_12:18:39
+GET /api/contacts/64311ffa1bd14ad257d003d7 13-04-2023_12:18:47
+POST /api/contacts/ 13-04-2023_12:19:20
+POST /api/contacts/ 13-04-2023_12:19:30
+POST /api/contacts/ 13-04-2023_12:22:05
+POST /api/contacts/ 13-04-2023_12:22:42
+POST /api/contacts/ 13-04-2023_12:23:09
+GET /api/contacts/ 13-04-2023_12:23:30
+DELETE /api/contacts/643715b9bdc55f4b84186449 13-04-2023_12:23:53
+PUT /api/contacts/643715b9bdc55f4b84186449 13-04-2023_12:24:52
+GET /api/contacts/ 13-04-2023_12:25:01
+PUT /api/contacts/6435401124eace2a3ff3afb3 13-04-2023_12:25:37
+PUT /api/contacts/6435401124eace2a3ff3afb3 13-04-2023_12:25:46
+PUT /api/contacts/6435401124eace2a3ff3afb3 13-04-2023_12:26:08
+GET /api/contacts 13-04-2023_12:26:28
+GET /api/contacts/6435452a70c93765f896e88a 13-04-2023_12:26:54
+GET /api/contacts/6435452a70c93765f896e88a/favorite 13-04-2023_12:27:23
+PATCH /api/contacts/6435452a70c93765f896e88a/favorite 13-04-2023_12:27:32
+PATCH /api/contacts/6435452a70c93765f896e88a/favorite 13-04-2023_12:27:44
+GET /api/contacts/ 13-04-2023_12:30:11
+PATCH /api/contacts/64311ffa1bd14ad257d003d7/favorite 13-04-2023_12:30:37
+PATCH /api/contacts/64311ffa1bd14ad257d003d7/favorite 13-04-2023_12:32:08
+PATCH /api/contacts/64311ffa1bd14ad257d003d7/favorite 13-04-2023_12:33:33
+PATCH /api/contacts/64311ffa1bd14ad257d003d7/favorite 13-04-2023_12:33:55
