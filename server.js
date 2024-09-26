@@ -1,5 +1,15 @@
-const app = require('./app')
+import  app from './app.js';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+dotenv.config();
+
+const {DB_HOST} = process.env;
+const LocalHostNumber=5000;
+
+mongoose.connect(DB_HOST)
+.then(()=>app.listen(LocalHostNumber, () => {
+  console.log(`Server running. Use our API on port: ${LocalHostNumber}`)
+}))
+.catch(error=>console.log(error.message));
+
