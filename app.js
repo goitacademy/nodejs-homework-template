@@ -1,25 +1,24 @@
-const express = require('express')
-const logger = require('morgan')
-const cors = require('cors')
+let express = require("express");
+let dotenv = require("dotenv");
 
-const contactsRouter = require('./routes/api/contacts')
+let connectDB = require("./db");
+require('colors')
+
 
 const app = express()
 
-const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
+// Load env variables
+dotenv.config();
 
-app.use(logger(formatsLogger))
-app.use(cors())
-app.use(express.json())
+// Connect DB
+connectDB();
 
-app.use('/api/contacts', contactsRouter)
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Not found' })
-})
+// Provide server
+const { PORT, NODE_ENV } = process.env || 5050;
 
-app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
-})
+console.log(PORT)
+app.listen(PORT, () => {
+    console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`.cyan.bold);
+});
 
-module.exports = app

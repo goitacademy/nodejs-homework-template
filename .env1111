@@ -1,0 +1,8 @@
+# aay-KD4D_7a@GWF
+PORT=5000
+MONGODB_URI=mongodb+srv://Stasy:aay-KD4D_7a@GWF@cluster0.ejutryy.mongodb.net/test?retryWrites=true&w=majority
+NODE_ENV=development
+SECRET_KEY=balabolka
+
+# DB_HOST='mongodb+srv://Stasy:aay-KD4D_7a@GWF@cluster0.kykqu9h.mongodb.net/test';
+# PORT = 3000
