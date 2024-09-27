@@ -1,25 +1,33 @@
-const express = require('express')
+const express = require('express');
+const contactsController = require('../../controllers/contacts.controller');
+const { validateBody } = require('../../middlewares');
+const schemas = require('../../schemas/contacts.schema');
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// @desc    Get all Contacts
+// @route 	GET /api/contacts
+// @access  Public
+router.get('/', contactsController.getAll);
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// @desc    Get Contact by id
+// @route 	GET /api/contacts/:id
+// @access  Public
+router.get('/:id', contactsController.getOne);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// @desc    Create Contact
+// @route 	POST /api/contacts
+// @access  Public
+router.post('/', validateBody(schemas.addSchema), contactsController.create);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// @desc    Update Contact
+// @route 	PUT /api/contacts/:id
+// @access  Public
+router.put('/:id', validateBody(schemas.addSchema), contactsController.update);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// @desc    Remove Contact
+// @route 	DELETE /api/contacts/:id
+// @access  Public
+router.delete('/:id', contactsController.remove);
 
-module.exports = router
+module.exports = router;
