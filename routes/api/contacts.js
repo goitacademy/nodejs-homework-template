@@ -1,25 +1,29 @@
-const express = require('express')
+const express = require("express");
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const Contact = require("../../models/contact");
+const User = require("../../models/user");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const { boolean } = require("joi");
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const auth = require("../../config/authorization")
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const contactsCtrl = require('../../controller/contactsCtrl')
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-module.exports = router
+// Manage contacts
+
+router.get("/", auth, contactsCtrl.getContacts)
+
+router.get("/:contactId", auth, contactsCtrl.getContactById)
+
+router.post("/", auth, contactsCtrl.addContact)
+
+router.delete("/:contactId", auth, contactsCtrl.deleteContact)
+
+router.put("/:contactId", auth, contactsCtrl.updateContactById)
+
+router.patch("/:contactId/favorite", auth, contactsCtrl.changeFavouriteContactById)
+
+module.exports = router;
