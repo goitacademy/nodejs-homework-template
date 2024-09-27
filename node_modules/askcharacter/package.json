@@ -1,0 +1,59 @@
+{
+  "name": "askcharacter",
+  "version": "1.0.0",
+  "description": "Prompt for a single character",
+  "keywords": [
+    "password",
+    "prompt",
+    "tty"
+  ],
+  "homepage": "https://github.com/mongodb-js/askcharacter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mongodb-js/askcharacter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mongodb-js/askcharacter/issues"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    "require": "./lib/index.js",
+    "import": "./.esm-wrapper.mjs"
+  },
+  "files": [
+    "LICENSE",
+    "lib",
+    "package.json",
+    "README.md",
+    ".esm-wrapper.mjs"
+  ],
+  "scripts": {
+    "lint": "eslint **/*.ts",
+    "test": "npm run lint && npm run build && nyc mocha --colors -r ts-node/register test/*.ts",
+    "build": "npm run compile-ts && gen-esm-wrapper . ./.esm-wrapper.mjs",
+    "prepack": "npm run build",
+    "compile-ts": "tsc -p tsconfig.json"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-semistandard": "^15.0.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "gen-esm-wrapper": "^1.1.0",
+    "mocha": "^8.1.3",
+    "nyc": "^15.1.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "hijack-stream": "^1.0.0"
+  }
+}

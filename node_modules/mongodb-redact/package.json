@@ -1,0 +1,28 @@
+{
+  "name": "mongodb-redact",
+  "version": "0.2.2",
+  "description": "Remove potentially sensitive information from objects without changing the shape.",
+  "scripts": {
+    "check": "mongodb-js-precommit",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "eslint-config-mongodb-js": "^5.0.3",
+    "mocha": "~7.0.0",
+    "mongodb-js-precommit": "^2.0.0"
+  },
+  "keywords": [
+    "mongodb",
+    "mongodb.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/mongodb-js/mongodb-redact.git"
+  },
+  "author": "Lucas Hrabovsky <hrabovsky.lucas@gmail.com> (http://imlucas.com)",
+  "license": "Apache-2.0",
+  "homepage": "http://github.com/mongodb-js/mongodb-redact"
+}
