@@ -1,5 +1,11 @@
 const app = require('./app')
+const path = require('node:path');
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
+require('dotenv').config({ path: path.resolve(__dirname, './.env') });
+
+const defaultPort = 3000;
+const port = process.env.PORT || defaultPort;
+
+app.listen(port, () => {
+  console.log(`Server run on http://localhost:${port}`)
 })
