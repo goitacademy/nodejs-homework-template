@@ -1,0 +1,46 @@
+{
+  "name": "mongodb-crypt-library-version",
+  "version": "1.0.3",
+  "description": "Get the version of a MongoDB Crypt shared library programmatically and as a CLI",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npm run build",
+    "test": "sh ./test.sh",
+    "install": "node-gyp rebuild",
+    "prepack": "npm run build",
+    "build": "gen-esm-wrapper . ./.esm-wrapper.mjs"
+  },
+  "author": "Anna Henningsen <anna@addaleax.net>",
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^4.3.0"
+  },
+  "license": "Apache-2.0",
+  "exports": {
+    "require": "./index.js",
+    "import": "./.esm-wrapper.mjs"
+  },
+  "homepage": "https://github.com/mongodb-js/mongodb-crypt-library-version",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mongodb-js/mongodb-crypt-library-version.git"
+  },
+  "bugs": "https://github.com/mongodb-js/mongodb-crypt-library-version/issues",
+  "typings": "index.d.ts",
+  "files": [
+    "binding.cc",
+    "binding.gyp",
+    "index.d.ts",
+    "index.js",
+    "bin/mongodb-crypt-library-version.js",
+    "LICENSE",
+    ".esm-wrapper.mjs"
+  ],
+  "bin": {
+    "mongodb-crypt-library-version": "bin/mongodb-crypt-library-version.js"
+  },
+  "devDependencies": {
+    "gen-esm-wrapper": "^1.1.1"
+  }
+}
