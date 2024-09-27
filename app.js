@@ -1,11 +1,12 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+require("dotenv").config();
 
 const contactsRouter = require('./routes/api/contacts')
 
 const app = express()
-
+console.log(process.env.PORT);
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'
 
 app.use(logger(formatsLogger))
@@ -19,7 +20,9 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message })
+  const { status = 500, message = 'server error' } = err
+  res.status(status).json({ message })
 })
 
 module.exports = app
+
