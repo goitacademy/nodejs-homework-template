@@ -1,25 +1,29 @@
-const express = require('express')
+const express = require("express"); // шмпорт модулю express
 
-const router = express.Router()
+const {
+  handleGetAll,
+  handleContactById,
+  handleAddNewContact,
+  handleDeleteContactById,
+  handleUpdataContactById,
+  handleUpdataFavourite,
+} = require("../../controllers/contactsController");
+const isValid = require("../../helpers/isValideObjId");
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// створення окремого роуту в API за допомогою виклику методу Router з модулю express
+const router = express.Router();
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+// створення окремих шляхів та їх обробкини
+router.get("/", handleGetAll);
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get("/:id", isValid, handleContactById);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post("/", handleAddNewContact);
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete("/:id", isValid, handleDeleteContactById);
 
-module.exports = router
+router.put("/:id", isValid, handleUpdataContactById);
+
+router.patch("/:id/favorite", isValid, handleUpdataFavourite);
+
+module.exports = router;
