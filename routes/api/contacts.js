@@ -2,6 +2,8 @@ const express = require('express')
 const contacts = require('../../models/contacts.js')
 const router = express.Router()
 
+
+
 router.get('/', async (req, res, next) => {
   contacts.listContacts().then(
     (contacts)=> {
@@ -22,12 +24,14 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  const { name, email, phone} = req.body;
+  const {name, email, phone} = req.body;
   (name=== undefined || email===undefined || phone===undefined)
     ? res.status(400).json({message: "missing fields"})
     : contacts.addContact(name, email, phone).then(
-      (contacts)=> {
-        res.status(200).json({ message: contacts })
+      (result)=> {
+        result.validationPass
+        ? res.status(200).json({ message: result.newContact })
+        : res.status(400).json({message: result})
       }
     )
 })
@@ -36,8 +40,8 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     contacts.removeContact(contactId).then(
       (result)=> {
-        result.contactRemoved
-        ? res.status(200).json({ message: result.newContactList })
+        result.removeDone
+        ? res.status(200).json({ message: "Contact deleted!" })
         : res.status(404).json({ message: 'Not found' })
       }
     )      
@@ -50,9 +54,11 @@ router.put('/:contactId', async (req, res, next) => {
     ? res.status(400).json({message: "missing fields"})
     : contacts.updateContact(contactId, name, email, phone).then(
         (result)=> {
-          (result.contactUpdated === true)
-            ? res.status(202).json({ message: result.newContactList})
-            : res.status(404).json({ message: 'Not found' }) 
+          (result.validationPass === false)
+            ? res.status(404).json({ message: result.message })
+            : (result.updatedDone ===false)
+              ?res.status(404).json({ message: 'Not found' })
+              :res.status(202).json({ message: result.updatedContact})
         }
       )
 })

@@ -1,8 +1,31 @@
 const fs = require('fs/promises')
 const { v4: uuidv4 } = require('uuid');
-
+const Joi = require('joi');
 const contactsPath = './models/db/contacts.json';
 
+
+const schema = Joi.object({ 
+  name: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
+
+  phone: Joi.string()
+      .pattern(new RegExp('^[0-9]{9,11}$')),
+
+  email: Joi.string()
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'pl','eu'] } })
+})
+
+const validation = ( name, email, phone)=>{
+
+let validationStatus = false
+const { error, value } = schema.validate({name, email, phone});
+if(error === undefined) 
+  validationStatus = true
+return {validationStatus, error}
+}
 
 const readingFile = async () => {
   try{
@@ -34,49 +57,62 @@ const getContactById = async (contactId) => {
 
 const removeContact = async (contactId) => {
    return readingFile().then((contacts)=> {
-            let contactRemoved = false
+            let removeDone = false
             const newContactList = contacts.filter(contact => contact.id!==contactId)
             
             if(contacts.length===newContactList.length) {
-              return {contactRemoved}
+              return {removeDone}
             }
-            contactRemoved = true
+            removeDone = true
             updateFile(newContactList)
-            return {contactRemoved, newContactList}
+            return {removeDone}
           })
  
 }
 
 const addContact = async (name, email, phone) => {
+  const newContact = {"id": uuidv4(), 
+                      "name": name, 
+                      "email": email, 
+                      "phone": phone
+                     }
+  const validationResp = validation(name, email, phone)
+  const validationPass = validationResp.validationStatus
+
+  if(!validationPass){
+    return validationResp.error.message
+  }
   return readingFile().then((contacts)=> {
-    const newContactsList = [...contacts, {"id": uuidv4(), 
-                                          "name": name, 
-                                          "email": email, 
-                                          "phone": phone
-                                         }
-                            ]
+    const newContactsList = [...contacts, newContact]
     updateFile(newContactsList)
-    return newContactsList
-  })
+    return { validationPass, newContact}
+    })
   
 }
 const updateContact = async (contactId, name, email, phone) => {
-  return readingFile().then((contacts)=> {
+    
+  const validationResp = validation(name, email, phone)
+  const validationPass = validationResp.validationStatus
+  if(!validationPass){
+    const message = validationResp.error.message
+    return {validationPass, message}
+  }
 
-    let contactUpdated = false
+  return readingFile().then((contacts)=> {
+  let updatedDone = false
     const contactToUpdate = contacts.find(({id}) => id===contactId)
 
     if(contactToUpdate === undefined ) {
-      return {contactUpdated}
+      return {validationPass, updatedDone}
     }
 
-    contactUpdated = true
-    const updateContact ={...contactToUpdate, "name": name, "email": email, "phone": phone}
+    const updatedContact ={...contactToUpdate, "name": name, "email": email, "phone": phone}
     const originContacts = contacts.filter(contact => contact.id!==contactId)
-    const newContactList = [...originContacts,updateContact]
+    const newContactList = [...originContacts,updatedContact]
     updateFile(newContactList)
+    updatedDone = true
 
-    return {contactUpdated, newContactList}
+    return {validationPass, updatedDone, updatedContact}
   })
 
 
