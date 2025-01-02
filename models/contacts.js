@@ -1,19 +1,92 @@
-// const fs = require('fs/promises')
+const Contact = require("./contactSchema.js");
 
-const listContacts = async () => {}
+async function listContacts() {
+	try {
+		const contacts = await Contact.find();
+		return contacts;
+	} catch (error) {
+		console.error("Błąd podczas pobierania kontaktów:", error.message);
+		throw error;
+	}
+}
 
-const getContactById = async (contactId) => {}
+async function getContactById(id) {
+	try {
+		const contact = await Contact.findById(id);
+		if (!contact) {
+			return null;
+		}
+		return contact;
+	} catch (error) {
+		console.error("Błąd podczas pobierania kontaktu:", error.message);
+	}
+}
 
-const removeContact = async (contactId) => {}
+async function removeContact(id) {
+	try {
+		const deleted = await Contact.findByIdAndDelete(id);
+		if (!deleted) {
+			return null;
+		}
+		return `Usunięto kontakt: ${deleted}`;
+	} catch (error) {
+		console.error("Błąd podczas usuwania kontaktu:", error.message);
+	}
+}
 
-const addContact = async (body) => {}
+async function addContact(newContactData) {
+	try {
+		const newContact = await Contact.create(newContactData);
+		return `Dodano nowy kontakt: ${newContact}`;
+	} catch (error) {
+		console.error("Błąd podczas tworzenia kontaktu:", error.message);
+	}
+}
 
-const updateContact = async (contactId, body) => {}
+async function updateContact(id, updateFields) {
+	try {
+		const contactExists = await Contact.findById(id);
+		if (!contactExists) {
+			return null;
+		}
+		const updatedContact = await Contact.findByIdAndUpdate(
+			id,
+			updateFields,
+			{ new: true, runValidators: true }
+		);
+		return `Zaktualizowano kontakt: ${updatedContact}`;
+	} catch (error) {
+		console.error("Błąd podczas aktualizacji kontaktu:", error.message);
+	}
+}
+
+async function updateStatusContact(id, favorite) {
+	try {
+		const contactExists = await Contact.findById(id);
+		if (!contactExists) {
+			return null;
+		}
+
+		const updatedContact = await Contact.findByIdAndUpdate(
+			id,
+			{ favorite },
+			{ new: true, runValidators: true }
+		);
+
+		return `Zaktualizowano status kontaktu: ${updatedContact}`;
+	} catch (error) {
+		console.error(
+			"Błąd podczas aktualizacji statusu kontaktu:",
+			error.message
+		);
+	}
+}
 
 module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-}
+	addContact,
+	listContacts,
+	getContactById,
+	updateContact,
+	removeContact,
+	updateStatusContact,
+};
