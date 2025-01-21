@@ -1,5 +1,7 @@
-const app = require('./app')
+import { startServer } from "./app.js";
+import * as dbConnection from "./models/dbConnection.js";
+const PORT = 3000;
 
-app.listen(3000, () => {
-  console.log("Server running. Use our API on port: 3000")
-})
+await dbConnection.connectDB();
+
+startServer(PORT);
