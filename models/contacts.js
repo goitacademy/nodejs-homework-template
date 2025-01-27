@@ -1,14 +1,38 @@
-// const fs = require('fs/promises')
+const mongoose = require('mongoose');
+const Contact = require('./contactModel');
+const connectDB = require('../config/db');
 
-const listContacts = async () => {}
+connectDB();
 
-const getContactById = async (contactId) => {}
+const listContacts = async () => {
+  return await Contact.find();
+};
 
-const removeContact = async (contactId) => {}
+const getContactById = async (contactId) => {
+  return await Contact.findById(contactId);
+};
 
-const addContact = async (body) => {}
+const removeContact = async (contactId) => {
+  return await Contact.findByIdAndDelete(contactId);
+};
 
-const updateContact = async (contactId, body) => {}
+const addContact = async (body) => {
+  const newContact = new Contact(body);
+  await newContact.save();
+  return newContact;
+};
+
+const updateContact = async (contactId, body) => {
+  return await Contact.findByIdAndUpdate(contactId, body, { new: true });
+};
+
+const updateStatusContact = async (contactId, { favorite }) => {
+  return await Contact.findByIdAndUpdate(
+    contactId,
+    { favorite },
+    { new: true, runValidators: true }
+  );
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +40,5 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+  updateStatusContact, 
+};
