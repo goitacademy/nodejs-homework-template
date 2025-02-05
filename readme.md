@@ -27,3 +27,27 @@ Uważnie czytaj komentarze mentora. Popraw uwagi i zrób commit na gałęzi z za
 - `npm run start:dev` &mdash; uruchamia serwer w trybie deweloperskim (development)
 - `npm run lint` &mdash; uruchamia sprawdzanie kodu z ESLint, należy wykonać przed każdym PR i poprawić wszystkie błędy lintera
 - `npm lint:fix` &mdash; to samo co powyższe, ale również automatycznie poprawia proste błędy.
+
+Po uruchomieniu, poszczególne funkcje są dostępne przy wysyłaniu zapytań pod http://localhost:3000/api/auth lub http://localhost:3000/api/contacts.
+
+### Dostępne zapytania:
+
+`auth`:
+
+- `GET /current` - zwraca kto jest obecnie zalogowany.
+- `GET /verify/<verificationToken>` - weryfikuje użytkownika na podstawie tokenu weryfikacyjnego otrzymanego w mailu lub przechowywanego w bazie danych.
+- `POST /verify` - wysyła ponownie maila na adres użytkownika, jeśli ten nie został jeszcze zautoryzowany.
+- `POST /signup` - rejestruje użytkownika w bazie danych.
+- `POST /login` - loguje użytkownika.
+- `POST /logout` - pozwala wylogować użytkownika.
+- `PATCH /update` - zmienia dane użytkownika.
+- `PATCH /avatars` - pozwala zmienić avatar użytkownika.
+
+`contacts`:
+
+- `GET /` - zwraca listę kontaktów użytkownika.
+- `GET /<id>` - zwraca informacje o wybranym kontakcie.
+- `POST /` - dodaje kontakt do listy użytkownika.
+- `DELETE /<id>` - usuwa wybrany kontakt.
+- `PUT /<id>` - zmienia dane wybranego kontaktu.
+- `PATCH /<id>/favourite` - zmienia status "Ulubiony" wybranego kontaktu.
