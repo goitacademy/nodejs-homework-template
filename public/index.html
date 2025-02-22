@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>JWT - Json Web Token</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <header class="top-bar">
+      <h1 id="status">Please login</h1>
+
+      <button type="button" id="logout">Logout</button>
+    </header>
+
+    <main class="column">
+      <section class="column">
+        <form id="register" autocomplete="off">
+          <label>Email:</label>
+          <input type="email" name="email" required value="user@user.com" />
+
+          <label>Password:</label>
+          <input type="password" name="password" required value="user123" />
+
+          <button type="submit">Register</button>
+        </form>
+
+        <form id="login" autocomplete="off">
+          <label>Email:</label>
+          <input type="email" name="email" required value="user@user.com" />
+
+          <label>Password:</label>
+          <input type="password" name="password" required value="user123" />
+
+          <button type="submit">Login</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Protected resources</h2>
+        <button type="button" id="users">Get All Users</button>
+
+        <button type="button" id="jwts">Generate some JWT</button>
+      </section>
+    </main>
+    </div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
