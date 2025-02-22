@@ -1,14 +1,29 @@
-// const fs = require('fs/promises')
+const Contact = require('./contact');
 
-const listContacts = async () => {}
+// Lista wszystkich kontaktów użytkownika
+const listContacts = async (owner) => {
+  return await Contact.find({ owner });
+};
 
-const getContactById = async (contactId) => {}
+// Pobranie kontaktu po ID (dla konkretnego użytkownika)
+const getContactById = async (contactId, owner) => {
+  return await Contact.findOne({ _id: contactId, owner });
+};
 
-const removeContact = async (contactId) => {}
+// Dodanie nowego kontaktu
+const addContact = async (body, owner) => {
+  return await Contact.create({ ...body, owner });
+};
 
-const addContact = async (body) => {}
+// Aktualizacja kontaktu
+const updateContact = async (contactId, body, owner) => {
+  return await Contact.findOneAndUpdate({ _id: contactId, owner }, body, { new: true });
+};
 
-const updateContact = async (contactId, body) => {}
+// Usuwanie kontaktu
+const removeContact = async (contactId, owner) => {
+  return await Contact.findOneAndDelete({ _id: contactId, owner });
+};
 
 module.exports = {
   listContacts,
@@ -16,4 +31,4 @@ module.exports = {
   removeContact,
   addContact,
   updateContact,
-}
+};
