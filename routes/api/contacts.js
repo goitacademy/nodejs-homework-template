@@ -1,25 +1,20 @@
-const express = require('express')
+const express = require('express');
+
+const { userMiddlewares } = require('../../middlewares/index');
+const { userController } = require('../../controllers');
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/', userController.getUsers)
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.post('/', userController.newUser)
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.get('/:contactId', userMiddlewares.checkUserId, userController.getUser)
 
-router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.delete('/:contactId', userMiddlewares.checkUserId, userController.deleteUser)
+
+router.put('/:contactId', userMiddlewares.checkUserId, userController.removeUser)
+
 
 module.exports = router
