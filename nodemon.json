@@ -1,3 +1,5 @@
 {
-  "ignore": ["node_modules", "models/contacts.json"]
+  "ext": "ts",
+  "exec": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register ./src/server.ts",
+  "ignore": ["node_modules", "dist"]
 }

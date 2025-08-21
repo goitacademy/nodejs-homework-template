@@ -1,31 +1,113 @@
-## GoIT Node.js Course Template Homework
+# Contacts Service API
 
-Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
-Форк створить репозиторій на вашому http://github.com
+A RESTful API for managing contacts with user authentication, email verification, and profile management features.  
+Built with **Node.js**, **Express**, and **MongoDB**.
 
-Додайте ментора до колаборації
+---
 
-Для кожної домашньої роботи створюйте свою гілку.
+## Features
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
+- **User Authentication & Authorization**
 
-Кожна нова гілка для др повинна робитися з master
+  - User registration with **email verification**.
+  - Login with JWT-based authentication.
+  - Email confirmation link sent to the registered email.
+  - **Resend verification email** in case the first one is missed.
+  - Password hashing with bcrypt.
 
-Після того, як ви закінчили виконувати домашнє завдання у своїй гілці, необхідно зробити пулл-реквест (PR). Потім додати ментора для рев'ю коду. Тільки після того, як ментор заапрувить PR, ви можете виконати мердж гілки з домашнім завданням у майстер.
+- **Contacts Management (CRUD)**
 
-Уважно читайте коментарі ментора. Виправте зауваження та зробіть коміт у гілці з домашнім завданням. Зміни підтягнуться у PR автоматично після того, як ви відправите коміт з виправленнями на github
-Після виправлення знову додайте ментора на рев'ю коду.
+  - Create, Read, Update, and Delete contacts.
+  - Upload and update **contact avatars**.
+  - Pagination and filtering support.
 
-- При здачі домашньої роботи є посилання на PR
-- JS-код чистий та зрозумілий, для форматування використовується Prettier
+- **User Profile Management**
 
-### Команди:
+  - Update **subscription plan**.
+  - Update **user avatar**.
 
-- `npm start` &mdash; старт сервера в режимі production
-- `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
-- `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
+- **Security**
+  - Protected routes (JWT required).
+  - Validation with Joi.
+  - Error handling middleware.
+
+---
+
+## Tech Stack
+
+- **Backend:** Node.js, Express
+- **Database:** MongoDB (Mongoose ODM)
+- **Authentication:** JWT, bcrypt
+- **Email Service:** Nodemailer (SMTP)
+- **File Uploads:** Multer
+- **Validation:** Joi
+- **Environment Management:** dotenv
+
+---
+
+## API Endpoints
+
+### Auth
+
+| Method | Endpoint                   | Description                                       |
+| ------ | -------------------------- | ------------------------------------------------- |
+| POST   | `/api/users/register`      | Register a new user (email verification required) |
+| POST   | `/api/users/login`         | Authenticate user and return token                |
+| GET    | `/api/users/verify/:token` | Verify email using token                          |
+| POST   | `/api/users/verify`        | Resend verification email                         |
+
+### User
+
+| Method | Endpoint                  | Description                          |
+| ------ | ------------------------- | ------------------------------------ |
+| GET    | `/api/users/current`      | Get current user info (JWT required) |
+| PATCH  | `/api/users/subscription` | Update subscription plan             |
+| PATCH  | `/api/users/avatar`       | Update user avatar                   |
+
+### Contacts
+
+| Method | Endpoint                   | Description                               |
+| ------ | -------------------------- | ----------------------------------------- |
+| GET    | `/api/contacts`            | Get all contacts (with pagination/filter) |
+| GET    | `/api/contacts/:id`        | Get contact by ID                         |
+| POST   | `/api/contacts`            | Create new contact                        |
+| PUT    | `/api/contacts/:id`        | Update contact                            |
+| PATCH  | `/api/contacts/:id/avatar` | Update contact avatar                     |
+| DELETE | `/api/contacts/:id`        | Delete contact                            |
+
+---
+
+## Installation
+
+```bash
+# Clone repository
+git clone https://github.com/your-username/contacts_service.git
+
+# Navigate to project folder
+cd contacts_service
+
+# Install dependencies
+npm install
+
+# Create .env file based on .env.example
+
+
+# Development
+npm run dev
+
+# Production
+npm start
+
+
+contacts_rest_api/
+│── controllers/    # Route handlers
+│── decorators/       #reusable functions
+│── helpers/         # Helpers (email sender, etc.)
+│── middlewares/    # Auth, error handlers, validation
+│── models/    # Mongoose models
+│── services/       # Business logic
+│── routes/api # API routes
+│── uploads/        # Avatar storage
+│── .env.example  #example env variables
+│── server.js # core file to start project
+```

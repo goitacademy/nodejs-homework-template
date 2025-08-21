@@ -1,26 +1,73 @@
 {
-  "name": "template",
-  "version": "0.0.0",
+  "name": "contacts_rest_api",
+  "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=24.4.1"
+  },
   "scripts": {
-    "start": "cross-env NODE_ENV=production node ./server.js",
-    "start:dev": "cross-env NODE_ENV=development nodemon ./server.js",
-    "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "start": "cross-env NODE_ENV=production node -r tsconfig-paths/register ./dist/server.js",
+    "dev": "nodemon",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint **/*.ts",
+    "lint:fix": "eslint --fix **/*.ts",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
   "dependencies": {
-    "cors": "2.8.5",
+    "@elasticemail/elasticemail-client": "^4.0.23",
+    "axios": "^1.11.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "cross-env": "7.0.3",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.3.1",
     "express": "4.17.1",
-    "morgan": "1.10.0"
+    "gravatar": "^1.8.2",
+    "jimp": "^0.22.10",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.18.0",
+    "mongoose": "^8.0.0",
+    "morgan": "1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "nanoid": "^5.0.4",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^6.9.7",
+    "pino": "^9.8.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/gravatar": "^1.8.6",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/mongoose": "^5.11.96",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.2.1",
+    "@types/node-cron": "^3.0.11",
+    "@types/nodemailer": "^6.4.17",
+    "@types/supertest": "^6.0.3",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "eslint": "7.19.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "2.25.3",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "5.2.0",
-    "nodemon": "2.0.15"
-  }
+    "jest": "^29.7.0",
+    "nodemon": "2.0.15",
+    "supertest": "^6.3.3",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.2"
+  },
+  "repository": "https://github.com/Ivan-Malakhovskyi/contacts_rest_api",
+  "author": "Ivan Malakhovskyi <ivanmalahovskij121@gmail.com>",
+  "license": "MIT"
 }
